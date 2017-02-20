@@ -1,0 +1,11 @@
+jphone_jphone:
+  name: jesse
+  picture: https://github.com/jnewland.png
+  track: yes
+  hide_if_away: no
+
+kphone_kphone:
+  name: katie
+  picture: https://github.com/katienewland.png
+  track: yes
+  hide_if_away: no

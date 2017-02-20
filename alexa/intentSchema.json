@@ -1,0 +1,12 @@
+{
+  "intents": [
+    { "intent": "AMAZON.PlaybackAction<object@MusicPlaylist>" },
+    { "intent": "MuteIntent" },
+    { "intent": "AMAZON.HelpIntent" },
+    { "intent": "AMAZON.NextIntent" },
+    { "intent": "AMAZON.PauseIntent" },
+    { "intent": "AMAZON.ResumeIntent" },
+    { "intent": "AMAZON.ShuffleOffIntent" },
+    { "intent": "AMAZON.ShuffleOnIntent" }
+   ]
+}

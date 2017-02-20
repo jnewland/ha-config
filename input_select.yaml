@@ -1,0 +1,29 @@
+mode:
+  name: Mode
+  options:
+   - Morning
+   - Working
+   - Cooking
+   - Party
+   - Movie
+   - Reading
+   - Sleeping
+   - Away
+   - Pause
+  initial: 'Working'
+  icon: mdi:settings
+playlist:
+  name: Playlist
+  options:
+   - My Favorites Mix
+   - My New Music Mix
+   - Queue
+   - Soul Queen
+   - Recently Added
+   - GitHub HQ 2.0
+   - Pure Ambient
+   - Headspace
+   - 'The A-List: Indie'
+   - Pause
+  initial: Pause
+  icon: mdi:playlist-play

@@ -1,0 +1,12 @@
+sequence:
+  - service: input_select.select_option
+    entity_id: input_select.mode
+    data:
+      option: Movie
+  - service: homeassistant.turn_off
+    entity_id:
+      - light.office_overhead
+      - light.office_closet_lamp
+      - light.office_closet
+      - group.hall
+      - group.office

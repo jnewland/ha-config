@@ -1,0 +1,3 @@
+sequence:
+  - service: media_player.media_play
+    entity_id: media_player.itunes

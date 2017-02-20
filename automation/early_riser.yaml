@@ -1,0 +1,29 @@
+# If the current mode is sleeping and motion is detected in the master bathroom
+# an hour before sunrise or later, turn off the alarm, transition to Morning
+# mode, and message Jesse.
+alias: Early Riser
+trigger:
+  platform: state
+  entity_id: binary_sensor.master_bath_motion
+  from: 'off'
+  to: 'on'
+condition:
+  condition: and
+  conditions:
+  - condition: sun
+    after: sunrise
+    after_offset: '-1:00:00'
+  - condition: template
+    value_template: '{{
+                      states.input_select.mode.state != "Pause" and
+                      states.input_boolean.guests.state == "off"
+                    }}'
+  - condition: template
+    value_template: '{{ states.input_select.mode.state == "Sleeping" }}'
+action:
+  - service: script.turn_on
+    entity_id: script.mode_morning
+  - service: notify.slack
+    data_template:
+      message: '@jnewland :sunrise:'
+      target: "#general"

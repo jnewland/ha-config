@@ -1,0 +1,10 @@
+sequence:
+  - service: scene.turn_on
+    data_template:
+      entity_id: '
+        {% if states.sun.sun.state == "above_horizon" %}
+        scene.master_bathroom_full_blast
+        {% else %}
+        scene.master_bathroom_nightlight
+        {% endif %}
+        '

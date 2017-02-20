@@ -1,0 +1,38 @@
+alias: House Music
+sequence:
+  - service: media_player.volume_set
+    data:
+      entity_id: media_player.itunes
+      volume: 0.5
+  - service: homeassistant.turn_on
+    data_template:
+      entity_id: >
+        {# Determine where we should play music #}
+        {# Returns an entity_id of a script #}
+        {%- set zone = states.device_tracker.jphone_jphone.state -%}
+        {%- if states.input_select.mode.state == "Morning" or states.input_select.mode.state == "Sleeping" -%}
+        script.airplay_computer
+        {%- else -%}
+        {%- if zone == "kitchen" or zone == "office "-%}
+        script.airplay_downstairs
+        {%- elif zone == "home" -%}
+        script.airplay_everywhere
+        {%- endif -%}
+        {%- endif -%}
+  - service_template: >
+      {%- if shuffle == "on shuffle" -%}
+        switch.turn_on
+      {%- else -%}
+        switch.turn_off
+      {%- endif -%}
+    entity_id: switch.shuffle
+  - service: media_player.play_media
+    entity_id: media_player.itunes
+    data_template:
+      media_content_type: playlist
+      media_content_id: >
+        {%- if playlist == "" -%}
+          My Favorites Mix
+        {%- else -%}
+          {{ playlist | default("My Favorites Mix") }}
+        {%- endif -%}

@@ -1,0 +1,3 @@
+name: 'Pause'
+entities:
+  script.mode_pause: 'on'

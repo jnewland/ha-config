@@ -1,0 +1,75 @@
+alias: log state changes to slack
+trigger:
+  platform: state
+  entity_id:
+    - binary_sensor.desk_active
+    - binary_sensor.stairs_motion
+    - binary_sensor.closet_motion
+    - sensor.dark_sky_minutely_summary
+    - sensor.dark_sky_daily_summary
+    - sensor.dark_sky_hourly_summary
+    - sensor.jphone_6s_battery_state
+    - sun.sun
+    - binary_sensor.master_bath_motion
+    - binary_sensor.master_ac_water
+    - sensor.downstairsroomba_state
+    - cover.garage
+    - cover.gate
+    - input_select.mode
+    - lock.front_door
+    - media_player.itunes
+    - media_player.atrium_wall_speakers
+    - media_player.kitchen_speakers
+    - media_player.living_front_speakers
+    - media_player.living_rear_speakers
+    - media_player.master_bathroom_speakers
+    - media_player.master_bedroom_speakers
+    - media_player.office_tv
+condition:
+  condition: template
+  value_template: |
+    {% set old_state = trigger.from_state %}
+    {% set new_state = trigger.to_state %}
+    {{
+      old_state != None and
+      new_state.state != old_state.state
+    }}
+action:
+  service: notify.slack
+  data_template:
+    message: |
+      {% set new_state = trigger.to_state %}
+      {% set domain_emoji = {
+        "input_select": ":gear:",
+        "media_player": ":sound:",
+        "cover":        ":house_with_garden:",
+      } %}
+      {% set entity_emoji = {
+        "binary_sensor.desk_active":        ":desktop_computer:",
+        "media_player.office_tv":           ":tv:",
+        "sensor.dark_sky_minutely_summary": ":cloud:",
+        "sensor.dark_sky_daily_summary":    ":cloud:",
+        "sensor.dark_sky_hourly_summary":   ":cloud:",
+        "sensor.jphone_6s_battery_state":   ":iphone:",
+        "sensor.downstairsroomba_state":    ":robot_face:",
+        "binary_sensor.master_ac_water":    ":droplet:"
+      } %}
+      {% set entity_state = new_state.entity_id + "." + new_state.state %}
+      {% set entity_state_emoji = {
+        "sun.sun.above_horizon":    ":sunrise:",
+        "sun.sun.below_horizon":    ":city_sunset:",
+        "lock.front_door.locked":   ":lock:",
+        "lock.front_door.unlocked": ":unlock:"
+      } %}
+      {{ new_state.name | capitalize -}}{{ " " -}}
+      {% if entity_state_emoji[entity_state] | default(none) != none -%}
+        {{ entity_state_emoji[entity_state] }}
+      {% else -%}
+        {% if entity_emoji[new_state.entity_id] | default(none) != none -%}
+          {{ entity_emoji[new_state.entity_id] -}}{{ " " -}}
+        {% else -%}
+          {{ domain_emoji[new_state.domain] | default(":control_knobs:") -}}{{ " " -}}
+        {% endif -%}
+        {{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}
+      {% endif -%}
+    target: "#general"

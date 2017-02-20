@@ -1,0 +1,21 @@
+alias: Sleepyhead
+trigger:
+  platform: state
+  entity_id: binary_sensor.master_bath_motion
+  from: 'off'
+  to: 'on'
+condition:
+  condition: template
+  value_template: '{{
+      states.input_select.mode.state == "Morning" and
+      states.input_boolean.guests.state == "off" and
+      ( states.device_tracker.jphone_jphone.state == "office" or
+        states.device_tracker.jphone_jphone.state == "kitchen" )
+    }}'
+action:
+  - service: notify.slack
+    data_template:
+      message: '@jnewland Katie is up!'
+      target: "#general"
+  - service: script.turn_on
+    entity_id: script.mode_working

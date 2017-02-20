@@ -1,0 +1,7 @@
+---
+name: people
+entities:
+- device_tracker.kphone_kphone
+- device_tracker.jphone_jphone
+- camera.jPhone
+- camera.kPhone

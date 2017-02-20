@@ -1,0 +1,4 @@
+control: hidden
+entities:
+- input_select.playlist
+- switch.shuffle

@@ -1,0 +1,17 @@
+alias: Turn on working mode on whenever we're in the office
+trigger:
+  platform: state
+  entity_id:
+    - device_tracker.kphone_kphone
+    - device_tracker.jphone_jphone
+  to: office
+condition:
+  condition: template
+  value_template: '
+    {{
+      states.input_select.mode.state != "Pause" and
+      states.input_select.mode.state != "Movie"
+    }}'
+action:
+  - service: script.turn_on
+    entity_id: script.mode_working

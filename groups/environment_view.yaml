@@ -1,0 +1,7 @@
+---
+name: environment
+view: true
+icon: mdi:temperature-fahrenheit
+entities:
+- group.climate
+- group.environment

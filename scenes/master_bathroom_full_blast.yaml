@@ -1,0 +1,14 @@
+name: 'Master Bathroom Full Blast'
+entities:
+  light.master_bath_overhead:
+    state: 'on'
+    brightness: 255
+  light.master_shower:
+    state: 'on'
+    brightness: 255
+  light.master_mirror:
+    state: 'on'
+    brightness: 255
+  light.master_toilet:
+    state: 'on'
+    brightness: 255

@@ -1,0 +1,3 @@
+sequence:
+  - service: lock.lock
+    entity_id: group.all_locks

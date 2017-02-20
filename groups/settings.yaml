@@ -1,0 +1,10 @@
+---
+name: settings
+view: true
+icon: mdi:settings
+entities:
+- group.preferences
+- group.system
+- group.links
+- group.all_automations
+- group.roomba

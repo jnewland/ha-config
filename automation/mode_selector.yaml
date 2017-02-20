@@ -1,0 +1,8 @@
+alias: Mode selector
+trigger:
+  platform: state
+  entity_id: input_select.mode
+action:
+  service: script.turn_on
+  data_template:
+    entity_id: script.mode_{{ trigger.to_state.state | lower }}

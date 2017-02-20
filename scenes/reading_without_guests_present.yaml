@@ -1,0 +1,27 @@
+name: Reading without guests present
+entities:
+  light.chandelier:
+    state: 'on'
+    brightness: 102
+  group.downstairs:
+    state: 'off'
+  light.master_closet:
+    state: 'off'
+  light.master_overhead:
+    state: 'off'
+  light.master_nook:
+    state: 'off'
+  light.master_patio:
+    state: 'off'
+  media_player.master_bedroom_speakers:
+    state: 'on'
+  media_player.master_bathroom_speakers:
+    state: 'on'
+  media_player.living_front_speakers:
+    state: 'off'
+  media_player.living_rear_speakers:
+    state: 'off'
+  media_player.kitchen_speakers:
+    state: 'off'
+  alarm_control_panel.alarm:
+    state: armed_home

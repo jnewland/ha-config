@@ -1,0 +1,3 @@
+name: 'Cooking'
+entities:
+  script.mode_cooking: 'on'

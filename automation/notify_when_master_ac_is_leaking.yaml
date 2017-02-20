@@ -1,0 +1,11 @@
+alias: notify when master ac is leaking
+trigger:
+  platform: state
+  entity_id: binary_sensor.master_ac_water
+  from: 'off'
+  to: 'on'
+action:
+  service: notify.slack
+  data_template:
+    message: '@jnewland the master AC water sensor detected a leak'
+    target: "#general"

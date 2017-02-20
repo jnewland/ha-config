@@ -1,0 +1,6 @@
+sensor.downstairsroomba_battery:
+  friendly_name: Battery
+sensor.downstairsroomba_capacity:
+  friendly_name: Capacity
+sensor.downstairsroomba_state:
+  friendly_name: Roomba

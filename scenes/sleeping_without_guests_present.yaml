@@ -1,0 +1,10 @@
+name: Sleeping without guests present
+entities:
+  group.indoor:
+    state: 'off'
+  group.nightime_security:
+    state: 'on'
+  group.speakers:
+    state: 'off'
+  alarm_control_panel.alarm:
+    state: armed_home

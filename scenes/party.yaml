@@ -1,0 +1,3 @@
+name: 'Party'
+entities:
+  script.mode_party: 'on'

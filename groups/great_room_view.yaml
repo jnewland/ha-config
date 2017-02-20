@@ -1,0 +1,9 @@
+---
+name: great_room
+view: true
+icon: mdi:account
+entities:
+- group.great_room
+- group.hall
+- group.great_room_speakers
+- group.great_room_outdoor_lights

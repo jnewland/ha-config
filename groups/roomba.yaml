@@ -1,0 +1,9 @@
+---
+name: Roomba
+control: hidden
+entities:
+- sensor.downstairsroomba_state
+- sensor.downstairsroomba_battery
+- switch.downstairsroomba_clean
+- switch.downstairsroomba_dock
+- switch.downstairsroomba_find

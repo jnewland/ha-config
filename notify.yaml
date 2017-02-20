@@ -1,0 +1,5 @@
+- platform: slack
+  name: slack
+  api_key: !env_var SLACK_API_KEY
+  default_channel: "#general"
+- platform: ios

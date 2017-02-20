@@ -1,0 +1,5 @@
+name: Preferences
+control: hidden
+entities:
+- input_boolean.guests
+- script.mode_pause

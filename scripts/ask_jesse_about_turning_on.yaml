@@ -1,0 +1,15 @@
+sequence:
+  - service: notify.ios_jphone_6s
+    data_template:
+      message: |
+        {{ message | default("Turn on " + entity_id) }}
+      data:
+        push:
+          category: ACK
+        action_data:
+          entity_id: |
+            {{ entity_id }}
+  - service: notify.slack
+    data_template:
+      message: |
+        Asked {{ message | default("about turning on " + entity_id) }}

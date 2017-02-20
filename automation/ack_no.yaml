@@ -1,0 +1,11 @@
+alias: Ack no
+trigger:
+  platform: event
+  event_type: ios.notification_action_fired
+  event_data:
+    actionName: ACK_NO
+action:
+  service: notify.slack
+  data_template:
+    message: ':-1: to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}'
+    target: "#general"

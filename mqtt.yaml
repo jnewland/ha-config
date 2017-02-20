@@ -1,0 +1,4 @@
+broker: !env_var MQTT_BROKER
+port: !env_var MQTT_PORT
+username: !env_var MQTT_USERNAME
+password: !env_var MQTT_PASSWORD

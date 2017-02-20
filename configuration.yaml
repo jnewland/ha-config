@@ -1,0 +1,44 @@
+homeassistant:
+  name: Home
+  latitude: !env_var LAT
+  longitude: !env_var LONG
+  elevation: !env_var ELEVATION
+  unit_system: imperial
+  time_zone: America/Chicago
+  customize: !include_dir_merge_named customize
+
+alarm_control_panel: !include alarm_control_panel.yaml
+alexa: !include alexa.yaml
+automation: !include_dir_list automation
+binary_sensor: !include binary_sensor.yaml
+camera: !include camera.yaml
+cover: !include cover.yaml
+conversation:
+device_tracker: !include device_tracker.yaml
+discovery:
+emulated_hue:
+  expose_by_default: false
+frontend:
+group: !include_dir_named groups
+history:
+http: !include http.yaml
+ifttt: !include ifttt.yaml
+ios: !include ios.yaml
+input_boolean: !include input_boolean.yaml
+input_select: !include input_select.yaml
+light: !include light.yaml
+logger: !include logger.yaml
+media_player: !include media_player.yaml
+mqtt: !include mqtt.yaml
+notify: !include notify.yaml
+proximity: !include proximity.yaml
+recorder: !include recorder.yaml
+scene: !include_dir_list scenes
+script: !include_dir_named scripts
+sensor: !include sensor.yaml
+statsd: !include statsd.yaml
+sun:
+switch: !include switch.yaml
+vera: !include vera.yaml
+weblink: !include weblink.yaml
+zone: !include zone.yaml

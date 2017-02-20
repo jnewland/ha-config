@@ -1,0 +1,3 @@
+platform: hue
+host: !env_var HUE_IP
+allow_unreachable: true

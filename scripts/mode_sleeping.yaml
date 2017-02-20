@@ -1,0 +1,14 @@
+sequence:
+  - service: scene.turn_on
+    data_template:
+      entity_id: '
+        {% if states.input_boolean.guests.state == "on" %}
+        scene.sleeping_with_guests_present
+        {% else %}
+        scene.sleeping_without_guests_present
+        {% endif %}
+        '
+  - service: input_select.select_option
+    entity_id: input_select.mode
+    data:
+      option: Sleeping

@@ -1,0 +1,14 @@
+name: 'Speakers All'
+entities:
+  media_player.living_front_speakers:
+    state: 'on'
+  media_player.living_rear_speakers:
+    state: 'on'
+  media_player.kitchen_speakers:
+    state: 'on'
+  media_player.atrium_wall_speakers:
+    state: 'on'
+  media_player.master_bedroom_speakers:
+    state: 'on'
+  media_player.master_bathroom_speakers:
+    state: 'on'

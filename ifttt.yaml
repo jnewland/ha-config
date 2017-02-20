@@ -1,0 +1,1 @@
+key: !env_var IFTTT_KEY

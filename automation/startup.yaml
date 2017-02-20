@@ -1,0 +1,7 @@
+alias: startup
+trigger:
+  platform: event
+  event_type: homeassistant_start
+action:
+  service: script.turn_on
+  entity_id: script.startup

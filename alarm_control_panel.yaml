@@ -1,0 +1,4 @@
+name: Alarm
+platform: !env_var ALARM_PLATFORM
+username: !env_var ALARM_USERNAME
+password: !env_var ALARM_PASSWORD

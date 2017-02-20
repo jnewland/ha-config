@@ -1,0 +1,21 @@
+group.all_automations:
+  friendly_name: Automation
+  hidden: false
+group.upstairs:
+  emulated_hue: true
+group.downstairs:
+  emulated_hue: true
+group.hall:
+  emulated_hue: true
+group.office:
+  emulated_hue: true
+group.great_room:
+  emulated_hue: true
+group.master:
+  emulated_hue: true
+  emulated_hue_name: "bedroom"
+group.master_bath:
+  emulated_hue: true
+  emulated_hue_name: "bathroom"
+group.itunes_controls:
+  friendly_name: Controls

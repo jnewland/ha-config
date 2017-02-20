@@ -1,0 +1,38 @@
+- platform: mpr_6zhmaut
+  name: living front speakers
+  host: !env_var MPR_API_IP
+  port: !env_var MPR_API_PORT
+  zone: 11
+- platform: mpr_6zhmaut
+  name: living rear speakers
+  host: !env_var MPR_API_IP
+  port: !env_var MPR_API_PORT
+  zone: 12
+- platform: mpr_6zhmaut
+  name: kitchen speakers
+  host: !env_var MPR_API_IP
+  port: !env_var MPR_API_PORT
+  zone: 13
+- platform: mpr_6zhmaut
+  name: atrium wall speakers
+  host: !env_var MPR_API_IP
+  port: !env_var MPR_API_PORT
+  zone: 14
+- platform: mpr_6zhmaut
+  name: master bedroom speakers
+  host: !env_var MPR_API_IP
+  port: !env_var MPR_API_PORT
+  zone: 15
+- platform: mpr_6zhmaut
+  name: master bathroom speakers
+  host: !env_var MPR_API_IP
+  port: !env_var MPR_API_PORT
+  zone: 16
+- platform: samsungtv
+  host: !env_var OFFICE_TV_IP
+  name: Office TV
+- platform: samsungtv
+  host: !env_var BEDROOM_TV_IP
+  name: Bedroom TV
+- platform: itunes
+  host: !env_var ITUNES_IP

@@ -1,0 +1,6 @@
+---
+name: Outdoor
+entities:
+- light.atrium
+- light.back_porch
+- light.front_porch

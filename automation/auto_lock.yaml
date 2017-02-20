@@ -1,0 +1,21 @@
+# Keep the front door locked
+alias: Auto lock
+trigger:
+  platform: state
+  entity_id: lock.front_door
+  to: unlocked
+  for:
+    minutes: 1
+condition:
+  condition: and
+  conditions:
+  - condition: template
+    value_template: '
+      {{
+        states.input_select.mode.state != "Pause"
+      }}'
+action:
+- service: script.ask_jesse_about_turning_on
+  data_template:
+    entity_id: script.lock_up
+    message: "Lock up?"

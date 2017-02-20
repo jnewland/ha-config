@@ -1,0 +1,8 @@
+*.log
+*.db
+*.sqlite
+*.xml
+*.conf
+OZW_Log.txt
+motion_detection
+deps

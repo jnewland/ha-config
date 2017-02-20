@@ -1,0 +1,8 @@
+sequence:
+  - service: homeassistant.turn_off
+    entity_id:
+      - group.speakers
+      - media_player.office_tv
+      - group.airplay
+  - service: media_player.media_pause
+    entity_id: media_player.itunes

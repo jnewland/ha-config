@@ -1,0 +1,7 @@
+---
+view: true
+icon: mdi:itunes
+entities:
+  - media_player.itunes
+  - group.airplay
+  - group.itunes_controls

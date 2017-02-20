@@ -1,0 +1,10 @@
+alias: Playlist selector
+trigger:
+  platform: state
+  entity_id: input_select.playlist
+action:
+  service: script.turn_on
+  data_template:
+    entity_id: script.house_music
+    variables:
+      playlist: '{{ trigger.to_state.state }}'

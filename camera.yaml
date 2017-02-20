@@ -1,0 +1,38 @@
+- platform: mjpeg
+  mjpeg_url: !env_var CAMERA_URL_1
+  name: gate
+- platform: mjpeg
+  mjpeg_url: !env_var CAMERA_URL_2
+  name: back porch
+- platform: mjpeg
+  mjpeg_url: !env_var CAMERA_URL_3
+  name: front yard left
+- platform: mjpeg
+  mjpeg_url: !env_var CAMERA_URL_4
+  name: atrium
+- platform: mjpeg
+  mjpeg_url: !env_var CAMERA_URL_5
+  name: garage
+- platform: mjpeg
+  mjpeg_url: !env_var CAMERA_URL_6
+  name: ac
+- platform: mjpeg
+  mjpeg_url: !env_var CAMERA_URL_7
+  name: front yard right
+- platform: mjpeg
+  mjpeg_url: !env_var CAMERA_URL_8
+  name: side yard
+- platform: mjpeg
+  mjpeg_url: !env_var CAMERA_URL_9
+  name: living room
+- platform: generic
+  name: jPhone
+  still_image_url: https://maps.googleapis.com/maps/api/staticmap?center={{ states.device_tracker.jphone_jphone.attributes.latitude }},{{ states.device_tracker.jphone_jphone.attributes.longitude }}&zoom=13&size=500x500&maptype=roadmap&markers=color:blue%7Clabel:J%7C{{ states.device_tracker.jphone_jphone.attributes.latitude }},{{ states.device_tracker.jphone_jphone.attributes.longitude }}
+  limit_refetch_to_url_change: true
+- platform: generic
+  name: kPhone
+  still_image_url: https://maps.googleapis.com/maps/api/staticmap?center={{ states.device_tracker.kphone_kphone.attributes.latitude }},{{ states.device_tracker.kphone_kphone.attributes.longitude }}&zoom=13&size=500x500&maptype=roadmap&markers=color:blue%7Clabel:K%7C{{ states.device_tracker.kphone_kphone.attributes.latitude }},{{ states.device_tracker.kphone_kphone.attributes.longitude }}
+  limit_refetch_to_url_change: true
+- platform: generic
+  name: radar
+  still_image_url: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=GRK&brand=wui&num=10&delay=25&type=N0R&frame=0&scale=1&noclutter=1&showstorms=99&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=0&rainsnow=1&lightning=1&smooth=1&rand=24691285&lat=0&lon=0&label=you

@@ -1,0 +1,4 @@
+- platform: rest
+  resource: !env_var DESK_HID_IDLE_TIME_RESOURCE
+  name: Desk active
+  value_template: '{{ value_json < 60}}'

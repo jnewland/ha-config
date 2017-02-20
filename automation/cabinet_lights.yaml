@@ -1,0 +1,13 @@
+alias: Cabinet lights
+trigger:
+  platform: state
+  entity_id:
+    - device_tracker.jphone_jphone
+    - device_tracker.kphone_kphone
+  to: kitchen
+condition:
+  condition: template
+  value_template: '{{ states.input_select.mode.state != "Pause" }}'
+action:
+  service: light.turn_on
+  entity_id: light.cabinets

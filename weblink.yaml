@@ -1,0 +1,21 @@
+entities:
+  - name: Router
+    url: !env_var ROUTER_LINK
+  - name: Grande Gateway
+    url: !env_var GATEWAY_LINK
+  - name: Motion
+    url: !env_var MOTION_LINK
+  - name: Grafana
+    url: !env_var GRAFANA_LINK
+  - name: Live Camera Dashboard
+    url: !env_var CAMERA_DASH
+  - name: Climate Dashboard
+    url: !env_var CLIMATE_DASH
+  - name: Graphite
+    url: !env_var GRAPHITE_LINK
+  - name: Vera
+    url: !env_var VERA_LINK
+  - name: Smokeping
+    url: !env_var SMOKEPING_LINK
+  - name: self
+    url: !env_var SELF_LINK

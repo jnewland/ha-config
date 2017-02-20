@@ -1,0 +1,49 @@
+intents:
+  MuteIntent:
+    action:
+      service: script.turn_on
+      entity_id: script.quiet
+  AMAZON.HelpIntent:
+    speech:
+      type: plaintext
+      text: I'm not that bright. Maybe ask Jesse instead?
+  AMAZON.NextIntent:
+    action:
+      service: script.turn_on
+      entity_id: script.next_track
+  AMAZON.PauseIntent:
+    action:
+      service: script.turn_on
+      entity_id: script.pause_itunes
+  AMAZON.PlaybackAction<object@MusicPlaylist>:
+    action:
+      service: script.turn_on
+      data_template:
+        entity_id: script.house_music
+        variables:
+          playlist: |
+            {{ object_name | default("") }} {{ object_owner_name | default("") }}
+          shuffle: |
+            {{ mode_name | default("off") }}
+    speech:
+      type: plaintext
+      text: |
+        Playing {{ object_name | default("") }} {{ object_owner_name | default("") }}
+  AMAZON.ResumeIntent:
+    action:
+      service: script.turn_on
+      entity_id: script.play_itunes
+  AMAZON.ShuffleOnIntent:
+    action:
+      service: switch.turn_on
+      entity_id: switch.shuffle
+    speech:
+      type: plaintext
+      text: Songs will be played in random order
+  AMAZON.ShuffleOffIntent:
+    action:
+      service: switch.turn_off
+      entity_id: switch.shuffle
+    speech:
+      type: plaintext
+      text: Shuffle off

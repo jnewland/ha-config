@@ -1,0 +1,14 @@
+default: info
+logs:
+  requests.packages.urllib3.connectionpool: critical
+  homeassistant.components.media_player: warn
+  homeassistant.components.light: debug
+  homeassistant.components.switch: warn
+  homeassistant.components.sensor: warn
+  homeassistant.components.http: warn
+  homeassistant.components.vera: debug
+  homeassistant.components.light.vera: debug
+  root: warn
+  pyvera.subscribe: warn
+  homeassistant.components.cover.myq: debug
+  homeassistant.components.alexa: debug

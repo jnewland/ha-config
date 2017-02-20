@@ -1,0 +1,11 @@
+---
+- light.master_bath_overhead
+- light.master_shower
+- light.master_mirror
+- light.master_toilet
+- binary_sensor.master_bath_motion
+- sensor.master_bath_multisensor_burglar_35
+- sensor.master_bath_multisensor_luminance_35
+- sensor.master_bath_multisensor_relative_humidity_35
+- sensor.master_bath_multisensor_temperature_35
+- sensor.master_bath_multisensor_ultraviolet_35

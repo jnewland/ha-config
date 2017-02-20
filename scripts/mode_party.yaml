@@ -1,0 +1,9 @@
+sequence:
+  - service: homeassistant.turn_on
+    entity_id:
+      - group.speakers
+      - group.all_lights
+  - service: input_select.select_option
+    entity_id: input_select.mode
+    data:
+      option: Party

@@ -1,0 +1,7 @@
+- platform: thinkingcleaner
+- platform: command_line
+  switches:
+    shuffle:
+      command_on: /config/bin/shuffle on
+      command_off: /config/bin/shuffle off
+      command_state: /config/bin/shuffle status

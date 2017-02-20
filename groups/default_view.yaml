@@ -1,0 +1,6 @@
+---
+view: true
+entities:
+- group.home_info
+- group.people
+- camera.radar

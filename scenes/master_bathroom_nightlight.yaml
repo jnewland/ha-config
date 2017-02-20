@@ -1,0 +1,11 @@
+name: 'Master Bathroom Nightlight'
+entities:
+  light.master_bath_overhead:
+    state: 'off'
+  light.master_shower:
+    state: 'off'
+  light.master_mirror:
+    state: 'off'
+  light.master_toilet:
+    state: 'on'
+    brightness: 50

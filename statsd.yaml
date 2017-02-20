@@ -1,0 +1,5 @@
+host: !env_var NUC_IP
+port: 8125
+prefix: rancho-de-newland
+rate: 1
+log_attributes: true

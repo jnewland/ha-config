@@ -1,0 +1,9 @@
+push:
+  categories:
+    - name: Ack
+      identifier: 'ACK'
+      actions:
+        - identifier: 'ACK_TURN_ON'
+          title: 'Hell yeah'
+        - identifier: 'ACK_NO'
+          title: 'Nope'

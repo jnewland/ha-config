@@ -1,0 +1,12 @@
+api_password: !env_var API_PASSWORD
+server_port: 443
+ssl_certificate: !env_var SSL_CERTIFICATE
+ssl_key: !env_var SSL_KEY
+trusted_networks:
+  - 127.0.0.1
+  - ::1
+  - !env_var TRUSTED_NETWORK_1
+  - !env_var TRUSTED_NETWORK_2
+  - !env_var TRUSTED_NETWORK_3
+ip_ban_enabled: True
+login_attempts_threshold: 2

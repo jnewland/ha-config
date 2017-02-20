@@ -1,0 +1,15 @@
+alias: Katie is home
+trigger:
+  platform: state
+  entity_id: device_tracker.kphone_kphone
+  from: not_home
+  to: home
+condition:
+  condition: state
+  entity_id: device_tracker.jphone_jphone
+  state: home
+action:
+  service: notify.slack
+  data:
+    message: '@jnewland Katie is home!'
+    target: "#general"

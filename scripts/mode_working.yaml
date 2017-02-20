@@ -1,0 +1,15 @@
+sequence:
+  - service: light.turn_on
+    entity_id:
+      - light.office_closet_lamp
+      - light.office_closet
+      - light.office_overhead
+    data:
+      brightness: 255
+  - service: light.turn_on
+    entity_id:
+      - light.desk
+  - service: input_select.select_option
+    entity_id: input_select.mode
+    data:
+      option: Working

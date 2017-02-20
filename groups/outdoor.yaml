@@ -1,0 +1,9 @@
+---
+- light.atrium
+- light.back_porch
+- light.front_porch
+- light.front_door
+- light.patio
+- light.master_patio
+- switch.fountain
+- group.garage

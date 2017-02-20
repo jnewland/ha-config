@@ -1,0 +1,3 @@
+name: Movie
+entities:
+  script.mode_movie: 'on'

@@ -1,0 +1,27 @@
+alias: log camera motion events to slack
+trigger:
+  platform: state
+  entity_id:
+    - input_boolean.motion1
+    - input_boolean.motion2
+    - input_boolean.motion3
+    - input_boolean.motion4
+    - input_boolean.motion5
+    - input_boolean.motion6
+    - input_boolean.motion7
+    - input_boolean.motion8
+    - input_boolean.motion9
+  from: 'off'
+  to: 'on'
+action:
+  service: notify.slack
+  data_template:
+    message: ':camera: motion detected'
+    target: "#general"
+    data:
+      attachments:
+        - title: '{{ trigger.to_state.attributes.friendly_name | capitalize }}'
+          title_link: |
+            {{ states.weblink.self.state }}{{ states.camera[(trigger.to_state.attributes.friendly_name|replace(" ", "_"))].attributes.entity_picture | replace("proxy", "proxy_stream") }}
+          image_url: |
+            {{ states.weblink.self.state }}{{ states.camera[(trigger.to_state.attributes.friendly_name|replace(" ", "_"))].attributes.entity_picture }}

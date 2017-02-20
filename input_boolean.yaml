@@ -1,0 +1,42 @@
+# Self-referential sensors that are updated via the API
+motion1:
+  initial: off
+  name: gate
+  icon: mdi:radar
+motion2:
+  initial: off
+  name: back porch
+  icon: mdi:radar
+motion3:
+  initial: off
+  name: front yard left
+  icon: mdi:radar
+motion4:
+  initial: off
+  name: atrium
+  icon: mdi:radar
+motion5:
+  initial: off
+  name: garage
+  icon: mdi:radar
+motion6:
+  initial: off
+  name: ac
+  icon: mdi:radar
+motion7:
+  initial: off
+  name: front yard right
+  icon: mdi:radar
+motion8:
+  initial: off
+  name: side yard
+  icon: mdi:radar
+motion9:
+  initial: off
+  name: living room
+  icon: mdi:radar
+
+guests:
+  initial: off
+  name: guests
+  icon: mdi:settings

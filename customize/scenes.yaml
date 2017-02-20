@@ -1,0 +1,14 @@
+scene.cooking:
+  emulated_hue: true
+scene.working:
+  emulated_hue: true
+scene.party:
+  emulated_hue: true
+scene.reading:
+  emulated_hue: true
+scene.sleeping:
+  emulated_hue: true
+scene.morning:
+  emulated_hue: true
+scene.movie:
+  emulated_hue: true
