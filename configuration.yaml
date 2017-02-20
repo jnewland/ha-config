@@ -9,6 +9,7 @@ homeassistant:
 
 alarm_control_panel: !include alarm_control_panel.yaml
 alexa: !include alexa.yaml
+alert: !include_dir_named alerts
 automation: !include_dir_list automation
 binary_sensor: !include binary_sensor.yaml
 camera: !include camera.yaml
