@@ -1,0 +1,3 @@
+control: hidden
+entities:
+- alert.rain_today
