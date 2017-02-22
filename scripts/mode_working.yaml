@@ -4,6 +4,7 @@ sequence:
       - light.office_closet_lamp
       - light.office_closet
       - light.office_overhead
+      - light.office_chandelier
     data:
       brightness: 255
   - service: light.turn_on
