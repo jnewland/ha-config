@@ -23,5 +23,3 @@ action:
         - title: '{{ trigger.to_state.attributes.friendly_name | capitalize }}'
           title_link: |
             {{ states.weblink.self.state }}{{ states.camera[(trigger.to_state.attributes.friendly_name|replace(" ", "_"))].attributes.entity_picture | replace("proxy", "proxy_stream") }}
-          image_url: |
-            {{ states.weblink.self.state }}{{ states.camera[(trigger.to_state.attributes.friendly_name|replace(" ", "_"))].attributes.entity_picture }}
