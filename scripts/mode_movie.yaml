@@ -16,4 +16,4 @@ sequence:
     entity_id:
       - light.office_chandelier
     data:
-      brightness: 125
+      brightness: 128
