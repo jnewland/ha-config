@@ -1,5 +1,6 @@
 api_password: !env_var API_PASSWORD
 server_port: 443
+base_url: !env_var VIRTUAL_HOST
 ssl_certificate: !env_var SSL_CERTIFICATE
 ssl_key: !env_var SSL_KEY
 trusted_networks:
