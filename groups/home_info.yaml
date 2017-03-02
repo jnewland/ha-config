@@ -3,7 +3,7 @@ name: Rancho de Newland
 entities:
 - input_select.mode
 - alarm_control_panel.alarm
-- lock.front_door
+- lock.front_door_12
 - cover.garage
 - cover.gate
 - persistent_notification.invalid_config

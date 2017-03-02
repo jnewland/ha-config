@@ -1,0 +1,29 @@
+#!/bin/bash
+# Updates my fork of HA
+set -ex
+cd ~/src/home-assistant
+
+if [ -n "$(git status --porcelain)" ]; then
+  git status --porcelain
+  exit 1
+fi
+
+if [ "$1" = "--force" ]; then
+  git checkout rancho-de-newland
+  git merge dev
+  git push jnewland :dev
+  git branch -d dev
+  git push jnewland rancho-de-newland
+fi
+
+git branch dev || true
+git checkout dev
+git pull jnewland dev || true
+git pull origin dev
+git push jnewland dev
+
+open "https://github.com/jnewland/home-assistant/compare/jnewland:rancho-de-newland...jnewland:dev"
+
+git checkout -
+
+echo "Run again --force merge dev into rancho-de-newland, push, and cleanup."

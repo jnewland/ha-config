@@ -3,20 +3,20 @@ trigger:
   platform: state
   entity_id:
     - binary_sensor.desk_active
-    - binary_sensor.stairs_motion
-    - binary_sensor.closet_motion
+    - binary_sensor.stairs_motion_6
+    - binary_sensor.closet_motion_61
     - sensor.dark_sky_minutely_summary
     - sensor.dark_sky_daily_summary
     - sensor.dark_sky_hourly_summary
     - sensor.jphone_6s_battery_state
     - sun.sun
-    - binary_sensor.master_bath_motion
-    - binary_sensor.master_ac_water
+    - binary_sensor.master_bath_motion_37
+    - binary_sensor.master_ac_water_13
     - sensor.downstairsroomba_state
     - cover.garage
     - cover.gate
     - input_select.mode
-    - lock.front_door
+    - lock.front_door_12
     - media_player.itunes
     - media_player.atrium_wall_speakers
     - media_player.kitchen_speakers
@@ -52,14 +52,14 @@ action:
         "sensor.dark_sky_hourly_summary":   ":cloud:",
         "sensor.jphone_6s_battery_state":   ":iphone:",
         "sensor.downstairsroomba_state":    ":robot_face:",
-        "binary_sensor.master_ac_water":    ":droplet:"
+        "binary_sensor.master_ac_water_13":    ":droplet:"
       } %}
       {% set entity_state = new_state.entity_id + "." + new_state.state %}
       {% set entity_state_emoji = {
         "sun.sun.above_horizon":    ":sunrise:",
         "sun.sun.below_horizon":    ":city_sunset:",
-        "lock.front_door.locked":   ":lock:",
-        "lock.front_door.unlocked": ":unlock:"
+        "lock.front_door_12.locked":   ":lock:",
+        "lock.front_door_12.unlocked": ":unlock:"
       } %}
       {{ new_state.name | capitalize -}}{{ " " -}}
       {% if entity_state_emoji[entity_state] | default(none) != none -%}

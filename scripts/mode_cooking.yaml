@@ -1,11 +1,11 @@
 sequence:
   - service: light.turn_on
     entity_id:
-      - light.cabinets
-      - light.dining_room_table
-      - light.kitchen
-      - light.living
-      - light.pendants
+      - light.cabinets_14
+      - light.dining_room_table_52
+      - light.kitchen_18
+      - light.living_20
+      - light.pendants_51
   - service: media_player.turn_on
     entity_id:
       - media_player.living_front_speakers

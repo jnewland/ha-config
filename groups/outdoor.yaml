@@ -1,9 +1,9 @@
 ---
-- light.atrium
-- light.back_porch
-- light.front_porch
-- light.front_door
-- light.patio
-- light.master_patio
-- switch.fountain
+- light.atrium_22
+- light.back_porch_46
+- light.front_porch_19
+- light.front_door_21
+- light.patio_29
+- light.master_patio_31
+- switch.fountain_26
 - group.garage
