@@ -1,7 +1,7 @@
 alias: log climate changes to slack
 trigger:
   platform: state
-  entity_id: climate.great_room, climate.upstairs, climate.hall
+  entity_id: climate.great_room_27, climate.upstairs_28, climate.hall_48
 action:
   service: notify.slack
   data_template:

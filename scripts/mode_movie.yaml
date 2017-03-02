@@ -5,15 +5,15 @@ sequence:
       option: Movie
   - service: homeassistant.turn_off
     entity_id:
-      - light.office_overhead
+      - light.office_overhead_11
       - light.office_closet_lamp
       - light.office_closet
-      - light.desk
+      - light.desk_63
       - group.office
       - group.guest
       - group.hall
   - service: light.turn_on
     entity_id:
-      - light.office_chandelier
+      - light.office_chandelier_69
     data:
       brightness: 128

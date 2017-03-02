@@ -2,7 +2,7 @@
 alias: Auto lock
 trigger:
   platform: state
-  entity_id: lock.front_door
+  entity_id: lock.front_door_12
   to: unlocked
   for:
     minutes: 1

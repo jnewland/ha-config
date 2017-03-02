@@ -4,7 +4,7 @@
 alias: Early Riser
 trigger:
   platform: state
-  entity_id: binary_sensor.master_bath_motion
+  entity_id: binary_sensor.master_bath_motion_37
   from: 'off'
   to: 'on'
 condition:
