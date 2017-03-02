@@ -5,4 +5,4 @@ icon: mdi:hotel
 entities:
 - group.master
 - group.master_bath
-- group.master_speakers
+- group.master_media

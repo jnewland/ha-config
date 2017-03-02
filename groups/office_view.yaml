@@ -6,3 +6,4 @@ entities:
 - group.office
 - group.guest
 - group.hall
+- group.office_media
