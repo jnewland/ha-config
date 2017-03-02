@@ -1,0 +1,17 @@
+#!/bin/bash
+set -ex
+cd ~/src/home-assistant
+
+if [ -n "$(git status --porcelain)" ]; then
+  git status --porcelain
+  exit 1
+fi
+
+git checkout dev
+git pull jnewland dev || true
+git pull origin dev
+git push jnewland dev
+
+open "https://github.com/jnewland/home-assistant/compare/jnewland:rancho-de-newland...jnewland:dev"
+
+git checkout -
