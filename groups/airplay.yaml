@@ -1,3 +1,4 @@
+name: "House Music"
 control: hidden
 entities:
 - script.airplay_computer

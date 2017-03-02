@@ -1,4 +1,5 @@
 ---
-entities:
+- media_player.bedroom_apple_tv
+- media_player.bedroom_tv
 - media_player.master_bedroom_speakers
 - media_player.master_bathroom_speakers
