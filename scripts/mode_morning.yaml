@@ -3,7 +3,7 @@ sequence:
     entity_id: group.nightime_security
   - service: light.turn_on
     entity_id:
-      - light.cabinets
+      - light.cabinets_14
     data:
       brightness: 255
   - service: media_player.turn_off
