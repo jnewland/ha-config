@@ -4,3 +4,4 @@ entities:
 - group.home_info
 - group.people
 - group.alerts
+- group.default_view_weather
