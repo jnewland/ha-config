@@ -3,12 +3,13 @@ sequence:
     entity_id:
       - light.office_closet_lamp
       - light.office_closet
-      - light.office_overhead
+      - light.office_overhead_11
+      - light.office_chandelier_69
     data:
       brightness: 255
   - service: light.turn_on
     entity_id:
-      - light.desk
+      - light.desk_63
   - service: input_select.select_option
     entity_id: input_select.mode
     data:

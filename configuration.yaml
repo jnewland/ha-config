@@ -40,6 +40,8 @@ sensor: !include sensor.yaml
 statsd: !include statsd.yaml
 sun:
 switch: !include switch.yaml
+tts:
+  - platform: google
 vera: !include vera.yaml
 weblink: !include weblink.yaml
 zone: !include zone.yaml
