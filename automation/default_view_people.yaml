@@ -1,12 +1,12 @@
 alias: Show people on dashboard only if interesting
 trigger:
   - platform: state
-    entity_id: binary_sensor.home_alone
+    entity_id: binary_sensor.together
   - platform: event
     event_type: homeassistant_start
 action:
   service: script.group_visibility
   data:
     entity_id: group.people
-    cond: binary_sensor.home_alone
+    cond: binary_sensor.together
     visible_state: 'on'
