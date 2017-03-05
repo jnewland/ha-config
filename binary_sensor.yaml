@@ -4,9 +4,6 @@
   value_template: '{{ value_json < 60}}'
 - platform: template
   sensors:
-    together:
-      value_template: |
-        {{ distance(states.device_tracker.jphone_jphone, states.device_tracker.kphone_kphone) < 0.25 }}
     rain_today:
       value_template: |
         {{
@@ -14,3 +11,8 @@
           float(states.sensor.dark_sky_precip_probability.state) > 0 or
           float(states.sensor.dark_sky_precip_intensity.state) > 0
         }}
+- platform: template
+  sensors:
+    together:
+      value_template: |
+        {{ distance(states.device_tracker.jphone_jphone, states.device_tracker.kphone_kphone) < 0.25 }}
