@@ -1,0 +1,12 @@
+alias: Show people on dashboard only if interesting
+trigger:
+  - platform: state
+    entity_id: binary_sensor.home_alone
+  - platform: event
+    event_type: homeassistant_start
+action:
+  service: script.group_visibility
+  data:
+    entity_id: group.people
+    cond: binary_sensor.home_alone
+    visible_state: 'on'
