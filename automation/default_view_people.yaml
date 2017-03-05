@@ -9,4 +9,4 @@ action:
   data:
     entity_id: group.people
     cond: binary_sensor.together
-    visible_state: 'on'
+    visible_state: 'off'
