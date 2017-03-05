@@ -1,0 +1,12 @@
+alias: Show weather info on the dashboard if its interesting
+trigger:
+  - platform: state
+    entity_id: binary_sensor.rain_today
+  - platform: event
+    event_type: homeassistant_start
+action:
+  service: script.group_visibility
+  data:
+    entity_id: group.default_view_weather
+    cond: binary_sensor.rain_today
+    visible_state: 'on'
