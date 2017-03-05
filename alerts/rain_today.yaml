@@ -1,0 +1,6 @@
+name: "@jnewland rain predicted for today!"
+entity_id: binary_sensor.rain_today
+state: 'on'
+repeat: 1440
+notifiers:
+- slack

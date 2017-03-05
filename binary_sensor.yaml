@@ -2,3 +2,15 @@
   resource: !env_var DESK_HID_IDLE_TIME_RESOURCE
   name: Desk active
   value_template: '{{ value_json < 60}}'
+- platform: template
+  sensors:
+    rain_today:
+      value_template: |
+        {{
+          float(states.sensor.dark_sky_daily_max_precip_intensity.state) > 0 or
+          float(states.sensor.dark_sky_precip_probability.state) > 0 or
+          float(states.sensor.dark_sky_precip_intensity.state) > 0
+        }}
+    together:
+      value_template: |
+        {{ distance(states.device_tracker.jphone_jphone, states.device_tracker.kphone_kphone) < 0.25 }}

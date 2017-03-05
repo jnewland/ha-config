@@ -3,4 +3,5 @@ view: true
 entities:
 - group.home_info
 - group.people
-- camera.radar
+- group.alerts
+- group.default_view_weather
