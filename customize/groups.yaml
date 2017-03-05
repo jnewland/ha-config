@@ -17,5 +17,3 @@ group.master:
 group.master_bath:
   emulated_hue: true
   emulated_hue_name: "bathroom"
-group.itunes_controls:
-  friendly_name: Controls
