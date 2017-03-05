@@ -1,4 +1,5 @@
----
+name: Great room
+entities:
 - light.cabinets_14
 - light.dining_room_table_52
 - light.kitchen_18
