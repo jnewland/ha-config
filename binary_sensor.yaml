@@ -11,8 +11,6 @@
           float(states.sensor.dark_sky_precip_probability.state) > 0 or
           float(states.sensor.dark_sky_precip_intensity.state) > 0
         }}
-- platform: template
-  sensors:
     together:
       value_template: |
         {{
