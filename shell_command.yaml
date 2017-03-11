@@ -1,1 +1,1 @@
-update_config: bash -cex "(which git || apt-get -y install git) && cd /config && git fetch origin && git reset --hard origin/{{ branch | default("master")}}"
+update_config: bash -cex "(which git || apt-get -y install git) && cd /config && git fetch origin && git reset --hard origin/{{ branch | default(states.sensor.jnewlandhaconfig_branch.state) }}"

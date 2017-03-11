@@ -33,6 +33,6 @@ script.airplay_upstairs:
   friendly_name: Upstairs
   emulated_hue: true
 script.deploy_haconfig:
-  friendly_name: Deploy jnewland/ha-config@master
+  friendly_name: Update and reload current ha-config branch
 script.restart:
   friendly_name: Restart Home Assistant
