@@ -6,7 +6,7 @@ trigger:
   entity_id:
     - device_tracker.jphone_jphone
     - device_tracker.kphone_kphone
-  to: kitchen
+  to: Kitchen
   for:
     minutes: 2
 condition:
