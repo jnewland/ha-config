@@ -13,8 +13,10 @@ sensor:
   command: "cat /usr/src/app/.git/ORIG_HEAD | head -c 12"
 script:
   restart:
+    sequence:
     - service: homeassistant.restart
   reload_core_config:
+    sequence:
     - service: homeassistant.reload_core_config
 group:
   deployment:
