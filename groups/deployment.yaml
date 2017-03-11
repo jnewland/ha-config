@@ -4,4 +4,4 @@ entities:
 - script.restart
 - script.reload_core_config
 - weblink.upstream_changes
-- weblink.ha-config
+- weblink.ha_config
