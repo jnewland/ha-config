@@ -18,23 +18,3 @@ script:
   reload_core_config:
     sequence:
     - service: homeassistant.reload_core_config
-weblink:
-  entities:
-  - name: CI
-    url: https://travis-ci.org/jnewland
-    icon: mdi:circle-outline
-  - name: "ha-config"
-    url: https://github.com/jnewland/ha-config
-    icon: mdi:source-branch
-  - name: "Upstream changes"
-    url: https://github.com/jnewland/home-assistant/compare/jnewland:rancho-de-newland...home-assistant:dev
-    icon: mdi:source-branch
-group:
-  deployment:
-    icon: mdi:rocket
-    control: hidden
-    entities:
-    - script.restart
-    - script.reload_core_config
-    - weblink.upstream_changes
-    - weblink.ha-config
