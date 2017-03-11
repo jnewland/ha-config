@@ -1,6 +1,6 @@
 #!/bin/bash
 
-exec bash -exc "which git || apt-get -y install git && \
+exec bash -exc "which git || apt-get update && apt-get -y install git && \
   cd /config && \
   git fetch origin && \
-  git reset --hard origin/$1" >>/var/log/update-config.log 2>&1
+  git reset --hard origin/$1" >>/proc/1/fd/1 2>&1
