@@ -6,6 +6,8 @@ exec 1>>/proc/1/fd/1 2>&1
 set -ex
 
 BRANCH=$1
+# TODO
+: ${NWO:=jnewland/ha-config}
 
 if [ -z "$BRANCH" ] && [ -n "$NWO" ]; then
   : ${TRAVIS:=travis-ci.org}
@@ -15,7 +17,11 @@ if [ -z "$BRANCH" ] && [ -n "$NWO" ]; then
     jq -r 'map(select(.result == 0)) | sort_by(.finished_at) | .[0].branch')
 fi
 
+if [ -z "$BRANCH" ]; then
+  exit 1
+fi
+
 which git || (apt-get update && apt-get -y install git)
 cd /config
 git fetch origin
-git reset --hard origin/$1
+git reset --hard origin/$BRANCH
