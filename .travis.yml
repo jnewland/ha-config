@@ -1,6 +1,7 @@
 language: python
 python:
 - '3.4'
+cache: pip
 install:
 - pip3 install https://github.com/jnewland/home-assistant/zipball/rancho-de-newland
 script:
