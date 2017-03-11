@@ -1,1 +1,1 @@
-update_config: /config/script/update-config {{ branch | default(states.sensor.haconfig_branch.state) }}
+update_config: /config/script/update-config {{ branch }}
