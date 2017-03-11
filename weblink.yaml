@@ -22,9 +22,9 @@ entities:
   - name: CI
     url: https://travis-ci.org/jnewland
     icon: mdi:check
-  - name: "ha-config"
+  - name: Repo
     url: https://github.com/jnewland/ha-config
-    icon: mdi:source-branch
+    icon: mdi:github-circle
   - name: "Upstream changes"
     url: https://github.com/jnewland/home-assistant/compare/jnewland:rancho-de-newland...home-assistant:dev
     icon: mdi:source-branch

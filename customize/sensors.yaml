@@ -5,6 +5,8 @@ sensor.downstairsroomba_capacity:
 sensor.downstairsroomba_state:
   friendly_name: Roomba
 sensor.haconfig_branch:
+  friendly_name: Branch
   icon: mdi:source-branch
 sensor.home_assistant_branch:
+  friendly_name: Branch
   icon: mdi:source-branch
