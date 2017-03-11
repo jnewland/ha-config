@@ -121,13 +121,7 @@
 
 - platform: command_line
   name: "jnewland/ha-config branch"
-  command: "cat /config/.git/HEAD | rev | cut -f 1 -d \\/ | rev"
+  command: "tail -n 1 /config/.git/logs/refs/heads/master | rev | cut -f 1 -d \\/ | rev"
 - platform: command_line
   name: "jnewland/home-assistant branch"
-  command: "cat /usr/src/app/.git/HEAD | rev | cut -f 1 -d \\/ | rev"
-- platform: command_line
-  name: "jnewland/ha-config sha"
-  command: "cat /config/.git/ORIG_HEAD | head -c 12"
-- platform: command_line
-  name: "jnewland/home-assistant sha"
-  command: "cat /usr/src/app/.git/ORIG_HEAD | head -c 12"
+  command: "tail -n 1 /usr/src/app/.git/logs/refs/heads/rancho-de-newland | rev | cut -f 1 -d \\/ | rev"
