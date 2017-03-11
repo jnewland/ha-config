@@ -5,7 +5,7 @@ entities:
 - weblink.haconfig
 - sensor.haconfig_branch
 - script.deploy_haconfig
-- script.script.deploy_haconfig_master
+- script.deploy_haconfig_master
 - sensor.home_assistant_branch
 - weblink.upstream_changes
 - script.restart
