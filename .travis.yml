@@ -5,7 +5,7 @@ cache: pip
 install:
 - pip3 install homeassistant
 script:
-- openssl req -x509 -newkey rsa:4096 -keyout /tmp/key.pem -out /tmp/cert.pem -days 365
+- openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout /tmp/key.pem -out /tmp/cert.pem
 - hass -c . --script check_config | tee /tmp/log
 - test "$(grep -c ERROR /tmp/log)" -eq 0
 env:
