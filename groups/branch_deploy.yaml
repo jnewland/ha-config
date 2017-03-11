@@ -1,0 +1,7 @@
+control: hidden
+name: Configuration
+entities:
+- sensor.haconfig_branch
+- weblink.haconfig
+- script.deploy_haconfig
+- script.deploy_haconfig_master

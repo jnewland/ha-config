@@ -8,4 +8,5 @@ entities:
 - group.links
 - group.all_automations
 - group.roomba
-- group.deployment
+- group.home_assistant
+- group.branch_deploy
