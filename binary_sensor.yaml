@@ -5,6 +5,10 @@
 - platform: template
   sensors:
     rain_today:
+      entity_id:
+      - sensor.dark_sky_daily_max_precip_intensity
+      - sensor.dark_sky_precip_probability
+      - sensor.dark_sky_precip_intensity
       value_template: |
         {{
           float(states.sensor.dark_sky_daily_max_precip_intensity.state) > 0 or
@@ -12,6 +16,9 @@
           float(states.sensor.dark_sky_precip_intensity.state) > 0
         }}
     together:
+      entity_id:
+      - device_tracker.jphone_jphone
+      - device_tracker.kphone_kphone
       value_template: |
         {{
           distance(states.device_tracker.jphone_jphone, states.device_tracker.kphone_kphone) != None and
