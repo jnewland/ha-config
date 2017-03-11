@@ -4,3 +4,4 @@ sequence:
     branch: master
 - service: homeassistant.reload_core_config
 - service: group.reload
+- service: automation.reload
