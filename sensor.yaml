@@ -127,7 +127,7 @@
   command: "tail -n 1 /usr/src/app/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
 - platform: command_line
   name: haconfig_sha
-  command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $1'}"
+  command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $2'}"
 - platform: command_line
   name: homeassistant_sha
-  command: "tail -n 1 /usr/src/app/.git/logs/HEAD | awk '{print $1'}"
+  command: "tail -n 1 /usr/src/app/.git/logs/HEAD | awk '{print $2'}"
