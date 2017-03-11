@@ -1,13 +1,6 @@
 #!/bin/bash
-set -e
 
-exec 1> >>/var/log/update-config.log 2>&1
-set -x
-
-which git || apt-get -y install git
-
-: ${HA_CONFIG_BRANCH:=$1}
-
-cd /config
-git fetch origin
-git reset --hard "origin/$HA_CONFIG_BRANCH"
+exec bash -exc "which git || apt-get -y install git && \
+  cd /config && \
+  git fetch origin && \
+  git reset --hard origin/$1" >>/var/log/update-config.log 2>&1
