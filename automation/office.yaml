@@ -4,7 +4,7 @@ trigger:
   entity_id:
     - device_tracker.kphone_kphone
     - device_tracker.jphone_jphone
-  to: office
+  to: Office
 condition:
   condition: template
   value_template: '

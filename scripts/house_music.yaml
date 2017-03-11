@@ -13,7 +13,7 @@ sequence:
         {%- if states.input_select.mode.state == "Morning" or states.input_select.mode.state == "Sleeping" -%}
         script.airplay_computer
         {%- else -%}
-        {%- if zone == "kitchen" or zone == "office "-%}
+        {%- if zone == "Kitchen" or zone == "Office "-%}
         script.airplay_downstairs
         {%- elif zone == "home" -%}
         script.airplay_everywhere
