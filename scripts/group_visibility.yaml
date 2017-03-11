@@ -2,4 +2,4 @@ sequence:
   - service: group.set_visibility
     data_template:
       entity_id: '{{ entity_id }}'
-      visible: '{{ is_state(cond, visible_state) }}'
+      visible: '{{ is_state(cond, visible_state) or not is_state(cond, hidden_state) }}'

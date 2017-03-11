@@ -1,0 +1,12 @@
+alias: Show branch deploy group if we're not on master
+trigger:
+  - platform: state
+    entity_id: sensor.haconfig_branch
+  - platform: event
+    event_type: homeassistant_start
+action:
+  service: script.group_visibility
+  data:
+    entity_id: group.branch_deploy
+    cond: sensor.haconfig_branch
+    hidden_state: 'master'

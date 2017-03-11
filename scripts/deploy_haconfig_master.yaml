@@ -1,0 +1,7 @@
+sequence:
+- service: shell_command.update_config
+  data:
+    branch: "master"
+- service: homeassistant.reload_core_config
+- service: group.reload
+- service: automation.reload

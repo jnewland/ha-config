@@ -118,3 +118,16 @@
         {% if states.switch.stairs_motion %}
           {{ states.switch.stairs_motion.attributes.battery_level | replace('%', '') }}
         {% endif %}
+
+- platform: command_line
+  name: haconfig_branch
+  command: "tail -n 1 /config/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
+- platform: command_line
+  name: homeassistant_branch
+  command: "tail -n 1 /usr/src/app/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
+- platform: command_line
+  name: haconfig_sha
+  command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $1'}"
+- platform: command_line
+  name: homeassistant_sha
+  command: "tail -n 1 /usr/src/app/.git/logs/HEAD | awk '{print $1'}"
