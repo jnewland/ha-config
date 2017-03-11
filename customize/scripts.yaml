@@ -39,4 +39,5 @@ script.deploy_haconfig_master:
 script.restart:
   friendly_name: Restart
 script.deploy_haconfig_latest:
-  friendly_name: Deploy latest ha-config branch
+  icon: mdi:update
+  friendly_name: Deploy ha-config
