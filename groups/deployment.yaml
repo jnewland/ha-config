@@ -5,3 +5,5 @@ entities:
 - script.reload_core_config
 - weblink.upstream_changes
 - weblink.ha_config
+- sensor.jnewland_ha_config_branch
+- sensor.jnewland_home_assistant_branch
