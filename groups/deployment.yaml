@@ -1,9 +1,11 @@
 icon: mdi:rocket
 control: hidden
+name: Deployment
 entities:
 - script.restart
 - script.reload_core_config
 - weblink.upstream_changes
 - weblink.haconfig
+- weblink.ci
 - sensor.jnewlandhaconfig_branch
 - sensor.jnewlandhomeassistant_branch
