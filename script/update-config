@@ -1,5 +1,10 @@
 #!/bin/bash
-set -ex
+set -e
+
+# Inject logs into the main processes' stdout
+ln -nsf /proc/1/fd/1 /var/log/docker.log
+exec 1> >/var/log/docker.log 2>&1
+set -x
 
 which git || apt-get -y install git
 
