@@ -121,7 +121,7 @@
 
 - platform: command_line
   name: "jnewland/ha-config branch"
-  command: "tail -n 1 /config/.git/logs/refs/heads/master | rev | cut -f 1 -d \\/ | rev"
+  command: "tail -n 1 /config/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
 - platform: command_line
   name: "jnewland/home-assistant branch"
-  command: "tail -n 1 /usr/src/app/.git/logs/refs/heads/rancho-de-newland | rev | cut -f 1 -d \\/ | rev"
+  command: "tail -n 1 /usr/src/app/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
