@@ -24,6 +24,6 @@ playlist:
    - Pure Ambient
    - Headspace
    - 'The A-List: Indie'
-   - Pause
+   - Idle
   initial: Pause
   icon: mdi:playlist-play
