@@ -1,3 +1,4 @@
 sequence:
 - service: shell_command.update_config
 - service: homeassistant.reload_core_config
+- service: group.reload
