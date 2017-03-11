@@ -3,7 +3,7 @@ python:
 - "3.4"
 cache: pip
 install:
-- pip3 install homeassistant
+- pip3 install https://github.com/jnewland/home-assistant/zipball/rancho-de-newland
 script:
 - openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout /tmp/key.pem -out /tmp/cert.pem
 - hass -c . --script check_config | tee /tmp/log
