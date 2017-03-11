@@ -2,6 +2,8 @@ control: hidden
 name: Home Assistant
 entities:
 - script.deploy_haconfig_latest
-- sensor.home_assistant_branch
+- sensor.homeassistant_branch
+- weblink.homeassistant_repo
+- weblink.homeassistant_ci
 - weblink.upstream_changes
 - script.restart

@@ -2,7 +2,7 @@ control: hidden
 name: ha-config branch
 entities:
 - sensor.haconfig_branch
-- weblink.repo
-- weblink.ci
+- weblink.haconfig
+- weblink.haconfig_ci
 - script.deploy_haconfig
 - script.deploy_haconfig_master
