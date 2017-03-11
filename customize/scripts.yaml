@@ -33,10 +33,10 @@ script.airplay_upstairs:
   friendly_name: Upstairs
   emulated_hue: true
 script.deploy_haconfig:
-  friendly_name: Update and reload current branch
+  friendly_name: Deploy branch
 script.deploy_haconfig_master:
   friendly_name: Redploy master
 script.restart:
-  friendly_name: Restart Home Assistant
+  friendly_name: Restart
 script.deploy_haconfig_latest:
   friendly_name: Deploy latest ha-config branch
