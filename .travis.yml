@@ -7,8 +7,7 @@ install:
 script:
 - openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout /tmp/key.pem
   -out /tmp/cert.pem
-- hass -c . --script check_config | tee /tmp/log
-- test "$(grep -c ERROR /tmp/log)" -eq 0
+- hass -c . --script check_config
 env:
 - ALARM_PASSWORD=""
   ALARM_PLATFORM=""
