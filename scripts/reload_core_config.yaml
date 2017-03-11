@@ -1,3 +1,0 @@
-name: Reload core config
-sequence:
-- service: homeassistant.reload_core_config

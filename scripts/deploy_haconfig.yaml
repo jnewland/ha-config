@@ -1,0 +1,4 @@
+name: Deploy jnewland/ha-config@master
+sequence:
+- service: shell_command.update_config
+- service: homeassistant.reload_core_config

@@ -1,8 +1,8 @@
 control: hidden
 name: Deployment
 entities:
+- script.deploy_haconfig
 - script.restart
-- script.reload_core_config
 - weblink.upstream_changes
 - weblink.haconfig
 - weblink.ci
