@@ -1,4 +1,3 @@
-icon: mdi:rocket
 control: hidden
 name: Deployment
 entities:
