@@ -120,14 +120,14 @@
         {% endif %}
 
 - platform: command_line
-  name: "ha-config branch"
+  name: haconfig_branch
   command: "tail -n 1 /config/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
 - platform: command_line
-  name: "Home Assistant branch"
+  name: homeassistant_branch
   command: "tail -n 1 /usr/src/app/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
 - platform: command_line
-  name: "ha-config sha"
+  name: haconfig_sha
   command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $1'}"
 - platform: command_line
-  name: "home-assistant sha"
+  name: homeassistant_sha
   command: "tail -n 1 /usr/src/app/.git/logs/HEAD | awk '{print $1'}"
