@@ -1,10 +1,11 @@
 control: hidden
 name: Deployment
 entities:
-- script.deploy_haconfig
-- script.restart
-- weblink.upstream_changes
-- weblink.haconfig
 - weblink.ci
+- weblink.haconfig
 - sensor.haconfig_branch
+- script.deploy_haconfig
+- script.script.deploy_haconfig_master
 - sensor.home_assistant_branch
+- weblink.upstream_changes
+- script.restart
