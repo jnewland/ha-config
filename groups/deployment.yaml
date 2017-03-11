@@ -1,0 +1,7 @@
+icon: mdi:rocket
+control: hidden
+entities:
+- script.restart
+- script.reload_core_config
+- weblink.upstream_changes
+- weblink.ha-config
