@@ -1,7 +1,9 @@
 alias: Show people on dashboard only if interesting
 trigger:
   - platform: state
-    entity_id: binary_sensor.together
+    entity_id:
+      - binary_sensor.together
+      - sensor.haconfig_sha
   - platform: event
     event_type: homeassistant_start
 action:

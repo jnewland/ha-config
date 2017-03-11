@@ -1,7 +1,9 @@
 alias: Show branch deploy group if we're not on master
 trigger:
   - platform: state
-    entity_id: sensor.haconfig_branch
+    entity_id:
+    - sensor.haconfig_branch
+    - sensor.haconfig_sha
   - platform: event
     event_type: homeassistant_start
 action:
