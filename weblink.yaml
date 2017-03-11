@@ -21,7 +21,7 @@ entities:
     url: !env_var SELF_LINK
   - name: CI
     url: https://travis-ci.org/jnewland
-    icon: mdi:circle-outline
+    icon: mdi:check
   - name: "ha-config"
     url: https://github.com/jnewland/ha-config
     icon: mdi:source-branch
