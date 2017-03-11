@@ -32,3 +32,7 @@ script.airplay_upstairs:
   icon: mdi:speaker
   friendly_name: Upstairs
   emulated_hue: true
+script.deploy_haconfig:
+  friendly_name: Deploy jnewland/ha-config@master
+script.restart:
+  friendly_name: Restart Home Assistant

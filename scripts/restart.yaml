@@ -1,3 +1,2 @@
-name: Restart home-assistant
 sequence:
 - service: homeassistant.restart
