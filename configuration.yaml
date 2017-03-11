@@ -6,6 +6,7 @@ homeassistant:
   unit_system: imperial
   time_zone: America/Chicago
   customize: !include_dir_merge_named customize
+  packages: !include_dir_named packages
 
 alarm_control_panel: !include alarm_control_panel.yaml
 alexa: !include alexa.yaml
@@ -32,7 +33,6 @@ logger: !include logger.yaml
 media_player: !include media_player.yaml
 mqtt: !include mqtt.yaml
 notify: !include notify.yaml
-packages: !include_dir_named packages
 proximity: !include proximity.yaml
 recorder: !include recorder.yaml
 scene: !include_dir_list scenes
