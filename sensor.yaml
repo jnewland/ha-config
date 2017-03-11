@@ -118,3 +118,16 @@
         {% if states.switch.stairs_motion %}
           {{ states.switch.stairs_motion.attributes.battery_level | replace('%', '') }}
         {% endif %}
+
+- platform: command_line
+  name: "jnewland/ha-config branch"
+  command: "cat /config/.git/HEAD | rev | cut -f 1 -d \\/ | rev"
+- platform: command_line
+  name: "jnewland/home-assistant branch"
+  command: "cat /usr/src/app/.git/HEAD | rev | cut -f 1 -d \\/ | rev"
+- platform: command_line
+  name: "jnewland/ha-config sha"
+  command: "cat /config/.git/ORIG_HEAD | head -c 12"
+- platform: command_line
+  name: "jnewland/home-assistant sha"
+  command: "cat /usr/src/app/.git/ORIG_HEAD | head -c 12"
