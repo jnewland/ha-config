@@ -6,7 +6,7 @@ install:
 - pip3 install https://github.com/jnewland/home-assistant/zipball/rancho-de-newland
 script:
 - openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout /tmp/key.pem -out /tmp/cert.pem
-- hass -c . -i all -f --script check_config | tee /tmp/log
+- hass -c . --script check_config -i all -f | tee /tmp/log
 - test "$(grep -c ERROR /tmp/log)" -eq 0
 env:
 - ALARM_PASSWORD=""
