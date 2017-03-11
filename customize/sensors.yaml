@@ -4,7 +4,7 @@ sensor.downstairsroomba_capacity:
   friendly_name: Capacity
 sensor.downstairsroomba_state:
   friendly_name: Roomba
-sensor.jnewlandhaconfig_branch:
+sensor.haconfig_branch:
   icon: mdi:source-branch
-sensor.jnewlandhomeassistant_branch:
+sensor.homeassistant_branch:
   icon: mdi:source-branch

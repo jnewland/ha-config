@@ -6,5 +6,5 @@ entities:
 - weblink.upstream_changes
 - weblink.haconfig
 - weblink.ci
-- sensor.jnewlandhaconfig_branch
-- sensor.jnewlandhomeassistant_branch
+- sensor.haconfig_branch
+- sensor.homeassistant_branch

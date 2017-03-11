@@ -120,8 +120,8 @@
         {% endif %}
 
 - platform: command_line
-  name: "jnewland/ha-config branch"
+  name: "ha-config branch"
   command: "tail -n 1 /config/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
 - platform: command_line
-  name: "jnewland/home-assistant branch"
+  name: "Home Assistant branch"
   command: "tail -n 1 /usr/src/app/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
