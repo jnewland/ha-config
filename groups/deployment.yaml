@@ -7,4 +7,4 @@ entities:
 - weblink.haconfig
 - weblink.ci
 - sensor.haconfig_branch
-- sensor.homeassistant_branch
+- sensor.home_assistant_branch
