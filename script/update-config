@@ -1,7 +1,9 @@
 #!/bin/bash
 
-exec bash -exc "\
-  (which git || (apt-get update && apt-get -y install git)) && \
-  cd /config && \
-  git fetch origin && \
-  git reset --hard origin/$1" >>/proc/1/fd/1 2>&1
+exec 1>>/proc/1/fd/1 2>&1
+set -ex
+
+which git || (apt-get update && apt-get -y install git)
+cd /config
+git fetch origin
+git reset --hard origin/$1
