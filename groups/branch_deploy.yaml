@@ -1,7 +1,7 @@
 control: hidden
-name: Configuration
+name: Branch deploy
 entities:
 - sensor.haconfig_branch
-- weblink.haconfig
+- weblink.repo
 - script.deploy_haconfig
 - script.deploy_haconfig_master
