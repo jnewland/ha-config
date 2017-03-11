@@ -1,6 +1,6 @@
 sequence:
 - service: shell_command.update_config
   data_template:
-    branch: {{ states.sensor.haconfig_branch.state }}
+    branch: "{{ states.sensor.haconfig_branch.state }}"
 - service: homeassistant.reload_core_config
 - service: group.reload
