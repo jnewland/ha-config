@@ -8,3 +8,4 @@ entities:
 - group.links
 - group.all_automations
 - group.roomba
+- group.deployment
