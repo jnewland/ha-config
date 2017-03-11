@@ -13,4 +13,7 @@
         }}
     together:
       value_template: |
-        {{ distance(states.device_tracker.jphone_jphone, states.device_tracker.kphone_kphone) < 0.25 }}
+        {{
+          distance(states.device_tracker.jphone_jphone, states.device_tracker.kphone_kphone) != None and
+          distance(states.device_tracker.jphone_jphone, states.device_tracker.kphone_kphone) < 0.25
+        }}
