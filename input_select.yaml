@@ -25,5 +25,5 @@ playlist:
    - Headspace
    - 'The A-List: Indie'
    - Idle
-  initial: Pause
+  initial: Idle
   icon: mdi:playlist-play
