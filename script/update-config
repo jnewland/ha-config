@@ -14,7 +14,7 @@ if [ -z "$BRANCH" ] && [ -n "$NWO" ]; then
   which jq || (apt-get update && apt-get -y install jq)
   BRANCH=$(curl -s \
     https://api.$TRAVIS/repos/$NWO/builds | \
-    jq -r 'map(select(.result == 0)) | sort_by(.finished_at) | reverse | .[0].branch')
+    jq -r 'map(select(.result == 0 and .event_type == "push")) | sort_by(.finished_at) | reverse | .[0].branch')
 fi
 
 if [ -z "$BRANCH" ]; then
