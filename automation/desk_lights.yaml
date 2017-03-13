@@ -2,8 +2,9 @@ alias: Desk lights turn off when computer isn't in use
 trigger:
   platform: state
   entity_id: binary_sensor.desk_active
-  from: 'on'
   to: 'off'
+  for:
+    minutes: 2
 condition:
   condition: template
   value_template: '{{ states.input_select.mode.state != "Pause" }}'
