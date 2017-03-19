@@ -1,0 +1,32 @@
+alias: Turn of bathroom lights after 30m
+trigger:
+  platform: state
+  entity_id:
+  - binary_sensor.guest_bath_motion_70
+  - binary_sensor.master_bath_motion_37
+  - binary_sensor.powder_room_motion_75
+  to: off
+  for:
+    minutes: 30
+condition:
+  condition: template
+  value_template: |
+    {{
+      states.input_select.mode.state != "Pause"
+    }}
+action:
+  - service: notify.slack
+    data_template:
+      message: '{{ trigger.to_state.attributes.friendly_name }} has been off for 30 minutes. Turning out the lights.'
+      target: "#general"
+  - service: homeassistant.turn_off
+    data_template:
+      entity_id: |
+        {%- set entity = trigger.to_state.entity_id -%}
+        {%- if entity == "binary_sensor.guest_bath_motion_70" -%}
+        {{ ["light.guest_bath_43", "light.guest_shower_44" ] }}
+        {%- elif entity == "binary_sensor.master_bath_motion_37" -%}
+        {{ ["light.master_mirror_35", "light.master_bath_overhead_36", "light.master_shower_34" ] }}
+        {%- elif entity == "binary_sensor.powder_room_motion_75" -%}
+        light.powder_room_80
+        {%- endif -%}
