@@ -25,3 +25,5 @@ entities:
     state: 'off'
   alarm_control_panel.alarm:
     state: armed_home
+  switch.downstairsroomba_clean:
+    state: 'on'
