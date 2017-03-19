@@ -24,9 +24,9 @@ action:
       entity_id: |
         {%- set entity = trigger.to_state.entity_id -%}
         {%- if entity == "binary_sensor.guest_bath_motion_70" -%}
-        {{ ["light.guest_bath_43", "light.guest_shower_44" ] }}
+        group.guest_bath
         {%- elif entity == "binary_sensor.master_bath_motion_37" -%}
-        {{ ["light.master_mirror_35", "light.master_bath_overhead_36", "light.master_shower_34" ] }}
+        group.master_bath
         {%- elif entity == "binary_sensor.powder_room_motion_75" -%}
         light.powder_room_80
         {%- endif -%}
