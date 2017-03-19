@@ -15,3 +15,5 @@ entities:
     state: 'on'
   media_player.master_bathroom_speakers:
     state: 'on'
+  media_player.atrium_wall_speakers:
+    state: 'off'
