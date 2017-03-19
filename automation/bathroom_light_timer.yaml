@@ -1,4 +1,4 @@
-alias: Turn of bathroom lights after 30m
+alias: Turn off bathroom lights after 30m
 trigger:
   platform: state
   entity_id:
