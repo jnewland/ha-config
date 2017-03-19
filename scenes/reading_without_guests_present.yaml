@@ -15,12 +15,6 @@ entities:
     state: 'on'
   media_player.master_bathroom_speakers:
     state: 'on'
-  media_player.living_front_speakers:
-    state: 'off'
-  media_player.living_rear_speakers:
-    state: 'off'
-  media_player.kitchen_speakers:
-    state: 'off'
   alarm_control_panel.alarm:
     state: armed_home
   switch.downstairsroomba_clean:
