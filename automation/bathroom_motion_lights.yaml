@@ -17,7 +17,11 @@ action:
       {%- if entity == "binary_sensor.guest_bath_motion_70" -%}
       group.guest_bath
       {%- elif entity == "binary_sensor.master_bath_motion_37" -%}
-      group.master_bath
+      {%- if states.input_select.mode.state == "Sleeping" -%}
+      scene.master_bathroom_nightlight
+      {%- else -%}
+      scene.master_bathroom_full_blast
+      {%- endif -%}
       {%- elif entity == "binary_sensor.powder_room_motion_75" -%}
       light.powder_room_80
       {%- endif -%}
