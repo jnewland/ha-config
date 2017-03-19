@@ -1,0 +1,27 @@
+alias: Turn on bathroom lights when motion is detected
+trigger:
+  platform: state
+  entity_id:
+  - binary_sensor.guest_bath_motion_70
+  - binary_sensor.master_bath_motion_37
+  - binary_sensor.powder_room_motion_75
+  to: "on"
+condition:
+  condition: template
+  value_template: '{{ states.input_select.mode.state != "Pause" }}'
+action:
+  service: homeassistant.turn_on
+  data_template:
+    entity_id: |
+      {%- set entity = trigger.to_state.entity_id -%}
+      {%- if entity == "binary_sensor.guest_bath_motion_70" -%}
+      group.guest_bath
+      {%- elif entity == "binary_sensor.master_bath_motion_37" -%}
+      {%- if states.input_select.mode.state == "Sleeping" -%}
+      scene.master_bathroom_nightlight
+      {%- else -%}
+      scene.master_bathroom_full_blast
+      {%- endif -%}
+      {%- elif entity == "binary_sensor.powder_room_motion_75" -%}
+      light.powder_room_80
+      {%- endif -%}
