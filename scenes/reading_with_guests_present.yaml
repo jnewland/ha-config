@@ -5,8 +5,6 @@ entities:
     brightness: 102
   group.downstairs_non_guest:
     state: 'off'
-  light.master_closet_32:
-    state: 'off'
   light.master_overhead_30:
     state: 'off'
   light.master_nook_42:
