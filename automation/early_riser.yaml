@@ -29,4 +29,4 @@ action:
         @jnewland :sunrise:
         {% if is_state("alert.lost_roomba", "on") %}
         The roomba's lost, btw. Help a poor robot out?
-        {% endif %}'
+        {% endif %}
