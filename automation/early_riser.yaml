@@ -24,5 +24,9 @@ action:
     entity_id: script.mode_morning
   - service: notify.slack
     data_template:
-      message: '@jnewland :sunrise:'
       target: "#general"
+      message: >
+        @jnewland :sunrise:
+        {% if is_state("alert.lost_roomba", "on") %}
+        The roomba's lost, btw. Help a poor robot out?
+        {% endif %}
