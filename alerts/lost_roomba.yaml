@@ -1,0 +1,6 @@
+name: "The roomba is lost"
+entity_id: sensor.downstairsroomba_state
+state: 'Off'
+repeat: 1440
+notifiers:
+- slack
