@@ -4,10 +4,6 @@
   value_template: '{{ value_json < 60}}'
 - platform: template
   sensors:
-    front_gate:
-      entity_id: binary_sensor.front_gate_81
-      value_template: '{% if is_state("binary_sensor.front_gate_81", "on") %}closed{% else %}open{% endif %}'
-      friendly_name: 'Front gate'
     rain_today:
       entity_id:
       - sensor.dark_sky_daily_max_precip_intensity

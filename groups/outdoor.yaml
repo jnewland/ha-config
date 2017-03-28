@@ -7,4 +7,4 @@
 - light.master_patio_31
 - switch.fountain_26
 - group.garage
-- binary_sensor.front_gate
+- sensor.front_gate

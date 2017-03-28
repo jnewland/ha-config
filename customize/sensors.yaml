@@ -4,6 +4,8 @@ sensor.downstairsroomba_capacity:
   friendly_name: Capacity
 sensor.downstairsroomba_state:
   friendly_name: Roomba
+sensor.front_gate:
+  device_class: opening
 sensor.haconfig_branch:
   friendly_name: Branch
   icon: mdi:source-branch
