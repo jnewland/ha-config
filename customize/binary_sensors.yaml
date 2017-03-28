@@ -1,2 +1,4 @@
 binary_sensor.desk_active:
   friendly_name: Desk
+binary_sensor.front_gate:
+  device_class: opening
