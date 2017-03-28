@@ -1,0 +1,11 @@
+alias: Gate Bell
+trigger:
+  platform: state
+  entity_id: binary_sensor.front_gate_81
+  to: 'on'
+action:
+  service: notify.slack
+  data_template:
+    target: "#general"
+    message: >
+      @jnewland the front gate just opened!
