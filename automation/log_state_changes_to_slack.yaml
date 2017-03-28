@@ -2,6 +2,7 @@ alias: log state changes to slack
 trigger:
   platform: state
   entity_id:
+    - automation.gate_bell
     - binary_sensor.desk_active
     - binary_sensor.stairs_motion_6
     - binary_sensor.closet_motion_61
@@ -43,6 +44,7 @@ action:
     message: |
       {% set new_state = trigger.to_state %}
       {% set domain_emoji = {
+        "automation":   "gear",
         "input_select": ":gear:",
         "media_player": ":sound:",
         "cover":        ":house_with_garden:",
