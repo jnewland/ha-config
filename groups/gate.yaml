@@ -1,5 +1,0 @@
-name: Front gate
-control: hidden
-entities:
-  - sensor.front_gate
-  - automation.gate_bell

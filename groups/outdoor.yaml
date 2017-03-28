@@ -1,4 +1,5 @@
----
+name: Outdoor lights
+entities:
 - light.atrium_22
 - light.back_porch_46
 - light.front_porch_19
