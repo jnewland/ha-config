@@ -5,4 +5,4 @@ entities:
 - group.outdoor
 - media_player.atrium_wall_speakers
 - group.garage
-- group.front_gate
+- group.gate
