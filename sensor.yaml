@@ -56,6 +56,10 @@
 
 - platform: template
   sensors:
+    front_gate:
+      entity_id: binary_sensor.front_gate_81
+      value_template: '{% if is_state("binary_sensor.front_gate_81", "on") %}open{% else %}closed{% endif %}'
+      friendly_name: Front gate
     sunrise:
       entity_id: sun.sun
       value_template: |

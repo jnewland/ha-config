@@ -1,0 +1,3 @@
+automation.gate_bell:
+  icon: mdi:bell
+  emulated_hue: true

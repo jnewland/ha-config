@@ -1,4 +1,5 @@
----
+name: Outdoor lights
+entities:
 - light.atrium_22
 - light.back_porch_46
 - light.front_porch_19
@@ -6,4 +7,3 @@
 - light.patio_29
 - light.master_patio_31
 - switch.fountain_26
-- group.garage
