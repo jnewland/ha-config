@@ -60,8 +60,7 @@ action:
         "sensor.dark_sky_hourly_summary":   ":cloud:",
         "sensor.jphone_6s_battery_state":   ":iphone:",
         "sensor.downstairsroomba_state":    ":robot_face:",
-        "sensor.doors_and_windows":         ":door:",
-        "sensor.living_room_motion":        ":couch_and_lamp:",
+        "sensor.alarm_sensors":             ":door:",
         "binary_sensor.master_ac_water_13": ":droplet:",
         "sensor.front_gate":                ":house_with_garden:"
       } %}
