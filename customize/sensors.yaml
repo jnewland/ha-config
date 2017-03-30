@@ -13,3 +13,5 @@ sensor.haconfig_branch:
 sensor.homeassistant_branch:
   friendly_name: Branch
   icon: mdi:source-branch
+sensor.alarm_sensors:
+  icon: mdi:radar
