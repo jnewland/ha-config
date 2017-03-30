@@ -5,3 +5,4 @@ entities:
 - group.people
 - group.alerts
 - group.default_view_weather
+- group.motion

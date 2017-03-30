@@ -13,3 +13,7 @@ sensor.haconfig_branch:
 sensor.homeassistant_branch:
   friendly_name: Branch
   icon: mdi:source-branch
+sensor.doors_and_windows:
+  icon: mdi:glassdoor
+sensor.living_room_motion:
+  icon: mdi:radar

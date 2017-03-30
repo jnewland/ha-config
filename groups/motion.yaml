@@ -1,0 +1,9 @@
+name: Motion
+control: hidden
+entities:
+- sensor.living_room_motion
+- binary_sensor.master_bath_motion_37
+- binary_sensor.guest_bath_motion_70
+- binary_sensor.powder_room_motion_75
+- binary_sensor.closet_motion_61
+# TODO add camera sensors too

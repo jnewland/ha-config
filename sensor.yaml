@@ -56,6 +56,14 @@
 
 - platform: template
   sensors:
+    doors_and_windows:
+      entity_id: alarm_control_panel.alarm
+      value_template: '{{ (states.alarm_control_panel.alarm.attributes.sensor_status | default("")).split(".")[0] }}'
+      friendly_name: Doors and windows
+    living_room_motion:
+      entity_id: alarm_control_panel.alarm
+      value_template: '{{ (states.alarm_control_panel.alarm.attributes.sensor_status | default("")).split(".")[1] }}'
+      friendly_name: Living room motion
     front_gate:
       entity_id: binary_sensor.front_gate_81
       value_template: '{% if is_state("binary_sensor.front_gate_81", "on") %}open{% else %}closed{% endif %}'
