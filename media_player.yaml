@@ -34,7 +34,3 @@
   name: Office TV
 - platform: itunes
   host: !env_var ITUNES_IP
-- platform: apple_tv
-  name: office_apple_tv
-  host: !env_var OFFICE_APPLE_TV_IP
-  login_id: !env_var APPLETV_LOGIN_ID
