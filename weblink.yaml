@@ -3,8 +3,6 @@ entities:
     url: !env_var ROUTER_LINK
   - name: Grande Gateway
     url: !env_var GATEWAY_LINK
-  - name: Motion
-    url: !env_var MOTION_LINK
   - name: Grafana
     url: !env_var GRAFANA_LINK
   - name: Live Camera Dashboard
