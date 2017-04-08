@@ -8,8 +8,7 @@ sequence:
       - light.pendants_51
   - service: media_player.turn_on
     entity_id:
-      - media_player.living_front_speakers
-      - media_player.living_rear_speakers
+      - media_player.living_speakers
       - media_player.kitchen_speakers
   - service: input_select.select_option
     entity_id: input_select.mode

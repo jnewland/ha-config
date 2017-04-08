@@ -3,5 +3,5 @@ view: true
 icon: mdi:tree
 entities:
 - group.outdoor
-- media_player.atrium_wall_speakers
+- media_player.atrium_speakers
 - group.gates

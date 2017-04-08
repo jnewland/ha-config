@@ -15,7 +15,9 @@ entities:
     state: 'on'
   media_player.master_bathroom_speakers:
     state: 'on'
-  media_player.atrium_wall_speakers:
+  media_player.atrium_speakers:
+    state: 'off'
+  media_player.patio_speakers:
     state: 'off'
   alarm_control_panel.alarm:
     state: armed_home
