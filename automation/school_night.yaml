@@ -7,7 +7,7 @@ condition:
   conditions:
   - condition: state
     entity_id: light.living_20
-    state: on
+    state: 'on'
   - condition: template
     value_template: |
       {{
