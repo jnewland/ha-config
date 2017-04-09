@@ -1,0 +1,11 @@
+alias: House Volume
+sequence:
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.itunes
+      volume: >
+        {%- if direction | default("up") == "up" -%}
+        {{ float(states.media_player.itunes.attributes.volume_level) + 0.1 }}
+        {%- else -%}
+        {{ float(states.media_player.itunes.attributes.volume_level) - 0.1 }}
+        {%- endif -%}
