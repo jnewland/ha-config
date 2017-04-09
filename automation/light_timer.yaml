@@ -1,10 +1,11 @@
-alias: Turn off bathroom lights after 30m
+alias: Turn off bathroom and stairs lights after 30m
 trigger:
   platform: state
   entity_id:
   - binary_sensor.guest_bath_motion_70
   - binary_sensor.master_bath_motion_37
   - binary_sensor.powder_room_motion_75
+  - binary_sensor.stairs_motion_6
   to: "off"
   for:
     minutes: 30
@@ -22,4 +23,6 @@ action:
       group.master_bath
       {%- elif entity == "binary_sensor.powder_room_motion_75" -%}
       light.powder_room_80
+      {%- elif entity == "binary_sensor.stairs_motion_6" -%}
+      light.stairs_23
       {%- endif -%}
