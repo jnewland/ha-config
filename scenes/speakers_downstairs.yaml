@@ -1,12 +1,12 @@
 name: 'Speakers Downstairs'
 entities:
-  media_player.living_front_speakers:
-    state: 'on'
-  media_player.living_rear_speakers:
+  media_player.living_speakers:
     state: 'on'
   media_player.kitchen_speakers:
     state: 'on'
-  media_player.atrium_wall_speakers:
+  media_player.atrium_speakers:
+    state: 'off'
+  media_player.patio_speakers:
     state: 'off'
   media_player.master_bedroom_speakers:
     state: 'off'

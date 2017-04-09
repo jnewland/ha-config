@@ -1,20 +1,21 @@
+# Powered sub is attached to this zone's preamp out
 - platform: mpr_6zhmaut
-  name: living front speakers
+  name: living speakers
   host: !env_var MPR_API_IP
   port: !env_var MPR_API_PORT
   zone: 11
 - platform: mpr_6zhmaut
-  name: living rear speakers
+  name: kitchen speakers
   host: !env_var MPR_API_IP
   port: !env_var MPR_API_PORT
   zone: 12
 - platform: mpr_6zhmaut
-  name: kitchen speakers
+  name: patio speakers
   host: !env_var MPR_API_IP
   port: !env_var MPR_API_PORT
   zone: 13
 - platform: mpr_6zhmaut
-  name: atrium wall speakers
+  name: atrium speakers
   host: !env_var MPR_API_IP
   port: !env_var MPR_API_PORT
   zone: 14

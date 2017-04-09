@@ -24,10 +24,10 @@ trigger:
     - input_select.mode
     - lock.front_door_12
     - media_player.itunes
-    - media_player.atrium_wall_speakers
+    - media_player.atrium_speakers
     - media_player.kitchen_speakers
     - media_player.living_front_speakers
-    - media_player.living_rear_speakers
+    - media_player.patio_speakers
     - media_player.master_bathroom_speakers
     - media_player.master_bedroom_speakers
     - media_player.office_tv
