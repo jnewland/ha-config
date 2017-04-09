@@ -5,7 +5,12 @@ sequence:
         {{ message | default("Turn on " + entity_id) }}
       data:
         push:
-          category: ACK
+          category: >
+            {%- if secure | default(none) != none -%}
+              SECURE_ACK
+            {%- else %}
+              ACK
+            {%- endif -%}
         action_data:
           entity_id: |
             {{ entity_id }}
