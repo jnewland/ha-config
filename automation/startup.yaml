@@ -12,7 +12,7 @@ action:
       entity_id: input_select.playlist
       option: Idle
   # Let components load
-  - delay: 00:15
+  - delay: 00:00:15
   - service: notify.slack
     data:
       message: ':house: starting up...'
