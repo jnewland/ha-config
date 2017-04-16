@@ -1,6 +1,6 @@
 alias: Show weather info on the dashboard if its interesting
 trigger:
-  platform:
+  platform: state
   entity_id: binary_sensor.rain_today
 action:
   service: script.group_visibility
