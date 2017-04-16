@@ -1,9 +1,7 @@
 alias: Show people on dashboard only if interesting
 trigger:
   platform: state
-  entity_id:
-    - binary_sensor.together
-    - sensor.haconfig_sha
+  entity_id: binary_sensor.together
 action:
   service: script.group_visibility
   data:

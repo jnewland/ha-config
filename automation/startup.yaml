@@ -11,19 +11,3 @@ action:
     data_template:
       entity_id: input_select.playlist
       option: Idle
-  # Let components load
-  - delay: 00:00:15
-  - service: notify.slack
-    data:
-      message: ':house: starting up...'
-      target: '#general'
-  - service: script.group_visibility
-    data:
-      entity_id: group.people
-      cond: binary_sensor.together
-      visible_state: 'off'
-  - service: script.group_visibility
-    data:
-      entity_id: group.default_view_weather
-      cond: binary_sensor.rain_today
-      visible_state: 'on'
