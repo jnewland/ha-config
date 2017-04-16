@@ -1,4 +1,6 @@
 sequence:
+  # Let components settle
+  - delay: 00:00:05
   - service: notify.slack
     data:
       message: ':house: starting up...'
@@ -11,3 +13,14 @@ sequence:
     data_template:
       entity_id: input_select.playlist
       option: Idle
+  - delay: 00:00:30
+  - service: script.group_visibility
+    data:
+      entity_id: group.people
+      cond: binary_sensor.together
+      visible_state: 'off'
+  - service: script.group_visibility
+    data:
+      entity_id: group.default_view_weather
+      cond: binary_sensor.rain_today
+      visible_state: 'on'
