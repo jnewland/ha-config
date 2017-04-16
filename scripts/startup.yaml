@@ -8,13 +8,11 @@ sequence:
       entity_id: input_select.playlist
       option: Idle
   # Let components load
-  - delay: 00:00:15
+  - delay: 00:1
   - service: notify.slack
     data:
       message: ':house: starting up...'
       target: '#general'
-  # Let these sensors warm up
-  - delay: 00:00:30
   - service: script.group_visibility
     data:
       entity_id: group.people
