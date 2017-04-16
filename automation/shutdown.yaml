@@ -1,7 +1,7 @@
 alias: shutdown
 trigger:
   platform: homeassistant
-  event_type: shutdown
+  event: shutdown
 action:
   service: script.turn_on
   entity_id: script.shutdown

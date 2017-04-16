@@ -5,7 +5,7 @@ trigger:
     - sensor.haconfig_branch
     - sensor.haconfig_sha
   - platform: homeassistant
-    event_type: start
+    event: start
 action:
   service: script.group_visibility
   data:
