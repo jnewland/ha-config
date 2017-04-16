@@ -1,10 +1,4 @@
 sequence:
-  # Let components settle
-  - delay: 00:00:05
-  - service: notify.slack
-    data:
-      message: ':house: starting up...'
-      target: '#general'
   - service: input_select.select_option
     data_template:
       entity_id: input_select.mode
@@ -13,6 +7,13 @@ sequence:
     data_template:
       entity_id: input_select.playlist
       option: Idle
+  # Let components load
+  - delay: 00:00:15
+  - service: notify.slack
+    data:
+      message: ':house: starting up...'
+      target: '#general'
+  # Let these sensors warm up
   - delay: 00:00:30
   - service: script.group_visibility
     data:
