@@ -47,7 +47,7 @@ action:
       {% set new_state = trigger.to_state %}
       {% set domain_emoji = {
         "alarm_control_panel": ":rotating_light:",
-        "automation":          "gear",
+        "automation":          ":gear:",
         "input_select":        ":gear:",
         "media_player":        ":sound:",
         "cover":               ":house_with_garden:",
