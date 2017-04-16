@@ -4,8 +4,8 @@ trigger:
     entity_id:
     - binary_sensor.rain_today
     - sensor.haconfig_sha
-  - platform: event
-    event_type: homeassistant_start
+  - platform: homeassistant
+    event_type: start
 action:
   service: script.group_visibility
   data:
