@@ -3,3 +3,8 @@
   api_key: !env_var SLACK_API_KEY
   default_channel: "#general"
 - platform: ios
+- platform: group
+  name: ios
+  services:
+  - service: ios_jphone_6s
+  - service: ios_katies_iphone
