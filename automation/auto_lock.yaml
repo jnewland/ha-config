@@ -5,7 +5,7 @@ trigger:
   entity_id: lock.front_door_12
   to: unlocked
   for:
-    minutes: 1
+    minutes: 5
 condition:
   condition: template
   value_template: '{{ states.input_select.mode.state != "Pause" }}'
