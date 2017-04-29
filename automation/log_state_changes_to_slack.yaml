@@ -46,7 +46,7 @@ condition:
 action:
   service: notify.slack
   data_template:
-    message: |
+    message: >
       {% set new_state = trigger.to_state %}
       {% set domain_emoji = {
         "alarm_control_panel": ":rotating_light:",
