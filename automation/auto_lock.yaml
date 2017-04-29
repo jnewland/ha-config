@@ -14,5 +14,4 @@ action:
   data_template:
     entity_id: script.lock_up
     message: "The front door's been unlocked for a bit. Lock up?"
-    message: "Lock up?"
     camera_entity_id: camera.front_yard_right
