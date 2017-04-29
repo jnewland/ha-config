@@ -1,10 +1,18 @@
 push:
   categories:
     - name: Ack
-      identifier: camera
+      identifier: 'ACK'
       actions:
         - identifier: 'ACK_TURN_ON'
-          title: 'Yup'
-          destructive: true
+          title: 'Hell yeah'
         - identifier: 'ACK_NO'
+          title: 'Nope'
+    - name: Secure Ack
+      identifier: 'SECURE_ACK'
+      actions:
+        - identifier: 'ACK_TURN_ON'
+          title: 'Hell yeah'
+          authenticationRequired: true
+        - identifier: 'ACK_NO'
+          authenticationRequired: true
           title: 'Nope'
