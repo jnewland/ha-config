@@ -19,3 +19,4 @@ action:
   data_template:
     entity_id: script.lock_up
     message: "Lock up?"
+    camera_entity_id: camera.front_yard_right
