@@ -91,7 +91,7 @@ action:
         {% endif -%}
         *{{ new_state.name | capitalize -}}{{ " " -}}*
         *_{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_*
-        after being _{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_
+        after being _{{ old_state.state | capitalize }}{{ old_state.attributes.unit_of_measurement }}_
         for {{ relative_time(old_state.last_changed) }}
       {% endif -%}
     target: "#general"
