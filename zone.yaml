@@ -16,17 +16,9 @@
   longitude: !env_var KITCHEN_LONG
   radius: 1
   icon: mdi:food-fork-drink
-  beacon:
-    uuid: 74278BDA-B644-4520-8F0C-720EAF059935
-    major: 10001
-    minor: 19642
 
 - name: Office
   latitude: !env_var OFFICE_LAT
   longitude: !env_var OFFICE_LONG
   radius: 1
   icon: mdi:desktop-mac
-  beacon:
-    uuid: 74278BDA-B644-4520-8F0C-720EAF059935
-    major: 10001
-    minor: 19641
