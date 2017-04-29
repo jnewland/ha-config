@@ -6,7 +6,7 @@ trigger:
   to: home
 condition:
   condition: state
-  entity_id: device_tracker.jphone_jphone
+  entity_id: device_tracker.jphone_6s
   state: home
 action:
   service: notify.slack

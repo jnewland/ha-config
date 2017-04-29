@@ -2,7 +2,7 @@ alias: Later
 trigger:
   platform: state
   entity_id:
-    - device_tracker.jphone_jphone
+    - device_tracker.jphone_6s
     - device_tracker.kphone_kphone
   to: not_home
   for:
@@ -14,7 +14,7 @@ condition:
                     states.input_boolean.guests.state == "off" and
                     states.input_select.mode.state != "Away" and
                     states.input_select.mode.state != "Pause" and
-                    states.device_tracker.jphone_jphone.state == "not_home" and
+                    states.device_tracker.jphone_6s.state == "not_home" and
                     states.device_tracker.kphone_kphone.state == "not_home"
                   }}
                   '

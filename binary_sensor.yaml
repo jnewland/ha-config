@@ -22,12 +22,12 @@
         }}
     together:
       entity_id:
-      - device_tracker.jphone_jphone
+      - device_tracker.jphone_6s
       - device_tracker.kphone_kphone
       value_template: |
         {{
           states.device_tracker.kphone_kphone != None and
-          states.device_tracker.jphone_jphone != None and
-          distance(states.device_tracker.jphone_jphone, states.device_tracker.kphone_kphone) != None and
-          distance(states.device_tracker.jphone_jphone, states.device_tracker.kphone_kphone) < 0.25
+          states.device_tracker.jphone_6s != None and
+          distance(states.device_tracker.jphone_6s, states.device_tracker.kphone_kphone) != None and
+          distance(states.device_tracker.jphone_6s, states.device_tracker.kphone_kphone) < 0.25
         }}

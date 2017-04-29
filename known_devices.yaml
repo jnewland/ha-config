@@ -1,8 +1,12 @@
-jphone_jphone:
+jphone_6s:
   name: jesse
+  hide_if_away: false
   picture: https://github.com/jnewland.png
-  track: yes
-  hide_if_away: no
+  mac:
+  name: jphone 6s
+  picture:
+  track: true
+  vendor:
 
 kphone_kphone:
   name: katie

@@ -1,6 +1,6 @@
 home:
   devices:
     - device_tracker.kphone_kphone
-    - device_tracker.jphone_jphone
+    - device_tracker.jphone_6s
   tolerance: 250
   unit_of_measurement: mi

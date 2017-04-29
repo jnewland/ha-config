@@ -12,8 +12,8 @@ condition:
         states.input_select.mode.state == "Morning" or
         states.input_select.mode.state == "Working"
       ) and
-      ( states.device_tracker.jphone_jphone.state == "Office" or
-        states.device_tracker.jphone_jphone.state == "Kitchen" )
+      ( states.device_tracker.jphone_6s.state == "Office" or
+        states.device_tracker.jphone_6s.state == "Kitchen" )
     }}'
 action:
   - service: notify.slack
