@@ -13,4 +13,4 @@ action:
 - service: script.ask_about_turning_on
   data_template:
     entity_id: script.lock_up
-    message: "Lock up?"
+    message: "The front door's been unlocked for a bit. Lock up?"
