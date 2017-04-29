@@ -2,8 +2,8 @@ alias: Cabinet lights
 trigger:
   platform: state
   entity_id:
-    - device_tracker.jphone_jphone
-    - device_tracker.kphone_kphone
+    - device_tracker.jphone_6s
+    - device_tracker.katies_iphone
   to: Kitchen
 condition:
   condition: template

@@ -4,5 +4,5 @@ sequence:
       entity_id: script.mode_away
   - service: notify.slack
     data_template:
-      message: '@jnewland is {{ states.device_tracker.jphone_jphone.state }} and katienewland is {{ states.device_tracker.jphone_jphone.state }}. Setting away mode.'
+      message: '@jnewland is {{ states.device_tracker.jphone_6s.state }} and katienewland is {{ states.device_tracker.jphone_6s.state }}. Setting away mode.'
       target: "#general"

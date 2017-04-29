@@ -1,11 +1,15 @@
-jphone_jphone:
+jphone_6s:
   name: jesse
+  hide_if_away: false
+  mac:
   picture: https://github.com/jnewland.png
-  track: yes
-  hide_if_away: no
+  track: true
+  vendor:
 
-kphone_kphone:
+katies_iphone:
+  hide_if_away: false
+  mac:
   name: katie
   picture: https://github.com/katienewland.png
-  track: yes
-  hide_if_away: no
+  track: true
+  vendor:

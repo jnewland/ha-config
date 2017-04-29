@@ -2,8 +2,8 @@ alias: Turn on working mode on whenever we're in the office
 trigger:
   platform: state
   entity_id:
-    - device_tracker.kphone_kphone
-    - device_tracker.jphone_jphone
+    - device_tracker.katies_iphone
+    - device_tracker.jphone_6s
   to: Office
 condition:
   condition: template

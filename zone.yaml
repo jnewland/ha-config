@@ -1,26 +1,24 @@
 - name: Home
   latitude: !env_var LAT
   longitude: !env_var LONG
-  radius: 100
+  radius: 50
   icon: mdi:home
 
-- name: Master
-  latitude: !env_var MASTER_LAT
-  longitude: !env_var MASTER_LONG
-  radius: 1
-  icon: mdi:sleep
-  passive: true
+# - name: Master
+#   latitude: !env_var MASTER_LAT
+#   longitude: !env_var MASTER_LONG
+#   radius: 1
+#   icon: mdi:sleep
+#   track_ios: false
 
 - name: Kitchen
   latitude: !env_var KITCHEN_LAT
   longitude: !env_var KITCHEN_LONG
   radius: 1
   icon: mdi:food-fork-drink
-  passive: true
 
 - name: Office
   latitude: !env_var OFFICE_LAT
   longitude: !env_var OFFICE_LONG
   radius: 1
   icon: mdi:desktop-mac
-  passive: true

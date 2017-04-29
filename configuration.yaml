@@ -15,7 +15,6 @@ binary_sensor: !include binary_sensor.yaml
 camera: !include camera.yaml
 cover: !include cover.yaml
 conversation:
-device_tracker: !include device_tracker.yaml
 discovery:
 emulated_hue:
   expose_by_default: false
