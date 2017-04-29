@@ -6,12 +6,13 @@ sequence:
         {{ message | default("Turn on " + entity_id) }}
       data:
         push:
-          category: >
-            {%- if secure | default(none) != none -%}
-              SECURE_ACK
-            {%- else %}
-              ACK
-            {%- endif -%}
+          category: camera
+        entity_id: |
+          {{ camera_entity_id }}
+        attachment:
+          url: "{{ states.weblink.self.state }}{{ states(camera_entity_id).attributes.entity_picture }}"
+          content-type: jpeg
+          hide-thumbnail: false
         action_data:
           entity_id: |
             {{ entity_id }}
