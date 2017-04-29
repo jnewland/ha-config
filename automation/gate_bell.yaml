@@ -5,12 +5,13 @@ trigger:
   to: 'on'
 action:
   - service: notify.ios
-    message: the front gate just opened!
-    data_template:
-      push:
-        category: camera
-      entity_id: camera.front_yard_left
-      attachment:
-        url: "{{ states.weblink.self.state }}{{ states.camera.front_yard_left.attributes.entity_picture }}"
-        content-type: jpeg
-        hide-thumbnail: false
+    data:
+      message: the front gate just opened!
+      data:
+        push:
+          category: camera
+        entity_id: camera.front_yard_left
+        attachment:
+          url: "{{ states.weblink.self.state }}{{ states.camera.front_yard_left.attributes.entity_picture }}"
+          content-type: jpeg
+          hide-thumbnail: false
