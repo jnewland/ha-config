@@ -14,4 +14,4 @@ action:
   data_template:
     entity_id: script.lock_up
     message: "The gate has been open for a bit. Close it up?"
-    camera_entity_id: camera.garage
+    camera_entity_id: camera.gate
