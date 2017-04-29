@@ -2,7 +2,6 @@ jphone_6s:
   name: jesse
   hide_if_away: false
   mac:
-  name: jphone 6s
   picture: https://github.com/jnewland.png
   track: true
   vendor:
