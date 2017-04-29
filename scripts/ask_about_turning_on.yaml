@@ -8,9 +8,9 @@ sequence:
         push:
           category: camera
         entity_id: |
-          {{ camera_entity_id }}
+          camera.{{ camera }}
         attachment:
-          url: "{{ states.weblink.self.state }}{{ states(camera_entity_id).attributes.entity_picture }}"
+          url: "{{ states.weblink.self.state }}{{ states.camera[camera].attributes.entity_picture }}"
           content-type: jpeg
           hide-thumbnail: false
         action_data:
