@@ -12,10 +12,7 @@ sequence:
             {%- else %}
               ACK
             {%- endif -%}
-        entity_id: |
-          {{ camera_entity_id | default(none) }}
         action_data:
-          category: camera
           entity_id: |
             {{ entity_id }}
   - service: notify.slack
