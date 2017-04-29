@@ -11,7 +11,8 @@ sequence:
             {%- else %}
               ACK
             {%- endif -%}
-        entity_id: {{ camera_entity_id | default(none) }}
+        entity_id: |
+          {{ camera_entity_id | default(none) }}
         action_data:
           entity_id: |
             {{ entity_id }}
