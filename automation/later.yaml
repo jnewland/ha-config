@@ -3,7 +3,7 @@ trigger:
   platform: state
   entity_id:
     - device_tracker.jphone_6s
-    - device_tracker.kphone_kphone
+    - device_tracker.katies_iphone
   to: not_home
   for:
     minutes: 10
@@ -15,7 +15,7 @@ condition:
                     states.input_select.mode.state != "Away" and
                     states.input_select.mode.state != "Pause" and
                     states.device_tracker.jphone_6s.state == "not_home" and
-                    states.device_tracker.kphone_kphone.state == "not_home"
+                    states.device_tracker.katies_iphone.state == "not_home"
                   }}
                   '
 action:

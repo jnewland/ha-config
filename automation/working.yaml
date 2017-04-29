@@ -5,7 +5,7 @@ trigger:
   platform: state
   entity_id:
     - device_tracker.jphone_6s
-    - device_tracker.kphone_kphone
+    - device_tracker.katies_iphone
   to: Office
   for:
     minutes: 2
@@ -18,7 +18,7 @@ condition:
   - condition: template
     value_template: '
       {% set jphone = states.device_tracker.jphone_6s.state %}
-      {% set kphone = states.device_tracker.kphone_kphone.state %}
+      {% set kphone = states.device_tracker.katies_iphone.state %}
       {{
         (jphone == kphone or (jnewland == "not_home" or kphone == "not_home")) and
         states.input_select.mode.state != "Movie" and

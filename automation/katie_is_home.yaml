@@ -1,7 +1,7 @@
 alias: Katie is home
 trigger:
   platform: state
-  entity_id: device_tracker.kphone_kphone
+  entity_id: device_tracker.katies_iphone
   from: not_home
   to: home
 condition:

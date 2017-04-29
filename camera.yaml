@@ -31,7 +31,7 @@
   limit_refetch_to_url_change: true
 - platform: generic
   name: kPhone
-  still_image_url: https://maps.googleapis.com/maps/api/staticmap?center={{ states.device_tracker.kphone_kphone.attributes.latitude }},{{ states.device_tracker.kphone_kphone.attributes.longitude }}&zoom=13&size=500x500&maptype=roadmap&markers=color:blue%7Clabel:K%7C{{ states.device_tracker.kphone_kphone.attributes.latitude }},{{ states.device_tracker.kphone_kphone.attributes.longitude }}
+  still_image_url: https://maps.googleapis.com/maps/api/staticmap?center={{ states.device_tracker.katies_iphone.attributes.latitude }},{{ states.device_tracker.katies_iphone.attributes.longitude }}&zoom=13&size=500x500&maptype=roadmap&markers=color:blue%7Clabel:K%7C{{ states.device_tracker.katies_iphone.attributes.latitude }},{{ states.device_tracker.katies_iphone.attributes.longitude }}
   limit_refetch_to_url_change: true
 - platform: generic
   name: radar

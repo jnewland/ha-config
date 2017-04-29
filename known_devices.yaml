@@ -6,8 +6,10 @@ jphone_6s:
   track: true
   vendor:
 
-kphone_kphone:
+katies_iphone:
+  hide_if_away: false
+  mac:
   name: katie
   picture: https://github.com/katienewland.png
-  track: yes
-  hide_if_away: no
+  track: true
+  vendor:
