@@ -1,3 +1,7 @@
 sequence:
   - service: lock.lock
     entity_id: group.all_locks
+  - service: cover.close_cover
+    entity_id: cover.garage
+  - service: cover.close_cover
+    entity_id: cover.gate
