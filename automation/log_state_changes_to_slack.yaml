@@ -70,7 +70,9 @@ action:
         "sensor.front_gate":                  ":house_with_garden:"
       } %}
       {% set entity_state = new_state.entity_id + "." + new_state.state %}
-      {% set old_entity_state = new_state.entity_id + "." + old_state.state %}
+      {% if old_state != None -%}
+        {% set old_entity_state = new_state.entity_id + "." + old_state.state %}
+      {% endif %}
       {% set entity_state_emoji = {
         "sun.sun.above_horizon":    ":sunrise:",
         "sun.sun.below_horizon":    ":city_sunset:",
@@ -80,8 +82,10 @@ action:
       {% if entity_state_emoji[entity_state] | default(none) != none -%}
         {{ entity_state_emoji[entity_state] }}
         *_{{ new_state.name | capitalize -}}{{ " " -}}_*
-        after being {{ entity_state_emoji[old_entity_state] }}
-        for {{ relative_time(old_state.last_changed) }}
+        {% if old_state != None -%}
+          after being {{ entity_state_emoji[old_entity_state] }}
+          for {{ relative_time(old_state.last_changed) }}
+        {% endif %}
       {% else -%}
         {% if entity_emoji[new_state.entity_id] | default(none) != none -%}
           {{ entity_emoji[new_state.entity_id] -}}{{ " " -}}
@@ -90,7 +94,9 @@ action:
         {% endif -%}
         *{{ new_state.name | capitalize -}}{{ " " -}}*
         *_{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_*
-        after being _{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_
-        for {{ relative_time(old_state.last_changed) }}
+        {% if old_state != None -%}
+          after being _{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_
+          for {{ relative_time(old_state.last_changed) }}
+        {% endif %}
       {% endif -%}
     target: "#general"
