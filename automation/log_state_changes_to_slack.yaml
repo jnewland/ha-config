@@ -78,8 +78,9 @@ action:
         "lock.front_door_12.unlocked": ":unlock:"
       } %}
       {% if entity_state_emoji[entity_state] | default(none) != none -%}
-        {{ entity_state_emoji[entity_state] }}
-        is *_{{ new_state.name | capitalize -}}_*{{ " " -}}
+        {{ entity_state_emoji[entity_state] -}}
+        *{{ new_state.name | capitalize -}}*{{ " " -}}
+        is {{ entity_state_emoji[entity_state] -}}
         {% set old_entity_state = new_state.entity_id + "." + old_state.state -%}
         after being {{ entity_state_emoji[old_entity_state] }}{{ " " -}}
         for {{ relative_time(old_state.last_changed) }}
