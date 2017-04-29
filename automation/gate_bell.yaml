@@ -4,13 +4,13 @@ trigger:
   entity_id: binary_sensor.front_gate_81
   to: 'on'
 action:
-  - service: notify.slack
+  - service: notify.ios
+    message: the front gate just opened!
     data_template:
-      target: "#general"
-      message: >
-        @jnewland the front gate just opened!
-  - service: notify.ios_jphone_6s
-    data:
       push:
         category: camera
       entity_id: camera.front_yard_left
+      attachment:
+        url: "{{ states.weblink.self.state }}{{ states.camera.front_yard_left.attributes.entity_picture }}"
+        content-type: jpeg
+        hide-thumbnail: false
