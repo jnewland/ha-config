@@ -1,5 +1,5 @@
 sequence:
-  - service: notify.ios_jphone_6s
+  - service_template: {{ service | default("notify.ios_jphone_6s"} }}
     data_template:
       message: |
         {{ message | default("Turn on " + entity_id) }}
@@ -14,6 +14,7 @@ sequence:
         entity_id: |
           {{ camera_entity_id | default(none) }}
         action_data:
+          category: camera
           entity_id: |
             {{ entity_id }}
   - service: notify.slack

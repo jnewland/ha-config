@@ -10,7 +10,7 @@ condition:
   condition: template
   value_template: '{{ states.input_select.mode.state != "Pause" }}'
 action:
-- service: script.ask_jesse_about_turning_on
+- service: script.ask_about_turning_on
   data_template:
     entity_id: script.lock_up
     message: "The gate has been open for a bit. Close it up?"
