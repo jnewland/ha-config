@@ -47,6 +47,7 @@ action:
   service: notify.slack
   data_template:
     message: >
+      {% set old_state = trigger.from_state %}
       {% set new_state = trigger.to_state %}
       {% set domain_emoji = {
         "alarm_control_panel": ":rotating_light:",
@@ -70,9 +71,6 @@ action:
         "sensor.front_gate":                  ":house_with_garden:"
       } %}
       {% set entity_state = new_state.entity_id + "." + new_state.state %}
-      {% if old_state != None -%}
-        {% set old_entity_state = new_state.entity_id + "." + old_state.state %}
-      {% endif %}
       {% set entity_state_emoji = {
         "sun.sun.above_horizon":    ":sunrise:",
         "sun.sun.below_horizon":    ":city_sunset:",
@@ -82,10 +80,9 @@ action:
       {% if entity_state_emoji[entity_state] | default(none) != none -%}
         {{ entity_state_emoji[entity_state] }}
         *_{{ new_state.name | capitalize -}}{{ " " -}}_*
-        {% if old_state != None -%}
-          after being {{ entity_state_emoji[old_entity_state] }}
-          for {{ relative_time(old_state.last_changed) }}
-        {% endif %}
+        {% set old_entity_state = new_state.entity_id + "." + old_state.state %}
+        after being {{ entity_state_emoji[old_entity_state] }}
+        for {{ relative_time(old_state.last_changed) }}
       {% else -%}
         {% if entity_emoji[new_state.entity_id] | default(none) != none -%}
           {{ entity_emoji[new_state.entity_id] -}}{{ " " -}}
@@ -94,9 +91,7 @@ action:
         {% endif -%}
         *{{ new_state.name | capitalize -}}{{ " " -}}*
         *_{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_*
-        {% if old_state != None -%}
-          after being _{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_
-          for {{ relative_time(old_state.last_changed) }}
-        {% endif %}
+        after being _{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_
+        for {{ relative_time(old_state.last_changed) }}
       {% endif -%}
     target: "#general"
