@@ -79,7 +79,7 @@ action:
       } %}
       {% if entity_state_emoji[entity_state] | default(none) != none -%}
         {{ entity_state_emoji[entity_state] }}
-        *_{{ new_state.name | capitalize -}}_*{{ " " -}}
+        is *_{{ new_state.name | capitalize -}}_*{{ " " -}}
         {% set old_entity_state = new_state.entity_id + "." + old_state.state -%}
         after being {{ entity_state_emoji[old_entity_state] }}{{ " " -}}
         for {{ relative_time(old_state.last_changed) }}
@@ -90,8 +90,8 @@ action:
           {{ domain_emoji[new_state.domain] | default(":control_knobs:") -}}{{ " " -}}
         {% endif -%}
         *{{ new_state.name | capitalize -}}*{{ " " -}}
-        *_{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_*{{ " " -}}
-        after being _{{ old_state.state | capitalize }}{{ old_state.attributes.unit_of_measurement }}_{{ " " -}}
+        is *_{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_*{{ " " -}}
+        after being {{ old_state.state | capitalize }}{{ old_state.attributes.unit_of_measurement }}{{ " " -}}
         for {{ relative_time(old_state.last_changed) }}
       {% endif -%}
     target: "#general"
