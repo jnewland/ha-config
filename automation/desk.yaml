@@ -1,7 +1,7 @@
 alias: Turn on working mode on whenever I'm at my desk
 trigger:
   platform: state
-  entity_id: binary_sensor.desk_active
+  entity_id: binary_sensor.jesses_desktop
   to: 'on'
 condition:
   condition: template
@@ -13,3 +13,10 @@ condition:
 action:
   - service: script.turn_on
     entity_id: script.mode_working
+  - service: device_tracker.see
+    data_template:
+      dev_id: jphone_6s
+      location_name: Desk
+      gps:
+      - !env_var LAT
+      - !env_var LONG

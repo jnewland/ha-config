@@ -1,0 +1,9 @@
+sequence:
+- service: homeassistant.turn_on
+  data_template:
+    entity_id: |
+      {%- if states.input_select.mode.state == "Sleeping" -%}
+      scene.master_bathroom_nightlight
+      {%- else -%}
+      scene.master_bathroom_full_blast
+      {%- endif -%}

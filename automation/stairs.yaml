@@ -1,7 +1,9 @@
 alias: Stairs
 trigger:
   platform: state
-  entity_id: binary_sensor.stairs_motion_6
+  entity_id:
+  - binary_sensor.stairs_motion_6
+  - binary_sensor.upstairs_motion_87
   from: 'off'
   to: 'on'
 condition:

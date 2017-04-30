@@ -1,9 +1,29 @@
 - platform: rest
   resource: !env_var DESK_HID_IDLE_TIME_RESOURCE
-  name: Desk active
+  name: Jesse's desktop
   value_template: '{{ value_json < 60}}'
 - platform: template
   sensors:
+    living_room_motion:
+      entity_id: sensor.alarm_sensors
+      value_template: |
+        {{ "No motion activity detected." not in (states.sensor.alarm_sensors.state | default("")) }}
+    entry_door:
+      entity_id: sensor.alarm_sensors
+      value_template: |
+        {{ "Entry" in (states.sensor.alarm_sensors.state | default("")) }}
+    master_door:
+      entity_id: sensor.alarm_sensors
+      value_template: |
+        {{ "Master" in (states.sensor.alarm_sensors.state | default("")) }}
+    garage:
+      entity_id: cover.garage
+      value_template: |
+        {{ states("cover.garage") | default("") == "open" }}
+    gate:
+      entity_id: cover.gate
+      value_template: |
+        {{ states("cover.gate") | default("") == "open" }}
     rain_today:
       entity_id:
       - sensor.dark_sky_daily_max_precip_intensity

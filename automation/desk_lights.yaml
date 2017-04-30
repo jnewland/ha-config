@@ -1,7 +1,7 @@
 alias: Desk lights turn off when computer isn't in use
 trigger:
   platform: state
-  entity_id: binary_sensor.desk_active
+  entity_id: binary_sensor.jesses_desktop
   to: 'off'
   for:
     minutes: 2

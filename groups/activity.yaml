@@ -1,7 +1,10 @@
 ---
-name: people
+name: Activity
 entities:
 - device_tracker.katies_iphone
 - device_tracker.jphone_6s
+- device_tracker.katies_air
+- device_tracker.jesses_macbook
+- device_tracker.motion
 - camera.jPhone
 - camera.kPhone
