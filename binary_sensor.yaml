@@ -7,11 +7,7 @@
     living_room_motion:
       entity_id: sensor.alarm_sensors
       value_template: |
-        {{ "No motion activity detected." in (states.sensor.alarm_sensors.state | default("")) }}
-    doors_and_windows:
-      entity_id: sensor.alarm_sensors
-      value_template: |
-        {{ "All doors and windows closed." in (states.sensor.alarm_sensors.state | default("")) }}
+        {{ "No motion activity detected." not in (states.sensor.alarm_sensors.state | default("")) }}
     entry_door:
       entity_id: sensor.alarm_sensors
       value_template: |
