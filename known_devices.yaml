@@ -13,3 +13,19 @@ katies_iphone:
   picture: https://github.com/katienewland.png
   track: true
   vendor:
+
+katies_air:
+  hide_if_away: false
+  mac:
+  name: katie's air
+  picture: https://github.com/jnewland.png
+  track: true
+  vendor:
+
+jesses_macbook:
+  hide_if_away: false
+  mac:
+  name: jesse's macbook
+  picture: https://github.com/katienewland.png
+  track: true
+  vendor:
