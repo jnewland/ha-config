@@ -9,6 +9,7 @@ trigger:
   - binary_sensor.office_motion_82
   - binary_sensor.upstairs_motion_87
   - binary_sensor.master_bath_motion_37
+  - binary_sensor.master_motion_92
   - binary_sensor.living_room_motion
   - binary_sensor.master_door
   - binary_sensor.entry_door
@@ -26,6 +27,7 @@ condition:
         states.binary_sensor.office_motion_82.state == "off" and
         states.binary_sensor.upstairs_motion_87.state == "off" and
         states.binary_sensor.living_room_motion.state == "off" and
+        states.binary_sensor.master_motion_92.state == "off" and
         states.binary_sensor.master_door.state == "off" and
         states.binary_sensor.entry_door.state == "off" and
         states.binary_sensor.garage.state == "off" and

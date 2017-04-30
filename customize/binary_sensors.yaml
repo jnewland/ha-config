@@ -14,6 +14,8 @@ binary_sensor.upstairs_motion_87:
   zone: Upstairs
 binary_sensor.master_bath_motion_37:
   zone: Master
+binary_sensor.master_motion_92:
+  zone: Master
 binary_sensor.living_room_motion:
   friendly_name: Living room motion
   zone: Living
