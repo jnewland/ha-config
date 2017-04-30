@@ -6,6 +6,5 @@ entities:
 - device_tracker.katies_air
 - device_tracker.jesses_macbook
 - device_tracker.jesses_macbook
-- binary_sensor.jesses_desktop
 - camera.jPhone
 - camera.kPhone
