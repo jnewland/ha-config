@@ -63,3 +63,11 @@
   passive: true
   track_ios: false
   icon: mdi:desktop-mac
+
+- name: Music room
+  latitude: !env_var OFFICE_LAT
+  longitude: !env_var OFFICE_LAT
+  radius: 1
+  passive: true
+  track_ios: false
+  icon: mdi:guitar-pick
