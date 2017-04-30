@@ -13,3 +13,7 @@ condition:
 action:
   - service: script.turn_on
     entity_id: script.mode_working
+  - service: device_tracker.see
+    data:
+      dev_id: jphone_6s
+      location_name: Desk
