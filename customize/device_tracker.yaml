@@ -1,2 +1,4 @@
 device_tracker.motion:
   icon: mdi:radar
+device_tracker.jesse_music_room:
+  icon: mdi:guitar-pick
