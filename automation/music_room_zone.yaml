@@ -11,9 +11,4 @@ action:
   service: device_tracker.see
   data_template:
     dev_id: jphone_6s
-    location_name: |
-      {%- if trigger.to_state.state == "on" -%}
-      Music room
-      {%- else -%}
-      Upstairs
-      {%- endif -%}
+    location_name: Music room
