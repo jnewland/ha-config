@@ -1,4 +1,6 @@
-- platform: ping
-  hosts:
-    jesse_macbook: !env_var JESSE_LAPTOP_IP
-    katie_air: !env_var KATIE_LAPTOP_IP
+- platform: unifi
+  host: !env_var NUC_IP
+  port: !env_var UNIFI_PORT
+  verify_ssl: false
+  username: !env_var UNIFI_USERNAME
+  password: !env_var UNIFI_PASSWORD
