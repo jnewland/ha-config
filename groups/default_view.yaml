@@ -3,6 +3,6 @@ view: true
 icon: mdi:home
 entities:
 - group.home_info
-- group.people
+- group.activity
 - group.alerts
 - group.default_view_weather

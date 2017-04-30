@@ -5,6 +5,6 @@ trigger:
 action:
   service: script.group_visibility
   data:
-    entity_id: group.people
+    entity_id: group.activity
     cond: binary_sensor.together
     visible_state: 'off'
