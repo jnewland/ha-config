@@ -1,7 +1,7 @@
 alias: Turn on working mode on whenever I'm at my desk
 trigger:
   platform: state
-  entity_id: binary_sensor.desk_active
+  entity_id: binary_sensor.jesses_desktop
   to: 'on'
 condition:
   condition: template

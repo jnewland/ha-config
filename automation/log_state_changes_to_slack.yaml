@@ -5,7 +5,7 @@ trigger:
     - sensor.alarm_sensors
     - alarm_control_panel.alarm
     - automation.gate_bell
-    - binary_sensor.desk_active
+    - binary_sensor.jesses_desktop
     - binary_sensor.stairs_motion_6
     - binary_sensor.closet_motion_61
     - binary_sensor.guest_bath_motion_70
@@ -60,7 +60,7 @@ action:
         "device_tracker":      ":iphone:"
       } %}
       {% set entity_emoji = {
-        "binary_sensor.desk_active":          ":desktop_computer:",
+        "binary_sensor.jesses_desktop":          ":desktop_computer:",
         "media_player.office_tv":             ":tv:",
         "sensor.dark_sky_minutely_summary":   ":cloud:",
         "sensor.dark_sky_daily_summary":      ":cloud:",
