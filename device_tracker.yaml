@@ -1,0 +1,4 @@
+- platform: ping
+  hosts:
+    jesse_laptop: !env_var JESSE_LAPTOP_IP
+    katie_laptop: !env_var KATIE_LAPTOP_IP
