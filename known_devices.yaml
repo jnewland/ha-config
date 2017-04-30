@@ -1,13 +1,13 @@
 jphone_6s:
   name: jesse
-  hide_if_away: false
+  hide_if_away: true
   mac:
   picture: https://github.com/jnewland.png
   track: true
   vendor:
 
 katies_iphone:
-  hide_if_away: false
+  hide_if_away: true
   mac:
   name: katie
   picture: https://github.com/katienewland.png
@@ -15,7 +15,7 @@ katies_iphone:
   vendor:
 
 katies_air:
-  hide_if_away: false
+  hide_if_away: true
   mac:
   name: katie's air
   picture: https://github.com/katienewland.png
@@ -23,7 +23,7 @@ katies_air:
   vendor:
 
 jesses_macbook:
-  hide_if_away: false
+  hide_if_away: true
   mac: !env_var JESSES_MACBOOK_MAC
   name: jesse's macbook
   picture: https://github.com/jnewland.png
