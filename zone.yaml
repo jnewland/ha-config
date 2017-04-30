@@ -15,12 +15,10 @@
   latitude: !env_var KITCHEN_LAT
   longitude: !env_var KITCHEN_LONG
   radius: 1
-  passive: true
   icon: mdi:food-fork-drink
 
 - name: Office
   latitude: !env_var OFFICE_LAT
   longitude: !env_var OFFICE_LONG
   radius: 1
-  passive: true
   icon: mdi:desktop-mac
