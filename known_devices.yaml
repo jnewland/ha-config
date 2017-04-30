@@ -24,7 +24,7 @@ katies_air:
 
 jesses_macbook:
   hide_if_away: false
-  mac:
+  mac: !env_var JESSES_MACBOOK_MAC
   name: jesse's macbook
   picture: https://github.com/jnewland.png
   track: true
