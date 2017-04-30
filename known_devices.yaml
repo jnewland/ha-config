@@ -16,7 +16,7 @@ katies_iphone:
 
 katies_air:
   hide_if_away: true
-  mac:
+  mac: !env_var KATIES_AIR_MAC
   name: katie's air
   picture: https://github.com/katienewland.png
   track: true
