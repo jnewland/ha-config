@@ -14,6 +14,7 @@ trigger:
   - binary_sensor.entry_door
   - binary_sensor.garage
   - binary_sensor.gate
+  to: 'on'
 condition:
   condition: template
   value_template: '{{ states.input_select.mode.state != "Pause" }}'
@@ -21,21 +22,5 @@ action:
   service: device_tracker.see
   data_template:
     dev_id: motion
-    location_name: >
-      {%-
-        if states.binary_sensor.stairs_motion_6.state == "off" and
-           states.binary_sensor.closet_motion_61.state == "off" and
-           states.binary_sensor.guest_bath_motion_70.state == "off" and
-           states.binary_sensor.powder_room_motion_75.state == "off" and
-           states.binary_sensor.office_motion_82.state == "off" and
-           states.binary_sensor.upstairs_motion_87.state == "off" and
-           states.binary_sensor.living_room_motion.state == "off" and
-           states.binary_sensor.master_door.state == "off" and
-           states.binary_sensor.entry_door.state == "off" and
-           states.binary_sensor.garage.state == "off" and
-           states.binary_sensor.gate.state == "off"
-      -%}
-      not_home
-      {%- elif trigger.to_state.state == "on" -%}
-      {{- trigger.to_state.attributes.zone -}}
-      {% endif %}
+    location_name: |
+      {{ trigger.to_state.attributes.zone }}
