@@ -20,6 +20,22 @@
   track_ios: false
   icon: mdi:home
 
+- name: Outside
+  latitude: !env_var LAT
+  longitude: !env_var LONG
+  radius: 1
+  passive: true
+  track_ios: false
+  icon: mdi:home
+
+- name: Living
+  latitude: !env_var LAT
+  longitude: !env_var LONG
+  radius: 1
+  passive: true
+  track_ios: false
+  icon: mdi:account
+
 - name: Master
   latitude: !env_var MASTER_LAT
   longitude: !env_var MASTER_LONG

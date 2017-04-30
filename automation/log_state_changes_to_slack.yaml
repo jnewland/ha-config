@@ -2,7 +2,11 @@ alias: log state changes to slack
 trigger:
   platform: state
   entity_id:
-    - sensor.alarm_sensors
+    - binary_sensor.living_room_motion
+    - binary_sensor.master_door
+    - binary_sensor.entry_door
+    - binary_sensor.garage
+    - binary_sensor.gate
     - alarm_control_panel.alarm
     - automation.gate_bell
     - binary_sensor.jesses_desktop
