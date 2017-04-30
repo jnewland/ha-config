@@ -50,10 +50,6 @@ env:
   MOTION_LINK=http://example.com
   MPR_API_IP=""
   MPR_API_PORT=1
-  MQTT_BROKER=""
-  MQTT_PASSWORD=""
-  MQTT_PORT=1
-  MQTT_USERNAME=""
   MYQ_PASSWORD=""
   MYQ_USERNAME=""
   NUC_IP=""
@@ -71,6 +67,9 @@ env:
   TRUSTED_NETWORK_1=0.0.0.0/0
   TRUSTED_NETWORK_2=0.0.0.0/0
   TRUSTED_NETWORK_3=0.0.0.0/0
+  UNIFI_USERNAME=foo
+  UNIFI_PASSWORD=bar
+  UNIFI_PORT=8443
   VERA_LINK=http://example.com
   VERA_URL=http://example.com
   VIRTUAL_HOST=example.com
