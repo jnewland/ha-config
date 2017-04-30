@@ -28,6 +28,10 @@ jesses_macbook:
   track: true
   vendor:
 
+jesse_music_room:
+  name: music room desk
+  track: true
+
 motion:
   name: motion
   track: true
