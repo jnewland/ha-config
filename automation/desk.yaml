@@ -14,6 +14,9 @@ action:
   - service: script.turn_on
     entity_id: script.mode_working
   - service: device_tracker.see
-    data:
+    data_template:
       dev_id: jphone_6s
       location_name: Desk
+      gps:
+      - !env_var LAT
+      - !env_var LONG
