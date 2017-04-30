@@ -4,12 +4,29 @@
   radius: 50
   icon: mdi:home
 
-# - name: Master
-#   latitude: !env_var MASTER_LAT
-#   longitude: !env_var MASTER_LONG
-#   radius: 1
-#   icon: mdi:sleep
-#   track_ios: false
+- name: Upstairs
+  latitude: !env_var LAT
+  longitude: !env_var LONG
+  radius: 1
+  passive: true
+  track_ios: false
+  icon: mdi:home
+
+- name: Downstairs
+  latitude: !env_var LAT
+  longitude: !env_var LONG
+  radius: 1
+  passive: true
+  track_ios: false
+  icon: mdi:home
+
+- name: Master
+  latitude: !env_var MASTER_LAT
+  longitude: !env_var MASTER_LONG
+  radius: 1
+  passive: true
+  track_ios: false
+  icon: mdi:sleep
 
 - name: Kitchen
   latitude: !env_var KITCHEN_LAT

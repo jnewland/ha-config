@@ -1,2 +1,16 @@
 binary_sensor.jesses_desktop:
   friendly_name: Desk
+binary_sensor.stairs_motion_6:
+  zone: Downstairs
+binary_sensor.closet_motion_61:
+  zone: Master
+binary_sensor.guest_bath_motion_70:
+  zone: Downstairs
+binary_sensor.powder_room_motion_75:
+  zone: Downstairs
+binary_sensor.office_motion_82:
+  zone: Office
+binary_sensor.upstairs_motion_87:
+  zone: Upstairs
+binary_sensor.master_bath_motion_37:
+  zone: Master

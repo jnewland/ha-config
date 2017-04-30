@@ -29,3 +29,8 @@ jesses_macbook:
   picture: https://github.com/jnewland.png
   track: true
   vendor:
+
+motion:
+  hide_if_away: true
+  name: motion
+  track: true
