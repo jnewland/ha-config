@@ -28,6 +28,4 @@ action:
         not_home
         {%- elif trigger.to_state.state == "on" -%}
         {{- trigger.to_state.attributes.zone -}}
-        {%- elif -%}
-        {{ None }}
         {% endif %}
