@@ -10,6 +10,7 @@ trigger:
   - binary_sensor.upstairs_motion_87
   - binary_sensor.master_bath_motion_37
   - binary_sensor.master_motion_92
+  - binary_sensor.wine_room_motion_97
   - binary_sensor.living_room_motion
   - binary_sensor.master_door
   - binary_sensor.entry_door

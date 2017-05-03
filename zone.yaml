@@ -12,7 +12,7 @@
   track_ios: false
   icon: mdi:home
 
-- name: Downstairs
+- name: Hall
   latitude: !env_var LAT
   longitude: !env_var LONG
   radius: 1
