@@ -7,10 +7,10 @@ binary_sensor.closet_motion_61:
   zone: Master
   trigger_entity_id: light.master_closet_32
 binary_sensor.guest_bath_motion_70:
-  zone: Downstairs
+  zone: Hall
   trigger_entity_id: group.guest_bath
 binary_sensor.powder_room_motion_75:
-  zone: Downstairs
+  zone: Hall
   trigger_entity_id: light.powder_room_80
 binary_sensor.office_motion_82:
   zone: Office
@@ -21,6 +21,9 @@ binary_sensor.master_bath_motion_37:
   zone: Master
   trigger_entity_id_on: script.master_bath_lights
   trigger_entity_id: group.master_bath
+binary_sensor.wine_room_motion_97:
+  zone: Hall
+  trigger_entity_id: light.wine_room_25
 binary_sensor.master_motion_92:
   zone: Master
 binary_sensor.living_room_motion:
