@@ -5,3 +5,4 @@ icon: mdi:temperature-fahrenheit
 entities:
 - group.climate
 - group.environment
+- group.wine_room
