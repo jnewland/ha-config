@@ -1,5 +1,5 @@
 control: hidden
-name: ha-config branch
+name: ha-config
 entities:
 - sensor.haconfig_branch
 - weblink.haconfig
