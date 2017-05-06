@@ -39,7 +39,6 @@ scene: !include_dir_list scenes
 script: !include_dir_named scripts
 sensor: !include sensor.yaml
 shell_command: !include shell_command.yaml
-statsd: !include statsd.yaml
 sun:
 switch: !include switch.yaml
 tts:
