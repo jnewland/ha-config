@@ -20,7 +20,6 @@ entities:
   - name: haconfig_ci
     url: https://travis-ci.org/jnewland/ha-config
     icon: mdi:check
-    icon: mdi:github-circle
   - name: homeassistant_ci
     url: https://travis-ci.org/jnewland/home-assistant
     icon: mdi:check
