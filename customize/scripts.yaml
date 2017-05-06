@@ -38,6 +38,3 @@ script.deploy_haconfig_master:
   friendly_name: Redploy master
 script.restart:
   friendly_name: Restart
-script.deploy_haconfig_latest:
-  icon: mdi:update
-  friendly_name: Deploy ha-config
