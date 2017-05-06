@@ -15,6 +15,8 @@ binary_sensor: !include binary_sensor.yaml
 camera: !include camera.yaml
 cover: !include cover.yaml
 conversation:
+datadog:
+  host: 127.0.0.1
 device_tracker: !include device_tracker.yaml
 discovery:
 emulated_hue:
