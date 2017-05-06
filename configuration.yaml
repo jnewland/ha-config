@@ -16,7 +16,7 @@ camera: !include camera.yaml
 cover: !include cover.yaml
 conversation:
 datadog:
-  host: 127.0.0.1
+  host: !env_var NUC_IP
 device_tracker: !include device_tracker.yaml
 discovery:
 emulated_hue:
