@@ -10,8 +10,5 @@ sensor.front_gate:
 sensor.haconfig_branch:
   friendly_name: Running branch
   icon: mdi:source-branch
-sensor.homeassistant_branch:
-  friendly_name: Branch
-  icon: mdi:source-branch
 sensor.alarm_sensors:
   icon: mdi:radar
