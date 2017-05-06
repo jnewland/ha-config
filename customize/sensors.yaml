@@ -8,7 +8,7 @@ sensor.front_gate:
   device_class: opening
   icon: mdi:gate
 sensor.haconfig_branch:
-  friendly_name: Branch
+  friendly_name: Running branch
   icon: mdi:source-branch
 sensor.homeassistant_branch:
   friendly_name: Branch
