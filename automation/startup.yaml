@@ -1,7 +1,7 @@
 alias: startup
 trigger:
-  platform: homeassistant
-  event: start
+  platform: event
+  event_type: homeassistant_start
 action:
   - service: input_select.select_option
     data_template:
