@@ -24,6 +24,9 @@ condition:
                       states.input_boolean.guests.state == "off"
                     }}'
 action:
+  # Delay a bit so the lights come on in nightlight mode
+  - delay:
+      seconds: 5
   - service: script.turn_on
     entity_id: script.mode_morning
   - condition: template
