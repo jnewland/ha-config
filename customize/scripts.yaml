@@ -38,3 +38,5 @@ script.deploy_haconfig_master:
   friendly_name: Redploy master
 script.restart:
   friendly_name: Restart
+script.working:
+  emulated_hue: true
