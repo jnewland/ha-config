@@ -33,11 +33,8 @@ script.airplay_upstairs:
   friendly_name: Upstairs
   emulated_hue: true
 script.deploy_haconfig:
-  friendly_name: Deploy branch
+  friendly_name: Deploy latest green branch
 script.deploy_haconfig_master:
   friendly_name: Redploy master
 script.restart:
   friendly_name: Restart
-script.deploy_haconfig_latest:
-  icon: mdi:update
-  friendly_name: Deploy ha-config

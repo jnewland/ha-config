@@ -1,8 +1,4 @@
 weblink.haconfig_ci:
-  friendly_name: CI
+  friendly_name: ha-config CI
 weblink.homeassistant_ci:
-  friendly_name: CI
-weblink.haconfig:
-  friendly_name: Repo
-weblink.homeassistant:
-  friendly_name: Repo
+  friendly_name: home-assistant CI

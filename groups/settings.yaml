@@ -9,4 +9,3 @@ entities:
 - group.all_automations
 - group.roomba
 - group.homeassistant
-- group.branch_deploy
