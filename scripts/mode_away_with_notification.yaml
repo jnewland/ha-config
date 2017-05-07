@@ -2,7 +2,6 @@ sequence:
   - service: script.turn_on
     data:
       entity_id: script.mode_away
-  - service: notify.slack
+  - service: notify.ios_jphone_6s
     data_template:
-      message: '@jnewland is {{ states.device_tracker.jphone_6s.state }} and katienewland is {{ states.device_tracker.jphone_6s.state }}. Setting away mode.'
-      target: "#general"
+      message: 'Turning on away mode.'

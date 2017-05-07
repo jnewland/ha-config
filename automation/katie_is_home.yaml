@@ -5,11 +5,10 @@ trigger:
   from: not_home
   to: home
 condition:
-  condition: state
-  entity_id: device_tracker.jphone_6s
-  state: home
+  condition: template
+  value_template: |
+    {{ states.device_tracker.jphone_6s.state != "not_home" }}
 action:
-  service: notify.slack
+  service: notify.ios_jphone_6s
   data:
-    message: '@jnewland Katie is home!'
-    target: "#general"
+    message: 'Katie is home!'
