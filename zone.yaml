@@ -29,19 +29,15 @@
   icon: mdi:home
 
 - name: Living
-  latitude: !env_var LAT
-  longitude: !env_var LONG
+  latitude: !env_var LIVING_LAT
+  longitude: !env_var LIVING_LONG
   radius: 1
-  passive: true
-  track_ios: false
   icon: mdi:account
 
 - name: Master
   latitude: !env_var MASTER_LAT
   longitude: !env_var MASTER_LONG
   radius: 1
-  passive: true
-  track_ios: false
   icon: mdi:sleep
 
 - name: Kitchen
@@ -54,14 +50,6 @@
   latitude: !env_var OFFICE_LAT
   longitude: !env_var OFFICE_LONG
   radius: 1
-  icon: mdi:desktop-mac
-
-- name: Desk
-  latitude: !env_var OFFICE_LAT
-  longitude: !env_var OFFICE_LONG
-  radius: 1
-  passive: true
-  track_ios: false
   icon: mdi:desktop-mac
 
 - name: Music room

@@ -1,5 +1,3 @@
-# If Katie and I are both in the kitchen for a few minutes, set the mode to
-# Cooking
 alias: Cooking
 trigger:
   platform: state
@@ -7,21 +5,16 @@ trigger:
     - device_tracker.jphone_6s
     - device_tracker.katies_iphone
   to: Kitchen
-  for:
-    minutes: 2
 condition:
   condition: and
   conditions:
   - condition: template
     value_template: '
-      {% set jphone = states.device_tracker.jphone_6s.state %}
-      {% set kphone = states.device_tracker.katies_iphone.state %}
       {{
-        (jphone == kphone or (jnewland == "not_home" or kphone == "not_home")) and
         states.input_select.mode.state != "Pause" and
-        states.input_boolean.guests.state == "off" and
-        states.input_select.mode.state != "Cooking"
+        states.input_select.mode.state != "Sleeping" and
+        states.input_boolean.guests.state == "off"
       }}'
 action:
   - service: script.turn_on
-    entity_id: script.mode_cooking
+    entity_id: script.cooking

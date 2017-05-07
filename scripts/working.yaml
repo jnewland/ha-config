@@ -10,7 +10,3 @@ sequence:
   - service: light.turn_on
     entity_id:
       - light.desk_63
-  - service: input_select.select_option
-    entity_id: input_select.mode
-    data:
-      option: Working

@@ -1,6 +1,6 @@
-name: "@jnewland rain predicted for today!"
+name: "rain predicted for today!"
 entity_id: binary_sensor.rain_today
 state: 'on'
 repeat: 1440
 notifiers:
-- slack
+- notify.ios_jphone_6s

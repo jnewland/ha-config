@@ -1,31 +1,28 @@
-# If Katie and I are both in the office for a few minutes and the sun is up,
-# set the mode to Working.
-alias: Working
+# If Katie and I are both in the master for a few minutes after the sun has set,
+# turn on Reading
+alias: Reading
 trigger:
   platform: state
   entity_id:
     - device_tracker.jphone_6s
     - device_tracker.katies_iphone
-  to: Office
+  to: Master
   for:
-    minutes: 2
+    minutes: 1
 condition:
   condition: and
   conditions:
-  - condition: sun
-    after: sunrise
-    after_offset: '-1:00:00'
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
   - condition: template
     value_template: '
       {% set jphone = states.device_tracker.jphone_6s.state %}
       {% set kphone = states.device_tracker.katies_iphone.state %}
       {{
         (jphone == kphone or (jnewland == "not_home" or kphone == "not_home")) and
-        states.input_select.mode.state != "Movie" and
-        states.input_select.mode.state != "Pause" and
-        states.input_boolean.guests.state == "off" and
-        states.input_select.mode.state != "Working"
+        states.input_select.mode.state != "Pause"
       }}'
 action:
   - service: script.turn_on
-    entity_id: script.mode_working
+    entity_id: script.mode_reading

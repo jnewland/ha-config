@@ -1,0 +1,40 @@
+alias: Morning
+trigger:
+  - platform: state
+    entity_id: binary_sensor.master_bath_motion_37
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id:
+    - sensor.jphone_6s_battery_state
+    - sensor.katies_iphone_battery_state
+    to: 'Unplugged'
+    for:
+      seconds: 30
+condition:
+  condition: and
+  conditions:
+  - condition: template
+    value_template: '{{ states.input_select.mode.state == "Sleeping" }}'
+  - condition: time
+    after: '05:00:00'
+  - condition: template
+    value_template: '{{
+                      states.input_select.mode.state != "Pause" and
+                      states.input_boolean.guests.state == "off"
+                    }}'
+action:
+  # Delay a bit so the lights come on in nightlight mode
+  - delay:
+      seconds: 5
+  - service: script.turn_on
+    entity_id: script.mode_morning
+  - condition: template
+    value_template: '{{ states.device_tracker.jphone_6s.state != "not_home" }}'
+  - service: notify.ios_jphone_6s
+    data_template:
+      message: >
+        Morning!
+        {% if is_state("alert.lost_roomba", "on") %}
+        The roomba's lost, btw. Help a robot out?
+        {% endif %}

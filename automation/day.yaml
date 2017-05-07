@@ -1,0 +1,36 @@
+alias: Day
+trigger:
+  - platform: state
+    entity_id: input_select.mode
+    to: Morning
+  - platform: state
+    entity_id: binary_sensor.master_bath_motion_37
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id:
+    - sensor.jphone_6s_battery_state
+    - sensor.katies_iphone_battery_state
+    to: 'Unplugged'
+    for:
+      seconds: 60
+condition:
+  condition: and
+  conditions:
+  - condition: state
+    entity_id: input_select.mode
+    state: Morning
+  - condition: template
+    value_template: |
+      {{
+        (states.device_tracker.jphone_6s.state == "not_home" or sensor.jphone_6s_battery_state.state == "Unplugged") and
+        (states.device_tracker.katies_iphone.state == "not_home" or sensor.katies_iphone_battery_state.state == "Unplugged")
+      }}
+action:
+  - service: script.turn_on
+    entity_id: script.mode_day
+  - condition: template
+    value_template: '{{ states.device_tracker.jphone_6s.state != "not_home" }}'
+  - service: notify.ios_jphone_6s
+    data_template:
+      message: Katie's up!
