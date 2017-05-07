@@ -9,7 +9,6 @@ mode:
    - Sleeping
    - Away
    - Pause
-  initial: 'Working'
   icon: mdi:settings
 playlist:
   name: Playlist
