@@ -1,0 +1,26 @@
+alias: state debugging
+trigger:
+  platform: state
+  entity_id:
+    - device_tracker.katies_iphone
+    - device_tracker.jphone_6s
+    - device_tracker.motion
+condition:
+  condition: template
+  value_template: |
+    {% set old_state = trigger.from_state %}
+    {% set new_state = trigger.to_state %}
+    {{
+      old_state != None and
+      new_state.state != old_state.state
+    }}
+action:
+  service: notify.ios_jphone_6s
+  data_template:
+    message: >
+      {% set old_state = trigger.from_state %}
+      {% set new_state = trigger.to_state %}
+      {{ new_state.name | capitalize -}}{{ " " -}}
+      is {{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}{{ " " -}}
+      after being {{ old_state.state | capitalize }}{{ old_state.attributes.unit_of_measurement }}{{ " " -}}
+      for {{ relative_time(old_state.last_changed) }}
