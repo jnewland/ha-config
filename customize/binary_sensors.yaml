@@ -2,7 +2,8 @@ binary_sensor.jesses_desktop:
   friendly_name: Desk
 binary_sensor.stairs_motion_6:
   zone: Living
-  trigger_entity_id: light.stairs_23
+  trigger_entity_id: script.stairs_lights
+  trigger_entity_id_off: light.stairs_23
 binary_sensor.closet_motion_61:
   zone: Master
   trigger_entity_id: light.master_closet_32
