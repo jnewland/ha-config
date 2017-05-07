@@ -29,8 +29,8 @@
   icon: mdi:home
 
 - name: Living
-  latitude: !env_var LAT
-  longitude: !env_var LONG
+  latitude: !env_var LIVING_LAT
+  longitude: !env_var LIVING_LONG
   radius: 1
   icon: mdi:account
 
