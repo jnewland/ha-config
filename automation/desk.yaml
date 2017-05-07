@@ -16,7 +16,7 @@ action:
   - service: device_tracker.see
     data_template:
       dev_id: jphone_6s
-      location_name: Desk
+      location_name: Office
       gps:
-      - !env_var LAT
-      - !env_var LONG
+      - !env_var OFFICE_LAT
+      - !env_var OFFICE_LONG
