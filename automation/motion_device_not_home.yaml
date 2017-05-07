@@ -1,37 +1,11 @@
 alias: Motion device not home
 trigger:
-  platform: state
-  entity_id:
-  - binary_sensor.stairs_motion_6
-  - binary_sensor.closet_motion_61
-  - binary_sensor.guest_bath_motion_70
-  - binary_sensor.powder_room_motion_75
-  - binary_sensor.office_motion_82
-  - binary_sensor.upstairs_motion_87
-  - binary_sensor.master_bath_motion_37
-  - binary_sensor.master_motion_92
-  - binary_sensor.living_room_motion
-  - binary_sensor.master_door
-  - binary_sensor.entry_door
-  - binary_sensor.garage
-  - binary_sensor.gate
-  to: 'off'
+  platform: time
+  seconds: '/30'
 condition:
   condition: template
   value_template: |
-    {{ states.input_select.mode.state != "Pause" and
-        states.binary_sensor.stairs_motion_6.state == "off" and
-        states.binary_sensor.closet_motion_61.state == "off" and
-        states.binary_sensor.guest_bath_motion_70.state == "off" and
-        states.binary_sensor.powder_room_motion_75.state == "off" and
-        states.binary_sensor.office_motion_82.state == "off" and
-        states.binary_sensor.upstairs_motion_87.state == "off" and
-        states.binary_sensor.living_room_motion.state == "off" and
-        states.binary_sensor.master_motion_92.state == "off" and
-        states.binary_sensor.master_door.state == "off" and
-        states.binary_sensor.entry_door.state == "off" and
-        states.binary_sensor.garage.state == "off" and
-        states.binary_sensor.gate.state == "off" }}
+    {{ as_timestamp(utcnow()) - as_timestamp(states.device_tracker.motion.last_changed) > 300 }}
 action:
   service: device_tracker.see
   data_template:
