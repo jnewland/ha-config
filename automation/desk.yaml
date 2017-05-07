@@ -1,18 +1,15 @@
-alias: Turn on working mode on whenever I'm at my desk
+alias: Activity on the iMac means Jesse is in the office
 trigger:
-  platform: state
-  entity_id: binary_sensor.jesses_desktop
-  to: 'on'
+  - platform: state
+    entity_id: binary_sensor.jesses_desktop
+    to: 'on'
+  - platform: time
+    seconds: '/10'
 condition:
   condition: template
-  value_template: '
-    {{
-      states.input_select.mode.state != "Pause" and
-      states.input_select.mode.state != "Movie"
-    }}'
+  value_template: |
+    {{ states.binary_sensor.jesses_desktop.state == "on" }}
 action:
-  - service: script.turn_on
-    entity_id: script.mode_working
   - service: device_tracker.see
     data_template:
       dev_id: jphone_6s
