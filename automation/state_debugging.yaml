@@ -1,4 +1,5 @@
 alias: state debugging
+initial_state: off
 trigger:
   platform: state
   entity_id:
