@@ -1,11 +1,17 @@
+zone.office:
+  beacon:
+    uuid: 74278BDA-B644-4520-8F0C-720EAF059935
+    major: 10001
+    minor: 19641
+
 zone.kitchen:
   beacon:
     uuid: 74278BDA-B644-4520-8F0C-720EAF059935
     major: 10001
     minor: 19642
 
-zone.office:
+zone.living:
   beacon:
     uuid: 74278BDA-B644-4520-8F0C-720EAF059935
     major: 10001
-    minor: 19641
+    minor: 19643

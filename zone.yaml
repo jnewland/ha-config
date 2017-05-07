@@ -32,8 +32,6 @@
   latitude: !env_var LAT
   longitude: !env_var LONG
   radius: 1
-  passive: true
-  track_ios: false
   icon: mdi:account
 
 - name: Master
