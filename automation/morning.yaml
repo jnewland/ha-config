@@ -30,7 +30,7 @@ action:
   - service: script.turn_on
     entity_id: script.mode_morning
   - condition: template
-    value_template: '{{ states.device_tracker.jphone_6s.state == "home" }}'
+    value_template: '{{ states.device_tracker.jphone_6s.state != "not_home" }}'
   - service: notify.ios_jphone_6s
     data_template:
       message: >
