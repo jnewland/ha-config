@@ -9,6 +9,7 @@ trigger:
   - binary_sensor.upstairs_motion_87
   - binary_sensor.closet_motion_61
   - binary_sensor.wine_room_motion_97
+  - binary_sensor.master_motion_92
   to: "on"
 condition:
   condition: template

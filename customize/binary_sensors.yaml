@@ -26,6 +26,8 @@ binary_sensor.wine_room_motion_97:
   trigger_entity_id: light.wine_room_25
 binary_sensor.master_motion_92:
   zone: Master
+  trigger_entity_id: light.chandelier_33
+  trigger_entity_id_off: script.turn_off_chandiler_during_day
 binary_sensor.living_room_motion:
   friendly_name: Living room motion
   zone: Living
