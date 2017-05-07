@@ -13,7 +13,7 @@ condition:
       {{
         states.input_select.mode.state != "Pause" and
         states.input_select.mode.state != "Sleeping" and
-        states.input_boolean.guests.state == "off" and
+        states.input_boolean.guests.state == "off"
       }}'
 action:
   - service: script.turn_on
