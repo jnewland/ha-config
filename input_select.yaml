@@ -2,7 +2,6 @@ mode:
   name: Mode
   options:
    - Morning
-   - Cooking
    - Party
    - Movie
    - Reading

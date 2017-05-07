@@ -1,5 +1,3 @@
-scene.cooking:
-  emulated_hue: true
 scene.party:
   emulated_hue: true
 scene.reading:

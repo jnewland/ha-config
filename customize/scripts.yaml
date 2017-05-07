@@ -40,3 +40,5 @@ script.restart:
   friendly_name: Restart
 script.working:
   emulated_hue: true
+script.cooking:
+  emulated_hue: true
