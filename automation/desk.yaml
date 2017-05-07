@@ -4,7 +4,7 @@ trigger:
     entity_id: binary_sensor.jesses_desktop
     to: 'on'
   - platform: time
-    seconds: '/10'
+    seconds: '00'
 condition:
   condition: template
   value_template: |
