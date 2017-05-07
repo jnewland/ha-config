@@ -38,8 +38,6 @@
   latitude: !env_var MASTER_LAT
   longitude: !env_var MASTER_LONG
   radius: 1
-  passive: true
-  track_ios: false
   icon: mdi:sleep
 
 - name: Kitchen
