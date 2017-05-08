@@ -23,8 +23,8 @@ condition:
   - condition: template
     value_template: |
       {{
-        (states.device_tracker.jphone_6s.state == "not_home" or sensor.jphone_6s_battery_state.state == "Unplugged") and
-        (states.device_tracker.katies_iphone.state == "not_home" or sensor.katies_iphone_battery_state.state == "Unplugged")
+        (states.device_tracker.jphone_6s.state == "not_home" or states.sensor.jphone_6s_battery_state.state == "Unplugged") and
+        (states.device_tracker.katies_iphone.state == "not_home" or states.sensor.katies_iphone_battery_state.state == "Unplugged")
       }}
 action:
   - service: script.turn_on
