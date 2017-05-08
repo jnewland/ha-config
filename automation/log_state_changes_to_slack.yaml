@@ -51,8 +51,14 @@ condition:
     {% set old_state = trigger.from_state %}
     {% set new_state = trigger.to_state %}
     {{
-      old_state != None and
-      new_state.state != old_state.state
+      (
+        old_state != None and
+        new_state.state != old_state.state and
+        (
+          old_state.state != "Unknown" and
+          ( as_timestamp(utcnow()) - as_timestamp(old_state.state.last_changed) < 60 )
+        )
+      )
     }}
 action:
   service: notify.slack
