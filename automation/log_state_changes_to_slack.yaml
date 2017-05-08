@@ -56,7 +56,7 @@ condition:
         new_state.state != old_state.state and
         (
           old_state.state != "Unknown" and
-          ( as_timestamp(utcnow()) - as_timestamp(old_state.state.last_changed) < 60 )
+          ( as_timestamp(utcnow()) - as_timestamp(old_state.last_changed) < 60 )
         )
       )
     }}
