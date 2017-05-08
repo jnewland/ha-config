@@ -8,7 +8,6 @@ trigger:
   - binary_sensor.stairs_motion_6
   - binary_sensor.upstairs_motion_87
   - binary_sensor.closet_motion_61
-  - binary_sensor.master_motion_92
   to: "off"
   for:
     minutes: 30

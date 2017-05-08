@@ -2,13 +2,15 @@ mode:
   name: Mode
   options:
    - Morning
-   - Day
+   - Working
+   - Cooking
    - Party
    - Movie
    - Reading
    - Sleeping
    - Away
    - Pause
+  initial: 'Working'
   icon: mdi:settings
 playlist:
   name: Playlist

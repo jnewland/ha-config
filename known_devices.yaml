@@ -34,5 +34,4 @@ jesse_music_room:
 
 motion:
   name: motion
-  hide_if_away: true
   track: true
