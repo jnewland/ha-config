@@ -52,6 +52,14 @@
   radius: 1
   icon: mdi:desktop-mac
 
+- name: Desk
+  latitude: !env_var OFFICE_LAT
+  longitude: !env_var OFFICE_LONG
+  radius: 1
+  passive: true
+  track_ios: false
+  icon: mdi:desktop-mac
+
 - name: Music room
   latitude: !env_var OFFICE_LAT
   longitude: !env_var OFFICE_LAT

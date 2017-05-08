@@ -10,3 +10,7 @@ sequence:
     entity_id:
       - media_player.living_speakers
       - media_player.kitchen_speakers
+  - service: input_select.select_option
+    entity_id: input_select.mode
+    data:
+      option: Cooking

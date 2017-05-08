@@ -1,0 +1,13 @@
+alias: startup
+trigger:
+  platform: event
+  event_type: homeassistant_start
+action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: input_select.mode
+      option: Working
+  - service: input_select.select_option
+    data_template:
+      entity_id: input_select.playlist
+      option: Idle

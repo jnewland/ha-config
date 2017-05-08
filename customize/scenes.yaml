@@ -1,3 +1,7 @@
+scene.cooking:
+  emulated_hue: true
+scene.working:
+  emulated_hue: true
 scene.party:
   emulated_hue: true
 scene.reading:

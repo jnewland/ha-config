@@ -5,6 +5,7 @@ trigger:
   from: 'off'
   to: 'on'
 action:
-  service: notify.ios_jphone_6s
-  data:
-    message: 'the master AC water sensor detected a leak'
+  service: notify.slack
+  data_template:
+    message: '@jnewland the master AC water sensor detected a leak'
+    target: "#general"
