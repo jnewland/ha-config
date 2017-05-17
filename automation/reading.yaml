@@ -13,7 +13,7 @@ condition:
   condition: and
   conditions:
   - condition: template
-    value_template: '
+    value_template: |
       {% set jphone = states.device_tracker.jphone_6s.state %}
       {% set kphone = states.device_tracker.katies_iphone.state %}
       {{
@@ -21,7 +21,7 @@ condition:
         states.input_select.mode.state != "Reading"
         states.input_select.mode.state != "Sleeping"
         states.input_select.mode.state != "Pause"
-      }}'
+      }}
   - condition: state
     entity_id: sun.sun
     state: below_horizon
