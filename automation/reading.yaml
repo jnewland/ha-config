@@ -18,8 +18,8 @@ condition:
       {% set kphone = states.device_tracker.katies_iphone.state %}
       {{
         (jphone == kphone or (jnewland == "not_home" or kphone == "not_home")) and
-        states.input_select.mode.state != "Reading"
-        states.input_select.mode.state != "Sleeping"
+        states.input_select.mode.state != "Reading" and
+        states.input_select.mode.state != "Sleeping" and
         states.input_select.mode.state != "Pause"
       }}
   - condition: state
