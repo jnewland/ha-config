@@ -13,7 +13,7 @@ condition:
   conditions:
   - condition: state
     entity_id: input_select.mode
-    tate: Away
+    state: Away
   - condition: template
     value_template: |
       {% set old_state = trigger.from_state %}
