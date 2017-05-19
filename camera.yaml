@@ -22,9 +22,6 @@
 - platform: mjpeg
   mjpeg_url: !env_var CAMERA_URL_8
   name: side yard
-- platform: mjpeg
-  mjpeg_url: !env_var CAMERA_URL_9
-  name: living room
 - platform: generic
   name: jPhone
   still_image_url: https://maps.googleapis.com/maps/api/staticmap?center={{ states.device_tracker.jphone_6s.attributes.latitude }},{{ states.device_tracker.jphone_6s.attributes.longitude }}&zoom=13&size=500x500&maptype=roadmap&markers=color:blue%7Clabel:J%7C{{ states.device_tracker.jphone_6s.attributes.latitude }},{{ states.device_tracker.jphone_6s.attributes.longitude }}
