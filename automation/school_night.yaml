@@ -1,7 +1,7 @@
 alias: "Dim the lights in the living room at 10pm"
 trigger:
   platform: time
-  after: "22:00:00"
+  at: "22:00:00"
 condition:
   condition: and
   conditions:
