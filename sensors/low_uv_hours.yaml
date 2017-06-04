@@ -1,0 +1,9 @@
+platform: rest
+resource: https://iaspub.epa.gov/enviro/efservice/getEnvirofactsUVHOURLY/ZIP/78722/JSON
+name: Today's low uv hours
+value_template: |
+  {%- for hour in value_json -%}
+  {%- if hour.UV_VALUE < 3 and hour.UV_VALUE > 0 -%}
+  {%- set date = hour.DATE_TIME.split(' ') -%}
+  {{ date[1] | round }}{{ date[2] | lower }} {% endif -%}
+  {%- endfor -%}
