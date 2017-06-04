@@ -37,7 +37,7 @@ proximity: !include proximity.yaml
 recorder: !include recorder.yaml
 scene: !include_dir_list scenes
 script: !include_dir_named scripts
-sensor: !include sensor.yaml
+sensor: !include_dir_list sensors
 shell_command: !include shell_command.yaml
 sun:
 switch: !include switch.yaml
