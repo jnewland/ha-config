@@ -4,4 +4,3 @@ icon: mdi:home
 entities:
 - group.home_info
 - group.alerts
-- group.default_view_weather
