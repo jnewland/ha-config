@@ -1,10 +1,13 @@
 ---
 name: Rancho de Newland
+control: hidden
 entities:
 - input_select.mode
 - alarm_control_panel.alarm
-- sensor.alarm_sensors
 - lock.front_door_12
 - cover.garage
 - cover.gate
+- script.mute
+- sensor.dark_sky_hourly_summary
+- sensor.alarm_sensors
 - persistent_notification.invalid_config

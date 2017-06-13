@@ -1,7 +1,0 @@
-name: Rainy day
-icon: mdi:weather-rainy
-entities:
-- sensor.dark_sky_precip
-- sensor.dark_sky_minutely_summary
-- sensor.dark_sky_hourly_summary
-- camera.radar

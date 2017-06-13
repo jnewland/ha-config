@@ -1,7 +1,7 @@
 ---
 name: great room
 view: true
-icon: mdi:account
+icon: mdi:sofa
 entities:
 - group.great_room
 - group.hall
