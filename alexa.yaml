@@ -2,7 +2,7 @@ intents:
   MuteIntent:
     action:
       service: script.turn_on
-      entity_id: script.quiet
+      entity_id: script.mute
   AMAZON.HelpIntent:
     speech:
       type: plaintext
