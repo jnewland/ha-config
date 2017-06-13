@@ -11,6 +11,8 @@ group.office:
   emulated_hue: true
 group.great_room:
   emulated_hue: true
+group.speakers:
+  emulated_hue: true
 group.master:
   emulated_hue: true
   emulated_hue_name: "bedroom"
