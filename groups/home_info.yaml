@@ -6,6 +6,7 @@ entities:
 - lock.front_door_12
 - cover.garage
 - cover.gate
+- script.mute
 - sensor.dark_sky_hourly_summary
 - alarm_control_panel.alarm
 - persistent_notification.invalid_config
