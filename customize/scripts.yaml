@@ -1,6 +1,7 @@
 script.mode_pause:
   friendly_name: Pause all automation
 script.mute:
+  friently_name: Mute
   emulated_hue: true
 script.pause_itunes:
   emulated_hue: true
