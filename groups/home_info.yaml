@@ -2,11 +2,11 @@
 name: Rancho de Newland
 entities:
 - input_select.mode
-- sensor.alarm_sensors
+- alarm_control_panel.alarm
 - lock.front_door_12
 - cover.garage
 - cover.gate
 - script.mute
 - sensor.dark_sky_hourly_summary
-- alarm_control_panel.alarm
+- sensor.alarm_sensors
 - persistent_notification.invalid_config
