@@ -1,0 +1,5 @@
+name: "Front door battery is low"
+entity_id: sensor.front_door_battery_low
+repeat: 1440
+notifiers:
+- notify.ios_jphone_6s

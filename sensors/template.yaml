@@ -41,32 +41,3 @@ sensors:
       {% if states.climate.upstairs %}
         {{ states.climate.upstairs.attributes.current_temperature }}
       {% endif %}
-  # battery_level
-  lock_front_door_battery_level:
-    entity_id: lock.front_door
-    unit_of_measurement: '%'
-    value_template: |
-      {% if states.lock.front_door %}
-        {{ states.lock.front_door.attributes.battery_level | replace('%', '') }}
-      {% endif %}
-  switch_master_ac_water_battery_level:
-    entity_id: switch.master_ac_water
-    unit_of_measurement: '%'
-    value_template: |
-      {% if states.switch.master_ac_water %}
-        {{ states.switch.master_ac_water.attributes.battery_level | replace('%', '') }}
-      {% endif %}
-  switch_master_bath_motion_battery_level:
-    entity_id: switch.master_bath_motion
-    unit_of_measurement: '%'
-    value_template: |
-      {% if states.switch.master_bath_motion %}
-        {{ states.switch.master_bath_motion.attributes.battery_level | replace('%', '') }}
-      {% endif %}
-  switch_stairs_motion_battery_level:
-    entity_id: switch.stairs_motion
-    unit_of_measurement: '%'
-    value_template: |
-      {% if states.switch.stairs_motion %}
-        {{ states.switch.stairs_motion.attributes.battery_level | replace('%', '') }}
-      {% endif %}
