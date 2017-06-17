@@ -1,7 +1,7 @@
 intents:
   TurnItDownIntent:
     action:
-      service: media_player.volume_up
+      service: media_player.volume_down
       entity_id: group.speakers
   TurnItUpIntent:
     action:
