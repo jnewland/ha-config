@@ -24,7 +24,8 @@ binary_sensor.master_bath_motion_37:
   trigger_entity_id: group.master_bath
 binary_sensor.wine_room_motion_97:
   zone: Hall
-  trigger_entity_id: light.wine_room_25
+  trigger_entity_id_on: script.wine_room_motion
+  trigger_entity_id_off: light.wine_room_25
 binary_sensor.master_motion_92:
   zone: Master
   trigger_entity_id_on: script.turn_on_chandiler_unless_sleeping

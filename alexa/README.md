@@ -16,6 +16,7 @@ In addition, Alexa knows how to talk to *the house*. For example, to get help, y
 * Alexa, tell the *house* *help*.
 * Alexa, *house* *help*.
 * Alexa, open *house*. *Help*.
+* Alexa, ask the house to turn it up.
 
 ## Controlling Music
 
@@ -28,6 +29,10 @@ In addition, Alexa knows how to talk to *the house*. For example, to get help, y
 > Alexa, tell the house to play *New Music Mix*.
 >
 > Alexa, house *music*.
+
+> Alexa, ask the house to *turn it up*.
+
+> Alexa, ask the house to *turn it down*.
 
 Play named playlists from iTunes on Jesse's desk computer.
 
