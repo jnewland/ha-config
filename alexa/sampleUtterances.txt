@@ -1,1 +1,5 @@
 MuteIntent mute
+TurnItUpIntent turn it up
+TurnItUpIntent louder
+TurnItUpIntent pump up the jams
+TurnItDownIntent turn it down
