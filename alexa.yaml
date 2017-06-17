@@ -1,4 +1,12 @@
 intents:
+  TurnItDownIntent:
+    action:
+      service: media_player.volume_up
+      entity_id: group.speakers
+  TurnItUpIntent:
+    action:
+      service: media_player.volume_up
+      entity_id: group.speakers
   MuteIntent:
     action:
       service: script.turn_on

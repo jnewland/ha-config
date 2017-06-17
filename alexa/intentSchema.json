@@ -2,6 +2,8 @@
   "intents": [
     { "intent": "AMAZON.PlaybackAction<object@MusicPlaylist>" },
     { "intent": "MuteIntent" },
+    { "intent": "TurnItUpIntent" },
+    { "intent": "TurnItDownIntent" },
     { "intent": "AMAZON.HelpIntent" },
     { "intent": "AMAZON.NextIntent" },
     { "intent": "AMAZON.PauseIntent" },
