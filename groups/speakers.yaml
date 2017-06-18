@@ -8,3 +8,5 @@ entities:
 - media_player.atrium_speakers
 - media_player.master_bedroom_speakers
 - media_player.master_bathroom_speakers
+- media_player.office_airtunes_speaker
+- media_player.music_room_airtunes_speaker
