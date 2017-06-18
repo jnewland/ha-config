@@ -1,2 +1,4 @@
+name: Downstairs speakers
+entities:
 - media_player.living_speakers
 - media_player.kitchen_speakers

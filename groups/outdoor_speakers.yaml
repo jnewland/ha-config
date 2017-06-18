@@ -1,2 +1,4 @@
+name: Outdoor speakers
+entities:
 - media_player.patio_speakers
 - media_player.atrium_speakers
