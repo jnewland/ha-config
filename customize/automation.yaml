@@ -1,5 +1,4 @@
 automation.gate_bell:
   icon: mdi:bell
-  emulated_hue: true
 automation.state_debugging:
   emulated_hue: true
