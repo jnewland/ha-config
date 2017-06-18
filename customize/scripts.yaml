@@ -10,30 +10,6 @@ script.play_itunes:
   emulated_hue: true
 script.next_track:
   emulated_hue: true
-script.airplay_computer:
-  icon: mdi:speaker
-  friendly_name: Computer only
-  emulated_hue: true
-script.airplay_downstairs:
-  icon: mdi:speaker
-  friendly_name: Downstairs
-  emulated_hue: true
-script.airplay_everywhere:
-  icon: mdi:speaker
-  friendly_name: Everywhere
-  emulated_hue: true
-script.airplay_in_the_office:
-  icon: mdi:speaker
-  friendly_name: Office
-  emulated_hue: true
-script.airplay_outdoors:
-  icon: mdi:speaker
-  friendly_name: Outdoors
-  emulated_hue: true
-script.airplay_upstairs:
-  icon: mdi:speaker
-  friendly_name: Upstairs
-  emulated_hue: true
 script.deploy_haconfig:
   friendly_name: Deploy latest green branch
 script.deploy_haconfig_master:
