@@ -3,7 +3,7 @@ sequence:
   - service: media_player.volume_set
     data:
       entity_id: media_player.itunes
-      volume: 0.5
+      volume_level: 0.5
   - service: homeassistant.turn_on
     data_template:
       entity_id: >
