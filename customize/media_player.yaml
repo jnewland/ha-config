@@ -1,0 +1,12 @@
+media_player.living_speakers:
+  emulated_hue: true
+media_player.patio_speakers:
+  emulated_hue: true
+media_player.kitchen_speakers:
+  emulated_hue: true
+media_player.atrium_speakers:
+  emulated_hue: true
+media_player.master_bedroom_speakers:
+  emulated_hue: true
+media_player.master_bathroom_speakers:
+  emulated_hue: true

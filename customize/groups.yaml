@@ -13,6 +13,12 @@ group.great_room:
   emulated_hue: true
 group.speakers:
   emulated_hue: true
+group.upstairs_speakers:
+  emulated_hue: true
+group.downstairs_speakers:
+  emulated_hue: true
+group.outdoor_speakers:
+  emulated_hue: true
 group.master:
   emulated_hue: true
   emulated_hue_name: "bedroom"
