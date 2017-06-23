@@ -1,0 +1,8 @@
+alias: Sunset notifications
+trigger:
+  platform: sun
+  event: sunset
+action:
+  service: notify.ios
+  data:
+    message: 'Check out the sunset!'
