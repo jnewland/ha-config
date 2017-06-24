@@ -126,7 +126,7 @@ class Airfoil:
     @property
     def client(self):
         """An Airfoil API client."""
-        return self.client
+        return self._client
 
     @property
     def speakers(self):
