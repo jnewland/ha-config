@@ -120,25 +120,23 @@ class Airfoil:
         self._host = host
         self._port = port
         self._use_ssl = use_ssl
-
         self.client = AirfoilClient(self._host, self._port, self._use_ssl)
 
-        self.speakers = []
+    @property
+    def name(self):
+        """Return the name of the device."""
+        return self.name
 
     @property
     def speakers(self):
-        """Return the name of the device."""
-        return self.speakers
-
-    def update(self):
-        """Retrieve latest state."""
-        self.speakers = []
+        """Connected speakers."""
+        speakers = []
         for device_data in self.client.speakers():
             speaker = AirfoilSpeakerDevice(device_data, self)
             speaker.updated_state(device_data)
-            self.speakers.append(speaker)
+            speakers.append(speaker)
 
-        return True
+        return speakers
 
 
 class AirfoilSpeakerDevice(MediaPlayerDevice):
