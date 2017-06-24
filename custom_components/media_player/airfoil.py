@@ -156,7 +156,7 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
 
         if 'name' in state_hash:
             name = state_hash.get('name')
-            self.device_name = '{} {}'.format(self.airfoil.name(), name)
+            self.device_name = '{} {}'.format(self.airfoil.name, name)
 
         if 'connected' in state_hash:
             self.connected = state_hash.get('connected', None) == "true"
