@@ -162,7 +162,7 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
             self.connected = state_hash.get('connected', None) == "true"
 
         if 'volume' in state_hash:
-            self.volume = state_hash.get('sound_volume', 0)
+            self.volume = state_hash.get('volume', 0)
 
     @property
     def name(self):
