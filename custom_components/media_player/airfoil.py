@@ -114,13 +114,12 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 class Airfoil:
     """Representation of an Airfoil API instance."""
 
-    def __init__(self, name, host, port, use_ssl, add_devices):
+    def __init__(self, name, host, port, use_ssl):
         """Initialize the Airfoil device."""
         self._name = name
         self._host = host
         self._port = port
         self._use_ssl = use_ssl
-        self._add_devices = add_devices
 
         self.client = AirfoilClient(self._host, self._port, self._use_ssl)
 
