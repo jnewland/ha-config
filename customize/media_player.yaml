@@ -16,3 +16,5 @@ media_player.office_airfoil_speakers:
 media_player.music_room_airfoil_speakers:
   emulated_hue: true
   friendly_name: "Music room speakers"
+media_player.bose_mini_soundlink_airfoil_speakers:
+  friendly_name: "Back porch speakers"
