@@ -134,7 +134,7 @@ class Airfoil:
         speakers = []
         for device_data in self.client.speakers():
             speaker = AirfoilSpeakerDevice(device_data, self)
-            speaker.updated_state(device_data)
+            speaker.update_state(device_data)
             speakers.append(speaker)
 
         return speakers
