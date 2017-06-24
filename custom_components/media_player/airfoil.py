@@ -65,7 +65,7 @@ class AirfoilClient(object):
             if method == 'GET':
                 response = requests.get(url, timeout=DEFAULT_TIMEOUT)
             elif method == 'POST':
-                response = requests.put(url, params, timeout=DEFAULT_TIMEOUT)
+                response = requests.post(url, params, timeout=DEFAULT_TIMEOUT)
             elif method == 'PUT':
                 response = requests.put(url, params, timeout=DEFAULT_TIMEOUT)
             elif method == 'DELETE':
