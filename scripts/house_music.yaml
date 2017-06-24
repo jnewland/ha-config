@@ -4,7 +4,7 @@ sequence:
     data:
       entity_id: media_player.itunes
       volume_level: 0.5
-  - service: homeassistant.turn_on
+  - service: scene.turn_on
     data_template:
       entity_id: >
         {# Determine where we should play music #}
@@ -14,11 +14,11 @@ sequence:
         scene.speakers_desk_only
         {%- else -%}
         {%- if zone == "Kitchen" or zone == "Office "-%}
-        script.speakers_downstairs
+        scene.speakers_downstairs
         {%- elif zone == "Master" -%}
-        script.speakers_upstairs
+        scene.speakers_upstairs
         {%- elif zone == "home" -%}
-        script.speakers_everywhere
+        scene.speakers_everywhere
         {%- endif -%}
         {%- endif -%}
   - service_template: >
