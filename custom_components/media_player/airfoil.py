@@ -24,6 +24,7 @@ DEFAULT_PORT = 8080
 DEFAULT_TIMEOUT = 3
 DEFAULT_SSL = False
 DOMAIN = 'airfoil'
+DEFAULT_HEADERS = {'content-type': 'text/plain'}
 
 SUPPORT_AIRFOIL = SUPPORT_VOLUME_SET | SUPPORT_TURN_ON | SUPPORT_TURN_OFF
 
@@ -61,24 +62,13 @@ class AirfoilClient(object):
         """Make the actual request and return the parsed response."""
         url = '{}{}'.format(self._base_url, path)
 
-        try:
-            if method == 'GET':
-                response = requests.get(url, timeout=DEFAULT_TIMEOUT)
-            elif method == 'POST':
-                response = requests.post(url, params, timeout=DEFAULT_TIMEOUT)
-            elif method == 'PUT':
-                response = requests.put(url, params, timeout=DEFAULT_TIMEOUT)
-            elif method == 'DELETE':
-                response = requests.delete(url, timeout=DEFAULT_TIMEOUT)
+        if method == 'GET':
+            response = requests.get(url, timeout=DEFAULT_TIMEOUT)
+        elif method == 'POST':
+            response = requests.post(url, params, timeout=DEFAULT_TIMEOUT,
+                                     headers=DEFAULT_HEADERS)
 
-            if response.status_code > 399:
-                return {'player_state': 'error'}
-            else:
-                return response.json()
-        except requests.exceptions.HTTPError:
-            return {'player_state': 'error'}
-        except requests.exceptions.RequestException:
-            return {'player_state': 'offline'}
+        return response.json()
 
     def speakers(self):
         """Return a list of speakers."""
