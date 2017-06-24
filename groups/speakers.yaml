@@ -6,6 +6,7 @@ entities:
 - media_player.patio_speakers
 - media_player.kitchen_speakers
 - media_player.atrium_speakers
+- media_player.mpr6zhmaut_airfoil_speakers
 - media_player.master_bedroom_speakers
 - media_player.master_bathroom_speakers
 - media_player.office_airfoil_speakers
