@@ -21,7 +21,7 @@ _LOGGER = logging.getLogger(__name__)
 
 DEFAULT_NAME = 'Airfoil speakers'
 DEFAULT_PORT = 8080
-DEFAULT_TIMEOUT = 10
+DEFAULT_TIMEOUT = 3
 DEFAULT_SSL = False
 DOMAIN = 'airfoil'
 
