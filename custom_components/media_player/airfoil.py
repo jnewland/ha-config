@@ -159,23 +159,23 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
 
         if 'name' in state_hash:
             name = state_hash.get('name')
-            self.device_name = '{} {}'.format(name, self.airfoil.name)
+            self._name = '{} {}'.format(name, self.airfoil.name)
 
         if 'connected' in state_hash:
-            self.connected = state_hash.get('connected', None) == "true"
+            self._connected = state_hash.get('connected', None) == "true"
 
         if 'volume' in state_hash:
-            self.volume = state_hash.get('volume', 0)
+            self._volume = state_hash.get('volume', 0)
 
     @property
     def name(self):
         """Return the name of the device."""
-        return self.device_name
+        return self._name
 
     @property
     def icon(self):
         """Return the icon to use in the frontend, if any."""
-        if self.connected is True:
+        if self._connected is True:
             return 'mdi:volume-high'
         else:
             return 'mdi:volume-off'
@@ -183,7 +183,7 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
     @property
     def state(self):
         """Return the state of the device."""
-        if self.connected is True:
+        if self._connected is True:
             return STATE_ON
         else:
             return STATE_OFF
@@ -198,7 +198,7 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
     @property
     def volume_level(self):
         """Return the volume."""
-        return float(self.volume)
+        return float(self._volume)
 
     @property
     def supported_features(self):
