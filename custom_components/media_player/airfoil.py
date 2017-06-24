@@ -204,8 +204,8 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
 
     def set_volume_level(self, volume):
         """Set volume level, range 0..1."""
-        volume = float(volume)
-        response = self.client.set_volume_speaker(self._id, volume)
+        response = self.client.set_volume_speaker(self._id,
+                                                  '{}'.format(volume))
         self.update_state(response)
         self.schedule_update_ha_state()
 
