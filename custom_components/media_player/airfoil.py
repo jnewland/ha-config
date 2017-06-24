@@ -90,10 +90,10 @@ class AirfoilClient(object):
         path = '/speakers/' + device_id + '/' + command
         return self._request('POST', path)
 
-    def set_volume_speaker(self, device_id, level):
-        """Set volume, returns current state of device, id, level 0-1."""
+    def set_volume_speaker(self, device_id, volume):
+        """Set volume, returns current state of device."""
         path = '/speakers/' + device_id + '/volume'
-        return self._request('POST', path, level)
+        return self._request('POST', path, volume)
 
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
@@ -207,8 +207,7 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
 
     def set_volume_level(self, volume):
         """Set volume level, range 0..1."""
-        response = self.client.set_volume_speaker(self._id,
-                                                  '{}'.format(volume))
+        response = self.client.set_volume_speaker(self._id, str(volume))
         self.update_state(response)
         self.schedule_update_ha_state()
 
