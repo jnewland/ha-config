@@ -116,12 +116,17 @@ class Airfoil:
         self._host = host
         self._port = port
         self._use_ssl = use_ssl
-        self.client = AirfoilClient(self._host, self._port, self._use_ssl)
+        self._client = AirfoilClient(self._host, self._port, self._use_ssl)
 
     @property
     def name(self):
         """Return the name of the device."""
-        return self.name
+        return self._name
+
+    @property
+    def client(self):
+        """An Airfoil API client."""
+        return self.client
 
     @property
     def speakers(self):
@@ -141,7 +146,7 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
     def __init__(self, device_data, airfoil):
         """Initialize the Airfoil device."""
         self.airfoil = airfoil
-        self.client = airfoil.client
+        self.client = airfoil.client()
         self.update_state(device_data)
 
     def update_state(self, state_hash):
