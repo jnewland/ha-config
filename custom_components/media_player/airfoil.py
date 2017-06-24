@@ -146,7 +146,7 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
     def __init__(self, device_data, airfoil):
         """Initialize the Airfoil device."""
         self.airfoil = airfoil
-        self.client = airfoil.client()
+        self.client = airfoil.client
         self.update_state(device_data)
 
     def update_state(self, state_hash):
