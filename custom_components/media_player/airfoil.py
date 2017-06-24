@@ -91,8 +91,9 @@ class AirfoilClient(object):
         return self._request('POST', path)
 
     def set_volume_speaker(self, device_id, level):
-        """Set volume, returns current state of device, id,level 0-100."""
+        """Set volume, returns current state of device, id, level 0-1."""
         path = '/speakers/' + device_id + '/volume'
+        _LOGGER.warning("airfoil device %s volume set to %s", device_id, level)
         return self._request('POST', path, level)
 
 
