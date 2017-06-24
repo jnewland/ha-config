@@ -93,7 +93,6 @@ class AirfoilClient(object):
     def set_volume_speaker(self, device_id, level):
         """Set volume, returns current state of device, id, level 0-1."""
         path = '/speakers/' + device_id + '/volume'
-        _LOGGER.warning("airfoil device %s volume set to %s", device_id, level)
         return self._request('POST', path, level)
 
 
@@ -152,6 +151,9 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
 
     def update_state(self, state_hash):
         """Update all the state properties with the passed in dictionary."""
+        if 'error' in state_hash:
+            _LOGGER.error("airfoil-api error: %s", state_hash)
+
         if 'id' in state_hash:
             self._id = state_hash.get('id')
 
