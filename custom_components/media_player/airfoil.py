@@ -104,7 +104,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
         config.get(CONF_PORT),
         config.get(CONF_SSL),
     )
-    add_devices(airfoil.speakers())
+    add_devices(airfoil.speakers)
 
 
 class Airfoil:
