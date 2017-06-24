@@ -207,17 +207,16 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
         volume = float(volume)
         response = self.client.set_volume_speaker(self._id, volume)
         self.update_state(response)
+        self.schedule_update_ha_state()
 
     def turn_on(self):
         """Select AirPlay."""
-        self.update_state({"connected": True})
-        self.schedule_update_ha_state()
         response = self.client.toggle_speaker(self._id, True)
         self.update_state(response)
+        self.schedule_update_ha_state()
 
     def turn_off(self):
         """Deselect AirPlay."""
-        self.update_state({"selected": False})
-        self.schedule_update_ha_state()
         response = self.client.toggle_speaker(self._id, False)
         self.update_state(response)
+        self.schedule_update_ha_state()
