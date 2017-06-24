@@ -19,7 +19,7 @@ import homeassistant.helpers.config_validation as cv
 
 _LOGGER = logging.getLogger(__name__)
 
-DEFAULT_NAME = 'Airfoil'
+DEFAULT_NAME = 'Airfoil speakers'
 DEFAULT_PORT = 8080
 DEFAULT_TIMEOUT = 10
 DEFAULT_SSL = False
@@ -156,7 +156,7 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
 
         if 'name' in state_hash:
             name = state_hash.get('name')
-            self.device_name = '{} {}'.format(self.airfoil.name, name)
+            self.device_name = '{} {}'.format(name, self.airfoil.name)
 
         if 'connected' in state_hash:
             self.connected = state_hash.get('connected', None) == "true"
