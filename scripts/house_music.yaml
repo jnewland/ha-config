@@ -11,14 +11,14 @@ sequence:
         {# Returns an entity_id of a script #}
         {%- set zone = states.device_tracker.jphone_6s.state -%}
         {%- if states.input_select.mode.state == "Morning" or states.input_select.mode.state == "Sleeping" -%}
-        script.airplay_computer
+        scene.speakers_desk_only
         {%- else -%}
         {%- if zone == "Kitchen" or zone == "Office "-%}
-        script.airplay_downstairs
+        script.speakers_downstairs
         {%- elif zone == "Master" -%}
-        script.airplay_upstairs
+        script.speakers_upstairs
         {%- elif zone == "home" -%}
-        script.airplay_everywhere
+        script.speakers_everywhere
         {%- endif -%}
         {%- endif -%}
   - service_template: >
