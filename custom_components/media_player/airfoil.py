@@ -187,7 +187,6 @@ class AirfoilSpeakerDevice(MediaPlayerDevice):
 
     def update(self):
         """Retrieve latest state."""
-        self.client.update()
         for device_data in self.client.speakers():
             device_id = device_data.get('id')
             if device_id == self._id:
