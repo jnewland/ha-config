@@ -10,7 +10,6 @@ media_player.bedroom_airfoil_speakers:
 media_player.bedroom_airtunes_speaker:
   homebridge_hidden: true
 media_player.bose_mini_soundlink_airfoil_speakers:
-  homebridge_hidden: true
   friendly_name: "Back porch speakers"
 media_player.bose_mini_soundlink_airtunes_speaker:
   homebridge_hidden: true
