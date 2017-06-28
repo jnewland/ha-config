@@ -3,20 +3,22 @@ sequence:
   - service: media_player.volume_set
     data:
       entity_id: media_player.itunes
-      volume: 0.5
-  - service: homeassistant.turn_on
+      volume_level: 0.5
+  - service: scene.turn_on
     data_template:
       entity_id: >
         {# Determine where we should play music #}
         {# Returns an entity_id of a script #}
         {%- set zone = states.device_tracker.jphone_6s.state -%}
         {%- if states.input_select.mode.state == "Morning" or states.input_select.mode.state == "Sleeping" -%}
-        script.airplay_computer
+        scene.speakers_desk_only
         {%- else -%}
-        {%- if zone == "Kitchen" or zone == "Office "-%}
-        script.airplay_downstairs
+        {%- if zone == "Kitchen" or zone == "Office" -%}
+        scene.speakers_downstairs
+        {%- elif zone == "Master" -%}
+        scene.speakers_upstairs
         {%- elif zone == "home" -%}
-        script.airplay_everywhere
+        scene.speakers_everywhere
         {%- endif -%}
         {%- endif -%}
   - service_template: >
