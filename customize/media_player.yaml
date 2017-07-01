@@ -34,8 +34,8 @@ media_player.master_bedroom_speakers:
   emulated_hue: true
   friendly_name: "Master bedroom speakers"
 media_player.mpr6zhmaut_airfoil_speakers:
-  emulated_hue: true
-  friendly_name: "Music room speakers"
+  emulated_hue: false
+  homebridge_hidden: true
 media_player.mpr6zhmaut_airtunes_speaker:
   homebridge_hidden: true
 media_player.music_room:
