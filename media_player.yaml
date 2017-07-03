@@ -35,3 +35,5 @@
   name: Office TV
 - platform: itunes
   host: !env_var ITUNES_IP
+- platform: airfoil
+  host: !env_var ITUNES_IP

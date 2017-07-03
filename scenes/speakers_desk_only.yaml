@@ -1,10 +1,10 @@
-name: 'Speakers Upstairs'
+name: 'Speakers Desk Only'
 entities:
   # desk airtunes
   media_player.computer_airtunes_speaker:
-    state: 'off'
-  media_player.house_airtunes_speaker:
     state: 'on'
+  media_player.house_airtunes_speaker:
+    state: 'off'
   media_player.mpr6zhmaut_airtunes_speaker:
     state: 'off'
   media_player.bedroom_airtunes_speaker:
@@ -19,9 +19,9 @@ entities:
   media_player.bedroom_airfoil_speakers:
     state: 'off'
   media_player.mpr6zhmaut_airfoil_speakers:
-    state: 'on'
+    state: 'off'
   media_player.music_room_airfoil_speakers:
-    state: 'on'
+    state: 'off'
   media_player.office_airfoil_speakers:
     state: 'off'
   # mpr-6zhmaut speakers
@@ -30,9 +30,9 @@ entities:
   media_player.kitchen_speakers:
     state: 'off'
   media_player.master_bedroom_speakers:
-    state: 'on'
+    state: 'off'
   media_player.master_bathroom_speakers:
-    state: 'on'
+    state: 'off'
   media_player.atrium_speakers:
     state: 'off'
   media_player.patio_speakers:
