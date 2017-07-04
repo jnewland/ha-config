@@ -1,4 +1,5 @@
 - platform: thinkingcleaner
+  entity_namespace: roomba
 - platform: command_line
   switches:
     shuffle:
