@@ -2,8 +2,8 @@
 name: Roomba
 control: hidden
 entities:
-- sensor.downstairsroomba_state
-- sensor.downstairsroomba_battery
-- switch.downstairsroomba_clean
-- switch.downstairsroomba_dock
-- switch.downstairsroomba_find
+- sensor.roomba_downstairs_state
+- sensor.roomba_downstairs_battery
+- switch.roomba_downstairs_clean
+- switch.roomba_downstairs_dock
+- switch.roomba_downstairs_find

@@ -1,8 +1,8 @@
-sensor.downstairsroomba_battery:
+sensor.roomba_downstairs_battery:
   friendly_name: Battery
-sensor.downstairsroomba_capacity:
+sensor.roomba_downstairs_capacity:
   friendly_name: Capacity
-sensor.downstairsroomba_state:
+sensor.roomba_downstairs_state:
   friendly_name: Roomba
 sensor.front_gate:
   device_class: opening
