@@ -32,7 +32,7 @@ trigger:
     - sun.sun
     - binary_sensor.master_bath_motion_37
     - binary_sensor.master_ac_water_13
-    - sensor.downstairsroomba_state
+    - sensor.roomba_downstairs_state
     - cover.garage
     - cover.gate
     - input_select.mode
@@ -82,7 +82,7 @@ action:
         "sensor.dark_sky_hourly_summary":     ":cloud:",
         "sensor.jphone_6s_battery_state":     ":iphone:",
         "sensor.katies_iphone_battery_state": ":iphone:",
-        "sensor.downstairsroomba_state":      ":robot_face:",
+        "sensor.roomba_downstairs_state":      ":robot_face:",
         "sensor.alarm_sensors":               ":door:",
         "binary_sensor.master_ac_water_13":   ":droplet:",
         "sensor.front_gate":                  ":house_with_garden:"
