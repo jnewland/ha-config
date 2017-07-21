@@ -18,6 +18,7 @@ condition:
     value_template: '{{ states.input_select.mode.state == "Sleeping" }}'
   - condition: time
     after: '05:00:00'
+    before: '12:00:00'
   - condition: template
     value_template: '{{
                       states.input_select.mode.state != "Pause" and
