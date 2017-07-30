@@ -10,7 +10,7 @@ action:
       data:
         push:
           category: camera
-        entity_id: camera.front_yard_left
+        entity_id: camera.front_yard_left_ffmpeg
         attachment:
           url: "{{ states.weblink.self.state }}{{ states.camera.front_yard_left.attributes.entity_picture }}"
           content-type: jpeg

@@ -37,11 +37,11 @@ action:
         category: camera
       entity_id: >
         {%- if trigger.to_state.entity_id == "binary_sensor.gate" -%}
-        camera.gate
+        camera.gate_ffmpeg
         {%- elif trigger.to_state.entity_id == "binary_sensor.garage" -%}
-        camera.garage
+        camera.garage_ffmpeg
         {%- else -%}
-        camera.front_yard_left
+        camera.front_yard_left_ffmpeg
         {%- endif -%}
       attachment:
         url: >
