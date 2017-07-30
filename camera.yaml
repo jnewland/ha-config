@@ -1,27 +1,60 @@
 - platform: mjpeg
-  mjpeg_url: !env_var CAMERA_URL_1
+  mjpeg_url: !env_var CAMERA_1_URL
   name: gate
 - platform: mjpeg
-  mjpeg_url: !env_var CAMERA_URL_2
+  mjpeg_url: !env_var CAMERA_2_URL
   name: back porch
 - platform: mjpeg
-  mjpeg_url: !env_var CAMERA_URL_3
+  mjpeg_url: !env_var CAMERA_3_URL
   name: front yard left
 - platform: mjpeg
-  mjpeg_url: !env_var CAMERA_URL_4
+  mjpeg_url: !env_var CAMERA_4_URL
   name: atrium
 - platform: mjpeg
-  mjpeg_url: !env_var CAMERA_URL_5
+  mjpeg_url: !env_var CAMERA_5_URL
   name: garage
 - platform: mjpeg
-  mjpeg_url: !env_var CAMERA_URL_6
+  mjpeg_url: !env_var CAMERA_6_URL
   name: ac
 - platform: mjpeg
-  mjpeg_url: !env_var CAMERA_URL_7
+  mjpeg_url: !env_var CAMERA_7_URL
   name: front yard right
 - platform: mjpeg
-  mjpeg_url: !env_var CAMERA_URL_8
+  mjpeg_url: !env_var CAMERA_8_URL
   name: side yard
+### ffmpeg direct
+- platform: ffmpeg
+  name: gate ffmpeg
+  input: !env_var CAMERA_1_RSTP_URL
+  extra_arguments: -an
+- platform: ffmpeg
+  name: back porch ffmpeg
+  input: !env_var CAMERA_2_RSTP_URL
+  extra_arguments: -an
+- platform: ffmpeg
+  name: front yard left ffmpeg
+  input: !env_var CAMERA_3_RSTP_URL
+  extra_arguments: -an
+- platform: ffmpeg
+  name: atrium ffmpeg
+  input: !env_var CAMERA_4_RSTP_URL
+  extra_arguments: -an
+- platform: ffmpeg
+  name: garage ffmpeg
+  input: !env_var CAMERA_5_RSTP_URL
+  extra_arguments: -an
+- platform: ffmpeg
+  name: ac ffmpeg
+  input: !env_var CAMERA_6_RSTP_URL
+  extra_arguments: -an
+- platform: ffmpeg
+  name: front yard right ffmpeg
+  input: !env_var CAMERA_7_RSTP_URL
+  extra_arguments: -an
+- platform: ffmpeg
+  name: side yard ffmpeg
+  input: !env_var CAMERA_8_RSTP_URL
+  extra_arguments: -an
 - platform: generic
   name: jPhone
   still_image_url: https://maps.googleapis.com/maps/api/staticmap?center={{ states.device_tracker.jphone_6s.attributes.latitude }},{{ states.device_tracker.jphone_6s.attributes.longitude }}&zoom=13&size=500x500&maptype=roadmap&markers=color:blue%7Clabel:J%7C{{ states.device_tracker.jphone_6s.attributes.latitude }},{{ states.device_tracker.jphone_6s.attributes.longitude }}

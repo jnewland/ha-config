@@ -15,10 +15,14 @@ env:
   matrix:
   - ALARM_PASSWORD="" ALARM_PLATFORM=alarmdotcom ALARM_USERNAME="" API_PASSWORD=""
     APPLETV_LOGIN_ID="" BEDROOM_APPLE_TV_IP="" BEDROOM_TV_IP="" BEDROOM_TV_MAC=""
-    CAMERA_URL_1=http://example.com CAMERA_URL_2=http://example.com
-    CAMERA_URL_3=http://example.com CAMERA_URL_4=http://example.com CAMERA_URL_5=http://example.com
-    CAMERA_URL_6=http://example.com CAMERA_URL_7=http://example.com CAMERA_URL_8=http://example.com
-    CAMERA_URL_9=http://example.com CLIMATE_DASH=http://example.com DESK_HID_IDLE_TIME_RESOURCE=http://example.com
+    CAMERA_1_URL=http://example.com CAMERA_2_URL=http://example.com
+    CAMERA_3_URL=http://example.com CAMERA_4_URL=http://example.com CAMERA_5_URL=http://example.com
+    CAMERA_6_URL=http://example.com CAMERA_7_URL=http://example.com CAMERA_8_URL=http://example.com
+    CAMERA_1_RTSP_URL=http://example.com CAMERA_2_RTSP_URL=http://example.com
+    CAMERA_3_RTSP_URL=http://example.com CAMERA_4_RTSP_URL=http://example.com CAMERA_5_RTSP_URL=http://example.com
+    CAMERA_6_RTSP_URL=http://example.com CAMERA_7_RTSP_URL=http://example.com CAMERA_8_RTSPURL=http://example.com
+
+    CLIMATE_DASH=http://example.com DESK_HID_IDLE_TIME_RESOURCE=http://example.com
     ELEVATION=0 FORECAST_API_KEY="" GATEWAY_LINK=http://example.com GRAFANA_LINK=http://example.com
     GRAPHITE_LINK=http://example.com HUE_IP="" IFTTT_KEY="" ITUNES_IP="" ITUNES_URL=""
     JESSE_MUSIC_ROOM_IP="0.0.0.0" JPHONE_PUSH_TARGET="" KITCHEN_LAT=0 KITCHEN_LONG=0
