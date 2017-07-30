@@ -5,8 +5,6 @@ entities:
     url: !env_var GATEWAY_LINK
   - name: Grafana
     url: !env_var GRAFANA_LINK
-  - name: Live Camera Dashboard
-    url: !env_var CAMERA_DASH
   - name: Climate Dashboard
     url: !env_var CLIMATE_DASH
   - name: Graphite

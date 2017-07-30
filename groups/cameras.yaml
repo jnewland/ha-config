@@ -3,7 +3,6 @@ name: cameras
 view: true
 icon: mdi:video
 entities:
-- weblink.live_camera_dashboard
 - camera.gate
 - camera.front_yard_right
 - camera.front_yard_left
