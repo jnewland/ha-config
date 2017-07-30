@@ -25,35 +25,35 @@
 ### ffmpeg direct
 - platform: ffmpeg
   name: gate ffmpeg
-  input: !env_var CAMERA_1_RSTP_URL
+  input: !env_var CAMERA_1_RTSP_URL
   extra_arguments: -an
 - platform: ffmpeg
   name: back porch ffmpeg
-  input: !env_var CAMERA_2_RSTP_URL
+  input: !env_var CAMERA_2_RTSP_URL
   extra_arguments: -an
 - platform: ffmpeg
   name: front yard left ffmpeg
-  input: !env_var CAMERA_3_RSTP_URL
+  input: !env_var CAMERA_3_RTSP_URL
   extra_arguments: -an
 - platform: ffmpeg
   name: atrium ffmpeg
-  input: !env_var CAMERA_4_RSTP_URL
+  input: !env_var CAMERA_4_RTSP_URL
   extra_arguments: -an
 - platform: ffmpeg
   name: garage ffmpeg
-  input: !env_var CAMERA_5_RSTP_URL
+  input: !env_var CAMERA_5_RTSP_URL
   extra_arguments: -an
 - platform: ffmpeg
   name: ac ffmpeg
-  input: !env_var CAMERA_6_RSTP_URL
+  input: !env_var CAMERA_6_RTSP_URL
   extra_arguments: -an
 - platform: ffmpeg
   name: front yard right ffmpeg
-  input: !env_var CAMERA_7_RSTP_URL
+  input: !env_var CAMERA_7_RTSP_URL
   extra_arguments: -an
 - platform: ffmpeg
   name: side yard ffmpeg
-  input: !env_var CAMERA_8_RSTP_URL
+  input: !env_var CAMERA_8_RTSP_URL
   extra_arguments: -an
 - platform: generic
   name: jPhone
