@@ -20,7 +20,7 @@ env:
     CAMERA_6_URL=http://example.com CAMERA_7_URL=http://example.com CAMERA_8_URL=http://example.com
     CAMERA_1_RTSP_URL=http://example.com CAMERA_2_RTSP_URL=http://example.com
     CAMERA_3_RTSP_URL=http://example.com CAMERA_4_RTSP_URL=http://example.com CAMERA_5_RTSP_URL=http://example.com
-    CAMERA_6_RTSP_URL=http://example.com CAMERA_7_RTSP_URL=http://example.com CAMERA_8_RTSPURL=http://example.com
+    CAMERA_6_RTSP_URL=http://example.com CAMERA_7_RTSP_URL=http://example.com CAMERA_8_RTSP_URL=http://example.com
 
     CLIMATE_DASH=http://example.com DESK_HID_IDLE_TIME_RESOURCE=http://example.com
     ELEVATION=0 FORECAST_API_KEY="" GATEWAY_LINK=http://example.com GRAFANA_LINK=http://example.com
