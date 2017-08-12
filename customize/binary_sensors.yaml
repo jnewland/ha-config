@@ -1,6 +1,6 @@
 binary_sensor.jesses_desktop:
   friendly_name: Desk
-binary_sensor.stairs_motion_6:
+binary_sensor.stairs_motion_102:
   zone: Living
   trigger_entity_id: script.stairs_lights
   trigger_entity_id_off: light.stairs_23

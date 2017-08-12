@@ -1,7 +1,7 @@
 name: Motion
 control: hidden
 entities:
-- binary_sensor.stairs_motion_6
+- binary_sensor.stairs_motion_102
 - binary_sensor.closet_motion_61
 - binary_sensor.guest_bath_motion_70
 - binary_sensor.powder_room_motion_75
