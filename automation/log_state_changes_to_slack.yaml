@@ -17,6 +17,7 @@ trigger:
     - binary_sensor.office_motion_82
     - binary_sensor.upstairs_motion_87
     - binary_sensor.master_motion_92
+    - binary_sensor.music_room_motion_107
     - sensor.front_gate
     - sensor.dark_sky_minutely_summary
     - sensor.dark_sky_daily_summary

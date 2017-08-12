@@ -12,6 +12,7 @@ trigger:
   - binary_sensor.master_motion_92
   - binary_sensor.wine_room_motion_97
   - binary_sensor.living_room_motion
+  - binary_sensor.music_room_motion_107
   - binary_sensor.master_door
   - binary_sensor.entry_door
   - binary_sensor.garage
