@@ -17,7 +17,8 @@ binary_sensor.office_motion_82:
   zone: Office
 binary_sensor.upstairs_motion_87:
   zone: Upstairs
-  trigger_entity_id: light.stairs_23
+  trigger_entity_id: script.stairs_lights
+  trigger_entity_id_off: light.stairs_23
 binary_sensor.master_bath_motion_37:
   zone: Master
   trigger_entity_id_on: script.master_bath_lights
