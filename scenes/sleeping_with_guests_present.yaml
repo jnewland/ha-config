@@ -10,3 +10,5 @@ entities:
     state: 'off'
   alarm_control_panel.alarm:
     state: armed_home
+  light.master_patio_31:
+    state: ‘off’
