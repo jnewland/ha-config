@@ -3,12 +3,11 @@ name: cameras
 view: true
 icon: mdi:video
 entities:
-- weblink.live_camera_dashboard
-- camera.gate
-- camera.front_yard_right
-- camera.front_yard_left
-- camera.atrium
-- camera.side_yard
-- camera.back_porch
-- camera.ac
-- camera.garage
+- camera.gate_ffmpeg
+- camera.front_yard_right_ffmpeg
+- camera.front_yard_left_ffmpeg
+- camera.atrium_ffmpeg
+- camera.side_yard_ffmpeg
+- camera.back_porch_ffmpeg
+- camera.ac_ffmpeg
+- camera.garage_ffmpeg
