@@ -2,4 +2,4 @@ sequence:
 - service: shell_command.update_config
   data:
     branch: "master"
-- service: homeassistant.restart
+- service: homeassistant.stop
