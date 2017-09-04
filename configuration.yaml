@@ -33,7 +33,7 @@ light: !include light.yaml
 logger: !include logger.yaml
 media_player: !include media_player.yaml
 notify: !include notify.yaml
-prometheus:
+prometheus: !include prometheus.yaml
 proximity: !include proximity.yaml
 recorder: !include recorder.yaml
 scene: !include_dir_list scenes
