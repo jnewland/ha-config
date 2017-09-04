@@ -8,3 +8,6 @@
 OZW_Log.txt
 motion_detection
 deps
+ip_bans.yaml
+*.pickle
+custom_components/media_player/__pycache__
