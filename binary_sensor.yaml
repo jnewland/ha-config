@@ -26,16 +26,13 @@
         {{ states("cover.gate") | default("") == "open" }}
     rain_today:
       entity_id:
-      - sensor.dark_sky_daily_max_precip_intensity
       - sensor.dark_sky_precip_probability
       - sensor.dark_sky_precip_intensity
       value_template: |
         {{
-          states.sensor.dark_sky_daily_max_precip_intensity.state != None and
           states.sensor.dark_sky_precip_probability.state != None and
           states.sensor.dark_sky_precip_intensity.state != None and
           (
-            float(states.sensor.dark_sky_daily_max_precip_intensity.state) > 0 or
             float(states.sensor.dark_sky_precip_probability.state) > 0 or
             float(states.sensor.dark_sky_precip_intensity.state) > 0
           )
