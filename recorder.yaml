@@ -1,1 +1,11 @@
 purge_days: 14
+db_url: !env_var DB_URL
+exclude:
+  domains:
+    - automation
+    - weblink
+    - updater
+  entities:
+    - sun.sun   # Don't record sun data
+    - sensor.last_boot
+    - sensor.date
