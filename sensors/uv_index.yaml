@@ -1,7 +1,0 @@
-platform: rest
-resource: https://iaspub.epa.gov/enviro/efservice/getEnvirofactsUVDAILY/ZIP/78722/JSON
-name: Today's uv index
-value_template: |
-  {%- for day in value_json -%}
-    {{ day.UV_INDEX }}
-  {%- endfor -%}
