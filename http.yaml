@@ -1,4 +1,2 @@
 api_password: !env_var API_PASSWORD
 base_url: !env_var VIRTUAL_HOST
-trusted_networks:
-- !env_var TRUSTED_NETWORK
