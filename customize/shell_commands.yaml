@@ -1,2 +1,0 @@
-shell_command.deploy:
-  friendly_name: Redeploy latest green container and config

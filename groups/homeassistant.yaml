@@ -5,4 +5,4 @@ entities:
 - weblink.upstream_changes
 - sensor.haconfig_branch
 - weblink.haconfig_ci
-- shell_command.deploy
+- script.deploy_haconfig

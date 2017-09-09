@@ -4,6 +4,8 @@ script.mute:
   icon: mdi:volume-mute
   friently_name: Mute
   emulated_hue: true
+script.deploy_haconfig:
+  friendly_name: Deploy
 script.working:
   emulated_hue: true
 script.cooking:
