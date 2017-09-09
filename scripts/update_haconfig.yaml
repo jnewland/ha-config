@@ -1,2 +1,2 @@
 sequence:
-- shell_command.deploy
+- service: shell_command.deploy
