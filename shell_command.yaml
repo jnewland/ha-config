@@ -1,1 +1,1 @@
-update_config: /config/script/update-config {{ branch }}
+deploy: rm /config/remove-me-to-update
