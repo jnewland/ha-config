@@ -1,5 +1,5 @@
 - platform: unifi
-  host: !env_var NUC_IP
+  host: !env_var UNIFI_IP
   port: !env_var UNIFI_PORT
   verify_ssl: false
   username: !env_var UNIFI_USERNAME
