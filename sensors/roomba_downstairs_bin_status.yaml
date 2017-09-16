@@ -1,0 +1,4 @@
+platform: rest
+name: Roomba downstairs bin status
+resource: http://thinking.home.jnewland.com/fullstatus.json
+value_template: '{{ value_json.tc_status.bin_status }}'
