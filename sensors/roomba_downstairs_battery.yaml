@@ -1,4 +1,4 @@
 platform: rest
 name: Roomba downstairs battery
 resource: http://thinking.home.jnewland.com/status.json
-value_template: '{{ value_json.status.battery_charge }}'
+value_template: '{{ value_json.status.battery_charge | int }}'
