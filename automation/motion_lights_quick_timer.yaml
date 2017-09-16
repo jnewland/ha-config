@@ -1,12 +1,15 @@
-alias: Turn off lights after 30m
+alias: Turn off lights after 5m
 trigger:
   platform: state
   entity_id:
-  - binary_sensor.guest_bath_motion_70
-  - binary_sensor.master_bath_motion_37
+  - binary_sensor.powder_room_motion_75
+  - binary_sensor.stairs_motion_102
+  - binary_sensor.upstairs_motion_87
+  - binary_sensor.closet_motion_61
+  - binary_sensor.master_motion_92
   to: "off"
   for:
-    minutes: 30
+    minutes: 5
 condition:
   condition: template
   value_template: '{{ states.input_select.mode.state != "Pause" }}'
