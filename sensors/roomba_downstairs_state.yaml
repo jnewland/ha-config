@@ -1,0 +1,3 @@
+platform: rest
+resource: http://thinking.home.jnewland.com/status.json
+value_template: '{{ value_json.status.cleaner_state }}'
