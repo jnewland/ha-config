@@ -9,7 +9,7 @@ install:
 script:
 - openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout /tmp/key.pem
   -out /tmp/cert.pem
-- hass -c . --script check_config -i all -f | tee /tmp/log
+- ./script/cibuild
 - test "$(grep -c ERROR /tmp/log)" -eq 0
 env:
   matrix:

@@ -1,0 +1,9 @@
+#!/bin/bash
+set -xeuo pipefail
+
+hass -c . --script check_config -i all -f | tee /tmp/log
+test "$(grep -c ERROR /tmp/log)" -eq 0
+
+# Confirm some specific entities
+grep entry_door: /tmp/log
+grep "Jesse's desktop" /tmp/log
