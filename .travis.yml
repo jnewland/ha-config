@@ -9,7 +9,7 @@ install:
 script:
 - openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout /tmp/key.pem
   -out /tmp/cert.pem
-- hass -c . --script check_config -i all -f | tee /tmp/log
+- ./script/cibuild
 - test "$(grep -c ERROR /tmp/log)" -eq 0
 env:
   matrix:
@@ -27,6 +27,8 @@ env:
     OFFICE_APPLE_TV_IP="" OFFICE_LAT=0 OFFICE_LONG=0 OFFICE_TV_IP="" OFFICE_TV_MAC=""
     ROUTER_LINK=http://example.com SELF_LINK=http://example.com SLACK_API_KEY="" SMOKEPING_LINK=http://example.com
     SSL_CERTIFICATE=/tmp/cert.pem SSL_KEY=/tmp/key.pem TRUSTED_NETWORK_1=0.0.0.0/0
+    THINKING_CLEANER_DOMAIN=example.com THINKING_CLEANER_STATUS_URL=http://example.com/status.json
+    THINKING_CLEANER_FULL_STATUS_URL=http://example.com/full_status.json
     TRUSTED_NETWORK_2=0.0.0.0/0 TRUSTED_NETWORK_3=0.0.0.0/0 UNIFI_IP=0.0.0.0 UNIFI_USERNAME=foo UNIFI_PASSWORD=bar
     UNIFI_PORT=8443 VERA_LINK=http://example.com VERA_URL=http://example.com VIRTUAL_HOST=example.com
     VIRTUAL_NETWORK="" VIRTUAL_PORT=""

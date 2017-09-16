@@ -1,0 +1,6 @@
+platform: command_line
+switches:
+  roomba_downstairs_clean:
+    command_on: /config/bin/roomba clean
+    command_off: /config/bin/roomba dock
+    command_state: /config/bin/roomba status st_clean

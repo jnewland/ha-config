@@ -1,0 +1,4 @@
+platform: rest
+name: Roomba downstairs state
+resource: !env_var THINKING_CLEANER_STATUS_URL
+value_template: '{{ value_json.status.cleaner_state }}'

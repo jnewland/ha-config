@@ -1,0 +1,38 @@
+#!/bin/bash
+# Usage: roomba [clean|find|dock|stop|status]
+set -eo pipefail
+
+if [ -z "$THINKING_CLEANER_DOMAIN" ]; then
+  echo "THINKING_CLEANER_DOMAIN required!" 1>&2
+  exit 1
+fi
+
+action=$1
+if ! shift ; then
+  echo "Usage: roomba [clean|find|dock|status]" 1>&2
+  exit 1
+fi
+
+if [ "$action" == "status" ]; then
+  match=$2
+  : ${match:=st_clean}
+  matched=$(curl -m 1 -s "$THINKING_CLEANER_DOMAIN/status.json" | \
+    grep -c "$match" || true)
+  if [ "$matched" -eq 1 ]; then
+    exit 0
+  else
+    exit 1
+  fi
+fi
+
+if [ "$action" == "clean" ]; then
+  exec curl -m 1 -s "$THINKING_CLEANER_DOMAIN/command.json?command=max"
+fi
+
+if [ "$action" == "find" ]; then
+  exec curl -m 1 -s "$THINKING_CLEANER_DOMAIN/command.json?command=find_me"
+fi
+
+if [ "$action" == "dock" ]; then
+  exec curl -m 1 -s "$THINKING_CLEANER_DOMAIN/command.json?command=dock"
+fi

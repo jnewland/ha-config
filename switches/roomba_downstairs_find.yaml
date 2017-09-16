@@ -1,0 +1,6 @@
+platform: command_line
+switches:
+  roomba_downstairs_find:
+    command_on: /config/bin/roomba find
+    command_off: /bin/false
+    command_state: /config/bin/roomba status st_locate
