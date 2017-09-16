@@ -1,4 +1,4 @@
-alias: Cooking
+alias: Living
 trigger:
   platform: state
   entity_id:
@@ -17,4 +17,4 @@ condition:
       }}'
 action:
   - service: script.turn_on
-    entity_id: script.cooking
+    entity_id: script.living
