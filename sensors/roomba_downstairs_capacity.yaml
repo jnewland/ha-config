@@ -1,4 +1,0 @@
-platform: rest
-name: Roomba downstairs capacity
-resource: !env_var THINKING_CLEANER_STATUS_URL
-value_template: '{{ value_json.status.capacity | int }}'

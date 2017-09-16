@@ -1,7 +1,5 @@
 sensor.roomba_downstairs_battery:
   friendly_name: Battery
-sensor.roomba_downstairs_capacity:
-  friendly_name: Capacity
 sensor.roomba_downstairs_state:
   friendly_name: Roomba
 sensor.roomba_downstairs_dirt_detected:
