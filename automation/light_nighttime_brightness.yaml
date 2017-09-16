@@ -1,0 +1,17 @@
+alias: Light nighttime brightness
+trigger:
+  platform: state
+  entity_id:
+  - light.living_20
+  to: "on"
+condition:
+  condition: state
+  entity_id: sun.sun
+  state: below_horizon
+action:
+  service: light.turn_on
+  data_template:
+    entity_id: |
+      {{ trigger.entity_id }}
+    brightness: |
+      {{ trigger.to_state.attributes.nighttime_brightness }}
