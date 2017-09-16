@@ -2,9 +2,6 @@
 # Usage: roomba [clean|find|dock|stop|status]
 set -ueo pipefail
 
-# TODO
-THINKING_CLEANER_DOMAIN=thinking.home.jnewland.com
-
 if [ -z "$THINKING_CLEANER_DOMAIN" ]; then
   echo "THINKING_CLEANER_DOMAIN required!" 1>&2
   exit 1

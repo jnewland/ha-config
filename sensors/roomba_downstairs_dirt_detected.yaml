@@ -1,4 +1,4 @@
 platform: rest
 name: Roomba downstairs dirt detected
-resource: http://thinking.home.jnewland.com/full_status.json
+resource: http://!env_var THINKING_CLEANER_FULL_STATUS_URL
 value_template: '{{ value_json.tc_status.dirt_detected | int }}'
