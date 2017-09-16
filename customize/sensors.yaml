@@ -4,6 +4,10 @@ sensor.roomba_downstairs_capacity:
   friendly_name: Capacity
 sensor.roomba_downstairs_state:
   friendly_name: Roomba
+sensor.roomba_downstairs_bin_status:
+  friendly_name: Bin status
+sensor.roomba_downstairs_dirt_detected:
+  friendly_name: Dirt detected
 sensor.front_gate:
   device_class: opening
   icon: mdi:gate
