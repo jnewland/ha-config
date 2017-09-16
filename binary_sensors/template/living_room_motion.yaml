@@ -1,0 +1,3 @@
+entity_id: sensor.alarm_sensors
+value_template: |
+  {{ "No motion activity detected." not in (states.sensor.alarm_sensors.state | default("")) }}

@@ -1,0 +1,2 @@
+platform: template
+sensors: !include_dir_named binary_sensors/template
