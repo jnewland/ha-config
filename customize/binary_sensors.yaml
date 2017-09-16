@@ -49,5 +49,5 @@ binary_sensor.garage:
   zone: Outside
 binary_sensor.gate:
   zone: Outside
-sensor.roomba_downstairs_bin_full:
+binary_sensor.roomba_downstairs_bin_full:
   friendly_name: Bin full
