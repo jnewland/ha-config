@@ -39,7 +39,7 @@ script: !include_dir_named scripts
 sensor: !include_dir_list sensors
 shell_command: !include shell_command.yaml
 sun:
-switch: !include switch.yaml
+switch: !include_dir_list switches
 tts:
   - platform: google
 vera: !include vera.yaml
