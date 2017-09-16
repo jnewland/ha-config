@@ -2,3 +2,4 @@ platform: rest
 name: Roomba downstairs dirt detected
 resource: !env_var THINKING_CLEANER_FULL_STATUS_URL
 value_template: '{{ value_json.tc_status.dirt_detected | int }}'
+unit_of_measurement: 'dirts'
