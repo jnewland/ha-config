@@ -11,5 +11,6 @@ condition:
 action:
   service: light.turn_on
   data_template:
-    entity_id: {{ trigger.entity_id }}
+    entity_id: |
+      {{ trigger.entity_id }}
     brightness: 255

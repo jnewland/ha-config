@@ -11,5 +11,7 @@ condition:
 action:
   service: light.turn_on
   data_template:
-    entity_id: {{ trigger.entity_id }}
-    brightness: {{ trigger.to_state.attributes.nighttime_brightness }}
+    entity_id: |
+      {{ trigger.entity_id }}
+    brightness: |
+      {{ trigger.to_state.attributes.nighttime_brightness }}
