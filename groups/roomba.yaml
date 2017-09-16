@@ -8,5 +8,5 @@ entities:
 - sensor.roomba_downstairs_state
 - sensor.roomba_downstairs_capacity
 - sensor.roomba_downstairs_battery
-- sensor.roomba_downstairs_bin_full
+- binary_sensor.roomba_downstairs_bin_full
 - sensor.roomba_downstairs_dirt_detected
