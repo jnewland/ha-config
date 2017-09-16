@@ -1,3 +1,5 @@
+platform: template
+name: Rain today
 entity_id:
 - sensor.dark_sky_precip_probability
 - sensor.dark_sky_precip_intensity

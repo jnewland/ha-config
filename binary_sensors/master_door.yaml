@@ -1,3 +1,5 @@
+platform: template
+name: Master door
 entity_id: sensor.alarm_sensors
 value_template: |
   {{ "Master" in (states.sensor.alarm_sensors.state | default("")) }}

@@ -1,3 +1,5 @@
+platform: template
+name: Together
 entity_id:
 - device_tracker.jphone_6s
 - device_tracker.katies_iphone
