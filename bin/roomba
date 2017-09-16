@@ -34,5 +34,5 @@ if [ "$action" == "find" ]; then
 fi
 
 if [ "$action" == "dock" ]; then
-  exec curl -m 1 -s "$THINKING_CLEANER_DOMAIN/command.json?command=find_me"
+  exec curl -m 1 -s "$THINKING_CLEANER_DOMAIN/command.json?command=dock"
 fi
