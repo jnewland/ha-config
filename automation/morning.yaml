@@ -36,6 +36,6 @@ action:
     data_template:
       message: >
         Morning!
-        {% if is_state("alert.lost_roomba", "on") %}
-        The roomba's lost, btw. Help a robot out?
+        {% if is_state("binary_sensor.roomba_on_dock", "off") %}
+        The roomba's not on the dock, btw. Help a robot out?
         {% endif %}

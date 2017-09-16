@@ -1,6 +1,0 @@
-name: "The roomba is lost"
-entity_id: sensor.roomba_downstairs_state
-state: 'Off'
-repeat: 1440
-notifiers:
-- slack

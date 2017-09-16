@@ -1,0 +1,6 @@
+platform: template
+sensors:
+  roomba_on_dock:
+    entity_id: sensor.roomba_downstairs_state
+    value_template: |
+      {{ "st_dock" in (sensor.roomba_downstaris_state | default("st_off")) }}
