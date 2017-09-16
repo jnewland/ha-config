@@ -17,6 +17,7 @@ trigger:
   - binary_sensor.entry_door
   - binary_sensor.garage
   - binary_sensor.gate
+  - binary_sensor.living_room_motion
   to: 'on'
 condition:
   condition: template

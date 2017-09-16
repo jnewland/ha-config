@@ -1,0 +1,13 @@
+sequence:
+  - service: light.turn_off
+    entity_id:
+      - light.cabinets_14
+      - light.dining_room_table_52
+      - light.kitchen_18
+      - light.living_20
+      - light.pendants_51
+      - light.floor_lamp
+  - service: media_player.turn_off
+    entity_id:
+      - media_player.living_speakers
+      - media_player.kitchen_speakers
