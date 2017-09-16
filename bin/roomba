@@ -1,5 +1,5 @@
 #!/bin/bash
-# Usage: roomba [clean|find|dock|status]
+# Usage: roomba [clean|find|dock|stop|status]
 set -ueo pipefail
 
 # TODO
