@@ -1,6 +1,6 @@
 #!/bin/bash
 # Usage: roomba [clean|find|dock|stop|status]
-set -ueo pipefail
+set -eo pipefail
 
 if [ -z "$THINKING_CLEANER_DOMAIN" ]; then
   echo "THINKING_CLEANER_DOMAIN required!" 1>&2
