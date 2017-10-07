@@ -34,6 +34,7 @@ binary_sensor.master_motion_92:
 binary_sensor.music_room_motion_107:
   friendly_name: Music room motion
   zone: Music room
+  trigger_entity_id: light.music_room_118
 binary_sensor.living_room_motion:
   friendly_name: Living room motion
   zone: Living
