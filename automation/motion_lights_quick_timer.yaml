@@ -8,6 +8,7 @@ trigger:
   - binary_sensor.closet_motion_61
   - binary_sensor.master_motion_92
   - binary_sensor.living_room_motion
+  - binary_sensor.music_room_motion_107
   to: "off"
   for:
     minutes: 5
