@@ -2,14 +2,14 @@ name: Reading without guests present
 entities:
   light.chandelier_33:
     state: 'on'
-    brightness: 102
+    brightness: 76
   group.downstairs:
     state: 'off'
   light.master_overhead_30:
     state: 'off'
   light.master_nook_42:
-    state: ‘on’
-    brightness: 102
+    state: 'on'
+    brightness: 76
   light.master_patio_31:
     state: 'on'
     brightness: 102
