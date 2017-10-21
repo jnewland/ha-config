@@ -1,4 +1,4 @@
-purge_days: 14
+purge_interval: 14
 db_url: !env_var DB_URL
 exclude:
   domains:
