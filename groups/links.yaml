@@ -1,11 +1,4 @@
 ---
 entities:
-- weblink.climate_dashboard
-- weblink.grafana
-- weblink.grande_gateway
-- weblink.graphite
-- weblink.live_camera_dashboard
-- weblink.motion
 - weblink.router
-- weblink.smokeping
 - weblink.vera
