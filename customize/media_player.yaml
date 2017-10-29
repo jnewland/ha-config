@@ -1,6 +1,7 @@
 media_player.atrium_speakers:
   emulated_hue: true
   friendly_name: "Atrium speakers"
+  homebridge_visible: true
 media_player.bedroom:
   friendly_name: "Bedroom Apple TV"
 media_player.bose_mini_soundlink_airfoil_speakers:
@@ -25,3 +26,4 @@ media_player.office_airfoil_speakers:
 media_player.patio_speakers:
   emulated_hue: true
   friendly_name: "Patio speakers"
+  homebridge_visible: true
