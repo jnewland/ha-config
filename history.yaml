@@ -6,3 +6,4 @@ exclude:
   - group
   entities:
   - sun.sun
+  - sensor.automation_history
