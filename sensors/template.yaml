@@ -5,14 +5,13 @@ sensors:
     value_template: '{{ (states.alarm_control_panel.alarm.attributes.sensor_status | default("")).replace(".", ". ") }}'
     friendly_name: Alarm sensors
   automation_history:
-    value_template:
-      friendly_name: Automation history
-      value_template: |
-        {%- for a in states.automation -%}
-          {%- if a.attributes.last_triggered != None -%}
-            {{ a.attributes.friendly_name }} ({{ relative_time(a.attributes.last_triggered) }} ago){{ " / " }}
-          {%- endif -%}
-        {%- endfor -%}
+    friendly_name: Automation history
+    value_template: |
+      {%- for a in states.automation -%}
+        {%- if a.attributes.last_triggered != None -%}
+          {{ a.attributes.friendly_name }} ({{ relative_time(a.attributes.last_triggered) }} ago){{ " / " }}
+        {%- endif -%}
+      {%- endfor -%}
   front_gate:
     entity_id: binary_sensor.front_gate_81
     value_template: '{% if is_state("binary_sensor.front_gate_81", "on") %}open{% else %}closed{% endif %}'
