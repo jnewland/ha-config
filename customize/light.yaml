@@ -1,33 +1,33 @@
 light.atrium_22:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.back_porch_46:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.cabinets_14:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.chandelier_33:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.dining_room_table_52:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.front_door_21:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.front_porch_19:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.kitchen_18:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.living_20:
-  emulated_hue: true
+  emulated_hue_hidden: false
   nighttime_brightness: 25
 light.master_closet_32:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.master_nook_42:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.master_overhead_30:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.patio_29:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.pendants_51:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.stairs_23:
-  emulated_hue: true
+  emulated_hue_hidden: false
 light.wine_room_25:
-  emulated_hue: true
+  emulated_hue_hidden: false
