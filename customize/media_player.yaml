@@ -3,25 +3,8 @@ media_player.atrium_speakers:
   friendly_name: "Atrium speakers"
 media_player.bedroom:
   friendly_name: "Bedroom Apple TV"
-  homebridge_hidden: true
-media_player.bed_room_un40j5200:
-  homebridge_hidden: true
-media_player.bedroom_airfoil_speakers:
-  homebridge_hidden: true
-media_player.bedroom_airtunes_speaker:
-  homebridge_hidden: true
 media_player.bose_mini_soundlink_airfoil_speakers:
   friendly_name: "Back porch speakers"
-media_player.bose_mini_soundlink_airtunes_speaker:
-  homebridge_hidden: true
-media_player.computer_airfoil_speakers:
-  homebridge_hidden: true
-media_player.computer_airtunes_speaker:
-  homebridge_hidden: true
-media_player.house_airtunes_speaker:
-  homebridge_hidden: true
-media_player.itunes:
-  homebridge_hidden: true
 media_player.kitchen_speakers:
   emulated_hue: true
   friendly_name: "Kitchen speakers"
@@ -36,26 +19,9 @@ media_player.master_bedroom_speakers:
   friendly_name: "Master bedroom speakers"
 media_player.mpr6zhmaut_airfoil_speakers:
   emulated_hue: false
-  homebridge_hidden: true
-media_player.mpr6zhmaut_airtunes_speaker:
-  homebridge_hidden: true
-media_player.music_room:
-  homebridge_hidden: true
-media_player.music_room_airfoil_speakers:
-  homebridge_hidden: true
-media_player.music_room_airtunes_speaker:
-  homebridge_hidden: true
-media_player.office:
-  homebridge_hidden: true
 media_player.office_airfoil_speakers:
   emulated_hue: true
   friendly_name: "Office speakers"
-media_player.office_airtunes_speaker:
-  homebridge_hidden: true
-media_player.office_tv:
-  homebridge_hidden: true
 media_player.patio_speakers:
   emulated_hue: true
   friendly_name: "Patio speakers"
-media_player.whole_house_airtunes_speaker:
-  homebridge_hidden: true
