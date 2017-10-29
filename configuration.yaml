@@ -22,6 +22,7 @@ emulated_hue:
 frontend:
 group: !include_dir_named groups
 history:
+history_graph: !include_dir_named history_graphs
 http: !include http.yaml
 ifttt: !include ifttt.yaml
 ios: !include ios.yaml
