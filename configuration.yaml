@@ -21,7 +21,7 @@ emulated_hue:
   expose_by_default: false
 frontend:
 group: !include_dir_named groups
-history:
+history: !include history.yaml
 history_graph: !include_dir_named history_graphs
 http: !include http.yaml
 ifttt: !include ifttt.yaml

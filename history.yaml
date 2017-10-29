@@ -1,0 +1,8 @@
+exclude:
+  domains:
+  - automation
+  - weblink
+  - updater
+  entities:
+  - sun.sun
+  - sensor.automation_history
