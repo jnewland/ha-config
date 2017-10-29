@@ -1,3 +1,5 @@
+scene.away:
+  homebridge_visible: true
 scene.party:
   emulated_hue: true
 scene.reading:
