@@ -3,4 +3,3 @@ icon: mdi:chart-bar
 entities:
 - history_graph.motion
 - history_graph.doors
-- group.history
