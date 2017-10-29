@@ -1,0 +1,5 @@
+cover.garage:
+  homebridge_cover_type: garage_door
+cover.gate:
+  homebridge_cover_type: garage_door
+

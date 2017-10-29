@@ -2,8 +2,9 @@ media_player.atrium_speakers:
   emulated_hue: true
   friendly_name: "Atrium speakers"
 media_player.bedroom:
-  emulated_hue: true
-  friendly_name: "Bedroom TV"
+  friendly_name: "Bedroom Apple TV"
+  homebridge_hidden: true
+media_player.bed_room_un40j5200:
   homebridge_hidden: true
 media_player.bedroom_airfoil_speakers:
   homebridge_hidden: true
