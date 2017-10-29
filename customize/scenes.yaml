@@ -1,12 +1,12 @@
 scene.away:
   homebridge_visible: true
 scene.party:
-  emulated_hue: true
+  emulated_hue_hidden: false
 scene.reading:
-  emulated_hue: true
+  emulated_hue_hidden: false
 scene.sleeping:
-  emulated_hue: true
+  emulated_hue_hidden: false
 scene.morning:
-  emulated_hue: true
+  emulated_hue_hidden: false
 scene.movie:
-  emulated_hue: true
+  emulated_hue_hidden: false

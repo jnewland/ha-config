@@ -3,11 +3,11 @@ script.mode_pause:
 script.mute:
   icon: mdi:volume-mute
   friently_name: Mute
-  emulated_hue: true
+  emulated_hue_hidden: false
 script.deploy_haconfig:
   friendly_name: Deploy
 script.working:
-  emulated_hue: true
+  emulated_hue_hidden: false
 script.living:
-  emulated_hue: true
+  emulated_hue_hidden: false
   emulated_hue_name: Cooking

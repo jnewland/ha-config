@@ -1,5 +1,5 @@
 media_player.atrium_speakers:
-  emulated_hue: true
+  emulated_hue_hidden: false
   friendly_name: "Atrium speakers"
   homebridge_visible: true
 media_player.bedroom:
@@ -7,23 +7,23 @@ media_player.bedroom:
 media_player.bose_mini_soundlink_airfoil_speakers:
   friendly_name: "Back porch speakers"
 media_player.kitchen_speakers:
-  emulated_hue: true
+  emulated_hue_hidden: false
   friendly_name: "Kitchen speakers"
 media_player.living_speakers:
-  emulated_hue: true
+  emulated_hue_hidden: false
   friendly_name: "Living speakers"
 media_player.master_bathroom_speakers:
-  emulated_hue: true
+  emulated_hue_hidden: false
   friendly_name: "Master bathroom speakers"
 media_player.master_bedroom_speakers:
-  emulated_hue: true
+  emulated_hue_hidden: false
   friendly_name: "Master bedroom speakers"
 media_player.mpr6zhmaut_airfoil_speakers:
   emulated_hue: false
 media_player.office_airfoil_speakers:
-  emulated_hue: true
+  emulated_hue_hidden: false
   friendly_name: "Office speakers"
 media_player.patio_speakers:
-  emulated_hue: true
+  emulated_hue_hidden: false
   friendly_name: "Patio speakers"
   homebridge_visible: true
