@@ -4,17 +4,16 @@ switch.roomba_downstairs_clean:
   friendly_name: Clean
   emulated_hue: true
   emulated_hue_name: Roomba
-  homebridge_name: Roomba
 switch.roomba_downstairs_dock:
   friendly_name: Dock
   emulated_hue: true
   emulated_hue_name: Dock roomba
-  homebridge_name: Dock roomba
 switch.roomba_downstairs_find:
   friendly_name: Find
   emulated_hue: true
   emulated_hue_name: Find roomba
-  homebridge_name: Find roomba
 switch.shuffle:
   emulated_hue: true
   icon: mdi:shuffle-variant
+switch.fountain_26:
+  homebridge_visible: true

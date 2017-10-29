@@ -11,10 +11,13 @@ group.speakers:
   emulated_hue: true
 group.upstairs_speakers:
   emulated_hue: true
+  homebridge_visible: true
 group.downstairs_speakers:
   emulated_hue: true
+  homebridge_visible: true
 group.outdoor_speakers:
   emulated_hue: true
+  homebridge_visible: true
 group.master:
   emulated_hue: true
   emulated_hue_name: "bedroom"
