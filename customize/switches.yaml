@@ -15,3 +15,5 @@ switch.roomba_downstairs_find:
 switch.shuffle:
   emulated_hue: true
   icon: mdi:shuffle-variant
+switch.fountain_26:
+  homebridge_visible: true
