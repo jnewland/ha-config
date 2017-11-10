@@ -21,23 +21,23 @@ sensors:
         {{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_local }}
       {% endif %}
   great_room_temperature:
-    entity_id: climate.great_room
+    entity_id: climate.great_room_27
     unit_of_measurement: '°F'
     value_template: |
-      {% if states.climate.great_room %}
-        {{ states.climate.great_room.attributes.current_temperature }}
+      {% if states.climate.great_room_27 %}
+        {{ states.climate.great_room_27.attributes.current_temperature }}
       {% endif %}
   hall_temperature:
-    entity_id: climate.hall
+    entity_id: climate.hall_48
     unit_of_measurement: '°F'
     value_template: |
-      {% if states.climate.hall %}
-        {{ states.climate.hall.attributes.current_temperature }}
+      {% if states.climate.hall_48 %}
+        {{ states.climate.hall_48.attributes.current_temperature }}
       {% endif %}
   upstairs_temperature:
-    entity_id: climate.upstairs
+    entity_id: climate.upstairs_28
     unit_of_measurement: '°F'
     value_template: |
-      {% if states.climate.upstairs %}
-        {{ states.climate.upstairs.attributes.current_temperature }}
+      {% if states.climate.upstairs_28 %}
+        {{ states.climate.upstairs_28.attributes.current_temperature }}
       {% endif %}
