@@ -1,0 +1,5 @@
+entities:
+- sensor.dark_sky_apparent_temperature
+- sensor.dark_sky_daily_high_apparent_temperature
+- sensor.dark_sky_daily_low_apparent_temperature
+- sensor.dark_sky_dew_point
