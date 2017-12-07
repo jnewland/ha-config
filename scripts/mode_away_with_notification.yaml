@@ -2,6 +2,6 @@ sequence:
   - service: script.turn_on
     data:
       entity_id: script.mode_away
-  - service: notify.ios_jphone_6s
+  - service: notify.ios_jphone_x
     data_template:
       message: 'Turning on away mode.'

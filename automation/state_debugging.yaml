@@ -4,9 +4,9 @@ trigger:
   platform: state
   entity_id:
     - device_tracker.katies_iphone
-    - device_tracker.jphone_6s
+    - device_tracker.jphone_x
     - device_tracker.motion
-    - sensor.jphone_6s_battery_state
+    - sensor.jphone_x_battery_state
     - sensor.katies_iphone_battery_state
 condition:
   condition: template
@@ -18,7 +18,7 @@ condition:
       new_state.state != old_state.state
     }}
 action:
-  service: notify.ios_jphone_6s
+  service: notify.ios_jphone_x
   data_template:
     message: >
       {% set old_state = trigger.from_state %}

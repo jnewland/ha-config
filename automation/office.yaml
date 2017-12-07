@@ -3,7 +3,7 @@ trigger:
   - platform: state
     entity_id:
       - device_tracker.katies_iphone
-      - device_tracker.jphone_6s
+      - device_tracker.jphone_x
     to: Office
   - platform: state
     entity_id: binary_sensor.office_motion_82

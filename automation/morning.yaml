@@ -6,7 +6,7 @@ trigger:
     to: 'on'
   - platform: state
     entity_id:
-    - sensor.jphone_6s_battery_state
+    - sensor.jphone_x_battery_state
     - sensor.katies_iphone_battery_state
     to: 'Unplugged'
     for:
@@ -31,8 +31,8 @@ action:
   - service: script.turn_on
     entity_id: script.mode_morning
   - condition: template
-    value_template: '{{ states.device_tracker.jphone_6s.state != "not_home" }}'
-  - service: notify.ios_jphone_6s
+    value_template: '{{ states.device_tracker.jphone_x.state != "not_home" }}'
+  - service: notify.ios_jphone_x
     data_template:
       message: >
         Morning!

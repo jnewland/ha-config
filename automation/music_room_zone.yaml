@@ -10,7 +10,7 @@ condition:
 action:
   service: device_tracker.see
   data_template:
-    dev_id: jphone_6s
+    dev_id: jphone_x
     location_name: Music room
     gps:
     - !env_var LAT

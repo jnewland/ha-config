@@ -12,7 +12,7 @@ condition:
 action:
   - service: device_tracker.see
     data_template:
-      dev_id: jphone_6s
+      dev_id: jphone_x
       location_name: Office
       gps:
       - !env_var OFFICE_LAT

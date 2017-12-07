@@ -4,7 +4,7 @@ alias: Reading
 trigger:
   platform: state
   entity_id:
-    - device_tracker.jphone_6s
+    - device_tracker.jphone_x
     - device_tracker.katies_iphone
   to: Master
   for:
@@ -14,7 +14,7 @@ condition:
   conditions:
   - condition: template
     value_template: |
-      {% set jphone = states.device_tracker.jphone_6s.state %}
+      {% set jphone = states.device_tracker.jphone_x.state %}
       {% set kphone = states.device_tracker.katies_iphone.state %}
       {{
         (jphone == kphone or (jnewland == "not_home" or kphone == "not_home")) and

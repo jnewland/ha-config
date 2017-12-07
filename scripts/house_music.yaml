@@ -9,7 +9,7 @@ sequence:
       entity_id: >
         {# Determine where we should play music #}
         {# Returns an entity_id of a script #}
-        {%- set zone = states.device_tracker.jphone_6s.state -%}
+        {%- set zone = states.device_tracker.jphone_x.state -%}
         {%- if states.input_select.mode.state == "Morning" or states.input_select.mode.state == "Sleeping" -%}
         scene.speakers_desk_only
         {%- else -%}

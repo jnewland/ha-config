@@ -22,10 +22,10 @@ trigger:
     - sensor.dark_sky_minutely_summary
     - sensor.dark_sky_daily_summary
     - sensor.dark_sky_hourly_summary
-    - sensor.jphone_6s_battery_state
+    - sensor.jphone_x_battery_state
     - sensor.katies_iphone_battery_state
     - device_tracker.katies_iphone
-    - device_tracker.jphone_6s
+    - device_tracker.jphone_x
     - device_tracker.katies_air
     - device_tracker.jesses_macbook
     - device_tracker.motion
@@ -81,7 +81,7 @@ action:
         "sensor.dark_sky_minutely_summary":   ":cloud:",
         "sensor.dark_sky_daily_summary":      ":cloud:",
         "sensor.dark_sky_hourly_summary":     ":cloud:",
-        "sensor.jphone_6s_battery_state":     ":iphone:",
+        "sensor.jphone_x_battery_state":     ":iphone:",
         "sensor.katies_iphone_battery_state": ":iphone:",
         "sensor.roomba_downstairs_state":      ":robot_face:",
         "sensor.alarm_sensors":               ":door:",
