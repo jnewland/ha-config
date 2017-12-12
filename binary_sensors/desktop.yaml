@@ -1,4 +1,7 @@
 platform: rest
 resource: !env_var DESK_HID_IDLE_TIME_RESOURCE
 name: Jesse's desktop
-value_template: '{{ value_json < 60}}'
+value_template: |
+  {%- if value_json -%}
+  {{ value_json < 60 }}
+  {%- endif -%}

@@ -1,5 +1,10 @@
 platform: rest
 name: Roomba downstairs battery
 resource: !env_var THINKING_CLEANER_STATUS_URL
-value_template: '{{ value_json.status.battery_charge | int }}'
 unit_of_measurement: '%'
+value_template: |
+  {%- if value_json -%}
+  {{ value_json.status.battery_charge | int }}
+  {%- else -%}
+  0
+  {%- endif -%}
