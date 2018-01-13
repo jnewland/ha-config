@@ -4,13 +4,15 @@ language: python
 python:
 - '3.4'
 cache: pip
+# https://github.com/travis-ci/travis-ci/issues/8920
+before_install:
+- python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
 install:
 - pip3 install https://github.com/jnewland/home-assistant/zipball/rancho-de-newland
 script:
 - openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout /tmp/key.pem
   -out /tmp/cert.pem
 - ./script/cibuild
-- test "$(grep -c ERROR /tmp/log)" -eq 0
 env:
   matrix:
   - ALARM_PASSWORD="" ALARM_PLATFORM=alarmdotcom ALARM_USERNAME="" API_PASSWORD=""

@@ -8,9 +8,9 @@ sequence:
         push:
           category: >
             {%- if secure | default(none) != none -%}
-              SECURE_ACK
+              secure_ack
             {%- else %}
-              ACK
+              ack
             {%- endif -%}
         action_data:
           entity_id: |

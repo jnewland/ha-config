@@ -1,19 +1,19 @@
 push:
   categories:
     - name: Ack
-      identifier: 'ACK'
+      identifier: ack
       actions:
-        - identifier: 'ACK_TURN_ON'
-          title: 'Yep'
+        - identifier: ACK_TURN_ON
+          title: Yep
           destructive: true
-        - identifier: 'ACK_NO'
-          title: 'Nope'
+        - identifier: ACK_NO
+          title: Nope
     - name: Secure Ack
-      identifier: 'SECURE_ACK'
+      identifier: secure_ack
       actions:
-        - identifier: 'ACK_TURN_ON'
-          title: 'Hell yeah'
+        - identifier: ACK_TURN_ON
+          title: Hell yeah
           authenticationRequired: true
-        - identifier: 'ACK_NO'
+        - identifier: ACK_NO
           authenticationRequired: true
-          title: 'Nope'
+          title: Nope
