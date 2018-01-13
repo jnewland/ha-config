@@ -1,7 +1,7 @@
 push:
   categories:
     - name: Ack
-      identifier: 'ACK'
+      identifier: 'ack'
       actions:
         - identifier: 'ACK_TURN_ON'
           title: 'Yep'
@@ -9,7 +9,7 @@ push:
         - identifier: 'ACK_NO'
           title: 'Nope'
     - name: Secure Ack
-      identifier: 'SECURE_ACK'
+      identifier: 'secure_ack'
       actions:
         - identifier: 'ACK_TURN_ON'
           title: 'Hell yeah'
