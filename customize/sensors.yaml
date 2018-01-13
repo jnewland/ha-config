@@ -4,9 +4,6 @@ sensor.roomba_downstairs_state:
   friendly_name: Roomba
 sensor.roomba_downstairs_dirt_detected:
   friendly_name: Dirt detected
-sensor.front_gate:
-  device_class: opening
-  icon: mdi:gate
 sensor.haconfig_branch:
   friendly_name: Running branch
   icon: mdi:source-branch

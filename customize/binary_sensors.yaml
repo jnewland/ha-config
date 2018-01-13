@@ -50,5 +50,9 @@ binary_sensor.garage:
   zone: Outside
 binary_sensor.gate:
   zone: Outside
+binary_sensor.front_gate_121:
+  device_class: opening
+  icon: mdi:gate
+  zone: Outside
 binary_sensor.roomba_downstairs_bin_full:
   friendly_name: Bin full
