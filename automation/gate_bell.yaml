@@ -1,7 +1,7 @@
 alias: Gate Bell
 trigger:
   platform: state
-  entity_id: binary_sensor.front_gate_81
+  entity_id: binary_sensor.front_gate_121
   to: 'on'
 action:
   - service: notify.ios

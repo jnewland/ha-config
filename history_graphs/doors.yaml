@@ -3,4 +3,4 @@ entities:
 - binary_sensor.entry_door
 - binary_sensor.garage
 - binary_sensor.gate
-- binary_sensor.front_gate_81
+- binary_sensor.front_gate_121
