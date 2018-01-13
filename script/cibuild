@@ -2,7 +2,7 @@
 set -xeuo pipefail
 
 hass -c . --script check_config -i all -f > ./log
-cat ./log
+grep MainThread ./log
 test "$(grep -c ERROR ./log)" -eq 0
 
 # Confirm some specific entities
