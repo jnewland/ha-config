@@ -27,3 +27,5 @@ media_player.patio_speakers:
   emulated_hue_hidden: false
   friendly_name: "Patio speakers"
   homebridge_visible: true
+media_player.jnewland_airfoil_speakers:
+  friendly_name: "Laptop speakers"
