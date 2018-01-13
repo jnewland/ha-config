@@ -40,12 +40,16 @@ trigger:
     - lock.front_door_12
     - media_player.itunes
     - media_player.atrium_speakers
+    - media_player.bose_mini_soundlink_airfoil_speakers
+    - media_player.jnewland_airfoil_speakers
     - media_player.kitchen_speakers
-    - media_player.living_front_speakers
-    - media_player.patio_speakers
+    - media_player.living_speakers
     - media_player.master_bathroom_speakers
     - media_player.master_bedroom_speakers
-    - media_player.office_tv
+    - media_player.mpr6zhmaut_airfoil_speakers
+    - media_player.music_room_airfoil_speakers
+    - media_player.office_airfoil_speakers
+    - media_player.patio_speakers
 condition:
   condition: template
   value_template: |
