@@ -1,10 +1,9 @@
 #!/bin/bash
 set -xeuo pipefail
 
-hass -c . --script check_config -i all -f > ./log
-grep MainThread ./log
-test "$(grep -c ERROR ./log)" -eq 0
+hass -c . --script check_config -i all -f | tee /tmp/log
+test "$(grep -c ERROR /tmp/log)" -eq 0
 
 # Confirm some specific entities
-grep entry_door: ./log
-grep "Jesse's desktop" ./log
+grep entry_door: /tmp/log
+grep "Jesse's desktop" /tmp/log
