@@ -1,4 +1,4 @@
-alias: Day
+alias: Day mode
 trigger:
   - platform: state
     entity_id: input_select.mode
