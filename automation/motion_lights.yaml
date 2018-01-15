@@ -11,6 +11,7 @@ trigger:
   - binary_sensor.wine_room_motion_97
   - binary_sensor.master_motion_92
   - binary_sensor.music_room_motion_107
+  - binary_sensor.living_room_motion
   to: "on"
 condition:
   condition: template
