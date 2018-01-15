@@ -1,4 +1,4 @@
-alias: Sunset notifications
+alias: Notify about the sunset
 trigger:
   platform: sun
   event: sunset
