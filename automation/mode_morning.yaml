@@ -1,4 +1,4 @@
-alias: Morning
+alias: Morning mode
 trigger:
   - platform: state
     entity_id: binary_sensor.master_bath_motion_37
