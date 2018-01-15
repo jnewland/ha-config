@@ -1,6 +1,6 @@
 # If Katie and I are both in the master for a few minutes after the sun has set,
 # turn on Reading
-alias: Reading
+alias: Reading mode
 trigger:
   platform: state
   entity_id:

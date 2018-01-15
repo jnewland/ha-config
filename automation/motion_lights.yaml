@@ -11,10 +11,14 @@ trigger:
   - binary_sensor.wine_room_motion_97
   - binary_sensor.master_motion_92
   - binary_sensor.music_room_motion_107
+  - binary_sensor.living_room_motion
+  - binary_sensor.office_motion_82
   to: "on"
 condition:
   condition: template
-  value_template: '{{ states.input_select.mode.state != "Pause" }}'
+  value_template: |
+    {{ states.input_select.mode.state != "Pause" and
+       states.input_select.mode.state != "Away" }}
 action:
   service: homeassistant.turn_on
   data_template:

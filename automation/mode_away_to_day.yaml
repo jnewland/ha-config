@@ -1,4 +1,4 @@
-alias: Home
+alias: Mode away to day
 trigger:
   - platform: state
     entity_id: lock.front_door_12

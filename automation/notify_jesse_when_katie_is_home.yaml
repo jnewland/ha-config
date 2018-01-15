@@ -1,4 +1,4 @@
-alias: Katie is home
+alias: Notify Jesse when Katie is home
 trigger:
   platform: state
   entity_id: device_tracker.katies_iphone

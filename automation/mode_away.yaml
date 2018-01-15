@@ -1,4 +1,4 @@
-alias: Later
+alias: Away mode
 trigger:
   platform: state
   entity_id:
