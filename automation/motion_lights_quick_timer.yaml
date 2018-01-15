@@ -9,6 +9,7 @@ trigger:
   - binary_sensor.master_motion_92
   - binary_sensor.living_room_motion
   - binary_sensor.music_room_motion_107
+  - binary_sensor.jesses_desktop
   to: "off"
   for:
     minutes: 5
