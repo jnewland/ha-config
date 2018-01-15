@@ -1,4 +1,4 @@
-alias: away notifications
+alias: Notify about stuff when we're away
 trigger:
   platform: state
   entity_id:
