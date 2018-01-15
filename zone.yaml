@@ -1,7 +1,7 @@
 - name: Home
   latitude: !env_var LAT
   longitude: !env_var LONG
-  radius: 50
+  radius: 25
   icon: mdi:home
 
 - name: Upstairs
