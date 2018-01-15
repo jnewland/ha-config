@@ -1,4 +1,4 @@
-automation.gate_bell:
+automation.notify_about_gate:
   icon: mdi:bell
 automation.state_debugging:
   emulated_hue_hidden: false
