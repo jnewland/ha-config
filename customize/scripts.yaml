@@ -8,6 +8,6 @@ script.deploy_haconfig:
   friendly_name: Deploy
 script.working:
   emulated_hue_hidden: false
-script.living:
+script.living_lights:
   emulated_hue_hidden: false
   emulated_hue_name: Cooking

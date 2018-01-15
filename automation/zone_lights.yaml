@@ -1,0 +1,16 @@
+alias: Turn on lights when devices enter zones
+trigger:
+  platform: state
+  entity_id:
+  - device_tracker.jphone_x
+  - device_tracker.katies_iphone
+condition:
+  condition: template
+  value_template: |
+    {{ states.input_select.mode.state != "Pause" and
+       trigger.from_state.state != trigger.to_state.state }}
+action:
+  service: homeassistant.turn_on
+  data_template:
+    entity_id: |
+      {{ states.zone[trigger.to_state.state].attributes.trigger_entity_id_on | default(states.zone[trigger.to_state.state].attributes.trigger_entity_id_on) }}
