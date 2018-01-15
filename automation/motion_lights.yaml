@@ -15,7 +15,9 @@ trigger:
   to: "on"
 condition:
   condition: template
-  value_template: '{{ states.input_select.mode.state != "Pause" }}'
+  value_template: |
+    {{ states.input_select.mode.state != "Pause" and
+       states.input_select.mode.state != "Away" }}
 action:
   service: homeassistant.turn_on
   data_template:
