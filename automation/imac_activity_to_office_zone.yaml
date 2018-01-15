@@ -8,7 +8,8 @@ trigger:
 condition:
   condition: template
   value_template: |
-    {{ states.binary_sensor.jesses_desktop.state == "on" }}
+    {{ states.binary_sensor.jesses_desktop.state == "on" and
+       states.device_tracker.jphone_x.state != "Office" }}
 action:
   - service: device_tracker.see
     data_template:
