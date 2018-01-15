@@ -1,3 +1,4 @@
+# Beacon, conditional motion logic
 alias: Office lights
 trigger:
   - platform: state

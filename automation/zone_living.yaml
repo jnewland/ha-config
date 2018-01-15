@@ -1,10 +1,15 @@
-alias: Living
+alias: Living lights
 trigger:
-  platform: state
-  entity_id:
-    - device_tracker.jphone_x
-    - device_tracker.katies_iphone
-  to: Kitchen
+  - platform: state
+    entity_id:
+      - device_tracker.jphone_x
+      - device_tracker.katies_iphone
+    to: Kitchen
+  - platform: state
+    entity_id:
+      - device_tracker.jphone_x
+      - device_tracker.katies_iphone
+    to: Living
 condition:
   condition: and
   conditions:

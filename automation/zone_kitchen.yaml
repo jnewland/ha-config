@@ -1,4 +1,4 @@
-alias: Cabinet lights
+alias: Kitchen lights
 trigger:
   platform: state
   entity_id:
