@@ -1,3 +1,12 @@
+zone.upstairs:
+  track_ios: false
+zone.hall:
+  track_ios: false
+zone.outside:
+  track_ios: false
+zone.music_room:
+  track_ios: false
+
 zone.office:
   beacon:
     uuid: 74278BDA-B644-4520-8F0C-720EAF059935

@@ -9,7 +9,6 @@
   longitude: !env_var LONG
   radius: 1
   passive: true
-  track_ios: false
   icon: mdi:home
 
 - name: Hall
@@ -17,7 +16,6 @@
   longitude: !env_var LONG
   radius: 1
   passive: true
-  track_ios: false
   icon: mdi:home
 
 - name: Outside
@@ -25,7 +23,6 @@
   longitude: !env_var LONG
   radius: 1
   passive: true
-  track_ios: false
   icon: mdi:home
 
 - name: Living
@@ -57,5 +54,4 @@
   longitude: !env_var OFFICE_LAT
   radius: 1
   passive: true
-  track_ios: false
   icon: mdi:guitar-pick
