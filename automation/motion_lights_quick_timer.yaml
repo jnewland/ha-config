@@ -6,7 +6,7 @@ trigger:
   - binary_sensor.stairs_motion_102
   - binary_sensor.upstairs_motion_87
   - binary_sensor.closet_motion_61
-  - binary_sensor.master_motion_92
+  - binary_sensor.hall_motion_92
   - binary_sensor.living_room_motion
   - binary_sensor.music_room_motion_107
   - binary_sensor.jesses_desktop
