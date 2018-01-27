@@ -1,4 +1,0 @@
-# Dasher is configured to call dash button scripts by name
-sequence:
-  - service: scene.turn_on
-    entity_id: scene.morning
