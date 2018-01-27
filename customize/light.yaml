@@ -16,7 +16,6 @@ light.kitchen_18:
   emulated_hue_hidden: false
 light.living_20:
   emulated_hue_hidden: false
-  nighttime_brightness: 25
 light.master_closet_32:
   emulated_hue_hidden: false
 light.master_nook_42:
