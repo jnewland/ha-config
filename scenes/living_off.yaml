@@ -1,0 +1,22 @@
+name: Living Day
+entities:
+  light.cabinets_14:
+    state: off
+  light.dining_room_table_52:
+    state: off
+  light.kitchen_18:
+    state: off
+  light.living_20:
+    state: off
+  light.pendants_51:
+    state: off
+  light.living_room_lamp_right:
+    state: off
+  light.living_room_lamp_left:
+    state: off
+  media_player.mpr6zhmaut_airfoil_speakers:
+    state: off
+  media_player.living_speakers:
+    state: off
+  media_player.kitchen_speakers:
+    state: off
