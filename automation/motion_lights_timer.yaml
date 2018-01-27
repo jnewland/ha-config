@@ -7,9 +7,6 @@ trigger:
   to: "off"
   for:
     minutes: 30
-condition:
-  condition: template
-  value_template: '{{ states.input_select.mode.state != "Pause" }}'
 action:
   service: homeassistant.turn_off
   data_template:
