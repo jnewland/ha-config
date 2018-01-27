@@ -1,6 +1,6 @@
 platform: template
 sensors:
-  front_door_battery_low:
+  ac_sensor_battery_low:
     entity_id: binary_sensor.master_ac_water_13
     value_template: |
       {{ states.binary_sensor.master_ac_water_13.attributes.battery_level | int < 50 }}
