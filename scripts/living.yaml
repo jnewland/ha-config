@@ -2,8 +2,11 @@ sequence:
   - service: homeassistant.turn_on
     data_template:
       entity_id: >
-        {%- if states.input_select.mode.state == "Sleeping" -%}
-        light.cabinets_14
+        {%- if states.input_select.mode.state == "Sleeping" or
+            states.input_select.mode.state == "Reading" -%}
+        scene.living_night
+        {%- elif states.sun.sun.state == "below_horizon" -%}
+        scene.living_evening
         {%- else -%}
-        script.living_lights
+        scene.living_day
         {%- endif -%}

@@ -8,18 +8,6 @@ sensors:
     entity_id: binary_sensor.front_gate_121
     value_template: '{% if is_state("binary_sensor.front_gate_121", "on") %}open{% else %}closed{% endif %}'
     friendly_name: Front gate
-  sunrise:
-    entity_id: sun.sun
-    value_template: |
-      {% if states.sun.sun %}
-        {{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_local }}
-      {% endif %}
-  sunset:
-    entity_id: sun.sun
-    value_template: |
-      {% if states.sun.sun %}
-        {{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_local }}
-      {% endif %}
   great_room_temperature:
     entity_id: climate.great_room_27
     unit_of_measurement: '°F'
