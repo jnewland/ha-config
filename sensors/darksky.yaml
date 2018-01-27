@@ -1,25 +1,25 @@
 platform: darksky
 api_key: !env_var FORECAST_API_KEY
 monitored_conditions:
-  - summary
-  - nearest_storm_distance
-  - nearest_storm_bearing
-  - precip_type
-  - precip_intensity
-  - precip_probability
-  - temperature
-  - apparent_temperature
-  - dew_point
-  - wind_speed
-  - wind_bearing
-  - cloud_cover
-  - humidity
-  - pressure
-  - visibility
-  - ozone
+  # - summary
   - minutely_summary
   - hourly_summary
   - daily_summary
-  - apparent_temperature_max
-  - apparent_temperature_min
+  # - nearest_storm_distance
+  # - nearest_storm_bearing
+  # - precip_type
+  - precip_intensity
   - precip_intensity_max
+  - precip_probability
+  # - wind_speed
+  # - wind_bearing
+  # - cloud_cover
+  # - humidity
+  # - pressure
+  # - visibility
+  # - ozone
+  # - apparent_temperature_max
+  # - apparent_temperature_min
+  - temperature
+  - apparent_temperature
+  - dew_point
