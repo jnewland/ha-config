@@ -1,5 +1,3 @@
-script.mode_pause:
-  friendly_name: Pause all automation
 switch.roomba_downstairs_clean:
   friendly_name: Clean
   emulated_hue_hidden: false

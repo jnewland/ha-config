@@ -13,7 +13,6 @@ condition:
                   {{
                     states.input_boolean.guests.state == "off" and
                     states.input_select.mode.state != "Away" and
-                    states.input_select.mode.state != "Pause" and
                     states.device_tracker.jphone_x.state == "not_home" and
                     states.device_tracker.katies_iphone.state == "not_home"
                   }}
