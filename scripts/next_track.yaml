@@ -1,3 +1,0 @@
-sequence:
-  - service: media_player.media_next_track
-    entity_id: media_player.itunes

@@ -9,18 +9,3 @@ mode:
    - Sleeping
    - Away
   icon: mdi:settings
-playlist:
-  name: Playlist
-  options:
-   - My Favorites Mix
-   - My New Music Mix
-   - Queue
-   - Soul Queen
-   - Recently Added
-   - GitHub HQ 2.0
-   - Pure Ambient
-   - Headspace
-   - 'The A-List: Indie'
-   - Idle
-  initial: Idle
-  icon: mdi:playlist-play

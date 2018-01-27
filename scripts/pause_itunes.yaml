@@ -1,3 +1,0 @@
-sequence:
-  - service: media_player.media_pause
-    entity_id: media_player.itunes

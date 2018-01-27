@@ -17,56 +17,7 @@ In addition, Alexa knows how to talk to *the house*. For example, to get help, y
 * Alexa, *house* *help*.
 * Alexa, open *house*. *Help*.
 * Alexa, ask the house to turn it up.
-
-## Controlling Music
-
-> Alexa, ask the house to play *some music*.
->
-> Alexa, ask the house to play *Soul Queen*.
->
-> Alexa, tell the house to play *Favorites*.
->
-> Alexa, tell the house to play *New Music Mix*.
->
-> Alexa, house *music*.
-
-> Alexa, ask the house to *turn it up*.
-
-> Alexa, ask the house to *turn it down*.
-
-Play named playlists from iTunes on Jesse's desk computer.
-
-> Alexa, house *mute*.
->
-> Alexa, tell the house to *mute*.
-
-Turns off the Office TV, pauses iTunes on Jesse's desk computer, and turns off all speakers.
-
-> Alexa, tell the house to *pause*.
->
-> Alexa, house *pause*.
-
-Pause whatever is playing on Jesse's desk computer.
-
-> Alexa, ask the house to *play*.
->
-> Alexa, ask the house to *resume*.
->
-> Alexa, ask the house to *continue*.
-
-Resume whatever music was playing on Jesse's computer.
-
-> Alexa, tell the house *next*.
->
-> Alexa, house *skip*.
-
-Play the next song.
-
-> Alexa, tell the house to *shuffle*.
->
-> Alexa, house turn *shuffle off*.
-
-Control shuffle.
+* Alexa, ask the house to mute.
 
 ### Updating custom commands
 
