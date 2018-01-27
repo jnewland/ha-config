@@ -6,4 +6,7 @@ entities:
 - light.front_door_21
 - light.patio_29
 - light.master_patio_31
+- light.ac_125
+- light.atrium_door_123
+- light.garage_door_124
 - switch.fountain_26
