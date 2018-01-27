@@ -29,10 +29,6 @@
   host: !env_var MPR_API_IP
   port: !env_var MPR_API_PORT
   zone: 16
-- platform: samsungtv
-  host: !env_var OFFICE_TV_IP
-  mac: !env_var OFFICE_TV_MAC
-  name: Office TV
 - platform: itunes
   host: !env_var ITUNES_IP
 - platform: airfoil
