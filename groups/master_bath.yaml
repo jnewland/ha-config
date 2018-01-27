@@ -5,6 +5,7 @@ entities:
 - light.master_mirror_35
 - light.master_toilet_62
 - binary_sensor.master_bath_motion_37
+- switch.master_bath_fan_129
 - sensor.master_bath_multisensor_burglar_35
 - sensor.master_bath_multisensor_luminance_35
 - sensor.master_bath_multisensor_relative_humidity_35

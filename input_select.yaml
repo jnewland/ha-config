@@ -8,7 +8,6 @@ mode:
    - Reading
    - Sleeping
    - Away
-   - Pause
   icon: mdi:settings
 playlist:
   name: Playlist

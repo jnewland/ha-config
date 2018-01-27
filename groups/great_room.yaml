@@ -5,5 +5,5 @@ entities:
 - light.kitchen_18
 - light.living_20
 - light.pendants_51
-- light.couch_lamp
-- light.floor_lamp
+- light.living_room_lamp_right
+- light.living_room_lamp_left
