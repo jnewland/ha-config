@@ -28,7 +28,6 @@ trigger:
     - device_tracker.jphone_x
     - device_tracker.katies_air
     - device_tracker.jesses_macbook
-    - device_tracker.motion
     - device_tracker.jesse_music_room
     - sun.sun
     - binary_sensor.master_bath_motion_37

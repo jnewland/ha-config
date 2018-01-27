@@ -5,7 +5,6 @@ trigger:
   entity_id:
     - device_tracker.katies_iphone
     - device_tracker.jphone_x
-    - device_tracker.motion
     - sensor.jphone_x_battery_state
     - sensor.katies_iphone_battery_state
 condition:

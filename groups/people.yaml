@@ -7,6 +7,5 @@ entities:
 - device_tracker.jphone_x
 - device_tracker.katies_air
 - device_tracker.jesses_macbook
-- device_tracker.motion
 - camera.jPhone
 - camera.kPhone
