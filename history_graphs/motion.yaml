@@ -6,5 +6,5 @@ entities:
 - binary_sensor.powder_room_motion_75
 - binary_sensor.office_motion_82
 - binary_sensor.upstairs_motion_87
-- binary_sensor.master_motion_92
+- binary_sensor.hall_motion_92
 - binary_sensor.music_room_motion_107
