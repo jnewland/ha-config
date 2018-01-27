@@ -2,8 +2,6 @@ sensor.roomba_downstairs_battery:
   friendly_name: Battery
 sensor.roomba_downstairs_state:
   friendly_name: Roomba
-sensor.roomba_downstairs_dirt_detected:
-  friendly_name: Dirt detected
 sensor.haconfig_branch:
   friendly_name: Running branch
   icon: mdi:source-branch
