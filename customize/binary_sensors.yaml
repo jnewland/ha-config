@@ -42,7 +42,7 @@ binary_sensor.living_room_motion:
   friendly_name: Living room motion
   zone: Living
   trigger_entity_id_on: script.living
-  trigger_entity_id_off: script.living_off
+  trigger_entity_id_off: scene.living_off
 binary_sensor.entry_door:
   friendly_name: Entry door
   zone: Outside
