@@ -1,9 +1,6 @@
 platform: template
 sensors:
   together:
-    entity_id:
-    - device_tracker.jphone_x
-    - device_tracker.katies_iphone
     value_template: |
       {{
         states.device_tracker.katies_iphone != None and

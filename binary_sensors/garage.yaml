@@ -1,6 +1,5 @@
 platform: template
 sensors:
   garage:
-    entity_id: cover.garage
     value_template: |
       {{ states("cover.garage") | default("") == "open" }}

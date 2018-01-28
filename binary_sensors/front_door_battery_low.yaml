@@ -1,6 +1,5 @@
 platform: template
 sensors:
   front_door_battery_low:
-    entity_id: lock.front_door_12
     value_template: |
       {{ states.lock.front_door_12.attributes.battery_level | int < 50 }}
