@@ -19,7 +19,8 @@ media_player.master_bedroom_speakers:
   emulated_hue_hidden: false
   friendly_name: "Master bedroom speakers"
 media_player.mpr6zhmaut_airfoil_speakers:
-  emulated_hue: false
+  friendly_name: "House speakers"
+  emulated_hue_hidden: false
 media_player.office_airfoil_speakers:
   emulated_hue_hidden: false
   friendly_name: "Office speakers"
