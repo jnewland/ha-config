@@ -160,10 +160,6 @@ class Airfoil(MediaPlayerDevice):
                 self._speakers[device_id] = speaker
                 new_devices.append(speaker)
 
-            speaker = AirfoilSpeakerDevice(device_data, self)
-            speaker.update_state(device_data)
-            self._speakers.append(speaker)
-
         if new_devices:
             self._add_devices(new_devices)
 
