@@ -132,6 +132,9 @@ class Airfoil(MediaPlayerDevice):
         self._speakers = {}
         self._connected = False
         self._playing = False
+        self._artist = None
+        self._album = None
+        self._track = None
 
     @property
     def client(self):
