@@ -2,6 +2,7 @@
 view: true
 icon: mdi:speaker
 entities:
+- media_player.house
 - media_player.atrium_speakers
 - media_player.house_bose_mini_soundlink
 - media_player.house_jnewland
