@@ -30,4 +30,5 @@
   port: !env_var MPR_API_PORT
   zone: 16
 - platform: airfoil
+  name: house
   host: !env_var ITUNES_IP
