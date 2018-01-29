@@ -1,29 +1,24 @@
 platform: template
 sensors:
   alarm_sensors:
-    entity_id: alarm_control_panel.alarm
     value_template: '{{ (states.alarm_control_panel.alarm.attributes.sensor_status | default("")).replace(".", ". ") }}'
     friendly_name: Alarm sensors
   front_gate:
-    entity_id: binary_sensor.front_gate_121
     value_template: '{% if is_state("binary_sensor.front_gate_121", "on") %}open{% else %}closed{% endif %}'
     friendly_name: Front gate
   great_room_temperature:
-    entity_id: climate.great_room_27
     unit_of_measurement: '°F'
     value_template: |
       {% if states.climate.great_room_27 %}
         {{ states.climate.great_room_27.attributes.current_temperature }}
       {% endif %}
   hall_temperature:
-    entity_id: climate.hall_48
     unit_of_measurement: '°F'
     value_template: |
       {% if states.climate.hall_48 %}
         {{ states.climate.hall_48.attributes.current_temperature }}
       {% endif %}
   upstairs_temperature:
-    entity_id: climate.upstairs_28
     unit_of_measurement: '°F'
     value_template: |
       {% if states.climate.upstairs_28 %}

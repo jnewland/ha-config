@@ -1,6 +1,5 @@
 platform: template
 sensors:
   gate:
-    entity_id: cover.gate
     value_template: |
       {{ states("cover.gate") | default("") == "open" }}
