@@ -6,9 +6,13 @@ media_player.bedroom:
   friendly_name: "Bedroom Apple TV"
 media_player.house_bose_mini_soundlink:
   friendly_name: "Back porch speakers"
+  homebridge_visible: true
 media_player.kitchen_speakers:
   emulated_hue_hidden: false
   friendly_name: "Kitchen speakers"
+media_player.house_computer:
+  friendly_name: "Desk speakers"
+  emulated_hue_hidden: false
 media_player.living_speakers:
   emulated_hue_hidden: false
   friendly_name: "Living speakers"
@@ -29,4 +33,6 @@ media_player.patio_speakers:
   friendly_name: "Patio speakers"
   homebridge_visible: true
 media_player.house_jnewland:
+  emulated_hue_hidden: false
+  homebridge_visible: true
   friendly_name: "Laptop speakers"

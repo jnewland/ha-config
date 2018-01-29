@@ -1,0 +1,6 @@
+---
+view: true
+icon: mdi:speaker
+entities:
+- media_player.house
+- group.speakers
