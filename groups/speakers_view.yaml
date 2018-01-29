@@ -3,4 +3,5 @@ view: true
 icon: mdi:speaker
 entities:
 - media_player.house
-- group.speakers
+- group.house_speakers
+- group.airfoil_speakers

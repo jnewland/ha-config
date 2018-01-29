@@ -1,13 +1,5 @@
 ---
 entities:
-- media_player.atrium_speakers
-- media_player.house_computer
-- media_player.house_bose_mini_soundlink
-- media_player.house_jnewland
-- media_player.kitchen_speakers
-- media_player.living_speakers
-- media_player.master_bathroom_speakers
-- media_player.master_bedroom_speakers
+- group.airfoil_speakers
+- group.house_speakers
 - media_player.house_mpr6zhmaut
-- media_player.house_office
-- media_player.patio_speakers

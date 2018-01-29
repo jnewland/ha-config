@@ -2,4 +2,3 @@ sequence:
   - service: homeassistant.turn_off
     entity_id:
       - group.speakers
-      - group.airplay
