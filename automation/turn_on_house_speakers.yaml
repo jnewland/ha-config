@@ -1,0 +1,9 @@
+alias: Turn on house speakers when streaming to house
+trigger:
+  platform: state
+  entity_id: media_player.house
+  to: 'playing'
+action:
+  - service: media_player.turn_on
+    data:
+      entity_id: media_player.house_mpr6zhmaut

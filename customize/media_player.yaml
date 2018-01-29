@@ -4,11 +4,15 @@ media_player.atrium_speakers:
   homebridge_visible: true
 media_player.bedroom:
   friendly_name: "Bedroom Apple TV"
-media_player.bose_mini_soundlink_airfoil_speakers:
+media_player.house_bose_mini_soundlink:
   friendly_name: "Back porch speakers"
+  homebridge_visible: true
 media_player.kitchen_speakers:
   emulated_hue_hidden: false
   friendly_name: "Kitchen speakers"
+media_player.house_computer:
+  friendly_name: "Desk speakers"
+  emulated_hue_hidden: false
 media_player.living_speakers:
   emulated_hue_hidden: false
   friendly_name: "Living speakers"
@@ -18,15 +22,17 @@ media_player.master_bathroom_speakers:
 media_player.master_bedroom_speakers:
   emulated_hue_hidden: false
   friendly_name: "Master bedroom speakers"
-media_player.mpr6zhmaut_airfoil_speakers:
+media_player.house_mpr6zhmaut:
   friendly_name: "House speakers"
   emulated_hue_hidden: false
-media_player.office_airfoil_speakers:
+media_player.house_office:
   emulated_hue_hidden: false
   friendly_name: "Office speakers"
 media_player.patio_speakers:
   emulated_hue_hidden: false
   friendly_name: "Patio speakers"
   homebridge_visible: true
-media_player.jnewland_airfoil_speakers:
+media_player.house_jnewland:
+  emulated_hue_hidden: false
+  homebridge_visible: true
   friendly_name: "Laptop speakers"

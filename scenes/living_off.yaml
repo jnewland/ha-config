@@ -14,7 +14,7 @@ entities:
     state: off
   light.living_room_lamp_left:
     state: off
-  media_player.mpr6zhmaut_airfoil_speakers:
+  media_player.house_mpr6zhmaut:
     state: off
   media_player.living_speakers:
     state: off

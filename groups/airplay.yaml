@@ -1,5 +1,0 @@
-name: "Airplay Speakers"
-control: hidden
-entities:
-  - media_player.computer_airtunes_speaker
-  - media_player.house_airtunes_speaker

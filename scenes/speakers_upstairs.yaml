@@ -14,15 +14,13 @@ entities:
   media_player.office_airtunes_speaker:
     state: 'off'
   # airfoil
-  media_player.computer_airfoil_speakers:
+  media_player.house_computer:
     state: 'off'
-  media_player.bedroom_airfoil_speakers:
+  media_player.house_bedroom:
     state: 'off'
-  media_player.mpr6zhmaut_airfoil_speakers:
+  media_player.house_mpr6zhmaut:
     state: 'on'
-  media_player.music_room_airfoil_speakers:
-    state: 'on'
-  media_player.office_airfoil_speakers:
+  media_player.house_office:
     state: 'off'
   # mpr-6zhmaut speakers
   media_player.living_speakers:
