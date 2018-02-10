@@ -11,7 +11,7 @@ media_player.kitchen_speakers:
   emulated_hue_hidden: false
   friendly_name: "Kitchen speakers"
 media_player.house_computer:
-  friendly_name: "Desk speakers"
+  friendly_name: "Music room speakers"
   emulated_hue_hidden: false
 media_player.living_speakers:
   emulated_hue_hidden: false
