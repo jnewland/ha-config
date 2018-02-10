@@ -1,6 +1,3 @@
-binary_sensor.jesses_desktop:
-  friendly_name: Desk
-  trigger_entity_id_off: light.desk_63
 binary_sensor.stairs_motion_102:
   zone: Hall
   trigger_entity_id: script.stairs_lights
@@ -15,7 +12,7 @@ binary_sensor.guest_bath_motion_70:
 binary_sensor.powder_room_motion_75:
   zone: Hall
   trigger_entity_id: light.powder_room_80
-  trigger_entity_id_off: group.powder_room 
+  trigger_entity_id_off: group.powder_room
 binary_sensor.office_motion_82:
   zone: Office
   trigger_entity_id: script.office
