@@ -6,4 +6,3 @@ test "$(grep -c ERROR /tmp/log)" -eq 0
 
 # Confirm some specific entities
 grep entry_door: /tmp/log
-grep "Jesse's desktop" /tmp/log
