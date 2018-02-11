@@ -1,7 +1,4 @@
 platform: rest
 resource: !env_var DESK_CAMERA_RESOURCE
 name: Desk camera
-value_template: |
-  {%- if value_json -%}
-  {{ value_json == "true" }}
-  {%- endif -%}
+value_template: {{ value_json }}
