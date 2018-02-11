@@ -9,7 +9,6 @@ sequence:
       - light.office_closet_lamp
       - light.office_closet
       - light.closet_backlight_112
-      - light.desk_63
       - group.office
       - group.guest
       - group.hall

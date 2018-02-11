@@ -1,0 +1,3 @@
+platform: rest
+resource: !env_var DESK_CAMERA_RESOURCE
+name: Desk camera

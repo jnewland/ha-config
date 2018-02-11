@@ -9,5 +9,4 @@ sequence:
       brightness: 255
   - service: light.turn_on
     entity_id:
-      - light.desk_63
       - light.closet_backlight_112

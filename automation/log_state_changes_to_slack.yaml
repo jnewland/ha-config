@@ -2,6 +2,7 @@ alias: log state changes to slack
 trigger:
   platform: state
   entity_id:
+    - binary_sensor.desk_camera
     - binary_sensor.living_room_motion
     - binary_sensor.master_door
     - binary_sensor.entry_door
@@ -80,11 +81,12 @@ action:
         "sensor.dark_sky_minutely_summary":   ":cloud:",
         "sensor.dark_sky_daily_summary":      ":cloud:",
         "sensor.dark_sky_hourly_summary":     ":cloud:",
-        "sensor.jphone_x_battery_state":     ":iphone:",
+        "sensor.jphone_x_battery_state":      ":iphone:",
         "sensor.katies_iphone_battery_state": ":iphone:",
         "sensor.roomba_downstairs_state":     ":robot_face:",
         "sensor.alarm_sensors":               ":door:",
         "binary_sensor.master_ac_water_13":   ":droplet:",
+        "binary_sensor.desk_camera":          ":camera:",
         "binary_sensor.front_gate_121":       ":house_with_garden:"
       } %}
       {% set entity_state = new_state.entity_id + "." + new_state.state %}
