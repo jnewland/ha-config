@@ -4,8 +4,6 @@ trigger:
   entity_id:
   - binary_sensor.desk_camera
   to: "off"
-  for:
-    minutes: 5
 action:
   service: homeassistant.turn_off
   data_template:
