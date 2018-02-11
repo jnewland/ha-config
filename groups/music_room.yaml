@@ -2,5 +2,6 @@ name: music room
 control: hidden
 entities:
 - light.music_room_118
+- light.desk_63
 - binary_sensor.music_room_motion_107
 - sensor.music_room_temp_108
