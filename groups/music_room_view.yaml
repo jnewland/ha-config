@@ -1,5 +1,5 @@
 ---
 view: true
-icon: mdi:music
+icon: mdi:guitar-pick
 entities:
 - group.music_room

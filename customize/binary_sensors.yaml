@@ -58,3 +58,4 @@ binary_sensor.roomba_downstairs_bin_full:
   friendly_name: Bin full
 binary_sensor.desk_camera:
   trigger_entity_id: light.desk_63
+  icon: mdi:camera-iris
