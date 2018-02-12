@@ -6,7 +6,7 @@ sequence:
   - service: homeassistant.turn_off
     entity_id:
       - light.office_overhead_11
-      - light.office_closet_lamp
+      - light.office_desk_lamp
       - light.office_closet
       - light.closet_backlight_112
       - group.office
