@@ -46,6 +46,7 @@ light.office_chandelier_69:
   notify_action: duck
 light.office_desk_lamp:
   notify_action: duck
+  brightness_step: 192
 light.office_overhead_11:
   notify_action: duck
 light.patio_29:
