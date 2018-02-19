@@ -2,6 +2,8 @@
 view: true
 icon: mdi:speaker
 entities:
+- media_player.itunes
 - media_player.house
+- group.itunes_controls
 - group.house_speakers
 - group.airfoil_speakers

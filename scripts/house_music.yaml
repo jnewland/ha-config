@@ -1,0 +1,12 @@
+alias: House Music
+sequence:
+  - service: media_player.volume_set
+    data:
+      entity_id: media_player.itunes
+      volume_level: 0.5
+  - service: media_player.play_media
+    entity_id: media_player.itunes
+    data_template:
+      media_content_type: playlist
+      media_content_id: |
+        {{ playlist | default("My Favorites Mix") }}
