@@ -8,6 +8,7 @@ sequence:
       - light.office_overhead_11
       - light.office_closet
       - light.closet_backlight_112
+      - light.floor_lamp
       - group.office
       - group.guest
       - group.hall
