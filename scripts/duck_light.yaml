@@ -1,0 +1,11 @@
+sequence:
+- service: python_script.relative_dimmer
+  data_template:
+    entity_id: {{ entity_id }}
+    change: -64
+- delay:
+    seconds: 5
+- service: python_script.relative_dimmer
+  data_template:
+    entity_id: {{ entity_id }}
+    change: 64
