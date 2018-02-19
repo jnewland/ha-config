@@ -15,3 +15,4 @@ action:
           url: "{{ states.weblink.self.state }}{{ states.camera.front_yard_left.attributes.entity_picture }}"
           content-type: jpeg
           hide-thumbnail: false
+  - service: script.alert
