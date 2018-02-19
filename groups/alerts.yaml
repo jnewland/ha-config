@@ -1,6 +1,5 @@
 control: hidden
 entities:
-- alert.rain_today
 - alert.front_door_battery_low
 - alert.ac_sensor_battery_low
 - alert.roomba_offline

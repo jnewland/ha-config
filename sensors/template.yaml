@@ -3,6 +3,18 @@ sensors:
   alarm_sensors:
     value_template: '{{ (states.alarm_control_panel.alarm.attributes.sensor_status | default("")).replace(".", ". ") }}'
     friendly_name: Alarm sensors
+  dark_sky_temperature:
+    unit_of_measurement: '°F'
+    friendly_name: Current temperature
+    {{ states.weather.dark_sky.attributes.temperature }}
+  dark_sky_daily_summary:
+    friendly_name: Daily forecast
+    value_template: |
+      {{ states.weather.dark_sky.attributes.daily_forecast_summary }}
+  dark_sky_hourly_summary:
+    friendly_name: Hourly forecast
+    value_template: |
+      {{ states.weather.dark_sky.attributes.hourly_forecast_summary }}
   front_gate:
     value_template: '{% if is_state("binary_sensor.front_gate_121", "on") %}open{% else %}closed{% endif %}'
     friendly_name: Front gate
