@@ -3,11 +3,11 @@ sequence:
   data_template:
     entity_id: |
       {{ entity_id }}
-    change: -64
+    change: -100
 - delay:
-    seconds: 5
+    seconds: 2
 - service: python_script.relative_dimmer
   data_template:
     entity_id: |
       {{ entity_id }}
-    change: 64
+    change: 100
