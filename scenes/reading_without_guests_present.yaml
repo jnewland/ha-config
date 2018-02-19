@@ -3,6 +3,8 @@ entities:
   light.chandelier_33:
     state: 'on'
     brightness: 76
+  group.music_room:
+    state: 'off'
   group.downstairs:
     state: 'off'
   light.master_overhead_30:
