@@ -3,6 +3,7 @@ trigger:
   platform: state
   entity_id:
   - binary_sensor.desk_camera
+  - binary_sensor.living_room_motion
   to: "off"
 action:
   service: homeassistant.turn_off
