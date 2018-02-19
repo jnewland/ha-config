@@ -17,6 +17,6 @@ for entity_id in entity_ids.split(','):
         data = { "entity_id" : entity_id }
         hass.services.call('light', 'turn_off', data)
     else:
-        logger.info('Dimming' + str(entity_id) + 'from : ' + str(brightness) + ' to ' + str(dim))
+        logger.info('Dimming ' + str(entity_id) + ' from ' + str(brightness) + ' to ' + str(dim))
         data = { "entity_id" : entity_id, "brightness" : dim }
         hass.services.call('light', 'turn_on', data)
