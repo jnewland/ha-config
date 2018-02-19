@@ -6,7 +6,8 @@ sensors:
   dark_sky_temperature:
     unit_of_measurement: '°F'
     friendly_name: Current temperature
-    {{ states.weather.dark_sky.attributes.temperature }}
+    value_template: |
+      {{ states.weather.dark_sky.attributes.temperature }}
   dark_sky_daily_summary:
     friendly_name: Daily forecast
     value_template: |
