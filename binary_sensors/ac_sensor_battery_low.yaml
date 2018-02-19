@@ -2,4 +2,4 @@ platform: template
 sensors:
   ac_sensor_battery_low:
     value_template: |
-      {{ states.binary_sensor.master_ac_water_13.attributes.battery_level | int < 50 }}
+      {{ states.binary_sensor.master_ac_water_13.attributes.battery_level | int < 25 }}
