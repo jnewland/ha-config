@@ -1,7 +1,7 @@
 ---
 entities:
 - sun.sun
-- states.weather.dark_sky
+- weather.dark_sky
 - sensor.dark_sky_temperature
 - sensor.dark_sky_hourly_summary
 - sensor.dark_sky_daily_summary
