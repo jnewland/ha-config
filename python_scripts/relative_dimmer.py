@@ -6,7 +6,7 @@ action     = data.get("action", "dim")
 if action == "dim":
     multiplier = -1
 elif action == "restore":
-    multipier = 1
+    multiplier = 1
 
 for entity_id in entity_ids.split(","):
     state      = hass.states.get(entity_id)
