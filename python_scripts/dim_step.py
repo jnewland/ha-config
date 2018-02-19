@@ -1,16 +1,16 @@
-""" Dim or restore a light by a customizable amount """
+""" Dim or brighten a light by a customizable amount """
 
 entity_ids = data.get("entity_id")
 action     = data.get("action", "dim")
 
-if action == "dim":
+if action == "down":
     multiplier = -1
-elif action == "restore":
+elif action == "up":
     multiplier = 1
 
 for entity_id in entity_ids.split(","):
     state      = hass.states.get(entity_id)
-    change     = state.attributes.get("dim_amount", 127)
+    change     = state.attributes.get("brightness_step", 127)
     brightness = state.attributes.get("brightness", 0)
 
     dim = (brightness + (int(change) * int(multiplier)))

@@ -1,0 +1,10 @@
+sequence:
+- service: script.duck_light
+  data_template:
+    entity_id: |
+      {% for entity_id in states.group.all_lights.attributes.entity_id if (
+          states.light[entity_id.split(".")[1]].attributes.notify_action == "duck" and
+          states(entity_id) == "on")
+      -%}
+      {{ entity_id }}{% if not loop.last %}{{ "," }}{% endif %}
+      {%- endfor -%}
