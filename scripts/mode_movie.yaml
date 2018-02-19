@@ -9,7 +9,6 @@ sequence:
       - light.office_closet
       - light.closet_backlight_112
       - light.floor_lamp
-      - group.office
       - group.guest
       - group.hall
   - service: light.turn_on
