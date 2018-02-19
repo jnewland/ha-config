@@ -50,4 +50,7 @@ tts:
   - platform: google
 vera: !include vera.yaml
 weblink: !include weblink.yaml
+weather:
+  - platform: darksky
+    api_key: !env_var FORECAST_API_KEY
 zone: !include zone.yaml
