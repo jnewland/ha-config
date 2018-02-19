@@ -8,14 +8,17 @@ light.chandelier_33:
   emulated_hue_hidden: false
 light.dining_room_table_52:
   emulated_hue_hidden: false
+  dim_amount: 192
 light.front_door_21:
   emulated_hue_hidden: false
 light.front_porch_19:
   emulated_hue_hidden: false
 light.kitchen_18:
   emulated_hue_hidden: false
+  dim_amount: 192
 light.living_20:
   emulated_hue_hidden: false
+  dim_amount: 192
 light.master_closet_32:
   emulated_hue_hidden: false
 light.master_nook_42:
@@ -26,6 +29,7 @@ light.patio_29:
   emulated_hue_hidden: false
 light.pendants_51:
   emulated_hue_hidden: false
+  dim_amount: 192
 light.stairs_23:
   emulated_hue_hidden: false
 light.wine_room_25:

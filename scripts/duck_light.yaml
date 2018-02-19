@@ -1,13 +1,13 @@
 sequence:
 - service: python_script.relative_dimmer
   data_template:
+    action: dim
     entity_id: |
       {{ entity_id }}
-    change: -127
 - delay:
     seconds: 2
 - service: python_script.relative_dimmer
   data_template:
+    action: restore
     entity_id: |
       {{ entity_id }}
-    change: 127
