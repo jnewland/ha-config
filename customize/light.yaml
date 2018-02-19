@@ -7,25 +7,53 @@ light.cabinets_14:
 light.chandelier_33:
   emulated_hue_hidden: false
 light.dining_room_table_52:
+  brightness_step: 192
   emulated_hue_hidden: false
+  notify_action: duck
+light.floor_lamp:
+  notify_action: duck
 light.front_door_21:
   emulated_hue_hidden: false
 light.front_porch_19:
   emulated_hue_hidden: false
 light.kitchen_18:
+  brightness_step: 192
   emulated_hue_hidden: false
+  notify_action: duck
 light.living_20:
+  brightness_step: 192
   emulated_hue_hidden: false
+  notify_action: duck
+light.master_bath_overhead_36:
+  notify_action: duck
 light.master_closet_32:
   emulated_hue_hidden: false
+  notify_action: duck
+light.master_mirror_35:
+  notify_action: duck
 light.master_nook_42:
   emulated_hue_hidden: false
 light.master_overhead_30:
   emulated_hue_hidden: false
+  notify_action: duck
+light.master_shower_34:
+  notify_action: duck
+light.master_toilet_62:
+  notify_action: duck
+light.music_room_118:
+  notify_action: duck
+light.office_chandelier_69:
+  notify_action: duck
+light.office_desk_lamp:
+  notify_action: duck
+light.office_overhead_11:
+  notify_action: duck
 light.patio_29:
   emulated_hue_hidden: false
 light.pendants_51:
+  brightness_step: 192
   emulated_hue_hidden: false
+  notify_action: duck
 light.stairs_23:
   emulated_hue_hidden: false
 light.wine_room_25:
