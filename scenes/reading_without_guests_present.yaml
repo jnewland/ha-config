@@ -3,6 +3,9 @@ entities:
   light.chandelier_33:
     state: 'on'
     brightness: 76
+  light.bedside_lamp_130:
+    state: 'on'
+    brightness: 61
   group.music_room:
     state: 'off'
   group.downstairs:
