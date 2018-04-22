@@ -13,3 +13,5 @@ action:
   data_template:
     entity_id: |
       {{ states.zone[trigger.to_state.state].attributes.trigger_entity_id_on | default(states.zone[trigger.to_state.state].attributes.trigger_entity_id) }}
+    brightness: |
+      {{ states('input_number.max_brightness') | int }}
