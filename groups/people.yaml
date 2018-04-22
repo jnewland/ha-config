@@ -5,7 +5,5 @@ icon: mdi:account
 entities:
 - device_tracker.katies_iphone
 - device_tracker.jphone_x
-- device_tracker.katies_air
-- device_tracker.jesses_macbook
 - camera.jPhone
 - camera.kPhone

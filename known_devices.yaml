@@ -12,22 +12,6 @@ katies_iphone:
   track: true
   vendor:
 
-katies_air:
-  hide_if_away: true
-  mac: !env_var KATIES_AIR_MAC
-  name: katie's air
-  picture: https://github.com/katienewland.png
-  track: true
-  vendor:
-
-jesses_macbook:
-  hide_if_away: true
-  mac: !env_var JESSES_MACBOOK_MAC
-  name: jesse's macbook
-  picture: https://github.com/jnewland.png
-  track: true
-  vendor:
-
 jesse_music_room:
   name: music room desk
   track: true
