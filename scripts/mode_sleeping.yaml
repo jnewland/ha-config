@@ -3,6 +3,10 @@ sequence:
     entity_id: input_select.mode
     data:
       option: Sleeping
+  - service: input_number.set_value
+    data:
+      entity_id: input_number.max_brightness
+      value: 13
   - service: scene.turn_on
     data_template:
       entity_id: '
@@ -12,7 +16,3 @@ sequence:
         scene.sleeping_without_guests_present
         {% endif %}
         '
-  - service: input_number.set_value
-    data:
-      entity_id: input_number.max_brightness
-      value: 13
