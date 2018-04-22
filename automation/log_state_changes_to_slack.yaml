@@ -35,7 +35,7 @@ trigger:
     - input_select.mode
     - lock.front_door_12
     - media_player.atrium_speakers
-    - media_player.house_bose_mini_soundlink
+    - media_player.house_back_porch
     - media_player.house_jnewland
     - media_player.kitchen_speakers
     - media_player.living_speakers

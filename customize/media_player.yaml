@@ -4,7 +4,7 @@ media_player.atrium_speakers:
   homebridge_visible: true
 media_player.bedroom:
   friendly_name: "Bedroom Apple TV"
-media_player.house_bose_mini_soundlink:
+media_player.house_back_porch:
   friendly_name: "Back porch speakers"
   homebridge_visible: true
 media_player.kitchen_speakers:
