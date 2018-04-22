@@ -1,0 +1,11 @@
+trigger:
+  platform: state
+  entity_id: input_number.max_brightness
+action:
+  service: light.turn_on
+  data_template:
+    entity_id: |
+      {% set ignore = ('light.sml', 'light.cabinets_14', 'light.closet_blue_115', 'light.closet_brightness_113', 'light.closet_green_114', 'light.closet_red_116', 'light.closet_white_117') %}
+      {%- for l in states.light if (l.entity_id not in ignore and l.entity_id not in states.group.outdoor.attributes.entity_id and l.entity_id not in ignore and l.state == "on") -%}{{l.entity_id}}{% if not loop.last %}{{ ", " }}{% endif %}{%-endfor-%}
+    brightness: |
+      {{ states('input_number.max_brightness') | int }}
