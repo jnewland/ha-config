@@ -1,0 +1,5 @@
+name: Max Brightness
+initial: 254
+min: 0
+max: 254
+step: 1

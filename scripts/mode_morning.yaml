@@ -1,11 +1,19 @@
 sequence:
+  - service: input_select.select_option
+    data:
+      entity_id: input_select.mode
+      option: Morning
   - service: homeassistant.turn_on
     entity_id: group.nightime_security
+  - service: input_number.set_value
+    data:
+      entity_id: input_number.max_brightness
+      value: 255
   - service: light.turn_on
     entity_id:
       - light.cabinets_14
-    data:
-      brightness: 255
+    data_template:
+      brightness: "{{ states('input_number.max_brightness') | int }}"
   - service: media_player.turn_off
     entity_id:
       - media_player.master_bedroom_speakers
@@ -16,7 +24,3 @@ sequence:
       - media_player.kitchen_speakers
   - service: alarm_control_panel.alarm_disarm
     entity_id: alarm_control_panel.alarm
-  - service: input_select.select_option
-    data:
-      entity_id: input_select.mode
-      option: Morning

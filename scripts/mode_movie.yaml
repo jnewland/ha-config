@@ -3,6 +3,10 @@ sequence:
     entity_id: input_select.mode
     data:
       option: Movie
+  - service: input_number.set_value
+    data_template:
+      entity_id: input_number.max_brightness
+      value: 128
   - service: homeassistant.turn_off
     entity_id:
       - light.office_overhead_11
@@ -15,5 +19,5 @@ sequence:
       - light.office_chandelier_69
       - light.office_desk_lamp
       - light.floor_lamp
-    data:
-      brightness: 128
+    data_template:
+      brightness: "{{ states('input_number.max_brightness') | int }}"
