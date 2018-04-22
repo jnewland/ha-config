@@ -1,9 +1,7 @@
 sequence:
+  - condition: template
+    value_template: >
+      {{ states.input_select.mode.state != "Evening"  }}
   - service: homeassistant.turn_on
-    data_template:
-      entity_id: >
-        {%- if states.input_select.mode.state == "Evening" -%}
-        script.mode_evening
-        {%- else -%}
-        script.working
-        {%- endif -%}
+    data:
+      entity_id: script.working
