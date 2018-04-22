@@ -8,5 +8,5 @@ scene.sleeping:
   emulated_hue_hidden: false
 scene.morning:
   emulated_hue_hidden: false
-scene.movie:
+scene.evening:
   emulated_hue_hidden: false

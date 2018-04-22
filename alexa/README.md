@@ -6,7 +6,7 @@ The Echo devices in our house respond to basic "turn on" and "turn off" commands
 * Alexa, turn on the great room
 * Alexa, turn off the downstairs lights
 * Alexa, set the wine room to 50 percent
-* Alexa, turn on movie
+* Alexa, turn on evening
 * Alexa, turn on reading
 * Alexa, turn on sleeping.
 

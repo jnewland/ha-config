@@ -2,8 +2,8 @@ sequence:
   - service: homeassistant.turn_on
     data_template:
       entity_id: >
-        {%- if states.input_select.mode.state == "Movie" -%}
-        script.mode_movie
+        {%- if states.input_select.mode.state == "Evening" -%}
+        script.mode_evening
         {%- else -%}
         script.working
         {%- endif -%}
