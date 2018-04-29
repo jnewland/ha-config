@@ -1,3 +1,4 @@
+alias: max brightness
 trigger:
   platform: state
   entity_id: input_number.max_brightness
