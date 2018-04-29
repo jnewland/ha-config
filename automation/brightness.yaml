@@ -8,6 +8,7 @@ action:
     entity_id: |
       {%- for l in states.light if (
           l.entity_id not in states.group.ignore_brightness.attributes.entity_id and
+          not l.attributes.fixed_brightness and
           l.state == "on") -%}
         {{l.entity_id}}{% if not loop.last %}{{ ", " }}{% endif %}
       {%-endfor-%}

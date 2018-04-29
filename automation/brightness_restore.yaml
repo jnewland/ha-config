@@ -32,6 +32,7 @@ trigger:
     - light.master_mirror_35
     - light.master_nook_42
     - light.master_overhead_30
+    - light.master_patio_31
     - light.master_shower_34
     - light.master_toilet_62
     - light.master_windows_128
@@ -45,17 +46,18 @@ trigger:
     - light.pendants_51
     - light.powder_room_80
     - light.stairs_23
+    - light.wine_room_25
   from: 'off'
   to: 'on'
 condition:
   condition: template
   value_template: |
     {{ trigger.to_state.attributes.brightness | default(255) <
-      states('input_number.brightness') | int }}
+      trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
 action:
   service: light.turn_on
   data_template:
     entity_id: |
       {{ trigger.to_state.entity_id }}
     brightness: |
-      {{ states('input_number.brightness') | int }}
+      {{ trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}

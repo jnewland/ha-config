@@ -14,7 +14,6 @@ entities:
     state: 'on'
   light.master_patio_31:
     state: 'on'
-    brightness: 102
   media_player.master_bedroom_speakers:
     state: 'on'
   media_player.master_bathroom_speakers:

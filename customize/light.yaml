@@ -36,6 +36,10 @@ light.master_nook_42:
 light.master_overhead_30:
   emulated_hue_hidden: false
   notify_action: duck
+light.master_patio_31:
+  fixed_brightness: 102
+  emulated_hue_hidden: false
+  notify_action: duck
 light.master_shower_34:
   notify_action: duck
 light.master_toilet_62:
@@ -58,4 +62,5 @@ light.pendants_51:
 light.stairs_23:
   emulated_hue_hidden: false
 light.wine_room_25:
+  fixed_brightness: 102
   emulated_hue_hidden: false

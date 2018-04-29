@@ -5,7 +5,6 @@ entities:
 - light.front_porch_19
 - light.front_door_21
 - light.patio_29
-- light.master_patio_31
 - light.ac_125
 - light.atrium_door_123
 - light.garage_door_124
@@ -16,4 +15,3 @@ entities:
 - light.closet_blue_115
 - light.closet_red_116
 - light.closet_white_117
-- light.wine_room_25

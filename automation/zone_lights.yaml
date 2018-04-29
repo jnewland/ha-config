@@ -15,4 +15,4 @@ action:
     entity_id: |
       {{ states.zone[trigger.to_state.state].attributes.trigger_entity_id_on | default(states.zone[trigger.to_state.state].attributes.trigger_entity_id) | default('') }}
     brightness: |
-      {{ states('input_number.brightness') | int }}
+      {{ trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
