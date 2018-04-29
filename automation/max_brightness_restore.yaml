@@ -1,16 +1,62 @@
 alias: max brightness restore
 trigger:
   platform: state
-  entity_id: group.all_lights
+  ## Generate me with
+  # {%- for l in states.light if (l.entity_id not in states.group.ignore_max_brightness.attributes.entity_id) %}
+  # - {{l.entity_id}}
+  # {%- endfor-%}
+  entity_id:
+    - light.bedside_lamp_130
+    - light.chandelier_33
+    - light.closet_backlight_112
+    - light.desk_63
+    - light.desk_blue_67
+    - light.desk_brightness_64
+    - light.desk_green_66
+    - light.desk_red_65
+    - light.desk_white_68
+    - light.dining_room_table_52
+    - light.floor_lamp
+    - light.garage_hall_50
+    - light.great_hall_24
+    - light.guest_bath_43
+    - light.guest_hall_16
+    - light.guest_shower_44
+    - light.kitchen_18
+    - light.living_20
+    - light.living_room
+    - light.living_room_lamp_left
+    - light.living_room_lamp_right
+    - light.master_bath_overhead_36
+    - light.master_closet_32
+    - light.master_mirror_35
+    - light.master_nook_42
+    - light.master_overhead_30
+    - light.master_shower_34
+    - light.master_toilet_62
+    - light.master_windows_128
+    - light.music_room_118
+    - light.office
+    - light.office_chandelier_69
+    - light.office_closet
+    - light.office_desk_lamp
+    - light.office_overhead_11
+    - light.pantry_122
+    - light.pendants_51
+    - light.powder_room_80
+    - light.stairs_23
+    - light.wine_room_25
+  from: 'off'
+  on: 'on'
+condition:
+  condition: template
+  value_template: |
+    {{ l.attributes.brightness | default(255) <
+      states('input_number.max_brightness') | int }}
 action:
   service: light.turn_on
   data_template:
     entity_id: |
-      {%- for l in states.light if (
-          l.entity_id not in states.group.ignore_max_brightness.attributes.entity_id and
-          l.state == "on" and
-          l.attributes.brightness < (states('input_number.max_brightness') | int)) -%}
-        {{l.entity_id}}{% if not loop.last %}{{ ", " }}{% endif %}
-      {%-endfor-%}
+      {{ trigger.to_state.entity_id }}
     brightness: |
       {{ states('input_number.max_brightness') | int }}
