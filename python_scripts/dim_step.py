@@ -15,8 +15,8 @@ for entity_id in entity_ids.split(","):
 
     dim = (brightness + (int(change) * int(multiplier)))
 
-    if dim >= 254:
-        dim = 254
+    if dim >= 255:
+        dim = 255
 
     if dim <= 0:
         logger.info("Tuning off " + str(entity_id))
