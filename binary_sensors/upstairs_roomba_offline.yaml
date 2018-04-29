@@ -1,4 +1,5 @@
 platform: template
+name: Upstairs roomba offline
 sensors:
   roomba_offline:
     value_template: |
