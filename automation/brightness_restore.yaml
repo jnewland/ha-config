@@ -51,7 +51,7 @@ trigger:
 condition:
   condition: template
   value_template: |
-    {{ l.attributes.brightness | default(255) <
+    {{ trigger.to_state.attributes.brightness | default(255) <
       states('input_number.brightness') | int }}
 action:
   service: light.turn_on
