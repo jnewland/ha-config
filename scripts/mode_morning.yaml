@@ -12,8 +12,6 @@ sequence:
   - service: light.turn_on
     entity_id:
       - light.cabinets_14
-    data_template:
-      brightness: "{{ states('input_number.brightness') | int }}"
   - service: media_player.turn_off
     entity_id:
       - media_player.master_bedroom_speakers
