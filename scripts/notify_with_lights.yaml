@@ -1,5 +1,5 @@
 sequence:
-- service: script.duck_light
+- service: script.pulse_light
   data_template:
     entity_id: |
       {% for entity_id in states.group.all_lights.attributes.entity_id if (
