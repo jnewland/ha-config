@@ -1,7 +1,6 @@
 binary_sensor.stairs_motion_102:
   zone: Hall
-  trigger_entity_id: script.stairs_lights
-  trigger_entity_id_off: light.stairs_23
+  trigger_entity_id: light.stairs_23
 binary_sensor.closet_motion_61:
   zone: Master
   trigger_entity_id: light.master_closet_32
