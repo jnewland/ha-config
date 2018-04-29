@@ -1,6 +1,6 @@
-sensor.roomba_downstairs_battery:
+sensor.upstairs_roomba_battery:
   friendly_name: Battery
-sensor.roomba_downstairs_state:
+sensor.upstairs_roomba_state:
   friendly_name: Roomba
 sensor.haconfig_branch:
   friendly_name: Running branch

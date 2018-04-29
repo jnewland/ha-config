@@ -1,12 +1,12 @@
-switch.roomba_downstairs_clean:
+switch.upstairs_roomba_clean:
   friendly_name: Clean
   emulated_hue_hidden: false
   emulated_hue_name: Roomba
-switch.roomba_downstairs_dock:
+switch.upstairs_roomba_dock:
   friendly_name: Dock
   emulated_hue_hidden: false
   emulated_hue_name: Dock roomba
-switch.roomba_downstairs_find:
+switch.upstairs_roomba_find:
   friendly_name: Find
   emulated_hue_hidden: false
   emulated_hue_name: Find roomba

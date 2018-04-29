@@ -1,6 +1,6 @@
 platform: command_line
 switches:
-  roomba_downstairs_dock:
+  upstairs_roomba_dock:
     command_on: /config/bin/roomba dock
     command_off: /config/bin/roomba stop
     command_state: /config/bin/roomba status st_dock

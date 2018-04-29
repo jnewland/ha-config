@@ -35,13 +35,13 @@ action:
         {{ states.weather.dark_sky.attributes.hourly_forecast_summary }}
   - condition: template
     value_template: |
-      {{ not is_state("binary_sensor.roomba_on_dock", "on") }}
+      {{ not is_state("binary_sensor.upstairs_roomba_on_dock", "on") }}
   - service: notify.ios_jphone_x
     data_template:
       message: |
-        {% if is_state("binary_sensor.roomba_on_dock", "off") %}
-        The roomba's not on the dock, btw. Help a robot out?
+        {% if is_state("binary_sensor.upstairs_roomba_on_dock", "off") %}
+        The upstairs roomba's not on the dock, btw. Help a robot out?
         {% endif %}
-        {% if is_state("sensor.roomba_downstairs_state", "unavailable") %}
-        The roomba's adrift. Help a robot out?
+        {% if is_state("sensor.upstairs_roomba_state", "unavailable") %}
+        The upstairs roomba's adrift. Help a robot out?
         {% endif %}
