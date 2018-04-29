@@ -47,7 +47,7 @@ trigger:
     - light.stairs_23
     - light.wine_room_25
   from: 'off'
-  on: 'on'
+  to: 'on'
 condition:
   condition: template
   value_template: |
