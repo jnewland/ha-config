@@ -1,0 +1,16 @@
+alias: max brightness restore
+trigger:
+  platform: state
+  entity_id: group.all_lights
+action:
+  service: light.turn_on
+  data_template:
+    entity_id: |
+      {%- for l in states.light if (
+          l.entity_id not in states.group.ignore_max_brightness.attributes.entity_id and
+          l.state == "on" and
+          l.attributes.brightness < (states('input_number.max_brightness') | int)) -%}
+        {{l.entity_id}}{% if not loop.last %}{{ ", " }}{% endif %}
+      {%-endfor-%}
+    brightness: |
+      {{ states('input_number.max_brightness') | int }}
