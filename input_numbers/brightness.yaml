@@ -1,5 +1,5 @@
 name: Brightness
-initial: 254
+initial: 255
 min: 0
-max: 254
+max: 255
 step: 1
