@@ -1,8 +1,8 @@
-alias: max brightness restore
+alias: brightness restore
 trigger:
   platform: state
   ## Generate me with
-  # {%- for l in states.light if (l.entity_id not in states.group.ignore_max_brightness.attributes.entity_id) %}
+  # {%- for l in states.light if (l.entity_id not in states.group.ignore_brightness.attributes.entity_id) %}
   # - {{l.entity_id}}
   # {%- endfor-%}
   entity_id:
@@ -52,11 +52,11 @@ condition:
   condition: template
   value_template: |
     {{ l.attributes.brightness | default(255) <
-      states('input_number.max_brightness') | int }}
+      states('input_number.brightness') | int }}
 action:
   service: light.turn_on
   data_template:
     entity_id: |
       {{ trigger.to_state.entity_id }}
     brightness: |
-      {{ states('input_number.max_brightness') | int }}
+      {{ states('input_number.brightness') | int }}

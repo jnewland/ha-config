@@ -11,4 +11,4 @@ entities:
 - sensor.dark_sky_hourly_summary
 - sensor.alarm_sensors
 - persistent_notification.invalid_config
-- input_number.max_brightness
+- input_number.brightness

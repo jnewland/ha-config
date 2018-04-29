@@ -9,5 +9,5 @@ sequence:
       option: Party
   - service: input_number.set_value
     data:
-      entity_id: input_number.max_brightness
+      entity_id: input_number.brightness
       value: 255

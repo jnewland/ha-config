@@ -5,7 +5,7 @@ sequence:
       option: Sleeping
   - service: input_number.set_value
     data:
-      entity_id: input_number.max_brightness
+      entity_id: input_number.brightness
       value: 13
   - service: scene.turn_on
     data_template:

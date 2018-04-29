@@ -1,4 +1,4 @@
-name: Ignore max brightness
+name: Ignore brightness
 entities:
 - light.atrium_22
 - light.back_porch_46

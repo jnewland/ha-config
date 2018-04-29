@@ -5,7 +5,7 @@ sequence:
       option: Evening
   - service: input_number.set_value
     data_template:
-      entity_id: input_number.max_brightness
+      entity_id: input_number.brightness
       value: 128
   - service: homeassistant.turn_off
     entity_id:
