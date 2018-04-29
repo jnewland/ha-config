@@ -54,7 +54,7 @@ binary_sensor.front_gate_121:
   device_class: opening
   icon: mdi:gate
   zone: Outside
-binary_sensor.roomba_downstairs_bin_full:
+binary_sensor.upstairs_roomba_bin_full:
   friendly_name: Bin full
 binary_sensor.desk_camera:
   trigger_entity_id: light.desk_63

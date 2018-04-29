@@ -1,5 +1,0 @@
-platform: template
-sensors:
-  roomba_on_dock:
-    value_template: |
-      {{ "st_dock" == (states.sensor.roomba_downstaris_state | default(None)) }}

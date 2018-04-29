@@ -1,5 +1,5 @@
 platform: rest
-name: Roomba downstairs battery
+name: Upstairs roomba battery
 resource: !env_var THINKING_CLEANER_STATUS_URL
 unit_of_measurement: '%'
 value_template: |

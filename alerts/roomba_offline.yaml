@@ -1,5 +1,0 @@
-name: Roomba offline
-entity_id: binary_sensor.roomba_offline
-repeat: 30
-notifiers:
-- slack
