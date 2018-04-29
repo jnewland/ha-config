@@ -1,15 +1,9 @@
-switch.roomba_downstairs_clean:
-  friendly_name: Clean
-  emulated_hue_hidden: false
-  emulated_hue_name: Roomba
-switch.roomba_downstairs_dock:
-  friendly_name: Dock
-  emulated_hue_hidden: false
-  emulated_hue_name: Dock roomba
-switch.roomba_downstairs_find:
-  friendly_name: Find
-  emulated_hue_hidden: false
-  emulated_hue_name: Find roomba
+switch.upstairs_roomba_clean:
+  friendly_name: Clean upstairs
+switch.upstairs_roomba_dock:
+  friendly_name: Dock upstairs roomba
+switch.upstairs_roomba_find:
+  friendly_name: Find upstairs roomba
 switch.shuffle:
   emulated_hue_hidden: false
   icon: mdi:shuffle-variant

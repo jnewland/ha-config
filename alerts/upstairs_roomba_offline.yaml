@@ -1,0 +1,5 @@
+name: Upstairs roomba offline
+entity_id: binary_sensor.upstairs_roomba_offline
+repeat: 30
+notifiers:
+- slack
