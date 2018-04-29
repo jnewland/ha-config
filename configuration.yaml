@@ -55,3 +55,4 @@ weather:
   - platform: darksky
     api_key: !env_var FORECAST_API_KEY
 zone: !include zone.yaml
+vacuum: !include_dir_list vacuums

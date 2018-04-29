@@ -1,0 +1,5 @@
+name: downstairs roomba
+platform: roomba
+host: !env_var ROOMBA_IP
+username: !env_var ROOMBA_BLID
+password: !env_var ROOMBA_PASSWORD
