@@ -5,8 +5,6 @@ sequence:
         {%- if states.input_select.mode.state == "Sleeping" or
             states.input_select.mode.state == "Reading" -%}
         scene.living_night
-        {%- elif states.sun.sun.state == "below_horizon" -%}
-        scene.living_evening
         {%- else -%}
         scene.living_day
         {%- endif -%}

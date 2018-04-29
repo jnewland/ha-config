@@ -6,8 +6,6 @@ sequence:
       - light.office_overhead_11
       - light.office_chandelier_69
       - light.floor_lamp
-    data:
-      brightness: 255
   - service: light.turn_on
     entity_id:
       - light.closet_backlight_112

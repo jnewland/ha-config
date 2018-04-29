@@ -1,14 +1,10 @@
-name: 'Master Bathroom Full Blast'
+name: 'Master Bathroom Day'
 entities:
   light.master_bath_overhead_36:
     state: 'on'
-    brightness: 255
   light.master_shower_34:
     state: 'on'
-    brightness: 255
   light.master_mirror_35:
     state: 'on'
-    brightness: 255
   light.master_toilet_62:
     state: 'on'
-    brightness: 255

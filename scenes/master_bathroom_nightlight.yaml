@@ -8,4 +8,3 @@ entities:
     state: 'off'
   light.master_toilet_62:
     state: 'on'
-    brightness: 50

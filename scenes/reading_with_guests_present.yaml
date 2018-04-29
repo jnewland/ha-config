@@ -2,10 +2,8 @@ name: Reading with guests present
 entities:
   light.chandelier_33:
     state: 'on'
-    brightness: 76
   light.bedside_lamp_130:
     state: 'on'
-    brightness: 61
   group.music_room:
     state: 'off'
   group.downstairs_non_guest:
@@ -14,7 +12,6 @@ entities:
     state: 'off'
   light.master_nook_42:
     state: 'on'
-    brightness: 76
   light.master_patio_31:
     state: 'on'
     brightness: 102
