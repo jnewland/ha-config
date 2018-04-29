@@ -45,7 +45,6 @@ trigger:
     - light.pendants_51
     - light.powder_room_80
     - light.stairs_23
-    - light.wine_room_25
   from: 'off'
   to: 'on'
 condition:
