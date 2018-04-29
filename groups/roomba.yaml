@@ -2,6 +2,7 @@
 name: Roomba
 control: hidden
 entities:
+- vacuum.downstairs_roomba
 - switch.upstairs_roomba_clean
 - switch.upstairs_roomba_dock
 - switch.upstairs_roomba_find
