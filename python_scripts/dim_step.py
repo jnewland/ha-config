@@ -19,7 +19,7 @@ for entity_id in entity_ids.split(","):
         dim = 255
 
     if dim <= 0:
-        logger.info("Tuning off " + str(entity_id))
+        logger.info("Turning off " + str(entity_id))
         data = { "entity_id" : entity_id }
         hass.services.call("light", "turn_off", data)
     else:
