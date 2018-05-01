@@ -1,7 +1,7 @@
 sequence:
 - service: light.turn_on
   data_template:
-    entity_id: master_toilet_62
+    entity_id: light.master_toilet_62
     brightness: |
       {{ brightness | default(states('input_number.brightness') | int) }}
 - condition: template
