@@ -21,7 +21,7 @@ condition:
     {{ states.input_select.mode.state != "Away" }}
 action:
   service_template: |
-    {{ trigger.to_state.attributes.trigger_script | default('homeassistant.turn_on') }}
+    {{ trigger.to_state.attributes.trigger_service | default('light.turn_on') }}
   data_template:
     entity_id: |
       {{ trigger.to_state.attributes.trigger_entity_id_on | default(trigger.to_state.attributes.trigger_entity_id) | default('') }}
