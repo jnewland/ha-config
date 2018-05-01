@@ -31,7 +31,7 @@ sequence:
       {% endif %}
 - condition: template
   value_template: >
-    {{ states.input_boolean.guests.state != "on""  }}
+    {{ states.input_boolean.guests.state != "on" }}
 - service: alarm_control_panel.alarm_arm_home
   entity_id: alarm_control_panel.alarm
 - service: vacuum.turn_on
