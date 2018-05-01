@@ -1,18 +1,29 @@
 sequence:
-  - service: input_select.select_option
-    entity_id: input_select.mode
-    data:
-      option: Sleeping
-  - service: input_number.set_value
-    data:
-      entity_id: input_number.brightness
-      value: 13
-  - service: scene.turn_on
-    data_template:
-      entity_id: '
-        {% if states.input_boolean.guests.state == "on" %}
-        scene.sleeping_with_guests_present
-        {% else %}
-        scene.sleeping_without_guests_present
-        {% endif %}
-        '
+- service: input_select.select_option
+  entity_id: input_select.mode
+  data:
+    option: Sleeping
+- service: input_number.set_value
+  data:
+    entity_id: input_number.brightness
+    value: 13
+- service: homeassistant.turn_off
+  entity_id:
+  - light.master_patio_31
+  - group.speakers
+  - group.upstairs
+- service: light.turn_on
+  entity_id: group.nightime_security
+- service: light.turn_off
+  data_template:
+    entity_id: |
+      {% if states.input_boolean.guests.state == "on" %}
+      group.downstairs_non_guest
+      {% else %}
+      group.downstairs
+      {% endif %}
+- condition: template
+  value_template: >
+    {{ states.input_boolean.guests.state != "on""  }}
+- service: alarm_control_panel.alarm_arm_home
+  entity_id: alarm_control_panel.alarm

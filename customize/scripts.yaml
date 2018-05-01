@@ -4,7 +4,8 @@ script.mute:
   emulated_hue_hidden: false
 script.deploy_haconfig:
   friendly_name: Deploy
-script.working:
+script.office:
+  friendly_name: Working
   emulated_hue_hidden: false
 script.living:
   emulated_hue_hidden: false

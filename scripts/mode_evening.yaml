@@ -10,7 +10,3 @@ sequence:
   - service: homeassistant.turn_off
     entity_id:
       - light.office_overhead_11
-      - light.office_closet
-      - light.closet_backlight_112
-      - group.guest
-      - group.hall
