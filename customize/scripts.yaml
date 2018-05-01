@@ -10,3 +10,15 @@ script.office:
 script.living:
   emulated_hue_hidden: false
   emulated_hue_name: Cooking
+script.mode_away:
+  homebridge_visible: true
+  friendly_name: Away
+script.mode_party:
+  emulated_hue_hidden: false
+  emulated_hue_name: Party
+script.mode_reading:
+  emulated_hue_hidden: false
+  emulated_hue_name: Reading
+script.mode_sleeping:
+  emulated_hue_hidden: false
+  emulated_hue_name: Sleeping

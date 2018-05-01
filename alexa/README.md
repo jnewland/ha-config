@@ -1,6 +1,6 @@
 # Alexa
 
-The Echo devices in our house respond to basic "turn on" and "turn off" commands for [this set of devices, groups, and scenes](http://alexa.amazon.com/spa/index.html#smart-home). For example:
+The Echo devices in our house respond to basic "turn on" and "turn off" commands for [this set of devices and groups](http://alexa.amazon.com/spa/index.html#smart-home). For example:
 
 * Alexa, turn off the living room lights
 * Alexa, turn on the great room
