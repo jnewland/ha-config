@@ -1,5 +1,0 @@
-sequence:
-  - service: light.turn_on
-    entity_id: light.wine_room_25
-    data:
-      brightness: 102

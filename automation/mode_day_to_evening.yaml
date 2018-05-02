@@ -8,4 +8,4 @@ condition:
   state: Day
 action:
   - service: script.turn_on
-    entity_id: script.mode_movie
+    entity_id: script.mode_evening

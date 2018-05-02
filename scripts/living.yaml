@@ -1,12 +1,18 @@
 sequence:
-  - service: homeassistant.turn_on
-    data_template:
-      entity_id: >
-        {%- if states.input_select.mode.state == "Sleeping" or
-            states.input_select.mode.state == "Reading" -%}
-        scene.living_night
-        {%- elif states.sun.sun.state == "below_horizon" -%}
-        scene.living_evening
-        {%- else -%}
-        scene.living_day
-        {%- endif -%}
+- service: light.turn_on
+  data:
+    entity_id: light.cabinets_14
+- condition: template
+  value_template: >
+    {{ states.input_select.mode.state != "Sleeping"  }}
+- service: light.turn_on
+  data_template:
+    entity_id:
+      - light.dining_room_table_52
+      - light.kitchen_18
+      - light.living_20
+      - light.pendants_51
+      - light.living_room_lamp_right
+      - light.living_room_lamp_left
+    brightness: |
+      {{ brightness | default(states('input_number.brightness') | int) }}

@@ -1,13 +1,12 @@
 sequence:
-  - service: homeassistant.turn_on
-    entity_id:
-      - group.speakers
-      - group.all_lights
   - service: input_select.select_option
     entity_id: input_select.mode
     data:
-      option: Party
+      option: Evening
   - service: input_number.set_value
-    data:
+    data_template:
       entity_id: input_number.brightness
-      value: 255
+      value: 128
+  - service: homeassistant.turn_off
+    entity_id:
+      - light.office_overhead_11

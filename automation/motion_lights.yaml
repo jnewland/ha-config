@@ -20,7 +20,10 @@ condition:
   value_template: |
     {{ states.input_select.mode.state != "Away" }}
 action:
-  service: homeassistant.turn_on
+  service_template: |
+    {{ trigger.to_state.attributes.trigger_service | default('light.turn_on') }}
   data_template:
     entity_id: |
-      {{ trigger.to_state.attributes.trigger_entity_id_on | default(trigger.to_state.attributes.trigger_entity_id) }}
+      {{ trigger.to_state.attributes.trigger_entity_id_on | default(trigger.to_state.attributes.trigger_entity_id) | default('') }}
+    brightness: |
+      {{ trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}

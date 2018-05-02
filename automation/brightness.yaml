@@ -1,0 +1,16 @@
+alias: brightness
+trigger:
+  platform: state
+  entity_id: input_number.brightness
+action:
+  service: light.turn_on
+  data_template:
+    entity_id: |
+      {%- for l in states.light if (
+          l.entity_id not in states.group.ignore_brightness.attributes.entity_id and
+          not l.attributes.fixed_brightness and
+          l.state == "on") -%}
+        {{l.entity_id}}{% if not loop.last %}{{ ", " }}{% endif %}
+      {%-endfor-%}
+    brightness: |
+      {{ states('input_number.brightness') | int }}

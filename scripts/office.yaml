@@ -1,9 +1,20 @@
 sequence:
-  - service: homeassistant.turn_on
-    data_template:
-      entity_id: >
-        {%- if states.input_select.mode.state == "Movie" -%}
-        script.mode_movie
-        {%- else -%}
-        script.working
-        {%- endif -%}
+- service: light.turn_on
+  data_template:
+    entity_id:
+    - light.office_desk_lamp
+    - light.office_closet
+    - light.office_overhead_11
+    - light.office_chandelier_69
+    - light.floor_lamp
+    brightness: |
+      {{ brightness | default(states('input_number.brightness') | int) }}
+- condition: template
+  value_template: >
+    {{ states.input_select.mode.state != "Evening"  }}
+- service: light.turn_on
+  data_template:
+    entity_id:
+    - light.office_overhead_11
+    brightness: |
+      {{ brightness | default(states('input_number.brightness') | int) }}

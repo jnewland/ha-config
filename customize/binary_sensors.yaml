@@ -1,7 +1,6 @@
 binary_sensor.stairs_motion_102:
   zone: Hall
-  trigger_entity_id: script.stairs_lights
-  trigger_entity_id_off: light.stairs_23
+  trigger_entity_id: light.stairs_23
 binary_sensor.closet_motion_61:
   zone: Master
   trigger_entity_id: light.master_closet_32
@@ -15,19 +14,17 @@ binary_sensor.powder_room_motion_75:
   trigger_entity_id_off: group.powder_room
 binary_sensor.office_motion_82:
   zone: Office
-  trigger_entity_id: script.office
+  trigger_service: script.office
 binary_sensor.upstairs_motion_87:
   zone: Hall
-  trigger_entity_id: script.stairs_lights
-  trigger_entity_id_off: light.stairs_23
+  trigger_entity_id: light.stairs_23
 binary_sensor.master_bath_motion_37:
   zone: Master
-  trigger_entity_id_on: script.master_bath_lights
-  trigger_entity_id: group.master_bath
+  trigger_service: script.master_bath_lights
+  trigger_entity_id_off: group.master_bath
 binary_sensor.wine_room_motion_97:
   zone: Hall
-  trigger_entity_id_on: script.wine_room_motion
-  trigger_entity_id_off: light.wine_room_25
+  trigger_entity_id: light.wine_room_25
 binary_sensor.hall_motion_92:
   zone: Hall
   trigger_entity_id: group.hall_overhead
@@ -38,8 +35,8 @@ binary_sensor.music_room_motion_107:
 binary_sensor.living_room_motion:
   friendly_name: Living room motion
   zone: Living
-  trigger_entity_id_on: script.living
-  trigger_entity_id_off: scene.living_off
+  trigger_service: script.living
+  trigger_entity_id_off: group.great_room
 binary_sensor.entry_door:
   friendly_name: Entry door
   zone: Outside
