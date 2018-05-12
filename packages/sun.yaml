@@ -1,0 +1,36 @@
+automation:
+  - alias: Sunrise
+    trigger:
+      platform: sun
+      event: sunrise
+      offset: '+00:30:00'
+    action:
+      service: script.turn_on
+      entity_id: script.sunrise
+
+  - alias: Sunset
+    trigger:
+      platform: sun
+      event: sunset
+    action:
+      service: script.turn_on
+      entity_id: script.sunset
+
+script:
+  sunrise:
+    sequence:
+      - service: light.turn_off
+        entity_id: group.security
+      - service: notify.slack
+        data_template:
+          message: ":city_sunrise:"
+  sunset:
+    sequence:
+      - service: light.turn_on
+        entity_id: group.security
+      - service: notify.slack
+        data_template:
+          message: ":city_sunset:"
+      - service: notify.ios
+        data:
+          message: 'Check out the sunset!'

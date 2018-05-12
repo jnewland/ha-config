@@ -37,6 +37,7 @@ logger: !include logger.yaml
 map:
 media_player: !include media_player.yaml
 notify: !include notify.yaml
+packages: !include_dir_named packages
 prometheus: !include prometheus.yaml
 proximity: !include proximity.yaml
 python_script:

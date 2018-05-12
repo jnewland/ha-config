@@ -26,7 +26,6 @@ trigger:
     - device_tracker.katies_iphone
     - device_tracker.jphone_x
     - device_tracker.jesse_music_room
-    - sun.sun
     - binary_sensor.master_bath_motion_37
     - binary_sensor.master_ac_water_13
     - sensor.upstairs_roomba_state
@@ -87,8 +86,6 @@ action:
       } %}
       {% set entity_state = new_state.entity_id + "." + new_state.state %}
       {% set entity_state_emoji = {
-        "sun.sun.above_horizon":    ":sunrise:",
-        "sun.sun.below_horizon":    ":city_sunset:",
         "lock.front_door_12.locked":   ":lock:",
         "lock.front_door_12.unlocked": ":unlock:"
       } %}

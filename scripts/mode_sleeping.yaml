@@ -7,8 +7,6 @@ sequence:
   entity_id:
   - group.speakers
   - group.upstairs
-- service: light.turn_on
-  entity_id: group.nightime_security
 - service: light.turn_off
   data_template:
     entity_id: |
