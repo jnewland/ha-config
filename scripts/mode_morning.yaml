@@ -5,6 +5,8 @@ sequence:
       option: Morning
   - service: homeassistant.turn_on
     entity_id: group.nightime_security
+  - service: light.turn_off
+    entity_id: group.master
   - service: input_number.set_value
     data:
       entity_id: input_number.brightness
