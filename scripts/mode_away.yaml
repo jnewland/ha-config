@@ -3,8 +3,6 @@ sequence:
     entity_id:
       - group.indoor
       - group.group_speakers
-  - service: homeassistant.turn_on
-    entity_id: group.nightime_security
   - service: alarm_control_panel.alarm_arm_home
     entity_id: alarm_control_panel.alarm
   - service: input_select.select_option

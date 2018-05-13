@@ -4,6 +4,3 @@ entities:
 - light.music_room_118
 - light.desk_63
 - light.desk_white_68
-- binary_sensor.desk_camera
-- binary_sensor.music_room_motion_107
-- sensor.music_room_temp_108

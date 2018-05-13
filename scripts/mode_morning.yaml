@@ -3,8 +3,8 @@ sequence:
     data:
       entity_id: input_select.mode
       option: Morning
-  - service: homeassistant.turn_on
-    entity_id: group.nightime_security
+  - service: light.turn_off
+    entity_id: group.master
   - service: input_number.set_value
     data:
       entity_id: input_number.brightness
@@ -22,3 +22,21 @@ sequence:
       - media_player.kitchen_speakers
   - service: alarm_control_panel.alarm_disarm
     entity_id: alarm_control_panel.alarm
+  - condition: template
+    value_template: '{{ states.device_tracker.jphone_x.state != "not_home" }}'
+  - service: notify.ios_jphone_x
+    data_template:
+      message: |
+        {{ states.weather.dark_sky.attributes.hourly_forecast_summary }}
+  - condition: template
+    value_template: |
+      {{ not is_state("binary_sensor.upstairs_roomba_on_dock", "on") }}
+  - service: notify.ios_jphone_x
+    data_template:
+      message: |
+        {% if is_state("binary_sensor.upstairs_roomba_on_dock", "off") %}
+        The upstairs roomba's not on the dock, btw. Help a robot out?
+        {% endif %}
+        {% if is_state("sensor.upstairs_roomba_state", "unavailable") %}
+        The upstairs roomba's adrift. Help a robot out?
+        {% endif %}

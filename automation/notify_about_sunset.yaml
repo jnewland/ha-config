@@ -1,8 +1,0 @@
-alias: Notify about the sunset
-trigger:
-  platform: sun
-  event: sunset
-action:
-  service: notify.ios
-  data:
-    message: 'Check out the sunset!'
