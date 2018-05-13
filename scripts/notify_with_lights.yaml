@@ -1,9 +1,21 @@
 sequence:
+- condition: template
+  value_template: |
+    {{
+      states.light |
+      selectattr("state", "equalto", "on") |
+      selectattr("attributes.notify_action", "equalto", "duck") |
+      map(attribute="entity_id") |
+      list |
+      length > 0
+    }}
 - service: script.pulse_light
   data_template:
     entity_id: |
-      {%- for l in states.light if (
-          l.attributes.notify_action == "duck" and
-          l.state == "on") -%}
-        {{l.entity_id}}{% if not loop.last %}{{ ", " }}{% endif %}
-      {%-endfor-%}
+      {{
+        states.light |
+        selectattr("state", "equalto", "on") |
+        selectattr("attributes.notify_action", "equalto", "duck") |
+        map(attribute="entity_id") |
+        join(', ')
+      }}
