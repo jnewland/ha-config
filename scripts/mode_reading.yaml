@@ -11,7 +11,8 @@ sequence:
   data_template:
     entity_id:
     - light.chandelier_33
-    - light.bedside_lamp_130
+    - light.bedside_lamp_141
+    - light.master_nook_42
     - light.master_patio_31
     brightness: |
       {{ states('input_number.brightness') | int }}
@@ -19,7 +20,6 @@ sequence:
   data:
     entity_id:
     - light.master_overhead_30
-    - light.master_nook_42
     - light.stairs_23
 - service: light.turn_off
   data_template:
