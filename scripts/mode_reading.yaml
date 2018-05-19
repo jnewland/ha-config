@@ -11,7 +11,7 @@ sequence:
   data_template:
     entity_id:
     - light.chandelier_33
-    - light.bedside_lamp_130
+    - light.bedside_lamp_141
     - light.master_patio_31
     brightness: |
       {{ states('input_number.brightness') | int }}

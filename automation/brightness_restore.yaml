@@ -6,7 +6,7 @@ trigger:
   # - {{l.entity_id}}
   # {%- endfor-%}
   entity_id:
-    - light.bedside_lamp_130
+    - light.bedside_lamp_141
     - light.chandelier_33
     - light.closet_backlight_112
     - light.desk_63
