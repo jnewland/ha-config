@@ -13,6 +13,8 @@ sensor:
         {{ f.name }} is {{ f.state }}{{ f.attributes.unit_of_measurement }}
         {{- ", " if not loop.last -}}
         {%- endfor %}
+      # {{ states.sensor | selectattr("attributes.device_class", "equalto", "battery") | map(attribute="entity_id") | list }}
+      entity_id: ['sensor.closet_motion_61_battery_level', 'sensor.front_door_12_battery_level', 'sensor.front_gate_121_battery_level', 'sensor.garage_hall_motion_132_battery_level', 'sensor.great_hall_motion_131_battery_level', 'sensor.guest_bath_motion_70_battery_level', 'sensor.hall_motion_92_battery_level', 'sensor.master_ac_water_13_battery_level', 'sensor.master_bath_motion_37_battery_level', 'sensor.music_room_motion_107_battery_level', 'sensor.office_motion_82_battery_level', 'sensor.powder_room_motion_75_battery_level', 'sensor.stairs_motion_102_battery_level', 'sensor.upstairs_motion_87_battery_level', 'sensor.wine_room_motion_97_battery_level']
   # Generate the remaining template sensors with the following template
   #
   # {% for f in states.binary_sensor %}
