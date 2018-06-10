@@ -9,7 +9,7 @@ sensor:
   sensors:
     low_battery_summary:
       value_template: |
-        {% for f in states.sensor if (state_attr(f.entity_id, 'device_class') == "battery" and (f.state | int) < 30) -%}
+        {% for f in states.sensor if (state_attr(f.entity_id, 'device_class') == "battery" and (f.state | int) < 25) -%}
         {{ f.name }} is {{ f.state }}{{ f.attributes.unit_of_measurement }}
         {{- ", " if not loop.last -}}
         {%- endfor %}
