@@ -1,0 +1,10 @@
+sequence:
+  - condition: template
+    value_template: |
+      {{ is_state("binary_sensor.battery_replacement_needed", "on") }}
+  - condition: template
+    value_template: '{{ states.device_tracker.jphone_x.state != "not_home" }}'
+  - service: notify.ios_jphone_x
+    data_template:
+      message: |
+        {{ states.sensor.low_battery_summary.state }}

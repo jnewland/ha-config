@@ -1,5 +1,0 @@
-name: "AC water sensor battery is low"
-entity_id: binary_sensor.ac_sensor_battery_low
-repeat: 30
-notifiers:
-- slack
