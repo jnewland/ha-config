@@ -3,7 +3,7 @@ binary_sensor:
   sensors:
     battery_replacement_needed:
       value_template: |
-        {{ "%" in states.sensor.low_battery_summary }}
+        {{ "%" in states.sensor.low_battery_summary.state }}
 sensor:
 - platform: template
   sensors:
