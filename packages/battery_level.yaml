@@ -1,0 +1,112 @@
+binary_sensor:
+- platform: template
+  sensors:
+    battery_replacement_needed:
+      value_template: |
+        {{ "%" in states.sensor.low_battery_summary.state }}
+sensor:
+- platform: template
+  sensors:
+    low_battery_summary:
+      value_template: |
+        {% for f in states.sensor if (state_attr(f.entity_id, 'device_class') == "battery" and (f.state | int) < 25) -%}
+        {{ f.name }} is {{ f.state }}{{ f.attributes.unit_of_measurement }}
+        {{- ", " if not loop.last -}}
+        {%- endfor %}
+      # {{ states.sensor | selectattr("attributes.device_class", "equalto", "battery") | map(attribute="entity_id") | list }}
+      entity_id: ['sensor.closet_motion_61_battery_level', 'sensor.front_door_12_battery_level', 'sensor.front_gate_121_battery_level', 'sensor.garage_hall_motion_132_battery_level', 'sensor.great_hall_motion_131_battery_level', 'sensor.guest_bath_motion_70_battery_level', 'sensor.hall_motion_92_battery_level', 'sensor.master_ac_water_13_battery_level', 'sensor.master_bath_motion_37_battery_level', 'sensor.music_room_motion_107_battery_level', 'sensor.office_motion_82_battery_level', 'sensor.powder_room_motion_75_battery_level', 'sensor.stairs_motion_102_battery_level', 'sensor.upstairs_motion_87_battery_level', 'sensor.wine_room_motion_97_battery_level']
+  # Generate the remaining template sensors with the following template
+  #
+  # {% for f in states.binary_sensor %}
+  # {%- if state_attr(f.entity_id, 'battery_level') %}
+  # {{ f.object_id }}_battery_level:
+  #   friendly_name: {{ f.name }} battery level
+  #   device_class: battery
+  #   unit_of_measurement: '%'
+  #   value_template: {{ "'{{" }}states.{{ f.entity_id }}.attributes.battery_level{{ "}}'" }}
+  # {%- endif %}
+  # {%- endfor %}
+  # {% for f in states.lock %}
+  # {%- if state_attr(f.entity_id, 'battery_level') %}
+  # {{ f.object_id }}_battery_level:
+  #   friendly_name: {{ f.name }} battery level
+  #   device_class: battery
+  #   unit_of_measurement: '%'
+  #   value_template: {{ "'{{" }}states.{{ f.entity_id }}.attributes.battery_level{{ "}}'" }}
+  # {%- endif %}
+  # {%- endfor %}
+    closet_motion_61_battery_level:
+      friendly_name: closet motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.closet_motion_61.attributes.battery_level}}'
+    front_gate_121_battery_level:
+      friendly_name: front gate battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.front_gate_121.attributes.battery_level}}'
+    garage_hall_motion_132_battery_level:
+      friendly_name: garage hall motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.garage_hall_motion_132.attributes.battery_level}}'
+    great_hall_motion_131_battery_level:
+      friendly_name: great hall motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.great_hall_motion_131.attributes.battery_level}}'
+    guest_bath_motion_70_battery_level:
+      friendly_name: guest bath motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.guest_bath_motion_70.attributes.battery_level}}'
+    hall_motion_92_battery_level:
+      friendly_name: hall motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.hall_motion_92.attributes.battery_level}}'
+    master_ac_water_13_battery_level:
+      friendly_name: master ac water battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.master_ac_water_13.attributes.battery_level}}'
+    master_bath_motion_37_battery_level:
+      friendly_name: master bath motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.master_bath_motion_37.attributes.battery_level}}'
+    music_room_motion_107_battery_level:
+      friendly_name: music room motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.music_room_motion_107.attributes.battery_level}}'
+    office_motion_82_battery_level:
+      friendly_name: office motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.office_motion_82.attributes.battery_level}}'
+    powder_room_motion_75_battery_level:
+      friendly_name: powder room motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.powder_room_motion_75.attributes.battery_level}}'
+    stairs_motion_102_battery_level:
+      friendly_name: stairs motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.stairs_motion_102.attributes.battery_level}}'
+    upstairs_motion_87_battery_level:
+      friendly_name: upstairs motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.upstairs_motion_87.attributes.battery_level}}'
+    wine_room_motion_97_battery_level:
+      friendly_name: wine room motion battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.binary_sensor.wine_room_motion_97.attributes.battery_level}}'
+    front_door_12_battery_level:
+      friendly_name: Front Door battery level
+      device_class: battery
+      unit_of_measurement: '%'
+      value_template: '{{states.lock.front_door_12.attributes.battery_level}}'

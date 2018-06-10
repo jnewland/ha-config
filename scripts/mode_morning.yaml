@@ -28,6 +28,8 @@ sequence:
     data_template:
       message: |
         {{ states.weather.dark_sky.attributes.hourly_forecast_summary }}
+  - service: script.turn_on
+    entity_id: script.notify_about_battery_maintenance
   - condition: template
     value_template: |
       {{ not is_state("binary_sensor.upstairs_roomba_on_dock", "on") }}
