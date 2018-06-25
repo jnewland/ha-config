@@ -69,18 +69,12 @@ views:
 
 
   - tab_icon: mdi:home-assistant
-    name: Custom card example
+    name: Custom card
     cards:
       - type: "custom:wired-toggle-card"
-        title: Lots of Kitchen AC
+        title: Guests
         entities:
-            # It is totally possible to render duplicates.
-          - input_boolean.switch_ac_kitchen
-          - input_boolean.switch_ac_kitchen
-          - input_boolean.switch_ac_kitchen
-          - input_boolean.switch_ac_kitchen
-          - input_boolean.switch_ac_kitchen
-          - input_boolean.switch_ac_kitchen
+          - input_boolean.guests
 resources:
   - url: /local/wired-cards.js
     type: module
