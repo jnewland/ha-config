@@ -65,22 +65,7 @@ views:
     cards:
       - type: media-control
         title: Airfoil
-        entities:
-          - media_player.house_mpr6zhmaut
-          - media_player.house_computer
-          - media_player.house_back_porch
-          - media_player.house_jnewland
-          - media_player.house_mpr6zhmaut
-          - media_player.house_office
-      - type: media-control
-        title: House
-        entities:
-          - media_player.atrium_speakers
-          - media_player.kitchen_speakers
-          - media_player.living_speakers
-          - media_player.master_bathroom_speakers
-          - media_player.master_bedroom_speakers
-          - media_player.patio_speakers
+        entity_id: media_player.house_mpr6zhmaut
 
 
   - tab_icon: mdi:home-assistant
