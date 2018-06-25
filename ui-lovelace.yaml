@@ -38,6 +38,13 @@ views:
         card_config:
           title: Alerts
 
+      - type: entity-filter
+        filter:
+          - domain: persistent_notification
+        card_config:
+          title: Notifications
+
+
   - tab_icon: mdi:lightbulb
     name: Lights
     cards:
