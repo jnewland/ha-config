@@ -65,7 +65,7 @@ views:
     cards:
       - type: media-control
         title: Airfoil
-        entity_id: media_player.house_mpr6zhmaut
+        entity: media_player.house_mpr6zhmaut
 
 
   - tab_icon: mdi:home-assistant
