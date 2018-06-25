@@ -29,7 +29,7 @@ views:
           - persistent_notification.invalid_config
           - input_number.brightness
 
-      - type: weather-forcast
+      - type: weather-forecast
         entity: weather.dark_sky
 
       - type: entity-filter
@@ -38,25 +38,25 @@ views:
         card_config:
           title: Alerts
 
-  - tab_icon: mdi:lights
+  - tab_icon: mdi:lightbulb
     name: Lights
     cards:
       - type: entity-filter
         filter:
-          - domain: lights
+          - domain: light
             state: 'on'
         card_config:
-          title: On
+          title: 'On'
       - type: entity-filter
         filter:
-          - domain: lights
+          - domain: light
         card_config:
           title: All
 
   - name: Speakers
-    tab_icon: mdi:speakers
+    tab_icon: mdi:speaker
     cards:
-      - type: media_player
+      - type: media-control
         title: Airfoil
         entities:
           - media_player.house_mpr6zhmaut
@@ -65,7 +65,7 @@ views:
           - media_player.house_jnewland
           - media_player.house_mpr6zhmaut
           - media_player.house_office
-      - type: media_player
+      - type: media-control
         title: House
         entities:
           - media_player.atrium_speakers
