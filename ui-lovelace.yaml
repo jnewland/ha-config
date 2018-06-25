@@ -1,0 +1,94 @@
+name: Rancho de Newland
+views:
+  - name: Home
+    theme: dark-mode
+    cards:
+      - type: entities
+        entities:
+          - input_select.mode
+          - alarm_control_panel.alarm
+          - lock.front_door_12
+          - cover.garage
+          - cover.gate
+          - script.mute
+          - sensor.dark_sky_hourly_summary
+          - sensor.alarm_sensors
+          - persistent_notification.invalid_config
+          - input_number.brightness
+
+      - type: glance
+        entities:
+          - input_select.mode
+          - alarm_control_panel.alarm
+          - lock.front_door_12
+          - cover.garage
+          - cover.gate
+          - script.mute
+          - sensor.dark_sky_hourly_summary
+          - sensor.alarm_sensors
+          - persistent_notification.invalid_config
+          - input_number.brightness
+
+      - type: weather-forcast
+        entity: weather.dark_sky
+
+      - type: entity-filter
+        filter:
+          - domain: alert
+        card_config:
+          title: Alerts
+
+  - tab_icon: mdi:lights
+    name: Lights
+    cards:
+      - type: entity-filter
+        filter:
+          - domain: lights
+            state: 'on'
+        card_config:
+          title: On
+      - type: entity-filter
+        filter:
+          - domain: lights
+        card_config:
+          title: All
+
+  - name: Speakers
+    tab_icon: mdi:speakers
+    cards:
+      - type: media_player
+        title: Airfoil
+        entities:
+          - media_player.house_mpr6zhmaut
+          - media_player.house_computer
+          - media_player.house_back_porch
+          - media_player.house_jnewland
+          - media_player.house_mpr6zhmaut
+          - media_player.house_office
+      - type: media_player
+        title: House
+        entities:
+          - media_player.atrium_speakers
+          - media_player.kitchen_speakers
+          - media_player.living_speakers
+          - media_player.master_bathroom_speakers
+          - media_player.master_bedroom_speakers
+          - media_player.patio_speakers
+
+
+  - tab_icon: mdi:home-assistant
+    name: Custom card example
+    cards:
+      - type: "custom:wired-toggle-card"
+        title: Lots of Kitchen AC
+        entities:
+            # It is totally possible to render duplicates.
+          - input_boolean.switch_ac_kitchen
+          - input_boolean.switch_ac_kitchen
+          - input_boolean.switch_ac_kitchen
+          - input_boolean.switch_ac_kitchen
+          - input_boolean.switch_ac_kitchen
+          - input_boolean.switch_ac_kitchen
+resources:
+  - url: /local/wired-cards.js
+    type: module
