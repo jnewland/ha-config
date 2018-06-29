@@ -2,4 +2,3 @@
 entities:
 - sensor.christmas
 - weather.dark_sky
-- camera.radar
