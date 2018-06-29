@@ -7,3 +7,6 @@ sensor.haconfig_branch:
   icon: mdi:source-branch
 sensor.alarm_sensors:
   icon: mdi:radar
+sensor.christmas:
+  icon: mdi:pine-tree
+  friendly_name: ' '

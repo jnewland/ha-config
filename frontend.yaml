@@ -3,5 +3,7 @@ extra_html_url:
 themes:
   gray:
     primary-color: gray
+    paper-item-icon-color: darkgrey
   black:
     primary-color: black
+    paper-item-icon-color: darkgrey
