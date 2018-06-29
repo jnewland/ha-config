@@ -5,7 +5,7 @@ sensors:
     friendly_name: Alarm sensors
   christmas:
     value_template: |
-      {{ (( as_timestamp(strptime('2018-12-25' , "%Y-%m-%d")) - as_timestamp(now()) )/ (3600*24)) | int }} days
+      {{ (( as_timestamp(strptime('2018-12-25' , "%Y-%m-%d")) - as_timestamp(now()) )/ (3600*24)) | int }}
   dark_sky_temperature:
     unit_of_measurement: '°F'
     friendly_name: Current temperature
