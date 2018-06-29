@@ -23,7 +23,7 @@ discovery:
   - samsung_tv
 emulated_hue:
   expose_by_default: false
-frontend:
+frontend: !include frontend.yaml
 group: !include_dir_named groups
 history: !include history.yaml
 history_graph: !include_dir_named history_graphs
