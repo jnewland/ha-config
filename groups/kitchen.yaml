@@ -1,4 +1,5 @@
 ---
+name: ' '
 entities:
 - sensor.christmas
 - weather.dark_sky
