@@ -1,7 +1,7 @@
 extra_html_url:
   - /local/custom_ui/state-card-value-only.html
 themes:
-  default:
-    primary-color: grey
-  dark:
+  gray:
+    primary-color: gray
+  black:
     primary-color: black
