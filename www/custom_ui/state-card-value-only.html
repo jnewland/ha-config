@@ -1,44 +1,48 @@
-<dom-module id="state-card-value_only">
+<script>
+{
+  // show the version of your custom UI in the HA dev info panel (HA 0.66.0+):
+  const _NAME = 'Value only';
+  const _URL = 'https://home-assistant.io/developers/frontend_creating_custom_ui/';
+  const _VERSION = '20180628';
+
+  if (!window.CUSTOM_UI_LIST) window.CUSTOM_UI_LIST = [];
+  window.CUSTOM_UI_LIST.push({
+    name: _NAME,
+    url: _URL,
+    version: _VERSION
+  });
+}
+</script>
+<dom-module id='state-card-value-only'>
   <template>
-
-    <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
     <style>
-      .state {
-        @apply(--paper-font-body1);
-        color: var(--primary-text-color);
-        margin-left: 10px;
-        text-align: left;
-        line-height: 20px;
-      }
+
     </style>
-
-    <div class='horizontal left layout'>
-      <!--
-      <state-badge state-obj='[[stateObj]]'></state-badge>
-      -->
-      <div class='state'>[[computeStateDisplay(stateObj)]]</div>
-    </div>
-
+    <h3>[[_toStr(stateObj)]]</h3>
   </template>
 </dom-module>
 
 <script>
-Polymer({
-  is: 'state-card-value-only',
+class StateCardValueOnly extends Polymer.Element {
+  static get is() { return 'state-card-value-only'; }
 
-  properties: {
-    hass: {
-      type: Object,
-    },
+  static get properties() {
+    return {
+      // Home Assistant object
+      hass: Object,
+      // inDialog is true if shown as more-info-card
+      inDialog: {
+        type: Boolean,
+        value: false,
+      },
+      // includes state, config and more information of the entity
+      stateObj: Object,
+    };
+  }
 
-    stateObj: {
-      type: Object,
-    },
-  },
-
-  computeStateDisplay: function (stateObj) {
-    return window.hassUtil.computeStateState(stateObj);
-  },
-
-});
+  _toStr(obj) {
+    return JSON.stringify(obj);
+  }
+}
+customElements.define(StateCardValueOnly.is, StateCardValueOnly);
 </script>
