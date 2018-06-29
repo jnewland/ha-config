@@ -18,7 +18,7 @@
     <style>
 
     </style>
-    <h3>[[_toStr(stateObj)]]</h3>
+    <h3>[[stateObj.state]]</h3>
   </template>
 </dom-module>
 
@@ -38,10 +38,6 @@ class StateCardValueOnly extends Polymer.Element {
       // includes state, config and more information of the entity
       stateObj: Object,
     };
-  }
-
-  _toStr(obj) {
-    return JSON.stringify(obj);
   }
 }
 customElements.define(StateCardValueOnly.is, StateCardValueOnly);
