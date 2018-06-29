@@ -1,0 +1,44 @@
+<dom-module id="state-card-value_only">
+  <template>
+
+    <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+    <style>
+      .state {
+        @apply(--paper-font-body1);
+        color: var(--primary-text-color);
+        margin-left: 10px;
+        text-align: left;
+        line-height: 20px;
+      }
+    </style>
+
+    <div class='horizontal left layout'>
+      <!--
+      <state-badge state-obj='[[stateObj]]'></state-badge>
+      -->
+      <div class='state'>[[computeStateDisplay(stateObj)]]</div>
+    </div>
+
+  </template>
+</dom-module>
+
+<script>
+Polymer({
+  is: 'state-card-value_only',
+
+  properties: {
+    hass: {
+      type: Object,
+    },
+
+    stateObj: {
+      type: Object,
+    },
+  },
+
+  computeStateDisplay: function (stateObj) {
+    return window.hassUtil.computeStateState(stateObj);
+  },
+
+});
+</script>
