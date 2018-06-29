@@ -4,4 +4,4 @@ view: true
 icon: mdi:tablet
 entities:
 - group.kitchen
-- group.kitchen_speakers
+- group.kitchen_media
