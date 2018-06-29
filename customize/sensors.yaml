@@ -7,5 +7,3 @@ sensor.haconfig_branch:
   icon: mdi:source-branch
 sensor.alarm_sensors:
   icon: mdi:radar
-sensor.christmas:
-  custom_ui_state_card: state-card-value-only
