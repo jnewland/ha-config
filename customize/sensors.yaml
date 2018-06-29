@@ -8,4 +8,4 @@ sensor.haconfig_branch:
 sensor.alarm_sensors:
   icon: mdi:radar
 sensor.christmas:
-  custom_ui_state_card: value-only
+  custom_ui_state_card: state-card-value-only
