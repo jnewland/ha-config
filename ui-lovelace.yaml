@@ -4,6 +4,10 @@ views:
     view_icon: mdi:home
     theme: dark-mode
     cards:
+      - type: entities
+        entities:
+          - sensor.christmas
+
       - type: picture-glance
         image: http://wwc.instacam.com/instacamimg/UTAUS/UTAUS_l.jpg
         entities:
@@ -12,12 +16,10 @@ views:
           - lock.front_door_12
           - cover.garage
           - cover.gate
-          - script.mute
           - input_number.brightness
 
-      - type: entities
-        entities:
-          - sensor.christmas
+      - type: weather-forecast
+        entity: weather.dark_sky
 
       - type: media-control
         entity: media_player.house
@@ -30,15 +32,6 @@ views:
           - media_player.house_mpr6zhmaut
           - media_player.house_back_porch
 
-      - type: weather-forecast
-        entity: weather.dark_sky
-
-      - type: entity-filter
-        filter:
-          - domain: alert
-        card_config:
-          title: Alerts
-#
 #   - tab_icon: mdi:home-assistant
 #     name: Custom card
 #     cards:
