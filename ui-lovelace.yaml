@@ -4,6 +4,13 @@ views:
     view_icon: mdi:home
     theme: dark-mode
     cards:
+      - type: weather-forecast
+        entity: weather.dark_sky
+
+      - type: entities
+        entities:
+          - sensor.christmas
+
       - type: picture-glance
         image: http://wwc.instacam.com/instacamimg/UTAUS/UTAUS_l.jpg
         entities:
@@ -16,13 +23,6 @@ views:
 
       - type: camera-preview
         entity: camera.front_yard_left
-
-      - type: entities
-        entities:
-          - sensor.christmas
-
-      - type: weather-forecast
-        entity: weather.dark_sky
 
       - type: media-control
         entity: media_player.house
