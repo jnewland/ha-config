@@ -57,10 +57,10 @@ views:
   - tab_icon: mdi:home-assistant
     name: Custom card
     cards:
-      - type: "custom:wired-toggle-card"
-        title: Guests
+      - type: "custom:big-state-card"
+        title: ''
         entities:
-          - input_boolean.guests
+          - sensor.christmas
 resources:
-  - url: /local/wired-cards.js
+  - url: /local/big-state-card.js
     type: module
