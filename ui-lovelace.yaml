@@ -32,6 +32,16 @@ views:
           - media_player.house_mpr6zhmaut
           - media_player.house_back_porch
 
+      - type: entities
+        entities:
+          - light.cabinets_14
+          - light.dining_room_table_52
+          - light.kitchen_18
+          - light.living_20
+          - light.pendants_51
+          - light.living_room_lamp_right
+          - light.living_room_lamp_left
+
 #   - tab_icon: mdi:home-assistant
 #     name: Custom card
 #     cards:
