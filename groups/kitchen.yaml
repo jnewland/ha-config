@@ -1,0 +1,6 @@
+---
+name: ' '
+entities:
+- sensor.christmas
+- weather.dark_sky
+- media_player.house
