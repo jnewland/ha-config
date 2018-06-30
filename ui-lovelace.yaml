@@ -38,14 +38,14 @@ views:
           - domain: alert
         card_config:
           title: Alerts
-
-  - tab_icon: mdi:home-assistant
-    name: Custom card
-    cards:
-      - type: "custom:big-state-card"
-        title: ''
-        entities:
-          - sensor.christmas
-resources:
-  - url: /local/big-state-card.js
-    type: module
+#
+#   - tab_icon: mdi:home-assistant
+#     name: Custom card
+#     cards:
+#       - type: "custom:big-state-card"
+#         title: ''
+#         entities:
+#           - sensor.christmas
+# resources:
+#   - url: /local/big-state-card.js
+#     type: module
