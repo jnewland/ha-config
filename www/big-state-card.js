@@ -21,6 +21,10 @@ class BigStateCard extends HTMLElement {
   getCardSize () {
     return 3
   }
+
+  setConfig (config) {
+    this._config = config
+  }
 }
 
 customElements.define('big-state-card', BigStateCard)
