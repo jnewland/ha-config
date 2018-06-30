@@ -19,7 +19,7 @@ views:
         entities:
           - sensor.christmas
 
-      - type: media-alarm_control_panel
+      - type: media-control
         entity: media_player.house
 
       - type: glance
