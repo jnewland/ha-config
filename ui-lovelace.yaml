@@ -27,14 +27,6 @@ views:
       - type: media-control
         entity: media_player.house
 
-      - type: entity-filter
-        filter:
-          - domain: device_tracker
-            state: 'home'
-        card: glance
-        # card_config:
-        #   title: People at home
-
       - type: glance
         entities:
           - media_player.atrium_speakers
