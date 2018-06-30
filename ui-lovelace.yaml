@@ -1,9 +1,11 @@
 name: Rancho de Newland
 views:
   - name: Home
+    view_icon: mdi:home
     theme: dark-mode
     cards:
-      - type: glance
+      - type: picture-glance
+        image: http://wwc.instacam.com/instacamimg/UTAUS/UTAUS_l.jpg
         entities:
           - input_select.mode
           - alarm_control_panel.alarm
@@ -13,21 +15,20 @@ views:
           - script.mute
           - input_number.brightness
 
+      - type: entities
+        entities:
+          - sensor.christmas
+
+      - type: media-alarm_control_panel
+        entity: media_player.house
+
       - type: glance
         entities:
-          - media_player.house
-          - media_player.house_mpr6zhmaut
-          - media_player.house_computer
-          - media_player.house_back_porch
-          - media_player.house_jnewland
-          - media_player.house_mpr6zhmaut
-          - media_player.house_office
           - media_player.atrium_speakers
           - media_player.kitchen_speakers
           - media_player.living_speakers
-          - media_player.master_bathroom_speakers
-          - media_player.master_bedroom_speakers
-          - media_player.patio_speakers
+          - media_player.house_mpr6zhmaut
+          - media_player.house_back_porch
 
       - type: weather-forecast
         entity: weather.dark_sky
@@ -37,13 +38,6 @@ views:
           - domain: alert
         card_config:
           title: Alerts
-
-      - type: entity-filter
-        filter:
-          - domain: persistent_notification
-        card_config:
-          title: Notifications
-
 
   - tab_icon: mdi:lightbulb
     name: Lights
@@ -59,14 +53,6 @@ views:
           - domain: light
         card_config:
           title: All
-
-  - name: Speakers
-    tab_icon: mdi:speaker
-    cards:
-      - type: media-control
-        title: Airfoil
-        entity: media_player.house_mpr6zhmaut
-
 
   - tab_icon: mdi:home-assistant
     name: Custom card
