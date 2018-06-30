@@ -39,21 +39,6 @@ views:
         card_config:
           title: Alerts
 
-  - tab_icon: mdi:lightbulb
-    name: Lights
-    cards:
-      - type: entity-filter
-        filter:
-          - domain: light
-            state: 'on'
-        card_config:
-          title: 'On'
-      - type: entity-filter
-        filter:
-          - domain: light
-        card_config:
-          title: All
-
   - tab_icon: mdi:home-assistant
     name: Custom card
     cards:
