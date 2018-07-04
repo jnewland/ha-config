@@ -1,7 +1,7 @@
 name: Rancho de Newland
 views:
-  - name: Home
-    view_icon: mdi:home
+  - title: Home
+    icon: mdi:home
     theme: dark-mode
     cards:
       - type: entities
@@ -36,7 +36,7 @@ views:
           - media_player.house_back_porch
 
 #   - tab_icon: mdi:home-assistant
-#     name: Custom card
+#     title: Custom card
 #     cards:
 #       - type: "custom:big-state-card"
 #         title: ''
