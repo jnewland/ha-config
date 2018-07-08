@@ -4,7 +4,9 @@ light.back_porch_46:
   emulated_hue_hidden: false
 light.cabinets_14:
   emulated_hue_hidden: false
-light.chandelier_33:
+light.chandelier_154:
+  emulated_hue_hidden: false
+light.chandelier_lamp_33:
   emulated_hue_hidden: false
 light.dining_room_table_52:
   brightness_step: 192
