@@ -42,3 +42,10 @@ sequence:
         {% if is_state("sensor.upstairs_roomba_state", "unavailable") %}
         The upstairs roomba's adrift. Help a robot out?
         {% endif %}
+        {% if is_state_attr("vacuum.downstairs_roomba", "status", Charging) %}
+        {% if is_state_attr("vacuum.downstairs_roomba", "bin_full", True) %}
+        The downstairs roomba's bin is full. Help a robot out?
+        {% endif %}
+        {% else %}
+        The downstairs roomba's not on the dock. Help a robot out?
+        {% endif %}
