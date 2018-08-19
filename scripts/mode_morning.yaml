@@ -51,7 +51,9 @@ sequence:
       {% endif %}
 - service: climate.set_temperature
   entity_id:  climate.upstairs_28
-  temperature: 74
+  data:
+    temperature: 74
 - service: climate.set_fan_mode
   entity_id:  climate.upstairs_28
-  fan_mode: Auto
+  data:
+    fan_mode: Auto
