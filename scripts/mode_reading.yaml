@@ -40,3 +40,6 @@ sequence:
 - service: climate.set_temperature
   entity_id:  climate.upstairs_28
   temperature: 72
+- service: climate.set_fan_mode
+  entity_id:  climate.upstairs_28
+  fan_mode: On
