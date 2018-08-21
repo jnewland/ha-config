@@ -37,3 +37,11 @@ sequence:
   entity_id: alarm_control_panel.alarm
 - service: vacuum.turn_on
   entity_id: vacuum.downstairs_roomba
+- service: climate.set_temperature
+  entity_id:  climate.upstairs_28
+  data:
+    temperature: 72
+- service: climate.set_fan_mode
+  entity_id:  climate.upstairs_28
+  data:
+    fan_mode: On
