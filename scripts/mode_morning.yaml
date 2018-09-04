@@ -11,15 +11,8 @@ sequence:
     value: 255
 - service: light.turn_on
   entity_id:
+    - group.speakers
     - light.cabinets_14
-- service: media_player.turn_off
-  entity_id:
-    - media_player.master_bedroom_speakers
-    - media_player.master_bathroom_speakers
-- service: media_player.turn_on
-  entity_id:
-    - media_player.living_speakers
-    - media_player.kitchen_speakers
 - service: alarm_control_panel.alarm_disarm
   entity_id: alarm_control_panel.alarm
 - condition: template

@@ -2,6 +2,9 @@
 view: true
 icon: mdi:speaker
 entities:
-- media_player.house
-- group.house_speakers
-- group.airfoil_speakers
+- media_player.atrium_speakers
+- media_player.kitchen_speakers
+- media_player.living_speakers
+- media_player.master_bathroom_speakers
+- media_player.master_bedroom_speakers
+- media_player.patio_speakers
