@@ -3,4 +3,8 @@ control: hidden
 entities:
 - light.music_room_118
 - light.desk_63
+- light.desk_brightness_64
+- light.desk_blue_67
+- light.desk_green_66
+- light.desk_red_65
 - light.desk_white_68
