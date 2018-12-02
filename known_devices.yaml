@@ -20,3 +20,11 @@ motion:
   name: motion
   hide_if_away: true
   track: true
+
+jesses_ipad:
+  hide_if_away: false
+  icon:
+  mac:
+  name: jesses ipad
+  picture: https://github.com/jnewland.png
+  track: true
