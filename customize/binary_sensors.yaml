@@ -32,12 +32,7 @@ binary_sensor.music_room_motion_107:
   friendly_name: music room motion
   zone: Music room
   trigger_entity_id: light.music_room_118
-binary_sensor.living_room_motion:
-  friendly_name: Living room motion
-  zone: Living
-  trigger_service: script.living
-  trigger_entity_id_off: group.great_room
-binary_sensor.kitchen_motion_160:
+binary_sensor.great_room_occupied:
   zone: Living
   trigger_service: script.living
   trigger_entity_id_off: group.great_room
