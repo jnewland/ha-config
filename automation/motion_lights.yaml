@@ -11,7 +11,7 @@ trigger:
   - binary_sensor.wine_room_motion_97
   - binary_sensor.hall_motion_92
   - binary_sensor.music_room_motion_107
-  - binary_sensor.living_room_motion
+  - binary_sensor.great_room_occupied
   - binary_sensor.office_motion_82
   - binary_sensor.desk_camera
   - binary_sensor.kitchen_motion_160
