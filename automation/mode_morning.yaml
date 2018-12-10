@@ -1,6 +1,10 @@
 alias: Morning mode
 trigger:
   - platform: state
+    entity_id: binary_sensor.closet_motion_61
+    from: 'off'
+    to: 'on'
+  - platform: state
     entity_id: binary_sensor.master_bath_motion_37
     from: 'off'
     to: 'on'
