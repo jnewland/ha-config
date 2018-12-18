@@ -48,6 +48,8 @@ light.master_toilet_62:
   notify_action: duck
 light.music_room_118:
   notify_action: duck
+light.desk_63:
+  emulated_hue_hidden: false
 light.office_chandelier_69:
   notify_action: duck
 light.office_desk_lamp:
