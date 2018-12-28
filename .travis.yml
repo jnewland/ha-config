@@ -30,8 +30,6 @@ env:
     ROOMBA_IP="0.0.0.0" ROOMBA_BLID="" ROOMBA_PASSWORD=""
     ROUTER_LINK=http://example.com SELF_LINK=http://example.com SLACK_API_KEY="" SMOKEPING_LINK=http://example.com
     SSL_CERTIFICATE=/tmp/cert.pem SSL_KEY=/tmp/key.pem TRUSTED_NETWORK_1=0.0.0.0/0
-    THINKING_CLEANER_DOMAIN=example.com THINKING_CLEANER_STATUS_URL=http://example.com/status.json
-    THINKING_CLEANER_FULL_STATUS_URL=http://example.com/full_status.json
     TRUSTED_NETWORK_2=0.0.0.0/0 TRUSTED_NETWORK_3=0.0.0.0/0 UNIFI_IP=0.0.0.0 UNIFI_USERNAME=foo UNIFI_PASSWORD=bar
     UNIFI_PORT=8443 VERA_LINK=http://example.com VERA_URL=http://example.com VIRTUAL_HOST=example.com
     VIRTUAL_NETWORK="" VIRTUAL_PORT=""

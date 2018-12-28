@@ -1,9 +1,0 @@
-platform: rest
-name: Upstairs roomba state
-resource: !env_var THINKING_CLEANER_STATUS_URL
-value_template: |
-  {%- if value_json -%}
-  {{ value_json.status.cleaner_state }}
-  {%- else -%}
-  st_off
-  {%- endif -%}

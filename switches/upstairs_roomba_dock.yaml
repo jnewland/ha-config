@@ -1,6 +1,0 @@
-platform: command_line
-switches:
-  upstairs_roomba_dock:
-    command_on: /config/bin/roomba dock
-    command_off: /config/bin/roomba stop
-    command_state: /config/bin/roomba status _base

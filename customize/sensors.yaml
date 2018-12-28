@@ -1,7 +1,3 @@
-sensor.upstairs_roomba_battery:
-  friendly_name: Upstairs roomba battery
-sensor.upstairs_roomba_state:
-  friendly_name: Upstairs roomba
 sensor.haconfig_branch:
   friendly_name: Running branch
   icon: mdi:source-branch

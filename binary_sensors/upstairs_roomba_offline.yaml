@@ -1,6 +1,0 @@
-platform: template
-name: Upstairs roomba offline
-sensors:
-  roomba_offline:
-    value_template: |
-      {{ is_state("sensor.upstairs_roomba_state", "unavailable") }}
