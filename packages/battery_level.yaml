@@ -14,7 +14,7 @@ sensor:
         {{- ", " if not loop.last -}}
         {%- endfor %}
       # {{ states.sensor | selectattr("attributes.device_class", "equalto", "battery") | map(attribute="entity_id") | list }}
-      entity_id: ['sensor.closet_motion_61_battery_level', 'sensor.front_door_12_battery_level', 'sensor.front_gate_121_battery_level', 'sensor.garage_hall_motion_132_battery_level', 'sensor.great_hall_motion_131_battery_level', 'sensor.guest_bath_motion_70_battery_level', 'sensor.hall_motion_92_battery_level', 'sensor.master_ac_water_13_battery_level', 'sensor.master_bath_motion_37_battery_level', 'sensor.music_room_motion_107_battery_level', 'sensor.office_motion_82_battery_level', 'sensor.powder_room_motion_75_battery_level', 'sensor.stairs_motion_102_battery_level', 'sensor.upstairs_motion_87_battery_level', 'sensor.wine_room_motion_97_battery_level']
+      entity_id: ['sensor.closet_motion_61_battery_level', 'sensor.front_door_12_battery_level', 'sensor.front_gate_121_battery_level', 'sensor.garage_hall_motion_132_battery_level', 'sensor.great_hall_motion_131_battery_level', 'sensor.guest_bath_motion_70_battery_level', 'sensor.kitchen_motion_160_battery_level', 'sensor.master_ac_water_13_battery_level', 'sensor.master_bath_motion_192_battery_level', 'sensor.music_room_motion_107_battery_level', 'sensor.office_motion_82_battery_level', 'sensor.powder_room_motion_75_battery_level', 'sensor.stairs_motion_102_battery_level', 'sensor.upstairs_motion_87_battery_level', 'sensor.wine_room_motion_97_battery_level']
   # Generate the remaining template sensors with the following template
   #
   # {% for f in states.binary_sensor %}
@@ -60,21 +60,21 @@ sensor:
       device_class: battery
       unit_of_measurement: '%'
       value_template: '{{states.binary_sensor.guest_bath_motion_70.attributes.battery_level}}'
-    hall_motion_92_battery_level:
-      friendly_name: hall motion battery level
+    kitchen_motion_160_battery_level:
+      friendly_name: kitchen motion battery level
       device_class: battery
       unit_of_measurement: '%'
-      value_template: '{{states.binary_sensor.hall_motion_92.attributes.battery_level}}'
+      value_template: '{{states.binary_sensor.kitchen_motion_160.attributes.battery_level}}'
     master_ac_water_13_battery_level:
       friendly_name: master ac water battery level
       device_class: battery
       unit_of_measurement: '%'
       value_template: '{{states.binary_sensor.master_ac_water_13.attributes.battery_level}}'
-    master_bath_motion_37_battery_level:
+    master_bath_motion_192_battery_level:
       friendly_name: master bath motion battery level
       device_class: battery
       unit_of_measurement: '%'
-      value_template: '{{states.binary_sensor.master_bath_motion_37.attributes.battery_level}}'
+      value_template: '{{states.binary_sensor.master_bath_motion_192.attributes.battery_level}}'
     music_room_motion_107_battery_level:
       friendly_name: music room motion battery level
       device_class: battery

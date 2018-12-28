@@ -2,7 +2,7 @@ default: info
 logs:
   requests.packages.urllib3.connectionpool: critical
   homeassistant.components.media_player: warn
-  homeassistant.components.light: debug
+  homeassistant.components.light: info
   homeassistant.components.switch: warn
   homeassistant.components.sensor: warn
   homeassistant.components.http: warn
@@ -12,3 +12,4 @@ logs:
   pyvera.subscribe: warn
   homeassistant.components.cover.myq: debug
   homeassistant.components.alexa: debug
+  roomba.roomba.Roomba: warn
