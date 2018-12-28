@@ -9,7 +9,7 @@ trigger:
     - binary_sensor.garage
     - binary_sensor.gate
     - alarm_control_panel.alarm
-    - automation.notify_about_gate
+    - automation.gate_bell
     - binary_sensor.stairs_motion_102
     - binary_sensor.closet_motion_61
     - binary_sensor.guest_bath_motion_70
