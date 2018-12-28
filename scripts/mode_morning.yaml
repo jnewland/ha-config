@@ -33,10 +33,10 @@ sequence:
       {% else %}
       The downstairs roomba's not on the dock. Help a robot out?
       {% endif %}
-- service: climate.set_temperature
-  entity_id:  climate.upstairs_28
-  data:
-    temperature: 74
+# - service: climate.set_temperature
+#   entity_id:  climate.upstairs_28
+#   data:
+#     temperature: 74
 - service: climate.set_fan_mode
   entity_id:  climate.upstairs_28
   data:
