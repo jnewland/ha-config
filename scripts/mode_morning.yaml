@@ -23,18 +23,9 @@ sequence:
       {{ states.weather.dark_sky.attributes.hourly_forecast_summary }}
 - service: script.turn_on
   entity_id: script.notify_about_battery_maintenance
-- condition: template
-  value_template: |
-    {{ not is_state("binary_sensor.upstairs_roomba_on_dock", "on") }}
 - service: notify.ios_jphone_x
   data_template:
     message: |
-      {% if is_state("binary_sensor.upstairs_roomba_on_dock", "off") %}
-      The upstairs roomba's not on the dock, btw. Help a robot out?
-      {% endif %}
-      {% if is_state("sensor.upstairs_roomba_state", "unavailable") %}
-      The upstairs roomba's adrift. Help a robot out?
-      {% endif %}
       {% if is_state_attr("vacuum.downstairs_roomba", "status", Charging) %}
       {% if is_state_attr("vacuum.downstairs_roomba", "bin_full", True) %}
       The downstairs roomba's bin is full. Help a robot out?
@@ -42,10 +33,10 @@ sequence:
       {% else %}
       The downstairs roomba's not on the dock. Help a robot out?
       {% endif %}
-- service: climate.set_temperature
-  entity_id:  climate.upstairs_28
-  data:
-    temperature: 74
+# - service: climate.set_temperature
+#   entity_id:  climate.upstairs_28
+#   data:
+#     temperature: 74
 - service: climate.set_fan_mode
   entity_id:  climate.upstairs_28
   data:
