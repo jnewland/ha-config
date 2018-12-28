@@ -1,5 +1,2 @@
-switch.shuffle:
-  emulated_hue_hidden: false
-  icon: mdi:shuffle-variant
 switch.fountain_26:
   homebridge_visible: true
