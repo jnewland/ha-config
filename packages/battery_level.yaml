@@ -60,11 +60,6 @@ sensor:
       device_class: battery
       unit_of_measurement: '%'
       value_template: '{{states.binary_sensor.guest_bath_motion_70.attributes.battery_level}}'
-    hall_motion_92_battery_level:
-      friendly_name: hall motion battery level
-      device_class: battery
-      unit_of_measurement: '%'
-      value_template: '{{states.binary_sensor.hall_motion_92.attributes.battery_level}}'
     kitchen_motion_160_battery_level:
       friendly_name: kitchen motion battery level
       device_class: battery
