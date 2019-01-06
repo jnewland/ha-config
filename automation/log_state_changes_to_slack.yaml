@@ -27,7 +27,7 @@ trigger:
     - device_tracker.katies_iphone
     - device_tracker.jphone_x
     - device_tracker.jesse_music_room
-    - binary_sensor.master_bath_motion_192
+    - binary_sensor.master_bath_motion_200
     - binary_sensor.master_ac_water_13
     - cover.garage
     - cover.gate
