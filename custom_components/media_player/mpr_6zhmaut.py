@@ -19,6 +19,7 @@ from homeassistant.components.media_player import (
 from homeassistant.components.media_player.const import (
     SUPPORT_VOLUME_SET, SUPPORT_TURN_ON, SUPPORT_TURN_OFF,
     SUPPORT_VOLUME_MUTE, SUPPORT_SELECT_SOURCE)
+import homeassistant.helpers.config_validation as cv
 
 _LOGGER = logging.getLogger(__name__)
 logging.getLogger("requests").setLevel(logging.WARNING)
