@@ -9,6 +9,7 @@ https://github.com/jnewland/mpr-6zhmaut-api
 """
 import logging
 import requests
+import voluptuous as vol
 
 from homeassistant.const import (
     CONF_HOST, CONF_NAME, CONF_PORT, CONF_ZONE,
