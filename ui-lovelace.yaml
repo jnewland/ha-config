@@ -64,6 +64,56 @@ views:
         entities:
         - light.music_room_118
         - light.desk_63
+  - title: Lights
+    icon: mdi:lightbulb
+    cards:
+    - type: custom:monster-card
+      show_empty: false
+      card:
+        type: glance
+        title: On
+      filter:
+        include:
+          - domain: light
+        exclude:
+          - state: 'off'
+          - state: 'unavailable'
+    - type: custom:monster-card
+      show_empty: false
+      card:
+        type: glance
+        title: Off
+      filter:
+        include:
+          - domain: light
+        exclude:
+          - state: 'on'
+  - title: Batteries
+    icon: mdi:battery
+    cards:
+    - type: sensor
+      entity: sensor.jphone_x_battery_level
+    - type: sensor
+      entity: sensor.katie_s_iphone_battery_level
+    - type: custom:entity-attributes-card
+      filter:
+        include:
+          # ahh i wish this could be a wildcard or a monster card
+          - switch.closet_motion_61.battery_level
+          - switch.front_door_12.battery_level
+          - switch.front_gate_121.battery_level
+          - switch.garage_hall_motion_132.battery_level
+          - switch.great_hall_motion_131.battery_level
+          - switch.guest_bath_motion_70.battery_level
+          - switch.kitchen_motion_160.battery_level
+          - switch.master_ac_water_13.battery_level
+          - switch.music_room_motion_107.battery_level
+          - switch.office_motion_82.battery_level
+          - switch.powder_room_motion_75.battery_level
+          - switch.stairs_motion_102.battery_level
+          - switch.upstairs_motion_87.battery_level
+          - switch.wine_room_motion_97.battery_level
+          - vacuum.downstairs_roomba.battery_level
   - title: Speakers
     icon: mdi:speaker
     cards:
@@ -143,5 +193,6 @@ views:
       - automation.away_mode
 
 resources:
-  - url: /local/monster-card.js?v=1
-    type: js
+- url: /local/monster-card.js?v=1
+  type: js
+- url: /local/entity-attributes-card.js?v=1
