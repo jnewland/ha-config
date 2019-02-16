@@ -2,6 +2,6 @@ name: Garages and gates
 control: hidden
 entities:
 - binary_sensor.front_gate_121
-- automation.notify_about_gate
+- automation.gate_bell
 - cover.garage
 - cover.gate

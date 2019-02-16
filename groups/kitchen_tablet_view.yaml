@@ -1,7 +1,0 @@
----
-name: kitchen
-view: true
-icon: mdi:tablet
-entities:
-- group.kitchen
-- group.kitchen_media

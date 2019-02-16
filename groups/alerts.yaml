@@ -1,5 +1,0 @@
-control: hidden
-entities:
-- alert.front_door_battery_low
-- alert.ac_sensor_battery_low
-- alert.roomba_offline

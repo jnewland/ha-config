@@ -2,8 +2,6 @@ media_player.atrium_speakers:
   emulated_hue_hidden: false
   friendly_name: "Atrium speakers"
   homebridge_visible: true
-media_player.bedroom:
-  friendly_name: "Bedroom Apple TV"
 media_player.house_back_porch:
   friendly_name: "Back porch speakers"
   homebridge_visible: true

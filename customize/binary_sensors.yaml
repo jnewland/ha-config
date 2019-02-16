@@ -18,7 +18,7 @@ binary_sensor.office_motion_82:
 binary_sensor.upstairs_motion_87:
   zone: Hall
   trigger_entity_id: light.stairs_23
-binary_sensor.master_bath_motion_37:
+binary_sensor.master_bath_motion_200:
   zone: Master
   trigger_service: script.master_bath_lights
   trigger_entity_id_off: group.master_bath
@@ -32,8 +32,7 @@ binary_sensor.music_room_motion_107:
   friendly_name: music room motion
   zone: Music room
   trigger_entity_id: light.music_room_118
-binary_sensor.living_room_motion:
-  friendly_name: Living room motion
+binary_sensor.great_room_occupied:
   zone: Living
   trigger_service: script.living
   trigger_entity_id_off: group.great_room
@@ -51,8 +50,6 @@ binary_sensor.front_gate_121:
   device_class: opening
   icon: mdi:gate
   zone: Outside
-binary_sensor.upstairs_roomba_bin_full:
-  friendly_name: Bin full
 binary_sensor.desk_camera:
   trigger_entity_id: light.desk_63
   icon: mdi:camera-iris
