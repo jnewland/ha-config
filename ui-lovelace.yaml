@@ -21,9 +21,8 @@ views:
         cards:
           - type: glance
             entities:
-              - media_player.atrium_speakers
-              - media_player.kitchen_speakers
-              - media_player.living_speakers
+            - device_tracker.katies_iphone
+            - device_tracker.jphone_x
           - type: picture-entity
             entity: camera.front_yard_left
   - title: Cameras
