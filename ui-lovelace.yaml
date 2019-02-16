@@ -122,6 +122,14 @@ views:
       - light.ac_125
       - light.atrium_door_123
       - light.garage_door_124
+  - title: Environment
+    icon: mdi:temperature-farenheit
+    cards:
+    - type: entities
+      entities:
+      - climate.great_room_27
+      - climate.upstairs_28
+      - climate.hall_48
   - title: Settings
     icon: mdi:settings
     cards:
