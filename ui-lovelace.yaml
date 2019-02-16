@@ -71,7 +71,7 @@ views:
       show_empty: false
       card:
         type: glance
-        title: On
+        title: "On"
       filter:
         include:
           - domain: light
@@ -82,7 +82,7 @@ views:
       show_empty: false
       card:
         type: glance
-        title: Off
+        title: "Off"
       filter:
         include:
           - domain: light
