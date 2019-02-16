@@ -23,8 +23,12 @@ views:
             entities:
             - device_tracker.katies_iphone
             - device_tracker.jphone_x
-          - type: picture-entity
-            entity: camera.front_yard_left
+          - type: horizontal-stack
+            cards:
+            - type: picture-entity
+              entity: camera.front_yard_left
+            - type: picture-entity
+              entity: camera.front_yard_right
   - title: Cameras
     icon: mdi:video
     cards:
