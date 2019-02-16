@@ -1,8 +1,0 @@
-view: true
-icon: mdi:chart-bar
-entities:
-- history_graph.motion
-- history_graph.doors
-- history_graph.indoor_temperatures
-- history_graph.outdoor_temperatures
-- history_graph.indoor_humidity

@@ -1,4 +1,0 @@
-name: Preferences
-control: hidden
-entities:
-- input_boolean.guests

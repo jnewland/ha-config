@@ -10,7 +10,6 @@ homeassistant:
 
 alarm_control_panel: !include alarm_control_panel.yaml
 alexa: !include alexa.yaml
-alert: !include_dir_named alerts
 automation: !include_dir_list automation
 binary_sensor: !include_dir_list binary_sensors
 camera: !include camera.yaml
@@ -33,6 +32,8 @@ ios: !include ios.yaml
 input_boolean: !include input_boolean.yaml
 input_select: !include input_select.yaml
 input_number: !include_dir_named input_numbers
+lovelace:
+  mode: yaml
 light: !include light.yaml
 logger: !include logger.yaml
 map:
