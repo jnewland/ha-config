@@ -19,8 +19,6 @@ views:
             entity: weather.dark_sky
       - type: vertical-stack
         cards:
-          - type: media-control
-            entity: media_player.house
           - type: glance
             entities:
               - media_player.atrium_speakers
