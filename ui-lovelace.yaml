@@ -92,3 +92,37 @@ views:
       - light.master_mirror_35
       - light.master_toilet_62
       - switch.master_bath_fan_129
+  - title: Great Room
+    icon: mdi:sofa
+    cards:
+    - type: entities
+      entities:
+      - light.cabinets_14
+      - light.dining_room_table_52
+      - light.kitchen_18
+      - light.living_20
+      - light.pendants_51
+      - light.living_room_lamp_right
+      - light.living_room_lamp_left
+  - title: Outdoor
+    icon: mdi:tree
+    cards:
+    - type: entities
+      entities:
+      - switch.fountain_26
+      - light.atrium_22
+      - light.back_porch_46
+      - light.front_porch_19
+      - light.front_door_21
+      - light.patio_29
+      - light.master_patio_31
+      - light.ac_125
+      - light.atrium_door_123
+      - light.garage_door_124
+  - title: Settings
+    icon: mdi:settings
+    cards:
+    - type: entities:
+      entities:
+      - input_boolean.guests
+      - automation.away_mode
