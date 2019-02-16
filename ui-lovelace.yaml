@@ -28,3 +28,22 @@ views:
               - media_player.living_speakers
           - type: picture-entity
             entity: camera.front_yard_left
+  - title: Cameras
+    icon: mdi:video
+    cards:
+      - type: picture-entity
+        entity: camera.gate
+      - type: picture-entity
+        entity: camera.front_yard_right
+      - type: picture-entity
+        entity: camera.front_yard_left
+      - type: picture-entity
+        entity: camera.atrium
+      - type: picture-entity
+        entity: camera.side_yard
+      - type: picture-entity
+        entity: camera.back_porch
+      - type: picture-entity
+        entity: camera.ac
+      - type: picture-entity
+        entity: camera.garage
