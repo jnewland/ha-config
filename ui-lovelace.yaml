@@ -76,6 +76,7 @@ views:
         include:
           - domain: light
         exclude:
+          - entity_id: "*sml*"
           - state: 'off'
           - state: 'unavailable'
     - type: custom:monster-card
