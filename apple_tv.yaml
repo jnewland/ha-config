@@ -1,0 +1,3 @@
+- host: !env_var MUSIC_ROOM_APPLE_TV_HOST
+  login_id: !env_var MUSIC_ROOM_APPLE_TV_LOGIN_ID
+  credentials: !env_var MUSIC_ROOM_APPLE_TV_CREDENTIALS
