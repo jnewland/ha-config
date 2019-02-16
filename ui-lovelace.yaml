@@ -123,7 +123,7 @@ views:
       - light.atrium_door_123
       - light.garage_door_124
   - title: Environment
-    icon: mdi:temperature-farenheit
+    icon: mdi:temperature-fahrenheit
     cards:
     - type: entities
       entities:
