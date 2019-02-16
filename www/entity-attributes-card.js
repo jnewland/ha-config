@@ -32,7 +32,7 @@ class EntityAttributesCard extends HTMLElement {
         Object.keys(hass.states[key].attributes).sort().forEach(attr_key => {
           if (filters.every(filterFunc => filterFunc(`${key}.${attr_key}`))) {
             attributes.set(`${key}.${attr_key}`, {
-              name: `${filter.name_attribute?hass.states[key].attributes[name_attribute]:attr_key.replace(/_/g, ' ')}`,
+              name: hass.states[key].attributes["friendly_name"],
               value: `${hass.states[key].attributes[attr_key]} ${filter.unit||''}`.trim(),
             });
           }
@@ -47,8 +47,8 @@ class EntityAttributesCard extends HTMLElement {
       throw new Error('Please define filters');
     }
 
-    if (!config.heading_name) config.heading_name = 'Attributes';
-    if (!config.heading_state) config.heading_state = 'States';
+    if (!config.heading_name) config.heading_name = 'Entity';
+    if (!config.heading_state) config.heading_state = 'Attribute Value';
 
     const root = this.shadowRoot;
     if (root.lastChild) root.removeChild(root.lastChild);

@@ -100,8 +100,8 @@ views:
     - type: sensor
       entity: sensor.katie_s_iphone_battery_level
     - type: custom:entity-attributes-card
-      heading_name: ""
-      heading_state: ""
+      heading_name: Sensor
+      heading_state: Battery level
       filter:
         name_attribute: friendly_name
         include:
@@ -214,5 +214,5 @@ views:
 resources:
 - url: /local/monster-card.js?v=1
   type: js
-- url: /local/entity-attributes-card.js?v=2
+- url: /local/entity-attributes-card.js?v=3
   type: js
