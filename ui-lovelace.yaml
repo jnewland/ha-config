@@ -183,7 +183,7 @@ views:
       - light.ac_125
       - light.atrium_door_123
       - light.garage_door_124
-    - type: entities:
+    - type: entities
       entities:
       - binary_sensor.front_gate_121
       - cover.garage
