@@ -33,6 +33,8 @@ ios: !include ios.yaml
 input_boolean: !include input_boolean.yaml
 input_select: !include input_select.yaml
 input_number: !include_dir_named input_numbers
+lovelace:
+  mode: yaml
 light: !include light.yaml
 logger: !include logger.yaml
 map:
