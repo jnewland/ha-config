@@ -1,5 +1,0 @@
----
-name: Roomba
-control: hidden
-entities:
-- vacuum.downstairs_roomba

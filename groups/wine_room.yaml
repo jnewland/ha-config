@@ -1,7 +1,0 @@
----
-name: wine room
-icon: mdi:wine
-entities:
-- binary_sensor.wine_room_motion_97
-- sensor.wine_room_temp_98
-- sensor.wine_room_humidity_100

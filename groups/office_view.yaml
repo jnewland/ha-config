@@ -1,8 +1,0 @@
----
-name: office
-view: true
-icon: mdi:desktop-mac
-entities:
-- group.office
-- group.guest
-- group.hall

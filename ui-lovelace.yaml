@@ -14,6 +14,7 @@ views:
               - lock.front_door_12
               - cover.garage
               - cover.gate
+              - binary_sensor.front_gate_121
               - input_number.brightness
           - type: horizontal-stack
             cards:
@@ -182,6 +183,11 @@ views:
       - light.ac_125
       - light.atrium_door_123
       - light.garage_door_124
+    - type: entities:
+      entities:
+      - binary_sensor.front_gate_121
+      - cover.garage
+      - cover.gate
   - title: Environment
     icon: mdi:temperature-fahrenheit
     cards:
@@ -197,6 +203,13 @@ views:
       entities:
       - input_boolean.guests
       - automation.away_mode
+    - type: entities
+      entities:
+      - weblink.homeassistant_ci
+      - weblink.upstream_changes
+      - sensor.haconfig_branch
+      - weblink.haconfig_ci
+      - script.deploy_haconfig
 
 resources:
 - url: /local/monster-card.js?v=1

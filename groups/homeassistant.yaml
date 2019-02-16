@@ -1,8 +1,0 @@
-control: hidden
-name: Home Assistant
-entities:
-- weblink.homeassistant_ci
-- weblink.upstream_changes
-- sensor.haconfig_branch
-- weblink.haconfig_ci
-- script.deploy_haconfig
