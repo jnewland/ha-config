@@ -47,6 +47,7 @@ sensor: !include_dir_list sensors
 shell_command: !include shell_command.yaml
 sun:
 switch: !include_dir_list switches
+system_health:
 tts:
   - platform: google
 vera: !include vera.yaml

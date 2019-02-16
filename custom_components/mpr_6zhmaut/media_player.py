@@ -9,14 +9,17 @@ https://github.com/jnewland/mpr-6zhmaut-api
 """
 import logging
 import requests
+import voluptuous as vol
 
-from homeassistant.components.media_player import (
-    MediaPlayerDevice, SUPPORT_VOLUME_SET,
-    SUPPORT_TURN_ON, SUPPORT_TURN_OFF,
-    SUPPORT_VOLUME_MUTE, SUPPORT_SELECT_SOURCE,
-    DOMAIN)
 from homeassistant.const import (
+    CONF_HOST, CONF_NAME, CONF_PORT, CONF_ZONE,
     STATE_OFF, STATE_ON)
+from homeassistant.components.media_player import (
+    MediaPlayerDevice, PLATFORM_SCHEMA)
+from homeassistant.components.media_player.const import (
+    SUPPORT_VOLUME_SET, SUPPORT_TURN_ON, SUPPORT_TURN_OFF,
+    SUPPORT_VOLUME_MUTE, SUPPORT_SELECT_SOURCE)
+import homeassistant.helpers.config_validation as cv
 
 _LOGGER = logging.getLogger(__name__)
 logging.getLogger("requests").setLevel(logging.WARNING)
@@ -26,17 +29,28 @@ SUPPORT_MPR = SUPPORT_VOLUME_SET | SUPPORT_TURN_ON | \
               SUPPORT_SELECT_SOURCE
 
 DOMAIN = 'mpr_6zhmaut'
+CONF_PROTO = 'proto'
+DEFAULT_PROTO = 'http'
+
+PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Required(CONF_NAME): cv.string,
+    vol.Required(CONF_HOST): cv.string,
+    vol.Required(CONF_PORT): cv.port,
+    vol.Required(CONF_ZONE): cv.string,
+    vol.Optional(CONF_PROTO, default=DEFAULT_PROTO): cv.string,
+})
+
 
 # pylint: disable=unused-argument
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """ Sets up the mpr_6zhmaut platform. """
 
     zone = MprZone(
-        config.get("name"),
-        config.get("host"),
-        config.get("port"),
-        config.get("zone"),
-        config.get("proto", "http"),
+        config.get(CONF_NAME),
+        config.get(CONF_HOST),
+        config.get(CONF_PORT),
+        config.get(CONF_ZONE),
+        config.get(CONF_PROTO),
     )
     if zone.update():
         add_devices([zone])
