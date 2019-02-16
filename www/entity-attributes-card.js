@@ -32,7 +32,7 @@ class EntityAttributesCard extends HTMLElement {
         Object.keys(hass.states[key].attributes).sort().forEach(attr_key => {
           if (filters.every(filterFunc => filterFunc(`${key}.${attr_key}`))) {
             attributes.set(`${key}.${attr_key}`, {
-              name: `${filter.name?filter.name:attr_key.replace(/_/g, ' ')}`,
+              name: `${filter.name_attribute?hass.states[key].attributes[name_attribute]:attr_key.replace(/_/g, ' ')}`,
               value: `${hass.states[key].attributes[attr_key]} ${filter.unit||''}`.trim(),
             });
           }

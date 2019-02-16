@@ -99,7 +99,10 @@ views:
     - type: sensor
       entity: sensor.katie_s_iphone_battery_level
     - type: custom:entity-attributes-card
+      heading_name: ""
+      heading_state: ""
       filter:
+        name_attribute: friendly_name
         include:
           # ahh i wish this could be a wildcard or a monster card
           - switch.closet_motion_61.battery_level
@@ -198,5 +201,5 @@ views:
 resources:
 - url: /local/monster-card.js?v=1
   type: js
-- url: /local/entity-attributes-card.js?v=1
+- url: /local/entity-attributes-card.js?v=2
   type: js
