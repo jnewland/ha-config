@@ -122,7 +122,7 @@ views:
   - title: Settings
     icon: mdi:settings
     cards:
-    - type: entities:
+    - type: entities
       entities:
       - input_boolean.guests
       - automation.away_mode
