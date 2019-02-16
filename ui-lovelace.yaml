@@ -17,9 +17,6 @@ views:
               - input_number.brightness
           - type: weather-forecast
             entity: weather.dark_sky
-          - type: entities
-            entities:
-              - sensor.christmas
       - type: vertical-stack
         cards:
           - type: media-control
@@ -29,18 +26,5 @@ views:
               - media_player.atrium_speakers
               - media_player.kitchen_speakers
               - media_player.living_speakers
-              - media_player.house_mpr6zhmaut
-              - media_player.house_back_porch
           - type: picture-entity
             entity: camera.front_yard_left
-
-#   - tab_icon: mdi:home-assistant
-#     title: Custom card
-#     cards:
-#       - type: "custom:big-state-card"
-#         title: ''
-#         entities:
-#           - sensor.christmas
-# resources:
-#   - url: /local/big-state-card.js
-#     type: module
