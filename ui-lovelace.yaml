@@ -141,3 +141,7 @@ views:
       entities:
       - input_boolean.guests
       - automation.away_mode
+
+resources:
+  - url: /local/monster-card.js?v=1
+    type: js
