@@ -72,4 +72,23 @@ views:
       - media_player.master_bathroom_speakers
       - media_player.master_bedroom_speakers
       - media_player.patio_speakers
-      
+  - title: Upstairs
+    icon: mdi:hotel
+    cards:
+    - type: entities
+      entities:
+      - light.chandelier_154
+      - light.chandelier_lamp_33
+      - light.master_overhead_30
+      - light.master_closet_32
+      - light.master_nook_42
+      - light.master_windows_128
+      - light.bedside_lamp_141
+      - light.master_patio_31
+    - type: entities
+      entities:
+      - light.master_bath_overhead_36
+      - light.master_shower_34
+      - light.master_mirror_35
+      - light.master_toilet_62
+      - switch.master_bath_fan_129
