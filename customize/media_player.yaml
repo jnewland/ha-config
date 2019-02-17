@@ -34,3 +34,5 @@ media_player.house_jnewland:
   emulated_hue_hidden: false
   homebridge_visible: true
   friendly_name: "Laptop speakers"
+media_player.music_room_tv:
+  friendly_name: "Music Room TV"
