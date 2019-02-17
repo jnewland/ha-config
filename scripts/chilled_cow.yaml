@@ -1,0 +1,6 @@
+sequence:
+- service: media_player.play_media
+  data:
+    entity_id: media_player.music_room_tv
+    media_content_id: http://hyades.shoutca.st:8043/stream
+    media_content_type: chilled_cow
