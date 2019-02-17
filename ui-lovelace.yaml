@@ -67,6 +67,8 @@ views:
         entities:
         - light.music_room_118
         - light.desk_63
+      - type: media-control
+        entity: media_player.music_room_tv
   - title: Lights
     icon: mdi:lightbulb
     cards:
