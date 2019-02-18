@@ -60,6 +60,8 @@ views:
         - light.office_overhead_11
         - light.office_chandelier_69
         - light.floor_lamp
+      - type: media-control
+        entity: media_player.office
   - title: Music Room
     icon: mdi:guitar-pick
     cards:
