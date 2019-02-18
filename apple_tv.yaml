@@ -3,4 +3,4 @@
   credentials: !env_var MUSIC_ROOM_APPLE_TV_CREDENTIALS
 - host: !env_var OFFICE_APPLE_TV_HOST
   login_id: !env_var OFFICE_APPLE_TV_LOGIN_ID
-  # credentials: !env_var OFFICE_APPLE_TV_CREDENTIALS
+  credentials: !env_var OFFICE_APPLE_TV_CREDENTIALS
