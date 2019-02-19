@@ -1,29 +1,12 @@
-# If Katie and I are both in the master for a few minutes after the sun has set,
-# turn on Reading
 alias: Reading mode
 trigger:
   platform: state
-  entity_id:
-    - device_tracker.jphone_x
-    - device_tracker.katies_iphone
-  to: Master
-  for:
-    minutes: 1
+  entity_id: binary_sensor.master_bedroom_door_205
+  to: "off"
 condition:
-  condition: and
-  conditions:
-  - condition: template
-    value_template: |
-      {% set jphone = states.device_tracker.jphone_x.state %}
-      {% set kphone = states.device_tracker.katies_iphone.state %}
-      {{
-        (jphone == kphone or (jnewland == "not_home" or kphone == "not_home")) and
-        states.input_select.mode.state != "Reading" and
-        states.input_select.mode.state != "Sleeping"
-      }}
-  - condition: state
-    entity_id: sun.sun
-    state: below_horizon
+  condition: state
+  entity_id: sun.sun
+  state: below_horizon
 action:
   - service: script.turn_on
     entity_id: script.mode_reading
