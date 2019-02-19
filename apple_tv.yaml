@@ -4,7 +4,7 @@
 - host: !env_var OFFICE_APPLE_TV_HOST
   login_id: !env_var OFFICE_APPLE_TV_LOGIN_ID
   credentials: !env_var OFFICE_APPLE_TV_CREDENTIALS
-- host: !env_var BEDROOM_APPLE_TV_HOST
-  login_id: !env_var BEDROOM_APPLE_TV_LOGIN_ID
-  credentials: !env_var BEDROOM_APPLE_TV_CREDENTIALS
-  start_off: true
+# - host: !env_var BEDROOM_APPLE_TV_HOST
+#   login_id: !env_var BEDROOM_APPLE_TV_LOGIN_ID
+#   credentials: !env_var BEDROOM_APPLE_TV_CREDENTIALS
+#   start_off: true
