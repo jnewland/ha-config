@@ -17,7 +17,7 @@ env:
   matrix:
   - ALARM_PASSWORD="" ALARM_PLATFORM=alarmdotcom ALARM_USERNAME="" API_PASSWORD=""
     APPLETV_LOGIN_ID="" BEDROOM_TV_IP="" BEDROOM_TV_MAC=""
-    BEDROOM_APPLE_TV_HOST="" BEDROOM_APPLE_TV_LOGIN_IP="" BEDROOM_APPLE_TV_CREDENTIALS=""
+    BEDROOM_APPLE_TV_HOST="" BEDROOM_APPLE_TV_LOGIN_ID="" BEDROOM_APPLE_TV_CREDENTIALS=""
     CAMERA_DASH=http://example.com CAMERA_URL_1=http://example.com CAMERA_URL_2=http://example.com
     CAMERA_URL_3=http://example.com CAMERA_URL_4=http://example.com CAMERA_URL_5=http://example.com
     CAMERA_URL_6=http://example.com CAMERA_URL_7=http://example.com CAMERA_URL_8=http://example.com
