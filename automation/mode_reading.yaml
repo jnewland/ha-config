@@ -4,9 +4,17 @@ trigger:
   entity_id: binary_sensor.master_bedroom_door_205
   to: "off"
 condition:
-  condition: state
-  entity_id: sun.sun
-  state: below_horizon
+  condition: and
+  conditions:
+  - condition: template
+    value_template: |
+      {{
+        states.input_select.mode.state != "Reading" and
+        states.input_select.mode.state != "Sleeping"
+      }}
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
 action:
   - service: script.turn_on
     entity_id: script.mode_reading
