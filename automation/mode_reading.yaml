@@ -6,12 +6,9 @@ trigger:
 condition:
   condition: and
   conditions:
-  - condition: template
-    value_template: |
-      {{
-        states.input_select.mode.state != "Reading" and
-        states.input_select.mode.state != "Sleeping"
-      }}
+  - condition: state
+    entity_id: input_select.mode
+    state: Evening
   - condition: state
     entity_id: sun.sun
     state: below_horizon
