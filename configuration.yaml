@@ -34,7 +34,7 @@ input_select: !include input_select.yaml
 input_number: !include_dir_named input_numbers
 lovelace:
   mode: yaml
-light: !include light.yaml
+light:
 logger: !include logger.yaml
 map:
 media_player: !include media_player.yaml

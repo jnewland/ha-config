@@ -22,7 +22,7 @@ env:
     CAMERA_URL_6=http://example.com CAMERA_URL_7=http://example.com CAMERA_URL_8=http://example.com
     CAMERA_URL_9=http://example.com CLIMATE_DASH=http://example.com DB_URL="" DESK_HID_IDLE_TIME_RESOURCE=http://example.com DESK_CAMERA_RESOURCE=http://example.com
     ELEVATION=0 FORECAST_API_KEY="" GATEWAY_LINK=http://example.com GRAFANA_LINK=http://example.com
-    GRAPHITE_LINK=http://example.com HUE_IP="" IFTTT_KEY=""
+    GRAPHITE_LINK=http://example.com IFTTT_KEY=""
     JESSE_MUSIC_ROOM_IP="0.0.0.0" JPHONE_PUSH_TARGET="" KITCHEN_LAT=0 KITCHEN_LONG=0
     LAT=0 LETSENCRYPT_EMAIL="" LETSENCRYPT_HOST="" LIVING_LAT=0 LIVING_LONG=0 LONG=0 MASTER_LAT=0 MASTER_LONG=0
     MOTION_LINK=http://example.com MPR_API_IP="" MPR_API_PORT=1 MYQ_PASSWORD="" MYQ_USERNAME=""
