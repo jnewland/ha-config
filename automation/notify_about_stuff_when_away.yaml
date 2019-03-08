@@ -23,7 +23,7 @@ condition:
         new_state.state != old_state.state
       }}
 action:
-  service: notify.ios_jphone_x
+  service: notify.ios_jphone_xs
   data_template:
     message: >
       {% set old_state = trigger.from_state %}
