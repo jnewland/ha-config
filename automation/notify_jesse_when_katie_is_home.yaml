@@ -9,6 +9,6 @@ condition:
   value_template: |
     {{ states.device_tracker.jphone_x.state != "not_home" }}
 action:
-  service: notify.ios_jphone_x
+  service: notify.ios_jphone_xs
   data:
     message: 'Katie is home!'
