@@ -6,5 +6,5 @@
 - platform: group
   name: ios
   services:
-  - service: ios_jphone_x
+  - service: ios_jphone_xs
   - service: ios_katies_iphone
