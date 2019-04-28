@@ -22,10 +22,10 @@ trigger:
     - binary_sensor.front_gate_121
     - sensor.dark_sky_daily_summary
     - sensor.dark_sky_hourly_summary
-    - sensor.jphone_x_battery_state
+    - sensor.jphone_xs_battery_state
     - sensor.katies_iphone_battery_state
     - device_tracker.katies_iphone
-    - device_tracker.jphone_x
+    - device_tracker.jphone_xs
     - device_tracker.jesse_music_room
     - binary_sensor.master_bath_motion_200
     - binary_sensor.master_ac_water_13
@@ -76,7 +76,7 @@ action:
         "media_player.office_tv":             ":tv:",
         "sensor.dark_sky_daily_summary":      ":cloud:",
         "sensor.dark_sky_hourly_summary":     ":cloud:",
-        "sensor.jphone_x_battery_state":      ":iphone:",
+        "sensor.jphone_xs_battery_state":      ":iphone:",
         "sensor.katies_iphone_battery_state": ":iphone:",
         "sensor.alarm_sensors":               ":door:",
         "binary_sensor.master_ac_water_13":   ":droplet:",

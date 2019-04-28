@@ -19,7 +19,7 @@ views:
           - type: glance
             entities:
             - device_tracker.katies_iphone
-            - device_tracker.jphone_x
+            - device_tracker.jphone_xs
           - type: horizontal-stack
             cards:
             - type: picture-entity
@@ -96,7 +96,7 @@ views:
     icon: mdi:battery
     cards:
     - type: sensor
-      entity: sensor.jphone_x_battery_level
+      entity: sensor.jphone_xs_battery_level
     - type: sensor
       entity: sensor.katie_s_iphone_battery_level
     - type: custom:entity-attributes-card

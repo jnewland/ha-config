@@ -9,7 +9,7 @@ trigger:
     to: 'on'
   - platform: state
     entity_id:
-    - sensor.jphone_x_battery_state
+    - sensor.jphone_xs_battery_state
     - sensor.katies_iphone_battery_state
     to: 'Unplugged'
     for:
@@ -23,14 +23,14 @@ condition:
   - condition: template
     value_template: |
       {{
-        (states.device_tracker.jphone_x.state == "not_home" or states.sensor.jphone_x_battery_state.state == "Unplugged") and
+        (states.device_tracker.jphone_xs.state == "not_home" or states.sensor.jphone_xs_battery_state.state == "Unplugged") and
         (states.device_tracker.katies_iphone.state == "not_home" or states.sensor.katies_iphone_battery_state.state == "Unplugged")
       }}
 action:
   - service: script.turn_on
     entity_id: script.mode_day
   - condition: template
-    value_template: '{{ states.device_tracker.jphone_x.state != "not_home" }}'
+    value_template: '{{ states.device_tracker.jphone_xs.state != "not_home" }}'
   - service: notify.ios_jphone_xs
     data_template:
       message: Katie's up!
