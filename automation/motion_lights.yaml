@@ -15,6 +15,8 @@ trigger:
   - binary_sensor.kitchen_motion_160
   - binary_sensor.office_motion_82
   - binary_sensor.desk_camera
+  - binary_sensor.garage_hall_motion_132
+  - binary_sensor.great_hall_motion_131
   to: "on"
 condition:
   condition: template

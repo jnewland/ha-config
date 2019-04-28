@@ -25,9 +25,15 @@ binary_sensor.master_bath_motion_200:
 binary_sensor.wine_room_motion_97:
   zone: Hall
   trigger_entity_id: light.wine_room_25
+binary_sensor.great_hall_motion_131:
+  zone: Hall
+  trigger_entity_id: light.great_hall_24
+binary_sensor.garage_hall_motion_132:
+  zone: Hall
+  trigger_entity_id: light.garage_hall_50
 binary_sensor.hall_motion_92:
   zone: Hall
-  trigger_entity_id: group.hall_overhead
+  trigger_entity_id: light.guest_hall_16
 binary_sensor.music_room_motion_107:
   friendly_name: music room motion
   zone: Music room
