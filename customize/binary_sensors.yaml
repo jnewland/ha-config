@@ -36,6 +36,14 @@ binary_sensor.great_room_occupied:
   zone: Living
   trigger_service: script.living
   trigger_entity_id_off: group.great_room
+binary_sensor.living_room_motion:
+  zone: Living
+  trigger_service: script.living
+  trigger_entity_id_off: group.great_room
+binary_sensor.kitchen_motion_160:
+  zone: Living
+  trigger_service: script.living
+  trigger_entity_id_off: group.great_room
 binary_sensor.entry_door:
   friendly_name: Entry door
   zone: Outside
