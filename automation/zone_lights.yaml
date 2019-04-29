@@ -2,7 +2,7 @@ alias: Turn on lights when devices enter zones
 trigger:
   platform: state
   entity_id:
-  - device_tracker.jphone_x
+  - device_tracker.jphone_xs
   - device_tracker.katies_iphone
 condition:
   condition: template

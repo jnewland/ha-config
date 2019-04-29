@@ -1,6 +1,6 @@
 home:
   devices:
     - device_tracker.katies_iphone
-    - device_tracker.jphone_x
+    - device_tracker.jphone_xs
   tolerance: 250
   unit_of_measurement: mi

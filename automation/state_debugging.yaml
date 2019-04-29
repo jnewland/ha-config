@@ -4,8 +4,8 @@ trigger:
   platform: state
   entity_id:
     - device_tracker.katies_iphone
-    - device_tracker.jphone_x
-    - sensor.jphone_x_battery_state
+    - device_tracker.jphone_xs
+    - sensor.jphone_xs_battery_state
     - sensor.katies_iphone_battery_state
 condition:
   condition: template
