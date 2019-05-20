@@ -15,6 +15,6 @@ filter:
   include_entities:
     - switch.fountain_26
     - script.mode_away
-  entity_config:
-    switch.fountain_26:
-      type: faucet
+entity_config:
+  switch.fountain_26:
+    type: faucet
