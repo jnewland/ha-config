@@ -1,1 +1,1 @@
-"""mpr-6zhmaut component"
+"""mpr-6zhmaut component"""
