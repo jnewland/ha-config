@@ -1,6 +1,4 @@
 cover.garage:
-  homebridge_cover_type: garage_door
-  homebridge_visible: true
+  device_class: garage
 cover.gate:
-  homebridge_cover_type: garage_door
-  homebridge_visible: true
+  device_class: garage

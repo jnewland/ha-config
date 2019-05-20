@@ -27,6 +27,7 @@ group: !include_dir_named groups
 history: !include history.yaml
 history_graph: !include_dir_named history_graphs
 http: !include http.yaml
+homekit: !include homekit.yaml
 ifttt: !include ifttt.yaml
 ios: !include ios.yaml
 input_boolean: !include input_boolean.yaml

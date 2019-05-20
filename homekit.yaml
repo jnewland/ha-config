@@ -1,0 +1,13 @@
+homekit:
+  filter:
+    include_domains:
+      - alarm_control_panel
+      - climate
+      - cover
+      - lock
+      - media_player
+    include_entities:
+      - switch.fountain_26
+      - script.mode_away
+    switch.fountain_26:
+      type: faucet
