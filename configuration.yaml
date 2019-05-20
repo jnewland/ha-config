@@ -51,7 +51,7 @@ sun:
 switch: !include_dir_list switches
 system_health:
 tts:
-  - platform: google
+  - platform: google_translate
 vera: !include vera.yaml
 weblink: !include weblink.yaml
 weather:
