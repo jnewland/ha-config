@@ -6,6 +6,13 @@ homekit:
       - cover
       - lock
       - media_player
+    exclude_domains:
+      - light
+      - sensor
+      - script
+      - sensor
+      - switch
+      - scene
     include_entities:
       - switch.fountain_26
       - script.mode_away
