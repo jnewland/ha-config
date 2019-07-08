@@ -16,16 +16,22 @@ views:
               - cover.gate
               - binary_sensor.front_gate_121
               - input_number.brightness
-          - type: glance
-            entities:
-            - device_tracker.katies_iphone
-            - device_tracker.jphone_xs
           - type: horizontal-stack
             cards:
             - type: picture-entity
               entity: camera.front_yard_left
             - type: picture-entity
-              entity: camera.front_yard_right
+              entity: camera.gate
+          - type: horizontal-stack
+            cards:
+            - type: picture-entity
+              entity: camera.side_yard
+            - type: picture-entity
+              entity: camera.atrium
+          - type: glance
+            entities:
+            - device_tracker.katies_iphone
+            - device_tracker.jphone_xs
       - type: vertical-stack
         cards:
           - type: weather-forecast
