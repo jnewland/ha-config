@@ -8,16 +8,20 @@ script.office:
   friendly_name: Working
   emulated_hue_hidden: false
 script.living:
+  friendly_name: Cooking
   emulated_hue_hidden: false
   emulated_hue_name: Cooking
 script.mode_away:
   friendly_name: Away
 script.mode_party:
+  friendly_name: Party
   emulated_hue_hidden: false
   emulated_hue_name: Party
 script.mode_reading:
+  friendly_name: Reading
   emulated_hue_hidden: false
   emulated_hue_name: Reading
 script.mode_sleeping:
+  friendly_name: Sleeping
   emulated_hue_hidden: false
   emulated_hue_name: Sleeping
