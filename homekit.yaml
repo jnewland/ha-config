@@ -15,9 +15,11 @@ filter:
   include_entities:
     - switch.fountain_26
     - script.mode_away
-    - script.working
-    - script.mode_reading
-    - script.mode_sleeping
+    - script.office
+    # - script.mode_reading
+    # - script.mode_sleeping
+    - script.mode_party
+    - script.living
 entity_config:
   switch.fountain_26:
     type: faucet
