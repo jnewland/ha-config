@@ -10,6 +10,9 @@ trigger:
     - binary_sensor.gate
     - alarm_control_panel.alarm
     - automation.gate_bell
+    - binary_sensor.master_motion_212
+    - binary_sensor.master_bedroom_door_205
+    - binary_sensor.master_bath_motion_200
     - binary_sensor.stairs_motion_102
     - binary_sensor.closet_motion_61
     - binary_sensor.guest_bath_motion_70
