@@ -20,6 +20,7 @@ filter:
     - script.mode_sleeping
     - script.mode_party
     - script.living
+    - light.desk_63
 entity_config:
   switch.fountain_26:
     type: faucet
