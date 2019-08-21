@@ -5,8 +5,8 @@ filter:
     - cover
     - lock
     - media_player
-  exclude_domains:
     - light
+  exclude_domains:
     - sensor
     - script
     - sensor
@@ -20,7 +20,6 @@ filter:
     - script.mode_sleeping
     - script.mode_party
     - script.living
-    - light.desk_63
 entity_config:
   switch.fountain_26:
     type: faucet
