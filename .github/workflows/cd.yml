@@ -97,4 +97,8 @@ jobs:
         openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout /tmp/key.pem -out /tmp/cert.pem
         ./script/cibuild
     - name: Deploy
-      run: echo todo
+      run: |
+        curl -X POST -H "Content-Type: application/json" -H "x-ha-access: $HA_PASSWORD" "$HA_SERVICE"
+      env:
+        HA_PASSWORD: ${{secrets.HA_PASSWORD}}
+        HA_SERVICE: ${{secrets.HA_SERVICE}}
