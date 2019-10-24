@@ -64,6 +64,3 @@ binary_sensor.front_gate_121:
   device_class: opening
   icon: mdi:gate
   zone: Outside
-binary_sensor.desk_camera:
-  trigger_entity_id: light.desk_63
-  icon: mdi:camera-iris
