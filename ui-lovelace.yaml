@@ -187,7 +187,7 @@ views:
       entities:
       - switch.fountain_26
       - light.atrium_22
-      - light.back_porch_46
+      - switch.back_porch_fans_228
       - light.front_porch_19
       - light.front_door_21
       - light.patio_29
