@@ -7,7 +7,7 @@ trigger:
 condition:
   condition: template
   value_template: |
-    {{ states.device_tracker.jphone_xs.state != "not_home" }}
+    {{ states.device_tracker.jphone_11_pro.state != "not_home" }}
 action:
   service: notify.ios_jphone_11_pro
   data:
