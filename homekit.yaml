@@ -13,6 +13,7 @@ filter:
     - switch
     - scene
   include_entities:
+    - switch.back_porch_fans_228
     - switch.fountain_26
     - script.mode_away
     - script.office

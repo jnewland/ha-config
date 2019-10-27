@@ -1,4 +1,3 @@
 - platform: myq
   username: !env_var MYQ_USERNAME
   password: !env_var MYQ_PASSWORD
-  type: chamberlain

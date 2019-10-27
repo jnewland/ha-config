@@ -43,7 +43,7 @@ views:
           - type: glance
             entities:
             - device_tracker.katies_iphone
-            - device_tracker.jphone_xs
+            - device_tracker.jphone_11_pro
   - title: Cameras
     icon: mdi:video
     cards:
@@ -108,7 +108,7 @@ views:
     icon: mdi:battery
     cards:
     - type: sensor
-      entity: sensor.jphone_xs_battery_level
+      entity: sensor.jphone_11_pro_battery_level
     - type: sensor
       entity: sensor.katie_s_iphone_battery_level
     - type: custom:entity-attributes-card
@@ -187,7 +187,7 @@ views:
       entities:
       - switch.fountain_26
       - light.atrium_22
-      - light.back_porch_46
+      - switch.back_porch_fans_228
       - light.front_porch_19
       - light.front_door_21
       - light.patio_29

@@ -10,7 +10,7 @@ trigger:
     to: 'on'
   - platform: state
     entity_id:
-    - sensor.jphone_xs_battery_state
+    - sensor.jphone_11_pro_battery_state
     - sensor.katies_iphone_battery_state
     to: 'Unplugged'
     for:
