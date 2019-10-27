@@ -31,8 +31,8 @@ trigger:
     - device_tracker.jesse_music_room
     - binary_sensor.master_bath_motion_200
     - binary_sensor.master_ac_water_13
-    - cover.garage
-    - cover.gate
+    - cover.garage_2
+    - cover.gate_2
     - input_select.mode
     - lock.front_door_12
     - media_player.atrium_speakers
