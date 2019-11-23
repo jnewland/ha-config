@@ -8,7 +8,7 @@ cache: pip
 before_install:
 - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
 install:
-- pip3 install https://github.com/home-assistant/home-assistant/zipball/0.100.3
+- pip3 install https://github.com/home-assistant/home-assistant/zipball/0.102.1
 - pip3 install colorlog
 script:
 - openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout /tmp/key.pem
