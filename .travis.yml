@@ -1,15 +1,16 @@
 sudo: false
-dist: trusty
+dist: bionic
 language: python
 python:
-- '3.6'
+- '3.7'
 cache: pip
 # https://github.com/travis-ci/travis-ci/issues/8920
 before_install:
 - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
 install:
-- pip3 install https://github.com/home-assistant/home-assistant/zipball/0.100.3
-- pip3 install colorlog
+- sudo apt-get install -y python-dev pkg-config libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libswscale-dev libswresample-dev libavfilter-dev ffmpeg
+- pip3 install colorlog av==6.1.2
+- pip3 install https://github.com/home-assistant/home-assistant/zipball/0.102.1
 script:
 - openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout /tmp/key.pem
   -out /tmp/cert.pem
