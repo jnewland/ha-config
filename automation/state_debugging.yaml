@@ -3,7 +3,7 @@ initial_state: off
 trigger:
   platform: state
   entity_id:
-    - device_tracker.katies_iphone
+    - device_tracker.katie_s_iphone
     - device_tracker.jphone_11_pro
     - sensor.jphone_11_pro_battery_state
     - sensor.katies_iphone_battery_state

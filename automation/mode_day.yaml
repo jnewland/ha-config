@@ -24,7 +24,7 @@ condition:
     value_template: |
       {{
         (states.device_tracker.jphone_11_pro.state == "not_home" or states.sensor.jphone_11_pro_battery_state.state == "Unplugged") and
-        (states.device_tracker.katies_iphone.state == "not_home" or states.sensor.katies_iphone_battery_state.state == "Unplugged")
+        (states.device_tracker.katie_s_iphone.state == "not_home" or states.sensor.katies_iphone_battery_state.state == "Unplugged")
       }}
 action:
   - service: script.turn_on

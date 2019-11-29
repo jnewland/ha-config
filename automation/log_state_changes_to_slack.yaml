@@ -26,7 +26,7 @@ trigger:
     - sensor.dark_sky_hourly_summary
     - sensor.jphone_11_pro_battery_state
     - sensor.katies_iphone_battery_state
-    - device_tracker.katies_iphone
+    - device_tracker.katie_s_iphone
     - device_tracker.jphone_11_pro
     - device_tracker.jesse_music_room
     - binary_sensor.master_bath_motion_200

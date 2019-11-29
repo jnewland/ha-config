@@ -2,12 +2,12 @@ platform: template
 sensors:
   together:
     entity_id:
-    - device_tracker.katies_iphone
+    - device_tracker.katie_s_iphone
     - device_tracker.jphone_11_pro
     value_template: |
       {{
-        states.device_tracker.katies_iphone != None and
+        states.device_tracker.katie_s_iphone != None and
         states.device_tracker.jphone_x != None and
-        distance(states.device_tracker.jphone_11_pro, states.device_tracker.katies_iphone) != None and
-        distance(states.device_tracker.jphone_11_pro, states.device_tracker.katies_iphone) < 0.25
+        distance(states.device_tracker.jphone_11_pro, states.device_tracker.katie_s_iphone) != None and
+        distance(states.device_tracker.jphone_11_pro, states.device_tracker.katie_s_iphone) < 0.25
       }}
