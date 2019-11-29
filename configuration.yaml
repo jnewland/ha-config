@@ -9,6 +9,8 @@ homeassistant:
   packages: !include_dir_named packages
   auth_providers: !include auth_providers.yaml
 
+default_config:
+
 alarm_control_panel: !include alarm_control_panel.yaml
 alexa: !include alexa.yaml
 automation: !include_dir_list automation
