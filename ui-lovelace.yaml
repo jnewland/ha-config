@@ -107,10 +107,10 @@ views:
   - title: Batteries
     icon: mdi:battery
     cards:
-    # - type: sensor
-    #   entity: sensor.jphone_11_pro_battery_level
-    # - type: sensor
-    #   entity: sensor.katie_s_iphone_battery_level
+    - type: sensor
+      entity: sensor.jphone_11_pro_battery_level
+    - type: sensor
+      entity: sensor.katie_s_iphone_battery_level
     - type: custom:entity-attributes-card
       heading_name: Sensor
       heading_state: Battery level
