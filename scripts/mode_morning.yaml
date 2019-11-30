@@ -17,7 +17,7 @@ sequence:
   entity_id: alarm_control_panel.alarm
 - condition: template
   value_template: '{{ states.device_tracker.jphone_11_pro.state != "not_home" }}'
-- service: notify.ios_jphone_11_pro
+- service: notify.mobile_app_jphone_11_pro
   data_template:
     message: |
       {% if is_state_attr("vacuum.downstairs_roomba", "status", Charging) %}
