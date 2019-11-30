@@ -31,6 +31,6 @@ script:
       - service: notify.slack
         data_template:
           message: ":city_sunset:"
-      - service: notify.ios
+      - service: notify.iphones
         data:
           message: 'Check out the sunset!'

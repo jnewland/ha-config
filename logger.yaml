@@ -13,3 +13,4 @@ logs:
   homeassistant.components.cover.myq: debug
   homeassistant.components.alexa: debug
   roomba.roomba.Roomba: warn
+  pyhap.hap_server: critical

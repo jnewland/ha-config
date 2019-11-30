@@ -12,8 +12,8 @@ views:
               - input_select.mode
               - alarm_control_panel.alarm
               - lock.front_door_12
-              - cover.garage
-              - cover.gate
+              - cover.garage_2
+              - cover.gate_2
               - binary_sensor.front_gate_121
               - input_number.brightness
           - type: horizontal-stack
@@ -42,8 +42,8 @@ views:
             image: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=GRK&brand=wui&num=10&delay=25&type=N0R&frame=0&scale=1&noclutter=1&showstorms=99&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=0&rainsnow=1&lightning=1&smooth=1&rand=24691285&lat=0&lon=0&label=you
           - type: glance
             entities:
-            - device_tracker.katies_iphone
-            - device_tracker.jphone_xs
+            - device_tracker.katie_s_iphone
+            - device_tracker.jphone_11_pro
   - title: Cameras
     icon: mdi:video
     cards:
@@ -108,7 +108,7 @@ views:
     icon: mdi:battery
     cards:
     - type: sensor
-      entity: sensor.jphone_xs_battery_level
+      entity: sensor.jphone_11_pro_battery_level
     - type: sensor
       entity: sensor.katie_s_iphone_battery_level
     - type: custom:entity-attributes-card
@@ -187,7 +187,7 @@ views:
       entities:
       - switch.fountain_26
       - light.atrium_22
-      - light.back_porch_46
+      - switch.back_porch_fans_228
       - light.front_porch_19
       - light.front_door_21
       - light.patio_29
@@ -198,8 +198,8 @@ views:
     - type: entities
       entities:
       - binary_sensor.front_gate_121
-      - cover.garage
-      - cover.gate
+      - cover.garage_2
+      - cover.gate_2
   - title: Environment
     icon: mdi:temperature-fahrenheit
     cards:

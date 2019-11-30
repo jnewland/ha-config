@@ -1,0 +1,3 @@
+- type: homeassistant
+- type: legacy_api_password
+  api_password: !env_var API_PASSWORD

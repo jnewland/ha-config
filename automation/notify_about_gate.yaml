@@ -4,7 +4,7 @@ trigger:
   entity_id: binary_sensor.front_gate_121
   to: 'on'
 action:
-  - service: notify.ios
+  - service: notify.iphones
     data_template:
       message: the front gate just opened!
       data:

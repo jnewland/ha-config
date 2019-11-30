@@ -2,4 +2,4 @@ platform: template
 sensors:
   garage:
     value_template: |
-      {{ states("cover.garage") | default("") == "open" }}
+      {{ states("cover.garage_2") | default("") == "open" }}

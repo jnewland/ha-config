@@ -2,7 +2,6 @@ alias: log state changes to slack
 trigger:
   platform: state
   entity_id:
-    - binary_sensor.desk_camera
     - binary_sensor.living_room_motion
     - binary_sensor.master_door
     - binary_sensor.entry_door
@@ -25,15 +24,18 @@ trigger:
     - binary_sensor.front_gate_121
     - sensor.dark_sky_daily_summary
     - sensor.dark_sky_hourly_summary
-    - sensor.jphone_xs_battery_state
-    - sensor.katies_iphone_battery_state
-    - device_tracker.katies_iphone
-    - device_tracker.jphone_xs
+    - sensor.jphone_11_pro_battery_state
+    - sensor.katie_s_iphone_battery_state
+    - sensor.katie_s_iphone_activity
+    - sensor.jphone_11_pro_activity
+    - device_tracker.katie_s_iphone
+    - device_tracker.jphone_11_pro
+    - device_tracker.jesses_ipad
     - device_tracker.jesse_music_room
     - binary_sensor.master_bath_motion_200
     - binary_sensor.master_ac_water_13
-    - cover.garage
-    - cover.gate
+    - cover.garage_2
+    - cover.gate_2
     - input_select.mode
     - lock.front_door_12
     - media_player.atrium_speakers
@@ -79,11 +81,10 @@ action:
         "media_player.office_tv":             ":tv:",
         "sensor.dark_sky_daily_summary":      ":cloud:",
         "sensor.dark_sky_hourly_summary":     ":cloud:",
-        "sensor.jphone_xs_battery_state":      ":iphone:",
-        "sensor.katies_iphone_battery_state": ":iphone:",
+        "sensor.jphone_11_pro_battery_state":      ":iphone:",
+        "sensor.katie_s_iphone_battery_state": ":iphone:",
         "sensor.alarm_sensors":               ":door:",
         "binary_sensor.master_ac_water_13":   ":droplet:",
-        "binary_sensor.desk_camera":          ":camera:",
         "binary_sensor.front_gate_121":       ":house_with_garden:"
       } %}
       {% set entity_state = new_state.entity_id + "." + new_state.state %}
