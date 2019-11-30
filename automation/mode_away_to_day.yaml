@@ -12,7 +12,7 @@ trigger:
     from: 'off'
     to: 'on'
   - platform: zone
-    entity_id: device_tracker.jphone_11_pro_2
+    entity_id: device_tracker.jphone_11_pro
     zone: zone.home
     event: enter
   - platform: zone
