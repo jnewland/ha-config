@@ -23,14 +23,14 @@ condition:
   - condition: template
     value_template: |
       {{
-        (states.device_tracker.jphone_11_pro.state == "not_home" or states.sensor.jphone_11_pro_battery_state.state == "Unplugged") and
+        (states.device_tracker.jphone_11_pro_2.state == "not_home" or states.sensor.jphone_11_pro_battery_state.state == "Unplugged") and
         (states.device_tracker.katie_s_iphone.state == "not_home" or states.sensor.katie_s_iphone_battery_state.state == "Unplugged")
       }}
 action:
   - service: script.turn_on
     entity_id: script.mode_day
   - condition: template
-    value_template: '{{ states.device_tracker.jphone_11_pro.state != "not_home" }}'
+    value_template: '{{ states.device_tracker.jphone_11_pro_2.state != "not_home" }}'
   - service: notify.mobile_app_jphone_11_pro
     data_template:
       message: Katie's up!

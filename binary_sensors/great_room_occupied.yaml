@@ -5,8 +5,8 @@ sensors:
       {{
       states.binary_sensors.living_room_motion.state == "on" or
       states.binary_sensor.kitchen_motion_160.state == "on" or
-      states.device_tracker.jphone_11_pro.state == "Kitchen" or
-      states.device_tracker.jphone_11_pro.state == "Living" or
+      states.device_tracker.jphone_11_pro_2.state == "Kitchen" or
+      states.device_tracker.jphone_11_pro_2.state == "Living" or
       states.device_tracker.katie_s_iphone.state == "Kitchen" or
       states.device_tracker.katie_s_iphone.state == "Living"
       }}

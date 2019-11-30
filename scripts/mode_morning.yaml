@@ -16,7 +16,7 @@ sequence:
 - service: alarm_control_panel.alarm_disarm
   entity_id: alarm_control_panel.alarm
 - condition: template
-  value_template: '{{ states.device_tracker.jphone_11_pro.state != "not_home" }}'
+  value_template: '{{ states.device_tracker.jphone_11_pro_2.state != "not_home" }}'
 - service: notify.mobile_app_jphone_11_pro
   data_template:
     message: |
