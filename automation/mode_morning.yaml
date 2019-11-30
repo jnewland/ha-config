@@ -11,7 +11,7 @@ trigger:
   - platform: state
     entity_id:
     - sensor.jphone_11_pro_battery_state
-    - sensor.katies_iphone_battery_state
+    - sensor.katie_s_iphone_battery_state
     to: 'Unplugged'
     for:
       seconds: 30
