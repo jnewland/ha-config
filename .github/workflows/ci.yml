@@ -3,17 +3,13 @@ on: [push]
 jobs:
   test-config:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        home-assistant-version:
-          - 0.102.1
     steps:
     - uses: actions/checkout@v1
     - name: Generate fake SSL cert
       run: |
         openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
     - name: Test config
-      uses: homeassistant/home-assistant:0.102.1
+      uses: docker://homeassistant/home-assistant:0.102.1
       env:
         ALARM_PASSWORD: ""
         ALARM_PLATFORM: alarmdotcom
