@@ -132,7 +132,7 @@ views:
           - switch.stairs_motion_102.battery_level
           - switch.upstairs_motion_87.battery_level
           - switch.wine_room_motion_97.battery_level
-          # - vacuum.downstairs_roomba.battery_level
+          - vacuum.downstairs_roomba.battery_level
   - title: Speakers
     icon: mdi:speaker
     cards:
