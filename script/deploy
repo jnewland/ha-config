@@ -2,9 +2,12 @@
 
 set -ex
 
-[ -n "$1" ]
+ref=$1
+if [ -z "$1" ]; then
+  ref=$(tail -n 1 /config/.git/logs/HEAD | rev | cut -f 1 -d " " | rev)
+fi
 
 git fetch origin
-git reset --hard $1
+git reset --hard $ref
 git clean -d -f -e lost+found
 rm /config/remove-me-to-restart

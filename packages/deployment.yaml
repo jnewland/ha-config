@@ -15,4 +15,4 @@ script:
     - service: shell_command.deploy
 
 shell_command:
-  deploy: /bin/bash ./script/deploy {{ sha | default(['origin',states('sensor.config_branch')]|join('/')) }}
+  deploy: /bin/bash ./script/deploy {{ sha }}
