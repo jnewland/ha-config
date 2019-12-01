@@ -1,40 +1,41 @@
-name: cd
+name: ci
 
 on: [push]
 
 jobs:
-  build:
+  test-config:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 2
       matrix:
-        python-version: [3.7]
         home-assistant-version: [0.102.1]
     steps:
-    - uses: actions/cache@v1
-      id: cache
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ matrix.home-assistant-version }}
-        restore-keys: |
-          ${{ runner.os }}-pip-${{ matrix.python-version }}
     - uses: actions/checkout@v1
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+    - uses: actions/cache@v1
+      id: docker-cache
       with:
-        python-version: ${{ matrix.python-version }}
-    - name: Dependencies
+        path: docker-cache
+        key: ${{ runner.os }}-docker-${{ matrix.home-assistant-version }}
+        restore-keys: |
+          ${{ runner.os }}-docker-
+    - name: Load cached Docker layers
       run: |
-        sudo apt-get install -y \
-        pkg-config \
-        libavformat-dev libavcodec-dev libavdevice-dev \
-        libavutil-dev libswscale-dev libswresample-dev libavfilter-dev
-    - name: Install Home Assistant
-      if: steps.cache.outputs.cache-hit != 'true'
-      run: pip3 install https://github.com/home-assistant/home-assistant/zipball/${{ matrix.home-assistant-version }}
-    - name: Colorize
-      if: steps.cache.outputs.cache-hit != 'true'
-      run: pip3 install colorlog
+        if [ -d "docker-cache" ]; then
+          cat docker-cache/x* > image.tar
+          docker load < image.tar
+          rm -fr docker-cache
+        fi
+    - name: Build image
+      if: steps.docker-cache.outputs.cache-hit != 'true'
+      run: |
+        docker pull homeassistant/home-assistant:${{ matrix.home-assistant-version }}
+        docker save homeassistant/home-assistant:${{ matrix.home-assistant-version }} $(docker history -q homeassistant/home-assistant:${{ matrix.home-assistant-version }} | awk '!/<missing>/{print}') > image.tar
+        mkdir docker-cache
+        split -b 100m image.tar docker-cache/x
+    - name: Tag cached image as scratch
+      run: |
+        docker rmi scratch
+        docker tag homeassistant/home-assistant:${{ matrix.home-assistant-version }} scratch
     - name: Test config
       env:
         ALARM_PASSWORD: ""
@@ -94,8 +95,8 @@ jobs:
         SELF_LINK: http://example.com
         SLACK_API_KEY: ""
         SMOKEPING_LINK: http://example.com
-        SSL_CERTIFICATE: /tmp/cert.pem
-        SSL_KEY: /tmp/key.pem
+        SSL_CERTIFICATE: cert.pem
+        SSL_KEY: key.pem
         TRUSTED_NETWORK_1: 0.0.0.0/0
         TRUSTED_NETWORK_2: 0.0.0.0/0
         TRUSTED_NETWORK_3: 0.0.0.0/0
@@ -108,26 +109,28 @@ jobs:
         VIRTUAL_HOST: example.com
         VIRTUAL_NETWORK: ""
         VIRTUAL_PORT: ""
+      uses: docker://scratch
       run: |
-        openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout /tmp/key.pem -out /tmp/cert.pem
+        openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem && \
         ./script/cibuild
-    - name: Create deployment object
-      run: |
-        curl \
-          -H 'Content-Type: application/json' \
-          -H 'Authorization: token ${GITHUB_TOKEN}' \
-          -H 'Accept: application/vnd.github.ant-man-preview+json' \
-          -X POST \
-          --data '{"ref":"${GITHUB_REF}"}' \
-          https://api.github.com/repos/${GITHUB_REPOSITORY}/deployments | \
-          tee $HOME/deployment
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Ask home-assistant to deploy
-      run: |
-        curl -X POST -H "Content-Type: application/json" -H "x-ha-access: $HA_PASSWORD" "$HA_SERVICE"
-      env:
-        HA_PASSWORD: ${{secrets.HA_PASSWORD}}
-        HA_SERVICE: ${{secrets.HA_SERVICE}}
+    # TODO
+    # - name: Create deployment object
+    #   run: |
+    #     curl \
+    #       -H 'Content-Type: application/json' \
+    #       -H 'Authorization: token ${GITHUB_TOKEN}' \
+    #       -H 'Accept: application/vnd.github.ant-man-preview+json' \
+    #       -X POST \
+    #       --data '{"ref":"${GITHUB_REF}"}' \
+    #       https://api.github.com/repos/${GITHUB_REPOSITORY}/deployments | \
+    #       tee $HOME/deployment
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Ask home-assistant to deploy
+    #   run: |
+    #     curl -X POST -H "Content-Type: application/json" -H "x-ha-access: $HA_PASSWORD" "$HA_SERVICE"
+    #   env:
+    #     HA_PASSWORD: ${{secrets.HA_PASSWORD}}
+    #     HA_SERVICE: ${{secrets.HA_SERVICE}}
     # TODO
     # "complete" the deployment when home-assistant starts up at the new version
