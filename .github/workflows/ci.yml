@@ -36,6 +36,9 @@ jobs:
       run: |
         docker rmi scratch
         docker tag homeassistant/home-assistant:${{ matrix.home-assistant-version }} scratch
+    - name: Generate fake SSL cert
+      run: |
+        openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
     - name: Test config
       env:
         ALARM_PASSWORD: ""
@@ -110,9 +113,9 @@ jobs:
         VIRTUAL_NETWORK: ""
         VIRTUAL_PORT: ""
       uses: docker://scratch
-      run: |
-        openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem && \
-        ./script/cibuild
+      with:
+        entrypoint: /bin/bash
+        args: ./script/cibuild
     # TODO
     # - name: Create deployment object
     #   run: |
