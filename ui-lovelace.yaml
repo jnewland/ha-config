@@ -217,7 +217,6 @@ views:
       - automation.away_mode
     - type: entities
       entities:
-      - sensor.config_branch
       - sensor.config_sha
       - sensor.latest_deployment_sha
       - script.deploy

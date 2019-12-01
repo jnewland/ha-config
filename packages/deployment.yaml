@@ -1,7 +1,4 @@
 sensor:
-  - name: config_branch
-    platform: command_line
-    command: "tail -n 1 /config/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
   - name: config_sha
     platform: command_line
     command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $2'}"

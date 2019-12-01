@@ -1,6 +1,3 @@
-sensor.config_branch:
-  friendly_name: Running branch
-  icon: mdi:source-branch
 sensor.alarm_sensors:
   icon: mdi:radar
 sensor.jphone_11_pro_battery_level:
