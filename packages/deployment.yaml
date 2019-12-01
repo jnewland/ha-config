@@ -10,8 +10,4 @@ sensor:
     command: "curl -s -H \"Accept: application/vnd.github.ant-man-preview+json\" \"https://api.github.com/repos/jnewland/ha-config/deployments?environment=production\" | jq -r '.[0].sha'"
 
 shell_command:
-  deploy: |
-    git fetch origin && \
-      git reset --hard {{ sha | default(['origin',states('sensor.config_branch')]|join('/')) }} && \
-      git clean -d -f -e lost+found && \
-      rm /config/remove-me-to-restart
+  deploy: /bin/bash ./script/deploy {{ sha | default(['origin',states('sensor.config_branch')]|join('/')) }}
