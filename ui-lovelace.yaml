@@ -217,10 +217,10 @@ views:
       - automation.away_mode
     - type: entities
       entities:
-      - sensor.haconfig_branch
-      - sensor.haconfig_sha
+      - sensor.config_branch
+      - sensor.config_sha
       - sensor.latest_deployment_sha
-      - script.deploy_haconfig
+      - shell_command.deploy
 
 resources:
 - url: /local/monster-card.js?v=1

@@ -1,8 +1,8 @@
 sensor:
-  - name: haconfig_branch
+  - name: config_branch
     platform: command_line
     command: "tail -n 1 /config/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
-  - name: haconfig_sha
+  - name: config_sha
     platform: command_line
     command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $2'}"
   - name: latest_deployment_sha
@@ -12,6 +12,6 @@ sensor:
 shell_command:
   deploy: |
     git fetch origin && \
-      git reset --hard {{ sha }} && \
+      git reset --hard {{ sha | default(['origin',states('sensor.config_branch')]|join('/')) }} && \
       git clean -d -f -e lost+found && \
       rm /config/remove-me-to-restart
