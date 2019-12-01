@@ -9,31 +9,11 @@ jobs:
           - 0.102.1
     steps:
     - uses: actions/checkout@v1
-    - uses: actions/cache@v1
-      id: docker-cache
-      with:
-        path: docker-cache
-        key: ${{ runner.os }}-docker-${{ matrix.home-assistant-version }}
-        restore-keys: |
-          ${{ runner.os }}-docker-
-    - name: Load cached Docker layers
-      run: |
-        if [ -d "docker-cache" ]; then
-          cat docker-cache/x* > image.tar
-          docker load < image.tar
-          rm -fr docker-cache
-        fi
-    - name: Pull image
-      if: steps.docker-cache.outputs.cache-hit != 'true'
-      run: |
-        docker pull homeassistant/home-assistant:${{ matrix.home-assistant-version }}
-        docker save homeassistant/home-assistant:${{ matrix.home-assistant-version }} $(docker history -q homeassistant/home-assistant:${{ matrix.home-assistant-version }} | awk '!/<missing>/{print}') > image.tar
-        mkdir docker-cache
-        split -b 100m image.tar docker-cache/x
     - name: Generate fake SSL cert
       run: |
         openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
     - name: Test config
+      uses: homeassistant/home-assistant:0.102.1
       env:
         ALARM_PASSWORD: ""
         ALARM_PLATFORM: alarmdotcom
@@ -106,14 +86,8 @@ jobs:
         VIRTUAL_HOST: example.com
         VIRTUAL_NETWORK: ""
         VIRTUAL_PORT: ""
-      run: |
-        env | grep -v PWD= > /tmp/env && \
-        docker run \
-          -i \
-          --env-file /tmp/env \
-          -v $PWD:$PWD -w $PWD \
-          homeassistant/home-assistant:${{ matrix.home-assistant-version }} \
-          ./script/cibuild
+      with:
+        entrypoint: ./script/cibuild
     # TODO
     # - name: Create deployment object
     #   run: |
