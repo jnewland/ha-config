@@ -32,10 +32,6 @@ jobs:
         docker save homeassistant/home-assistant:${{ matrix.home-assistant-version }} $(docker history -q homeassistant/home-assistant:${{ matrix.home-assistant-version }} | awk '!/<missing>/{print}') > image.tar
         mkdir docker-cache
         split -b 100m image.tar docker-cache/x
-    - name: Tag cached image as scratch
-      run: |
-        docker rmi scratch
-        docker tag homeassistant/home-assistant:${{ matrix.home-assistant-version }} scratch
     - name: Generate fake SSL cert
       run: |
         openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
@@ -112,10 +108,14 @@ jobs:
         VIRTUAL_HOST: example.com
         VIRTUAL_NETWORK: ""
         VIRTUAL_PORT: ""
-      uses: docker://scratch
-      with:
-        entrypoint: /bin/bash
-        args: ./script/cibuild
+      run: |
+        env | grep -v PWD= > /tmp/env && \
+        docker run \
+          -i \
+          --env-file /tmp/env \
+          -v $PWD:$PWD -w $PWD \
+          homeassistant/home-assistant:${{ matrix.home-assistant-version }}
+          ./script/cibuild
     # TODO
     # - name: Create deployment object
     #   run: |
