@@ -114,7 +114,7 @@ jobs:
           -i \
           --env-file /tmp/env \
           -v $PWD:$PWD -w $PWD \
-          homeassistant/home-assistant:${{ matrix.home-assistant-version }}
+          homeassistant/home-assistant:${{ matrix.home-assistant-version }} \
           ./script/cibuild
     # TODO
     # - name: Create deployment object
