@@ -117,3 +117,35 @@ jobs:
           auto_merge: "true"
           required_contexts: YAMBURGER,validate-config
           production_environment: "true"
+
+      - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
+        id: pending
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deployment_id: ${{ steps.create-deployment.outputs.id }}
+          state: pending
+
+      - name: 'Deploy home-assistant'
+        env:
+          HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
+          HASS_URL: ${{ secrets.HASS_URL }}
+        run: |
+          curl \
+            --silent --output /dev/null \
+            -H "Authorization: Bearer $HASS_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"sha\": \"${{ github.event.sha }}\"}" \
+            "$HASS_URL/api/services/shell_command/deploy"
+
+      - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
+        if: success()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deployment_id: ${{ steps.create-deployment.outputs.id }}
+          state: success
+      - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
+        if: failure()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deployment_id: ${{ steps.create-deployment.outputs.id }}
+          state: failure
