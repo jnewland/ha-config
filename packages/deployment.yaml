@@ -1,0 +1,18 @@
+sensor:
+  - name: haconfig_branch
+    platform: command_line
+    command: "tail -n 1 /config/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"
+  - name: haconfig_sha
+    platform: command_line
+    command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $2'}"
+  - name: latest_deployment_sha
+    platform: command_line
+    command: "curl -s -H \"Accept: application/vnd.github.ant-man-preview+json\" \"https://api.github.com/repos/jnewland/ha-config/deployments?environment=production\" | jq -r '.[0].sha'"
+
+shell_command:
+  deploy: |
+    cd /config && \
+      git fetch origin && \
+      git reset --hard {{ sha }} && \
+      git clean -d -n -e lost+found && \
+      rm /config/remove-me-to-restart

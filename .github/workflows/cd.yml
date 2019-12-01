@@ -116,7 +116,4 @@ jobs:
           ref: ${{ github.ref }}
           auto_merge: "true"
           required_contexts: YAMBURGER,validate-config
-      - name: Print outputs
-        run: |
-          echo ${{ steps.create-deployment.outputs.id }}
-          echo ${{ steps.create-deployment.outputs.number }}
+          production_environment: "true"

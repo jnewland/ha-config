@@ -1,0 +1,43 @@
+name: 'Deploy'
+on: ['deployment']
+
+jobs:
+  deployment:
+
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - name: 'Checkout'
+      uses: 'actions/checkout@v1'
+
+    - name: 'Deployment pending'
+      uses: 'deliverybot/status@v1.0.0'
+      with:
+        state: 'pending'
+        token: '${{ secrets.GITHUB_TOKEN }}'
+
+    - name: 'Deploy home-assistant'
+      env:
+        HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
+        HASS_URL: ${{ secrets.HASS_URL }}
+      run: |
+        curl \
+          --silent --output /dev/null \
+          -H "Authorization: Bearer $HASS_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d "{\"sha\": \"${{ github.event.deployment.sha }}\"}" \
+          "$HASS_URL/api/services/shell_command/deploy"
+
+    - name: 'deployment success'
+      if: success()
+      uses: 'deliverybot/status@v1.0.0'
+      with:
+        state: 'success'
+        token: '${{ secrets.GITHUB_TOKEN }}'
+
+    - name: 'deployment failure'
+      if: failure()
+      uses: 'deliverybot/status@v1.0.0'
+      with:
+        state: 'failure'
+        token: '${{ secrets.GITHUB_TOKEN }}'
