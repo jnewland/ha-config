@@ -11,8 +11,7 @@ sensor:
 
 shell_command:
   deploy: |
-    cd /config && \
-      git fetch origin && \
+    git fetch origin && \
       git reset --hard {{ sha }} && \
       git clean -d -f -e lost+found && \
       rm /config/remove-me-to-restart
