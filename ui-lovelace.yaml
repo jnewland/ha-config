@@ -220,7 +220,7 @@ views:
       - sensor.config_branch
       - sensor.config_sha
       - sensor.latest_deployment_sha
-      - shell_command.deploy
+      - script.deploy
 
 resources:
 - url: /local/monster-card.js?v=1
