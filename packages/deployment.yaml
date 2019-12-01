@@ -10,6 +10,9 @@ script:
   deploy:
     sequence:
     - service: shell_command.deploy
+      data_template:
+          sha: "{{ sha }}"
+    - service: homeassistant.restart
 
 shell_command:
   deploy: /bin/bash ./script/deploy {{ sha }}

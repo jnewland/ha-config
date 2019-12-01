@@ -8,5 +8,3 @@ if [ -n "$ref" ]; then
     git reset --hard $ref
     git clean -d -f -e lost+found
 fi
-
-rm /config/remove-me-to-restart
