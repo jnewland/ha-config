@@ -1,3 +1,0 @@
-platform: command_line
-name: haconfig_branch
-command: "tail -n 1 /config/.git/logs/HEAD | rev | cut -f 1 -d \\/ | rev"

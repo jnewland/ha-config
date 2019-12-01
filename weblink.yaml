@@ -1,16 +1,3 @@
 entities:
-  - name: Router
-    url: !env_var ROUTER_LINK
-  - name: Vera
-    url: !env_var VERA_LINK
   - name: self
     url: !env_var SELF_LINK
-  - name: haconfig_ci
-    url: https://travis-ci.org/jnewland/ha-config
-    icon: mdi:check
-  - name: homeassistant_ci
-    url: https://travis-ci.org/jnewland/home-assistant
-    icon: mdi:check
-  - name: "Upstream changes"
-    url: https://github.com/jnewland/home-assistant/compare/jnewland:rancho-de-newland...home-assistant:dev
-    icon: mdi:source-branch

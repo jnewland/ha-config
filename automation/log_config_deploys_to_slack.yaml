@@ -1,9 +1,9 @@
 alias: Log config deploys to slack
 trigger:
   platform: state
-  entity_id: sensor.haconfig_sha
+  entity_id: sensor.config_sha
 action:
   service: notify.slack
   data_template:
-    message: ':shipit: <https://github.com/jnewland/ha-config/commit/{{ states.sensor.haconfig_sha.state }}|{{ states.sensor.haconfig_sha.state }}>'
+    message: ':shipit: <https://github.com/jnewland/ha-config/commit/{{ states.sensor.config_sha.state }}|{{ states.sensor.config_sha.state }}>'
     target: "#general"

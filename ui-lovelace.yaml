@@ -217,11 +217,9 @@ views:
       - automation.away_mode
     - type: entities
       entities:
-      - weblink.homeassistant_ci
-      - weblink.upstream_changes
-      - sensor.haconfig_branch
-      - weblink.haconfig_ci
-      - script.deploy_haconfig
+      - sensor.config_sha
+      - sensor.latest_deployment_sha
+      - script.deploy
 
 resources:
 - url: /local/monster-card.js?v=1
