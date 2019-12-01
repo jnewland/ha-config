@@ -84,27 +84,6 @@ jobs:
         VIRTUAL_PORT: ""
       with:
         entrypoint: ./script/cibuild
-    # TODO
-    # - name: Create deployment object
-    #   run: |
-    #     curl \
-    #       -H 'Content-Type: application/json' \
-    #       -H 'Authorization: token ${GITHUB_TOKEN}' \
-    #       -H 'Accept: application/vnd.github.ant-man-preview+json' \
-    #       -X POST \
-    #       --data '{"ref":"${GITHUB_REF}"}' \
-    #       https://api.github.com/repos/${GITHUB_REPOSITORY}/deployments | \
-    #       tee $HOME/deployment
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    # - name: Ask home-assistant to deploy
-    #   run: |
-    #     curl -X POST -H "Content-Type: application/json" -H "x-ha-access: $HA_PASSWORD" "$HA_SERVICE"
-    #   env:
-    #     HA_PASSWORD: ${{secrets.HA_PASSWORD}}
-    #     HA_SERVICE: ${{secrets.HA_SERVICE}}
-    # TODO
-    # "complete" the deployment when home-assistant starts up at the new version
   deploy:
     runs-on: ubuntu-latest
     needs: validate-config
