@@ -1,14 +1,12 @@
 name: ci
-
 on: [push]
-
 jobs:
   test-config:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 2
       matrix:
-        home-assistant-version: [0.102.1]
+        home-assistant-version:
+          - 0.102.1
     steps:
     - uses: actions/checkout@v1
     - uses: actions/cache@v1
@@ -25,7 +23,7 @@ jobs:
           docker load < image.tar
           rm -fr docker-cache
         fi
-    - name: Build image
+    - name: Pull image
       if: steps.docker-cache.outputs.cache-hit != 'true'
       run: |
         docker pull homeassistant/home-assistant:${{ matrix.home-assistant-version }}
