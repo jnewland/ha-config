@@ -14,5 +14,5 @@ shell_command:
     cd /config && \
       git fetch origin && \
       git reset --hard {{ sha }} && \
-      git clean -d -n -e lost+found && \
+      git clean -d -f -e lost+found && \
       rm /config/remove-me-to-restart
