@@ -113,7 +113,8 @@ jobs:
           HASS_URL: ${{ secrets.HASS_URL }}
         run: |
           curl \
-            --silent --output /dev/null \
+            --silent \
+            --output /dev/null \
             -H "Authorization: Bearer $HASS_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"sha\": \"${{ github.event.pull_request.head.sha }}\"}" \
@@ -126,14 +127,18 @@ jobs:
         run: |
           while true; do
             curl \
+              --silent \
               --max-time 5 \
               -H "Authorization: Bearer $HASS_TOKEN" \
               -H "Content-Type: application/json" \
-              "$HASS_URL/api/states/sensors/config_sha"; 
-            if [ "$SECONDS" -gt "60" ]; then 
+              "$HASS_URL/api/states/sensor.config_sha" | jq '.state' | tee /tmp/deployed_sha;
+            if [ "$(cat /tmp/deployed_sha)" -eq "${{ github.event.pull_request.head.sha }}" ]; then
               exit;
+            elif [ "$SECONDS" -gt "60" ]; then
+              exit 1;
+            else
+              sleep 5;
             fi
-            sleep 5;
           done
 
       - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
