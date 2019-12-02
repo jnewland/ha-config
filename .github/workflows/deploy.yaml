@@ -124,6 +124,7 @@ jobs:
         env:
           HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
           HASS_URL: ${{ secrets.HASS_URL }}
+          TIMEOUT: "60"
         run: |
           while true; do
             curl \
@@ -134,7 +135,8 @@ jobs:
               "$HASS_URL/api/states/sensor.config_sha" | jq -r '.state' | tee /tmp/deployed_sha;
             if [ "$(cat /tmp/deployed_sha)" = "${{ github.event.pull_request.head.sha }}" ]; then
               exit;
-            elif [ "$SECONDS" -gt "60" ]; then
+            elif [ "$SECONDS" -gt "$TIMEOUT" ]; then
+              echo "Couldn't confirm deployment in under $TIMEOUT seconds"
               exit 1;
             else
               sleep 5;
