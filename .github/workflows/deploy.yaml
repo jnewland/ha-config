@@ -125,7 +125,7 @@ jobs:
         run: |
           while true; do
             curl \
-              --max-time 5
+              --max-time 5 \
               -H "Authorization: Bearer $HASS_TOKEN" \
               -H "Content-Type: application/json" \
               "$HASS_URL/api/states/sensors/config_sha"; 
