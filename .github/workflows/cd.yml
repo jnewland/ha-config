@@ -94,7 +94,7 @@ jobs:
         id: create-deployment
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ github.event.push.before }}
+          ref: ${{ github.event.pull_request.head.sha }}
           auto_merge: "true"
           required_contexts: YAMBURGER,validate-config
           production_environment: "true"
