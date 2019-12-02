@@ -68,10 +68,8 @@ views:
     cards:
       - type: entities
         entities:
-        - light.office_desk_lamp
         - light.office_overhead_11
         - light.office_chandelier_69
-        - light.floor_lamp
   - title: Music Room
     icon: mdi:guitar-pick
     cards:
@@ -132,7 +130,7 @@ views:
           - switch.stairs_motion_102.battery_level
           - switch.upstairs_motion_87.battery_level
           - switch.wine_room_motion_97.battery_level
-          - vacuum.downstairs_roomba.battery_level
+          # - vacuum.downstairs_roomba.battery_level
   - title: Speakers
     icon: mdi:speaker
     cards:

@@ -105,6 +105,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment_id: ${{ steps.create-deployment.outputs.id }}
           state: pending
+          log_url: https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks
 
       - name: 'Deploy home-assistant'
         env:
@@ -112,11 +113,35 @@ jobs:
           HASS_URL: ${{ secrets.HASS_URL }}
         run: |
           curl \
-            --silent --output /dev/null \
+            --silent \
+            --output /dev/null \
             -H "Authorization: Bearer $HASS_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"sha\": \"$GITHUB_SHA\"}" \
+            -d "{\"sha\": \"${{ github.event.pull_request.head.sha }}\"}" \
             "$HASS_URL/api/services/script/deploy"
+
+      - name: 'Wait for deployment to complete'
+        env:
+          HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
+          HASS_URL: ${{ secrets.HASS_URL }}
+          TIMEOUT: "60"
+        run: |
+          while true; do
+            curl \
+              --silent \
+              --max-time 5 \
+              -H "Authorization: Bearer $HASS_TOKEN" \
+              -H "Content-Type: application/json" \
+              "$HASS_URL/api/states/sensor.config_sha" | jq -r '.state' | tee /tmp/deployed_sha;
+            if [ "$(cat /tmp/deployed_sha)" = "${{ github.event.pull_request.head.sha }}" ]; then
+              exit;
+            elif [ "$SECONDS" -gt "$TIMEOUT" ]; then
+              echo "Couldn't confirm deployment in under $TIMEOUT seconds"
+              exit 1;
+            else
+              sleep 5;
+            fi
+          done
 
       - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
         if: success()
@@ -124,9 +149,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment_id: ${{ steps.create-deployment.outputs.id }}
           state: success
+          log_url: https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks
       - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
         if: failure()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment_id: ${{ steps.create-deployment.outputs.id }}
           state: failure
+          log_url: https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks
