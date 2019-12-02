@@ -118,6 +118,23 @@ jobs:
             -d "{\"sha\": \"${{ github.event.pull_request.head.sha }}\"}" \
             "$HASS_URL/api/services/script/deploy"
 
+      - name: 'Wait for deployment to complete'
+        env:
+          HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
+          HASS_URL: ${{ secrets.HASS_URL }}
+        run: |
+          while true; do
+            curl \
+              --max-time 5
+              -H "Authorization: Bearer $HASS_TOKEN" \
+              -H "Content-Type: application/json" \
+              "$HASS_URL/api/states/sensors/config_sha"; 
+            if [ "$SECONDS" -gt "60" ]; then 
+              exit;
+            fi
+            sleep 5;
+          done
+
       - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
         if: success()
         with:
