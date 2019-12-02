@@ -115,7 +115,7 @@ jobs:
             --silent --output /dev/null \
             -H "Authorization: Bearer $HASS_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"sha\": \"$GITHUB_SHA\"}" \
+            -d "{\"sha\": \"${{ github.event.pull_request.head.sha }}\"}" \
             "$HASS_URL/api/services/script/deploy"
 
       - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
