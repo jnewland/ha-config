@@ -1,5 +1,7 @@
 name: cd
-on: [push]
+on:
+  pull_request:
+    types: [synchronize,opened,reopened]
 jobs:
   validate-config:
     runs-on: ubuntu-latest
@@ -92,7 +94,7 @@ jobs:
         id: create-deployment
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ github.ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           auto_merge: "true"
           required_contexts: YAMBURGER,validate-config
           production_environment: "true"
