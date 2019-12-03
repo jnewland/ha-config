@@ -5,7 +5,7 @@ trigger:
     from: 'off'
     to: 'on'
   - platform: state
-    entity_id: binary_sensor.master_bath_motion_200
+    entity_id: binary_sensor.master_bath_motion_212
     from: 'off'
     to: 'on'
   - platform: state

@@ -11,7 +11,7 @@ trigger:
     - automation.gate_bell
     - binary_sensor.master_motion_212
     - binary_sensor.master_bedroom_door_205
-    - binary_sensor.master_bath_motion_200
+    - binary_sensor.master_bath_motion_212
     - binary_sensor.stairs_motion_102
     - binary_sensor.closet_motion_61
     - binary_sensor.guest_bath_motion_70
@@ -29,7 +29,7 @@ trigger:
     - device_tracker.katies_iphone
     - device_tracker.jphone_11_pro
     - device_tracker.jesse_music_room
-    - binary_sensor.master_bath_motion_200
+    - binary_sensor.master_bath_motion_212
     - binary_sensor.master_ac_water_13
     - cover.garage_2
     - cover.gate_2
