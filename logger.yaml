@@ -11,5 +11,6 @@ logs:
   root: warn
   pyvera.subscribe: warn
   homeassistant.components.cover.myq: debug
-  homeassistant.components.alexa: debug
   roomba.roomba.Roomba: warn
+  pyhap.hap_server: critical
+  homeassistant.components.shell_command: debug

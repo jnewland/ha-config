@@ -1,3 +1,9 @@
-exclude:
-  domains:
+filter:
+  exclude_domains:
     - device_tracker
+    - climate
+  exclude_entities:
+    - binary_sensor.updater
+    - sensor.jphone_11_pro_battery_state
+    - sensor.katie_s_iphone_battery_state
+    - sensor.jesses_ipad_battery_state

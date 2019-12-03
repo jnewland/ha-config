@@ -7,9 +7,11 @@ homeassistant:
   time_zone: America/Chicago
   customize: !include_dir_merge_named customize
   packages: !include_dir_named packages
+  auth_providers: !include auth_providers.yaml
+
+default_config:
 
 alarm_control_panel: !include alarm_control_panel.yaml
-alexa: !include alexa.yaml
 automation: !include_dir_list automation
 binary_sensor: !include_dir_list binary_sensors
 camera: !include camera.yaml
@@ -46,7 +48,6 @@ python_script:
 recorder: !include recorder.yaml
 script: !include_dir_named scripts
 sensor: !include_dir_list sensors
-shell_command: !include shell_command.yaml
 sun:
 switch: !include_dir_list switches
 system_health:
@@ -58,4 +59,4 @@ weather:
   - platform: darksky
     api_key: !env_var FORECAST_API_KEY
 zone: !include zone.yaml
-vacuum: !include_dir_list vacuums
+# vacuum: !include_dir_list vacuums

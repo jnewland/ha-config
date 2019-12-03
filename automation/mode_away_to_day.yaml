@@ -16,7 +16,7 @@ trigger:
     zone: zone.home
     event: enter
   - platform: zone
-    entity_id: device_tracker.katies_iphone
+    entity_id: device_tracker.katie_s_iphone
     zone: zone.home
     event: enter
 condition:

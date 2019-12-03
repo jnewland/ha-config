@@ -1,6 +1,6 @@
 sequence:
   - service_template: |
-      {{ service | default("notify.ios") }}
+      {{ service | default("notify.iphones") }}
     data_template:
       message: |
         {{ message | default("Turn on " + entity_id) }}

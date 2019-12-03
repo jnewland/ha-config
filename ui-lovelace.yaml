@@ -42,7 +42,7 @@ views:
             image: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=GRK&brand=wui&num=10&delay=25&type=N0R&frame=0&scale=1&noclutter=1&showstorms=99&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=0&rainsnow=1&lightning=1&smooth=1&rand=24691285&lat=0&lon=0&label=you
           - type: glance
             entities:
-            - device_tracker.katies_iphone
+            - device_tracker.katie_s_iphone
             - device_tracker.jphone_11_pro
   - title: Cameras
     icon: mdi:video
@@ -68,10 +68,8 @@ views:
     cards:
       - type: entities
         entities:
-        - light.office_desk_lamp
         - light.office_overhead_11
         - light.office_chandelier_69
-        - light.floor_lamp
   - title: Music Room
     icon: mdi:guitar-pick
     cards:
@@ -132,7 +130,7 @@ views:
           - switch.stairs_motion_102.battery_level
           - switch.upstairs_motion_87.battery_level
           - switch.wine_room_motion_97.battery_level
-          - vacuum.downstairs_roomba.battery_level
+          # - vacuum.downstairs_roomba.battery_level
   - title: Speakers
     icon: mdi:speaker
     cards:
@@ -217,11 +215,9 @@ views:
       - automation.away_mode
     - type: entities
       entities:
-      - weblink.homeassistant_ci
-      - weblink.upstream_changes
-      - sensor.haconfig_branch
-      - weblink.haconfig_ci
-      - script.deploy_haconfig
+      - sensor.config_sha
+      - sensor.latest_deployment_sha
+      - script.deploy
 
 resources:
 - url: /local/monster-card.js?v=1
