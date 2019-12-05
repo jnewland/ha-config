@@ -1,7 +1,8 @@
 platform: template
 sensors:
   alarm_sensors:
-    value_template: '{{ (states.alarm_control_panel.alarm.attributes.sensor_status | default("")).replace(".", ". ") }}'
+    value_template: >
+      {%- for state in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")).split(".") if state|replace("low battery", "") == state and state != ""  -%}{{ state }}. {% endfor -%}
     friendly_name: Alarm sensors
   dark_sky_temperature:
     unit_of_measurement: '°F'
