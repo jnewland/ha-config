@@ -2,7 +2,7 @@ script:
   arm:
     sequence:
       - service: alarm_control_panel.alarm_arm_home
-      entity_id: alarm_control_panel.alarm
+        entity_id: alarm_control_panel.alarm
   disarm:
     sequence:
       - service: alarm_control_panel.alarm_disarm
