@@ -11,3 +11,4 @@ action:
   data_template:
     entity_id: script.lock_up
     message: "The garage has been open for a bit. Close it up?"
+    confirmation_message: closed the garage

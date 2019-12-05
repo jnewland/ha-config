@@ -13,7 +13,7 @@ push:
       actions:
         - identifier: ACK_TURN_ON
           title: Hell yeah
+          destructive: true
           authenticationRequired: true
         - identifier: ACK_NO
-          authenticationRequired: true
-          title: Nope
+          title: Nah

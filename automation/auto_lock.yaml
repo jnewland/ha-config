@@ -11,3 +11,4 @@ action:
   data_template:
     entity_id: script.lock_up
     message: "The front door's been unlocked for a bit. Lock up?"
+    confirmation_message: locked up
