@@ -6,8 +6,10 @@ sequence:
         {{ message | default("Turn on " + entity_id) }}
       data:
         push:
+          apns_headers:
+            'apns-collapse-id': {{ entity_id }}
           category: >
-            {%- if secure | default(none) != none -%}
+            {%- if secure | default("false") != "false" -%}
               secure_ack
             {%- else %}
               ack
@@ -15,6 +17,10 @@ sequence:
         action_data:
           entity_id: |
             {{ entity_id }}
+          notify_service: |
+            {{ service | default("notify.iphones") }}
+          confirmation_message: |
+            {{ confirmation_message | default("turned on " + entity_id) }}
   - service: notify.slack
     data_template:
       message: |
