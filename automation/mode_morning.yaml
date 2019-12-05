@@ -12,7 +12,7 @@ trigger:
     entity_id:
     - sensor.jphone_11_pro_battery_state
     - sensor.katie_s_iphone_battery_state
-    to: 'Unplugged'
+    to: 'Not Charging'
     for:
       seconds: 30
 condition:
