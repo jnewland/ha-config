@@ -25,4 +25,4 @@ sequence:
   - service: notify.slack
     data_template:
       message: |
-        Asked {{ message | default("about turning on " + entity_id) }}
+        :question: Asked {{ message | default("about turning on " + entity_id) }}
