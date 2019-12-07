@@ -24,7 +24,7 @@ action:
       {%- else -%}
       *_Off_*
       {%- endif -%}{{ " " -}}
-      after being
+      after being{{ " " -}}
       {%- if old_state.state == "on" -%}
       *_{{ '%0.0f' % ( ( old_state.attributes.brightness / 255 | round ) * 100 ) }}%*_
       {%- else -%}
