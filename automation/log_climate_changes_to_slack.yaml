@@ -8,5 +8,5 @@ action:
     message: |
       {% set old_state = trigger.from_state %}
       {% set new_state = trigger.to_state %}
-      :thermometer: {{ new_state.name | capitalize }} is currently {{ new_state.attributes.current_temperature }}{{ new_state.attributes.unit_of_measurement }}, and is set to {{ new_state.attributes.temperature }}{{ new_state.attributes.unit_of_measurement }} in {{ new_state.state }} mode
+      :thermometer: *{{ new_state.name | capitalize }}* is currently *_{{ new_state.attributes.current_temperature }}{{ new_state.attributes.unit_of_measurement }}_*, set to *_{{ new_state.attributes.temperature }}{{ new_state.attributes.unit_of_measurement }}_* in *_{{ new_state.state }}_* mode
     target: "#general"

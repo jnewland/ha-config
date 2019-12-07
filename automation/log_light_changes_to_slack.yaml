@@ -18,17 +18,17 @@ action:
     message: |
       {% set old_state = trigger.event.data.get("old_state") %}
       {% set new_state = trigger.event.data.get("new_state") %}
-      :bulb: {{ new_state.name | capitalize }}{{ " " -}}
+      :bulb: *{{ new_state.name | capitalize }}{{ " " -}}*
       {%- if new_state.state == "on" -%}
-      {{ '%0.0f' % ( ( new_state.attributes.brightness / 255 | round ) * 100 ) }}%
+      *_{{ '%0.0f' % ( ( new_state.attributes.brightness / 255 | round ) * 100 ) }}%_*
       {%- else -%}
-      Off
+      *_Off_*
       {%- endif -%}{{ " " -}}
       after being
       {%- if old_state.state == "on" -%}
-      {{ '%0.0f' % ( ( old_state.attributes.brightness / 255 | round ) * 100 ) }}%
+      *_{{ '%0.0f' % ( ( old_state.attributes.brightness / 255 | round ) * 100 ) }}%*_
       {%- else -%}
-      Off
+      *_Off_*
       {%- endif -%}{{ " " -}}
       for {{ relative_time(old_state.last_changed) }}
     target: "#general"
