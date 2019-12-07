@@ -9,6 +9,10 @@ sensor:
 script:
   deploy:
     sequence:
+    - service: notify.slack
+      data_template:
+        message: ':shipit: https://github.com/jnewland/ha-config/commit/{{ sha }}/checks'
+        target: "#general"
     - service: shell_command.deploy
       data_template:
           sha: "{{ sha }}"

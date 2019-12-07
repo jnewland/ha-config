@@ -1,7 +1,7 @@
 sequence:
   - service: notify.slack
     data:
-      message: ':house: shutting down...'
+      message: ':house: Shutting down...'
       target: '#general'
   - service: input_select.select_option
     data_template:
