@@ -26,9 +26,9 @@ action:
       {%- endif -%}{{ " " -}}
       after being{{ " " -}}
       {%- if old_state.state == "on" -%}
-      *_{{ '%0.0f' % ( ( old_state.attributes.brightness / 255 | round ) * 100 ) }}%_*
+      {{ '%0.0f' % ( ( old_state.attributes.brightness / 255 | round ) * 100 ) }}%
       {%- else -%}
-      *_Off_*
+      Off
       {%- endif -%}{{ " " -}}
       for {{ relative_time(old_state.last_changed) }}
     target: "#general"
