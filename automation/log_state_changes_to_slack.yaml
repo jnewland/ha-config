@@ -86,8 +86,8 @@ action:
       } %}
       {% set entity_state = new_state.entity_id + "." + new_state.state %}
       {% set entity_state_emoji = {
-        "lock.front_door_12.locked":   ":lock:",
-        "lock.front_door_12.unlocked": ":unlock:"
+        "lock.front_door.locked":   ":lock:",
+        "lock.front_door.unlocked": ":unlock:"
       } %}
       {% if entity_state_emoji[entity_state] | default(none) != none -%}
         {{ entity_state_emoji[entity_state] -}}

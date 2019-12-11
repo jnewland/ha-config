@@ -24,17 +24,17 @@ sensors:
     unit_of_measurement: '°F'
     value_template: |
       {% if states.climate.great_room_27 %}
-        {{ states.climate.great_room_27.attributes.current_temperature }}
+        {{ states.climate.great_room.attributes.current_temperature }}
       {% endif %}
   hall_temperature:
     unit_of_measurement: '°F'
     value_template: |
-      {% if states.climate.hall_48 %}
-        {{ states.climate.hall_48.attributes.current_temperature }}
+      {% if states.climate.office_48 %}
+        {{ states.climate.office.attributes.current_temperature }}
       {% endif %}
   upstairs_temperature:
     unit_of_measurement: '°F'
     value_template: |
       {% if states.climate.upstairs_28 %}
-        {{ states.climate.upstairs_28.attributes.current_temperature }}
+        {{ states.climate.upstairs.attributes.current_temperature }}
       {% endif %}
