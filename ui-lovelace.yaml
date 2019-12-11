@@ -70,6 +70,7 @@ views:
         entities:
         - light.office_overhead
         - light.office_chandelier
+        - light.exersize_bike
   - title: Music Room
     icon: mdi:guitar-pick
     cards:
