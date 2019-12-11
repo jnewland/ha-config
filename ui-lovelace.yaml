@@ -71,6 +71,7 @@ views:
         - light.office_overhead
         - light.office_chandelier
         - light.exercise_bike
+        - binary_sensor.office_motion
   - title: Music Room
     icon: mdi:guitar-pick
     cards:
@@ -78,6 +79,7 @@ views:
         entities:
         - light.music_room
         - light.bookshelf
+        - binary_sensor.music_room_motion
   - title: Lights
     icon: mdi:lightbulb
     cards:
@@ -168,6 +170,7 @@ views:
       - light.master_windows
       - light.bedside_lamp
       - light.master_patio
+      - binary_sensor.closet_motion
     - type: entities
       entities:
       - light.master_bath_overhead
@@ -175,6 +178,7 @@ views:
       - light.master_mirror
       - light.master_toilet
       - switch.master_bath_fan
+      - binary_sensor.master_bath_motion
   - title: Great Room
     icon: mdi:sofa
     cards:
@@ -188,6 +192,7 @@ views:
       - light.couch_lamp_right
       - light.couch_lamp_left
       - switch.christmas_tree
+      - binary_sensor.kitchen_motion
   - title: Outdoor
     icon: mdi:tree
     cards:
