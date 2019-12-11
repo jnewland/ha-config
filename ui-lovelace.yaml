@@ -81,28 +81,33 @@ views:
   - title: Lights
     icon: mdi:lightbulb
     cards:
-    - type: custom:monster-card
+    - type: custom:auto-entities
       show_empty: false
       card:
-        type: glance
-        title: "On"
+        type: entities
+        title: Lights on
+        show_header_toggle: false
       filter:
         include:
           - domain: light
         exclude:
-          - entity_id: "*sml*"
-          - state: 'off'
-          - state: 'unavailable'
-    - type: custom:monster-card
+          - entity_id: "/_\d+$/"
+          - state: "off"
+          - state: "unavailable"
+    - type: custom:auto-entities
       show_empty: false
       card:
         type: glance
-        title: "Off"
+        title: Off
       filter:
         include:
           - domain: light
+            state: "off"
+            options:
+              tap_action:
+                action: toggle
         exclude:
-          - state: 'on'
+          - entity_id: "/_\d+$/"
   - title: Batteries
     icon: mdi:battery
     cards:
@@ -222,9 +227,19 @@ views:
       - sensor.config_sha
       - sensor.latest_deployment_sha
       - script.deploy
+    - type: custom:auto-entities
+      show_empty: false
+      card:
+        type: glance
+        title: Unconfigured
+      filter:
+        include:
+          - entity_id: "/_\d+$/"
 
 resources:
 - url: /local/monster-card.js?v=1
   type: js
 - url: /local/entity-attributes-card.js?v=3
   type: js
+- url: /local/auto-entities.js
+  type: module
