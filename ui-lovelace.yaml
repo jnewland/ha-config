@@ -234,7 +234,7 @@ views:
         title: Unconfigured
       filter:
         include:
-          - entity_id: "/_\d+$/"
+          - entity_id: '/_[0-9]+$/'
 
 resources:
 - url: /local/monster-card.js?v=1
