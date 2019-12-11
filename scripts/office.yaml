@@ -6,7 +6,7 @@ sequence:
     - light.office_closet
     - light.office_overhead
     - light.office_chandelier
-    - light.floor_lamp
+    - light.exercise_bike
     brightness: |
       {{ brightness | default(states('input_number.brightness') | int) }}
 - condition: template

@@ -10,7 +10,7 @@ light.dining_room_table:
   brightness_step: 192
   emulated_hue_hidden: false
   notify_action: duck
-light.floor_lamp:
+light.exersize_bike:
   notify_action: duck
 light.front_door:
   emulated_hue_hidden: false

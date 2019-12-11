@@ -11,7 +11,7 @@ trigger:
     - light.chandelier
     - light.closet_backlight
     - light.dining_room_table
-    - light.floor_lamp
+    - light.exersize_bike
     - light.garage_hall
     - light.great_hall
     - light.guest_bath
