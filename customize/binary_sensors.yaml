@@ -64,3 +64,5 @@ binary_sensor.front_gate:
   device_class: opening
   icon: mdi:gate
   zone: Outside
+binary_sensor.updater:
+  friendly_name: Update
