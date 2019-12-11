@@ -2,4 +2,4 @@ platform: template
 sensors:
   gate:
     value_template: |
-      {{ states("cover.gate_2") | default("") == "open" }}
+      {{ states("cover.gate") | default("") == "open" }}

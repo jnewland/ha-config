@@ -2,7 +2,7 @@
 alias: Auto garage
 trigger:
   platform: state
-  entity_id: cover.garage_2
+  entity_id: cover.garage
   to: open
   for:
     minutes: 5

@@ -12,8 +12,8 @@ views:
               - input_select.mode
               - alarm_control_panel.alarm
               - lock.front_door_12
-              - cover.garage_2
-              - cover.gate_2
+              - cover.garage
+              - cover.gate
               - binary_sensor.front_gate_121
               - input_number.brightness
           - type: horizontal-stack
@@ -196,8 +196,8 @@ views:
     - type: entities
       entities:
       - binary_sensor.front_gate_121
-      - cover.garage_2
-      - cover.gate_2
+      - cover.garage
+      - cover.gate
   - title: Environment
     icon: mdi:temperature-fahrenheit
     cards:
