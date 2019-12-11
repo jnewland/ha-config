@@ -9,7 +9,7 @@ trigger:
   - binary_sensor.upstairs_motion
   - binary_sensor.closet_motion
   - binary_sensor.wine_room_motion
-  - binary_sensor.hall_motion
+  - binary_sensor.guest_hall_motion
   - binary_sensor.music_room_motion
   - binary_sensor.living_room_motion
   - binary_sensor.kitchen_motion

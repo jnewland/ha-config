@@ -8,7 +8,7 @@ trigger:
   - binary_sensor.closet_motion
   - binary_sensor.garage_hall_motion
   - binary_sensor.great_hall_motion
-  - binary_sensor.hall_motion
+  - binary_sensor.guest_hall_motion
   - binary_sensor.music_room_motion
   to: "off"
   for:

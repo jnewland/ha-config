@@ -4,6 +4,9 @@ binary_sensor.stairs_motion:
 binary_sensor.closet_motion:
   zone: Master
   trigger_entity_id: light.master_closet
+binary_sensor.guest_hall_motion:
+  zone: Hall
+  trigger_entity_id: light.guest_hall
 binary_sensor.guest_bath_motion:
   zone: Hall
   trigger_entity_id: group.guest_bath_lights
@@ -31,9 +34,6 @@ binary_sensor.great_hall_motion:
 binary_sensor.garage_hall_motion:
   zone: Hall
   trigger_entity_id: light.garage_hall
-binary_sensor.hall_motion:
-  zone: Hall
-  trigger_entity_id: light.guest_hall
 binary_sensor.music_room_motion:
   friendly_name: music room motion
   zone: Music room
