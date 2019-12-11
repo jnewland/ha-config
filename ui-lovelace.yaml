@@ -71,6 +71,7 @@ views:
         - light.office_overhead
         - light.office_chandelier
         - light.exercise_bike
+        - binary_sensor.office_motion
   - title: Music Room
     icon: mdi:guitar-pick
     cards:
@@ -78,31 +79,40 @@ views:
         entities:
         - light.music_room
         - light.bookshelf
+        - binary_sensor.music_room_motion
   - title: Lights
     icon: mdi:lightbulb
     cards:
-    - type: custom:monster-card
+    - type: custom:auto-entities
       show_empty: false
+      sort:
+        method: name
       card:
-        type: glance
-        title: "On"
+        type: entities
+        title: Lights on
       filter:
         include:
           - domain: light
         exclude:
-          - entity_id: "*sml*"
-          - state: 'off'
-          - state: 'unavailable'
-    - type: custom:monster-card
+          - entity_id: '/_[0-9]+$/'
+          - state: "off"
+          - state: "unavailable"
+    - type: custom:auto-entities
+      sort:
+        method: name
       show_empty: false
       card:
-        type: glance
-        title: "Off"
+        type: entities
+        title: Lights off
       filter:
         include:
           - domain: light
+            state: "off"
+            options:
+              tap_action:
+                action: toggle
         exclude:
-          - state: 'on'
+          - entity_id: '/_[0-9]+$/'
   - title: Batteries
     icon: mdi:battery
     cards:
@@ -160,6 +170,7 @@ views:
       - light.master_windows
       - light.bedside_lamp
       - light.master_patio
+      - binary_sensor.closet_motion
     - type: entities
       entities:
       - light.master_bath_overhead
@@ -167,6 +178,7 @@ views:
       - light.master_mirror
       - light.master_toilet
       - switch.master_bath_fan
+      - binary_sensor.master_bath_motion
   - title: Great Room
     icon: mdi:sofa
     cards:
@@ -180,6 +192,7 @@ views:
       - light.couch_lamp_right
       - light.couch_lamp_left
       - switch.christmas_tree
+      - binary_sensor.kitchen_motion
   - title: Outdoor
     icon: mdi:tree
     cards:
@@ -217,12 +230,28 @@ views:
       - automation.away_mode
     - type: entities
       entities:
+      - sensor.current_version
+      - binary_sensor.updater
       - sensor.config_sha
       - sensor.latest_deployment_sha
       - script.deploy
+    - type: custom:auto-entities
+      show_empty: false
+      sort:
+        method: id
+      card:
+        type: glance
+        title: Unconfigured devices
+      filter:
+        include:
+          - entity_id: '/_[0-9]+$/'
+        exclude:
+          - entity_id: "*_sim_*"
 
 resources:
 - url: /local/monster-card.js?v=1
   type: js
 - url: /local/entity-attributes-card.js?v=3
   type: js
+- url: /local/auto-entities.js
+  type: module
