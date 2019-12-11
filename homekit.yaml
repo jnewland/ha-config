@@ -15,6 +15,7 @@ filter:
   include_entities:
     - switch.back_porch_fans
     - switch.bug_zapper
+    - switch.christmas_tree
     - script.mode_away
     - script.office
     - script.mode_reading

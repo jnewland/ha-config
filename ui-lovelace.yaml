@@ -178,6 +178,7 @@ views:
       - light.pendants
       - light.couch_lamp_right
       - light.couch_lamp_left
+      - switch.christmas_tree
   - title: Outdoor
     icon: mdi:tree
     cards:
