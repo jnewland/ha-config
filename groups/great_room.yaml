@@ -1,9 +1,9 @@
 name: great room
 entities:
-- light.cabinets_14
-- light.dining_room_table_52
-- light.kitchen_18
-- light.living_20
-- light.pendants_51
-- light.couch_lamp_right_206
-- light.couch_lamp_left_207
+- light.cabinets
+- light.dining_room_table
+- light.kitchen
+- light.living
+- light.pendants
+- light.couch_lamp_right
+- light.couch_lamp_left

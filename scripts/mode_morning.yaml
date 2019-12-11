@@ -12,7 +12,7 @@ sequence:
 - service: light.turn_on
   entity_id:
     - group.speakers
-    - light.cabinets_14
+    - light.cabinets
 - service: alarm_control_panel.alarm_disarm
   entity_id: alarm_control_panel.alarm
 - condition: template
@@ -28,10 +28,10 @@ sequence:
 #       The downstairs roomba's not on the dock. Help a robot out?
 #       {% endif %}
 # - service: climate.set_temperature
-#   entity_id:  climate.upstairs_28
+#   entity_id:  climate.upstairs
 #   data:
 #     temperature: 74
 - service: climate.set_fan_mode
-  entity_id:  climate.upstairs_28
+  entity_id:  climate.upstairs
   data:
     fan_mode: Auto

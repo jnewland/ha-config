@@ -1,7 +1,7 @@
 name: master bath
 entities:
-- light.master_bath_overhead_36
-- light.master_shower_34
-- light.master_mirror_35
-- light.master_toilet_62
-- switch.master_bath_fan_129
+- light.master_bath_overhead
+- light.master_shower
+- light.master_mirror
+- light.master_toilet
+- switch.master_bath_fan

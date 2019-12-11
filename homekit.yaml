@@ -13,8 +13,9 @@ filter:
     - switch
     - scene
   include_entities:
-    - switch.back_porch_fans_228
-    - switch.fountain_26
+    - switch.back_porch
+    - switch.bug_zapper
+    - switch.christmas_tree
     - script.mode_away
     - script.office
     - script.mode_reading
@@ -22,17 +23,9 @@ filter:
     - script.mode_party
     - script.living
   exclude_entities:
-    - light.closet_blue_115
-    - light.closet_brightness_113
-    - light.closet_green_114
-    - light.closet_red_116
-    - light.closet_white_117
-    - light.desk_blue_67
-    - light.desk_brightness_64
-    - light.desk_green_66
-    - light.desk_red_65
-    - light.desk_white_68
-    - light.pantry_122
-entity_config:
-  switch.fountain_26:
-    type: faucet
+    - light.bookshelf_blue
+    - light.bookshelf_brightness
+    - light.bookshelf_green
+    - light.bookshelf_red
+    - light.bookshelf_white
+    - light.pantry

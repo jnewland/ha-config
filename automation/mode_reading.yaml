@@ -1,7 +1,7 @@
 alias: Reading mode
 trigger:
   platform: state
-  entity_id: binary_sensor.master_bedroom_door_205
+  entity_id: binary_sensor.master_bedroom_door
   to: "off"
 condition:
   condition: and

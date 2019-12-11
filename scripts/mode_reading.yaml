@@ -10,18 +10,18 @@ sequence:
 - service: light.turn_on
   data_template:
     entity_id:
-    - light.chandelier_154
-    - light.chandelier_lamp_33
-    - light.bedside_lamp_141
-    - light.master_nook_42
-    - light.master_patio_31
+    - light.chandelier
+    - light.chandelier_lamp
+    - light.bedside_lamp
+    - light.master_nook
+    - light.master_patio
     brightness: |
       {{ states('input_number.brightness') | int }}
 - service: light.turn_off
   data:
     entity_id:
-    - light.master_overhead_30
-    - light.stairs_23
+    - light.master_overhead
+    - light.stairs
 - service: light.turn_off
   data_template:
     entity_id: |
@@ -38,10 +38,10 @@ sequence:
 # - service: vacuum.turn_on
 #   entity_id: vacuum.downstairs_roomba
 # - service: climate.set_temperature
-#   entity_id:  climate.upstairs_28
+#   entity_id:  climate.upstairs
 #   data:
 #     temperature: 72
 - service: climate.set_fan_mode
-  entity_id:  climate.upstairs_28
+  entity_id:  climate.upstairs
   data:
     fan_mode: On

@@ -1,18 +1,18 @@
 sequence:
 - service: light.turn_on
   data:
-    entity_id: light.cabinets_14
+    entity_id: light.cabinets
 - condition: template
   value_template: >
     {{ states.input_select.mode.state != "Sleeping"  }}
 - service: light.turn_on
   data_template:
     entity_id:
-      - light.dining_room_table_52
-      - light.kitchen_18
-      - light.living_20
-      - light.pendants_51
-      - light.couch_lamp_right_206
-      - light.couch_lamp_left_207
+      - light.dining_room_table
+      - light.kitchen
+      - light.living
+      - light.pendants
+      - light.couch_lamp_right
+      - light.couch_lamp_left
     brightness: |
       {{ brightness | default(states('input_number.brightness') | int) }}

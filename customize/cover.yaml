@@ -1,4 +1,4 @@
-cover.garage_2:
+cover.garage:
   device_class: garage
-cover.gate_2:
+cover.gate:
   device_class: garage

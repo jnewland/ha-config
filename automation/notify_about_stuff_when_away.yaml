@@ -2,12 +2,12 @@ alias: Notify about stuff when we're away
 trigger:
   platform: state
   entity_id:
-    - lock.front_door_12
+    - lock.front_door
     - alarm_control_panel.alarm
     - binary_sensor.entry_door
     - binary_sensor.garage
     - binary_sensor.gate
-    - binary_sensor.master_door
+    - binary_sensor.master_patio_door
 condition:
   condition: and
   conditions:

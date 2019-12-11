@@ -2,7 +2,7 @@
 alias: Auto gate
 trigger:
   platform: state
-  entity_id: cover.gate_2
+  entity_id: cover.gate
   to: open
   for:
     minutes: 5

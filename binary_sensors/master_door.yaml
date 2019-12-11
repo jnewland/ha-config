@@ -1,5 +1,5 @@
 platform: template
 sensors:
-  master_door:
+  master_patio_door:
     value_template: |
       {{ "Master" in (states.sensor.alarm_sensors.state | default("")) }}
