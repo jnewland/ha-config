@@ -91,7 +91,7 @@ views:
         include:
           - domain: light
         exclude:
-          - entity_id: "/_\d+$/"
+          - entity_id: '/_[0-9]+$/'
           - state: "off"
           - state: "unavailable"
     - type: custom:auto-entities
@@ -107,7 +107,7 @@ views:
               tap_action:
                 action: toggle
         exclude:
-          - entity_id: "/_\d+$/"
+          - entity_id: '/_[0-9]+$/'
   - title: Batteries
     icon: mdi:battery
     cards:
