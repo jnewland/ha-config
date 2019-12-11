@@ -97,8 +97,8 @@ views:
     - type: custom:auto-entities
       show_empty: false
       card:
-        type: glance
-        title: Off
+        type: entities
+        title: Lights off
       filter:
         include:
           - domain: light
@@ -231,10 +231,12 @@ views:
       show_empty: false
       card:
         type: glance
-        title: Unconfigured
+        title: Unconfigured vera
       filter:
         include:
           - entity_id: '/_[0-9]+$/'
+            attributes:
+              "Vera Device Id": "> 1"
 
 resources:
 - url: /local/monster-card.js?v=1
