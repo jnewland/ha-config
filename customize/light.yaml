@@ -46,7 +46,7 @@ light.master_toilet:
   notify_action: duck
 light.music_room:
   notify_action: duck
-light.desk:
+light.bookshelf:
   emulated_hue_hidden: false
 light.office_chandelier:
   notify_action: duck

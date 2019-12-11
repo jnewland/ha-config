@@ -76,7 +76,7 @@ views:
       - type: entities
         entities:
         - light.music_room
-        - light.desk
+        - light.bookshelf
   - title: Lights
     icon: mdi:lightbulb
     cards:

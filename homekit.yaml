@@ -27,11 +27,11 @@ filter:
     - light.closet_green
     - light.closet_red
     - light.closet_white
-    - light.desk_blue
-    - light.desk_brightness
-    - light.desk_green
-    - light.desk_red
-    - light.desk_white
+    - light.bookshelf_blue
+    - light.bookshelf_brightness
+    - light.bookshelf_green
+    - light.bookshelf_red
+    - light.bookshelf_white
     - light.pantry
 entity_config:
   switch.fountain:
