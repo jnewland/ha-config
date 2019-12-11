@@ -13,8 +13,8 @@ filter:
     - switch
     - scene
   include_entities:
-    - switch.back_porch_fans_228
-    - switch.fountain_26
+    - switch.back_porch_fans
+    - switch.fountain
     - script.mode_away
     - script.office
     - script.mode_reading
@@ -22,17 +22,17 @@ filter:
     - script.mode_party
     - script.living
   exclude_entities:
-    - light.closet_blue_115
-    - light.closet_brightness_113
-    - light.closet_green_114
-    - light.closet_red_116
-    - light.closet_white_117
-    - light.desk_blue_67
-    - light.desk_brightness_64
-    - light.desk_green_66
-    - light.desk_red_65
-    - light.desk_white_68
-    - light.pantry_122
+    - light.closet_blue
+    - light.closet_brightness
+    - light.closet_green
+    - light.closet_red
+    - light.closet_white
+    - light.desk_blue
+    - light.desk_brightness
+    - light.desk_green
+    - light.desk_red
+    - light.desk_white
+    - light.pantry
 entity_config:
-  switch.fountain_26:
+  switch.fountain:
     type: faucet

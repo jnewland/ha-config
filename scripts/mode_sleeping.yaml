@@ -24,6 +24,6 @@ sequence:
 - service: alarm_control_panel.alarm_arm_home
   entity_id: alarm_control_panel.alarm
 - service: climate.set_fan_mode
-  entity_id:  climate.upstairs_28
+  entity_id:  climate.upstairs
   data:
     fan_mode: Auto

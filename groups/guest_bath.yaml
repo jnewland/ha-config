@@ -1,4 +1,4 @@
 ---
-- light.guest_bath_43
-- light.guest_shower_44
-- switch.guest_bath_fan_126
+- light.guest_bath
+- light.guest_shower
+- switch.guest_bath_fan

@@ -11,10 +11,10 @@ views:
             entities:
               - input_select.mode
               - alarm_control_panel.alarm
-              - lock.front_door_12
+              - lock.front_door
               - cover.garage
               - cover.gate
-              - binary_sensor.front_gate_121
+              - binary_sensor.front_gate
               - input_number.brightness
           - type: horizontal-stack
             cards:
@@ -68,15 +68,15 @@ views:
     cards:
       - type: entities
         entities:
-        - light.office_overhead_11
-        - light.office_chandelier_69
+        - light.office_overhead
+        - light.office_chandelier
   - title: Music Room
     icon: mdi:guitar-pick
     cards:
       - type: entities
         entities:
-        - light.music_room_118
-        - light.desk_63
+        - light.music_room
+        - light.desk
   - title: Lights
     icon: mdi:lightbulb
     cards:
@@ -151,51 +151,51 @@ views:
     cards:
     - type: entities
       entities:
-      - light.chandelier_154
-      - light.chandelier_lamp_33
-      - light.master_overhead_30
-      - light.master_closet_32
-      - light.master_nook_42
-      - light.master_windows_128
-      - light.bedside_lamp_141
-      - light.master_patio_31
+      - light.chandelier
+      - light.chandelier_lamp
+      - light.master_overhead
+      - light.master_closet
+      - light.master_nook
+      - light.master_windows
+      - light.bedside_lamp
+      - light.master_patio
     - type: entities
       entities:
-      - light.master_bath_overhead_36
-      - light.master_shower_34
-      - light.master_mirror_35
-      - light.master_toilet_62
-      - switch.master_bath_fan_129
+      - light.master_bath_overhead
+      - light.master_shower
+      - light.master_mirror
+      - light.master_toilet
+      - switch.master_bath_fan
   - title: Great Room
     icon: mdi:sofa
     cards:
     - type: entities
       entities:
-      - light.cabinets_14
-      - light.dining_room_table_52
-      - light.kitchen_18
-      - light.living_20
-      - light.pendants_51
-      - light.couch_lamp_right_206
-      - light.couch_lamp_left_207
+      - light.cabinets
+      - light.dining_room_table
+      - light.kitchen
+      - light.living
+      - light.pendants
+      - light.couch_lamp_right
+      - light.couch_lamp_left
   - title: Outdoor
     icon: mdi:tree
     cards:
     - type: entities
       entities:
-      - switch.fountain_26
-      - light.atrium_22
-      - switch.back_porch_fans_228
-      - light.front_porch_19
-      - light.front_door_21
-      - light.patio_29
-      - light.master_patio_31
-      - light.ac_125
-      - light.atrium_door_123
-      - light.garage_door_124
+      - switch.fountain
+      - light.atrium
+      - switch.back_porch_fans
+      - light.front_porch
+      - light.front_door
+      - light.patio
+      - light.master_patio
+      - light.ac
+      - light.atrium_door
+      - light.garage_door
     - type: entities
       entities:
-      - binary_sensor.front_gate_121
+      - binary_sensor.front_gate
       - cover.garage
       - cover.gate
   - title: Environment
@@ -203,9 +203,9 @@ views:
     cards:
     - type: entities
       entities:
-      - climate.great_room_27
-      - climate.upstairs_28
-      - climate.hall_48
+      - climate.great_room
+      - climate.upstairs
+      - climate.hall
   - title: Settings
     icon: mdi:settings
     cards:

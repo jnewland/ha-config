@@ -2,20 +2,20 @@ alias: Turn on lights when motion is detected
 trigger:
   platform: state
   entity_id:
-  - binary_sensor.guest_bath_motion_70
-  - binary_sensor.master_bath_motion_212
-  - binary_sensor.powder_room_motion_75
-  - binary_sensor.stairs_motion_102
-  - binary_sensor.upstairs_motion_87
-  - binary_sensor.closet_motion_61
-  - binary_sensor.wine_room_motion_97
-  - binary_sensor.hall_motion_92
-  - binary_sensor.music_room_motion_107
+  - binary_sensor.guest_bath_motion
+  - binary_sensor.master_bath_motion
+  - binary_sensor.powder_room_motion
+  - binary_sensor.stairs_motion
+  - binary_sensor.upstairs_motion
+  - binary_sensor.closet_motion
+  - binary_sensor.wine_room_motion
+  - binary_sensor.hall_motion
+  - binary_sensor.music_room_motion
   - binary_sensor.living_room_motion
-  - binary_sensor.kitchen_motion_160
-  - binary_sensor.office_motion_82
-  - binary_sensor.garage_hall_motion_132
-  - binary_sensor.great_hall_motion_131
+  - binary_sensor.kitchen_motion
+  - binary_sensor.office_motion
+  - binary_sensor.garage_hall_motion
+  - binary_sensor.great_hall_motion
   to: "on"
 condition:
   condition: template

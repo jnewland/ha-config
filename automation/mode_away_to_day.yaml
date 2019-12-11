@@ -1,7 +1,7 @@
 alias: Mode away to day
 trigger:
   - platform: state
-    entity_id: lock.front_door_12
+    entity_id: lock.front_door
     to: 'unlocked'
   - platform: state
     entity_id: binary_sensor.garage

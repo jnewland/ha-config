@@ -1,6 +1,6 @@
 ---
-- light.front_porch_19
-- light.front_door_21
-- light.ac_125
-- light.atrium_door_123
-- light.garage_door_124
+- light.front_porch
+- light.front_door
+- light.ac
+- light.atrium_door
+- light.garage_door

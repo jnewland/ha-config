@@ -4,8 +4,8 @@ sequence:
     entity_id:
     - light.office_desk_lamp
     - light.office_closet
-    - light.office_overhead_11
-    - light.office_chandelier_69
+    - light.office_overhead
+    - light.office_chandelier
     - light.floor_lamp
     brightness: |
       {{ brightness | default(states('input_number.brightness') | int) }}
@@ -15,6 +15,6 @@ sequence:
 - service: light.turn_on
   data_template:
     entity_id:
-    - light.office_overhead_11
+    - light.office_overhead
     brightness: |
       {{ brightness | default(states('input_number.brightness') | int) }}

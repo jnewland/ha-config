@@ -1,9 +1,9 @@
 ---
-- light.chandelier_154
-- light.chandelier_lamp_33
-- light.master_overhead_30
-- light.master_closet_32
-- light.master_nook_42
-- light.master_windows_128
-- light.bedside_lamp_141
-- light.master_patio_31
+- light.chandelier
+- light.chandelier_lamp
+- light.master_overhead
+- light.master_closet
+- light.master_nook
+- light.master_windows
+- light.bedside_lamp
+- light.master_patio

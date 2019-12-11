@@ -1,68 +1,68 @@
-light.atrium_22:
+light.atrium:
   emulated_hue_hidden: false
-light.cabinets_14:
+light.cabinets:
   emulated_hue_hidden: false
-light.chandelier_154:
+light.chandelier:
   emulated_hue_hidden: false
-light.chandelier_lamp_33:
+light.chandelier_lamp:
   emulated_hue_hidden: false
-light.dining_room_table_52:
+light.dining_room_table:
   brightness_step: 192
   emulated_hue_hidden: false
   notify_action: duck
 light.floor_lamp:
   notify_action: duck
-light.front_door_21:
+light.front_door:
   emulated_hue_hidden: false
-light.front_porch_19:
+light.front_porch:
   emulated_hue_hidden: false
-light.kitchen_18:
+light.kitchen:
   brightness_step: 192
   emulated_hue_hidden: false
   notify_action: duck
-light.living_20:
+light.living:
   brightness_step: 192
   emulated_hue_hidden: false
   notify_action: duck
-light.master_bath_overhead_36:
+light.master_bath_overhead:
   notify_action: duck
-light.master_closet_32:
+light.master_closet:
   emulated_hue_hidden: false
   notify_action: duck
-light.master_mirror_35:
+light.master_mirror:
   notify_action: duck
-light.master_nook_42:
+light.master_nook:
   emulated_hue_hidden: false
-light.master_overhead_30:
+light.master_overhead:
   emulated_hue_hidden: false
   notify_action: duck
-light.master_patio_31:
+light.master_patio:
   fixed_brightness: 102
   emulated_hue_hidden: false
   notify_action: duck
-light.master_shower_34:
+light.master_shower:
   notify_action: duck
-light.master_toilet_62:
+light.master_toilet:
   notify_action: duck
-light.music_room_118:
+light.music_room:
   notify_action: duck
-light.desk_63:
+light.desk:
   emulated_hue_hidden: false
-light.office_chandelier_69:
+light.office_chandelier:
   notify_action: duck
 light.office_desk_lamp:
   notify_action: duck
   brightness_step: 192
-light.office_overhead_11:
+light.office_overhead:
   notify_action: duck
-light.patio_29:
+light.patio:
   emulated_hue_hidden: false
-light.pendants_51:
+light.pendants:
   brightness_step: 192
   emulated_hue_hidden: false
   notify_action: duck
-light.stairs_23:
+light.stairs:
   emulated_hue_hidden: false
-light.wine_room_25:
+light.wine_room:
   fixed_brightness: 102
   emulated_hue_hidden: false

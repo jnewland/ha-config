@@ -1,5 +1,5 @@
 name: music room
 control: hidden
 entities:
-- light.music_room_118
-- light.desk_63
+- light.music_room
+- light.desk
