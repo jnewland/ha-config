@@ -9,7 +9,6 @@ trigger:
     - light.bedside_lamp
     - light.chandelier_lamp
     - light.chandelier
-    - light.closet_backlight
     - light.dining_room_table
     - light.exersize_bike
     - light.garage_hall

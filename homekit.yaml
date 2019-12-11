@@ -23,11 +23,6 @@ filter:
     - script.mode_party
     - script.living
   exclude_entities:
-    - light.closet_blue
-    - light.closet_brightness
-    - light.closet_green
-    - light.closet_red
-    - light.closet_white
     - light.bookshelf_blue
     - light.bookshelf_brightness
     - light.bookshelf_green
