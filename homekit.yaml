@@ -34,6 +34,3 @@ filter:
     - light.bookshelf_red
     - light.bookshelf_white
     - light.pantry
-entity_config:
-  switch.bug_zapper:
-    type: faucet
