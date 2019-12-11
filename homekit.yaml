@@ -13,7 +13,7 @@ filter:
     - switch
     - scene
   include_entities:
-    - switch.back_porch_fans
+    - switch.back_porch
     - switch.bug_zapper
     - switch.christmas_tree
     - script.mode_away

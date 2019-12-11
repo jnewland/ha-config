@@ -186,7 +186,7 @@ views:
       entities:
       - switch.bug_zapper
       - light.atrium
-      - switch.back_porch_fans
+      - switch.back_porch
       - light.front_porch
       - light.front_door
       - light.patio
