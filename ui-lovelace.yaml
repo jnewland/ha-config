@@ -83,6 +83,8 @@ views:
     cards:
     - type: custom:auto-entities
       show_empty: false
+      sort:
+        method: name
       card:
         type: entities
         title: Lights on
@@ -94,6 +96,8 @@ views:
           - state: "off"
           - state: "unavailable"
     - type: custom:auto-entities
+      sort:
+        method: name
       show_empty: false
       card:
         type: entities
@@ -228,14 +232,16 @@ views:
       - script.deploy
     - type: custom:auto-entities
       show_empty: false
+      sort:
+        method: id
       card:
         type: glance
-        title: Unconfigured vera
+        title: Unconfigured devices
       filter:
         include:
           - entity_id: '/_[0-9]+$/'
-            attributes:
-              "Vera Device Id": "> 1"
+        exclude:
+          - entity_id: "*_sim_*"
 
 resources:
 - url: /local/monster-card.js?v=1
