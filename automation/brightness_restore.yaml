@@ -31,7 +31,6 @@ trigger:
     - light.master_toilet
     - light.master_windows
     - light.music_room
-    - light.office
     - light.office_chandelier
     - light.office_closet
     - light.office_desk_lamp
