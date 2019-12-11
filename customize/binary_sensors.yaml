@@ -53,8 +53,8 @@ binary_sensor.kitchen_motion_160:
 binary_sensor.entry_door:
   friendly_name: Entry door
   zone: Outside
-binary_sensor.master_door:
-  friendly_name: Master door
+binary_sensor.master_patio_door:
+  friendly_name: Master patio door
   zone: Outside
 binary_sensor.garage:
   zone: Outside

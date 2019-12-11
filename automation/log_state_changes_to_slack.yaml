@@ -3,7 +3,7 @@ trigger:
   platform: state
   entity_id:
     - binary_sensor.living_room_motion
-    - binary_sensor.master_door
+    - binary_sensor.master_patio_door
     - binary_sensor.entry_door
     - binary_sensor.garage
     - binary_sensor.gate
