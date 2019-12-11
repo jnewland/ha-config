@@ -14,7 +14,7 @@ filter:
     - scene
   include_entities:
     - switch.back_porch_fans
-    - switch.fountain
+    - switch.bug_zapper
     - script.mode_away
     - script.office
     - script.mode_reading
@@ -34,5 +34,5 @@ filter:
     - light.bookshelf_white
     - light.pantry
 entity_config:
-  switch.fountain:
+  switch.bug_zapper:
     type: faucet

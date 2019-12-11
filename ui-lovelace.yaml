@@ -183,7 +183,7 @@ views:
     cards:
     - type: entities
       entities:
-      - switch.fountain
+      - switch.bug_zapper
       - light.atrium
       - switch.back_porch_fans
       - light.front_porch
