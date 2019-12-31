@@ -214,7 +214,7 @@ views:
       - binary_sensor.front_gate
       - cover.garage
       - cover.gate
-  - title: Environment
+  - title: Climate
     icon: mdi:temperature-fahrenheit
     cards:
     - type: entities
@@ -222,6 +222,26 @@ views:
       - climate.great_room
       - climate.upstairs
       - climate.office
+    - type: entities
+      entities:
+      - automation.upstairs_ac
+      - automation.upstairs_heat
+      - automation.upstairs_evening_ac
+      - automation.upstairs_morning_climate_reset
+      - automation.downstairs_ac
+      - automation.downstairs_heat
+    - type: custom:entity-attributes-card
+      heading_name: Automation status
+      heading_state: Last triggered
+      filter:
+        name_attribute: friendly_name
+        include:
+          - automation.upstairs_ac.last_triggered
+          - automation.upstairs_heat.last_triggered
+          - automation.upstairs_evening_ac.last_triggered
+          - automation.upstairs_morning_climate_reset.last_triggered
+          - automation.downstairs_ac.last_triggered
+          - automation.downstairs_heat.last_triggered
   - title: Settings
     icon: mdi:settings
     cards:
