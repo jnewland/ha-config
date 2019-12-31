@@ -6,9 +6,14 @@ automation:
         - climate.great_room
         - climate.office
       value_template: "{{ state.attributes.current_temperature }}"
-      below: 70
+      below: 71
       for:
         minutes: 3
+    condition:
+      condition: numeric_state
+      entity_id: weather.dark_sky
+      below: 68
+      value_template: "{{ state.attributes.temperature }}"
     action:
       - service: climate.set_hvac_mode
         data_template:
@@ -17,7 +22,7 @@ automation:
       - service: climate.set_temperature
         data_template:
           entity_id: {{ trigger.to_state.entity_id }}
-          temperature: 71
+          temperature: 72
 
   - alias: Downstairs AC
     trigger:
@@ -25,11 +30,15 @@ automation:
       entity_id:
         - climate.great_room
         - climate.office
-        - climate.upstairs
       value_template: "{{ state.attributes.current_temperature }}"
       above: 73
       for:
         minutes: 3
+    condition:
+      condition: numeric_state
+      entity_id: weather.dark_sky
+      above: 75
+      value_template: "{{ state.attributes.temperature }}"
     action:
       - service: climate.set_hvac_mode
         data_template:
@@ -46,9 +55,14 @@ automation:
       entity_id:
         - climate.upstairs
       value_template: "{{ state.attributes.current_temperature }}"
-      below: 67
+      below: 68
       for:
         minutes: 3
+    condition:
+      condition: numeric_state
+      entity_id: weather.dark_sky
+      below: 68
+      value_template: "{{ state.attributes.temperature }}"
     action:
       - service: climate.set_hvac_mode
         data_template:
@@ -68,10 +82,22 @@ automation:
       above: 74
       for:
         minutes: 3
+    condition:
+      condition: numeric_state
+      entity_id: weather.dark_sky
+      above: 75
+      value_template: "{{ state.attributes.temperature }}"
     action:
-}
+      - service: climate.set_hvac_mode
+        data_template:
+          entity_id: {{ trigger.to_state.entity_id }}
+          hvac_mode: cool
+      - service: climate.set_temperature
+        data_template:
+          entity_id: {{ trigger.to_state.entity_id }}
+          temperature: 73
 
-  - alias: Upstairs Evening temp
+  - alias: Upstairs Evening AC
     trigger:
     - platform: state
       entity_id: input_select.mode
@@ -93,3 +119,14 @@ automation:
         data_template:
           entity_id: {{ trigger.to_state.entity_id }}
           temperature: 69
+
+  - alias: Upstairs Morning Climate Reset
+    trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Morning
+    action:
+      - service: climate.set_hvac_mode
+        data_template:
+          entity_id: {{ trigger.to_state.entity_id }}
+          hvac_mode: off
