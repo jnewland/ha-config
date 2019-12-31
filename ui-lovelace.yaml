@@ -193,6 +193,7 @@ views:
       - light.couch_lamp_left
       - switch.christmas_tree
       - binary_sensor.kitchen_motion
+      - binary_sensor.living_room_motion
   - title: Outdoor
     icon: mdi:tree
     cards:
