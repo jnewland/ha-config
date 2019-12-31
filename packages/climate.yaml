@@ -17,11 +17,11 @@ automation:
     action:
       - service: climate.set_hvac_mode
         data_template:
-          entity_id: {{ trigger.to_state.entity_id }}
+          entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: heat
       - service: climate.set_temperature
         data_template:
-          entity_id: {{ trigger.to_state.entity_id }}
+          entity_id: "{{ trigger.to_state.entity_id }}"
           temperature: 72
 
   - alias: Downstairs AC
@@ -42,11 +42,11 @@ automation:
     action:
       - service: climate.set_hvac_mode
         data_template:
-          entity_id: {{ trigger.to_state.entity_id }}
+          entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: cool
       - service: climate.set_temperature
         data_template:
-          entity_id: {{ trigger.to_state.entity_id }}
+          entity_id: "{{ trigger.to_state.entity_id }}"
           temperature: 72
 
   - alias: Upstairs heat
@@ -66,11 +66,11 @@ automation:
     action:
       - service: climate.set_hvac_mode
         data_template:
-          entity_id: {{ trigger.to_state.entity_id }}
+          entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: heat
       - service: climate.set_temperature
         data_template:
-          entity_id: {{ trigger.to_state.entity_id }}
+          entity_id: "{{ trigger.to_state.entity_id }}"
           temperature: 69
 
   - alias: Upstairs AC
@@ -90,11 +90,11 @@ automation:
     action:
       - service: climate.set_hvac_mode
         data_template:
-          entity_id: {{ trigger.to_state.entity_id }}
+          entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: cool
       - service: climate.set_temperature
         data_template:
-          entity_id: {{ trigger.to_state.entity_id }}
+          entity_id: "{{ trigger.to_state.entity_id }}"
           temperature: 73
 
   - alias: Upstairs Evening AC
@@ -113,11 +113,11 @@ automation:
     action:
       - service: climate.set_hvac_mode
         data_template:
-          entity_id: {{ trigger.to_state.entity_id }}
+          entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: cool
       - service: climate.set_temperature
         data_template:
-          entity_id: {{ trigger.to_state.entity_id }}
+          entity_id: "{{ trigger.to_state.entity_id }}"
           temperature: 69
 
   - alias: Upstairs Morning Climate Reset
@@ -128,5 +128,5 @@ automation:
     action:
       - service: climate.set_hvac_mode
         data_template:
-          entity_id: {{ trigger.to_state.entity_id }}
+          entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: off
