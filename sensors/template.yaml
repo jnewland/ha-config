@@ -9,7 +9,7 @@ sensors:
     friendly_name: Current temperature
     value_template: |
       {{ states.weather.dark_sky.attributes.temperature }}
-   front_gate:
+  front_gate:
     value_template: '{% if is_state("binary_sensor.front_gate_121", "on") %}open{% else %}closed{% endif %}'
     friendly_name: Front gate
   great_room_temperature:
