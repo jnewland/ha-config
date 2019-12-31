@@ -82,11 +82,6 @@ automation:
       above: 74
       for:
         minutes: 3
-    condition:
-      condition: numeric_state
-      entity_id: weather.dark_sky
-      above: 75
-      value_template: "{{ state.attributes.temperature }}"
     action:
       - service: climate.set_hvac_mode
         data_template:
