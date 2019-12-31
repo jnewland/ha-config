@@ -22,8 +22,6 @@ trigger:
     - binary_sensor.music_room_motion
     - binary_sensor.kitchen_motion
     - binary_sensor.front_gate
-    - sensor.dark_sky_daily_summary
-    - sensor.dark_sky_hourly_summary
     - sensor.jphone_11_pro_battery_state
     - sensor.katie_s_iphone_battery_state
     - sensor.katie_s_iphone_activity
@@ -76,7 +74,6 @@ action:
       } %}
       {% set entity_emoji = {
         "media_player.office_tv":             ":tv:",
-        "sensor.dark_sky_daily_summary":      ":cloud:",
         "sensor.dark_sky_hourly_summary":     ":cloud:",
         "sensor.jphone_11_pro_battery_state":      ":iphone:",
         "sensor.katie_s_iphone_battery_state": ":iphone:",

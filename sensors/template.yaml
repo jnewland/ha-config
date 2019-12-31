@@ -9,15 +9,7 @@ sensors:
     friendly_name: Current temperature
     value_template: |
       {{ states.weather.dark_sky.attributes.temperature }}
-  dark_sky_daily_summary:
-    friendly_name: Daily forecast
-    value_template: |
-      {{ states.weather.dark_sky.attributes.daily_forecast_summary }}
-  dark_sky_hourly_summary:
-    friendly_name: Hourly forecast
-    value_template: |
-      {{ states.weather.dark_sky.attributes.hourly_forecast_summary }}
-  front_gate:
+   front_gate:
     value_template: '{% if is_state("binary_sensor.front_gate_121", "on") %}open{% else %}closed{% endif %}'
     friendly_name: Front gate
   great_room_temperature:
