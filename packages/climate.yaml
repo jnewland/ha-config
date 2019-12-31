@@ -1,0 +1,95 @@
+automation:
+  - alias: Downstairs heat
+    trigger:
+      platform: numeric_state
+      entity_id:
+        - climate.great_room
+        - climate.office
+      value_template: "{{ state.attributes.current_temperature }}"
+      below: 70
+      for:
+        minutes: 3
+    action:
+      - service: climate.set_hvac_mode
+        data_template:
+          entity_id: {{ trigger.to_state.entity_id }}
+          hvac_mode: heat
+      - service: climate.set_temperature
+        data_template:
+          entity_id: {{ trigger.to_state.entity_id }}
+          temperature: 71
+
+  - alias: Downstairs AC
+    trigger:
+      platform: numeric_state
+      entity_id:
+        - climate.great_room
+        - climate.office
+        - climate.upstairs
+      value_template: "{{ state.attributes.current_temperature }}"
+      above: 73
+      for:
+        minutes: 3
+    action:
+      - service: climate.set_hvac_mode
+        data_template:
+          entity_id: {{ trigger.to_state.entity_id }}
+          hvac_mode: cool
+      - service: climate.set_temperature
+        data_template:
+          entity_id: {{ trigger.to_state.entity_id }}
+          temperature: 72
+
+  - alias: Upstairs heat
+    trigger:
+      platform: numeric_state
+      entity_id:
+        - climate.upstairs
+      value_template: "{{ state.attributes.current_temperature }}"
+      below: 67
+      for:
+        minutes: 3
+    action:
+      - service: climate.set_hvac_mode
+        data_template:
+          entity_id: {{ trigger.to_state.entity_id }}
+          hvac_mode: heat
+      - service: climate.set_temperature
+        data_template:
+          entity_id: {{ trigger.to_state.entity_id }}
+          temperature: 69
+
+  - alias: Upstairs AC
+    trigger:
+      platform: numeric_state
+      entity_id:
+        - climate.upstairs
+      value_template: "{{ state.attributes.current_temperature }}"
+      above: 74
+      for:
+        minutes: 3
+    action:
+}
+
+  - alias: Upstairs Evening temp
+    trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Reading
+    - platform: state
+      entity_id: input_select.mode
+      to: Sleeping
+    condition:
+      condition: numeric_state
+      entity_id: climate.upstairs
+      above: 69
+      value_template: "{{ state.attributes.current_temperature }}"
+    action:
+      - service: climate.set_hvac_mode
+        data_template:
+          entity_id: {{ trigger.to_state.entity_id }}
+          hvac_mode: cool
+      - service: climate.set_temperature
+        data_template:
+          entity_id: {{ trigger.to_state.entity_id }}
+          temperature: 69
