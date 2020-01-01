@@ -223,6 +223,7 @@ views:
       entity: climate.office
     - type: thermostat
       entity: climate.upstairs
+
     - type: entities
       entities:
       - automation.downstairs_ac
@@ -233,39 +234,45 @@ views:
       - automation.upstairs_reading_fan
       - automation.upstairs_sleeping_fan_reset
       - automation.upstairs_morning_climate_reset
-    - type: custom:entity-attributes-card
-      heading_name: Automation status
-      heading_state: Last triggered
+
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 72
       filter:
-        name_attribute: friendly_name
         include:
-          - automation.upstairs_ac.last_triggered
-          - automation.upstairs_heat.last_triggered
-          - automation.upstairs_evening_ac.last_triggered
-          - automation.upstairs_morning_climate_reset.last_triggered
-          - automation.downstairs_ac.last_triggered
-          - automation.downstairs_heat.last_triggered
+          - entity_id: "/^sensor.*_temperature$/"
+
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 72
+      filter:
+        include:
+          - entity_id: "/^sensor.*_temp$/"
+        exclude:
+          - sensor.wine_room_temp
+
     - type: history-graph
-      entities:
-        - sensor.dark_sky_temperature
-        - sensor.great_room_temperature
-        - sensor.office_temperature
-        - sensor.upstairs_temperature
-    - type: history-graph
-      entities:
-        - sensor.kitchen_temp
-        - sensor.great_hall_temp
-        - sensor.powder_room_temp
-        - sensor.guest_bath_temp
-        - sensor.guest_hall_temp
-        - sensor.office_temp
-        - sensor.garage_hall_temp
-        - sensor.stairs_temp
-        - sensor.upstairs_temp
-        - sensor.music_room_temp
-    - type: history-graph
+      hours_to_show: 72
       entities:
         - sensor.wine_room_temp
+
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 72
+      filter:
+        include:
+          - entity_id: "/^sensor.*_humidity$/"
+
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 72
+      filter:
+        include:
+          - entity_id: "/^sensor.*_light$/"
 
   - title: Settings
     icon: mdi:settings
