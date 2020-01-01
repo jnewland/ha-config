@@ -272,14 +272,6 @@ views:
         hours_to_show: 72
       filter:
         include:
-          - entity_id: "/^sensor.*_humidity$/"
-
-    - type: custom:auto-entities
-      card:
-        type: history-graph
-        hours_to_show: 72
-      filter:
-        include:
           - entity_id: "/^sensor.*_light$/"
 
   - title: Settings
