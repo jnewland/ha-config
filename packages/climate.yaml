@@ -1,3 +1,24 @@
+sensor:
+- platform: template
+  sensors:
+    dark_sky_temperature:
+      unit_of_measurement: '°F'
+      friendly_name: Current temperature
+      value_template: |
+        {{ state_attr('weather.dark_sky', 'temperature') }}
+    great_room_temperature:
+      unit_of_measurement: '°F'
+      value_template: |
+        {{ state_attr('climate.great_room', 'current_temperature') }}
+    office_temperature:
+      unit_of_measurement: '°F'
+      value_template: |
+        {{ state_attr('climate.office', 'current_temperature') }}
+    upstairs_temperature:
+      unit_of_measurement: '°F'
+      value_template: |
+        {{ state_attr('climate.upstairs', 'current_temperature') }}
+
 automation:
   - alias: Downstairs heat
     trigger:
