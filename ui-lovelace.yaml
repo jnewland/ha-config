@@ -251,7 +251,7 @@ views:
         include:
           - entity_id: "/^sensor.*_temp$/"
         exclude:
-          - sensor.wine_room_temp
+          - entity_id: sensor.wine_room_temp
 
     - type: history-graph
       hours_to_show: 72
