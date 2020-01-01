@@ -115,6 +115,28 @@ automation:
           entity_id: "{{ trigger.to_state.entity_id }}"
           temperature: 69
 
+  - alias: Upstairs Reading fan
+    trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Reading
+    action:
+      - service: climate.set_fan_mode
+        entity_id:  climate.upstairs
+        data:
+          fan_mode: "on"
+
+  - alias: Upstairs Sleeping Fan Reset
+    trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Sleeping
+    action:
+      - service: climate.set_fan_mode
+        entity_id:  climate.upstairs
+        data:
+          fan_mode: "auto"
+
   - alias: Upstairs Morning Climate Reset
     trigger:
     - platform: state
@@ -122,6 +144,10 @@ automation:
       to: Morning
     action:
       - service: climate.set_hvac_mode
-        data_template:
-          entity_id: "{{ trigger.to_state.entity_id }}"
-          hvac_mode: off
+        entity_id:  climate.upstairs
+        data:
+          hvac_mode: "off"
+      - service: climate.set_fan_mode
+        entity_id:  climate.upstairs
+        data:
+          fan_mode: "auto"
