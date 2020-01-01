@@ -217,11 +217,12 @@ views:
   - title: Climate
     icon: mdi:temperature-fahrenheit
     cards:
-    - type: entities
-      entities:
-      - climate.great_room
-      - climate.upstairs
-      - climate.office
+    - type: climate
+      entity: climate.great_room
+    - type: climate
+      entity: climate.office
+    - type: climate
+      entity: climate.upstairs
     - type: entities
       entities:
       - automation.downstairs_ac
@@ -244,6 +245,28 @@ views:
           - automation.upstairs_morning_climate_reset.last_triggered
           - automation.downstairs_ac.last_triggered
           - automation.downstairs_heat.last_triggered
+    - type: history-graph
+      entities:
+        - sensor.dark_sky_temperature
+        - sensor.great_room_temperature
+        - sensor.office_temperature
+        - sensor.upstairs_temperature
+    - type: history-graph
+      entities:
+        - sensor.kitchen_temp
+        - sensor.great_hall_temp
+        - sensor.powder_room_temp
+        - sensor.guest_bath_temp
+        - sensor.guest_hall_temp
+        - sensor.office_temp
+        - sensor.garage_hall_temp
+        - sensor.stairs_temp
+        - sensor.upstairs_temp
+        - sensor.music_room_temp
+    - type: history-graph
+      entities:
+        - sensor.wine_room_temp
+
   - title: Settings
     icon: mdi:settings
     cards:
