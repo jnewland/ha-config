@@ -22,6 +22,7 @@ filter:
     - script.mode_sleeping
     - script.mode_party
     - script.living
+    - switch.master_bath_fan
   exclude_entities:
     - light.bookshelf_blue
     - light.bookshelf_brightness

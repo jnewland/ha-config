@@ -31,6 +31,13 @@ script:
       - service: notify.slack
         data_template:
           message: ":city_sunset:"
+      - condition: template
+        value_template: |
+          {{
+            states.input_select.mode.state != "Away" and
+            states.weather.dark_sky.attributes.visibility > 5 and
+            states.weather.dark_sky.attributes.temperature > 50
+          }}
       - service: notify.iphones
         data:
           message: 'Check out the sunset!'

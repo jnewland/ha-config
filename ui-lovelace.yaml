@@ -193,6 +193,7 @@ views:
       - light.couch_lamp_left
       - switch.christmas_tree
       - binary_sensor.kitchen_motion
+      - binary_sensor.living_room_motion
   - title: Outdoor
     icon: mdi:tree
     cards:
@@ -213,14 +214,58 @@ views:
       - binary_sensor.front_gate
       - cover.garage
       - cover.gate
-  - title: Environment
+  - title: Climate
     icon: mdi:temperature-fahrenheit
     cards:
+    - type: thermostat
+      entity: climate.great_room
+    - type: thermostat
+      entity: climate.office
+    - type: thermostat
+      entity: climate.upstairs
+
     - type: entities
       entities:
-      - climate.great_room
-      - climate.upstairs
-      - climate.office
+      - automation.downstairs_ac
+      - automation.downstairs_heat
+      - automation.upstairs_ac
+      - automation.upstairs_heat
+      - automation.upstairs_evening_ac
+      - automation.upstairs_reading_fan
+      - automation.upstairs_sleeping_fan_reset
+      - automation.upstairs_morning_climate_reset
+
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 72
+      filter:
+        include:
+          - entity_id: "/^sensor.*_temperature$/"
+
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 72
+      filter:
+        include:
+          - entity_id: "/^sensor.*_temp$/"
+        exclude:
+          - entity_id: sensor.wine_room_temp
+
+    - type: history-graph
+      hours_to_show: 72
+      entities:
+        - sensor.wine_room_temp
+
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 72
+      filter:
+        include:
+          - entity_id: "/^sensor.*_light$/"
+
   - title: Settings
     icon: mdi:settings
     cards:

@@ -4,37 +4,6 @@ sensors:
     value_template: >
       {%- for state in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")).split(".") if state|replace("low battery", "") == state and state != ""  -%}{{ state }}. {% endfor -%}
     friendly_name: Alarm sensors
-  dark_sky_temperature:
-    unit_of_measurement: '°F'
-    friendly_name: Current temperature
-    value_template: |
-      {{ states.weather.dark_sky.attributes.temperature }}
-  dark_sky_daily_summary:
-    friendly_name: Daily forecast
-    value_template: |
-      {{ states.weather.dark_sky.attributes.daily_forecast_summary }}
-  dark_sky_hourly_summary:
-    friendly_name: Hourly forecast
-    value_template: |
-      {{ states.weather.dark_sky.attributes.hourly_forecast_summary }}
   front_gate:
     value_template: '{% if is_state("binary_sensor.front_gate_121", "on") %}open{% else %}closed{% endif %}'
     friendly_name: Front gate
-  great_room_temperature:
-    unit_of_measurement: '°F'
-    value_template: |
-      {% if states.climate.great_room_27 %}
-        {{ states.climate.great_room.attributes.current_temperature }}
-      {% endif %}
-  hall_temperature:
-    unit_of_measurement: '°F'
-    value_template: |
-      {% if states.climate.office_48 %}
-        {{ states.climate.office.attributes.current_temperature }}
-      {% endif %}
-  upstairs_temperature:
-    unit_of_measurement: '°F'
-    value_template: |
-      {% if states.climate.upstairs_28 %}
-        {{ states.climate.upstairs.attributes.current_temperature }}
-      {% endif %}
