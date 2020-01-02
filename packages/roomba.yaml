@@ -4,7 +4,7 @@ script:
       - service: vacuum.locate
         entity_id: vacuum.downstairs_roomba
 automation:
-  - alias: Roomba morning maintenance
+  - alias: Find the roomba in the morning
     trigger:
     - platform: state
       entity_id: input_select.mode
@@ -20,6 +20,20 @@ automation:
           message: >
             The downstairs roomba is lost. Should I make it beep?
           confirmation_message: found the roomba
+
+  - alias: Empty the roomba in the morning
+    trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Morning
+    condition:
+      condition: template
+      value_template: |
+        {{ is_state_attr("vacuum.downstairs_roomba", "is_full", True) }}
+    action:
+      - service: notify.iphones
+        data:
+          message: The downstairs roomba is full. Help a robot out?
 
   - alias: Run roomba in reading mode
     trigger:
