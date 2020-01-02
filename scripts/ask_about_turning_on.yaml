@@ -7,7 +7,7 @@ sequence:
       data:
         apns_headers:
           'apns-collapse-id': >
-            {{ entity_id }}
+            {{ apns_collapse_id | default(entity_id) }}
         push:
           category: >
             {%- if secure | default("false") != "false" -%}
@@ -16,6 +16,8 @@ sequence:
               ack
             {%- endif -%}
         action_data:
+          apns_collapse_id: >
+            {{ apns_collapse_id | default(entity_id) }}
           entity_id: |
             {{ entity_id }}
           notify_service: |

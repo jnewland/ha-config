@@ -31,9 +31,12 @@ automation:
       value_template: |
         {{ is_state_attr("vacuum.downstairs_roomba", "is_full", True) }}
     action:
-      - service: notify.iphones
-        data:
-          message: The downstairs roomba is full. Help a robot out?
+      - service: script.ask_about_turning_on
+        data_template:
+          entity_id: shell_command.noop
+          apns_collapse_id: roomba-full
+          message: The downstairs roomba is full. Did you empty it out?
+          confirmation_message: emptied the roomba
 
   - alias: Run roomba in reading mode
     trigger:
