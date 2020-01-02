@@ -19,7 +19,7 @@ automation:
           entity_id: script.find_roomba
           message: >
             The downstairs roomba is lost. Should I make it beep?
-          confirmation_message: located the roomba.
+          confirmation_message: found the roomba
 
   - alias: Run roomba in reading mode
     trigger:
