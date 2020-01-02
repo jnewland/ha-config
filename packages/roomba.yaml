@@ -1,0 +1,36 @@
+script:
+  find_roomba:
+    sequence:
+      - service: vacuum.locate
+        entity_id: vacuum.downstairs_roomba
+automation:
+  - alias: Roomba morning maintenance
+    trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Morning
+    condition:
+      condition: template
+      value_template: |
+        {{ not is_state_attr("vacuum.downstairs_roomba", "status", "Charging") }}
+    action:
+      - service: script.ask_about_turning_on
+        data_template:
+          service: >
+            {{ service | default('notify.mobile_app_jphone_11_pro') }}
+          entity_id: script.find_roomba
+          message: >
+            The downstairs roomba is lost. Should I make it beep?
+          confirmation_message: located the roomba.
+
+  - alias: Run roomba in reading mode
+    trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Reading
+    action:
+      - service: vacuum.turn_on
+        entity_id: vacuum.downstairs_roomba
+
+
+
