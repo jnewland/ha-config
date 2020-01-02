@@ -11,13 +11,11 @@ views:
             entities:
               - input_select.mode
               - alarm_control_panel.alarm
-              - automation.away_mode
               - lock.front_door
               - cover.garage
               - cover.gate
               - binary_sensor.front_gate
               - input_number.brightness
-              - input_boolean.guests
               - vacuum.downstairs_roomba
           - type: horizontal-stack
             cards:
