@@ -5,10 +5,10 @@ sequence:
       message: |
         {{ message | default("Turn on " + entity_id) }}
       data:
+        apns_headers:
+          'apns-collapse-id': >
+            {{ entity_id }}
         push:
-          apns_headers:
-            'apns-collapse-id': >
-              {{ entity_id }}
           category: >
             {%- if secure | default("false") != "false" -%}
               secure_ack
