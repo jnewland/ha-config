@@ -16,8 +16,6 @@ automation:
     action:
       - service: script.ask_about_turning_on
         data_template:
-          service: >
-            {{ service | default('notify.mobile_app_jphone_11_pro') }}
           entity_id: script.find_roomba
           message: >
             The downstairs roomba is lost. Should I make it beep?
