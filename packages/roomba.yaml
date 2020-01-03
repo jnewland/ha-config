@@ -5,8 +5,8 @@ script:
         entity_id: vacuum.downstairs_roomba
   noop:
     sequence:
-      - homeassistant.update_entity
-        binary_sensor.updater
+      - service: homeassistant.update_entity
+        entity_id: binary_sensor.updater
 automation:
   - alias: Find the roomba in the morning
     trigger:
