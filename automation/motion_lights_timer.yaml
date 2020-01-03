@@ -2,8 +2,8 @@ alias: Turn off lights after 30m
 trigger:
   platform: state
   entity_id:
-  - binary_sensor.guest_bath_motion_70
-  - binary_sensor.master_bath_motion_200
+  - binary_sensor.guest_bath_motion
+  - binary_sensor.master_bath_motion
   - binary_sensor.great_room_occupied
   to: "off"
   for:

@@ -4,8 +4,8 @@
 
 ## Interacting w/ the house
 
-* [Alexa](./alexa/README.md)'s smart home functionality is decent.
-* [Siri](./doc/siri.md) has been configured for limited functionality when you're not near an Echo.
+* Walk around. Carry your phone with you. Observe sensors try to do the right thing.
+* Use [Siri](./doc/siri.md) when they don't.
 
 ### Related projects
 

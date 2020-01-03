@@ -1,0 +1,161 @@
+name: cd
+on:
+  pull_request:
+    types: [synchronize,opened,reopened]
+jobs:
+  validate-config:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Generate fake SSL cert
+      run: |
+        openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
+    - name: Test config
+      uses: docker://homeassistant/home-assistant:0.102.1
+      env:
+        ALARM_PASSWORD: ""
+        ALARM_PLATFORM: alarmdotcom
+        ALARM_USERNAME: ""
+        API_PASSWORD: ""
+        BEDROOM_APPLE_TV_CREDENTIALS: ""
+        BEDROOM_APPLE_TV_HOST: ""
+        BEDROOM_APPLE_TV_LOGIN_ID: ""
+        CAMERA_DASH: http://example.com
+        CAMERA_URL_1: http://example.com
+        CAMERA_URL_2: http://example.com
+        CAMERA_URL_3: http://example.com
+        CAMERA_URL_4: http://example.com
+        CAMERA_URL_5: http://example.com
+        CAMERA_URL_6: http://example.com
+        CAMERA_URL_7: http://example.com
+        CAMERA_URL_8: http://example.com
+        CAMERA_URL_9: http://example.com
+        CLIMATE_DASH: http://example.com
+        DB_URL: ""
+        DESK_CAMERA_RESOURCE: http://example.com
+        DESK_HID_IDLE_TIME_RESOURCE: http://example.com
+        ELEVATION: 0
+        FORECAST_API_KEY: ""
+        GATEWAY_LINK: http://example.com
+        GRAFANA_LINK: http://example.com
+        GRAPHITE_LINK: http://example.com
+        IFTTT_KEY: ""
+        JESSE_MUSIC_ROOM_IP: "0.0.0.0"
+        JPHONE_PUSH_TARGET: ""
+        KITCHEN_LAT: 0
+        KITCHEN_LONG: 0
+        LAT: 0
+        LETSENCRYPT_EMAIL: ""
+        LETSENCRYPT_HOST: ""
+        LIVING_LAT: 0
+        LIVING_LONG: 0
+        LONG: 0
+        MASTER_LAT: 0
+        MASTER_LONG: 0
+        MOTION_LINK: http://example.com
+        MPR_API_IP: ""
+        MPR_API_PORT: 1
+        MUSIC_ROOM_APPLE_TV_CREDENTIALS: ""
+        MUSIC_ROOM_APPLE_TV_HOST: ""
+        MUSIC_ROOM_APPLE_TV_LOGIN_ID: ""
+        MYQ_PASSWORD: ""
+        MYQ_USERNAME: ""
+        OFFICE_APPLE_TV_CREDENTIALS: ""
+        OFFICE_APPLE_TV_HOST: ""
+        OFFICE_APPLE_TV_LOGIN_ID: ""
+        OFFICE_LAT: 0
+        OFFICE_LONG: 0
+        ROOMBA_BLID: ""
+        ROOMBA_IP: "0.0.0.0"
+        ROOMBA_PASSWORD: ""
+        ROUTER_LINK: http://example.com
+        SELF_LINK: http://example.com
+        SLACK_API_KEY: ""
+        SMOKEPING_LINK: http://example.com
+        SSL_CERTIFICATE: cert.pem
+        SSL_KEY: key.pem
+        TRUSTED_NETWORK_1: 0.0.0.0/0
+        TRUSTED_NETWORK_2: 0.0.0.0/0
+        TRUSTED_NETWORK_3: 0.0.0.0/0
+        UNIFI_IP: 0.0.0.0
+        UNIFI_PASSWORD: bar
+        UNIFI_PORT: "8443"
+        UNIFI_USERNAME: foo
+        VERA_LINK: http://example.com
+        VERA_URL: http://example.com
+        VIRTUAL_HOST: example.com
+        VIRTUAL_NETWORK: ""
+        VIRTUAL_PORT: ""
+      with:
+        entrypoint: ./script/cibuild
+  deploy:
+    runs-on: ubuntu-latest
+    needs: validate-config
+    steps:
+      - uses: maxkomarychev/oction-create-deployment@v0.7.1
+        id: create-deployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          auto_merge: "true"
+          required_contexts: YAMBURGER,validate-config
+          production_environment: "true"
+
+      - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
+        id: pending
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deployment_id: ${{ steps.create-deployment.outputs.id }}
+          state: pending
+          log_url: https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks
+
+      - name: 'Deploy home-assistant'
+        env:
+          HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
+          HASS_URL: ${{ secrets.HASS_URL }}
+        run: |
+          curl \
+            --silent \
+            --output /dev/null \
+            -H "Authorization: Bearer $HASS_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"sha\": \"${{ github.event.pull_request.head.sha }}\"}" \
+            "$HASS_URL/api/services/script/deploy"
+
+      - name: 'Wait for deployment to complete'
+        env:
+          HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
+          HASS_URL: ${{ secrets.HASS_URL }}
+          TIMEOUT: "60"
+        run: |
+          while true; do
+            curl \
+              --silent \
+              --max-time 5 \
+              -H "Authorization: Bearer $HASS_TOKEN" \
+              -H "Content-Type: application/json" \
+              "$HASS_URL/api/states/sensor.config_sha" | jq -r '.state' | tee /tmp/deployed_sha;
+            if [ "$(cat /tmp/deployed_sha)" = "${{ github.event.pull_request.head.sha }}" ]; then
+              exit;
+            elif [ "$SECONDS" -gt "$TIMEOUT" ]; then
+              echo "Couldn't confirm deployment in under $TIMEOUT seconds"
+              exit 1;
+            else
+              sleep 5;
+            fi
+          done
+
+      - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
+        if: success()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deployment_id: ${{ steps.create-deployment.outputs.id }}
+          state: success
+          log_url: https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks
+      - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
+        if: failure()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deployment_id: ${{ steps.create-deployment.outputs.id }}
+          state: failure
+          log_url: https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks

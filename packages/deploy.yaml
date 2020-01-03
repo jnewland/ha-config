@@ -1,0 +1,22 @@
+sensor:
+  - name: config_sha
+    platform: command_line
+    command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $2'}"
+  - name: latest_deployment_sha
+    platform: command_line
+    command: "curl -s -H \"Accept: application/vnd.github.ant-man-preview+json\" \"https://api.github.com/repos/jnewland/ha-config/deployments?environment=production\" | jq -r '.[0].sha'"
+
+script:
+  deploy:
+    sequence:
+    - service: notify.slack
+      data_template:
+        message: ':shipit: https://github.com/jnewland/ha-config/commit/{{ sha }}/checks'
+        target: "#general"
+    - service: shell_command.deploy
+      data_template:
+          sha: "{{ sha }}"
+    - service: homeassistant.restart
+
+shell_command:
+  deploy: /bin/bash ./script/deploy {{ sha }}

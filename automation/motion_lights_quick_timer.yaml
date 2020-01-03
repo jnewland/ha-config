@@ -2,12 +2,14 @@ alias: Turn off lights after 5m
 trigger:
   platform: state
   entity_id:
-  - binary_sensor.powder_room_motion_75
-  - binary_sensor.stairs_motion_102
-  - binary_sensor.upstairs_motion_87
-  - binary_sensor.closet_motion_61
-  - binary_sensor.hall_motion_92
-  - binary_sensor.music_room_motion_107
+  - binary_sensor.powder_room_motion
+  - binary_sensor.stairs_motion
+  - binary_sensor.upstairs_motion
+  - binary_sensor.closet_motion
+  - binary_sensor.garage_hall_motion
+  - binary_sensor.great_hall_motion
+  - binary_sensor.guest_hall_motion
+  - binary_sensor.music_room_motion
   to: "off"
   for:
     minutes: 5

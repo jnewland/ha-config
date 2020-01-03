@@ -2,7 +2,7 @@
 alias: Auto lock
 trigger:
   platform: state
-  entity_id: lock.front_door_12
+  entity_id: lock.front_door
   to: unlocked
   for:
     minutes: 5
@@ -11,3 +11,4 @@ action:
   data_template:
     entity_id: script.lock_up
     message: "The front door's been unlocked for a bit. Lock up?"
+    confirmation_message: locked up

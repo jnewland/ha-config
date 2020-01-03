@@ -1,10 +1,8 @@
 media_player.atrium_speakers:
   emulated_hue_hidden: false
   friendly_name: "Atrium speakers"
-  homebridge_visible: true
 media_player.house_back_porch:
   friendly_name: "Back porch speakers"
-  homebridge_visible: true
 media_player.kitchen_speakers:
   emulated_hue_hidden: false
   friendly_name: "Kitchen speakers"
@@ -29,12 +27,6 @@ media_player.house_office:
 media_player.patio_speakers:
   emulated_hue_hidden: false
   friendly_name: "Patio speakers"
-  homebridge_visible: true
 media_player.house_jnewland:
   emulated_hue_hidden: false
-  homebridge_visible: true
   friendly_name: "Laptop speakers"
-media_player.music_room_tv:
-  friendly_name: "Music Room TV"
-media_player.office:
-  friendly_name: "Office TV"

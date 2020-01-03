@@ -7,9 +7,11 @@ homeassistant:
   time_zone: America/Chicago
   customize: !include_dir_merge_named customize
   packages: !include_dir_named packages
+  auth_providers: !include auth_providers.yaml
+
+default_config:
 
 alarm_control_panel: !include alarm_control_panel.yaml
-alexa: !include alexa.yaml
 apple_tv: !include apple_tv.yaml
 automation: !include_dir_list automation
 binary_sensor: !include_dir_list binary_sensors
@@ -27,6 +29,7 @@ group: !include_dir_named groups
 history: !include history.yaml
 history_graph: !include_dir_named history_graphs
 http: !include http.yaml
+homekit: !include homekit.yaml
 ifttt: !include ifttt.yaml
 ios: !include ios.yaml
 input_boolean: !include input_boolean.yaml
@@ -34,7 +37,7 @@ input_select: !include input_select.yaml
 input_number: !include_dir_named input_numbers
 lovelace:
   mode: yaml
-light: !include light.yaml
+light:
 logger: !include logger.yaml
 map:
 media_player: !include media_player.yaml
@@ -45,12 +48,11 @@ python_script:
 recorder: !include recorder.yaml
 script: !include_dir_named scripts
 sensor: !include_dir_list sensors
-shell_command: !include shell_command.yaml
 sun:
 switch: !include_dir_list switches
 system_health:
 tts:
-  - platform: google
+  - platform: google_translate
 vera: !include vera.yaml
 weblink: !include weblink.yaml
 weather:

@@ -1,12 +1,12 @@
 alias: log climate changes to slack
 trigger:
   platform: state
-  entity_id: climate.great_room_27, climate.upstairs_28, climate.hall_48
+  entity_id: climate.great_room_27, climate.upstairs_28, climate.office
 action:
   service: notify.slack
   data_template:
     message: |
       {% set old_state = trigger.from_state %}
       {% set new_state = trigger.to_state %}
-      {{ new_state.name | capitalize }} :thermometer: {{ new_state.state }} set to {{ new_state.attributes.temperature }}{{ new_state.attributes.unit_of_measurement }}, currently {{ new_state.attributes.current_temperature }}{{ new_state.attributes.unit_of_measurement }}
+      :thermometer: *{{ new_state.name | capitalize }}* is currently *_{{ new_state.attributes.current_temperature }}{{ new_state.attributes.unit_of_measurement }}_*, set to *_{{ new_state.attributes.temperature }}{{ new_state.attributes.unit_of_measurement }}_* in *_{{ new_state.state }}_* mode
     target: "#general"

@@ -1,7 +1,7 @@
 sequence:
   - service: lock.lock
     entity_id: group.all_locks
-  - service: cover.close_cover
+  - service: python_script.close_if_open
     entity_id: cover.garage
-  - service: cover.close_cover
+  - service: python_script.close_if_open
     entity_id: cover.gate

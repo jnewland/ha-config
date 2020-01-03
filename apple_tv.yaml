@@ -1,10 +1,15 @@
-- host: !env_var MUSIC_ROOM_APPLE_TV_HOST
+- name: Music Room TV
+  start_off: true
+  host: !env_var MUSIC_ROOM_APPLE_TV_HOST
   login_id: !env_var MUSIC_ROOM_APPLE_TV_LOGIN_ID
   credentials: !env_var MUSIC_ROOM_APPLE_TV_CREDENTIALS
-- host: !env_var OFFICE_APPLE_TV_HOST
+- name: Office TV
+  start_off: true
+  host: !env_var OFFICE_APPLE_TV_HOST
   login_id: !env_var OFFICE_APPLE_TV_LOGIN_ID
   credentials: !env_var OFFICE_APPLE_TV_CREDENTIALS
-# - host: !env_var BEDROOM_APPLE_TV_HOST
-#   login_id: !env_var BEDROOM_APPLE_TV_LOGIN_ID
-#   credentials: !env_var BEDROOM_APPLE_TV_CREDENTIALS
-#   start_off: true
+- name: Bedroom TV
+  start_off: true
+  host: !env_var BEDROOM_APPLE_TV_HOST
+  login_id: !env_var BEDROOM_APPLE_TV_LOGIN_ID
+  credentials: !env_var BEDROOM_APPLE_TV_CREDENTIALS

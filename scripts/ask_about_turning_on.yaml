@@ -1,21 +1,30 @@
 sequence:
   - service_template: |
-      {{ service | default("notify.ios") }}
+      {{ service | default("notify.iphones") }}
     data_template:
       message: |
         {{ message | default("Turn on " + entity_id) }}
       data:
+        apns_headers:
+          'apns-collapse-id': >
+            {{ apns_collapse_id | default(entity_id) }}
         push:
           category: >
-            {%- if secure | default(none) != none -%}
+            {%- if secure | default("false") != "false" -%}
               secure_ack
             {%- else %}
               ack
             {%- endif -%}
         action_data:
+          apns_collapse_id: >
+            {{ apns_collapse_id | default(entity_id) }}
           entity_id: |
             {{ entity_id }}
+          notify_service: |
+            {{ service | default("notify.iphones") }}
+          confirmation_message: |
+            {{ confirmation_message | default("turned on " + entity_id) }}
   - service: notify.slack
     data_template:
       message: |
-        Asked {{ message | default("about turning on " + entity_id) }}
+        :question: Asked {{ message | default("about turning on " + entity_id) }}

@@ -6,42 +6,40 @@ trigger:
   # - {{l.entity_id}}
   # {%- endfor-%}
   entity_id:
-    - light.bedside_lamp_141
-    - light.chandelier_lamp_33
-    - light.chandelier_154
-    - light.closet_backlight_112
-    - light.dining_room_table_52
-    - light.floor_lamp
-    - light.garage_hall_50
-    - light.great_hall_24
-    - light.guest_bath_43
-    - light.guest_hall_16
-    - light.guest_shower_44
-    - light.kitchen_18
-    - light.living_20
+    - light.bedside_lamp
+    - light.chandelier_lamp
+    - light.chandelier
+    - light.dining_room_table
+    - light.exersize_bike
+    - light.garage_hall
+    - light.great_hall
+    - light.guest_bath
+    - light.guest_hall
+    - light.guest_shower
+    - light.kitchen
+    - light.living
     - light.living_room
-    - light.living_room_lamp_left
-    - light.living_room_lamp_right
-    - light.master_bath_overhead_36
-    - light.master_closet_32
-    - light.master_mirror_35
-    - light.master_nook_42
-    - light.master_overhead_30
-    - light.master_patio_31
-    - light.master_shower_34
-    - light.master_toilet_62
-    - light.master_windows_128
-    - light.music_room_118
-    - light.office
-    - light.office_chandelier_69
+    - light.couch_lamp_left
+    - light.couch_lamp_right
+    - light.master_bath_overhead
+    - light.master_closet
+    - light.master_mirror
+    - light.master_nook
+    - light.master_overhead
+    - light.master_patio
+    - light.master_shower
+    - light.master_toilet
+    - light.master_windows
+    - light.music_room
+    - light.office_chandelier
     - light.office_closet
     - light.office_desk_lamp
-    - light.office_overhead_11
-    - light.pantry_122
-    - light.pendants_51
-    - light.powder_room_80
-    - light.stairs_23
-    - light.wine_room_25
+    - light.office_overhead
+    - light.pantry
+    - light.pendants
+    - light.powder_room
+    - light.stairs
+    - light.wine_room
   from: 'off'
   to: 'on'
 condition:

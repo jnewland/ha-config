@@ -1,0 +1,55 @@
+script:
+  find_roomba:
+    sequence:
+      - service: vacuum.locate
+        entity_id: vacuum.downstairs_roomba
+  noop:
+    sequence:
+      - service: homeassistant.update_entity
+        entity_id: binary_sensor.updater
+automation:
+  - alias: Find the roomba in the morning
+    trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Morning
+    condition:
+      condition: template
+      value_template: |
+        {{ not is_state_attr("vacuum.downstairs_roomba", "status", "Charging") }}
+    action:
+      - service: script.ask_about_turning_on
+        data_template:
+          entity_id: script.find_roomba
+          message: >
+            The downstairs roomba is lost. Should I make it beep?
+          confirmation_message: found the roomba
+
+  - alias: Empty the roomba in the morning
+    trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Morning
+    condition:
+      condition: template
+      value_template: |
+        {{ is_state_attr("vacuum.downstairs_roomba", "bin_full", True) }}
+    action:
+      - service: script.ask_about_turning_on
+        data_template:
+          entity_id: script.noop
+          apns_collapse_id: roomba-full
+          message: The downstairs roomba is full. Did you empty it out?
+          confirmation_message: emptied the roomba
+
+  - alias: Run roomba in reading mode
+    trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Reading
+    action:
+      - service: vacuum.turn_on
+        entity_id: vacuum.downstairs_roomba
+
+
+

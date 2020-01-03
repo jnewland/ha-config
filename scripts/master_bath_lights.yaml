@@ -1,7 +1,7 @@
 sequence:
 - service: light.turn_on
   data_template:
-    entity_id: light.master_toilet_62
+    entity_id: light.master_toilet
     brightness: |
       {{ brightness | default(states('input_number.brightness') | int) }}
 - condition: template
@@ -10,8 +10,8 @@ sequence:
 - service: light.turn_on
   data_template:
     entity_id:
-    - light.master_bath_overhead_36
-    - light.master_shower_34
-    - light.master_mirror_35
+    - light.master_bath_overhead
+    - light.master_shower
+    - light.master_mirror
     brightness: |
       {{ brightness | default(states('input_number.brightness') | int) }}
