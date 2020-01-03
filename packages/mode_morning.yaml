@@ -1,0 +1,51 @@
+automation:
+  - alias: Morning mode
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.closet_motion
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.master_bath_motion
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id:
+        - sensor.jphone_11_pro_battery_state
+        - sensor.katie_s_iphone_battery_state
+        to: 'Not Charging'
+        for:
+          seconds: 30
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: input_select.mode
+        state: Sleeping
+      - condition: time
+        after: '05:00:00'
+        before: '12:00:00'
+    action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.mode
+        option: Morning
+
+  - alias: Run default morning actions
+    trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Morning
+    action:   
+    - service: light.turn_off
+      entity_id: group.master
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.brightness
+        value: 255
+    - service: light.turn_on
+      entity_id:
+        - group.speakers
+        - light.cabinets
+    - service: alarm_control_panel.alarm_disarm
+      entity_id: alarm_control_panel.alarm
