@@ -20,4 +20,3 @@ script:
 
 shell_command:
   deploy: /bin/bash ./script/deploy {{ sha }}
-  noop: /bin/true
