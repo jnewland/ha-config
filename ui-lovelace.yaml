@@ -83,8 +83,8 @@ views:
         - light.music_room
         - light.bookshelf
         - binary_sensor.music_room_motion
-    - type: media-control
-      entity: media_player.music_room_tv
+      - type: media-control
+        entity: media_player.music_room_tv
   - title: Lights
     icon: mdi:lightbulb
     cards:
