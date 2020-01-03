@@ -16,6 +16,7 @@ views:
               - cover.gate
               - binary_sensor.front_gate
               - input_number.brightness
+              - vacuum.downstairs_roomba
           - type: horizontal-stack
             cards:
             - type: picture-entity
@@ -141,7 +142,7 @@ views:
           - switch.stairs_motion.battery_level
           - switch.upstairs_motion.battery_level
           - switch.wine_room_motion.battery_level
-          # - vacuum.downstairs_roomba.battery_level
+          - vacuum.downstairs_roomba.battery_level
   - title: Speakers
     icon: mdi:speaker
     cards:
@@ -273,6 +274,7 @@ views:
       entities:
       - input_boolean.guests
       - automation.away_mode
+      - vacuum.downstairs_roomba
     - type: entities
       entities:
       - sensor.current_version

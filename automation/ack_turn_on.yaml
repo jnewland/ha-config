@@ -10,13 +10,12 @@ action:
       entity_id: '{{ trigger.event.data.action_data.entity_id }}'
   - service_template: '{{ trigger.event.data.action_data.notify_service }}'
     data_template:
-      data:
-        push:
-          apns_headers:
-            'apns-collapse-id': >
-              {{ trigger.event.data.action_data.entity_id }}
       message: >
         {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}.
+      data:
+        apns_headers:
+          'apns-collapse-id': >
+            {{ trigger.event.data.action_data.apns_collapse_id | default(trigger.event.data.action_data.entity_id) }}
   - service: notify.slack
     data_template:
       message: ':+1: to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}'
