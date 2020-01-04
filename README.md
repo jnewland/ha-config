@@ -9,6 +9,4 @@
 
 ### Related projects
 
-* [My fork of home assistant](https://github.com/jnewland/home-assistant), generally only used to [test out changes](https://github.com/jnewland/home-assistant/compare) to Home Assistant before submitting them upstream.
 * https://github.com/jnewland/mpr-6zhmaut-api
-* https://github.com/jnewland/ioreg-api
