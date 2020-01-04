@@ -17,9 +17,6 @@ jobs:
         ALARM_PLATFORM: alarmdotcom
         ALARM_USERNAME: ""
         API_PASSWORD: ""
-        BEDROOM_APPLE_TV_CREDENTIALS: ""
-        BEDROOM_APPLE_TV_HOST: ""
-        BEDROOM_APPLE_TV_LOGIN_ID: ""
         CAMERA_DASH: http://example.com
         CAMERA_URL_1: http://example.com
         CAMERA_URL_2: http://example.com
@@ -55,14 +52,8 @@ jobs:
         MOTION_LINK: http://example.com
         MPR_API_IP: ""
         MPR_API_PORT: 1
-        MUSIC_ROOM_APPLE_TV_CREDENTIALS: ""
-        MUSIC_ROOM_APPLE_TV_HOST: ""
-        MUSIC_ROOM_APPLE_TV_LOGIN_ID: ""
         MYQ_PASSWORD: ""
         MYQ_USERNAME: ""
-        OFFICE_APPLE_TV_CREDENTIALS: ""
-        OFFICE_APPLE_TV_HOST: ""
-        OFFICE_APPLE_TV_LOGIN_ID: ""
         OFFICE_LAT: 0
         OFFICE_LONG: 0
         ROOMBA_BLID: ""
