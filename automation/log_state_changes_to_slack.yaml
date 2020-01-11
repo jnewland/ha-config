@@ -46,6 +46,7 @@ trigger:
     - media_player.house_mpr6zhmaut
     - media_player.house_office
     - media_player.patio_speakers
+    - weather.dark_sky
 condition:
   condition: template
   value_template: |
@@ -70,11 +71,11 @@ action:
         "input_select":        ":gear:",
         "media_player":        ":sound:",
         "cover":               ":house_with_garden:",
-        "device_tracker":      ":iphone:"
+        "device_tracker":      ":iphone:",
+        "weather":             ":cloud:"
       } %}
       {% set entity_emoji = {
         "media_player.office_tv":             ":tv:",
-        "sensor.dark_sky_hourly_summary":     ":cloud:",
         "sensor.jphone_11_pro_battery_state":      ":iphone:",
         "sensor.katie_s_iphone_battery_state": ":iphone:",
         "sensor.alarm_sensors":               ":door:",
