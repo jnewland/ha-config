@@ -17,12 +17,12 @@ source:
   
 file_out:
   - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
-confidence: 50
-labels:
-  - dog
-  - person
-  - name: car
-    confidence: 30
-  - name: truck
-    confidence: 30
+confidence: 30
+# labels:
+#   - dog
+#   - person
+#   - name: car
+#     confidence: 30
+#   - name: truck
+#     confidence: 30
 
