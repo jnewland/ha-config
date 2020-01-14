@@ -6,14 +6,13 @@ detector: default
 source:
   - entity_id: camera.atrium
   - entity_id: camera.back_porch
+  - entity_id: camera.front_yard_left
   - entity_id: camera.garage
   - entity_id: camera.gate
-  - entity_id: camera.front_yard_left
   
-# file_out:
-#   - "/tmp/{{ camera_entity.split('.')[1] }}_latest.jpg"
-#   - "/tmp/{{ camera_entity.split('.')[1] }}_{{ now().strftime('%Y%m%d_%H%M%S') }}.jpg"
-# confidence: 50
+file_out:
+  - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+confidence: 50
 # # This global detection area is required for all labels
 # area:
 #   # Exclude top 10% of image
