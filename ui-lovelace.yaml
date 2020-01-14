@@ -72,8 +72,8 @@ views:
         entity: camera.doods_back_porch
       # - type: picture-entity
       #   entity: camera.doods_front_yard_left
-      # - type: picture-entity
-      #   entity: camera.doods_garage
+      - type: picture-entity
+        entity: camera.doods_garage
       # - type: picture-entity
       #   entity: camera.doods_gate
   - title: Office

@@ -6,8 +6,8 @@ detector: default
 source:
   - entity_id: camera.atrium
   - entity_id: camera.back_porch
+  - entity_id: camera.garage
   # - entity_id: camera.front_yard_left
-  # - entity_id: camera.garage
   # - entity_id: camera.gate
   
 file_out:
@@ -16,4 +16,5 @@ confidence: 50
 labels:
   - dog
   - person
+  - car
 
