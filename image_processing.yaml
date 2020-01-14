@@ -34,7 +34,7 @@
   area:
     # Exclude top 50% of image
     top: 0.5
-    cover: true
+    covers: true
   labels:
     - dog
     - person
@@ -55,7 +55,7 @@
   area:
     # Exclude top third of image
     top: 0.33
-    cover: true
+    covers: true
   labels:
     - dog
     - person
