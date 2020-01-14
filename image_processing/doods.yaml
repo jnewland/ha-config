@@ -1,10 +1,15 @@
 platform: doods
-scan_interval: 10000
+# scan_interval: 10000
 url: "http://doods.home-assistant.svc.kubernetes.home.jnewland.com:8080"
 timeout: 60
 detector: default
 source:
   - entity_id: camera.atrium
+  - entity_id: camera.back_porch
+  - entity_id: camera.garage
+  - entity_id: camera.gate
+  - entity_id: camera.front_yard_left
+  
 # file_out:
 #   - "/tmp/{{ camera_entity.split('.')[1] }}_latest.jpg"
 #   - "/tmp/{{ camera_entity.split('.')[1] }}_{{ now().strftime('%Y%m%d_%H%M%S') }}.jpg"
@@ -17,8 +22,8 @@ source:
 #   right: 0.95
 #   # The entire detection must be inside this box
 #   covers: true
-labels:
-  - dog
+# labels:
+  # - dog
   # - name: person
   #   confidence: 40
   #   area:
