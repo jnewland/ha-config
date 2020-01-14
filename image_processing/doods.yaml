@@ -5,10 +5,15 @@ url: "http://doods.home-assistant.svc.kubernetes.home.jnewland.com:8080"
 detector: default
 source:
   - entity_id: camera.atrium
+    name: atrium
   - entity_id: camera.back_porch
+    name: back_porch
   - entity_id: camera.garage
+    name: garage
   - entity_id: camera.front_yard_left
+    name: front yard left
   - entity_id: camera.gate
+    name: gate
   
 file_out:
   - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
