@@ -29,15 +29,15 @@
 - platform: local_file
   file_path: /tmp/doods_atrium.jpg
   name: doods_atrium
-- platform: local_file
-  file_path: /tmp/doods_back_porch.jpg
-  name: doods_back_porch
-- platform: local_file
-  file_path: /tmp/doods_front_yard_left.jpg
-  name: doods_front_yard_left
-- platform: local_file
-  file_path: /tmp/doods_garage.jpg
-  name: doods_garage
-- platform: local_file
-  file_path: /tmp/doods_gate.jpg
-  name: doods_gate
+# - platform: local_file
+#   file_path: /tmp/doods_back_porch.jpg
+#   name: doods_back_porch
+# - platform: local_file
+#   file_path: /tmp/doods_front_yard_left.jpg
+#   name: doods_front_yard_left
+# - platform: local_file
+#   file_path: /tmp/doods_garage.jpg
+#   name: doods_garage
+# - platform: local_file
+#   file_path: /tmp/doods_gate.jpg
+#   name: doods_gate
