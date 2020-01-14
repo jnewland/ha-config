@@ -3,6 +3,12 @@ sensor:
   sensors:
     object_detection_summary:
       friendly_name: object_detection_summary
+      entity_id:
+        - image_processing.atrium
+        - image_processing.back_porch
+        - image_processing.front_yard_left
+        - image_processing.garage
+        - image_processing.gate
       value_template: |
         {% for state in states.image_processing if state.attributes.total_matches > 0 -%}
           {%- if loop.first %}Detected {% elif loop.last %}, and {% else %}, {% endif -%}
