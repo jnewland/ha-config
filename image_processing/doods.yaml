@@ -16,5 +16,8 @@ confidence: 50
 labels:
   - dog
   - person
-  - car
+  - name: car
+    confidence: 30
+  - name: truck
+    confidence: 30
 
