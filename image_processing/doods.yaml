@@ -1,7 +1,7 @@
 platform: doods
-# scan_interval: 10000
-url: "http://doods.home-assistant.svc.kubernetes.home.jnewland.com:8080"
+scan_interval: 60
 timeout: 60
+url: "http://doods.home-assistant.svc.kubernetes.home.jnewland.com:8080"
 detector: default
 source:
   - entity_id: camera.atrium
