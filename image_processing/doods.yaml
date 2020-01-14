@@ -13,23 +13,7 @@ source:
 file_out:
   - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
 confidence: 50
-# # This global detection area is required for all labels
-# area:
-#   # Exclude top 10% of image
-#   top: 0.1
-#   # Exclude right 5% of image
-#   right: 0.95
-#   # The entire detection must be inside this box
-#   covers: true
-# labels:
-  # - dog
-  # - name: person
-  #   confidence: 40
-  #   area:
-  #     # Exclude top 10% of image
-  #     top: 0.1
-  #     # Exclude right 15% of image
-  #     right: 0.85
-  #     # Any part of the detection inside this area will trigger
-  #     covers: false
+labels:
+  - dog
+  - person
 
