@@ -1,6 +1,6 @@
 platform: doods
 scan_interval: 10000
-url: "http://doods:8080"
+url: "http://doods.home-assistant.svc.kubernetes.home.jnewland.com:8080"
 timeout: 60
 detector: default
 source:
