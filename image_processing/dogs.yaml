@@ -1,0 +1,31 @@
+platform: doods
+scan_interval: 10000
+url: "http://doods:8080"
+timeout: 60
+detector: default
+source:
+  - entity_id: camera.atrium
+# file_out:
+#   - "/tmp/{{ camera_entity.split('.')[1] }}_latest.jpg"
+#   - "/tmp/{{ camera_entity.split('.')[1] }}_{{ now().strftime('%Y%m%d_%H%M%S') }}.jpg"
+# confidence: 50
+# # This global detection area is required for all labels
+# area:
+#   # Exclude top 10% of image
+#   top: 0.1
+#   # Exclude right 5% of image
+#   right: 0.95
+#   # The entire detection must be inside this box
+#   covers: true
+labels:
+  - dog
+  # - name: person
+  #   confidence: 40
+  #   area:
+  #     # Exclude top 10% of image
+  #     top: 0.1
+  #     # Exclude right 15% of image
+  #     right: 0.85
+  #     # Any part of the detection inside this area will trigger
+  #     covers: false
+
