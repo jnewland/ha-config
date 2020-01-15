@@ -102,7 +102,7 @@ action:
           {{ domain_emoji[new_state.domain] | default(":control_knobs:") -}}{{ " " -}}
         {% endif -%}
         *{{ new_state.name | capitalize -}}*{{ " " -}}
-        is *_{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_*{{ " " -}}
+        is {% if new_state.state == "" %}{{ "'' " }}{% else %}*_{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_*{{ " " }}{% endif -%}
         after being {{ old_state.state | capitalize }}{{ old_state.attributes.unit_of_measurement }}{{ " " -}}
         for {{ relative_time(old_state.last_changed) }}
       {% endif -%}
