@@ -11,10 +11,12 @@
       name: back_porch
   file_out:
     - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
-  confidence: 50
+  confidence: 90
   labels:
-    - dog
-    - person
+    - name: dog
+      confidence: 30
+    - name: person
+      confidence: 60
 
 # The bottom two thirds of the front yard camera
 - platform: doods
@@ -27,11 +29,13 @@
       name: front yard left
   file_out:
     - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
-  confidence: 50
   area:
     # Exclude top third of image
     top: 0.33
     covers: true
+  confidence: 90
   labels:
-    - dog
-    - person
+    - name: dog
+      confidence: 30
+    - name: person
+      confidence: 60
