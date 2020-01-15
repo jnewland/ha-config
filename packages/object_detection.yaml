@@ -11,5 +11,4 @@ sensor:
         {% for state in states.image_processing if state.attributes.total_matches > 0 -%}
           {%- if loop.first %}Detected {% elif loop.last %}, and {% else %}, {% endif -%}
           {% for thing in state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %} on {{ state.name | lower }} camera
-          {%- if loop.last %}.{% endif -%}
         {%- endfor %}
