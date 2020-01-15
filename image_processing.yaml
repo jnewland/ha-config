@@ -9,14 +9,25 @@
       name: atrium
     - entity_id: camera.back_porch
       name: back_porch
-    - entity_id: camera.garage
-      name: garage
   file_out:
     - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
   confidence: 50
   labels:
     - dog
     - person
+
+- platform: doods
+  scan_interval: 10
+  timeout: 60
+  url: "http://doods.home-assistant.svc.kubernetes.home.jnewland.com:8080"
+  detector: default
+  source:
+    - entity_id: camera.garage
+      name: garage
+  file_out:
+    - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+  confidence: 50
+  labels:
     - truck
 
 # The bottom half of the gate camera
@@ -38,7 +49,6 @@
   labels:
     - dog
     - person
-    - truck
 
 # The bottom two thirds of the front yard camera
 - platform: doods
@@ -59,4 +69,3 @@
   labels:
     - dog
     - person
-    - truck
