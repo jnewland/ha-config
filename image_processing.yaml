@@ -30,9 +30,10 @@
   file_out:
     - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
   confidence: 90
-  # Exclude right half of image
-  right: 0.5
-  covers: true
+  area:
+    # Exclude right half of image
+    right: 0.5
+    covers: true
   labels:
     - name: dog
       confidence: 30
