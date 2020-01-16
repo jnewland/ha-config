@@ -1,4 +1,3 @@
-# Detect on all parts of these cameras
 - platform: doods
   scan_interval: 10
   timeout: 60
@@ -7,16 +6,39 @@
   source:
     - entity_id: camera.atrium
       name: atrium
-    - entity_id: camera.back_porch
-      name: back_porch
   file_out:
     - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
   confidence: 90
+  area:
+    # Exclude left part of image
+    left: 0.25
+    covers: true
   labels:
     - name: dog
       confidence: 30
     - name: person
       confidence: 60
+
+- platform: doods
+  scan_interval: 10
+  timeout: 60
+  url: "http://doods.home-assistant.svc.kubernetes.home.jnewland.com:8080"
+  detector: default
+  source:
+    - entity_id: camera.back_porch
+      name: back_porch
+  file_out:
+    - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+  confidence: 90
+  # Exclude right half of image
+  right: 0.5
+  covers: true
+  labels:
+    - name: dog
+      confidence: 30
+    - name: person
+      confidence: 60
+
 
 # The bottom two thirds of the front yard camera
 - platform: doods
@@ -30,8 +52,9 @@
   file_out:
     - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
   area:
-    # Exclude top third of image
-    top: 0.33
+    # Exclude street
+    top: 0.25
+    left: 0.25
     covers: true
   confidence: 90
   labels:
