@@ -24,7 +24,7 @@
   detector: default
   source:
     - entity_id: camera.back_porch
-      name: back_porch
+      name: back porch
   file_out:
     - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
   area:
