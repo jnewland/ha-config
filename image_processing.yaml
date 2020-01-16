@@ -10,7 +10,7 @@
     - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
   area:
     # Exclude left part of image
-    left: 0.25
+    left: 0.20
   labels:
     - name: dog
       confidence: 30
@@ -36,7 +36,6 @@
     - name: person
       confidence: 60
 
-
 # The bottom two thirds of the front yard camera
 - platform: doods
   scan_interval: 10
@@ -50,8 +49,8 @@
     - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
   area:
     # Exclude street
-    top: 0.25
-    left: 0.25
+    top: 0.20
+    left: 0.20
   labels:
     - name: dog
       confidence: 30
