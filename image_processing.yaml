@@ -8,11 +8,9 @@
       name: atrium
   file_out:
     - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
-  confidence: 90
   area:
     # Exclude left part of image
     left: 0.25
-    covers: true
   labels:
     - name: dog
       confidence: 30
@@ -29,11 +27,9 @@
       name: back_porch
   file_out:
     - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
-  confidence: 90
   area:
     # Exclude right half of image
     right: 0.5
-    covers: true
   labels:
     - name: dog
       confidence: 30
@@ -56,8 +52,6 @@
     # Exclude street
     top: 0.25
     left: 0.25
-    covers: true
-  confidence: 90
   labels:
     - name: dog
       confidence: 30
