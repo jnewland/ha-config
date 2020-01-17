@@ -15,7 +15,7 @@
     - name: dog
       confidence: 30
     - name: person
-      confidence: 60
+      confidence: 75
 
 - platform: doods
   scan_interval: 10
@@ -34,7 +34,7 @@
     - name: dog
       confidence: 30
     - name: person
-      confidence: 60
+      confidence: 75
 
 # The bottom two thirds of the front yard camera
 - platform: doods
@@ -55,4 +55,4 @@
     - name: dog
       confidence: 30
     - name: person
-      confidence: 60
+      confidence: 75
