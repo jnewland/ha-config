@@ -20,20 +20,38 @@ views:
           - type: horizontal-stack
             cards:
             - type: picture-entity
+              camera_view: live
+              show_name: false
+              show_state: false
               entity: camera.front_yard_left
             - type: picture-entity
+              camera_view: live
+              show_name: false
+              show_state: false
               entity: camera.gate
           - type: horizontal-stack
             cards:
             - type: picture-entity
+              camera_view: live
+              show_name: false
+              show_state: false
               entity: camera.side_yard
             - type: picture-entity
+              camera_view: live
+              show_name: false
+              show_state: false
               entity: camera.atrium
           - type: horizontal-stack
             cards:
             - type: picture-entity
+              camera_view: live
+              show_name: false
+              show_state: false
               entity: camera.garage
             - type: picture-entity
+              camera_view: live
+              show_name: false
+              show_state: false
               entity: camera.back_porch
       - type: vertical-stack
         cards:
@@ -51,26 +69,56 @@ views:
     icon: mdi:video
     cards:
       - type: picture-entity
+        camera_view: live
+        show_name: false
+        show_state: false
         entity: camera.gate
       - type: picture-entity
+        camera_view: live
+        show_name: false
+        show_state: false
         entity: camera.front_yard_right
       - type: picture-entity
+        camera_view: live
+        show_name: false
+        show_state: false
         entity: camera.front_yard_left
       - type: picture-entity
+        camera_view: live
+        show_name: false
+        show_state: false
         entity: camera.atrium
       - type: picture-entity
+        camera_view: live
+        show_name: false
+        show_state: false
         entity: camera.side_yard
       - type: picture-entity
+        camera_view: live
+        show_name: false
+        show_state: false
         entity: camera.back_porch
       - type: picture-entity
+        camera_view: live
+        show_name: false
+        show_state: false
         entity: camera.ac
       - type: picture-entity
+        camera_view: live
+        show_name: false
+        show_state: false
         entity: camera.garage
       - type: picture-entity
+        show_name: false
+        show_state: false
         entity: camera.doods_atrium
       - type: picture-entity
+        show_name: false
+        show_state: false
         entity: camera.doods_back_porch
       - type: picture-entity
+        show_name: false
+        show_state: false
         entity: camera.doods_front_yard_left
   - title: Office
     icon: mdi:desktop-mac
