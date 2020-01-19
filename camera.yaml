@@ -38,3 +38,6 @@
 - platform: local_file
   file_path: /tmp/doods_front_yard_left.jpg
   name: doods_front_yard_left
+- platform: local_file
+  file_path: /tmp/doods_pergola.jpg
+  name: doods_pergola
