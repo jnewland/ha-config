@@ -26,7 +26,7 @@ views:
           - type: horizontal-stack
             cards:
             - type: picture-entity
-              entity: camera.side_yard
+              entity: camera.pergola
             - type: picture-entity
               entity: camera.atrium
           - type: horizontal-stack
@@ -59,7 +59,7 @@ views:
       - type: picture-entity
         entity: camera.atrium
       - type: picture-entity
-        entity: camera.side_yard
+        entity: camera.pergola
       - type: picture-entity
         entity: camera.back_porch
       - type: picture-entity
