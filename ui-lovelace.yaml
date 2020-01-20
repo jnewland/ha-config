@@ -260,16 +260,24 @@ views:
     cards:
     - type: entities
       entities:
-      - switch.bug_zapper
-      - light.atrium
       - switch.back_porch
-      - light.front_porch
-      - light.front_door
-      - light.patio
-      - light.master_patio
+      - switch.back_porch_fountain
+      - light.back_porch_fountain
+      - switch.bug_zapper
       - light.ac
+    - type: entities
+      entities:
+      - light.atrium
       - light.atrium_door
       - light.garage_door
+    - type: entities
+      entities:
+      - light.front_porch
+      - light.front_door
+    - type: entities
+      entities:
+      - light.patio
+      - light.master_patio
     - type: entities
       entities:
       - binary_sensor.front_gate
