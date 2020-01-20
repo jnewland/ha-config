@@ -111,6 +111,7 @@ views:
         show_state: false
         entity: camera.doods_pergola
       - type: custom:auto-entities
+        show_header_toggle: false
         show_empty: false
         sort:
           method: name
