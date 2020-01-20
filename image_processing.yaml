@@ -4,6 +4,22 @@
   url: "http://doods.home-assistant.svc.kubernetes.home.jnewland.com:8080"
   detector: default
   source:
+    - entity_id: camera.pergola
+      name: pergola
+  file_out:
+    - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+  labels:
+    - name: dog
+      confidence: 30
+    - name: person
+      confidence: 75
+
+- platform: doods
+  scan_interval: 10
+  timeout: 60
+  url: "http://doods.home-assistant.svc.kubernetes.home.jnewland.com:8080"
+  detector: default
+  source:
     - entity_id: camera.atrium
       name: atrium
   file_out:
