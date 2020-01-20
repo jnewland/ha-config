@@ -22,6 +22,22 @@
 - platform: mjpeg
   mjpeg_url: !env_var CAMERA_URL_8
   name: side yard
+- platform: mjpeg
+  mjpeg_url: !env_var CAMERA_URL_9
+  name: pergola
 - platform: ffmpeg
   name: capitol
   input: https://wms-prod-1.wetmet.net/live/192-07-01/playlist.m3u8
+
+- platform: local_file
+  file_path: /tmp/doods_atrium.jpg
+  name: doods_atrium
+- platform: local_file
+  file_path: /tmp/doods_back_porch.jpg
+  name: doods_back_porch
+- platform: local_file
+  file_path: /tmp/doods_front_yard_left.jpg
+  name: doods_front_yard_left
+- platform: local_file
+  file_path: /tmp/doods_pergola.jpg
+  name: doods_pergola

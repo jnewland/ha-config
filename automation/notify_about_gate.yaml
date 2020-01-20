@@ -23,5 +23,3 @@ action:
         attachments:
         - title: Front yard left
           image_url: "{{ states.weblink.self.state }}{{ states.camera.front_yard_left.attributes.entity_picture }}"
-        - title: Front yard right
-          image_url: "{{ states.weblink.self.state }}{{ states.camera.front_yard_right.attributes.entity_picture }}"
