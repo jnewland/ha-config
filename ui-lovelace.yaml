@@ -260,16 +260,24 @@ views:
     cards:
     - type: entities
       entities:
-      - switch.bug_zapper
-      - light.atrium
       - switch.back_porch
-      - light.front_porch
-      - light.front_door
-      - light.patio
-      - light.master_patio
+      - switch.back_porch_fountain
+      - light.back_porch_fountain
+      - switch.bug_zapper
       - light.ac
+    - type: entities
+      entities:
+      - light.atrium
       - light.atrium_door
       - light.garage_door
+    - type: entities
+      entities:
+      - light.front_porch
+      - light.front_door
+    - type: entities
+      entities:
+      - light.patio
+      - light.master_patio
     - type: entities
       entities:
       - binary_sensor.front_gate
@@ -326,6 +334,22 @@ views:
       filter:
         include:
           - entity_id: "/^sensor.*_light$/"
+
+  - title: Guest
+    icon: mdi:bag-personal
+    cards:
+    - type: entities
+      entities:
+        - binary_sensor.guest_bath_motion
+        - binary_sensor.guest_hall_motion
+        - switch.guest_bath_fan
+    - type: entities
+      entities:
+        - light.guest_hall
+        - light.guest_bath
+        - light.guest_shower
+        - light.guest_room_bedside_left
+        - light.guest_room_bedside_right
 
   - title: Settings
     icon: mdi:settings

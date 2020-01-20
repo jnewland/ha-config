@@ -14,6 +14,7 @@ filter:
     - scene
   include_entities:
     - switch.back_porch
+    - switch.back_porch_fountain
     - switch.bug_zapper
     - switch.christmas_tree
     - script.mode_away
@@ -29,4 +30,11 @@ filter:
     - light.bookshelf_green
     - light.bookshelf_red
     - light.bookshelf_white
+    - light.back_porch_fountain_blue
+    - light.back_porch_fountain_brightness
+    - light.back_porch_fountain_green
+    - light.back_porch_fountain_red
+    - light.back_porch_fountain_white
     - light.pantry
+    - light.office
+    - light.guest_room
