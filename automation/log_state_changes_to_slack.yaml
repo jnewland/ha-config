@@ -26,7 +26,7 @@ trigger:
     - sensor.katie_s_iphone_battery_state
     - sensor.katie_s_iphone_activity
     - sensor.jphone_11_pro_activity
-    - sensor.object_detection_summary
+    - sensor.image_processing_summary
     - device_tracker.katie_s_iphone
     - device_tracker.jphone_11_pro
     - device_tracker.jesses_ipad

@@ -1,8 +1,8 @@
 sensor:
 - platform: template
   sensors:
-    object_detection_summary:
-      friendly_name: Object detection summary
+    image_processing_summary:
+      friendly_name: Image processing summary
       entity_id:
         - image_processing.atrium
         - image_processing.back_porch
