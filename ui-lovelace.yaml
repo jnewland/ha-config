@@ -131,6 +131,7 @@ views:
         entities:
         - light.office_overhead
         - light.office_chandelier
+        - light.marble_lamp
         - light.exercise_bike
         - binary_sensor.office_motion
   - title: Music Room
