@@ -1,0 +1,10 @@
+platform: nut
+name: core UPS
+host: diskstation.iot.home.jnewland.com
+username: monuser
+password: secret
+resources:
+  - ups.load
+  - ups.realpower.nominal
+  - input.voltage
+  - battery.runtime
