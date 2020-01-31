@@ -1,0 +1,11 @@
+platform: synologydsm
+host: diskstation
+username: guest
+password: !env_var DISKSTATION_GUEST_PASSWORD
+monitored_conditions:
+  - cpu_total_load
+  - memory_real_usage
+  - volume_status
+  - volume_percentage_used
+  - disk_status
+  - disk_temp
