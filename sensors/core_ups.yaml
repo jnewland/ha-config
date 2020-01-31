@@ -1,0 +1,11 @@
+platform: nut
+name: core UPS
+alias: ups
+host: diskstation
+username: monuser
+password: !env_var DISKSTATION_NUT_PASSWORD
+resources:
+  - ups.load
+  - ups.realpower.nominal
+  - input.voltage
+  - battery.runtime

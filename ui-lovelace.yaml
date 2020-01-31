@@ -380,6 +380,40 @@ views:
         exclude:
           - entity_id: "*_sim_*"
 
+  - title: Core
+    icon: mdi:server-network
+    cards:
+    - type: custom:auto-entities
+      show_empty: false
+      sort:
+        method: id
+      card:
+        type: glance
+        title: UPS
+      filter:
+        include:
+          - entity_id: '/core_ups/'
+    - type: custom:auto-entities
+      show_empty: false
+      sort:
+        method: id
+      card:
+        type: glance
+        title: NAS
+      filter:
+        include:
+          - entity_id: '/diskstation/'
+    - type: custom:auto-entities
+      show_empty: false
+      sort:
+        method: id
+      card:
+        type: glance
+        title: Printer
+      filter:
+        include:
+          - entity_id: '/dcp_l2540dw/'
+
 resources:
 - url: /local/monster-card.js?v=1
   type: js
