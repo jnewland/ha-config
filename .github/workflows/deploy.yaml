@@ -35,6 +35,8 @@ jobs:
         DB_URL: ""
         DESK_HID_IDLE_TIME_RESOURCE: http://example.com
         DESK_CAMERA_RESOURCE: http://example.com
+        DISKSTATION_GUEST_PASSWORD: ""
+        DISKSTATION_NUT_PASSWORD: ""
         ELEVATION: 0
         FORECAST_API_KEY: ""
         GATEWAY_LINK: http://example.com
