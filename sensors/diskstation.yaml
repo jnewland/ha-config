@@ -1,7 +1,7 @@
 name: diskstation
 platform: synologydsm
 host: diskstation
-username: guest
+username: home-assistant
 password: !env_var DISKSTATION_GUEST_PASSWORD
 monitored_conditions:
   - cpu_total_load
