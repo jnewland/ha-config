@@ -1,7 +1,7 @@
 platform: nut
 name: core UPS
 alias: ups
-host: diskstation.iot.home.jnewland.com
+host: diskstation
 username: monuser
 password: secret
 resources:
