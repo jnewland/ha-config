@@ -19,9 +19,6 @@ cover: !include cover.yaml
 conversation:
 device_tracker: !include device_tracker.yaml
 discovery:
-  ignore:
-  - apple_tv
-  - samsung_tv
 emulated_hue:
   expose_by_default: false
 frontend: !include frontend.yaml
