@@ -1,7 +1,5 @@
 default: info
 logs:
-  pyatv: debug
-  custom_components.apple_tv: debug
   requests.packages.urllib3.connectionpool: critical
   homeassistant.components.media_player: warn
   homeassistant.components.light: info
