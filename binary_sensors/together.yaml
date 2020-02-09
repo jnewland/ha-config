@@ -7,7 +7,7 @@ sensors:
     value_template: |
       {{
         states.device_tracker.katie_s_iphone != None and
-        states.device_tracker.jphone_x != None and
+        states.device_tracker.jphone_11_pro != None and
         distance(states.device_tracker.jphone_11_pro, states.device_tracker.katie_s_iphone) != None and
         distance(states.device_tracker.jphone_11_pro, states.device_tracker.katie_s_iphone) < 0.25
       }}

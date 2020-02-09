@@ -384,6 +384,7 @@ views:
       hours_to_show: 80
       entities:
         - input_select.mode
+        - binary_sensor.together
         - device_tracker.jphone_11_pro
         - sensor.jphone_11_pro_battery_state
         - device_tracker.katie_s_iphone
