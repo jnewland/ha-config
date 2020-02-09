@@ -178,32 +178,21 @@ views:
   - title: Batteries
     icon: mdi:battery
     cards:
-    - type: sensor
-      entity: sensor.jphone_11_pro_battery_level
-    - type: sensor
-      entity: sensor.katie_s_iphone_battery_level
-    - type: custom:entity-attributes-card
-      heading_name: Sensor
-      heading_state: Battery level
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 80
       filter:
-        name_attribute: friendly_name
         include:
-          # ahh i wish this could be a wildcard or a monster card
-          - switch.closet_motion.battery_level
-          - switch.front_door.battery_level
-          - switch.front_gate.battery_level
-          - switch.garage_hall_motion.battery_level
-          - switch.great_hall_motion.battery_level
-          - switch.guest_bath_motion.battery_level
-          - switch.kitchen_motion.battery_level
-          - switch.master_ac_water.battery_level
-          - switch.music_room_motion.battery_level
-          - switch.office_motion.battery_level
-          - switch.powder_room_motion.battery_level
-          - switch.stairs_motion.battery_level
-          - switch.upstairs_motion.battery_level
-          - switch.wine_room_motion.battery_level
-          - vacuum.downstairs_roomba.battery_level
+          - entity_id: '/.*phone.*battery_level/'
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 80
+      filter:
+        include:
+          - attributes:
+              battery_level: "<= 100" 
   - title: Speakers
     icon: mdi:speaker
     cards:
@@ -406,6 +395,15 @@ views:
         include:
           - entity_id: '/core_ups/'
     - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 80
+      filter:
+        include:
+          - entity_id: '/core_ups/'
+
+
+    - type: custom:auto-entities
       show_empty: false
       sort:
         method: id
@@ -416,6 +414,14 @@ views:
         include:
           - entity_id: '/diskstation/'
     - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 80
+      filter:
+        include:
+          - entity_id: '/diskstation/'
+
+    - type: custom:auto-entities
       show_empty: false
       sort:
         method: id
@@ -425,7 +431,13 @@ views:
       filter:
         include:
           - entity_id: '/dcp_l2540dw/'
-
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 80
+      filter:
+        include:
+          - entity_id: '/dcp_l2540dw/'
 resources:
 - url: /local/monster-card.js?v=1
   type: js
