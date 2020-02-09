@@ -379,6 +379,17 @@ views:
           - entity_id: '/_[0-9]+$/'
         exclude:
           - entity_id: "*_sim_*"
+    - type: history-graph
+      title: History
+      hours_to_show: 80
+      entities:
+        - input_select.mode
+        - device_tracker.jphone_11_pro
+        - sensor.jphone_11_pro_battery_state
+        - device_tracker.katie_s_iphone
+        - sensor.katie_s_iphone_battery_state
+        - sun.sun
+        - weather.dark_sky
 
   - title: Core
     icon: mdi:server-network
