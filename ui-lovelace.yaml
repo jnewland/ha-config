@@ -185,14 +185,26 @@ views:
       filter:
         include:
           - entity_id: '/.*phone.*battery_level/'
-    - type: custom:auto-entities
-      card:
-        type: history-graph
-        hours_to_show: 80
+    - type: custom:entity-attributes-card
+      heading_name: Sensor
+      heading_state: Battery level
+      name_attribute: friendly_name
       filter:
         include:
-          - attributes:
-              battery_level: "<= 100" 
+          - switch.front_door.battery_level
+          - switch.front_gate.battery_level
+          - switch.garage_hall_motion.battery_level
+          - switch.great_hall_motion.battery_level
+          - switch.guest_bath_motion.battery_level
+          - switch.kitchen_motion.battery_level
+          - switch.master_ac_water.battery_level
+          - switch.music_room_motion.battery_level
+          - switch.office_motion.battery_level
+          - switch.powder_room_motion.battery_level
+          - switch.stairs_motion.battery_level
+          - switch.upstairs_motion.battery_level
+          - switch.wine_room_motion.battery_level
+          - vacuum.downstairs_roomba.battery_level
   - title: Speakers
     icon: mdi:speaker
     cards:
