@@ -197,6 +197,8 @@ views:
           - switch.great_hall_motion.battery_level
           - switch.guest_bath_motion.battery_level
           - switch.kitchen_motion.battery_level
+          - switch.master_motion.battery_level
+          - switch.master_bath_motion.battery_level
           - switch.master_ac_water.battery_level
           - switch.music_room_motion.battery_level
           - switch.office_motion.battery_level
