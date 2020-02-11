@@ -392,6 +392,14 @@ views:
         - sensor.katie_s_iphone_battery_state
         - sun.sun
         - weather.dark_sky
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 72
+        name: Motion sensors
+      filter:
+        include:
+          - entity_id: "/^binary_sensor.*_motion$/"
 
   - title: Core
     icon: mdi:server-network
