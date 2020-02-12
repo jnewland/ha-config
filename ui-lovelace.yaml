@@ -178,24 +178,27 @@ views:
   - title: Batteries
     icon: mdi:battery
     cards:
-    - type: sensor
-      entity: sensor.jphone_11_pro_battery_level
-    - type: sensor
-      entity: sensor.katie_s_iphone_battery_level
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 80
+      filter:
+        include:
+          - entity_id: '/.*phone.*battery_level/'
     - type: custom:entity-attributes-card
       heading_name: Sensor
       heading_state: Battery level
+      name_attribute: friendly_name
       filter:
-        name_attribute: friendly_name
         include:
-          # ahh i wish this could be a wildcard or a monster card
-          - switch.closet_motion.battery_level
           - switch.front_door.battery_level
           - switch.front_gate.battery_level
           - switch.garage_hall_motion.battery_level
           - switch.great_hall_motion.battery_level
           - switch.guest_bath_motion.battery_level
           - switch.kitchen_motion.battery_level
+          - switch.master_motion.battery_level
+          - switch.master_bath_motion.battery_level
           - switch.master_ac_water.battery_level
           - switch.music_room_motion.battery_level
           - switch.office_motion.battery_level
@@ -379,6 +382,26 @@ views:
           - entity_id: '/_[0-9]+$/'
         exclude:
           - entity_id: "*_sim_*"
+    - type: history-graph
+      title: History
+      hours_to_show: 80
+      entities:
+        - input_select.mode
+        - binary_sensor.together
+        - device_tracker.jphone_11_pro
+        - sensor.jphone_11_pro_battery_state
+        - device_tracker.katie_s_iphone
+        - sensor.katie_s_iphone_battery_state
+        - sun.sun
+        - weather.dark_sky
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 72
+        name: Motion sensors
+      filter:
+        include:
+          - entity_id: "/^binary_sensor.*_motion$/"
 
   - title: Core
     icon: mdi:server-network
@@ -394,6 +417,15 @@ views:
         include:
           - entity_id: '/core_ups/'
     - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 80
+      filter:
+        include:
+          - entity_id: '/core_ups/'
+
+
+    - type: custom:auto-entities
       show_empty: false
       sort:
         method: id
@@ -404,6 +436,14 @@ views:
         include:
           - entity_id: '/diskstation/'
     - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 80
+      filter:
+        include:
+          - entity_id: '/diskstation/'
+
+    - type: custom:auto-entities
       show_empty: false
       sort:
         method: id
@@ -413,7 +453,13 @@ views:
       filter:
         include:
           - entity_id: '/dcp_l2540dw/'
-
+    - type: custom:auto-entities
+      card:
+        type: history-graph
+        hours_to_show: 80
+      filter:
+        include:
+          - entity_id: '/dcp_l2540dw/'
 resources:
 - url: /local/monster-card.js?v=1
   type: js
