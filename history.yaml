@@ -1,7 +1,6 @@
 exclude:
   domains:
   - automation
-  - weblink
   - updater
   - group
   entities:

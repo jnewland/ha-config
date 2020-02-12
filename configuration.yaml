@@ -24,7 +24,6 @@ emulated_hue:
 frontend: !include frontend.yaml
 group: !include_dir_named groups
 history: !include history.yaml
-history_graph: !include_dir_named history_graphs
 http: !include http.yaml
 homekit: !include homekit.yaml
 ifttt: !include ifttt.yaml
@@ -52,7 +51,6 @@ system_health:
 tts:
   - platform: google_translate
 vera: !include vera.yaml
-weblink: !include weblink.yaml
 weather:
   - platform: darksky
     api_key: !env_var FORECAST_API_KEY
