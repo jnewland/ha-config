@@ -22,6 +22,7 @@ trigger:
     - binary_sensor.music_room_motion
     - binary_sensor.kitchen_motion
     - binary_sensor.front_gate
+    - sensor.core_ups_state
     - sensor.jphone_11_pro_battery_state
     - sensor.katie_s_iphone_battery_state
     - sensor.katie_s_iphone_activity
