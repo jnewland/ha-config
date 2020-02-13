@@ -1,0 +1,19 @@
+automation:
+  - alias: Turn back porch fountain green when pax is detected
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.back_porch_pax
+      to: "on"
+    action:
+      service: light.turn_on
+      entity_id: light.back_porch_fountain_green
+  - alias: Turn back porch fountain green off when pax is gone
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.back_porch_pax
+      to: "off"
+    action:
+      service: light.turn_off
+      entity_id: light.back_porch_fountain_green
