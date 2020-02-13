@@ -1,4 +1,4 @@
-sensors:
+sensor:
   - platform: nut
     name: core UPS
     alias: ups
@@ -18,14 +18,14 @@ sensors:
           - sensor.core_ups_input_voltage
         value_template: |
           {{ states.sensor.core_ups_input_voltage.attributes.state }}
-binary_sensors:
+binary_sensor:
   - platform: template
     sensors:
       core_ups_voltage_low:
         value_template: |
           {{ float(states.sensor.core_ups_input_voltage.state) | default(0) <= 114 }}
 
-automations:
+automation:
   - alias: Notify Jesse when UPS voltage is low
     trigger:
       platform: state
