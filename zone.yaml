@@ -53,5 +53,4 @@
   latitude: !env_var OFFICE_LAT
   longitude: !env_var OFFICE_LAT
   radius: 1
-  passive: true
   icon: mdi:guitar-pick
