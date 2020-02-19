@@ -68,6 +68,9 @@ homeassistant:
       trigger_entity_id: light.pantry
       trigger_entity_id_off: light.pantry
 
+    counter.light_automations:
+      unit_of_measurement: occurances
+
     # fixed_brightness: int
     # TODO: min_brightness
     # notify_action: duck
