@@ -197,6 +197,7 @@ views:
           - switch.great_hall_motion.battery_level
           - switch.guest_bath_motion.battery_level
           - switch.kitchen_motion.battery_level
+          - switch.pantry_motion.battery_level
           - switch.master_motion.battery_level
           - switch.master_bath_motion.battery_level
           - switch.master_ac_water.battery_level
@@ -251,14 +252,15 @@ views:
     - type: entities
       entities:
       - light.cabinets
-      - light.dining_room_table
       - light.kitchen
-      - light.living
       - light.pendants
+      - light.dining_room_table
+      - binary_sensor.kitchen_motion
+      - light.pantry
+      - binary_sensor.pantry_motion
+      - light.living
       - light.couch_lamp_right
       - light.couch_lamp_left
-      - switch.christmas_tree
-      - binary_sensor.kitchen_motion
       - binary_sensor.living_room_motion
   - title: Outdoor
     icon: mdi:tree
