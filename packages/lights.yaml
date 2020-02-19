@@ -19,42 +19,49 @@ homeassistant:
 
     binary_sensor.stairs_motion:
       trigger_entity_id: light.stairs
+      trigger_entity_id_off: light.stairs
+    binary_sensor.upstairs_motion:
+      trigger_entity_id: light.stairs
+      trigger_entity_id_off: light.stairs
     binary_sensor.closet_motion:
       trigger_entity_id: light.master_closet
+      trigger_entity_off: light.master_closet
     binary_sensor.guest_hall_motion:
       trigger_entity_id: light.guest_hall
+      trigger_entity_id_off: light.guest_hall
     binary_sensor.guest_bath_motion:
       trigger_entity_id: group.guest_bath_lights
       trigger_entity_id_off: group.guest_bath
+      off_delay_seconds: 1800
     binary_sensor.powder_room_motion:
       trigger_entity_id: light.powder_room
       trigger_entity_id_off: group.powder_room
     binary_sensor.office_motion:
       trigger_service: script.office
-    binary_sensor.upstairs_motion:
-      trigger_entity_id: light.stairs
+      trigger_entity_id_off: group.office
+      off_delay_seconds: 300
     binary_sensor.master_bath_motion:
       trigger_service: script.master_bath_lights
       trigger_entity_id_off: group.master_bath
+      off_delay_seconds: 1800
     binary_sensor.master_motion:
       trigger_service: script.master_lights
       trigger_service_off: script.master_lights_off
     binary_sensor.wine_room_motion:
       trigger_entity_id: light.wine_room
+      trigger_entity_off: light.wine_room
     binary_sensor.great_hall_motion:
       trigger_entity_id: light.great_hall
+      trigger_entity_id_off: light.great_hall
     binary_sensor.garage_hall_motion:
       trigger_entity_id: light.garage_hall
+      trigger_entity_id_off: light.garage_hall
     binary_sensor.music_room_motion:
       friendly_name: music room motion
       trigger_entity_id: light.music_room
+      trigger_entity_id_off: light.music_room
+      off_delay_seconds: 300
     binary_sensor.great_room_occupied:
-      trigger_service: script.living
-      trigger_entity_id_off: group.great_room
-    binary_sensor.living_room_motion:
-      trigger_service: script.living
-      trigger_entity_id_off: group.great_room
-    binary_sensor.kitchen_motion:
       trigger_service: script.living
       trigger_entity_id_off: group.great_room
 
@@ -182,44 +189,37 @@ automation:
         brightness: |
           {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
 
-  - alias: Turn off lights 5m after the sensor has turned off
+  - alias: Turn off lights after sensors have turned off
     trigger:
-      platform: state
-      entity_id:
-      - binary_sensor.powder_room_motion
-      - binary_sensor.stairs_motion
-      - binary_sensor.upstairs_motion
-      - binary_sensor.closet_motion
-      - binary_sensor.garage_hall_motion
-      - binary_sensor.great_hall_motion
-      - binary_sensor.guest_hall_motion
-      - binary_sensor.music_room_motion
-      to: "off"
-      for:
-        minutes: 5
-    action:
-      service_template: |
-        {{ trigger.to_state.attributes.trigger_service_off | default('homeassistant.turn_off') }}
-      data_template:
-        entity_id: |
-          {{ trigger.to_state.attributes.trigger_entity_id_off | default(trigger.to_state.attributes.trigger_entity_id) }}
+      platform: event
+      event_type: state_changed
+    condition:
+      condition: and
+      conditions:
+        - condition: template
+          value_template: |
+            {{
+              trigger.event.data.old_state != None and
+              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+              trigger.event.data.new_state.domain == "binary_sensor" and
+              trigger.event.data.new_state.state == "off"
+            }}
+        - condition: template
+          value_template: |
+            {{
+              trigger.event.data.new_state.attributes.trigger_service_off != None or
+              trigger.event.data.new_state.attributes.trigger_entity_id_off != None
+            }}
 
-  - alias: Turn off lights 30m after the sensor has turned off
-    trigger:
-      platform: state
-      entity_id:
-      - binary_sensor.guest_bath_motion
-      - binary_sensor.master_bath_motion
-      - binary_sensor.great_room_occupied
-      to: "off"
-      for:
-        minutes: 30
     action:
-      service_template: |
-        {{ trigger.to_state.attributes.trigger_service_off | default('homeassistant.turn_off') }}
-      data_template:
-        entity_id: |
-          {{ trigger.to_state.attributes.trigger_entity_id_off | default(trigger.to_state.attributes.trigger_entity_id) }}
+      - delay:
+          seconds: |
+            {{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }}
+      - service_template: |
+          {{ trigger.event.data.new_state.attributes.trigger_service_off | default('homeassistant.turn_off') }}
+        data_template:
+          entity_id: |
+            {{ trigger.event.data.new_state.attributes.trigger_entity_id_off | default(trigger.event.data.new_state.attributes.trigger_entity_id) | default('') }}
 
   - alias: React to changes of the brightness slider
     trigger:
