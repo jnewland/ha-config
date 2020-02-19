@@ -25,7 +25,7 @@ homeassistant:
       trigger_entity_id_off: light.stairs
     binary_sensor.closet_motion:
       trigger_entity_id: light.master_closet
-      trigger_entity_off: light.master_closet
+      trigger_entity_id_off: light.master_closet
     binary_sensor.guest_hall_motion:
       trigger_entity_id: light.guest_hall
       trigger_entity_id_off: light.guest_hall
@@ -49,7 +49,7 @@ homeassistant:
       trigger_service_off: script.master_lights_off
     binary_sensor.wine_room_motion:
       trigger_entity_id: light.wine_room
-      trigger_entity_off: light.wine_room
+      trigger_entity_id_off: light.wine_room
     binary_sensor.great_hall_motion:
       trigger_entity_id: light.great_hall
       trigger_entity_id_off: light.great_hall
