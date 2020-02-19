@@ -230,11 +230,12 @@ views:
       - light.chandelier
       - light.chandelier_lamp
       - light.master_overhead
-      - light.master_closet
       - light.master_nook
       - light.master_windows
       - light.bedside_lamp
       - light.master_patio
+      - binary_sensor.master_motion
+      - light.master_closet
       - binary_sensor.closet_motion
     - type: entities
       entities:
