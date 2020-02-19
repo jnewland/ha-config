@@ -124,6 +124,7 @@ homeassistant:
     light.master_mirror:
       notify_action: duck
     light.master_nook:
+      notify_action: duck
     light.master_overhead:
       notify_action: duck
     light.master_patio:
