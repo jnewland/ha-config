@@ -151,28 +151,31 @@ homeassistant:
 automation:
   - alias: Turn on lights when motion is detected
     trigger:
-      platform: state
-      entity_id:
-      - binary_sensor.guest_bath_motion
-      - binary_sensor.master_bath_motion
-      - binary_sensor.powder_room_motion
-      - binary_sensor.stairs_motion
-      - binary_sensor.upstairs_motion
-      - binary_sensor.closet_motion
-      - binary_sensor.wine_room_motion
-      - binary_sensor.guest_hall_motion
-      - binary_sensor.music_room_motion
-      - binary_sensor.living_room_motion
-      - binary_sensor.kitchen_motion
-      - binary_sensor.office_motion
-      - binary_sensor.garage_hall_motion
-      - binary_sensor.great_hall_motion
-      - binary_sensor.master_motion
-      to: "on"
+      platform: event
+      event_type: state_changed
     condition:
-      condition: template
-      value_template: |
-        {{ states.input_select.mode.state != "Away" }}
+      condition: and
+      conditions:
+        - condition: template
+          value_template: |
+            {% set old_state = trigger.event.data.get("old_state") %}
+            {% set new_state = trigger.event.data.get("new_state") %}
+            {{
+              new_state.domain == "binary_sensor" and
+              new_state.state != old_state.state and
+              new_state.state == "on" and
+              old_state != None
+            }}
+        - condition: template
+          value_template: |
+            {% set new_state = trigger.event.data.get("new_state") %}
+            {{
+              new_state.attributes.trigger_service != None or
+              new_state.attributes.trigger_entity_id != None
+            }}
+        - condition: template
+          value_template: |
+            {{ states.input_select.mode.state != "Away" }}
     action:
       service_template: |
         {{ trigger.to_state.attributes.trigger_service | default('light.turn_on') }}
