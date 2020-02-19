@@ -225,6 +225,10 @@ automation:
       - delay:
           seconds: |
             {{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }}
+      # Double check that the sensor is still off after the delay to avoid races
+      - condition: template
+        value_template: |
+          {{ states(trigger.event.entity_id) == "off" }}
       - service_template: |
           {{ trigger.event.data.new_state.attributes.trigger_service_off | default('homeassistant.turn_off') }}
         data_template:
