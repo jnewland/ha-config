@@ -143,7 +143,6 @@ homeassistant:
     light.master_overhead:
       notify_action: duck
     light.master_patio:
-      fixed_brightness: 102
       notify_action: duck
     light.master_shower:
       notify_action: duck
