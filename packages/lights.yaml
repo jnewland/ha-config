@@ -175,7 +175,7 @@ automation:
             {{ states.input_select.mode.state != "Away" }}
     action:
       service_template: |
-        {{ trigger.event.data.new_state.attributes.trigger_service | default('light.turn_on') }}
+        {{ trigger.event.data.new_state.attributes.trigger_service | default('homeassistant.turn_on') }}
       data_template:
         entity_id: |
           {{ trigger.event.data.new_state.attributes.trigger_entity_id_on | default(trigger.event.data.new_state.attributes.trigger_entity_id) | default('') }}
@@ -327,7 +327,7 @@ script:
       - condition: template
         value_template: >
           {{ states.input_select.mode.state != "Reading"  }}
-      - service: home_assistant.turn_on
+      - service: homeassistant.turn_on
         data_template:
           entity_id: |
             {{ "light.master_toilet" if states.input_select.mode.state == "Sleeping" else "group.master" }}
