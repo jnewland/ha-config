@@ -64,6 +64,9 @@ homeassistant:
     binary_sensor.great_room_occupied:
       trigger_service: script.living_lights
       trigger_entity_id_off: group.great_room
+    binary_sensor.pantry_motion:
+      trigger_entity_id: light.pantry
+      trigger_entity_off: light.pantry
 
     # fixed_brightness: int
     # TODO: min_brightness
