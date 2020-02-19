@@ -1,73 +1,9 @@
-binary_sensor.stairs_motion:
-  zone: Hall
-  trigger_entity_id: light.stairs
-binary_sensor.closet_motion:
-  zone: Master
-  trigger_entity_id: light.master_closet
-binary_sensor.guest_hall_motion:
-  zone: Hall
-  trigger_entity_id: light.guest_hall
-binary_sensor.guest_bath_motion:
-  zone: Hall
-  trigger_entity_id: group.guest_bath_lights
-  trigger_entity_id_off: group.guest_bath
-binary_sensor.powder_room_motion:
-  zone: Hall
-  trigger_entity_id: light.powder_room
-  trigger_entity_id_off: group.powder_room
-binary_sensor.office_motion:
-  zone: Office
-  trigger_service: script.office
-binary_sensor.upstairs_motion:
-  zone: Hall
-  trigger_entity_id: light.stairs
-binary_sensor.master_bath_motion:
-  zone: Master
-  trigger_service: script.master_bath_lights
-  trigger_entity_id_off: group.master_bath
-binary_sensor.master_motion:
-  zone: Master
-  trigger_service: script.noop
-  # trigger_service: script.master_motion
-  # trigger_service_off: script.master_motion_off
-binary_sensor.wine_room_motion:
-  zone: Hall
-  trigger_entity_id: light.wine_room
-binary_sensor.great_hall_motion:
-  zone: Hall
-  trigger_entity_id: light.great_hall
-binary_sensor.garage_hall_motion:
-  zone: Hall
-  trigger_entity_id: light.garage_hall
-binary_sensor.music_room_motion:
-  friendly_name: music room motion
-  zone: Music room
-  trigger_entity_id: light.music_room
-binary_sensor.great_room_occupied:
-  zone: Living
-  trigger_service: script.living
-  trigger_entity_id_off: group.great_room
-binary_sensor.living_room_motion:
-  zone: Living
-  trigger_service: script.living
-  trigger_entity_id_off: group.great_room
-binary_sensor.kitchen_motion:
-  zone: Living
-  trigger_service: script.living
-  trigger_entity_id_off: group.great_room
 binary_sensor.entry_door:
   friendly_name: Entry door
-  zone: Outside
 binary_sensor.master_patio_door:
   friendly_name: Master patio door
-  zone: Outside
-binary_sensor.garage:
-  zone: Outside
-binary_sensor.gate:
-  zone: Outside
 binary_sensor.front_gate:
   device_class: opening
   icon: mdi:gate
-  zone: Outside
 binary_sensor.updater:
   friendly_name: Update

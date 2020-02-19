@@ -1,0 +1,342 @@
+# * Automations to handle binary sensors -> lights or scripts
+#   * https://www.amazon.com/gp/product/B0151Z8ZQY are great sensors
+
+# * An input number for global brightness adjustments
+
+# * script.notify_with_lights ==>> ducks selected lights, useful as an
+#   unobtrusive "hey something is happening look at your phone for more"
+#   notification
+
+homeassistant:
+  customize:
+    # Configure which service or entity is triggered when the sensor
+    # changes state
+    #
+    # trigger_service: service
+    # trigger_entity_id: entity_id
+    # trigger_service_off: service
+    # trigger_entity_id_off: entity_id
+
+    binary_sensor.stairs_motion:
+      trigger_entity_id: light.stairs
+    binary_sensor.closet_motion:
+      trigger_entity_id: light.master_closet
+    binary_sensor.guest_hall_motion:
+      trigger_entity_id: light.guest_hall
+    binary_sensor.guest_bath_motion:
+      trigger_entity_id: group.guest_bath_lights
+      trigger_entity_id_off: group.guest_bath
+    binary_sensor.powder_room_motion:
+      trigger_entity_id: light.powder_room
+      trigger_entity_id_off: group.powder_room
+    binary_sensor.office_motion:
+      trigger_service: script.office
+    binary_sensor.upstairs_motion:
+      trigger_entity_id: light.stairs
+    binary_sensor.master_bath_motion:
+      trigger_service: script.master_bath_lights
+      trigger_entity_id_off: group.master_bath
+    binary_sensor.master_motion:
+      trigger_service: script.noop
+      # trigger_service: script.master_motion
+      # trigger_service_off: script.master_motion_off
+    binary_sensor.wine_room_motion:
+      trigger_entity_id: light.wine_room
+    binary_sensor.great_hall_motion:
+      trigger_entity_id: light.great_hall
+    binary_sensor.garage_hall_motion:
+      trigger_entity_id: light.garage_hall
+    binary_sensor.music_room_motion:
+      friendly_name: music room motion
+      trigger_entity_id: light.music_room
+    binary_sensor.great_room_occupied:
+      trigger_service: script.living
+      trigger_entity_id_off: group.great_room
+    binary_sensor.living_room_motion:
+      trigger_service: script.living
+      trigger_entity_id_off: group.great_room
+    binary_sensor.kitchen_motion:
+      trigger_service: script.living
+      trigger_entity_id_off: group.great_room
+
+    # fixed_brightness: int
+    # TODO: min_brightness
+    # notify_action: duck
+    # duck_step: int | default(127)
+    light.atrium:
+      fixed_brightness: 255
+    light.front_porch:
+      fixed_brightness: 255
+    light.front_door:
+      fixed_brightness: 255
+    light.patio:
+      fixed_brightness: 255
+    light.ac:
+      fixed_brightness: 255
+    light.atrium_door:
+      fixed_brightness: 255
+    light.garage_door:
+      fixed_brightness: 255
+    light.cabinets:
+      fixed_brightness: 255
+
+    light.bookshelf:
+      fixed_brightness: 255
+    light.bookshelf_blue:
+      fixed_brightness: 0
+    light.bookshelf_brightness:
+      fixed_brightness: 0
+    light.bookshelf_green:
+      fixed_brightness: 0
+    light.bookshelf_red:
+      fixed_brightness: 0
+    light.bookshelf_white:
+      fixed_brightness: 0
+
+    light.back_porch_fountain_lights:
+      fixed_brightness: 255
+    light.back_porch_fountain_blue:
+      fixed_brightness: 0
+    light.back_porch_fountain_brightness:
+      fixed_brightness: 0
+    light.back_porch_fountain_green:
+      fixed_brightness: 0
+    light.back_porch_fountain_red:
+      fixed_brightness: 0
+    light.back_porch_fountain_white:
+      fixed_brightness: 0
+
+    light.dining_room_table:
+      notify_action: duck
+      duck_step: 192
+    light.exersize_bike:
+      notify_action: duck
+    light.kitchen:
+      notify_action: duck
+      duck_step: 192
+    light.living:
+      notify_action: duck
+      duck_step: 192
+    light.master_bath_overhead:
+      notify_action: duck
+    light.master_closet:
+      notify_action: duck
+    light.master_mirror:
+      notify_action: duck
+    light.master_nook:
+    light.master_overhead:
+      notify_action: duck
+    light.master_patio:
+      fixed_brightness: 102
+      notify_action: duck
+    light.master_shower:
+      notify_action: duck
+    light.master_toilet:
+      notify_action: duck
+    light.music_room:
+      notify_action: duck
+    light.office_chandelier:
+      notify_action: duck
+    light.office_desk_lamp:
+      notify_action: duck
+      duck_step: 192
+    light.office_overhead:
+      notify_action: duck
+    light.pendants:
+      notify_action: duck
+      duck_step: 192
+    light.wine_room:
+      fixed_brightness: 102
+
+automation:
+  - alias: Turn on lights when motion is detected
+    trigger:
+      platform: state
+      entity_id:
+      - binary_sensor.guest_bath_motion
+      - binary_sensor.master_bath_motion
+      - binary_sensor.powder_room_motion
+      - binary_sensor.stairs_motion
+      - binary_sensor.upstairs_motion
+      - binary_sensor.closet_motion
+      - binary_sensor.wine_room_motion
+      - binary_sensor.guest_hall_motion
+      - binary_sensor.music_room_motion
+      - binary_sensor.living_room_motion
+      - binary_sensor.kitchen_motion
+      - binary_sensor.office_motion
+      - binary_sensor.garage_hall_motion
+      - binary_sensor.great_hall_motion
+      - binary_sensor.master_motion
+      to: "on"
+    condition:
+      condition: template
+      value_template: |
+        {{ states.input_select.mode.state != "Away" }}
+    action:
+      service_template: |
+        {{ trigger.to_state.attributes.trigger_service | default('light.turn_on') }}
+      data_template:
+        entity_id: |
+          {{ trigger.to_state.attributes.trigger_entity_id_on | default(trigger.to_state.attributes.trigger_entity_id) | default('') }}
+        brightness: |
+          {{ trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+
+  - alias: Turn off lights 5m after the sensor has turned off
+    trigger:
+      platform: state
+      entity_id:
+      - binary_sensor.powder_room_motion
+      - binary_sensor.stairs_motion
+      - binary_sensor.upstairs_motion
+      - binary_sensor.closet_motion
+      - binary_sensor.garage_hall_motion
+      - binary_sensor.great_hall_motion
+      - binary_sensor.guest_hall_motion
+      - binary_sensor.music_room_motion
+      to: "off"
+      for:
+        minutes: 5
+    action:
+      service_template: |
+        {{ trigger.to_state.attributes.trigger_service_off | default('homeassistant.turn_off')}
+      data_template:
+        entity_id: |
+          {{ trigger.to_state.attributes.trigger_entity_id_off | default(trigger.to_state.attributes.trigger_entity_id) }}
+
+  - alias: Turn off lights 30m after the sensor has turned off
+    trigger:
+      platform: state
+      entity_id:
+      - binary_sensor.guest_bath_motion
+      - binary_sensor.master_bath_motion
+      - binary_sensor.great_room_occupied
+      to: "off"
+      for:
+        minutes: 30
+    action:
+      service_template: |
+        {{ trigger.to_state.attributes.trigger_service_off | default('homeassistant.turn_off')}
+      data_template:
+        entity_id: |
+          {{ trigger.to_state.attributes.trigger_entity_id_off | default(trigger.to_state.attributes.trigger_entity_id) }}
+
+  - alias: React to changes of the brightness slider
+    trigger:
+      platform: state
+      entity_id: input_number.brightness
+    action:
+      service: light.turn_on
+      data_template:
+        entity_id: |
+          {%- for l in states.light if (
+              not l.attributes.fixed_brightness and
+              l.state == "on") -%}
+            {{l.entity_id}}{% if not loop.last %}{{ ", " }}{% endif %}
+          {%- endfor -%}
+        brightness: |
+          {{ states('input_number.brightness') | int }}
+
+  - alias: Set lights to correct brightness when turned on
+    trigger:
+      platform: state
+      # TODO refactor to use event: state_changed like slack notifications
+      ## Generate me with
+      # {%- for l in states.light if (l.entity_id not in states.group.ignore_brightness.attributes.entity_id) %}
+      # - {{l.entity_id}}
+      # {%- endfor-%}
+      entity_id:
+        - light.bedside_lamp
+        - light.chandelier_lamp
+        - light.chandelier
+        - light.dining_room_table
+        - light.exersize_bike
+        - light.garage_hall
+        - light.great_hall
+        - light.guest_bath
+        - light.guest_hall
+        - light.guest_shower
+        - light.kitchen
+        - light.living
+        - light.living_room
+        - light.couch_lamp_left
+        - light.couch_lamp_right
+        - light.master_bath_overhead
+        - light.master_closet
+        - light.master_mirror
+        - light.master_nook
+        - light.master_overhead
+        - light.master_patio
+        - light.master_shower
+        - light.master_toilet
+        - light.master_windows
+        - light.music_room
+        - light.office_chandelier
+        - light.office_closet
+        - light.office_desk_lamp
+        - light.office_overhead
+        - light.pantry
+        - light.pendants
+        - light.powder_room
+        - light.stairs
+        - light.wine_room
+      from: 'off'
+      to: 'on'
+    condition:
+      condition: template
+      value_template: |
+        {{ trigger.to_state.attributes.brightness | default(255) <
+          trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+    action:
+      service: light.turn_on
+      data_template:
+        entity_id: |
+          {{ trigger.to_state.entity_id }}
+        brightness: |
+          {{ trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+
+input_number:
+  brightness:
+    name: Brightness
+    min: 0
+    max: 255
+    step: 1
+
+script:
+  notify_with_lights:
+    sequence:
+    - condition: template
+      value_template: |
+        {{
+          states.light |
+          selectattr("state", "equalto", "on") |
+          selectattr("attributes.notify_action", "equalto", "duck") |
+          map(attribute="entity_id") |
+          list |
+          length > 0
+        }}
+    - service: script.pulse_light
+      data_template:
+        entity_id: |
+          {{
+            states.light |
+            selectattr("state", "equalto", "on") |
+            selectattr("attributes.notify_action", "equalto", "duck") |
+            map(attribute="entity_id") |
+            join(', ')
+          }}
+
+  pulse_light:
+    sequence:
+    - service: python_script.dim_step
+      data_template:
+        action: down
+        entity_id: |
+          {{ entity_id }}
+    - delay:
+        seconds: 2
+    - service: python_script.dim_step
+      data_template:
+        action: up
+        entity_id: |
+          {{ entity_id }}
