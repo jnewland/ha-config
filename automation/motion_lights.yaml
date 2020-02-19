@@ -16,6 +16,7 @@ trigger:
   - binary_sensor.office_motion
   - binary_sensor.garage_hall_motion
   - binary_sensor.great_hall_motion
+  - binary_sensor.master_motion
   to: "on"
 condition:
   condition: template

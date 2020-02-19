@@ -1,0 +1,9 @@
+alias: Trigger a service when motion is no longer detected
+trigger:
+  platform: state
+  entity_id:
+  - binary_sensor.master_motion
+  to: "off"
+action:
+  service_template: |
+    {{ trigger.to_state.attributes.trigger_service_off }

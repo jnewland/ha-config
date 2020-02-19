@@ -25,6 +25,11 @@ binary_sensor.master_bath_motion:
   zone: Master
   trigger_service: script.master_bath_lights
   trigger_entity_id_off: group.master_bath
+binary_sensor.master_motion:
+  zone: Master
+  trigger_service: script.noop
+  # trigger_service: script.master_motion
+  # trigger_service_off: script.master_motion_off
 binary_sensor.wine_room_motion:
   zone: Hall
   trigger_entity_id: light.wine_room

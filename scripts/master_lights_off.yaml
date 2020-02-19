@@ -1,0 +1,10 @@
+sequence:
+- condition: template
+  value_template: >
+    {{ states.input_select.mode.state != "Reading" }}
+- service: home_assistant.turn_off
+  data_template:
+    entity_id: |
+      group.master
+    brightness: |
+      {{ brightness | default(states('input_number.brightness') | int) }}
