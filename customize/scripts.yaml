@@ -2,10 +2,10 @@ script.mute:
   icon: mdi:volume-mute
   friently_name: Mute
   emulated_hue_hidden: false
-script.office:
+script.office_lights:
   friendly_name: Working
   emulated_hue_hidden: false
-script.living:
+script.living_lights:
   friendly_name: Cooking
   emulated_hue_hidden: false
   emulated_hue_name: Cooking
