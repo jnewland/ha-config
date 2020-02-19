@@ -158,32 +158,29 @@ automation:
       conditions:
         - condition: template
           value_template: |
-            {% set old_state = trigger.event.data.get("old_state") %}
-            {% set new_state = trigger.event.data.get("new_state") %}
             {{
-              new_state.domain == "binary_sensor" and
-              new_state.state != old_state.state and
-              new_state.state == "on" and
-              old_state != None
+              trigger.event.data.old_state != None and
+              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+              trigger.event.data.new_state.domain == "binary_sensor" and
+              trigger.event.data.new_state.state == "on"
             }}
         - condition: template
           value_template: |
-            {% set new_state = trigger.event.data.get("new_state") %}
             {{
-              new_state.attributes.trigger_service != None or
-              new_state.attributes.trigger_entity_id != None
+              trigger.event.data.new_state.attributes.trigger_service != None or
+              trigger.event.data.new_state.attributes.trigger_entity_id != None
             }}
         - condition: template
           value_template: |
             {{ states.input_select.mode.state != "Away" }}
     action:
       service_template: |
-        {{ trigger.to_state.attributes.trigger_service | default('light.turn_on') }}
+        {{ trigger.event.data.new_state.attributes.trigger_service | default('light.turn_on') }}
       data_template:
         entity_id: |
-          {{ trigger.to_state.attributes.trigger_entity_id_on | default(trigger.to_state.attributes.trigger_entity_id) | default('') }}
+          {{ trigger.event.data.new_state.attributes.trigger_entity_id_on | default(trigger.event.data.new_state.attributes.trigger_entity_id) | default('') }}
         brightness: |
-          {{ trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+          {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
 
   - alias: Turn off lights 5m after the sensor has turned off
     trigger:
