@@ -184,13 +184,15 @@ automation:
           value_template: |
             {{ states.input_select.mode.state != "Away" }}
     action:
-      service_template: |
-        {{ trigger.event.data.new_state.attributes.trigger_service | default('homeassistant.turn_on') }}
-      data_template:
-        entity_id: |
-          {{ trigger.event.data.new_state.attributes.trigger_entity_id_on | default(trigger.event.data.new_state.attributes.trigger_entity_id) | default('') }}
-        brightness: |
-          {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+      - service_template: |
+          {{ trigger.event.data.new_state.attributes.trigger_service | default('homeassistant.turn_on') }}
+        data_template:
+          entity_id: |
+            {{ trigger.event.data.new_state.attributes.trigger_entity_id_on | default(trigger.event.data.new_state.attributes.trigger_entity_id) | default('') }}
+          brightness: |
+            {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+      - service: counter.increment
+        entity_id: counter.light_automations
 
   - alias: Turn off lights after sensors have turned off
     trigger:
@@ -223,22 +225,26 @@ automation:
         data_template:
           entity_id: |
             {{ trigger.event.data.new_state.attributes.trigger_entity_id_off | default(trigger.event.data.new_state.attributes.trigger_entity_id) | default('') }}
+      - service: counter.increment
+        entity_id: counter.light_automations
 
   - alias: React to changes of the brightness slider
     trigger:
       platform: state
       entity_id: input_number.brightness
     action:
-      service: light.turn_on
-      data_template:
-        entity_id: |
-          {%- for l in states.light if (
-              not l.attributes.fixed_brightness and
-              l.state == "on") -%}
-            {{l.entity_id}}{% if not loop.last %}{{ ", " }}{% endif %}
-          {%- endfor -%}
-        brightness: |
-          {{ states('input_number.brightness') | int }}
+      - service: light.turn_on
+        data_template:
+          entity_id: |
+            {%- for l in states.light if (
+                not l.attributes.fixed_brightness and
+                l.state == "on") -%}
+              {{l.entity_id}}{% if not loop.last %}{{ ", " }}{% endif %}
+            {%- endfor -%}
+          brightness: |
+            {{ states('input_number.brightness') | int }}
+      - service: counter.increment
+        entity_id: counter.light_automations
 
   - alias: Set lights to correct brightness when turned on
     trigger:
@@ -260,12 +266,14 @@ automation:
             {{ trigger.event.data.new_state.attributes.brightness | default(255) !=
               trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
     action:
-      service: light.turn_on
-      data_template:
-        entity_id: |
-          {{ trigger.event.data.new_state.entity_id }}
-        brightness: |
-          {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+      - service: light.turn_on
+        data_template:
+          entity_id: |
+            {{ trigger.event.data.new_state.entity_id }}
+          brightness: |
+            {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+      - service: counter.increment
+        entity_id: counter.light_automations
 
   - alias: log light changes to slack
     trigger:
@@ -298,6 +306,10 @@ automation:
           {%- endif -%}{{ " " -}}
           for {{ relative_time(trigger.event.data.old_state.last_changed) }}
         target: "#general"
+
+counter:
+  light_automations:
+    name: Light Automations
 
 input_number:
   brightness:

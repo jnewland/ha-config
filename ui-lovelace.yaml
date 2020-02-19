@@ -389,6 +389,7 @@ views:
       title: History
       hours_to_show: 80
       entities:
+        - counter.light_automations
         - input_select.mode
         - binary_sensor.together
         - device_tracker.jphone_11_pro
@@ -401,7 +402,7 @@ views:
       card:
         type: history-graph
         hours_to_show: 72
-        name: Motion sensors
+        title: Motion
       filter:
         include:
           - entity_id: "/^binary_sensor.*_motion$/"
