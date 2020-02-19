@@ -166,7 +166,7 @@ automation:
         - condition: template
           value_template: |
             {{
-              trigger.event.data.old_state != None and
+              trigger.event.data.old_state is not none and
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "binary_sensor" and
               trigger.event.data.new_state.state == "on"
@@ -174,8 +174,8 @@ automation:
         - condition: template
           value_template: |
             {{
-              trigger.event.data.new_state.attributes.trigger_service != None or
-              trigger.event.data.new_state.attributes.trigger_entity_id != None
+              trigger.event.data.new_state.attributes.trigger_service is not none or
+              trigger.event.data.new_state.attributes.trigger_entity_id is not none
             }}
         - condition: template
           value_template: |
@@ -199,7 +199,7 @@ automation:
         - condition: template
           value_template: |
             {{
-              trigger.event.data.old_state != None and
+              trigger.event.data.old_state is not none and
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "binary_sensor" and
               trigger.event.data.new_state.state == "off"
@@ -207,8 +207,8 @@ automation:
         - condition: template
           value_template: |
             {{
-              trigger.event.data.new_state.attributes.trigger_service_off != None or
-              trigger.event.data.new_state.attributes.trigger_entity_id_off != None
+              trigger.event.data.new_state.attributes.trigger_service_off is not none or
+              trigger.event.data.new_state.attributes.trigger_entity_id_off is not none
             }}
 
     action:
