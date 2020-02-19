@@ -264,6 +264,37 @@ automation:
         brightness: |
           {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
 
+  - alias: log light changes to slack
+    trigger:
+      platform: event
+      event_type: state_changed
+    condition:
+      condition: template
+      value_template: |
+        {{
+          trigger.event.data.new_state.domain == "light" and
+          trigger.event.data.old_state != None and
+          trigger.event.data.new_state.state != trigger.event.data.old_state.state
+        }}
+    action:
+      service: notify.slack
+      data_template:
+        message: |
+          :bulb: *{{ trigger.event.data.new_state.name | capitalize }}*{{ " " -}}
+          {%- if trigger.event.data.new_state.state == "on" -%}
+          *_{{ '%0.0f' % ( ( trigger.event.data.new_state.attributes.brightness / 255 | round ) * 100 ) }}%_*
+          {%- else -%}
+          *_Off_*
+          {%- endif -%}{{ " " -}}
+          after being{{ " " -}}
+          {%- if trigger.event.data.old_state.state == "on" -%}
+          {{ '%0.0f' % ( ( trigger.event.data.old_state.attributes.brightness / 255 | round ) * 100 ) }}%
+          {%- else -%}
+          Off
+          {%- endif -%}{{ " " -}}
+          for {{ relative_time(trigger.event.data.old_state.last_changed) }}
+        target: "#general"
+
 input_number:
   brightness:
     name: Brightness
