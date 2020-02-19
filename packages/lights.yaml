@@ -239,61 +239,30 @@ automation:
 
   - alias: Set lights to correct brightness when turned on
     trigger:
-      platform: state
-      # TODO refactor to use event: state_changed like slack notifications
-      ## Generate me with
-      # {%- for l in states.light if (l.entity_id not in states.group.ignore_brightness.attributes.entity_id) %}
-      # - {{l.entity_id}}
-      # {%- endfor-%}
-      entity_id:
-        - light.bedside_lamp
-        - light.chandelier_lamp
-        - light.chandelier
-        - light.dining_room_table
-        - light.exersize_bike
-        - light.garage_hall
-        - light.great_hall
-        - light.guest_bath
-        - light.guest_hall
-        - light.guest_shower
-        - light.kitchen
-        - light.living
-        - light.living_room
-        - light.couch_lamp_left
-        - light.couch_lamp_right
-        - light.master_bath_overhead
-        - light.master_closet
-        - light.master_mirror
-        - light.master_nook
-        - light.master_overhead
-        - light.master_patio
-        - light.master_shower
-        - light.master_toilet
-        - light.master_windows
-        - light.music_room
-        - light.office_chandelier
-        - light.office_closet
-        - light.office_desk_lamp
-        - light.office_overhead
-        - light.pantry
-        - light.pendants
-        - light.powder_room
-        - light.stairs
-        - light.wine_room
-      from: 'off'
-      to: 'on'
+      platform: event
+      event_type: state_changed
     condition:
-      condition: template
-      value_template: |
-        {{ trigger.to_state.attributes.brightness | default(255) <
-          trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+      condition: and
+      conditions:
+        - condition: template
+          value_template: |
+            {{
+              trigger.event.data.old_state is not none and
+              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+              trigger.event.data.new_state.domain == "light" and
+              trigger.event.data.new_state.state == "on"
+            }}
+        - condition: template
+          value_template: |
+            {{ trigger.event.data.new_state.attributes.brightness | default(255) !=
+              trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
     action:
       service: light.turn_on
       data_template:
         entity_id: |
-          {{ trigger.to_state.entity_id }}
+          {{ trigger.event.data.new_state.entity_id }}
         brightness: |
-          {{ trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+          {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
 
 input_number:
   brightness:
