@@ -341,7 +341,8 @@ script:
         data_template:
           message: |
             {{ message }}
-          level: {{ level | default('info') }}
+          level: |
+            {{ level | default('info') }}
           logger: packages.lights
 
   living_lights:
