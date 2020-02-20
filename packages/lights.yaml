@@ -177,10 +177,9 @@ automation:
               trigger.event.data.old_state != None and
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "binary_sensor" and
-              trigger.event.data.new_state.state == "on" and
-              trigger.event.data.new_state.attributes != None and (
-                trigger.event.data.new_state.attributes.trigger_service != None or
-                trigger.event.data.new_state.attributes.trigger_entity_id != None
+              trigger.event.data.new_state.state == "on" and (
+                trigger.event.data.new_state.attributes.trigger_service != "" or
+                trigger.event.data.new_state.attributes.trigger_entity_id != ""
               )
             }}
         - condition: template
@@ -197,7 +196,7 @@ automation:
       - service: system_log.write
         data_template:
           message: |
-            data={{ trigger.event.data }} attributes={{ trigger.event.data.new_state.attributes }}
+            entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_service }}
           level: |
             {{ level | default('info') }}
           logger: packages.lights
@@ -217,10 +216,9 @@ automation:
               trigger.event.data.old_state != None and
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "binary_sensor" and
-              trigger.event.data.new_state.state == "off" and
-                trigger.event.data.new_state.attributes != None and (
-                trigger.event.data.new_state.attributes.trigger_service_off != None or
-                trigger.event.data.new_state.attributes.trigger_entity_id_off != None
+              trigger.event.data.new_state.state == "off" and (
+                trigger.event.data.new_state.attributes.trigger_service_off != "" or
+                trigger.event.data.new_state.attributes.trigger_entity_id_off != ""
               )
             }}
 
@@ -240,7 +238,7 @@ automation:
       - service: system_log.write
         data_template:
           message: |
-            {{ trigger.event.data }}
+            entity_id={{ trigger.event.data.entity_id }} trigger_service_off={{ trigger.event.data.new_state.attributes.trigger_service_off }} trigger_entity_id_off={{ trigger.event.data.new_state.attributes.trigger_service_off }}
           level: |
             {{ level | default('info') }}
           logger: packages.lights
