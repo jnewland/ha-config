@@ -371,7 +371,7 @@ script:
     sequence:
       - condition: template
         value_template: >
-          {{ states.input_select.mode.state != "Reading" }}
+          {{ states.input_select.mode.state not in ["Reading", "Morning"] }}
       - service: homeassistant.turn_on
         data_template:
           entity_id: |
@@ -383,7 +383,7 @@ script:
     sequence:
       - condition: template
         value_template: >
-          {{ states.input_select.mode.state != "Reading" }}
+          {{ states.input_select.mode.state not in ["Reading", "Morning"] }}
       - service: homeassistant.turn_off
         data_template:
           entity_id: |
