@@ -196,7 +196,7 @@ automation:
       - service: system_log.write
         data_template:
           message: |
-            entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_service }}
+            entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_entity_id }}
           logger: packages.lights
           level: info
       - service: counter.increment
