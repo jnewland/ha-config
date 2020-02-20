@@ -197,9 +197,8 @@ automation:
         data_template:
           message: |
             entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_service }} defined={{ trigger.event.data.new_state.attributes.trigger_service is defined }} string={{ trigger.event.data.new_state.attributes.trigger_service is string }} lower={{ trigger.event.data.new_state.attributes.trigger_service is lower }}
-          level: |
-            {{ level | default('info') }}
           logger: packages.lights
+          level: info
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -238,10 +237,9 @@ automation:
       - service: system_log.write
         data_template:
           message: |
-            entity_id={{ trigger.event.data.entity_id }} trigger_service_off={{ trigger.event.data.new_state.attributes.trigger_service_off }} trigger_entity_id_off={{ trigger.event.data.new_state.attributes.trigger_service_off }}
-          level: |
-            {{ level | default('info') }}
+            entity_id={{ trigger.event.data.entity_id }} trigger_service_off={{ trigger.event.data.new_state.attributes.trigger_service_off }} trigger_entity_id_off={{ trigger.event.data.new_state.attributes.trigger_entity_id_off }}
           logger: packages.lights
+          level: info
       - service: counter.increment
         entity_id: counter.light_automations
 
