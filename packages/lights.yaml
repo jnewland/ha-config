@@ -197,7 +197,7 @@ automation:
       - service: system_log.write
         data_template:
           message: |
-            {{ trigger.event.data }}
+            data={{ trigger.event.data }} attributes={{ trigger.event.data.new_state.attributes }}
           level: |
             {{ level | default('info') }}
           logger: packages.lights
