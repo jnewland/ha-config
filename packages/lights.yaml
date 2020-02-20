@@ -178,8 +178,8 @@ automation:
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "binary_sensor" and
               trigger.event.data.new_state.state == "on" and (
-                trigger.event.data.new_state.attributes.trigger_service != "" or
-                trigger.event.data.new_state.attributes.trigger_entity_id != ""
+                trigger.event.data.new_state.attributes.trigger_service is defined or
+                trigger.event.data.new_state.attributes.trigger_entity_id is defined
               )
             }}
         - condition: template
@@ -196,7 +196,7 @@ automation:
       - service: system_log.write
         data_template:
           message: |
-            entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_service }} defined={{ trigger.event.data.new_state.attributes.trigger_service is defined }} string={{ trigger.event.data.new_state.attributes.trigger_service is string }} lower={{ trigger.event.data.new_state.attributes.trigger_service is lower }}
+            entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_service }}
           logger: packages.lights
           level: info
       - service: counter.increment
@@ -216,8 +216,8 @@ automation:
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "binary_sensor" and
               trigger.event.data.new_state.state == "off" and (
-                trigger.event.data.new_state.attributes.trigger_service_off != "" or
-                trigger.event.data.new_state.attributes.trigger_entity_id_off != ""
+                trigger.event.data.new_state.attributes.trigger_service_off is defined or
+                trigger.event.data.new_state.attributes.trigger_entity_id_off is defined
               )
             }}
 
