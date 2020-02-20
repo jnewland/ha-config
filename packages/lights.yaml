@@ -193,7 +193,7 @@ automation:
           {{ trigger.event.data.new_state.attributes.trigger_service | default('homeassistant.turn_on') }}
         data_template:
           entity_id: |
-            {%- set entity = trigger.event.data.new_state.attributes.trigger_entity_id | default('') }
+            {%- set entity = trigger.event.data.new_state.attributes.trigger_entity_id | default('') -%}
             {%- if entity == '' -%}
               script.lights_log
             {%- else -%}
