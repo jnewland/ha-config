@@ -193,9 +193,16 @@ automation:
           {{ trigger.event.data.new_state.attributes.trigger_service | default('homeassistant.turn_on') }}
         data_template:
           entity_id: |
-            {{ trigger.event.data.new_state.attributes.trigger_entity_id | default('') }}
+            {%- set entity = trigger.event.data.new_state.attributes.trigger_entity_id | default('') }
+            {%- if entity == '' -%}
+              script.lights_log
+            {%- else -%}
+              {{ entity }}
+            {%- endif -%}
           brightness: |
             {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+          message: |
+            {{ trigger.event.data.new_state.attributes }}
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -328,6 +335,15 @@ input_number:
     step: 1
 
 script:
+  lights_log:
+    sequence:
+      - service: system_log.write
+        data_template:
+          message: |
+            {{ message }}
+          level: {{ level | default('info') }}
+          logger: packages.lights
+
   living_lights:
     sequence:
       - service: light.turn_on
