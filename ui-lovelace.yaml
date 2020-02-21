@@ -197,6 +197,7 @@ views:
           - switch.great_hall_motion.battery_level
           - switch.guest_bath_motion.battery_level
           - switch.kitchen_motion.battery_level
+          - switch.pantry_motion.battery_level
           - switch.master_motion.battery_level
           - switch.master_bath_motion.battery_level
           - switch.master_ac_water.battery_level
@@ -230,11 +231,12 @@ views:
       - light.chandelier
       - light.chandelier_lamp
       - light.master_overhead
-      - light.master_closet
       - light.master_nook
       - light.master_windows
       - light.bedside_lamp
       - light.master_patio
+      - binary_sensor.master_motion
+      - light.master_closet
       - binary_sensor.closet_motion
     - type: entities
       entities:
@@ -250,14 +252,15 @@ views:
     - type: entities
       entities:
       - light.cabinets
-      - light.dining_room_table
       - light.kitchen
-      - light.living
       - light.pendants
+      - light.dining_room_table
+      - binary_sensor.kitchen_motion
+      - light.pantry
+      - binary_sensor.pantry_motion
+      - light.living
       - light.couch_lamp_right
       - light.couch_lamp_left
-      - switch.christmas_tree
-      - binary_sensor.kitchen_motion
       - binary_sensor.living_room_motion
   - title: Outdoor
     icon: mdi:tree
@@ -386,6 +389,8 @@ views:
       title: History
       hours_to_show: 80
       entities:
+        - counter.light_automations
+        - counter.errors
         - input_select.mode
         - binary_sensor.together
         - device_tracker.jphone_11_pro
@@ -398,7 +403,7 @@ views:
       card:
         type: history-graph
         hours_to_show: 72
-        name: Motion sensors
+        title: Motion
       filter:
         include:
           - entity_id: "/^binary_sensor.*_motion$/"
