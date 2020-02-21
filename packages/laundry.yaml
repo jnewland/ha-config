@@ -15,3 +15,15 @@ sensor:
           - switch.laundry
         value_template: |
           {{ states.switch.laundry.attributes.current_energy_kwh }}
+
+binary_sensor:
+  - platform: template
+    sensors:
+      laundry:
+        friendly_name: Laundry
+        entity_id:
+          - sensor.laundry_power
+        value_template: |
+          {{ float(states.sensor.laundry_power.state) | default(0) > 0 }}
+        delay_off:
+          minutes: 5
