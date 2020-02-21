@@ -398,7 +398,6 @@ views:
         - device_tracker.katie_s_iphone
         - sensor.katie_s_iphone_battery_state
         - sensor.laundry_power
-        - sensor.laundry_energy
         - binary_sensor.laundry
         - sun.sun
         - weather.dark_sky
