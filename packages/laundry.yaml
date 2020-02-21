@@ -27,3 +27,18 @@ binary_sensor:
           {{ float(states.sensor.laundry_power.state) | default(0) > 0 }}
         delay_off:
           minutes: 5
+
+automation:
+  - alias: Laundry notifications
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.laundry
+      from: "on"
+      to: "off"
+    action:
+      - service: script.ask_about_turning_on
+        data_template:
+          entity_id: script.noop
+          apns_collapse_id: laundry
+          message: The laundry needs attention. Did you do the laundry thing?
+          confirmation_message: did the laundry thing, cool
