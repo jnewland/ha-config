@@ -1,0 +1,17 @@
+sensor:
+  - platform: template
+    sensors:
+      laundry_power:
+        friendly_name: Laundry power
+        unit_of_measurement: W
+        entity_id:
+          - switch.laundry
+        value_template: |
+          {{ states.switch.laundry.attributes.current_power_w }}
+      laundry_energy:
+        friendly name: Laundry energy
+        unit_of_measurement: kWh
+        entity_id:
+          - switch.laundry
+        value_template: |
+          {{ states.switch.laundry.attributes.current_energy_kwh }}
