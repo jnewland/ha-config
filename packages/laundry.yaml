@@ -4,6 +4,7 @@ sensor:
       laundry_power:
         friendly_name: Laundry power
         unit_of_measurement: W
+        device_class: power
         entity_id:
           - switch.laundry
         value_template: |
@@ -11,6 +12,7 @@ sensor:
       laundry_energy:
         friendly_name: Laundry energy
         unit_of_measurement: kWh
+        device_class: power
         entity_id:
           - switch.laundry
         value_template: |
@@ -21,6 +23,7 @@ binary_sensor:
     sensors:
       laundry:
         friendly_name: Laundry
+        device_class: power
         entity_id:
           - sensor.laundry_power
         value_template: |
