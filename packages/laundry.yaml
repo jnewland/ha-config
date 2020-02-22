@@ -20,6 +20,8 @@ binary_sensor:
           - sensor.laundry_power
         value_template: |
           {{ float(states.sensor.laundry_power.state) | default(0) > 0 }}
+        delay_on:
+          minutes: 5
         delay_off:
           minutes: 5
 
