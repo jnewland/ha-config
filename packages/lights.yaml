@@ -225,7 +225,12 @@ automation:
       - delay:
           seconds: |
             {{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }}
-      # Double check that the sensor is still off after the delay to avoid races
+      - service: system_log.write
+        data_template:
+          message: |
+            entity_id={{ trigger.event.data.entity_id }} delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }} race={{ states[trigger.event.data.entity_id].last_updated != trigger.event.data.new_state.last_updated }}
+          logger: packages.lights
+          level: info
       - condition: template
         value_template: |
           {{ states(trigger.event.data.entity_id) == "off" }}
