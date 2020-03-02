@@ -233,9 +233,9 @@ automation:
           level: info
       - wait_template: |
           {{
-            states(trigger.event.data.entity_id) == "off" and
-              (as_timestamp(now()) - as_timestamp(states[trigger.event.data.entity_id].last_updated)) >
-              (trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int)
+            as_timestamp(now()) - trigger.event.data.new_state.last_changed
+              >
+            (trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int)
           }}
         timeout: "01:01:00"
         continue_on_timeout: "false"
@@ -245,9 +245,19 @@ automation:
             at=wait_template_end
             entity_id={{ trigger.event.data.entity_id }}
             delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int }}
-            seconds_since_update={{ as_timestamp(now()) - as_timestamp(states[trigger.event.data.entity_id].last_updated) }}
+            seconds_since_changed={{ as_timestamp(now()) - as_timestamp(states[trigger.event.data.entity_id].last_changed) }}
+            state={{ states(trigger.event.data.entity_id) == "off" }}
+            new_state_last_changed={{ trigger.event.data.new_state.last_changed }}
+            states_last_changed={{ states[trigger.event.data.entity_id].last_changed }}
+            continue={{ trigger.event.data.new_state.last_changed == states[trigger.event.data.entity_id].last_changed and states(trigger.event.data.entity_id) == "off" }}
           logger: packages.lights
           level: info
+      - condition: template
+        value_template: |
+          {{
+            trigger.event.data.new_state.last_changed == states[trigger.event.data.entity_id].last_changed and
+            states(trigger.event.data.entity_id) == "off"
+          }}
       - service_template: |
           {{ trigger.event.data.new_state.attributes.trigger_service_off | default('homeassistant.turn_off') }}
         data_template:
