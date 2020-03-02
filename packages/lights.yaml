@@ -226,18 +226,23 @@ automation:
       - service: system_log.write
         data_template:
           message: >
-            at=off_delay_start
-            entity_id={{ trigger.event.data.entity_id }} delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }} stale={{ states[trigger.event.data.entity_id].last_updated != trigger.event.data.new_state.last_updated }} trigger_timestamp={{ trigger.event.data.new_state.last_updated }} entity_timestamp={{ states[trigger.event.data.entity_id].last_updated }}
+            at=wait_template_start
+            entity_id={{ trigger.event.data.entity_id }} delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int }} stale={{ states[trigger.event.data.entity_id].last_updated != trigger.event.data.new_state.last_updated }} trigger_timestamp={{ trigger.event.data.new_state.last_updated }} entity_timestamp={{ states[trigger.event.data.entity_id].last_updated }}
           logger: packages.lights
           level: info
-      - delay:
-          seconds: |
-            {{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }}
+      - wait_template: |
+          {{
+            states(trigger.entity_id) == "off" and
+              (as_timestamp(now()) - as_timestamp(states[trigger.entity_id].last_updated)) >
+              (state_attr(trigger.entity_id,"off_delay_seconds") | default(0) | int)
+          }}
+        timeout: "01:01:00"
+        continue_on_timeout: "false"
       - service: system_log.write
         data_template:
           message: >
-            at=off_delay_end
-            entity_id={{ trigger.event.data.entity_id }} delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }} stale={{ states[trigger.event.data.entity_id].last_updated != trigger.event.data.new_state.last_updated }} trigger_timestamp={{ trigger.event.data.new_state.last_updated }} entity_timestamp={{ states[trigger.event.data.entity_id].last_updated }}
+            at=wait_template_end
+            entity_id={{ trigger.event.data.entity_id }} delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int }} stale={{ states[trigger.event.data.entity_id].last_updated != trigger.event.data.new_state.last_updated }} trigger_timestamp={{ trigger.event.data.new_state.last_updated }} entity_timestamp={{ states[trigger.event.data.entity_id].last_updated }}
           logger: packages.lights
           level: info
       - condition: template
