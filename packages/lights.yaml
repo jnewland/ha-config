@@ -225,7 +225,7 @@ automation:
       - service: system_log.write
         data_template:
           message: |
-            at=off_delay_start trigger={{ trigger }} delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }} race={{ states[trigger.event.data.entity_id].last_updated != trigger.event.data.new_state.last_updated }}
+            at=off_delay_start delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }} race={{ states[trigger.event.data.entity_id].last_updated != trigger.event.data.new_state.last_updated }}
           logger: packages.lights
           level: info
       - delay:
