@@ -233,8 +233,8 @@ automation:
           level: info
       - wait_template: |
           {{
-            states(trigger.entity_id) == "off" and
-              (as_timestamp(now()) - as_timestamp(states[trigger.entity_id].last_updated)) >
+            states(trigger.event.data.entity_id) == "off" and
+              (as_timestamp(now()) - as_timestamp(states[trigger.event.data.entity_id].last_updated)) >
               (trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int)
           }}
         timeout: "01:01:00"
@@ -245,7 +245,7 @@ automation:
             at=wait_template_end
             entity_id={{ trigger.event.data.entity_id }}
             delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int }}
-            seconds_since_update={{ as_timestamp(now()) - as_timestamp(states[trigger.entity_id].last_updated) }}
+            seconds_since_update={{ as_timestamp(now()) - as_timestamp(states[trigger.event.data.entity_id].last_updated) }}
           logger: packages.lights
           level: info
       - service_template: |
