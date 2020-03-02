@@ -32,18 +32,18 @@ homeassistant:
     binary_sensor.guest_bath_motion:
       trigger_entity_id: group.guest_bath_lights
       trigger_entity_id_off: group.guest_bath
-      off_delay_seconds: 3600
+      off_delay_seconds: 1800
     binary_sensor.powder_room_motion:
       trigger_entity_id: light.powder_room
       trigger_entity_id_off: group.powder_room
     binary_sensor.office_motion:
       trigger_service: script.office_lights
       trigger_entity_id_off: group.office
-      off_delay_seconds: 3600
+      off_delay_seconds: 1800
     binary_sensor.master_bath_motion:
       trigger_service: script.master_bath_lights
       trigger_entity_id_off: group.master_bath
-      off_delay_seconds: 3600
+      off_delay_seconds: 1800
     binary_sensor.master_motion:
       trigger_service: script.master_lights
       trigger_service_off: script.master_lights_off
