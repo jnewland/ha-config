@@ -195,7 +195,8 @@ automation:
             {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
       - service: system_log.write
         data_template:
-          message: |
+          message: >
+            at=on
             entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_entity_id }}
           logger: packages.lights
           level: info
@@ -224,8 +225,9 @@ automation:
     action:
       - service: system_log.write
         data_template:
-          message: |
-            at=off_delay_start delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }} race={{ states[trigger.event.data.entity_id].last_updated != trigger.event.data.new_state.last_updated }}
+          message: >
+            at=off_delay_start
+            entity_id={{ trigger.event.data.entity_id }} delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }} stale={{ states[trigger.event.data.entity_id].last_updated != trigger.event.data.new_state.last_updated }} trigger_timestamp={{ trigger.event.data.new_state.last_updated }} entity_timestamp={{ states[trigger.event.data.entity_id].last_updated }}
           logger: packages.lights
           level: info
       - delay:
@@ -233,8 +235,9 @@ automation:
             {{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }}
       - service: system_log.write
         data_template:
-          message: |
-            at=off_delay_end entity_id={{ trigger.event.data.entity_id }} delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }} race={{ states[trigger.event.data.entity_id].last_updated != trigger.event.data.new_state.last_updated }}
+          message: >
+            at=off_delay_end
+            entity_id={{ trigger.event.data.entity_id }} delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }} stale={{ states[trigger.event.data.entity_id].last_updated != trigger.event.data.new_state.last_updated }} trigger_timestamp={{ trigger.event.data.new_state.last_updated }} entity_timestamp={{ states[trigger.event.data.entity_id].last_updated }}
           logger: packages.lights
           level: info
       - condition: template
@@ -247,8 +250,9 @@ automation:
             {{ trigger.event.data.new_state.attributes.trigger_entity_id_off | default('') }}
       - service: system_log.write
         data_template:
-          message: |
-            at=off entity_id={{ trigger.event.data.entity_id }} trigger_service_off={{ trigger.event.data.new_state.attributes.trigger_service_off }} trigger_entity_id_off={{ trigger.event.data.new_state.attributes.trigger_entity_id_off }}
+          message: >
+            at=off
+            entity_id={{ trigger.event.data.entity_id }} trigger_service_off={{ trigger.event.data.new_state.attributes.trigger_service_off }} trigger_entity_id_off={{ trigger.event.data.new_state.attributes.trigger_entity_id_off }}
           logger: packages.lights
           level: info
       - service: counter.increment
