@@ -233,7 +233,7 @@ automation:
           level: info
       - wait_template: |
           {{
-            as_timestamp(now()) - trigger.event.data.new_state.last_changed
+            as_timestamp(now()) - as_timestamp(trigger.event.data.new_state.last_changed)
               >
             (trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int)
           }}
