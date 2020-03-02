@@ -252,6 +252,7 @@ automation:
       - condition: template
         value_template: |
           {{
+            states(trigger.event.data.entity_id) == "off" and
             as_timestamp(now()) - as_timestamp(states[trigger.event.data.entity_id].last_changed)
               >
             (trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int)
@@ -265,7 +266,9 @@ automation:
         data_template:
           message: >
             at=off
-            entity_id={{ trigger.event.data.entity_id }} trigger_service_off={{ trigger.event.data.new_state.attributes.trigger_service_off }} trigger_entity_id_off={{ trigger.event.data.new_state.attributes.trigger_entity_id_off }}
+            entity_id={{ trigger.event.data.entity_id }}
+            trigger_service_off={{ trigger.event.data.new_state.attributes.trigger_service_off }}
+            trigger_entity_id_off={{ trigger.event.data.new_state.attributes.trigger_entity_id_off }}
           logger: packages.lights
           level: info
       - service: counter.increment
