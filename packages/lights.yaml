@@ -232,8 +232,7 @@ automation:
           logger: packages.lights
           level: info
       # Use state_attr here?
-      - alias: packages.lights at=delay
-        delay: "{{ state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int | timestamp_custom('%H:%M:%S',False) }}"
+      - delay: "{{ state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
         data_template:
           message: >
@@ -246,8 +245,7 @@ automation:
             states_last_changed={{ states[trigger.event.data.new_state.domain][trigger.event.data.new_state.object_id].last_changed }}
           logger: packages.lights
           level: info
-      - alias: packages.lights at=staleness_check
-        condition: template
+      - condition: template
         value_template: |
           {{
             states(trigger.event.data.entity_id) == "off" and
