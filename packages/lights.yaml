@@ -242,6 +242,7 @@ automation:
             state={{ states(trigger.event.data.entity_id) }}
             new_state_last_changed={{ trigger.event.data.new_state.last_changed }}
             states_last_changed={{ states[trigger.event.data.new_state.domain][trigger.event.data.new_state.object_id].last_changed }}
+            event={{ trigger.event }}
           logger: packages.lights
           level: info
       - condition: template
