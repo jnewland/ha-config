@@ -231,18 +231,12 @@ automation:
             delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int }}
           logger: packages.lights
           level: info
-      # Use state_attr here?
       - delay: "{{ state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
         data_template:
           message: >
             at=delay_end
             entity_id={{ trigger.event.data.entity_id }}
-            delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int }}
-            seconds_since_changed={{ as_timestamp(now()) - as_timestamp(states[trigger.event.data.new_state.domain][trigger.event.data.new_state.object_id].last_changed) }}
-            state={{ states(trigger.event.data.entity_id) }}
-            new_state_last_changed={{ trigger.event.data.new_state.last_changed }}
-            states_last_changed={{ states[trigger.event.data.new_state.domain][trigger.event.data.new_state.object_id].last_changed }}
           logger: packages.lights
           level: info
       - condition: template
