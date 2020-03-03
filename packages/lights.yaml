@@ -226,21 +226,16 @@ automation:
       - service: system_log.write
         data_template:
           message: >
-            at=wait_template_start
+            at=delay_start
             entity_id={{ trigger.event.data.entity_id }}
             delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int }}
           logger: packages.lights
           level: info
-      - wait_template: |
-          {{
-            as_timestamp(now()) - as_timestamp(states[trigger.event.data.entity_id].last_changed)
-              >
-            (trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int)
-          }}
+      - delay: "{{ trigger.event.data.new_state.attributes.off_delay_seconds | int | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
         data_template:
           message: >
-            at=wait_template_end
+            at=delay_end
             entity_id={{ trigger.event.data.entity_id }}
             delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int }}
             seconds_since_changed={{ as_timestamp(now()) - as_timestamp(states[trigger.to_state.domain][trigger.to_state.object_id].last_changed) }}
