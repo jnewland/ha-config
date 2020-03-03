@@ -231,7 +231,8 @@ automation:
             delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int }}
           logger: packages.lights
           level: info
-      - delay: "{{ trigger.event.data.new_state.attributes.off_delay_seconds | int | timestamp_custom('%H:%M:%S',False) }}"
+      # Use state_attr here?
+      - delay: "{{ state_attr(trigger.event.data.entity_id,'off_delay_seconds') | int | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
         data_template:
           message: >
