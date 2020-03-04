@@ -223,6 +223,15 @@ automation:
             }}
 
     action:
+      # Emit a custom event with a boolean indicating whether or not to delay.
+      # If this works, separate automations should be possible for lights with and without delay
+      # using event_data as mentioned at https://www.home-assistant.io/docs/automation/trigger/#event-trigger
+      - event: lights_motion_sensor_off
+        event_data_template:
+          entity_id: |
+            {{ trigger.event.data.entity_id }}
+          delay: |
+            {{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int != 0 }}
       - service: system_log.write
         data_template:
           message: >
