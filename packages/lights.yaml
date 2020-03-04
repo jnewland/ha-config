@@ -223,9 +223,15 @@ automation:
             }}
 
     action:
+      # Persist some data for debugging info
+      - service: python_script.set_attribute
+        data_template:
+          entity_id: |
+            {{ trigger.event.data.entity_id }}
+          attribute: off_after
+          value: |
+            {{ (as_timestamp(now()) + (state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int)) | timestamp_local }}
       # Emit a custom event with a boolean indicating whether or not to delay.
-      # If this works, separate automations should be possible for lights with and without delay
-      # using event_data as mentioned at https://www.home-assistant.io/docs/automation/trigger/#event-trigger
       - event: lights_motion_sensor_off
         event_data_template:
           entity_id: |
@@ -241,17 +247,17 @@ automation:
         delay: "False"
     action:
       - service_template: |
-          {{ trigger.event.data.new_state.attributes.trigger_service_off | default('homeassistant.turn_off') }}
+          {{ state_attr(trigger.event.data.entity_id,'trigger_service_off') | default('homeassistant.turn_off') }}
         data_template:
           entity_id: |
-            {{ trigger.event.data.new_state.attributes.trigger_entity_id_off | default('') }}
+            {{ state_attr(trigger.event.data.entity_id,'trigger_entity_id_off') | default('') }}
       - service: system_log.write
         data_template:
           message: >
             at=off
             entity_id={{ trigger.event.data.entity_id }}
-            trigger_service_off={{ trigger.event.data.new_state.attributes.trigger_service_off }}
-            trigger_entity_id_off={{ trigger.event.data.new_state.attributes.trigger_entity_id_off }}
+            trigger_service_off={{ state_attr(trigger.event.data.entity_id,'trigger_service_off') }}
+            trigger_entity_id_off={{ state_attr(trigger.event.data.entity_id,'trigger_entity_id_off') }}
           logger: packages.lights
           level: info
       - service: counter.increment
@@ -269,17 +275,9 @@ automation:
           message: >
             at=delay_start
             entity_id={{ trigger.event.data.entity_id }}
-            delay={{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int }}
+            delay={{ state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int }}
           logger: packages.lights
           level: info
-      # An attempt at persisting some data for debugging info
-      - service: python_script.set_attribute
-        data_template:
-          entity_id: |
-            {{ trigger.event.data.entity_id }}
-          attribute: off_after
-          value: |
-            {{ (as_timestamp(now()) + (state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int)) | timestamp_local }}
       - delay: "{{ state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
         data_template:
@@ -292,22 +290,22 @@ automation:
         value_template: |
           {{
             states(trigger.event.data.entity_id) == "off" and
-            as_timestamp(now()) - as_timestamp(states[trigger.event.data.new_state.domain][trigger.event.data.new_state.object_id].last_changed)
+            as_timestamp(now()) - as_timestamp(states(trigger.event.data.entity_id).last_changed)
               >
-            (trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int)
+            (state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int)
           }}
       - service_template: |
-          {{ trigger.event.data.new_state.attributes.trigger_service_off | default('homeassistant.turn_off') }}
+          {{ state_attr(trigger.event.data.entity_id,'trigger_service_off') | default('homeassistant.turn_off') }}
         data_template:
           entity_id: |
-            {{ trigger.event.data.new_state.attributes.trigger_entity_id_off | default('') }}
+            {{ state_attr(trigger.event.data.entity_id,'trigger_entity_id_off') | default('') }}
       - service: system_log.write
         data_template:
           message: >
             at=off
             entity_id={{ trigger.event.data.entity_id }}
-            trigger_service_off={{ trigger.event.data.new_state.attributes.trigger_service_off }}
-            trigger_entity_id_off={{ trigger.event.data.new_state.attributes.trigger_entity_id_off }}
+            trigger_service_off={{ state_attr(trigger.event.data.entity_id,'trigger_service_off') }}
+            trigger_entity_id_off={{ state_attr(trigger.event.data.entity_id,'trigger_entity_id_off') }}
           logger: packages.lights
           level: info
       - service: counter.increment
