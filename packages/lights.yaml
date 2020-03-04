@@ -272,8 +272,8 @@ automation:
           message: >
             at=delay_start
             entity_id={{ trigger.event.data.entity_id }}
-            delay={{ trigger.event.data.delay }}
-      - delay: "{{ trigger.event.data.delay | int | timestamp_custom('%H:%M:%S',False) }}"
+            delay={{ states[trigger.event.data.entity_id].attributes.off_delay_seconds }}
+      - delay: "{{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | int | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
         data_template:
           message: >
