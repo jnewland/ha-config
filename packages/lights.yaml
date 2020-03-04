@@ -32,18 +32,18 @@ homeassistant:
     binary_sensor.guest_bath_motion:
       trigger_entity_id: group.guest_bath_lights
       trigger_entity_id_off: group.guest_bath
-      off_delay_seconds: 3600
+      off_delay_seconds: 1800
     binary_sensor.powder_room_motion:
       trigger_entity_id: light.powder_room
       trigger_entity_id_off: group.powder_room
     binary_sensor.office_motion:
       trigger_service: script.office_lights
       trigger_entity_id_off: group.office
-      off_delay_seconds: 3600
+      off_delay_seconds: 1800
     binary_sensor.master_bath_motion:
       trigger_service: script.master_bath_lights
       trigger_entity_id_off: group.master_bath
-      off_delay_seconds: 3600
+      off_delay_seconds: 1800
     binary_sensor.master_motion:
       trigger_service: script.master_lights
       trigger_service_off: script.master_lights_off
@@ -195,7 +195,8 @@ automation:
             {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
       - service: system_log.write
         data_template:
-          message: |
+          message: >
+            at=on
             entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_entity_id }}
           logger: packages.lights
           level: info
@@ -222,22 +223,82 @@ automation:
             }}
 
     action:
-      - delay:
-          seconds: |
-            {{ trigger.event.data.new_state.attributes.off_delay_seconds | default(1) | int }}
-      # Double check that the sensor is still off after the delay to avoid races
-      - condition: template
-        value_template: |
-          {{ states(trigger.event.data.entity_id) == "off" }}
+      # Emit a custom event including a boolean indicating whether or not to delay.
+      - event: lights_motion_sensor_off
+        event_data_template:
+          entity_id: |
+            {{ trigger.event.data.entity_id }}
+          delay: |
+            {{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | default(0) | int != 0 }}
+          # Pass this value along so that we can double check it after delaying
+          last_changed: |
+            {{ states[trigger.event.data.entity_id].last_changed }}
+
+  - alias: Turn off lights immediately
+    trigger:
+      platform: event
+      event_type: lights_motion_sensor_off
+      event_data:
+        delay: "False"
+    action:
       - service_template: |
-          {{ trigger.event.data.new_state.attributes.trigger_service_off | default('homeassistant.turn_off') }}
+          {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
         data_template:
           entity_id: |
-            {{ trigger.event.data.new_state.attributes.trigger_entity_id_off | default('') }}
+            {{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off | default('') }}
       - service: system_log.write
         data_template:
-          message: |
-            entity_id={{ trigger.event.data.entity_id }} trigger_service_off={{ trigger.event.data.new_state.attributes.trigger_service_off }} trigger_entity_id_off={{ trigger.event.data.new_state.attributes.trigger_entity_id_off }}
+          message: >
+            at=off
+            entity_id={{ trigger.event.data.entity_id }}
+            trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
+            trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
+          logger: packages.lights
+          level: info
+      - service: counter.increment
+        entity_id: counter.light_automations
+
+  - alias: Turn off lights with delay
+    trigger:
+      platform: event
+      event_type: lights_motion_sensor_off
+      event_data:
+        delay: "True"
+    action:
+      - service: system_log.write
+        data_template:
+          logger: packages.lights
+          level: info
+          message: >
+            at=delay_start
+            entity_id={{ trigger.event.data.entity_id }}
+            delay={{ states[trigger.event.data.entity_id].attributes.off_delay_seconds }}
+      - delay: "{{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | int | timestamp_custom('%H:%M:%S',False) }}"
+      - service: system_log.write
+        data_template:
+          message: >
+            at=delay_end
+            entity_id={{ trigger.event.data.entity_id }}
+            event_last_changed={{ trigger.event.data.last_changed }}
+            state_last_changed={{ states[trigger.event.data.entity_id].last_changed }}
+            equal={{ as_timestamp(trigger.event.data.last_changed) == as_timestamp(states[trigger.event.data.entity_id].last_changed) }}
+          logger: packages.lights
+          level: info
+      - condition: template
+        value_template: |
+          {{ as_timestamp(trigger.event.data.last_changed) == as_timestamp(states[trigger.event.data.entity_id].last_changed) }}
+      - service_template: |
+          {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
+        data_template:
+          entity_id: |
+            {{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off | default('') }}
+      - service: system_log.write
+        data_template:
+          message: >
+            at=off
+            entity_id={{ trigger.event.data.entity_id }}
+            trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
+            trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
           logger: packages.lights
           level: info
       - service: counter.increment
