@@ -267,13 +267,16 @@ automation:
     action:
       - service: system_log.write
         data_template:
+          logger: packages.lights
+          level: info
           message: >
             at=delay_start
             entity_id={{ trigger.event.data.entity_id }}
             delay={{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | default(0) | int }}
-          logger: packages.lights
-          level: info
-      - delay: "{{ states[trigger.event.data.delay | int | timestamp_custom('%H:%M:%S',False) }}"
+
+      - delay: |
+          {{ states[trigger.event.data.delay | int | timestamp_custom('%H:%M:%S',False) }}
+
       - service: system_log.write
         data_template:
           message: >
