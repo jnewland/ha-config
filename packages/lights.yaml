@@ -279,6 +279,8 @@ automation:
           message: >
             at=delay_end
             entity_id={{ trigger.event.data.entity_id }}
+            event_last_changed={{ trigger.event.data.last_changed }}
+            state_last_changed={{ states(trigger.event.data.entity_id).last_changed }}
           logger: packages.lights
           level: info
       - condition: template
