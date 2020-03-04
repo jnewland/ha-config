@@ -223,13 +223,16 @@ automation:
             }}
 
     action:
-      # Emit a custom event with a boolean indicating whether or not to delay.
+      # Emit a custom event including a boolean indicating whether or not to delay.
       - event: lights_motion_sensor_off
         event_data_template:
           entity_id: |
             {{ trigger.event.data.entity_id }}
           delay: |
-            {{ trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int != 0 }}
+            {{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | default(0) | int != 0 }}
+          # Pass this value along so that we can double check it after delaying
+          last_changed: |
+            {{ states[trigger.event.data.entity_id].last_changed }}
 
   - alias: Turn off lights without delay
     trigger:
@@ -270,7 +273,7 @@ automation:
             delay={{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | default(0) | int }}
           logger: packages.lights
           level: info
-      - delay: "{{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | default(0) | int | timestamp_custom('%H:%M:%S',False) }}"
+      - delay: "{{ states[trigger.event.data.delay | int | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
         data_template:
           message: >
@@ -280,12 +283,7 @@ automation:
           level: info
       - condition: template
         value_template: |
-          {{
-            states(trigger.event.data.entity_id) == "off" and
-            as_timestamp(now()) - as_timestamp(states(trigger.event.data.entity_id).last_changed)
-              >
-            (states[trigger.event.data.entity_id].attributes.off_delay_seconds | default(0) | int)
-          }}
+          {{ trigger.event.data.last_changed == states(trigger.event.data.entity_id).last_changed }}
       - service_template: |
           {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
         data_template:
