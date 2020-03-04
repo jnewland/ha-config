@@ -26,10 +26,10 @@
   mjpeg_url: !env_var CAMERA_URL_9
   name: pergola
 - platform: mjpeg
-  mjpeg_url: camera-C39LCEHWFNJM:10001
+  mjpeg_url: http://camera-C39LCEHWFNJM:10001/
   name: atrium fountain
 - platform: mjpeg
-  mjpeg_url: camera-C6KQCA9GGRXW:10001
+  mjpeg_url: http://camera-C6KQCA9GGRXW:10001/
   name: back porch fountain
 - platform: ffmpeg
   name: capitol
