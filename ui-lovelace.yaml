@@ -91,6 +91,14 @@ views:
       - type: picture-entity
         show_name: false
         show_state: false
+        entity: camera.atrium_fountain
+      - type: picture-entity
+        show_name: false
+        show_state: false
+        entity: camera.back_porch_fountain
+      - type: picture-entity
+        show_name: false
+        show_state: false
         entity: camera.doods_atrium
       - type: picture-entity
         show_name: false
