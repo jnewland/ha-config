@@ -247,7 +247,7 @@ automation:
             {{ trigger.event.data.entity_id }}
           attribute: off_after
           value: |
-            {{ timestamp_local(as_timestamp(now()) + (trigger.event.data.new_state.attributes.off_delay_seconds | default(0) | int)) }}
+            {{ (as_timestamp(now()) + (state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int)) | timestamp_local }}
       - delay: "{{ state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
         data_template:
