@@ -31,9 +31,6 @@
 - platform: mjpeg
   mjpeg_url: http://camera-C6KQCA9GGRXW:10001/
   name: back porch fountain
-- platform: ffmpeg
-  name: capitol
-  input: https://wms-prod-1.wetmet.net/live/192-07-01/playlist.m3u8
 
 - platform: local_file
   file_path: /tmp/doods_atrium.jpg
