@@ -230,7 +230,7 @@ automation:
             {{ trigger.event.data.entity_id }}
           attribute: off_after
           value: |
-            {{ (as_timestamp(now()) + (state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int)) | timestamp_utc }}
+            {{ (as_timestamp(now()) + (state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int)) | timestamp_local }}
       # Emit a custom event with a boolean indicating whether or not to delay.
       - event: lights_motion_sensor_off
         event_data_template:
