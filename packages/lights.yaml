@@ -43,7 +43,7 @@ homeassistant:
     binary_sensor.master_bath_motion:
       trigger_service: script.master_bath_lights
       trigger_entity_id_off: group.master_bath
-      off_delay_seconds: 3600
+      off_delay_seconds: 1800
     binary_sensor.master_motion:
       trigger_service: script.master_lights
       trigger_service_off: script.master_lights_off
@@ -267,23 +267,26 @@ automation:
     action:
       - service: system_log.write
         data_template:
+          logger: packages.lights
+          level: info
           message: >
             at=delay_start
             entity_id={{ trigger.event.data.entity_id }}
-            delay={{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | default(0) | int }}
-          logger: packages.lights
-          level: info
-      - delay: "{{ states[trigger.event.data.delay | int | timestamp_custom('%H:%M:%S',False) }}"
+            delay={{ states[trigger.event.data.entity_id].attributes.off_delay_seconds }}
+      - delay: "{{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | int | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
         data_template:
           message: >
             at=delay_end
             entity_id={{ trigger.event.data.entity_id }}
+            event_last_changed={{ trigger.event.data.last_changed }}
+            state_last_changed={{ states[trigger.event.data.entity_id].last_changed }}
+            equal={{ as_timestamp(trigger.event.data.last_changed) == as_timestamp(states[trigger.event.data.entity_id].last_changed) }}
           logger: packages.lights
           level: info
       - condition: template
         value_template: |
-          {{ trigger.event.data.last_changed == states(trigger.event.data.entity_id).last_changed }}
+          {{ as_timestamp(trigger.event.data.last_changed) == as_timestamp(states[trigger.event.data.entity_id].last_changed) }}
       - service_template: |
           {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
         data_template:
