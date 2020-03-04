@@ -7,6 +7,6 @@ value      = data.get("value")
 for entity_id in entity_ids.replace(" ", "").split(","):
     state = hass.states.get(entity_id)
     attributes = state.attributes or {}
-    attributes[attribute] = value
+    attributes.set(attribute, value)
     hass.states.set(state, state.state, attributes)
     logger.info("Set states." + str(entity_id) + ".attributes." + str(attribute) + " to " + str(value))
