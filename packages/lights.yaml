@@ -234,7 +234,7 @@ automation:
           last_changed: |
             {{ states[trigger.event.data.entity_id].last_changed }}
 
-  - alias: Turn off lights without delay
+  - alias: Turn off lights immediately
     trigger:
       platform: event
       event_type: lights_motion_sensor_off
