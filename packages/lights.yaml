@@ -223,14 +223,14 @@ automation:
             }}
 
     action:
-      # Persist some data for debugging info
+      # Persist a deadline
       - service: python_script.set_attribute
         data_template:
           entity_id: |
             {{ trigger.event.data.entity_id }}
           attribute: off_after
           value: |
-            {{ (as_timestamp(now()) + (state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int)) | timestamp_local }}
+            {{ (as_timestamp(now()) + (state_attr(trigger.event.data.entity_id,'off_delay_seconds') | default(0) | int)) | timestamp_utc }}
       # Emit a custom event with a boolean indicating whether or not to delay.
       - event: lights_motion_sensor_off
         event_data_template:
@@ -251,6 +251,12 @@ automation:
         data_template:
           entity_id: |
             {{ state_attr(trigger.event.data.entity_id,'trigger_entity_id_off') | default('') }}
+      - service: python_script.set_attribute
+        data_template:
+          entity_id: |
+            {{ trigger.event.data.entity_id }}
+          attribute: off_after
+          value: "None"
       - service: system_log.write
         data_template:
           message: >
@@ -299,6 +305,12 @@ automation:
         data_template:
           entity_id: |
             {{ state_attr(trigger.event.data.entity_id,'trigger_entity_id_off') | default('') }}
+      - service: python_script.set_attribute
+        data_template:
+          entity_id: |
+            {{ trigger.event.data.entity_id }}
+          attribute: off_after
+          value: "None"
       - service: system_log.write
         data_template:
           message: >
