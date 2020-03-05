@@ -277,7 +277,7 @@ automation:
             entity_id={{ trigger.event.data.entity_id }}
             delay={{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | int | timestamp_custom('%H:%M:%S',False) }}
             event_last_changed={{ trigger.event.data.last_changed }}
-      - delay: "{{ (states[trigger.event.data.entity_id].attributes.off_delay_seconds | int) + 1 | timestamp_custom('%H:%M:%S',False) }}"
+      - delay: "{{ ((states[trigger.event.data.entity_id].attributes.off_delay_seconds | int) + 1) | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
         data_template:
           message: >
