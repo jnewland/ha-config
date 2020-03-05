@@ -233,6 +233,8 @@ automation:
           # Pass this value along so that we can double check it after delaying
           last_changed: |
             {{ states[trigger.event.data.entity_id].last_changed }}
+          event_id: |
+            {{ (as_timestamp(now()) * 1000000) | int }}{{ range(0,9999) | random }}
 
   - alias: Turn off lights immediately
     trigger:
@@ -271,22 +273,43 @@ automation:
           level: info
           message: >
             at=delay_start
+            event_id={{ trigger.event.data.event_id }}
             entity_id={{ trigger.event.data.entity_id }}
-            delay={{ states[trigger.event.data.entity_id].attributes.off_delay_seconds }}
-      - delay: "{{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | int | timestamp_custom('%H:%M:%S',False) }}"
+            delay={{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | int | timestamp_custom('%H:%M:%S',False) }}
+            event_last_changed={{ trigger.event.data.last_changed }}
+      - delay: "{{ ((states[trigger.event.data.entity_id].attributes.off_delay_seconds | int) + 1) | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
         data_template:
           message: >
             at=delay_end
+            event_id={{ trigger.event.data.event_id }}
             entity_id={{ trigger.event.data.entity_id }}
+            delay={{ states[trigger.event.data.entity_id].attributes.off_delay_seconds | int | timestamp_custom('%H:%M:%S',False) }}
+            utcnow={{ utcnow() }}
             event_last_changed={{ trigger.event.data.last_changed }}
             state_last_changed={{ states[trigger.event.data.entity_id].last_changed }}
             equal={{ as_timestamp(trigger.event.data.last_changed) == as_timestamp(states[trigger.event.data.entity_id].last_changed) }}
+            early={{
+              (
+                as_timestamp(states[trigger.event.data.entity_id].last_changed) + (states[trigger.event.data.entity_id].attributes.off_delay_seconds | int)
+              ) > as_timestamp(now())
+            }}
+            state={{ states(trigger.event.data.entity_id) }}
           logger: packages.lights
           level: info
+      # Only continue if:
+      # * The sensor is off
+      # * It hasn't changed since we started delaying
+      # * It has been at least off_delay_seconds since the sensor changed
       - condition: template
         value_template: |
-          {{ as_timestamp(trigger.event.data.last_changed) == as_timestamp(states[trigger.event.data.entity_id].last_changed) }}
+          {{
+            is_state(trigger.event.data.entity_id, "off") and
+            as_timestamp(trigger.event.data.last_changed) == as_timestamp(states[trigger.event.data.entity_id].last_changed) and
+            (
+              as_timestamp(states[trigger.event.data.entity_id].last_changed) + (states[trigger.event.data.entity_id].attributes.off_delay_seconds | int)
+            ) < as_timestamp(now())
+          }}
       - service_template: |
           {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
         data_template:
@@ -296,6 +319,7 @@ automation:
         data_template:
           message: >
             at=off
+            event_id={{ trigger.event.data.event_id }}
             entity_id={{ trigger.event.data.entity_id }}
             trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
             trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
