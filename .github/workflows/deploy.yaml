@@ -65,6 +65,8 @@ jobs:
         OFFICE_LONG: 0
         OFFICE_TV_IP: ""
         OFFICE_TV_MAC: ""
+        RAINCLOUD_USERNAME: ""
+        RAINCLOUD_PASSWORD: ""
         ROOMBA_IP: "0.0.0.0"
         ROOMBA_BLID: ""
         ROOMBA_PASSWORD: ""
