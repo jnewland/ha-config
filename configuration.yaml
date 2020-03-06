@@ -41,6 +41,9 @@ notify: !include notify.yaml
 prometheus: !include prometheus.yaml
 proximity: !include proximity.yaml
 python_script:
+raincloud:
+  username: !env_var RAINCLOUD_USERNAME
+  password: !env_var RAINCLOUD_PASSWORD
 recorder: !include recorder.yaml
 script: !include_dir_named scripts
 sensor: !include_dir_list sensors
