@@ -5,8 +5,11 @@ trigger:
   minutes: 0
 action:
   - service: script.notify_slack_about_camera
-    entity_id: camera.front_yard_left
+    data:
+      entity_id: camera.front_yard_left
   - service: script.notify_slack_about_camera
-    entity_id: camera.back_porch_fountain
+    data:
+      entity_id: camera.back_porch_fountain
   - service: script.notify_slack_about_camera
-    entity_id: camera.atrium
+    data:
+      entity_id: camera.atrium
