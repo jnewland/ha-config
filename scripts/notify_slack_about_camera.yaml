@@ -1,0 +1,14 @@
+sequence:
+ - service: camera.snapshot
+   data_template:
+      entity_id: |
+        {{ entity_id }}
+      filename: |
+        /tmp/slack-{{ entity_id }}.png
+  - service: notify.slack
+    data_template:
+      message: ":camera_with_flash: {{ entity_id }}"
+      data:
+        file:
+          path: |
+            /tmp/slack-{{ entity_id }}.png

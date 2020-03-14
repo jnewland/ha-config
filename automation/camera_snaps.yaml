@@ -4,27 +4,9 @@ trigger:
   # Every hour
   minutes: 0
 action:
-  - service: notify.slack
-    data_template:
-      message: "Debug: {{ states.camera.front_yard_left.attributes.entity_picture }}"
-  # - service: notify.slack
-  #   data_template:
-  #     message: ":camera_with_flash:"
-  #     data:
-  #       attachments:
-  #       - title: Front yard left
-  #         image_url: "https://home.jnewland.com/{{ states.camera.front_yard_left.attributes.entity_picture }}"
-  # - service: notify.slack
-  #   data_template:
-  #     message: ":camera_with_flash:"
-  #     data:
-  #       attachments:
-  #       - title: Back porch fountain
-  #         image_url: "https://home.jnewland.com/{{ states.camera.back_porch_fountain.attributes.entity_picture }}"
-  # - service: notify.slack
-  #   data_template:
-  #     message: ":camera_with_flash:"
-  #     data:
-  #       attachments:
-  #       - title: Atrium
-  #         image_url: "https://home.jnewland.com/{{ states.camera.atrium.attributes.entity_picture }}"
+  - service: script.notify_slack_about_camera
+    entity_id: camera.front_yard_left
+  - service: script.notify_slack_about_camera
+    entity_id: camera.back_porch_fountain
+  - service: script.notify_slack_about_camera
+    entity_id: camera.atrium
