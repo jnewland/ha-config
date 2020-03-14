@@ -1,6 +1,6 @@
 sequence:
- - service: camera.snapshot
-   data_template:
+  - service: camera.snapshot
+    data_template:
       entity_id: |
         {{ entity_id }}
       filename: |
