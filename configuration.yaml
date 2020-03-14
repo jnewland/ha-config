@@ -8,6 +8,8 @@ homeassistant:
   customize: !include_dir_merge_named customize
   packages: !include_dir_named packages
   auth_providers: !include auth_providers.yaml
+  whitelist_external_dirs:
+    - /tmp
 
 default_config:
 
@@ -55,7 +57,5 @@ vera: !include vera.yaml
 weather:
   - platform: darksky
     api_key: !env_var FORECAST_API_KEY
-whitelist_external_dirs:
-  - /tmp
 zone: !include zone.yaml
 vacuum: !include_dir_list vacuums
