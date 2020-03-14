@@ -4,11 +4,11 @@ sequence:
       entity_id: |
         {{ entity_id }}
       filename: |
-        /tmp/slack-{{ entity_id }}.png
+        /tmp/slack_{{ entity_id.split('.')[1] }}.png
   - service: notify.slack
     data_template:
-      message: ":camera_with_flash: {{ entity_id }}"
+      message: ":camera_with_flash: {{ entity_id.split('.')[1] }}"
       data:
         file:
           path: |
-            /tmp/slack-{{ entity_id }}.png
+            /tmp/slack_{{ entity_id.split('.')[1] }}.png
