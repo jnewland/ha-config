@@ -1,8 +1,8 @@
 alias: Camera snaps
 trigger:
   platform: time_pattern
-  # Every hour
-  minutes: 0
+  hours: "/4"
+  minutes: "0"
 action:
   - service: script.notify_slack_about_camera
     data:
