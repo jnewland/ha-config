@@ -3,6 +3,10 @@ trigger:
   platform: time_pattern
   hours: "/4"
   minutes: "0"
+condition:
+  condition: state
+  entity_id: input_select.mode
+  state: Away
 action:
   - service: script.notify_slack_about_camera
     data:
