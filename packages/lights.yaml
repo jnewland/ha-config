@@ -129,9 +129,17 @@ homeassistant:
     light.kitchen:
       notify_action: duck
       duck_step: 192
+
     light.living:
       notify_action: duck
       duck_step: 192
+    light.couch_lamp_right:
+      notify_action: duck
+      fixed_brightness: 20
+    light.couch_lamp_left:
+      notify_action: duck
+      fixed_brightness: 20
+
     light.master_bath_overhead:
       notify_action: duck
     light.master_closet:
