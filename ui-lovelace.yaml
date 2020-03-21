@@ -134,6 +134,7 @@ views:
     icon: mdi:desktop-mac
     cards:
       - type: entities
+        title: Office
         entities:
         - light.office_overhead
         - light.office_chandelier
@@ -144,6 +145,7 @@ views:
     icon: mdi:guitar-pick
     cards:
       - type: entities
+        title: Music Room
         entities:
         - light.music_room
         - light.bookshelf
@@ -234,6 +236,7 @@ views:
     icon: mdi:hotel
     cards:
     - type: entities
+      title: Master
       entities:
       - light.chandelier
       - light.chandelier_lamp
@@ -246,6 +249,7 @@ views:
       - light.master_closet
       - binary_sensor.closet_motion
     - type: entities
+      title: Master Bath
       entities:
       - light.master_bath_overhead
       - light.master_shower
@@ -257,6 +261,7 @@ views:
     icon: mdi:sofa
     cards:
     - type: entities
+      title: Great Room
       entities:
       - light.cabinets
       - light.kitchen
@@ -273,6 +278,7 @@ views:
     icon: mdi:tree
     cards:
     - type: entities
+      title: Back Porch
       entities:
       - switch.back_porch
       - switch.back_porch_fountain
@@ -280,15 +286,18 @@ views:
       - switch.bug_zapper
       - light.ac
     - type: entities
+      title: Atrium
       entities:
       - light.atrium
       - light.atrium_door
       - light.garage_door
     - type: entities
+      title: Front Porch
       entities:
       - light.front_porch
       - light.front_door
     - type: entities
+      title: Patio
       entities:
       - light.patio
       - light.master_patio
@@ -359,6 +368,7 @@ views:
         - binary_sensor.guest_hall_motion
         - switch.guest_bath_fan
     - type: entities
+      title: Guest
       entities:
         - light.guest_hall
         - light.guest_bath
