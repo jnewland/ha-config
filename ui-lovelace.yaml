@@ -158,6 +158,7 @@ views:
       card:
         type: entities
         title: Lights on
+        show_header_toggle: false
       filter:
         include:
           - domain: light
@@ -307,6 +308,7 @@ views:
       entity: climate.upstairs
 
     - type: entities
+      show_header_toggle: false
       entities:
       - automation.downstairs_ac
       - automation.downstairs_heat
@@ -368,6 +370,7 @@ views:
     icon: mdi:settings
     cards:
     - type: entities
+      show_header_toggle: false
       entities:
       - input_boolean.guests
       - automation.away_mode
