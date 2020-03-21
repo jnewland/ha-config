@@ -236,7 +236,7 @@ views:
     icon: mdi:hotel
     cards:
       - type: entities
-        title: Master
+        title: bedroom
         entities:
           - light.chandelier
           - light.chandelier_lamp
@@ -249,7 +249,7 @@ views:
           - light.master_closet
           - binary_sensor.closet_motion
       - type: entities
-        title: Master Bath
+        title: bath
         entities:
           - light.master_bath_overhead
           - light.master_shower
@@ -261,7 +261,7 @@ views:
     icon: mdi:sofa
     cards:
       - type: entities
-        title: Great Room
+        title: great room
         entities:
           - light.cabinets
           - light.kitchen
@@ -278,7 +278,7 @@ views:
     icon: mdi:tree
     cards:
       - type: entities
-        title: Back Porch
+        title: back porch
         entities:
           - switch.back_porch
           - switch.back_porch_fountain
@@ -286,18 +286,18 @@ views:
           - switch.bug_zapper
           - light.ac
       - type: entities
-        title: Atrium
+        title: atrium
         entities:
           - light.atrium
           - light.atrium_door
           - light.garage_door
       - type: entities
-        title: Front Porch
+        title: front porch
         entities:
           - light.front_porch
           - light.front_door
       - type: entities
-        title: Patio
+        title: patio
         entities:
           - light.patio
           - light.master_patio
@@ -368,7 +368,7 @@ views:
           - binary_sensor.guest_hall_motion
           - switch.guest_bath_fan
       - type: entities
-        title: Guest
+        title: guest
         entities:
           - light.guest_hall
           - light.guest_bath
@@ -380,6 +380,7 @@ views:
     icon: mdi:settings
     cards:
       - type: entities
+        title: settings
         show_header_toggle: false
         entities:
           - input_boolean.guests
@@ -398,14 +399,14 @@ views:
           method: id
         card:
           type: glance
-          title: Unconfigured devices
+          title: unconfigured
         filter:
           include:
             - entity_id: "/_[0-9]+$/"
           exclude:
             - entity_id: "*_sim_*"
       - type: history-graph
-        title: History
+        title: history
         hours_to_show: 80
         entities:
           - counter.light_automations
@@ -424,7 +425,7 @@ views:
         card:
           type: history-graph
           hours_to_show: 72
-          title: Motion
+          title: motion
         filter:
           include:
             - entity_id: "/^binary_sensor.*_motion$/"
@@ -438,7 +439,7 @@ views:
           method: id
         card:
           type: glance
-          title: UPS
+          title: ups
         filter:
           include:
             - entity_id: "/core_ups/"
@@ -456,7 +457,7 @@ views:
           method: id
         card:
           type: glance
-          title: NAS
+          title: nas
         filter:
           include:
             - entity_id: "/diskstation/"
@@ -474,7 +475,7 @@ views:
           method: id
         card:
           type: glance
-          title: Printer
+          title: printer
         filter:
           include:
             - entity_id: "/dcp_l2540dw/"
