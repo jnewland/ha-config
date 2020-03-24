@@ -2,8 +2,6 @@
 
 set -ex
 
-pip install pyalarmdotcomajax
-
 ref=$1
 if [ -n "$ref" ]; then
     git fetch origin

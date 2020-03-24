@@ -1,9 +1,6 @@
 #!/bin/bash
 set -xeuo pipefail
 
-# test
-# pip install pyalarmdotcomajax
-
 hass -c . --script check_config -i all -f | tee /tmp/log
 test "$(grep -c ^ERROR /tmp/log)" -eq 0
 
