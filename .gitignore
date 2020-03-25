@@ -5,7 +5,7 @@
 *.sqlite
 *.xml
 *.conf
-*.json
+/*.json
 .homekit.state
 OZW_Log.txt
 motion_detection
@@ -13,3 +13,4 @@ deps
 ip_bans.yaml
 *.pickle
 custom_components/mpr_6zhmaut/__pycache__
+.vscode
