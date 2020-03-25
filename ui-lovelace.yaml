@@ -323,9 +323,9 @@ views:
           - automation.downstairs_heat
           - automation.upstairs_ac
           - automation.upstairs_heat
-          - automation.upstairs_evening_ac
-          - automation.upstairs_reading_fan
-          - automation.upstairs_sleeping_fan_reset
+          - automation.upstairs_ac
+          - automation.upstairs_reading
+          - automation.upstairs_sleeping
           - automation.upstairs_morning_climate_reset
 
       - type: custom:auto-entities
