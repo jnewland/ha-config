@@ -147,7 +147,7 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.office*_temperature$/"
+            - entity_id: "/^sensor.office*_temp/"
       - type: custom:auto-entities
         card:
           type: history-graph
@@ -171,7 +171,7 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.music_room*_temperature$/"
+            - entity_id: "/^sensor.music_room*_temp/"
       - type: custom:auto-entities
         card:
           type: history-graph
@@ -294,8 +294,8 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.master*_temperature$/"
-            - entity_id: "/^sensor.upstairs*_temperature$/"
+            - entity_id: "/^sensor.master*_temp/"
+            - entity_id: "/^sensor.upstairs*_temp/"
       - type: custom:auto-entities
         card:
           type: history-graph
@@ -328,8 +328,8 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.great*_temperature$/"
-            - entity_id: "/^sensor.powder*_temperature$/"
+            - entity_id: "/^sensor.great*_temp/"
+            - entity_id: "/^sensor.powder*_temp/"
       - type: custom:auto-entities
         card:
           type: history-graph
@@ -400,7 +400,7 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.*_temperature$/"
+            - entity_id: "/^sensor.*_temp/"
 
       - type: custom:auto-entities
         card:
@@ -447,7 +447,7 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.guest*_temperature$/"
+            - entity_id: "/^sensor.guest*_temp/"
       - type: custom:auto-entities
         card:
           type: history-graph
