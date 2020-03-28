@@ -94,8 +94,6 @@ homeassistant:
     light.cabinets:
       fixed_brightness: 255
 
-    light.bookshelf:
-      fixed_brightness: 255
     light.bookshelf_blue:
       fixed_brightness: 0
     light.bookshelf_brightness:
@@ -103,8 +101,6 @@ homeassistant:
     light.bookshelf_green:
       fixed_brightness: 0
     light.bookshelf_red:
-      fixed_brightness: 0
-    light.bookshelf_white:
       fixed_brightness: 0
 
     light.back_porch_fountain_lights:
