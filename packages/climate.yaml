@@ -43,6 +43,8 @@ automation:
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: heat
+      - delay:
+          seconds: 10
       - service: climate.set_temperature
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
@@ -68,6 +70,8 @@ automation:
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: cool
+      - delay:
+          seconds: 10
       - service: climate.set_temperature
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
@@ -92,6 +96,8 @@ automation:
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: heat
+      - delay:
+          seconds: 10
       - service: climate.set_temperature
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
@@ -111,6 +117,8 @@ automation:
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: cool
+      - delay:
+          seconds: 10
       - service: climate.set_temperature
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
@@ -126,10 +134,14 @@ automation:
         data:
           entity_id: climate.upstairs
           hvac_mode: cool
+      - delay:
+          seconds: 10
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
           temperature: 69
+      - delay:
+          seconds: 10
       - service: climate.set_fan_mode
         entity_id:  climate.upstairs
         data:
@@ -145,10 +157,14 @@ automation:
         entity_id: climate.upstairs
         data:
           fan_mode: "auto"
+      - delay:
+          seconds: 10
       - service: climate.set_hvac_mode
         data:
           entity_id: climate.upstairs
           hvac_mode: cool
+      - delay:
+          seconds: 10
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
@@ -164,6 +180,8 @@ automation:
         entity_id:  climate.upstairs
         data:
           hvac_mode: "off"
+      - delay:
+          seconds: 10
       - service: climate.set_fan_mode
         entity_id:  climate.upstairs
         data:
