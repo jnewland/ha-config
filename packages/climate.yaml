@@ -43,6 +43,8 @@ automation:
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: heat
+      - delay:
+          seconds: 10
       - service: climate.set_temperature
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
@@ -68,6 +70,8 @@ automation:
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: cool
+      - delay:
+          seconds: 10
       - service: climate.set_temperature
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
@@ -92,6 +96,8 @@ automation:
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: heat
+      - delay:
+          seconds: 10
       - service: climate.set_temperature
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
@@ -111,55 +117,58 @@ automation:
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: cool
+      - delay:
+          seconds: 10
       - service: climate.set_temperature
         data_template:
           entity_id: "{{ trigger.to_state.entity_id }}"
           temperature: 73
 
-  - alias: upstairs evening AC
+  - alias: upstairs reading
     trigger:
     - platform: state
       entity_id: input_select.mode
       to: Reading
-    - platform: state
-      entity_id: input_select.mode
-      to: Sleeping
-    condition:
-      condition: numeric_state
-      entity_id: climate.upstairs
-      above: 69
-      value_template: "{{ state.attributes.current_temperature }}"
     action:
       - service: climate.set_hvac_mode
-        data_template:
-          entity_id: "{{ trigger.to_state.entity_id }}"
+        data:
+          entity_id: climate.upstairs
           hvac_mode: cool
+      - delay:
+          seconds: 10
       - service: climate.set_temperature
-        data_template:
-          entity_id: "{{ trigger.to_state.entity_id }}"
+        data:
+          entity_id: climate.upstairs
           temperature: 69
-
-  - alias: upstairs reading fan
-    trigger:
-    - platform: state
-      entity_id: input_select.mode
-      to: Reading
-    action:
+      - delay:
+          seconds: 10
       - service: climate.set_fan_mode
         entity_id:  climate.upstairs
         data:
           fan_mode: "on"
 
-  - alias: upstairs sleeping fan reset
+  - alias: upstairs sleeping
     trigger:
     - platform: state
       entity_id: input_select.mode
       to: Sleeping
     action:
       - service: climate.set_fan_mode
-        entity_id:  climate.upstairs
+        entity_id: climate.upstairs
         data:
           fan_mode: "auto"
+      - delay:
+          seconds: 10
+      - service: climate.set_hvac_mode
+        data:
+          entity_id: climate.upstairs
+          hvac_mode: cool
+      - delay:
+          seconds: 10
+      - service: climate.set_temperature
+        data:
+          entity_id: climate.upstairs
+          temperature: 69
 
   - alias: upstairs morning climate reset
     trigger:
@@ -171,6 +180,8 @@ automation:
         entity_id:  climate.upstairs
         data:
           hvac_mode: "off"
+      - delay:
+          seconds: 10
       - service: climate.set_fan_mode
         entity_id:  climate.upstairs
         data:

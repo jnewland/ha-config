@@ -141,6 +141,21 @@ views:
           - light.marble_lamp
           - light.exercise_bike
           - binary_sensor.office_motion
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.office*_temp/"
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.office*_light$/"
+
   - title: Music Room
     icon: mdi:guitar-pick
     cards:
@@ -150,6 +165,21 @@ views:
           - light.music_room
           - light.bookshelf
           - binary_sensor.music_room_motion
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.music_room*_temp/"
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.music_room*_light$/"
+
   - title: Lights
     icon: mdi:lightbulb
     cards:
@@ -232,6 +262,7 @@ views:
         entity: media_player.master_bedroom_speakers
       - type: media-control
         entity: media_player.patio_speakers
+
   - title: Upstairs
     icon: mdi:hotel
     cards:
@@ -257,6 +288,23 @@ views:
           - light.master_toilet
           - switch.master_bath_fan
           - binary_sensor.master_bath_motion
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.master*_temp/"
+            - entity_id: "/^sensor.upstairs*_temp/"
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.master*_light$/"
+            - entity_id: "/^sensor.upstairs*_light$/"
+
   - title: Great Room
     icon: mdi:sofa
     cards:
@@ -274,6 +322,23 @@ views:
           - light.couch_lamp_right
           - light.couch_lamp_left
           - binary_sensor.living_room_motion
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.great*_temp/"
+            - entity_id: "/^sensor.powder*_temp/"
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.great*_light$/"
+            - entity_id: "/^sensor.powder*_light$/"
+
   - title: Outdoor
     icon: mdi:tree
     cards:
@@ -291,6 +356,7 @@ views:
           - light.atrium
           - light.atrium_door
           - light.garage_door
+          - switch.atrium_fountain
       - type: entities
         title: front porch
         entities:
@@ -323,9 +389,9 @@ views:
           - automation.downstairs_heat
           - automation.upstairs_ac
           - automation.upstairs_heat
-          - automation.upstairs_evening_ac
-          - automation.upstairs_reading_fan
-          - automation.upstairs_sleeping_fan_reset
+          - automation.upstairs_ac
+          - automation.upstairs_reading
+          - automation.upstairs_sleeping
           - automation.upstairs_morning_climate_reset
 
       - type: custom:auto-entities
@@ -334,7 +400,7 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.*_temperature$/"
+            - entity_id: "/^sensor.*_temp/"
 
       - type: custom:auto-entities
         card:
@@ -375,6 +441,20 @@ views:
           - light.guest_shower
           - light.guest_room_bedside_left
           - light.guest_room_bedside_right
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.guest*_temp/"
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.guest*_light$/"
 
   - title: Settings
     icon: mdi:settings
