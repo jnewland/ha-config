@@ -94,14 +94,18 @@ homeassistant:
     light.cabinets:
       fixed_brightness: 255
 
-    light.bookshelf_blue:
-      fixed_brightness: 0
-    light.bookshelf_brightness:
-      fixed_brightness: 0
-    light.bookshelf_green:
-      fixed_brightness: 0
+    light.bookshelf:
+      ignore_brightness: true
+    light.bookshelf_white:
+      ignore_brightness: true
     light.bookshelf_red:
-      fixed_brightness: 0
+      ignore_brightness: true
+    light.bookshelf_green:
+      ignore_brightness: true
+    light.bookshelf_blue:
+      ignore_brightness: true
+    light.bookshelf_brightness:
+      ignore_brightness: true
 
     light.back_porch_fountain_lights:
       notify_action: duck
