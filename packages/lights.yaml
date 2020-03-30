@@ -94,17 +94,17 @@ homeassistant:
     light.cabinets:
       fixed_brightness: 255
 
-    light.bookshelf:
+    light.bedside_table:
       ignore_brightness: true
-    light.bookshelf_white:
+    light.bedside_table_white:
       ignore_brightness: true
-    light.bookshelf_red:
+    light.bedside_table_red:
       ignore_brightness: true
-    light.bookshelf_green:
+    light.bedside_table_green:
       ignore_brightness: true
-    light.bookshelf_blue:
+    light.bedside_table_blue:
       ignore_brightness: true
-    light.bookshelf_brightness:
+    light.bedside_table_brightness:
       ignore_brightness: true
 
     light.back_porch_fountain_lights:
