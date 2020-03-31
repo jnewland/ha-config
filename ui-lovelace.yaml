@@ -163,7 +163,6 @@ views:
         title: Music Room
         entities:
           - light.music_room
-          - light.bookshelf
           - binary_sensor.music_room_motion
       - type: custom:auto-entities
         card:
@@ -275,6 +274,7 @@ views:
           - light.master_nook
           - light.master_windows
           - light.bedside_lamp
+          - light.bedside_table
           - light.master_patio
           - binary_sensor.master_motion
           - light.master_closet
