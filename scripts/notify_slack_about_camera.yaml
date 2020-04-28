@@ -7,8 +7,10 @@ sequence:
         /tmp/slack_{{ entity_id.split('.')[1] }}.png
   - service: notify.slack
     data_template:
-      message: |
+      title: |
         :camera_with_flash: {{ entity_id.split('.')[1] }}
+      message: |
+        {{ message | default('') }}
       data:
         file:
           path: |
