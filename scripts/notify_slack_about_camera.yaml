@@ -1,0 +1,15 @@
+sequence:
+  - service: camera.snapshot
+    data_template:
+      entity_id: |
+        {{ entity_id }}
+      filename: |
+        /tmp/slack_{{ entity_id.split('.')[1] }}.png
+  - service: notify.slack
+    data_template:
+      message: |
+        :camera_with_flash: {{ entity_id.split('.')[1] }}
+      data:
+        file:
+          path: |
+            /tmp/slack_{{ entity_id.split('.')[1] }}.png

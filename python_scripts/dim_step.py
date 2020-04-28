@@ -10,7 +10,7 @@ elif action == "up":
 
 for entity_id in entity_ids.split(","):
     state      = hass.states.get(entity_id.replace(" ", ""))
-    change     = state.attributes.get("brightness_step", 127)
+    change     = state.attributes.get("duck_step", 127)
     brightness = state.attributes.get("brightness", 0)
 
     dim = (brightness + (int(change) * int(multiplier)))

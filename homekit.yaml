@@ -18,18 +18,18 @@ filter:
     - switch.bug_zapper
     - switch.christmas_tree
     - script.mode_away
-    - script.office
+    - script.office_lights
     - script.mode_reading
     - script.mode_sleeping
     - script.mode_party
-    - script.living
+    - script.living_lights
     - switch.master_bath_fan
   exclude_entities:
-    - light.bookshelf_blue
-    - light.bookshelf_brightness
-    - light.bookshelf_green
-    - light.bookshelf_red
-    - light.bookshelf_white
+    - light.bedside_table_blue
+    - light.bedside_table_brightness
+    - light.bedside_table_green
+    - light.bedside_table_red
+    - light.bedside_table_white
     - light.back_porch_fountain_blue
     - light.back_porch_fountain_brightness
     - light.back_porch_fountain_green

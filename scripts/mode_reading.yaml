@@ -13,6 +13,7 @@ sequence:
     - light.chandelier
     - light.chandelier_lamp
     - light.bedside_lamp
+    - light.bedside_table
     - light.master_nook
     - light.master_patio
     brightness: |

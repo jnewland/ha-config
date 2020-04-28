@@ -1,0 +1,6 @@
+name: master bath lights
+entities:
+- light.master_bath_overhead
+- light.master_shower
+- light.master_mirror
+- light.master_toilet

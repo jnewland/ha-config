@@ -1,5 +1,3 @@
 name: music room
-control: hidden
 entities:
 - light.music_room
-- light.bookshelf
