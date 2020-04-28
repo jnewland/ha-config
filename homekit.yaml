@@ -13,10 +13,10 @@ filter:
     - switch
     - scene
   include_entities:
+    - switch.atrium_fountain
     - switch.back_porch
     - switch.back_porch_fountain
     - switch.bug_zapper
-    - switch.christmas_tree
     - script.mode_away
     - script.office_lights
     - script.mode_reading
