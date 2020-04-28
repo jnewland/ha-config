@@ -30,6 +30,7 @@ automation:
             }}
     action:
       - service: script.notify_slack_about_camera
+        data_template:
           entity_id: |
             camera.doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] }}
           message: |
