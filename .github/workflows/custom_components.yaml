@@ -35,10 +35,10 @@ jobs:
         # Push & rebase 5 times
         rebases=0
         until [ $rebases -ge 5 ]; do
-          if git push origin HEAD:${GITHUB_REF}; then
+          if git push origin HEAD:${GITHUB_HEAD_REF}; then
             exit 0
           else
-            git pull --rebase origin ${GITHUB_REF}
+            git pull --rebase origin ${GITHUB_HEAD_REF}
           fi
           rebases=$[$rebases+1]
         done
