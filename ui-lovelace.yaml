@@ -558,10 +558,3 @@ views:
         filter:
           include:
             - entity_id: "/dcp_l2540dw/"
-resources:
-  - url: /local/monster-card.js?v=1
-    type: js
-  - url: /local/entity-attributes-card.js?v=3
-    type: js
-  - url: /local/auto-entities.js
-    type: module

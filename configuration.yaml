@@ -33,6 +33,13 @@ input_boolean: !include input_boolean.yaml
 input_select: !include input_select.yaml
 lovelace:
   mode: yaml
+  resources:
+    - url: /local/monster-card.js?v=1
+      type: js
+    - url: /local/entity-attributes-card.js?v=3
+      type: js
+    - url: /local/auto-entities.js
+      type: module
 light:
 logger: !include logger.yaml
 map:
