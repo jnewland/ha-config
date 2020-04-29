@@ -323,16 +323,16 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.great*_temp/"
-            - entity_id: "/^sensor.powder*_temp/"
+            - entity_id: "/^sensor.kitchen*_temp/"
+            - entity_id: "/^sensor.powder_room*_temp/"
       - type: custom:auto-entities
         card:
           type: history-graph
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.great*_light$/"
-            - entity_id: "/^sensor.powder*_light$/"
+            - entity_id: "/^sensor.kitchen*_light$/"
+            - entity_id: "/^sensor.powder_room*_light$/"
 
   - title: Outdoor
     icon: mdi:tree
@@ -442,14 +442,16 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.guest*_temp/"
+            - entity_id: "/^sensor.guest_hall*_temp/"
+            - entity_id: "/^sensor.guest_bath*_temp/"
       - type: custom:auto-entities
         card:
           type: history-graph
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.guest*_light$/"
+            - entity_id: "/^sensor.guest_hall*_light$/"
+            - entity_id: "/^sensor.guest_bath*_light$/"
 
   - title: Settings
     icon: mdi:settings
