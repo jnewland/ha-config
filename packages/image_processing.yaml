@@ -94,6 +94,7 @@ image_processing:
     area:
       # Exclude left part of image
       left: 0.20
+      covers: false
     labels:
       - name: dog
         confidence: 30
@@ -110,9 +111,6 @@ image_processing:
         name: back porch
     file_out:
       - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
-    area:
-      # Exclude right half of image
-      right: 0.5
     labels:
       - name: dog
         confidence: 30
@@ -132,8 +130,8 @@ image_processing:
       - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
     area:
       # Exclude street
-      top: 0.20
-      left: 0.20
+      top: 0.18
+      covers: false
     labels:
       - name: dog
         confidence: 30
