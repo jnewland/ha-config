@@ -5,36 +5,23 @@ filter:
     - cover
     - lock
     - media_player
-    - light
   exclude_domains:
     - sensor
     - script
     - sensor
     - switch
     - scene
+    - light
   include_entities:
     - switch.atrium_fountain
     - switch.back_porch
     - switch.back_porch_fountain
     - switch.bug_zapper
+    - switch.master_bath_fan
+
     - script.mode_away
     - script.office_lights
     - script.mode_reading
     - script.mode_sleeping
     - script.mode_party
     - script.living_lights
-    - switch.master_bath_fan
-  exclude_entities:
-    - light.bedside_table_blue
-    - light.bedside_table_brightness
-    - light.bedside_table_green
-    - light.bedside_table_red
-    - light.bedside_table_white
-    - light.back_porch_fountain_blue
-    - light.back_porch_fountain_brightness
-    - light.back_porch_fountain_green
-    - light.back_porch_fountain_red
-    - light.back_porch_fountain_white
-    - light.pantry
-    - light.office
-    - light.guest_room
