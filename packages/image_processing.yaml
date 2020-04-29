@@ -43,6 +43,27 @@ camera:
 
 # Process images from selected cameras on an interval and look for interesting objects
 # Uses a copy of https://hub.docker.com/r/snowzach/doods running at http://doods:8080
+# with the following script run on startup to use the faster_rcnn_inception_v2_coco_2018_01_28 model
+#
+#     cd /config
+#     mkdir -p models
+#     wget http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
+#     tar -zxvf faster_rcnn_inception_v2_coco_2018_01_28.tar.gz faster_rcnn_inception_v2_coco_2018_01_28/frozen_inference_graph.pb --strip=1
+#     mv frozen_inference_graph.pb models/faster_rcnn_inception_v2_coco_2018_01_28.pb
+#     rm faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
+#     wget https://raw.githubusercontent.com/amikelive/coco-labels/master/coco-labels-2014_2017.txt
+#     mv coco-labels-2014_2017.txt models/coco_labels1.txt
+#     cat << EOF > /config/tensorflow.yaml
+#     doods:
+#       detectors:
+#         - name: default
+#           type: tensorflow
+#           modelFile: /config/models/faster_rcnn_inception_v2_coco_2018_01_28.pb
+#           labelFile: /config/models/coco_labels1.txt
+#           numThreads: 1
+#           numConcurrent: 4
+#     EOF
+#
 image_processing:
   - platform: doods
     scan_interval: 10
@@ -119,17 +140,17 @@ image_processing:
       - name: person
         confidence: 75
 
-
 # Adding a unit allows these values to be graphed in the UI
-customize:
-  image_processing.atrium:
-    unit_of_measurement: objects
-  image_processing.back_porch:
-    unit_of_measurement: objects
-  image_processing.front_yard_left:
-    unit_of_measurement: objects
-  image_processing.pergola:
-    unit_of_measurement: objects
+homeassistant:
+  customize:
+    image_processing.atrium:
+      unit_of_measurement: objects
+    image_processing.back_porch:
+      unit_of_measurement: objects
+    image_processing.front_yard_left:
+      unit_of_measurement: objects
+    image_processing.pergola:
+      unit_of_measurement: objects
 
 automation:
   - alias: Post doods matches to slack
