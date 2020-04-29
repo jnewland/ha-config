@@ -169,6 +169,8 @@ automation:
         data_template:
           entity_id: |
             camera.doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] }}
+          title: |
+            {{ trigger.event.data.new_state.attributes.friendly_name }}
           message: |
             {% for thing in trigger.event.data.new_state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %}
 
