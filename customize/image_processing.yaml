@@ -1,8 +1,0 @@
-image_processing.atrium:
-  unit_of_measurement: objects
-image_processing.back_porch:
-  unit_of_measurement: objects
-image_processing.front_yard_left:
-  unit_of_measurement: objects
-image_processing.pergola:
-  unit_of_measurement: objects

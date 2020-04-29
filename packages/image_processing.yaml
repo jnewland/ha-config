@@ -1,3 +1,136 @@
+camera:
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_1
+    name: gate
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_2
+    name: back porch
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_3
+    name: front yard left
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_4
+    name: atrium
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_5
+    name: garage
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_6
+    name: ac
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_7
+    name: front yard right
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_8
+    name: side yard
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_9
+    name: pergola
+
+  # local_file cameras are setup for to support displaying snapshots with objects highlighted
+  - platform: local_file
+    file_path: /tmp/doods_atrium.jpg
+    name: doods_atrium
+  - platform: local_file
+    file_path: /tmp/doods_back_porch.jpg
+    name: doods_back_porch
+  - platform: local_file
+    file_path: /tmp/doods_front_yard_left.jpg
+    name: doods_front_yard_left
+  - platform: local_file
+    file_path: /tmp/doods_pergola.jpg
+    name: doods_pergola
+
+# Process images from selected cameras on an interval and look for interesting objects
+# Uses a copy of https://hub.docker.com/r/snowzach/doods running at http://doods:8080
+image_processing:
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.pergola
+        name: pergola
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.atrium
+        name: atrium
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+    area:
+      # Exclude left part of image
+      left: 0.20
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.back_porch
+        name: back porch
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+    area:
+      # Exclude right half of image
+      right: 0.5
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  # The bottom two thirds of the front yard camera
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.front_yard_left
+        name: front yard left
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+    area:
+      # Exclude street
+      top: 0.20
+      left: 0.20
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+
+# Adding a unit allows these values to be graphed in the UI
+customize:
+  image_processing.atrium:
+    unit_of_measurement: objects
+  image_processing.back_porch:
+    unit_of_measurement: objects
+  image_processing.front_yard_left:
+    unit_of_measurement: objects
+  image_processing.pergola:
+    unit_of_measurement: objects
+
 automation:
   - alias: Post doods matches to slack
     trigger:
@@ -19,3 +152,23 @@ automation:
             camera.doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] }}
           message: |
             {% for thing in trigger.event.data.new_state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %}
+
+script:
+  notify_slack_about_camera:
+    sequence:
+      - service: camera.snapshot
+        data_template:
+          entity_id: |
+            {{ entity_id }}
+          filename: |
+            /tmp/slack_{{ entity_id.split('.')[1] }}.png
+      - service: notify.slack
+        data_template:
+          title: |
+            {{ title | default(entity_id.split('.')[1]) }}
+          message: |
+            {{ message | default('') }}
+          data:
+            file:
+              path: |
+                /tmp/slack_{{ entity_id.split('.')[1] }}.png
