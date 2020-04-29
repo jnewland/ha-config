@@ -25,3 +25,5 @@ filter:
     - script.mode_sleeping
     - script.mode_party
     - script.living_lights
+
+    - vacuum.downstairs_roomba
