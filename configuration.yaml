@@ -53,6 +53,10 @@ script: !include_dir_named scripts
 sensor: !include_dir_list sensors
 sun:
 switch: !include_dir_list switches
+synology_dsm:
+  - host: diskstation
+    username: home-assistant
+    password: !env_var DISKSTATION_GUEST_PASSWORD
 system_health:
 system_log:
   fire_event: true
