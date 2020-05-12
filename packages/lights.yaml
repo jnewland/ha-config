@@ -556,4 +556,4 @@ script:
           {{ entity_id }}
 
 shell_command:
-  wake_bookshelf: ping -c 1 bookshelf && curl -v --retry 3 --retry-max-time 10 --max-time 30 -X POST bookshelf:8686/wake
+  wake_bookshelf: curl -v --retry 3 --retry-max-time 10 --max-time 30 -X POST bookshelf:8686/wake
