@@ -64,9 +64,6 @@ jobs:
         OFFICE_LONG: 0
         OFFICE_TV_IP: ""
         OFFICE_TV_MAC: ""
-        ROOMBA_IP: "0.0.0.0"
-        ROOMBA_BLID: ""
-        ROOMBA_PASSWORD: ""
         ROUTER_LINK: http://example.com
         SELF_LINK: http://example.com
         SLACK_API_KEY: ""
