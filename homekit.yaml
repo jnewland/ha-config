@@ -26,4 +26,4 @@ filter:
     - script.mode_party
     - script.living_lights
 
-    - vacuum.downstairs_roomba
+    - vacuum.downstairs980
