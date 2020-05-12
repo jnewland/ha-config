@@ -165,31 +165,11 @@ automation:
               trigger.event.data.new_state.attributes.total_matches > 0
             }}
     action:
-      - service: script.notify_slack_about_camera
+      - service: notify.slack
         data_template:
-          entity_id: |
-            camera.doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] }}
           title: |
             {{ trigger.event.data.new_state.attributes.friendly_name }}
           message: |
             {% for thing in trigger.event.data.new_state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %}
-
-script:
-  notify_slack_about_camera:
-    sequence:
-      - service: camera.snapshot
-        data_template:
-          entity_id: |
-            {{ entity_id }}
-          filename: |
-            /tmp/slack_{{ entity_id.split('.')[1] }}.png
-      - service: notify.slack
-        data_template:
-          title: |
-            {{ title | default(entity_id.split('.')[1]) }}
-          message: |
-            {{ message | default('') }}
           data:
-            file:
-              path: |
-                /tmp/slack_{{ entity_id.split('.')[1] }}.png
+            file: /tmp/doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] }}.jpg
