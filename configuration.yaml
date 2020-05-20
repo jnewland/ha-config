@@ -24,7 +24,7 @@ emulated_hue:
   expose_by_default: false
 frontend: !include frontend.yaml
 group: !include_dir_named groups
-history: !include history.yaml
+history:
 http: !include http.yaml
 homekit: !include homekit.yaml
 ifttt: !include ifttt.yaml
