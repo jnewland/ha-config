@@ -5,6 +5,7 @@ filter:
     - cover
     - lock
     - media_player
+    - camera
   exclude_domains:
     - sensor
     - script
