@@ -25,7 +25,7 @@ emulated_hue:
 frontend: !include frontend.yaml
 group: !include_dir_named groups
 history:
-http: !include http.yaml
+http:
 homekit: !include homekit.yaml
 ifttt: !include ifttt.yaml
 ios: !include ios.yaml

@@ -1,1 +1,0 @@
-base_url: !env_var VIRTUAL_HOST
