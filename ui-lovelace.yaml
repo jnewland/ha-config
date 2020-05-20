@@ -261,7 +261,6 @@ views:
     title: Record player
     icon: mdi:record-player
     cards:
-
       - type: custom:auto-entities
         show_empty: false
         sort:
@@ -269,7 +268,6 @@ views:
         card:
           type: entities
           show_header_toggle: false
-          title: music server
         filter:
           include:
             - entity_id: "/media_player.forked_daapd.*/"
