@@ -257,7 +257,7 @@ views:
       - type: media-control
         entity: media_player.patio_speakers
 
-  - id: record-player
+  - path: record-player
     title: Record player
     icon: mdi:record-player
     cards:
