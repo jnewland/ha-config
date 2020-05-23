@@ -54,8 +54,8 @@ homeassistant:
       trigger_entity_id: light.great_hall
       trigger_entity_id_off: light.great_hall
     binary_sensor.garage_hall_motion:
-      trigger_entity_id: group.garage_hall
-      trigger_entity_id_off: group.garage_hall
+      trigger_entity_id: light.garage_hall
+      trigger_entity_id_off: light.garage_hall
     binary_sensor.music_room_motion:
       friendly_name: music room motion
       trigger_service: script.music_room
