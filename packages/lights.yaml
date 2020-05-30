@@ -573,10 +573,28 @@ script:
 
   pulse_record_cabinet_lights:
     sequence:
-        - service: script.pulse_light
-          data_template:
-            entity_id: |
-              light.record_cabinet_left,light.record_cabinet_right
+      - service: light.turn_on
+        data:
+          entity_id: light.record_cabinet_left
+          effect: colorloop
+      - service: light.turn_on
+        data:
+          entity_id: light.record_cabinet_right
+          effect: colorloop
+      - delay:
+          seconds: 10
+      - service: light.turn_off
+        data:
+          entity_id: light.record_cabinet_left
+      - service: light.turn_off
+        data:
+          entity_id: light.record_cabinet_right
+      - service: light.turn_on
+        data:
+          entity_id: light.record_cabinet_left
+      - service: light.turn_on
+        data:
+          entity_id: light.record_cabinet_right
 
 shell_command:
   wake_bookshelf: curl -v --retry 3 --retry-max-time 10 --max-time 30 -X POST bookshelf:8686/wake
