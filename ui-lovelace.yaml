@@ -453,8 +453,7 @@ views:
           - light.guest_hall
           - light.guest_bath
           - light.guest_shower
-          - light.guest_room_bedside_left
-          - light.guest_room_bedside_right
+          - light.guest_room_lamp
       - type: custom:auto-entities
         card:
           type: history-graph
