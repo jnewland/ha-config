@@ -271,7 +271,7 @@ views:
         filter:
           include:
             - entity_id: "/media_player.forked_daapd.*/"
-      - type: glance
+      - type: entities
         entities:
           - light.record_cabinet_left
           - light.record_cabinet_right
