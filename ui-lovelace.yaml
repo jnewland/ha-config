@@ -257,6 +257,25 @@ views:
       - type: media-control
         entity: media_player.patio_speakers
 
+  - path: record-player
+    title: Record player
+    icon: mdi:record-player
+    cards:
+      - type: custom:auto-entities
+        show_empty: false
+        sort:
+          method: id
+        card:
+          type: entities
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: "/media_player.forked_daapd.*/"
+      - type: entities
+        entities:
+          - light.record_cabinet_left
+          - light.record_cabinet_right
+
   - title: Upstairs
     icon: mdi:hotel
     cards:
@@ -434,8 +453,7 @@ views:
           - light.guest_hall
           - light.guest_bath
           - light.guest_shower
-          - light.guest_room_bedside_left
-          - light.guest_room_bedside_right
+          - light.guest_room_lamp
       - type: custom:auto-entities
         card:
           type: history-graph

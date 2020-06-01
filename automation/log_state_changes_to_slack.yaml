@@ -47,6 +47,7 @@ trigger:
     - media_player.house_mpr6zhmaut
     - media_player.house_office
     - media_player.patio_speakers
+    - media_player.forked_daapd_server
     - weather.dark_sky
 condition:
   condition: template

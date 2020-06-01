@@ -67,6 +67,8 @@ homeassistant:
     binary_sensor.pantry_motion:
       trigger_entity_id: light.pantry
       trigger_entity_id_off: light.pantry
+    binary_sensor.record_player_playing:
+      trigger_service: script.pulse_record_cabinet_lights
 
     counter.light_automations:
       unit_of_measurement: occurances
@@ -121,6 +123,13 @@ homeassistant:
     light.back_porch_fountain_white:
       fixed_brightness: 0
 
+    light.garage_hall:
+      notify_action: duck
+    light.record_cabinet_left:
+      notify_action: duck
+    light.record_cabinet_right:
+      notify_action: duck
+
     light.dining_room_table:
       notify_action: duck
       duck_step: 192
@@ -170,6 +179,13 @@ homeassistant:
       duck_step: 192
     light.wine_room:
       fixed_brightness: 102
+
+binary_sensor:
+  - platform: template
+    sensors:
+      record_player_playing:
+        value_template: |
+          {{ is_state("media_player.forked_daapd_server", "playing") }}
 
 automation:
   - alias: Turn on lights when motion is detected
@@ -554,6 +570,31 @@ script:
         action: up
         entity_id: |
           {{ entity_id }}
+
+  pulse_record_cabinet_lights:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.record_cabinet_left
+          effect: colorloop
+      - service: light.turn_on
+        data:
+          entity_id: light.record_cabinet_right
+          effect: colorloop
+      - delay:
+          seconds: 30
+      - service: light.turn_off
+        data:
+          entity_id: light.record_cabinet_left
+      - service: light.turn_off
+        data:
+          entity_id: light.record_cabinet_right
+      - service: light.turn_on
+        data:
+          entity_id: light.record_cabinet_left
+      - service: light.turn_on
+        data:
+          entity_id: light.record_cabinet_right
 
 shell_command:
   wake_bookshelf: curl -v --retry 3 --retry-max-time 10 --max-time 30 -X POST bookshelf:8686/wake
