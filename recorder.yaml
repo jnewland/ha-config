@@ -6,6 +6,7 @@ exclude:
   - updater
   - group
   - vacuum
+  - counter
   entities:
   - sun.sun
   event_types:
