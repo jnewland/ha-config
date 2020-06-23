@@ -139,6 +139,14 @@ image_processing:
       - name: person
         confidence: 75
 
+binary_sensor:
+  - platform: template
+    sensors:
+      pergola_object_detected:
+        entity_id: image_processing.pergola
+        value_template: |
+          {{ float(states.image_processing.pergola.state | default(0)) > 0}}
+
 # Adding a unit allows these values to be graphed in the UI
 homeassistant:
   customize:
