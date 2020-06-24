@@ -96,8 +96,6 @@ homeassistant:
     light.cabinets:
       fixed_brightness: 255
 
-    light.bedside_table:
-      ignore_brightness: true
     light.bedside_table_white:
       ignore_brightness: true
     light.bedside_table_red:
@@ -109,19 +107,16 @@ homeassistant:
     light.bedside_table_brightness:
       ignore_brightness: true
 
-    light.back_porch_fountain_lights:
-      notify_action: duck
-      fixed_brightness: 255
-    light.back_porch_fountain_blue:
-      fixed_brightness: 0
-    light.back_porch_fountain_brightness:
-      fixed_brightness: 0
-    light.back_porch_fountain_green:
-      fixed_brightness: 0
-    light.back_porch_fountain_red:
-      fixed_brightness: 0
     light.back_porch_fountain_white:
-      fixed_brightness: 0
+      ignore_brightness: true
+    light.back_porch_fountain_green:
+      ignore_brightness: true
+    light.back_porch_fountain_red:
+      ignore_brightness: true
+    light.back_porch_fountain_blue:
+      ignore_brightness: true
+    light.back_porch_fountain_brightness:
+      ignore_brightness: true
 
     light.garage_hall:
       notify_action: duck
