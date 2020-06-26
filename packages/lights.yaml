@@ -356,7 +356,8 @@ automation:
         data_template:
           entity_id: |
             {%- for l in states.light if (
-                not l.attributes.fixed_brightness and
+                l.attributes.fixed_brightness is not defined and
+                l.attributes.ignore_brightness is not defined and
                 l.state == "on") -%}
               {{l.entity_id}}{% if not loop.last %}{{ ", " }}{% endif %}
             {%- endfor -%}
