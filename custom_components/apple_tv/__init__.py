@@ -163,7 +163,9 @@ class AppleTVManager:
 
     def connection_lost(self, exception):
         """Device was unexpectedly disconnected."""
-        _LOGGER.warning('Connection lost to Apple TV "%s"', self.atv.name)
+        _LOGGER.warning(
+            'Connection lost to Apple TV "%s"', self.config_entry.data.get(CONF_NAME)
+        )
         if self.atv:
             self.atv.listener = None
             self.atv.close()
@@ -275,11 +277,19 @@ class AppleTVManager:
         protocol = Protocol(self.config_entry.data[CONF_PROTOCOL])
 
         self._update_state(message="Discovering device...")
-        atvs = await scan(
-            self.hass.loop, identifier=identifier, protocol=protocol, hosts=[address]
-        )
-        if atvs:
-            return atvs[0]
+        try:
+            atvs = await scan(
+                self.hass.loop,
+                identifier=identifier,
+                protocol=protocol,
+                hosts=[address],
+            )
+            if atvs:
+                return atvs[0]
+        except exceptions.NonLocalSubnetError:
+            _LOGGER.debug(
+                "Address %s is on non-local subnet, relying on regular scan", address
+            )
 
         _LOGGER.debug(
             "Failed to find device %s with address %s, trying to scan",
@@ -317,7 +327,8 @@ class AppleTVManager:
         self._connection_attempts = 0
         if self._connection_was_lost:
             _LOGGER.info(
-                'Connection was re-established to Apple TV "%s"', self.atv.service.name
+                'Connection was re-established to Apple TV "%s"',
+                self.config_entry.data.get(CONF_NAME),
             )
             self._connection_was_lost = False
 
