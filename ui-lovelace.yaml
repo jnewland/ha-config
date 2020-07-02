@@ -26,17 +26,7 @@ views:
               - type: picture-entity
                 show_name: false
                 show_state: false
-                entity: camera.gate
-          - type: horizontal-stack
-            cards:
-              - type: picture-entity
-                show_name: false
-                show_state: false
-                entity: camera.garage
-              - type: picture-entity
-                show_name: false
-                show_state: false
-                entity: camera.back_porch
+                entity: camera.pergola
           - type: horizontal-stack
             cards:
               - type: picture-entity
@@ -46,7 +36,17 @@ views:
               - type: picture-entity
                 show_name: false
                 show_state: false
-                entity: camera.pergola
+                entity: camera.back_porch
+          - type: horizontal-stack
+            cards:
+              - type: picture-entity
+                show_name: false
+                show_state: false
+                entity: camera.gate
+              - type: picture-entity
+                show_name: false
+                show_state: false
+                entity: camera.garage
       - type: vertical-stack
         cards:
           - type: weather-forecast

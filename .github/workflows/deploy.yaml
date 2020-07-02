@@ -11,7 +11,7 @@ jobs:
       run: |
         openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
     - name: Test config
-      uses: docker://homeassistant/home-assistant:0.110.0
+      uses: docker://homeassistant/home-assistant:0.111.4
       env:
         ALARM_PASSWORD: ""
         ALARM_USERNAME: ""
@@ -30,6 +30,8 @@ jobs:
         CAMERA_URL_7: http://example.com
         CAMERA_URL_8: http://example.com
         CAMERA_URL_9: http://example.com
+        PERGOLA_CAMERA_STREAM_SOURCE: http://example.com
+        PERGOLA_CAMERA_STILL_IMAGE_URL: http://example.com
         CLIMATE_DASH: http://example.com
         DB_URL: ""
         DESK_HID_IDLE_TIME_RESOURCE: http://example.com

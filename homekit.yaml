@@ -27,3 +27,8 @@ filter:
     - script.living_lights
 
     - vacuum.downstairs980
+    - camera.pergola
+entity_config:
+  camera.pergola:
+    linked_motion_sensor: binary_sensor.pergola_object_detected
+    video_codec: copy
