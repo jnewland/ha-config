@@ -16,7 +16,6 @@ default_config:
 alarm_control_panel: !include alarm_control_panel.yaml
 automation: !include_dir_list automation
 binary_sensor: !include_dir_list binary_sensors
-camera: !include camera.yaml
 cover: !include cover.yaml
 conversation:
 device_tracker: !include device_tracker.yaml
@@ -25,16 +24,22 @@ emulated_hue:
   expose_by_default: false
 frontend: !include frontend.yaml
 group: !include_dir_named groups
-history: !include history.yaml
-http: !include http.yaml
+history:
+http:
 homekit: !include homekit.yaml
 ifttt: !include ifttt.yaml
 ios: !include ios.yaml
-image_processing: !include image_processing.yaml
 input_boolean: !include input_boolean.yaml
 input_select: !include input_select.yaml
 lovelace:
   mode: yaml
+  resources:
+    - url: /local/monster-card.js?v=1
+      type: js
+    - url: /local/entity-attributes-card.js?v=3
+      type: js
+    - url: /local/auto-entities.js
+      type: module
 light:
 logger: !include logger.yaml
 map:
@@ -48,6 +53,10 @@ script: !include_dir_named scripts
 sensor: !include_dir_list sensors
 sun:
 switch: !include_dir_list switches
+synology_dsm:
+  - host: diskstation
+    username: home-assistant
+    password: !env_var DISKSTATION_GUEST_PASSWORD
 system_health:
 system_log:
   fire_event: true
@@ -58,4 +67,3 @@ weather:
   - platform: darksky
     api_key: !env_var FORECAST_API_KEY
 zone: !include zone.yaml
-vacuum: !include_dir_list vacuums

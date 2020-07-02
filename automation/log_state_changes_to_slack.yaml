@@ -27,7 +27,6 @@ trigger:
     - sensor.katie_s_iphone_battery_state
     - sensor.katie_s_iphone_activity
     - sensor.jphone_11_pro_activity
-    - sensor.image_processing_summary
     - device_tracker.katie_s_iphone
     - device_tracker.jphone_11_pro
     - device_tracker.jesses_ipad
@@ -48,6 +47,7 @@ trigger:
     - media_player.house_mpr6zhmaut
     - media_player.house_office
     - media_player.patio_speakers
+    - media_player.forked_daapd_server
     - weather.dark_sky
 condition:
   condition: template

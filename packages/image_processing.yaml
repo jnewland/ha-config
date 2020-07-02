@@ -1,15 +1,184 @@
-sensor:
-- platform: template
-  sensors:
-    image_processing_summary:
-      friendly_name: Image processing summary
-      entity_id:
-        - image_processing.atrium
-        - image_processing.back_porch
-        - image_processing.front_yard_left
-        - image_processing.pergola
-      value_template: |
-        {% for state in states.image_processing if state.attributes.total_matches > 0 -%}
-          {%- if loop.first %}Detected {% elif loop.last %}, and {% else %}, {% endif -%}
-          {% for thing in state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %} on {{ state.name | lower }} camera
-        {%- endfor %}
+camera:
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_1
+    name: gate
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_2
+    name: back porch
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_3
+    name: front yard left
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_4
+    name: atrium
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_5
+    name: garage
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_6
+    name: ac
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_7
+    name: front yard right
+  - platform: mjpeg
+    mjpeg_url: !env_var CAMERA_URL_8
+    name: side yard
+  - platform: generic
+    stream_source: !env_var PERGOLA_CAMERA_STREAM_SOURCE
+    still_image_url: !env_var PERGOLA_CAMERA_STILL_IMAGE_URL
+    name: pergola
+
+  # local_file cameras are setup for to support displaying snapshots with objects highlighted
+  - platform: local_file
+    file_path: /tmp/doods_atrium.jpg
+    name: doods_atrium
+  - platform: local_file
+    file_path: /tmp/doods_back_porch.jpg
+    name: doods_back_porch
+  - platform: local_file
+    file_path: /tmp/doods_front_yard_left.jpg
+    name: doods_front_yard_left
+  - platform: local_file
+    file_path: /tmp/doods_pergola.jpg
+    name: doods_pergola
+
+# Process images from selected cameras on an interval and look for interesting objects
+# Uses a copy of https://hub.docker.com/r/snowzach/doods running at http://doods:8080
+# with the following script run on startup to use the faster_rcnn_inception_v2_coco_2018_01_28 model
+#
+#     cd /config
+#     mkdir -p models
+#     wget http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
+#     tar -zxvf faster_rcnn_inception_v2_coco_2018_01_28.tar.gz faster_rcnn_inception_v2_coco_2018_01_28/frozen_inference_graph.pb --strip=1
+#     mv frozen_inference_graph.pb models/faster_rcnn_inception_v2_coco_2018_01_28.pb
+#     rm faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
+#     wget https://raw.githubusercontent.com/amikelive/coco-labels/master/coco-labels-2014_2017.txt
+#     mv coco-labels-2014_2017.txt models/coco_labels1.txt
+#     cat << EOF > /config/tensorflow.yaml
+#     doods:
+#       detectors:
+#         - name: default
+#           type: tensorflow
+#           modelFile: /config/models/faster_rcnn_inception_v2_coco_2018_01_28.pb
+#           labelFile: /config/models/coco_labels1.txt
+#           numThreads: 1
+#           numConcurrent: 4
+#     EOF
+#
+image_processing:
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.pergola
+        name: pergola
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.atrium
+        name: atrium
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+    area:
+      # Exclude left part of image
+      left: 0.20
+      covers: false
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.back_porch
+        name: back porch
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  # The bottom two thirds of the front yard camera
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.front_yard_left
+        name: front yard left
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+    area:
+      # Exclude street
+      top: 0.18
+      covers: false
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+binary_sensor:
+  - platform: template
+    sensors:
+      pergola_object_detected:
+        entity_id: image_processing.pergola
+        value_template: |
+          {{ float(states.image_processing.pergola.state | default(0)) > 0}}
+
+# Adding a unit allows these values to be graphed in the UI
+homeassistant:
+  customize:
+    image_processing.atrium:
+      unit_of_measurement: objects
+    image_processing.back_porch:
+      unit_of_measurement: objects
+    image_processing.front_yard_left:
+      unit_of_measurement: objects
+    image_processing.pergola:
+      unit_of_measurement: objects
+
+automation:
+  - alias: Post doods matches to slack
+    trigger:
+      platform: event
+      event_type: state_changed
+    condition:
+      condition: and
+      conditions:
+        - condition: template
+          value_template: |
+            {{
+              trigger.event.data.new_state.domain == "image_processing" and
+              trigger.event.data.new_state.attributes.total_matches > 0
+            }}
+    action:
+      - service: notify.slack
+        data_template:
+          title: |
+            {{ trigger.event.data.new_state.attributes.friendly_name }}
+          message: |
+            {% for thing in trigger.event.data.new_state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %}
+          data:
+            file: /tmp/doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] }}.jpg

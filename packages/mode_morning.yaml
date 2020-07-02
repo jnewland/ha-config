@@ -47,5 +47,7 @@ automation:
       entity_id:
         - group.speakers
         - light.cabinets
+        - light.record_cabinet_left
+        - light.record_cabinet_right
     - service: alarm_control_panel.alarm_disarm
       entity_id: alarm_control_panel.alarm

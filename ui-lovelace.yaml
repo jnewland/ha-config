@@ -16,7 +16,7 @@ views:
               - cover.gate
               - binary_sensor.front_gate
               - input_number.brightness
-              - vacuum.downstairs_roomba
+              - vacuum.downstairs980
           - type: horizontal-stack
             cards:
               - type: picture-entity
@@ -26,17 +26,7 @@ views:
               - type: picture-entity
                 show_name: false
                 show_state: false
-                entity: camera.gate
-          - type: horizontal-stack
-            cards:
-              - type: picture-entity
-                show_name: false
-                show_state: false
-                entity: camera.garage
-              - type: picture-entity
-                show_name: false
-                show_state: false
-                entity: camera.back_porch
+                entity: camera.pergola
           - type: horizontal-stack
             cards:
               - type: picture-entity
@@ -46,17 +36,30 @@ views:
               - type: picture-entity
                 show_name: false
                 show_state: false
-                entity: camera.pergola
+                entity: camera.back_porch
+          - type: horizontal-stack
+            cards:
+              - type: picture-entity
+                show_name: false
+                show_state: false
+                entity: camera.gate
+              - type: picture-entity
+                show_name: false
+                show_state: false
+                entity: camera.garage
       - type: vertical-stack
         cards:
           - type: weather-forecast
             entity: weather.dark_sky
           - type: picture
             image: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=GRK&brand=wui&num=10&delay=25&type=N0R&frame=0&scale=1&noclutter=1&showstorms=99&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=0&rainsnow=1&lightning=1&smooth=1&rand=24691285&lat=0&lon=0&label=you
-          - type: glance
+      - type: vertical-stack
+        cards:
+          - type: map
             entities:
-              - device_tracker.katie_s_iphone
               - device_tracker.jphone_11_pro
+              - device_tracker.katie_s_iphone
+            hours_to_show: 24
   - title: Cameras
     icon: mdi:video
     cards:
@@ -88,14 +91,6 @@ views:
         show_name: false
         show_state: false
         entity: camera.garage
-      - type: picture-entity
-        show_name: false
-        show_state: false
-        entity: camera.atrium_fountain
-      - type: picture-entity
-        show_name: false
-        show_state: false
-        entity: camera.back_porch_fountain
       - type: picture-entity
         show_name: false
         show_state: false
@@ -245,7 +240,7 @@ views:
             - switch.stairs_motion.battery_level
             - switch.upstairs_motion.battery_level
             - switch.wine_room_motion.battery_level
-            - vacuum.downstairs_roomba.battery_level
+            - vacuum.downstairs980.battery_level
   - title: Speakers
     icon: mdi:speaker
     cards:
@@ -261,6 +256,25 @@ views:
         entity: media_player.master_bedroom_speakers
       - type: media-control
         entity: media_player.patio_speakers
+
+  - path: record-player
+    title: Record player
+    icon: mdi:record-player
+    cards:
+      - type: custom:auto-entities
+        show_empty: false
+        sort:
+          method: id
+        card:
+          type: entities
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: "/media_player.forked_daapd.*/"
+      - type: entities
+        entities:
+          - light.record_cabinet_left
+          - light.record_cabinet_right
 
   - title: Upstairs
     icon: mdi:hotel
@@ -328,16 +342,16 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.great*_temp/"
-            - entity_id: "/^sensor.powder*_temp/"
+            - entity_id: "/^sensor.kitchen*_temp/"
+            - entity_id: "/^sensor.powder_room*_temp/"
       - type: custom:auto-entities
         card:
           type: history-graph
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.great*_light$/"
-            - entity_id: "/^sensor.powder*_light$/"
+            - entity_id: "/^sensor.kitchen*_light$/"
+            - entity_id: "/^sensor.powder_room*_light$/"
 
   - title: Outdoor
     icon: mdi:tree
@@ -439,22 +453,23 @@ views:
           - light.guest_hall
           - light.guest_bath
           - light.guest_shower
-          - light.guest_room_bedside_left
-          - light.guest_room_bedside_right
+          - light.guest_room_lamp
       - type: custom:auto-entities
         card:
           type: history-graph
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.guest*_temp/"
+            - entity_id: "/^sensor.guest_hall*_temp/"
+            - entity_id: "/^sensor.guest_bath*_temp/"
       - type: custom:auto-entities
         card:
           type: history-graph
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.guest*_light$/"
+            - entity_id: "/^sensor.guest_hall*_light$/"
+            - entity_id: "/^sensor.guest_bath*_light$/"
 
   - title: Settings
     icon: mdi:settings
@@ -465,7 +480,7 @@ views:
         entities:
           - input_boolean.guests
           - automation.away_mode
-          - vacuum.downstairs_roomba
+          - vacuum.downstairs980
       - type: entities
         entities:
           - sensor.current_version
@@ -566,10 +581,3 @@ views:
         filter:
           include:
             - entity_id: "/dcp_l2540dw/"
-resources:
-  - url: /local/monster-card.js?v=1
-    type: js
-  - url: /local/entity-attributes-card.js?v=3
-    type: js
-  - url: /local/auto-entities.js
-    type: module
