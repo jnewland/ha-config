@@ -136,6 +136,8 @@ views:
           - light.marble_lamp
           - light.exercise_bike
           - binary_sensor.office_motion
+      - type: media-control
+        entity: media_player.office
       - type: custom:auto-entities
         card:
           type: history-graph
@@ -159,6 +161,8 @@ views:
         entities:
           - light.music_room
           - binary_sensor.music_room_motion
+      - type: media-control
+        entity: media_player.music_room
       - type: custom:auto-entities
         card:
           type: history-graph
@@ -302,6 +306,8 @@ views:
           - light.master_toilet
           - switch.master_bath_fan
           - binary_sensor.master_bath_motion
+      - type: media-control
+        entity: media_player.bedroom
       - type: custom:auto-entities
         card:
           type: history-graph
