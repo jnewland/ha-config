@@ -10,13 +10,14 @@ script:
   deploy:
     sequence:
     - service: notify.slack
-      message: ':shipit:'
       data:
-        blocks_template:
-        - type: section
-          text:
-            type: mrkdwn
-            text: ':shipit: https://github.com/jnewland/ha-config/commit/{{ sha }}/checks'
+        message: ':shipit:'
+        data:
+          blocks_template:
+          - type: section
+            text:
+              type: mrkdwn
+              text: ':shipit: https://github.com/jnewland/ha-config/commit/{{ sha }}/checks'
     - service: shell_command.deploy
       data_template:
           sha: "{{ sha }}"
