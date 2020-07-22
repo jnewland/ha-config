@@ -172,21 +172,21 @@ views:
         entities:
           - light.yoga_room
           - light.marble_lamp
-          - binary_sensor.yoga_motion
+          - binary_sensor.yoga_room_motion
       - type: custom:auto-entities
         card:
           type: history-graph
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.yoga_room*_temp/"
+            - entity_id: "/^sensor.yoga_room_temp/"
       - type: custom:auto-entities
         card:
           type: history-graph
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.yoga*_light$/"
+            - entity_id: "/^sensor.yoga_room_light$/"
 
   - title: Lights
     icon: mdi:lightbulb
