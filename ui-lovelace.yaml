@@ -133,7 +133,6 @@ views:
         entities:
           - light.office_overhead
           - light.office_chandelier
-          - light.marble_lamp
           - light.exercise_bike
           - binary_sensor.office_motion
       - type: media-control
@@ -157,26 +156,37 @@ views:
     icon: mdi:guitar-pick
     cards:
       - type: entities
-        title: Music Room
         entities:
-          - light.music_room
-          - binary_sensor.music_room_motion
+          - light.bookshelf
+          - light.striped_lamp
+          - light.network_closet
+          # TODO
+          # - binary_sensor.music_room_motion
       - type: media-control
         entity: media_player.music_room
+
+  - title: Yoga Room
+    icon: mdi:self_improvement
+    cards:
+      - type: entities
+        entities:
+          - light.yoga_room
+          - light.marble_lamp
+          - binary_sensor.yoga_motion
       - type: custom:auto-entities
         card:
           type: history-graph
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.music_room*_temp/"
+            - entity_id: "/^sensor.yoga_room*_temp/"
       - type: custom:auto-entities
         card:
           type: history-graph
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.music_room*_light$/"
+            - entity_id: "/^sensor.yoga*_light$/"
 
   - title: Lights
     icon: mdi:lightbulb

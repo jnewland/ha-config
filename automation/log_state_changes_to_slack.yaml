@@ -19,7 +19,7 @@ trigger:
     - binary_sensor.office_motion
     - binary_sensor.upstairs_motion
     - binary_sensor.guest_hall_motion
-    - binary_sensor.music_room_motion
+    - binary_sensor.yoga_room_motion
     - binary_sensor.kitchen_motion
     - binary_sensor.front_gate
     - sensor.core_ups_state

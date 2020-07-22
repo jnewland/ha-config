@@ -1,3 +1,5 @@
 name: music room
 entities:
-- light.music_room
+- light.bookshelf
+- light.striped_lamp
+- light.network_closet
