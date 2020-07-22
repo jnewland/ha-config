@@ -166,7 +166,7 @@ views:
         entity: media_player.music_room
 
   - title: Yoga Room
-    icon: mdi:self_improvement
+    icon: mdi:yoga
     cards:
       - type: entities
         entities:
