@@ -383,6 +383,7 @@ views:
       - type: entities
         title: atrium
         entities:
+          - light.bamboo
           - light.atrium
           - light.atrium_door
           - light.garage_door
