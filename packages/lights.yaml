@@ -58,9 +58,9 @@ homeassistant:
       trigger_entity_id_off: light.garage_hall
     binary_sensor.yoga_room_motion:
       friendly_name: yoga room motion
-      trigger_entity_id: light.yoga_room
-      trigger_entity_id_off: light.yoga_room
-      off_delay_seconds: 300
+      trigger_entity_id: group.yoga_room
+      trigger_entity_id_off: group.yoga_room
+      off_delay_seconds: 600
     binary_sensor.great_room_occupied:
       trigger_service: script.living_lights
       trigger_entity_id_off: group.great_room
