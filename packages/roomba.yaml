@@ -49,7 +49,7 @@ automation:
       entity_id: input_select.mode
       to: Reading
     action:
-      - service: vacuum.turn_on
+      - service: vacuum.start
         entity_id: vacuum.downstairs980
 
 
