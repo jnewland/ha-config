@@ -172,6 +172,7 @@ views:
         entities:
           - light.yoga_room
           - light.marble_lamp
+          - light.yoga_closet
           - binary_sensor.yoga_room_motion
       - type: custom:auto-entities
         card:
