@@ -40,6 +40,10 @@ homeassistant:
       trigger_service: script.office_lights
       trigger_entity_id_off: group.office
       off_delay_seconds: 1800
+    binary_sensor.music_room_motion:
+      trigger_service: script.music_room
+      trigger_entity_id_off: group.music_room
+      off_delay_seconds: 1800
     binary_sensor.master_bath_motion:
       trigger_service: script.master_bath_lights
       trigger_entity_id_off: group.master_bath
@@ -56,11 +60,11 @@ homeassistant:
     binary_sensor.garage_hall_motion:
       trigger_entity_id: light.garage_hall
       trigger_entity_id_off: light.garage_hall
-    binary_sensor.music_room_motion:
-      friendly_name: music room motion
-      trigger_service: script.music_room
-      trigger_entity_id_off: light.music_room
-      off_delay_seconds: 300
+    binary_sensor.yoga_room_motion:
+      friendly_name: yoga room motion
+      trigger_entity_id: group.yoga_room
+      trigger_entity_id_off: group.yoga_room
+      off_delay_seconds: 600
     binary_sensor.great_room_occupied:
       trigger_service: script.living_lights
       trigger_entity_id_off: group.great_room
@@ -160,7 +164,7 @@ homeassistant:
       notify_action: duck
     light.master_toilet:
       notify_action: duck
-    light.music_room:
+    light.yoga_room:
       notify_action: duck
     light.office_chandelier:
       notify_action: duck
@@ -395,6 +399,28 @@ automation:
             {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
       - service: counter.increment
         entity_id: counter.light_automations
+
+  - alias: Turn on lights when devices enter zones
+    trigger:
+      platform: state
+      entity_id:
+      - device_tracker.jphone_11_pro
+      - device_tracker.katie_s_iphone
+    condition:
+      condition: template
+      value_template: |
+        {{
+          trigger.from_state.state != trigger.to_state.state and
+          trigger.to_state.attributes.trigger_entity_id is defined
+        }}
+    action:
+      service_template: |
+        {{ trigger.to_state.attributes.trigger_service | default('homeassistant.turn_on') }}
+      data_template:
+        entity_id: |
+          {{ trigger.to_state.attributes.trigger_entity_id }}
+        brightness: |
+          {{ trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
 
   - alias: log light changes to slack
     trigger:

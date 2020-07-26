@@ -1,0 +1,4 @@
+name: yoga room
+entities:
+- light.yoga_room
+- light.marble_lamp
