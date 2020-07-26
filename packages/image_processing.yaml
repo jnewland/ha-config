@@ -1,32 +1,32 @@
 camera:
-  - platform: mjpeg
-    mjpeg_url: !env_var CAMERA_URL_1
-    name: gate
-  - platform: mjpeg
-    mjpeg_url: !env_var CAMERA_URL_2
-    name: back porch
-  - platform: mjpeg
-    mjpeg_url: !env_var CAMERA_URL_3
-    name: front yard left
-  - platform: mjpeg
-    mjpeg_url: !env_var CAMERA_URL_4
-    name: atrium
-  - platform: mjpeg
-    mjpeg_url: !env_var CAMERA_URL_5
-    name: garage
-  - platform: mjpeg
-    mjpeg_url: !env_var CAMERA_URL_6
-    name: ac
-  - platform: mjpeg
-    mjpeg_url: !env_var CAMERA_URL_7
-    name: front yard right
-  - platform: mjpeg
-    mjpeg_url: !env_var CAMERA_URL_8
-    name: side yard
-  - platform: generic
+  - name: gate
+    platform: generic
+    stream_source: http://gate-stream.cameras
+    still_image_url: http://gate.cameras
+  - name: back porch
+    platform: generic
+    stream_source: http://back-porch-stream.cameras
+    still_image_url: http://back-porch.cameras
+  - name: front yard left
+    platform: generic
+    stream_source: http://front-yard-left-stream.cameras
+    still_image_url: http://front-yard-left.cameras
+  - name: atrium
+    platform: generic
+    stream_source: http://atrium-stream.cameras
+    still_image_url: http://atrium.cameras
+  - name: garage
+    platform: generic
+    stream_source: http://garage-stream.cameras
+    still_image_url: http://garage.cameras
+  - name: ac
+    platform: generic
+    stream_source: http://ac-stream.cameras
+    still_image_url: http://ac.cameras
+  - name: pergola
+    platform: generic
     stream_source: !env_var PERGOLA_CAMERA_STREAM_SOURCE
     still_image_url: !env_var PERGOLA_CAMERA_STILL_IMAGE_URL
-    name: pergola
 
   # local_file cameras are setup for to support displaying snapshots with objects highlighted
   - platform: local_file
