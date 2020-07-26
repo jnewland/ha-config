@@ -432,7 +432,7 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.*_temp/"
+            - entity_id: "/^sensor.*_temperature/"
 
       - type: custom:auto-entities
         card:
