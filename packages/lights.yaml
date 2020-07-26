@@ -40,6 +40,10 @@ homeassistant:
       trigger_service: script.office_lights
       trigger_entity_id_off: group.office
       off_delay_seconds: 1800
+    binary_sensor.music_room_motion:
+      trigger_service: script.music_room
+      trigger_entity_id_off: group.music_room
+      off_delay_seconds: 1800
     binary_sensor.master_bath_motion:
       trigger_service: script.master_bath_lights
       trigger_entity_id_off: group.master_bath
