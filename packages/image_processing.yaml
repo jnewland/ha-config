@@ -182,4 +182,5 @@ automation:
           message: |
             {% for thing in trigger.event.data.new_state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %}
           data:
-            file: /tmp/doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] }}.jpg
+            file:
+              path: /tmp/doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] }}.jpg

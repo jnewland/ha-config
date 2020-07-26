@@ -19,7 +19,5 @@ action:
   - service: notify.slack
     data_template:
       message: ":camera_with_flash: The front gate just opened!"
-      data:
-        attachments:
-        - title: Front yard left
-          image_url: "https://home.jnewland.com/{{ states.camera.front_yard_left.attributes.entity_picture }}"
+      file:
+        url: "https://home.jnewland.com/{{ states.camera.front_yard_left.attributes.entity_picture }}"

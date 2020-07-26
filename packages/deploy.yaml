@@ -10,10 +10,10 @@ script:
   deploy:
     sequence:
     - service: notify.slack
-      data:
+      data_template:
         message: ':shipit:'
         data:
-          blocks_template:
+          blocks:
           - type: section
             text:
               type: mrkdwn
