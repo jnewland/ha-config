@@ -291,7 +291,7 @@ views:
           - light.record_cabinet_right
 
   - title: Upstairs
-    icon: mdi:hotel
+    icon: mdi:bed
     cards:
       - type: entities
         title: bedroom
@@ -488,7 +488,7 @@ views:
             - entity_id: "/^sensor.guest_bath*_light$/"
 
   - title: Settings
-    icon: mdi:settings
+    icon: mdi:cog
     cards:
       - type: entities
         title: settings
