@@ -8,7 +8,8 @@ views:
         cards:
           - type: picture-glance
             camera_image: camera.front_yard_left
-            camera_view: live
+            # Oddly seems to overlay the entities on safari?
+            # camera_view: live
             entities:
               - input_select.mode
               - alarm_control_panel.alarm
