@@ -8,8 +8,6 @@ views:
         cards:
           - type: picture-glance
             camera_image: camera.front_yard_left
-            # Oddly seems to overlay the entities on safari?
-            # camera_view: live
             entities:
               - input_select.mode
               - alarm_control_panel.alarm
@@ -25,30 +23,25 @@ views:
                 show_name: false
                 show_state: false
                 entity: camera.pergola
-                camera_view: live
           - type: horizontal-stack
             cards:
               - type: picture-entity
                 show_name: false
                 show_state: false
                 entity: camera.atrium
-                camera_view: live
               - type: picture-entity
                 show_name: false
                 show_state: false
                 entity: camera.back_porch
-                camera_view: live
           - type: horizontal-stack
             cards:
               - type: picture-entity
                 show_name: false
                 show_state: false
                 entity: camera.gate
-                camera_view: live
               - type: picture-entity
                 show_name: false
                 show_state: false
-                camera_view: live
                 entity: camera.garage
       - type: vertical-stack
         cards:
