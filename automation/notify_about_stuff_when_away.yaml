@@ -1,4 +1,5 @@
 alias: Notify about stuff when we're away
+mode: parallel
 trigger:
   platform: state
   entity_id:

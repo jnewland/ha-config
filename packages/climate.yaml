@@ -24,6 +24,7 @@ sensor:
 
 automation:
   - alias: downstairs heat
+    mode: queued
     trigger:
       platform: numeric_state
       entity_id:
@@ -51,6 +52,7 @@ automation:
           temperature: 72
 
   - alias: downstairs AC
+    mode: queued
     trigger:
       platform: numeric_state
       entity_id:
@@ -78,6 +80,7 @@ automation:
           temperature: 72
 
   - alias: upstairs heat
+    mode: queued
     trigger:
       platform: numeric_state
       entity_id:
@@ -104,6 +107,7 @@ automation:
           temperature: 69
 
   - alias: upstairs AC
+    mode: queued
     trigger:
       platform: numeric_state
       entity_id:
@@ -125,6 +129,7 @@ automation:
           temperature: 73
 
   - alias: upstairs reading
+    mode: queued
     trigger:
     - platform: state
       entity_id: input_select.mode
@@ -148,6 +153,7 @@ automation:
           fan_mode: "on"
 
   - alias: upstairs sleeping
+    mode: queued
     trigger:
     - platform: state
       entity_id: input_select.mode
@@ -171,6 +177,7 @@ automation:
           temperature: 69
 
   - alias: upstairs morning climate reset
+    mode: queued
     trigger:
     - platform: state
       entity_id: input_select.mode
