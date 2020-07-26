@@ -20,4 +20,3 @@ action:
   - service: notify.slack
     data_template:
       message: ':+1: to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}'
-      target: "#general"

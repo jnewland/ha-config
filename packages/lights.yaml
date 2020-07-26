@@ -460,7 +460,6 @@ automation:
           Off
           {%- endif -%}{{ " " -}}
           for {{ relative_time(trigger.event.data.old_state.last_changed) }}
-        target: "#general"
 
 counter:
   light_automations:
