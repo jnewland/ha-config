@@ -28,7 +28,19 @@ filter:
 
     - vacuum.downstairs980
     - camera.pergola
+    - camera.front_yard_left
+    - camera.gate
+    - camera.garage
+    - binary_sensor.pergola_object_detected
+    - binary_sensor.front_yard_left_object_detected
 entity_config:
   camera.pergola:
     linked_motion_sensor: binary_sensor.pergola_object_detected
+    video_codec: copy
+  camera.front_yard_left:
+    linked_motion_sensor: binary_sensor.front_yard_left_object_detected
+    video_codec: copy
+  camera.gate:
+    video_codec: copy
+  camera.garage:
     video_codec: copy
