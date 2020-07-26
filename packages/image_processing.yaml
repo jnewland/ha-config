@@ -161,6 +161,7 @@ homeassistant:
 
 automation:
   - alias: Post doods matches to slack
+    mode: parallel
     trigger:
       platform: event
       event_type: state_changed

@@ -188,6 +188,7 @@ binary_sensor:
 
 automation:
   - alias: Turn on lights when motion is detected
+    mode: parallel
     trigger:
       platform: event
       event_type: state_changed
@@ -227,6 +228,7 @@ automation:
         entity_id: counter.light_automations
 
   - alias: Turn off lights after sensors have turned off
+    mode: parallel
     trigger:
       platform: event
       event_type: state_changed
@@ -260,6 +262,7 @@ automation:
             {{ (as_timestamp(now()) * 1000000) | int }}{{ range(0,9999) | random }}
 
   - alias: Turn off lights immediately
+    mode: parallel
     trigger:
       platform: event
       event_type: lights_motion_sensor_off
@@ -284,6 +287,7 @@ automation:
         entity_id: counter.light_automations
 
   - alias: Turn off lights with delay
+    mode: parallel
     trigger:
       platform: event
       event_type: lights_motion_sensor_off
@@ -352,6 +356,7 @@ automation:
         entity_id: counter.light_automations
 
   - alias: React to changes of the brightness slider
+    mode: queued
     trigger:
       platform: state
       entity_id: input_number.brightness
@@ -371,6 +376,7 @@ automation:
         entity_id: counter.light_automations
 
   - alias: Set lights to correct brightness when turned on
+    mode: parallel
     trigger:
       platform: event
       event_type: state_changed
@@ -401,6 +407,7 @@ automation:
         entity_id: counter.light_automations
 
   - alias: Turn on lights when devices enter zones
+    mode: parallel
     trigger:
       platform: state
       entity_id:
@@ -423,6 +430,7 @@ automation:
           {{ trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
 
   - alias: log light changes to slack
+    mode: parallel
     trigger:
       platform: event
       event_type: state_changed

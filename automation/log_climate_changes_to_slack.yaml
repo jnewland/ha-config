@@ -1,4 +1,5 @@
 alias: log climate changes to slack
+mode: parallel
 trigger:
   platform: state
   entity_id: climate.great_room_27, climate.upstairs_28, climate.office
