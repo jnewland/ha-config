@@ -570,11 +570,10 @@ script:
       - service: light.turn_on
         data_template:
           entity_id:
-          - light.office_desk_lamp
           - light.office_closet
           - light.office_overhead
           - light.office_chandelier
-          - light.exercise_bike
+          - light.coat_closet
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
       - condition: template
