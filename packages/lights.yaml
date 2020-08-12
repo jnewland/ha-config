@@ -83,7 +83,10 @@ homeassistant:
     # duck_step: int | default(127)
     light.atrium:
       notify_action: duck
-      fixed_brightness: 255
+      fixed_brightness: 127
+    light.bamboo:
+      notify_action: duck
+      fixed_brightness: 127
     light.front_porch:
       fixed_brightness: 255
     light.front_door:
