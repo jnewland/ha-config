@@ -34,5 +34,8 @@ sequence:
 - condition: template
   value_template: >
     {{ states.input_boolean.guests.state != "on" }}
-- service: alarm_control_panel.alarm_arm_home
-  entity_id: alarm_control_panel.alarm
+- service: script.ask_about_turning_on
+data_template:
+    entity_id: script.arm
+    message: "Arm the alarm?"
+    confirmation_message: armed the alarm
