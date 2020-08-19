@@ -37,3 +37,9 @@ automation:
         message: |
           Core UPS reports status of {{ states.sensor.core_ups_state.state | default("Unknown") }} with input of {{ float(states.sensor.core_ups_input_voltage.state) | default(0) | round }} {{ states.sensor.core_ups_input_voltage.attributes.unit_of_measurement }}.{{" "-}}
           Battery runtime estimated to be {{ ((float(states.sensor.core_ups_battery_runtime.state) | default(1))/60) | round }} minutes.
+        data:
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
