@@ -12,7 +12,8 @@ action:
           category: camera
         entity_id: camera.front_yard_left
         attachment:
-          url: "https://home.jnewland.com/{{ states.camera.front_yard_left.attributes.entity_picture }}"
+          url: |
+            https://home.jnewland.com{{ states.camera.front_yard_left.attributes.entity_picture }}
           content-type: jpeg
           hide-thumbnail: false
   - service: script.notify_with_lights
@@ -21,4 +22,5 @@ action:
       message: ":camera_with_flash: The front gate just opened!"
       data:
         file:
-          url: "https://home.jnewland.com/{{ states.camera.front_yard_left.attributes.entity_picture }}"
+          url: |
+            https://home.jnewland.com{{ states.camera.front_yard_left.attributes.entity_picture }}
