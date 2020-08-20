@@ -1,5 +1,4 @@
 alias: log media to slack
-mode: parallel
 trigger:
   platform: state
   entity_id:
