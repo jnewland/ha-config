@@ -23,7 +23,7 @@ action:
     title: |
       {{ trigger.to_state.name | capitalize }}
     message: |
-      { trigger.to_state.attributes.media_artist }} - {{ trigger.to_state.attributes.media_album_name | default("") }} - {{ trigger.to_state.attributes.media_title }}
+      {{ trigger.to_state.attributes.media_artist }} - {{ trigger.to_state.attributes.media_album_name | default("") }} - {{ trigger.to_state.attributes.media_title }}
     data:
       file:
         url: |
