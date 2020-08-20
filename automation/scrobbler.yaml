@@ -12,7 +12,7 @@ condition:
     {{
       (
         new_state.state == "playing" and
-        new_state.attributes.media_content_type == "music"
+        new_state.attributes.media_content_type == "music" and
         new_state.attributes.entity_picture and
         new_state.attributes.entity_picture != old_state.attributes.entity_picture
       )
