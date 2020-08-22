@@ -1,0 +1,25 @@
+// TODO
+// default environment variables so that ./script/cibuild works?
+// share image between this and actions somehow?
+{
+    "name": "Home Assistant Config",
+    "image": "homeassistant/home-assistant:0.114.2",
+    "extensions": [
+      "redhat.vscode-yaml",
+      "esbenp.prettier-vscode"
+    ],
+    "settings": {
+      "editor.formatOnPaste": false,
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true,
+      "files.trimTrailingWhitespace": true,
+      "terminal.integrated.shell.linux": "/bin/bash",
+      "yaml.customTags": [
+        "!secret scalar",
+        "!include_dir_named scalar",
+        "!include_dir_list scalar",
+        "!include_dir_merge_list scalar",
+        "!include_dir_merge_named scalar"
+      ]
+    }
+  }

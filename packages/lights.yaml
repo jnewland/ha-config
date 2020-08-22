@@ -430,14 +430,14 @@ automation:
         - condition: template
           value_template: |
             {{ trigger.event.data.new_state.attributes.color_temp | default(255) !=
-              trigger.event.data.new_state.attributes.color_temp | int) }}
+              trigger.event.data.new_state.attributes.color_temp | int }}
     action:
       - service: light.turn_on
         data_template:
           entity_id: |
             {{ trigger.event.data.new_state.entity_id }}
           color_temp: |
-            {{ trigger.event.data.new_state.attributes.color_temp | int) }}
+            {{ trigger.event.data.new_state.attributes.color_temp }}
       - service: counter.increment
         entity_id: counter.light_automations
 
