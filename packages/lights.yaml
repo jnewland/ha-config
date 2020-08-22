@@ -87,6 +87,7 @@ homeassistant:
     light.bamboo:
       notify_action: duck
       fixed_brightness: 127
+      color_temp: 396
     light.front_porch:
       fixed_brightness: 255
     light.front_door:
@@ -406,6 +407,37 @@ automation:
             {{ trigger.event.data.new_state.entity_id }}
           brightness: |
             {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+      - service: counter.increment
+        entity_id: counter.light_automations
+
+  - alias: Set lights to correct color temp when turned on
+    mode: parallel
+    trigger:
+      platform: event
+      event_type: state_changed
+    condition:
+      condition: and
+      conditions:
+        - condition: template
+          value_template: |
+            {{
+              trigger.event.data.old_state != None and
+              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+              trigger.event.data.new_state.domain == "light" and
+              trigger.event.data.new_state.state == "on" and
+              trigger.event.data.new_state.attributes.color_temp is defined
+            }}
+        - condition: template
+          value_template: |
+            {{ trigger.event.data.new_state.attributes.color_temp | default(255) !=
+              trigger.event.data.new_state.attributes.color_temp | int) }}
+    action:
+      - service: light.turn_on
+        data_template:
+          entity_id: |
+            {{ trigger.event.data.new_state.entity_id }}
+          color_temp: |
+            {{ trigger.event.data.new_state.attributes.color_temp | int) }}
       - service: counter.increment
         entity_id: counter.light_automations
 
