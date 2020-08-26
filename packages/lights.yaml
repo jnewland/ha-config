@@ -394,7 +394,8 @@ automation:
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "light" and
               trigger.event.data.new_state.state == "on" and
-              trigger.event.data.new_state.attributes.ignore_brightness is not defined
+              trigger.event.data.new_state.attributes.ignore_brightness is not defined and
+              trigger.event.data.new_state.attributes.color_temp is not defined
             }}
         - condition: template
           value_template: |
