@@ -106,6 +106,8 @@ homeassistant:
 
     light.bookshelf:
       color_temp: 396
+    light.striped_lamp:
+      color_temp: 396
 
     light.bedside_table_white:
       ignore_brightness: true
@@ -440,7 +442,6 @@ automation:
             {{ trigger.event.data.new_state.attributes.color_temp }}
           brightness: |
             {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
-          xy_color: ['{{ (trigger.event.data.new_state.attributes.x_color | default(0)) | float }}','{{ (trigger.event.data.new_state.attributes.y_color | default(0)) | float }}']
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -581,6 +582,9 @@ script:
             {{ states.light.bookshelf.attributes.color_temp | int }}
       - service: light.turn_on
         entity_id: light.striped_lamp
+        data_template:
+          color_temp: |
+            {{ states.light.bookshelf.attributes.striped_lamp | int }}
       - service: shell_command.wake_bookshelf
 
   notify_with_lights:
