@@ -434,6 +434,7 @@ automation:
             {{ trigger.event.data.new_state.entity_id }}
           color_temp: |
             {{ trigger.event.data.new_state.attributes.color_temp }}
+          xy_color: ['{{ (trigger.event.data.new_state.attributes.x_color | default(0)) | float }}','{{ (trigger.event.data.new_state.attributes.y_color | default(0)) | float }}']
       - service: counter.increment
         entity_id: counter.light_automations
 
