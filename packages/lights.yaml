@@ -104,6 +104,9 @@ homeassistant:
     light.cabinets:
       fixed_brightness: 255
 
+    light.bookshelf:
+      color_temp: 396
+
     light.bedside_table_white:
       ignore_brightness: true
     light.bedside_table_red:
@@ -573,6 +576,9 @@ script:
     sequence:
       - service: light.turn_on
         entity_id: light.bookshelf
+        data_template:
+          color_temp: |
+            {{ states.light.bookshelf.attributes.color_temp | int }}
       - service: light.turn_on
         entity_id: light.striped_lamp
       - service: shell_command.wake_bookshelf
