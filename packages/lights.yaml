@@ -374,6 +374,7 @@ automation:
         data_template:
           entity_id: |
             {%- for l in states.light if (
+                l.attributes.is_hue_group is not defined and
                 l.attributes.fixed_brightness is not defined and
                 l.attributes.ignore_brightness is not defined and
                 l.state == "on") -%}
@@ -396,6 +397,7 @@ automation:
           value_template: |
             {{
               trigger.event.data.old_state != None and
+              trigger.event.data.new_state.attributes.is_hue_group is not defined
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "light" and
               trigger.event.data.new_state.state == "on" and
@@ -428,6 +430,7 @@ automation:
           value_template: |
             {{
               trigger.event.data.old_state != None and
+              trigger.event.data.new_state.attributes.is_hue_group is not defined and
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "light" and
               trigger.event.data.new_state.state == "on" and
