@@ -1,2 +1,3 @@
 id,x,y,brightness
 group.all_lights.default,0.502,0.414,255
+light.bamboo.default,0.001,0.001,128
