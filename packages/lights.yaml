@@ -587,7 +587,7 @@ script:
         entity_id: light.striped_lamp
         data_template:
           color_temp: |
-            {{ states.light.bookshelf.attributes.striped_lamp | int }}
+            {{ states.light.striped_lamp.attributes.color_temp | int }}
       - service: shell_command.wake_bookshelf
 
   notify_with_lights:
