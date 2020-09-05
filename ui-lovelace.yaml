@@ -289,7 +289,7 @@ views:
           show_header_toggle: false
         filter:
           include:
-            - entity_id: "/media_player.forked_daapd.*/"
+            - entity_id: "/media_player..*_output_.*/"
       - type: entities
         show_header_toggle: false
         entities:

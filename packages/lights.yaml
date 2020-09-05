@@ -71,7 +71,7 @@ homeassistant:
     binary_sensor.pantry_motion:
       trigger_entity_id: light.pantry
       trigger_entity_id_off: light.pantry
-    binary_sensor.record_player_playing:
+    binary_sensor.record_cabinet_playing:
       trigger_service: script.pulse_record_cabinet_lights
 
     counter.light_automations:
@@ -191,9 +191,9 @@ homeassistant:
 binary_sensor:
   - platform: template
     sensors:
-      record_player_playing:
+      record_cabinet_playing:
         value_template: |
-          {{ is_state("media_player.forked_daapd_server", "playing") }}
+          {{ is_state("media_player.record_cabinet", "playing") }}
 
 automation:
   - alias: Turn on lights when motion is detected
