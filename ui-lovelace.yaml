@@ -278,6 +278,8 @@ views:
     title: Record player
     icon: mdi:record-player
     cards:
+      - type: media-control
+        entity: media_player.record_player
       - type: custom:auto-entities
         show_empty: false
         sort:
@@ -289,6 +291,7 @@ views:
           include:
             - entity_id: "/media_player.forked_daapd.*/"
       - type: entities
+        show_header_toggle: false
         entities:
           - light.record_cabinet_left
           - light.record_cabinet_right
