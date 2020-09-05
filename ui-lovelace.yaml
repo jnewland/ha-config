@@ -279,7 +279,7 @@ views:
     icon: mdi:record-player
     cards:
       - type: media-control
-        entity: media_player.record_player
+        entity: media_player.record_cabinet
       - type: custom:auto-entities
         show_empty: false
         sort:
