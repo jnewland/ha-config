@@ -383,7 +383,6 @@ views:
         entities:
           - switch.back_porch
           - switch.back_porch_fountain
-          - light.back_porch_fountain
           - switch.bug_zapper
           - light.ac
       - type: entities
