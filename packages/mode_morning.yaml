@@ -1,4 +1,27 @@
 automation:
+  - alias: Wake up
+    trigger:
+      - platform: template
+        value_template: |
+          {{ 
+            states.input_datetime.wake_up.attributes.hour == now().hour and
+            states.input_datetime.wake_up.attributes.minute == now().minute and
+            states.media_player.record_cabinet.state == "idle"
+          }}
+    action:
+    - service: homeassistant.turn_off
+      entity_id:
+        - media_player.record_cabinet_output_master
+    - service: homeassistant.turn_on
+      entity_id:
+        - media_player.master_bathroom_speakers
+        - media_player.master_bedroom_speakers
+        - media_player.record_cabinet_output_master
+    - service: media_player.play_media
+      entity_id: media_player.record_cabinet
+      data:
+        media_content_id: nature
+        media_content_type: playlist
   - alias: Morning mode
     trigger:
       - platform: state
