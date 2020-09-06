@@ -248,7 +248,6 @@ views:
             - switch.guest_bath_motion.battery_level
             - switch.kitchen_motion.battery_level
             - switch.pantry_motion.battery_level
-            - switch.master_motion.battery_level
             - switch.master_bath_motion.battery_level
             - switch.master_ac_water.battery_level
             - switch.music_room_motion.battery_level
@@ -314,7 +313,6 @@ views:
           - light.bedside_lamp
           - light.bedside_table
           - light.master_patio
-          - binary_sensor.master_motion
           - light.master_closet
           - binary_sensor.closet_motion
       - type: entities
