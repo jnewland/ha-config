@@ -10,18 +10,16 @@ automation:
           }}
     action:
     - service: homeassistant.turn_off
-      entity_id:
-        - media_player.record_cabinet_output_master
+      entity_id: group.outdoor_speakers
     - service: homeassistant.turn_on
       entity_id:
         - media_player.master_bathroom_speakers
         - media_player.master_bedroom_speakers
         - media_player.record_cabinet_output_master
-    - service: media_player.play_media
-      entity_id: media_player.record_cabinet
+    - service: media_player.select_source
       data:
-        media_content_id: nature
-        media_content_type: playlist
+        entity_id: media_player.record_cabinet
+        select_source: nature (playlist)
   - alias: Morning mode
     trigger:
       - platform: state
