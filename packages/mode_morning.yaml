@@ -19,7 +19,7 @@ automation:
     - service: media_player.select_source
       entity_id: media_player.record_cabinet
       data:
-        select_source: nature (playlist)
+        source: nature (playlist)
     - service: media_player.media_play
       entity_id: media_player.record_cabinet
   - alias: Morning mode
