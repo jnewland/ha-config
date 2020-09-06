@@ -4,9 +4,8 @@ automation:
       - platform: template
         value_template: |
           {{ 
-            states.input_datetime.wake_up.attributes.hour == now().hour and
-            states.input_datetime.wake_up.attributes.minute == now().minute and
-            states.media_player.record_cabinet.state == "idle"
+            states('sensor.time') ==
+            (state_attr('input_datetime.wake_up', 'timestamp') | int | timestamp_custom('%H:%M', False))
           }}
     action:
     - service: homeassistant.turn_off
