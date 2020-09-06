@@ -17,8 +17,8 @@ automation:
         - media_player.master_bedroom_speakers
         - media_player.record_cabinet_output_master
     - service: media_player.select_source
+      entity_id: media_player.record_cabinet
       data:
-        entity_id: media_player.record_cabinet
         select_source: nature (playlist)
     - service: media_player.media_play
       entity_id: media_player.record_cabinet
