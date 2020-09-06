@@ -20,6 +20,8 @@ automation:
       data:
         entity_id: media_player.record_cabinet
         select_source: nature (playlist)
+    - service: media_player.media_play
+      entity_id: media_player.record_cabinet
   - alias: Morning mode
     trigger:
       - platform: state
