@@ -1,4 +1,7 @@
 name: Outdoor speakers
 entities:
-- media_player.patio_speakers
-- media_player.atrium_speakers
+- media_player.record_cabinet_output_atrium
+- media_player.record_cabinet_output_patio
+- media_player.record_cabinet_output_back_porch
+- media_player.record_cabinet_output_pergola
+- media_player.record_cabinet_output_front_porch

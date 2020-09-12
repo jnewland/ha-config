@@ -1,4 +1,4 @@
-## Home Assistant Configuration
+# Home Assistant Configuration
 
 [Home Assistant](https://github.com/home-assistant/home-assistant/) is a super cool [open source home automation platform](https://home-assistant.io/). This repository contains the configuration I run at my house.
 
@@ -9,4 +9,4 @@
 
 ### Related projects
 
-* https://github.com/jnewland/mpr-6zhmaut-api
+* [monoprice amp api](https://github.com/jnewland/mpr-6zhmaut-api)

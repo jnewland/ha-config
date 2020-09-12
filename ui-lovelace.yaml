@@ -248,7 +248,6 @@ views:
             - switch.guest_bath_motion.battery_level
             - switch.kitchen_motion.battery_level
             - switch.pantry_motion.battery_level
-            - switch.master_motion.battery_level
             - switch.master_bath_motion.battery_level
             - switch.master_ac_water.battery_level
             - switch.music_room_motion.battery_level
@@ -278,6 +277,8 @@ views:
     title: Record player
     icon: mdi:record-player
     cards:
+      - type: media-control
+        entity: media_player.record_cabinet
       - type: custom:auto-entities
         show_empty: false
         sort:
@@ -287,8 +288,13 @@ views:
           show_header_toggle: false
         filter:
           include:
-            - entity_id: "/media_player.forked_daapd.*/"
+            - entity_id: "/media_player..*_output_.*/"
       - type: entities
+        show_header_toggle: false
+        entities:
+          - input_datetime.wake_up
+      - type: entities
+        show_header_toggle: false
         entities:
           - light.record_cabinet_left
           - light.record_cabinet_right
@@ -307,7 +313,6 @@ views:
           - light.bedside_lamp
           - light.bedside_table
           - light.master_patio
-          - binary_sensor.master_motion
           - light.master_closet
           - binary_sensor.closet_motion
       - type: entities
@@ -380,7 +385,6 @@ views:
         entities:
           - switch.back_porch
           - switch.back_porch_fountain
-          - light.back_porch_fountain
           - switch.bug_zapper
           - light.ac
       - type: entities
