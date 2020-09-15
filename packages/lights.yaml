@@ -30,12 +30,12 @@ homeassistant:
     binary_sensor.guest_hall_motion:
       trigger_entity_id: light.guest_hall
       trigger_entity_id_off: light.guest_hall
-      haunt: light.drums
+      haunt: light.couch
     binary_sensor.guest_bath_motion:
       trigger_entity_id: group.guest_bath_lights
       trigger_entity_id_off: group.guest_bath
       off_delay_seconds: 1800
-      haunt: light.drums
+      haunt: light.couch
     binary_sensor.powder_room_motion:
       trigger_entity_id: light.powder_room
       trigger_entity_id_off: group.powder_room
@@ -60,9 +60,11 @@ homeassistant:
     binary_sensor.great_hall_motion:
       trigger_entity_id: light.great_hall
       trigger_entity_id_off: light.great_hall
+      haunt: light.drums
     binary_sensor.garage_hall_motion:
       trigger_entity_id: light.garage_hall
       trigger_entity_id_off: light.garage_hall
+      haunt: light.drums
     binary_sensor.yoga_room_motion:
       friendly_name: yoga room motion
       trigger_entity_id: group.yoga_room
