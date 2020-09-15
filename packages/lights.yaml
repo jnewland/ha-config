@@ -104,7 +104,7 @@ homeassistant:
     light.bookshelf:
       color_temp: 396
     light.keyboard:
-      fixed_brightness: 25
+      fixed_brightness: 50
     light.striped_lamp:
       color_temp: 396
 
