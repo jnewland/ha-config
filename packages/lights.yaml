@@ -690,16 +690,16 @@ script:
       - service: light.turn_on
         data_template:
           brightness_step_pct: |
-            -{{ step | default("25")}}
+            -{{ step | default("50")}}
           entity_id: |
             {{ entity_id }}
       - delay:
           seconds: |
-            {{ delay | default("0.5")}}
+            {{ delay | default("1")}}
       - service: light.turn_on
         data_template:
           brightness_step_pct: |
-            {{ step | default("25")}}
+            {{ step | default("50")}}
           entity_id: |
             {{ entity_id }}
 
