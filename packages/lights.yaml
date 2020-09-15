@@ -657,7 +657,8 @@ script:
           entity_id: |
             {{ entity_id }}
       - delay:
-          seconds: {{ delay | default("0.5")}}
+          seconds: |
+            {{ delay | default("0.5")}}
       - service: light.turn_on
         data_template:
           brightness_step_pct: |
