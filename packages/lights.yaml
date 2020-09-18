@@ -84,7 +84,7 @@ homeassistant:
     light.bamboo:
       notify_action: duck
       fixed_brightness: 127
-      color_temp: 396
+      fixed_color_temp: 396
     light.front_porch:
       fixed_brightness: 255
     light.front_door:
@@ -102,9 +102,9 @@ homeassistant:
       fixed_brightness: 255
 
     light.bookshelf:
-      color_temp: 396
+      fixed_color_temp: 396
     light.striped_lamp:
-      color_temp: 396
+      fixed_color_temp: 396
 
     light.bedside_table_white:
       ignore_brightness: true
@@ -399,7 +399,7 @@ automation:
               trigger.event.data.new_state.domain == "light" and
               trigger.event.data.new_state.state == "on" and
               trigger.event.data.new_state.attributes.ignore_brightness is not defined and
-              trigger.event.data.new_state.attributes.color_temp is not defined
+              trigger.event.data.new_state.attributes.fixed_color_temp is not defined
             }}
         - condition: template
           value_template: |
@@ -431,7 +431,7 @@ automation:
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "light" and
               trigger.event.data.new_state.state == "on" and
-              trigger.event.data.new_state.attributes.color_temp is defined
+              trigger.event.data.new_state.attributes.fixed_color_temp is defined
             }}
     action:
       - service: light.turn_on
@@ -439,7 +439,7 @@ automation:
           entity_id: |
             {{ trigger.event.data.new_state.entity_id }}
           color_temp: |
-            {{ trigger.event.data.new_state.attributes.color_temp }}
+            {{ trigger.event.data.new_state.attributes.fixed_color_temp }}
           brightness: |
             {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
       - service: counter.increment
@@ -579,12 +579,12 @@ script:
         entity_id: light.bookshelf
         data_template:
           color_temp: |
-            {{ states.light.bookshelf.attributes.color_temp | int }}
+            {{ states.light.bookshelf.attributes.fixed_color_temp | int }}
       - service: light.turn_on
         entity_id: light.striped_lamp
         data_template:
           color_temp: |
-            {{ states.light.striped_lamp.attributes.color_temp | int }}
+            {{ states.light.striped_lamp.attributes.fixed_color_temp | int }}
       - service: shell_command.wake_bookshelf
 
   notify_with_lights:
