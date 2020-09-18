@@ -14,8 +14,6 @@ sensor:
     sensors:
       core_ups_state:
         friendly_name: Core UPS State
-        entity_id:
-          - sensor.core_ups_input_voltage
         value_template: |
           {{ states.sensor.core_ups_input_voltage.attributes.state }}
 binary_sensor:
