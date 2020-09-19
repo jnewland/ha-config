@@ -20,6 +20,7 @@ homeassistant:
     binary_sensor.stairs_motion:
       trigger_entity_id: light.stairs
       trigger_entity_id_off: light.stairs
+      haunt: light.bookshelf_right
     binary_sensor.upstairs_motion:
       trigger_entity_id: light.stairs
       trigger_entity_id_off: light.stairs
@@ -29,17 +30,21 @@ homeassistant:
     binary_sensor.guest_hall_motion:
       trigger_entity_id: light.guest_hall
       trigger_entity_id_off: light.guest_hall
+      haunt: light.couch
     binary_sensor.guest_bath_motion:
       trigger_entity_id: group.guest_bath_lights
       trigger_entity_id_off: group.guest_bath
       off_delay_seconds: 1800
+      haunt: light.couch
     binary_sensor.powder_room_motion:
       trigger_entity_id: light.powder_room
       trigger_entity_id_off: group.powder_room
+      haunt: light.drums
     binary_sensor.office_motion:
       trigger_service: script.office_lights
       trigger_entity_id_off: group.office
       off_delay_seconds: 1800
+      haunt: light.couch
     binary_sensor.music_room_motion:
       trigger_service: script.music_room
       trigger_entity_id_off: group.music_room
@@ -48,26 +53,32 @@ homeassistant:
       trigger_service: script.master_bath_lights
       trigger_entity_id_off: group.master_bath
       off_delay_seconds: 1800
+      haunt: light.bookshelf_left
     binary_sensor.wine_room_motion:
       trigger_entity_id: light.wine_room
       trigger_entity_id_off: light.wine_room
     binary_sensor.great_hall_motion:
       trigger_entity_id: light.great_hall
       trigger_entity_id_off: light.great_hall
+      haunt: light.drums
     binary_sensor.garage_hall_motion:
       trigger_entity_id: light.garage_hall
       trigger_entity_id_off: light.garage_hall
+      haunt: light.drums
     binary_sensor.yoga_room_motion:
       friendly_name: yoga room motion
       trigger_entity_id: group.yoga_room
       trigger_entity_id_off: group.yoga_room
       off_delay_seconds: 600
+      haunt: light.bookshelf_middle
     binary_sensor.great_room_occupied:
       trigger_service: script.living_lights
       trigger_entity_id_off: group.great_room
+      haunt: light.bookshelf_right
     binary_sensor.pantry_motion:
       trigger_entity_id: light.pantry
       trigger_entity_id_off: light.pantry
+      haunt: light.bookshelf_right
     binary_sensor.record_cabinet_playing:
       trigger_service: script.pulse_record_cabinet_lights
 
@@ -103,6 +114,8 @@ homeassistant:
 
     light.bookshelf:
       fixed_color_temp: 396
+    light.keyboard:
+      fixed_brightness: 50
     light.striped_lamp:
       fixed_color_temp: 396
 
@@ -500,6 +513,32 @@ automation:
           {%- endif -%}{{ " " -}}
           for {{ relative_time(trigger.event.data.old_state.last_changed) }}
 
+  - alias: Haunt lights
+    mode: parallel
+    trigger:
+      platform: event
+      event_type: state_changed
+    condition:
+      condition: and
+      conditions:
+        - condition: template
+          value_template: |
+            {{
+              trigger.event.data.old_state != None and
+              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+              trigger.event.data.new_state.domain == "binary_sensor" and
+              trigger.event.data.new_state.state == "on" and
+              trigger.event.data.new_state.attributes.haunt is defined
+            }}
+        - condition: template
+          value_template: |
+            {{ states.input_select.mode.state != "Away" }}
+    action:
+      - service_template: script.haunt
+        data_template:
+          entity_id: |
+            {{ expand(trigger.event.data.new_state.attributes.haunt.split(",")) | selectattr("state", "equalto", "on") | map(attribute="entity_id") | join(",") }}
+
 counter:
   light_automations:
     name: Light Automations
@@ -645,6 +684,24 @@ script:
         action: up
         entity_id: |
           {{ entity_id }}
+
+  haunt:
+    sequence:
+      - service: light.turn_on
+        data_template:
+          brightness_step_pct: |
+            -{{ step | default("50")}}
+          entity_id: |
+            {{ entity_id }}
+      - delay:
+          seconds: |
+            {{ delay | default("1")}}
+      - service: light.turn_on
+        data_template:
+          brightness_step_pct: |
+            {{ step | default("50")}}
+          entity_id: |
+            {{ entity_id }}
 
   pulse_record_cabinet_lights:
     sequence:
