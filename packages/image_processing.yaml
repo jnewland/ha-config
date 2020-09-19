@@ -143,13 +143,11 @@ binary_sensor:
   - platform: template
     sensors:
       pergola_object_detected:
-        entity_id: image_processing.pergola
         value_template: |
           {{ float(states.image_processing.pergola.state | default(0)) > 0}}
   - platform: template
     sensors:
       front_yard_left_object_detected:
-        entity_id: image_processing.front_yard_left
         value_template: |
           {{ float(states.image_processing.front_yard_left.state | default(0)) > 0}}
 
