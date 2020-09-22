@@ -18,3 +18,7 @@ sensors:
   office_window:
     value_template: |
       {{ "Office Window is Open" in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")) }}
+  living_room_motion:
+    friendly_name: living room motion
+    value_template: |
+      {{ "Motion Detector is Activated" in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")) }}
