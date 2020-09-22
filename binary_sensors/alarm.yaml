@@ -3,7 +3,7 @@ sensors:
   entry_door:
     value_template: |
       {{ "Entry Door is Open" in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")) }}
-  master_window:
+  master_patio_door:
     value_template: |
       {{ "Master is Open" in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")) }}
   downstairs_bathroom_window:
