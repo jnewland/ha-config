@@ -1,21 +1,27 @@
 platform: template
 sensors:
   entry_door:
+    friendly_name: entry door
     value_template: |
       {{ "Entry Door is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   master_patio_door:
+    friendly_name: master patio door
     value_template: |
       {{ "Master is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   downstairs_bathroom_window:
+    friendly_name: downstairs bathroom window
     value_template: |
       {{ "Downstairs Bathroom is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   downstairs_window:
+    friendly_name: downstairs window
     value_template: |
       {{ "Downstairs Window is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   bedroom_two_window:
+    friendly_name: music room window
     value_template: |
       {{ "Bedroom Two is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   office_window:
+    friendly_name: office window
     value_template: |
       {{ "Office Window is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   living_room_motion:
