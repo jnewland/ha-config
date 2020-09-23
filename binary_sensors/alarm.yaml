@@ -2,23 +2,23 @@ platform: template
 sensors:
   entry_door:
     value_template: |
-      {{ "Entry Door is Open" in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")) }}
+      {{ "Entry Door is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   master_patio_door:
     value_template: |
-      {{ "Master is Open" in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")) }}
+      {{ "Master is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   downstairs_bathroom_window:
     value_template: |
-      {{ "Downstairs Bathroom is Open" in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")) }}
+      {{ "Downstairs Bathroom is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   downstairs_window:
     value_template: |
-      {{ "Downstairs Window is Open" in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")) }}
+      {{ "Downstairs Window is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   bedroom_two_window:
     value_template: |
-      {{ "Bedroom Two is Open" in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")) }}
+      {{ "Bedroom Two is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   office_window:
     value_template: |
-      {{ "Office Window is Open" in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")) }}
+      {{ "Office Window is Open" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
   living_room_motion:
     friendly_name: living room motion
     value_template: |
-      {{ "Motion Detector is Activated" in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")) }}
+      {{ "Motion Detector is Activated" in state_attr('alarm_control_panel.alarm', 'sensor_status') }}
