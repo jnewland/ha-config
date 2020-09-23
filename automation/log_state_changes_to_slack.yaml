@@ -5,6 +5,10 @@ trigger:
   entity_id:
     - binary_sensor.living_room_motion
     - binary_sensor.master_patio_door
+    - binary_sensor.downstairs_bathroom_window
+    - binary_sensor.downstairs_window
+    - binary_sensor.bedroom_two_window
+    - binary_sensor.office_window
     - binary_sensor.entry_door
     - binary_sensor.garage
     - binary_sensor.gate
