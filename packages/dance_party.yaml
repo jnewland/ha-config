@@ -1,0 +1,20 @@
+automation:
+  - alias: dance party
+    trigger:
+    - platform: event
+      event_type: tag_scanned
+      event_data:
+        tag_id: d1ae1648-f261-4c33-a7fe-af87e3ff5d16
+    action:
+      - service: light.turn_on
+        data:
+          entity_id:
+            - light.keyboard
+            - light.couch
+            - light.drums
+            - light.bookshelf_left
+            - light.bookshelf_middle
+            - light.bookshelf_right
+            - light.striped_lamp
+            - light.network_closet
+          effect: colorloop
