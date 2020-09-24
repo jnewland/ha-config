@@ -164,6 +164,7 @@ views:
           - light.striped_lamp
           - light.network_closet
           - binary_sensor.music_room_motion
+          - binary_sensor.music_room_window
       - type: media-control
         entity: media_player.music_room
 
