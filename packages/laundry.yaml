@@ -6,7 +6,7 @@ sensor:
         unit_of_measurement: W
         device_class: power
         value_template: |
-          {{ states.switch.laundry.attributes.current_power_w }}
+          {{ state_attr('switch.laundry','current_power_w') }}
 
 binary_sensor:
   - platform: template
@@ -15,7 +15,7 @@ binary_sensor:
         friendly_name: Laundry
         device_class: power
         value_template: |
-          {{ float(states.sensor.laundry_power.state) | default(0) > 0 }}
+          {{ float(states.sensor.laundry_power.state | default(0)) > 0 }}
         delay_on:
           minutes: 5
         delay_off:
