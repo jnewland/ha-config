@@ -39,8 +39,8 @@ script:
       - condition: template
         value_template: |
           {{
-            states.weather.dark_sky.attributes.visibility > 5 and
-            states.weather.dark_sky.attributes.temperature > 50
+            (state_attr('weather.dark_sky', 'visibility') | default(0)) > 5 and
+            (state_attr('weather.dark_sky', 'temperature') | default(0)) > 50
           }}
       - service: notify.iphones
         data:
