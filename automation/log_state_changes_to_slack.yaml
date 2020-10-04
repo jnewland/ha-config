@@ -55,6 +55,7 @@ trigger:
     - media_player.house_office
     - media_player.patio_speakers
     - media_player.record_cabinet
+    - binary_sensor.music_room_window
     - weather.dark_sky
 condition:
   condition: template
