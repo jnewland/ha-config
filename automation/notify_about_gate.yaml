@@ -19,7 +19,7 @@ action:
   - service: script.notify_with_lights
   - service: script.notify_channels
     data:
-      message: the front gate just opened!
+      message: the front gate just opened
   - service: notify.slack
     data_template:
       message: ":camera_with_flash: The front gate just opened!"
