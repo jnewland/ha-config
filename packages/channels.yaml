@@ -1,0 +1,29 @@
+
+script:
+  notify_channels:
+    sequence:
+      - service: shell_command.notify_channels
+        data:
+          host: music-room
+          title: |
+            {{ title | default("") }}
+          message: |
+            {{ message | default("") }}
+      - service: shell_command.notify_channels
+        data:
+          host: office
+          title: |
+            {{ title | default("") }}
+          message: |
+            {{ message | default("") }}
+      - service: shell_command.notify_channels
+        data:
+          host: bedroom
+          title: |
+            {{ title | default("") }}
+          message: |
+            {{ message | default("") }}
+
+shell_command:
+  notify_channels: |
+    curl --connect-time 0.4 -H 'Content-Type: application/json' --data '{% set _title = title | default("") %}{% set _message = message | default("") %}{{ {"title": _title, "message": _message} | to_json }}' {{ host }}:57000/api/notify

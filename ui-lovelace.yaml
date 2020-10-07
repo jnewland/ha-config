@@ -361,6 +361,7 @@ views:
           - light.couch_lamp_right
           - light.couch_lamp_left
           - binary_sensor.living_room_motion
+          - binary_sensor.great_room_occupied
       - type: custom:auto-entities
         card:
           type: history-graph
