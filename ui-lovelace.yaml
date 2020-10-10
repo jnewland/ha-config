@@ -340,7 +340,6 @@ views:
           - automation.downstairs_heat
           - automation.upstairs_ac
           - automation.upstairs_heat
-          - automation.upstairs_ac
           - automation.upstairs_reading
           - automation.upstairs_sleeping
           - automation.upstairs_morning_climate_reset
