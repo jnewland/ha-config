@@ -21,9 +21,11 @@ media_player.master_bedroom_speakers:
 media_player.house_mpr6zhmaut:
   friendly_name: "House speakers"
   emulated_hue_hidden: false
+media_player.office:
+  friendly_name: Lounge
 media_player.house_office:
   emulated_hue_hidden: false
-  friendly_name: "Office speakers"
+  friendly_name: "Lounge speakers"
 media_player.patio_speakers:
   emulated_hue_hidden: false
   friendly_name: "Patio speakers"

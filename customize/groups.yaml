@@ -3,7 +3,7 @@ group.all_automations:
   hidden: false
 group.hall:
   emulated_hue_hidden: false
-group.office:
+group.lounge:
   emulated_hue_hidden: false
 group.great_room:
   emulated_hue_hidden: false

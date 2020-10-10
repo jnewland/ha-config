@@ -8,7 +8,7 @@ trigger:
     - binary_sensor.downstairs_bathroom_window
     - binary_sensor.downstairs_window
     - binary_sensor.bedroom_two_window
-    - binary_sensor.office_window
+    - binary_sensor.lounge_window
     - binary_sensor.entry_door
     - binary_sensor.garage
     - binary_sensor.gate
@@ -20,7 +20,7 @@ trigger:
     - binary_sensor.closet_motion
     - binary_sensor.guest_bath_motion
     - binary_sensor.powder_room_motion
-    - binary_sensor.office_motion
+    - binary_sensor.lounge_motion
     - binary_sensor.upstairs_motion
     - binary_sensor.guest_hall_motion
     - binary_sensor.yoga_room_motion
@@ -52,7 +52,7 @@ trigger:
     - media_player.master_bathroom_speakers
     - media_player.master_bedroom_speakers
     - media_player.house_mpr6zhmaut
-    - media_player.house_office
+    - media_player.house_lounge
     - media_player.patio_speakers
     - media_player.record_cabinet
     - binary_sensor.music_room_window

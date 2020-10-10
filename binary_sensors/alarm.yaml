@@ -20,10 +20,10 @@ sensors:
     friendly_name: music room window
     value_template: |
       {{ "Bedroom Two is Open" in states.sensor.alarm_sensors.state | default("") }}
-  office_window:
-    friendly_name: office window
+  lounge_window:
+    friendly_name: lounge window
     value_template: |
-      {{ "Office Window is Open" in states.sensor.alarm_sensors.state | default("") }}
+      {{ "Lounge Window is Open" in states.sensor.alarm_sensors.state | default("") }}
   living_room_motion:
     friendly_name: living room motion
     value_template: |

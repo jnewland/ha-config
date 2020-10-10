@@ -11,11 +11,11 @@ sensor:
       unit_of_measurement: '°F'
       value_template: |
         {{ state_attr('climate.great_room', 'current_temperature') }}
-    office_temperature:
-      friendly_name: office
+    lounge_temperature:
+      friendly_name: lounge
       unit_of_measurement: '°F'
       value_template: |
-        {{ state_attr('climate.office', 'current_temperature') }}
+        {{ state_attr('climate.lounge', 'current_temperature') }}
     upstairs_temperature:
       friendly_name: upstairs
       unit_of_measurement: '°F'
@@ -29,7 +29,7 @@ automation:
       platform: numeric_state
       entity_id:
         - climate.great_room
-        - climate.office
+        - climate.lounge
       value_template: "{{ state.attributes.current_temperature }}"
       below: 71
       for:
@@ -57,7 +57,7 @@ automation:
       platform: numeric_state
       entity_id:
         - climate.great_room
-        - climate.office
+        - climate.lounge
       value_template: "{{ state.attributes.current_temperature }}"
       above: 73
       for:

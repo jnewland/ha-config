@@ -43,7 +43,7 @@
   radius: 1
   icon: mdi:food-fork-drink
 
-- name: Office
+- name: Lounge
   latitude: !env_var OFFICE_LAT
   longitude: !env_var OFFICE_LONG
   radius: 1

@@ -2,7 +2,7 @@ script.mute:
   icon: mdi:volume-mute
   friently_name: Mute
   emulated_hue_hidden: false
-script.office_lights:
+script.lounge_lights:
   friendly_name: Working
   emulated_hue_hidden: false
 script.living_lights:
