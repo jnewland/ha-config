@@ -138,6 +138,7 @@ views:
           - light.office_chandelier
           - light.exercise_bike
           - binary_sensor.office_motion
+          - sensor.office_temp
         footer:
           type: graph
           entity: sensor.office_temp
@@ -156,6 +157,7 @@ views:
           - light.network_closet
           - binary_sensor.music_room_motion
           - binary_sensor.music_room_window
+          - sensor.music_room_temp
         footer:
           type: graph
           entity: sensor.music_room_temp
@@ -173,6 +175,7 @@ views:
           - light.marble_lamp
           - light.yoga_closet
           - binary_sensor.yoga_room_motion
+          - sensor.yoga_room_temp
         footer:
           type: graph
           entity: sensor.yoga_room_temp
@@ -303,6 +306,12 @@ views:
           - light.master_patio
           - light.master_closet
           - binary_sensor.closet_motion
+          - sensor.master_temp
+        footer:
+          type: graph
+          entity: sensor.master_temp
+          hours_to_show: 36
+          detail: 2
       - type: entities
         title: bath
         entities:
@@ -312,24 +321,14 @@ views:
           - light.master_toilet
           - switch.master_bath_fan
           - binary_sensor.master_bath_motion
+          - sensor.master_bath_temp
+        footer:
+          type: graph
+          entity: sensor.master_bath_temp
+          hours_to_show: 36
+          detail: 2
       - type: media-control
         entity: media_player.bedroom
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-        filter:
-          include:
-            - entity_id: "/^sensor.master*_temp/"
-            - entity_id: "/^sensor.upstairs*_temp/"
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-        filter:
-          include:
-            - entity_id: "/^sensor.master*_light$/"
-            - entity_id: "/^sensor.upstairs*_light$/"
 
   - title: Great Room
     icon: mdi:sofa
