@@ -11,7 +11,7 @@ script:
             {{ message | default("") }}
       - service: shell_command.notify_channels
         data:
-          host: office
+          host: lounge
           title: |
             {{ title | default("") }}
           message: |

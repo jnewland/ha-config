@@ -9,4 +9,4 @@ sequence:
       value: 128
   - service: homeassistant.turn_off
     entity_id:
-      - light.office_overhead
+      - light.lounge_overhead

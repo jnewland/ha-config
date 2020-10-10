@@ -19,7 +19,7 @@ filter:
     - switch.bug_zapper
     - switch.master_bath_fan
     - script.mode_away
-    - script.office_lights
+    - script.lounge_lights
     - script.mode_reading
     - script.mode_sleeping
     - script.mode_party

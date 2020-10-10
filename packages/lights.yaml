@@ -40,9 +40,9 @@ homeassistant:
       trigger_entity_id: light.powder_room
       trigger_entity_id_off: group.powder_room
       haunt: light.drums
-    binary_sensor.office_motion:
-      trigger_service: script.office_lights
-      trigger_entity_id_off: group.office
+    binary_sensor.lounge_motion:
+      trigger_service: script.lounge_lights
+      trigger_entity_id_off: group.lounge
       off_delay_seconds: 1800
       haunt: light.couch
     binary_sensor.music_room_motion:
@@ -185,12 +185,12 @@ homeassistant:
       notify_action: duck
     light.yoga_room:
       notify_action: duck
-    light.office_chandelier:
+    light.lounge_chandelier:
       notify_action: duck
-    light.office_desk_lamp:
+    light.lounge_desk_lamp:
       notify_action: duck
       duck_step: 192
-    light.office_overhead:
+    light.lounge_overhead:
       notify_action: duck
     light.pendants:
       notify_action: duck
@@ -649,14 +649,14 @@ script:
             join(', ')
           }}
 
-  office_lights:
+  lounge_lights:
     sequence:
       - service: light.turn_on
         data_template:
           entity_id:
-          - light.office_closet
-          - light.office_overhead
-          - light.office_chandelier
+          - light.lounge_closet
+          - light.lounge_overhead
+          - light.lounge_chandelier
           - light.coat_closet
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
@@ -666,7 +666,7 @@ script:
       - service: light.turn_on
         data_template:
           entity_id:
-          - light.office_overhead
+          - light.lounge_overhead
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
 
