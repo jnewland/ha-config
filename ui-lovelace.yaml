@@ -342,22 +342,12 @@ views:
           - light.couch_lamp_left
           - binary_sensor.living_room_motion
           - binary_sensor.great_room_occupied
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-        filter:
-          include:
-            - entity_id: "/^sensor.kitchen*_temp/"
-            - entity_id: "/^sensor.powder_room*_temp/"
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-        filter:
-          include:
-            - entity_id: "/^sensor.kitchen*_light$/"
-            - entity_id: "/^sensor.powder_room*_light$/"
+          - sensor.kitchen_temp
+        footer:
+          type: graph
+          entity: sensor.kitchen_temp
+          hours_to_show: 36
+          detail: 2
 
   - title: Outdoor
     icon: mdi:tree
