@@ -44,6 +44,187 @@ views:
           - device_tracker.jphone_11_pro
           - device_tracker.katie_s_iphone
         hours_to_show: 24
+
+  - title: Great Room
+    icon: mdi:sofa
+    cards:
+      - type: entities
+        title: great room
+        entities:
+          - light.cabinets
+          - light.kitchen
+          - light.pendants
+          - light.dining_room_table
+          - binary_sensor.kitchen_motion
+          - light.pantry
+          - binary_sensor.pantry_motion
+          - light.living
+          - light.couch_lamp_right
+          - light.couch_lamp_left
+          - binary_sensor.living_room_motion
+          - binary_sensor.great_room_occupied
+          - sensor.kitchen_temp
+        footer:
+          type: graph
+          entity: sensor.kitchen_temp
+          hours_to_show: 36
+          detail: 2
+
+  - title: Lounge
+    icon: mdi:television-classic
+    cards:
+      - type: entities
+        title: lounge
+        entities:
+          - light.lounge_overhead
+          - light.lounge_chandelier
+          - light.exercise_bike
+          - binary_sensor.lounge_motion
+          - sensor.lounge_temp
+        footer:
+          type: graph
+          entity: sensor.lounge_temp
+          hours_to_show: 36
+          detail: 2
+      - type: media-control
+        entity: media_player.office
+
+  - title: Music Room
+    icon: mdi:guitar-pick
+    cards:
+      - type: entities
+        title: music room
+        entities:
+          - light.bookshelf
+          - light.striped_lamp
+          - light.network_closet
+          - binary_sensor.music_room_motion
+          - binary_sensor.music_room_window
+          - sensor.music_room_temp
+        footer:
+          type: graph
+          entity: sensor.music_room_temp
+          hours_to_show: 36
+          detail: 2
+      - type: media-control
+        entity: media_player.music_room
+
+  - title: Guest
+    icon: mdi:bag-personal
+    cards:
+      - type: entities
+        entities:
+          - binary_sensor.guest_bath_motion
+          - binary_sensor.guest_hall_motion
+          - switch.guest_bath_fan
+      - type: entities
+        title: guest
+        entities:
+          - light.guest_hall
+          - light.guest_bath
+          - light.guest_shower
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.guest_hall*_temp/"
+            - entity_id: "/^sensor.guest_bath*_temp/"
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/^sensor.guest_hall*_light$/"
+            - entity_id: "/^sensor.guest_bath*_light$/"
+
+  - title: Yoga Studio
+    icon: mdi:yoga
+    cards:
+      - type: entities
+        title: yoga studio
+        entities:
+          - light.yoga_room
+          - light.marble_lamp
+          - light.yoga_closet
+          - binary_sensor.yoga_room_motion
+          - sensor.yoga_room_temp
+        footer:
+          type: graph
+          entity: sensor.yoga_room_temp
+          hours_to_show: 36
+          detail: 2
+
+  - title: Upstairs
+    icon: mdi:bed
+    cards:
+      - type: entities
+        title: bedroom
+        entities:
+          - light.chandelier
+          - light.chandelier_lamp
+          - light.master_overhead
+          - light.master_nook
+          - light.master_windows
+          - light.bedside_lamp
+          - light.bedside_table
+          - light.master_patio
+          - light.master_closet
+          - binary_sensor.closet_motion
+      - type: entities
+        title: bath
+        entities:
+          - light.master_bath_overhead
+          - light.master_shower
+          - light.master_mirror
+          - light.master_toilet
+          - switch.master_bath_fan
+          - binary_sensor.master_bath_motion
+          - sensor.master_bath_temp
+        footer:
+          type: graph
+          entity: sensor.master_bath_temp
+          hours_to_show: 36
+          detail: 2
+      - type: media-control
+        entity: media_player.bedroom
+
+  - title: Outdoor
+    icon: mdi:tree
+    cards:
+      - type: entities
+        title: back porch
+        entities:
+          - switch.back_porch
+          - switch.back_porch_fountain
+          - switch.bug_zapper
+          - light.ac
+      - type: entities
+        title: atrium
+        entities:
+          - light.bamboo
+          - light.atrium
+          - light.atrium_door
+          - light.garage_door
+          - switch.atrium_fountain
+      - type: entities
+        title: front porch
+        entities:
+          - light.front_porch
+          - light.front_door
+      - type: entities
+        title: patio
+        entities:
+          - light.patio
+          - light.master_patio
+      - type: entities
+        entities:
+          - binary_sensor.front_gate
+          - cover.garage
+          - cover.gate
+
   - title: Cameras
     icon: mdi:video
     cards:
@@ -105,7 +286,7 @@ views:
           method: name
         card:
           type: entities
-          title: Image processing
+          title: image processing
         filter:
           include:
             - entity_id: "/image_processing/"
@@ -116,144 +297,9 @@ views:
         filter:
           include:
             - domain: image_processing
-  - title: Lounge
-    icon: mdi:television-classic
-    cards:
-      - type: entities
-        title: Lounge
-        entities:
-          - light.lounge_overhead
-          - light.lounge_chandelier
-          - light.exercise_bike
-          - binary_sensor.lounge_motion
-          - sensor.lounge_temp
-        footer:
-          type: graph
-          entity: sensor.lounge_temp
-          hours_to_show: 36
-          detail: 2
-      - type: media-control
-        entity: media_player.office
 
-  - title: Music Room
-    icon: mdi:guitar-pick
-    cards:
-      - type: entities
-        entities:
-          - light.bookshelf
-          - light.striped_lamp
-          - light.network_closet
-          - binary_sensor.music_room_motion
-          - binary_sensor.music_room_window
-          - sensor.music_room_temp
-        footer:
-          type: graph
-          entity: sensor.music_room_temp
-          hours_to_show: 36
-          detail: 2
-      - type: media-control
-        entity: media_player.music_room
-
-  - title: Yoga Room
-    icon: mdi:yoga
-    cards:
-      - type: entities
-        entities:
-          - light.yoga_room
-          - light.marble_lamp
-          - light.yoga_closet
-          - binary_sensor.yoga_room_motion
-          - sensor.yoga_room_temp
-        footer:
-          type: graph
-          entity: sensor.yoga_room_temp
-          hours_to_show: 36
-          detail: 2
-
-  - title: Lights
-    icon: mdi:lightbulb
-    cards:
-      - type: custom:auto-entities
-        show_empty: false
-        sort:
-          method: name
-        card:
-          type: entities
-          title: Lights on
-          show_header_toggle: false
-        filter:
-          include:
-            - domain: light
-          exclude:
-            - entity_id: "/_[0-9]+$/"
-            - state: "off"
-            - state: "unavailable"
-      - type: custom:auto-entities
-        sort:
-          method: name
-        show_empty: false
-        card:
-          type: entities
-          title: Lights off
-        filter:
-          include:
-            - domain: light
-              state: "off"
-              options:
-                tap_action:
-                  action: toggle
-          exclude:
-            - entity_id: "/_[0-9]+$/"
-  - title: Batteries
-    icon: mdi:battery
-    cards:
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 80
-        filter:
-          include:
-            - entity_id: "/.*phone.*battery_level/"
-      - type: custom:entity-attributes-card
-        heading_name: Sensor
-        heading_state: Battery level
-        name_attribute: friendly_name
-        filter:
-          include:
-            - switch.front_door.battery_level
-            - switch.front_gate.battery_level
-            - switch.garage_hall_motion.battery_level
-            - switch.great_hall_motion.battery_level
-            - switch.guest_bath_motion.battery_level
-            - switch.kitchen_motion.battery_level
-            - switch.pantry_motion.battery_level
-            - switch.master_bath_motion.battery_level
-            - switch.master_ac_water.battery_level
-            - switch.music_room_motion.battery_level
-            - switch.lounge_motion.battery_level
-            - switch.powder_room_motion.battery_level
-            - switch.stairs_motion.battery_level
-            - switch.upstairs_motion.battery_level
-            - switch.wine_room_motion.battery_level
-            - vacuum.downstairs980.battery_level
-  - title: Speakers
-    icon: mdi:speaker
-    cards:
-      - type: media-control
-        entity: media_player.atrium_speakers
-      - type: media-control
-        entity: media_player.kitchen_speakers
-      - type: media-control
-        entity: media_player.living_speakers
-      - type: media-control
-        entity: media_player.master_bathroom_speakers
-      - type: media-control
-        entity: media_player.master_bedroom_speakers
-      - type: media-control
-        entity: media_player.patio_speakers
-
-  - path: record-player
-    title: Record player
+  - title: Record player
+    path: record-player
     icon: mdi:record-player
     cards:
       - type: media-control
@@ -278,98 +324,22 @@ views:
           - light.record_cabinet_left
           - light.record_cabinet_right
 
-  - title: Upstairs
-    icon: mdi:bed
+  - title: Speakers
+    icon: mdi:speaker
     cards:
-      - type: entities
-        title: bedroom
-        entities:
-          - light.chandelier
-          - light.chandelier_lamp
-          - light.master_overhead
-          - light.master_nook
-          - light.master_windows
-          - light.bedside_lamp
-          - light.bedside_table
-          - light.master_patio
-          - light.master_closet
-          - binary_sensor.closet_motion
-      - type: entities
-        title: bath
-        entities:
-          - light.master_bath_overhead
-          - light.master_shower
-          - light.master_mirror
-          - light.master_toilet
-          - switch.master_bath_fan
-          - binary_sensor.master_bath_motion
-          - sensor.master_bath_temp
-        footer:
-          type: graph
-          entity: sensor.master_bath_temp
-          hours_to_show: 36
-          detail: 2
       - type: media-control
-        entity: media_player.bedroom
+        entity: media_player.atrium_speakers
+      - type: media-control
+        entity: media_player.kitchen_speakers
+      - type: media-control
+        entity: media_player.living_speakers
+      - type: media-control
+        entity: media_player.master_bathroom_speakers
+      - type: media-control
+        entity: media_player.master_bedroom_speakers
+      - type: media-control
+        entity: media_player.patio_speakers
 
-  - title: Great Room
-    icon: mdi:sofa
-    cards:
-      - type: entities
-        title: great room
-        entities:
-          - light.cabinets
-          - light.kitchen
-          - light.pendants
-          - light.dining_room_table
-          - binary_sensor.kitchen_motion
-          - light.pantry
-          - binary_sensor.pantry_motion
-          - light.living
-          - light.couch_lamp_right
-          - light.couch_lamp_left
-          - binary_sensor.living_room_motion
-          - binary_sensor.great_room_occupied
-          - sensor.kitchen_temp
-        footer:
-          type: graph
-          entity: sensor.kitchen_temp
-          hours_to_show: 36
-          detail: 2
-
-  - title: Outdoor
-    icon: mdi:tree
-    cards:
-      - type: entities
-        title: back porch
-        entities:
-          - switch.back_porch
-          - switch.back_porch_fountain
-          - switch.bug_zapper
-          - light.ac
-      - type: entities
-        title: atrium
-        entities:
-          - light.bamboo
-          - light.atrium
-          - light.atrium_door
-          - light.garage_door
-          - switch.atrium_fountain
-      - type: entities
-        title: front porch
-        entities:
-          - light.front_porch
-          - light.front_door
-      - type: entities
-        title: patio
-        entities:
-          - light.patio
-          - light.master_patio
-      - type: entities
-        entities:
-          - binary_sensor.front_gate
-          - cover.garage
-          - cover.gate
   - title: Climate
     icon: mdi:temperature-fahrenheit
     cards:
@@ -422,91 +392,6 @@ views:
         filter:
           include:
             - entity_id: "/^sensor.*_light$/"
-
-  - title: Guest
-    icon: mdi:bag-personal
-    cards:
-      - type: entities
-        entities:
-          - binary_sensor.guest_bath_motion
-          - binary_sensor.guest_hall_motion
-          - switch.guest_bath_fan
-      - type: entities
-        title: guest
-        entities:
-          - light.guest_hall
-          - light.guest_bath
-          - light.guest_shower
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-        filter:
-          include:
-            - entity_id: "/^sensor.guest_hall*_temp/"
-            - entity_id: "/^sensor.guest_bath*_temp/"
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-        filter:
-          include:
-            - entity_id: "/^sensor.guest_hall*_light$/"
-            - entity_id: "/^sensor.guest_bath*_light$/"
-
-  - title: Settings
-    icon: mdi:cog
-    cards:
-      - type: entities
-        title: settings
-        show_header_toggle: false
-        entities:
-          - input_boolean.guests
-          - automation.away_mode
-          - vacuum.downstairs980
-      - type: entities
-        entities:
-          - sensor.current_version
-          - binary_sensor.updater
-          - sensor.config_sha
-          - sensor.latest_deployment_sha
-          - script.deploy
-      - type: custom:auto-entities
-        show_empty: false
-        sort:
-          method: id
-        card:
-          type: glance
-          title: unconfigured
-        filter:
-          include:
-            - entity_id: "/_[0-9]+$/"
-          exclude:
-            - entity_id: "*_sim_*"
-      - type: history-graph
-        title: history
-        hours_to_show: 80
-        entities:
-          - counter.light_automations
-          - counter.errors
-          - input_select.mode
-          - binary_sensor.together
-          - device_tracker.jphone_11_pro
-          - sensor.jphone_11_pro_battery_state
-          - device_tracker.katie_s_iphone
-          - sensor.katie_s_iphone_battery_state
-          - sensor.laundry_power
-          - binary_sensor.laundry
-          - sun.sun
-          - weather.dark_sky
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-          title: motion
-        filter:
-          include:
-            - entity_id: "/^binary_sensor.*_motion$/"
 
   - title: Core
     icon: mdi:server-network
@@ -564,3 +449,125 @@ views:
         filter:
           include:
             - entity_id: "/dcp_l2540dw/"
+
+  - title: Lights
+    icon: mdi:lightbulb
+    cards:
+      - type: custom:auto-entities
+        show_empty: false
+        sort:
+          method: name
+        card:
+          type: entities
+          title: lights on
+          show_header_toggle: false
+        filter:
+          include:
+            - domain: light
+          exclude:
+            - entity_id: "/_[0-9]+$/"
+            - state: "off"
+            - state: "unavailable"
+      - type: custom:auto-entities
+        sort:
+          method: name
+        show_empty: false
+        card:
+          type: entities
+          title: lights off
+        filter:
+          include:
+            - domain: light
+              state: "off"
+              options:
+                tap_action:
+                  action: toggle
+          exclude:
+            - entity_id: "/_[0-9]+$/"
+
+  - title: Batteries
+    icon: mdi:battery
+    cards:
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 80
+        filter:
+          include:
+            - entity_id: "/.*phone.*battery_level/"
+      - type: custom:entity-attributes-card
+        heading_name: Sensor
+        heading_state: Battery level
+        name_attribute: friendly_name
+        filter:
+          include:
+            - switch.front_door.battery_level
+            - switch.front_gate.battery_level
+            - switch.garage_hall_motion.battery_level
+            - switch.great_hall_motion.battery_level
+            - switch.guest_bath_motion.battery_level
+            - switch.kitchen_motion.battery_level
+            - switch.pantry_motion.battery_level
+            - switch.master_bath_motion.battery_level
+            - switch.master_ac_water.battery_level
+            - switch.music_room_motion.battery_level
+            - switch.lounge_motion.battery_level
+            - switch.powder_room_motion.battery_level
+            - switch.stairs_motion.battery_level
+            - switch.upstairs_motion.battery_level
+            - switch.wine_room_motion.battery_level
+            - vacuum.downstairs980.battery_level
+
+  - title: Settings
+    icon: mdi:cog
+    cards:
+      - type: entities
+        title: settings
+        show_header_toggle: false
+        entities:
+          - input_boolean.guests
+          - automation.away_mode
+          - vacuum.downstairs980
+      - type: entities
+        entities:
+          - sensor.current_version
+          - binary_sensor.updater
+          - sensor.config_sha
+          - sensor.latest_deployment_sha
+          - script.deploy
+      - type: custom:auto-entities
+        show_empty: false
+        sort:
+          method: id
+        card:
+          type: glance
+          title: unconfigured
+        filter:
+          include:
+            - entity_id: "/_[0-9]+$/"
+          exclude:
+            - entity_id: "*_sim_*"
+      - type: history-graph
+        title: history
+        hours_to_show: 80
+        entities:
+          - counter.light_automations
+          - counter.errors
+          - input_select.mode
+          - binary_sensor.together
+          - device_tracker.jphone_11_pro
+          - sensor.jphone_11_pro_battery_state
+          - device_tracker.katie_s_iphone
+          - sensor.katie_s_iphone_battery_state
+          - sensor.laundry_power
+          - binary_sensor.laundry
+          - sun.sun
+          - weather.dark_sky
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+          title: motion
+        filter:
+          include:
+            - entity_id: "/^binary_sensor.*_motion$/"
