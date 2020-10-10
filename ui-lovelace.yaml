@@ -4,58 +4,50 @@ views:
     icon: mdi:home
     theme: dark-mode
     cards:
-      - type: vertical-stack
+      - type: picture-glance
+        camera_image: camera.front_yard_left
+        entities:
+          - input_select.mode
+          - alarm_control_panel.alarm
+          - lock.front_door
+          - cover.garage
+          - cover.gate
+          - binary_sensor.front_gate
+          - input_number.brightness
+          - vacuum.downstairs980
+      - type: horizontal-stack
         cards:
-          - type: picture-glance
-            camera_image: camera.front_yard_left
-            entities:
-              - input_select.mode
-              - alarm_control_panel.alarm
-              - lock.front_door
-              - cover.garage
-              - cover.gate
-              - binary_sensor.front_gate
-              - input_number.brightness
-              - vacuum.downstairs980
-          - type: horizontal-stack
-            cards:
-              - type: picture-entity
-                show_name: false
-                show_state: false
-                entity: camera.pergola
-          - type: horizontal-stack
-            cards:
-              - type: picture-entity
-                show_name: false
-                show_state: false
-                entity: camera.gate
-              - type: picture-entity
-                show_name: false
-                show_state: false
-                entity: camera.garage
-          - type: horizontal-stack
-            cards:
-              - type: picture-entity
-                show_name: false
-                show_state: false
-                entity: camera.atrium
-              - type: picture-entity
-                show_name: false
-                show_state: false
-                entity: camera.back_porch
-      - type: vertical-stack
+          - type: picture-entity
+            show_name: false
+            show_state: false
+            entity: camera.pergola
+          - type: picture-entity
+            show_name: false
+            show_state: false
+            entity: camera.gate
+          - type: picture-entity
+            show_name: false
+            show_state: false
+            entity: camera.garage
+      - type: horizontal-stack
         cards:
-          - type: weather-forecast
-            entity: weather.dark_sky
-          - type: picture
-            image: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=GRK&brand=wui&num=10&delay=25&type=N0R&frame=0&scale=1&noclutter=0&showstorms=99&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=1&rainsnow=1&lightning=1&smooth=1&rand=24691285&lat=0&lon=0&label=you
-      - type: vertical-stack
-        cards:
-          - type: map
-            entities:
-              - device_tracker.jphone_11_pro
-              - device_tracker.katie_s_iphone
-            hours_to_show: 24
+          - type: picture-entity
+            show_name: false
+            show_state: false
+            entity: camera.atrium
+          - type: picture-entity
+            show_name: false
+            show_state: false
+            entity: camera.back_porch
+      - type: weather-forecast
+        entity: weather.dark_sky
+      - type: picture
+        image: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=GRK&brand=wui&num=10&delay=25&type=N0R&frame=0&scale=1&noclutter=0&showstorms=99&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=1&rainsnow=1&lightning=1&smooth=1&rand=24691285&lat=0&lon=0&label=you
+      - type: map
+        entities:
+          - device_tracker.jphone_11_pro
+          - device_tracker.katie_s_iphone
+        hours_to_show: 24
   - title: Cameras
     icon: mdi:video
     cards:
