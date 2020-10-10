@@ -88,6 +88,20 @@ views:
           detail: 2
       - type: media-control
         entity: media_player.office
+      - type: entities
+        title: guest
+        entities:
+          - light.guest_hall
+          - light.guest_bath
+          - light.guest_shower
+          - binary_sensor.guest_bath_motion
+          - binary_sensor.guest_hall_motion
+          - sensor.guest_bath_temp
+        footer:
+          type: graph
+          entity: sensor.guest_bath_temp
+          hours_to_show: 36
+          detail: 2
 
   - title: Music Room
     icon: mdi:guitar-pick
@@ -108,37 +122,6 @@ views:
           detail: 2
       - type: media-control
         entity: media_player.music_room
-
-  - title: Guest
-    icon: mdi:bag-personal
-    cards:
-      - type: entities
-        entities:
-          - binary_sensor.guest_bath_motion
-          - binary_sensor.guest_hall_motion
-          - switch.guest_bath_fan
-      - type: entities
-        title: guest
-        entities:
-          - light.guest_hall
-          - light.guest_bath
-          - light.guest_shower
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-        filter:
-          include:
-            - entity_id: "/^sensor.guest_hall*_temp/"
-            - entity_id: "/^sensor.guest_bath*_temp/"
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-        filter:
-          include:
-            - entity_id: "/^sensor.guest_hall*_light$/"
-            - entity_id: "/^sensor.guest_bath*_light$/"
 
   - title: Yoga Studio
     icon: mdi:yoga
