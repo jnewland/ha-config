@@ -89,7 +89,7 @@ views:
       - type: media-control
         entity: media_player.office
       - type: media-control
-        entity: media_player.office_channels
+        entity: media_player.lounge_channels
       - type: entities
         title: guest
         entities:
