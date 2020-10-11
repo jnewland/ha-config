@@ -188,3 +188,22 @@ automation:
           data:
             file:
               path: /tmp/doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] }}.jpg
+
+  - alias: change channel to streams with detected objects
+    trigger:
+      platform: event
+      event_type: state_changed
+    condition:
+      condition: and
+      conditions:
+        - condition: template
+          value_template: |
+            {{
+              trigger.event.data.new_state.domain == "image_processing" and
+              (trigger.event.data.new_state.attributes.total_matches | default(0)) > 0
+            }}
+    action:
+      - service: media_player.select_source
+        data:
+          entity_id: media_player.music_room_channels
+          source: "{{ trigger.event.data.new_state.attributes.friendly_name | upper }} HD CAMERA"
