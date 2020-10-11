@@ -88,6 +88,8 @@ views:
           detail: 2
       - type: media-control
         entity: media_player.office
+      - type: media-control
+        entity: media_player.office_channels
       - type: entities
         title: guest
         entities:
@@ -122,6 +124,8 @@ views:
           detail: 2
       - type: media-control
         entity: media_player.music_room
+      - type: media-control
+        entity: media_player.music_room_channels
 
   - title: Yoga Studio
     icon: mdi:yoga
@@ -173,6 +177,8 @@ views:
           detail: 2
       - type: media-control
         entity: media_player.bedroom
+      - type: media-control
+        entity: media_player.bedroom_channels
 
   - title: Outdoor
     icon: mdi:tree
