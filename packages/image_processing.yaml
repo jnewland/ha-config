@@ -3,30 +3,51 @@ camera:
     platform: generic
     stream_source: http://gate-stream.cameras/index.m3u8
     still_image_url: http://gate-stream.cameras/still.jpg
+  - name: gate_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://gate-stream.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: back porch
     platform: generic
     stream_source: http://back-porch-stream.cameras/index.m3u8
     still_image_url: http://back-porch-stream.cameras/still.jpg
+  - name: back_porch_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://back-porch.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: front yard left
     platform: generic
     stream_source: http://front-yard-left-stream.cameras/index.m3u8
     still_image_url: http://front-yard-left-stream.cameras/still.jpg
+  - name: front_yard_left_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://front-yard-left.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: atrium
     platform: generic
     stream_source: http://atrium-stream.cameras/index.m3u8
     still_image_url: http://atrium-stream.cameras/still.jpg
+  - name: atrium_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://atrium-stream.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: garage
     platform: generic
     stream_source: http://garage-stream.cameras/index.m3u8
     still_image_url: http://garage-stream.cameras/still.jpg
+  - name: garage_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://garage-stream.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: ac
     platform: generic
     stream_source: http://ac-stream.cameras/index.m3u8
     still_image_url: http://ac-stream.cameras/still.jpg
+  - name: ac_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://ac-stream.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: pergola
     platform: generic
     stream_source: http://pergola-stream.cameras/index.m3u8
     still_image_url: http://pergola-stream.cameras/still.jpg
+  - name: pergola_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://pergola-stream.cameras/faster_rcnn_inception_v2_coco.jpg
 
   # local_file cameras are setup for to support displaying snapshots with objects highlighted
   - platform: local_file
@@ -41,6 +62,15 @@ camera:
   - platform: local_file
     file_path: /tmp/doods_pergola.jpg
     name: doods_pergola
+  - platform: local_file
+    file_path: /tmp/doods_gate.jpg
+    name: doods_gate
+  - platform: local_file
+    file_path: /tmp/doods_garage.jpg
+    name: doods_garage
+  - platform: local_file
+    file_path: /tmp/doods_ac.jpg
+    name: doods_ac
 
 # Process images from selected cameras on an interval and look for interesting objects
 # Uses a copy of https://hub.docker.com/r/snowzach/doods running at http://doods:8080
@@ -48,9 +78,9 @@ camera:
 #
 #     cd /config
 #     mkdir -p models
-#     wget http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
+#     wget http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco.jpg_2018_01_28.tar.gz
 #     tar -zxvf faster_rcnn_inception_v2_coco_2018_01_28.tar.gz faster_rcnn_inception_v2_coco_2018_01_28/frozen_inference_graph.pb --strip=1
-#     mv frozen_inference_graph.pb models/faster_rcnn_inception_v2_coco_2018_01_28.pb
+#     mv frozen_inference_graph.pb models/faster_rcnn_inception_v2_coco.jpg_2018_01_28.pb
 #     rm faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
 #     wget https://raw.githubusercontent.com/amikelive/coco-labels/master/coco-labels-2014_2017.txt
 #     mv coco-labels-2014_2017.txt models/coco_labels1.txt
@@ -59,7 +89,7 @@ camera:
 #       detectors:
 #         - name: default
 #           type: tensorflow
-#           modelFile: /config/models/faster_rcnn_inception_v2_coco_2018_01_28.pb
+#           modelFile: /config/models/faster_rcnn_inception_v2_coco.jpg_2018_01_28.pb
 #           labelFile: /config/models/coco_labels1.txt
 #           numThreads: 1
 #           numConcurrent: 4
@@ -72,7 +102,7 @@ image_processing:
     url: "http://doods:8080"
     detector: default
     source:
-      - entity_id: camera.pergola
+      - entity_id: camera.pergola_faster_rcnn_inception_v2_coco
         name: pergola
     file_out:
       - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
@@ -88,7 +118,7 @@ image_processing:
     url: "http://doods:8080"
     detector: default
     source:
-      - entity_id: camera.atrium
+      - entity_id: camera.atrium_faster_rcnn_inception_v2_coco
         name: atrium
     file_out:
       - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
@@ -108,8 +138,56 @@ image_processing:
     url: "http://doods:8080"
     detector: default
     source:
-      - entity_id: camera.back_porch
+      - entity_id: camera.back_porch_faster_rcnn_inception_v2_coco
         name: back porch
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.gate_faster_rcnn_inception_v2_coco
+        name: gate
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.garage_faster_rcnn_inception_v2_coco
+        name: garage
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.ac_faster_rcnn_inception_v2_coco
+        name: ac
     file_out:
       - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
     labels:
@@ -125,7 +203,7 @@ image_processing:
     url: "http://doods:8080"
     detector: default
     source:
-      - entity_id: camera.front_yard_left
+      - entity_id: camera.front_yard_left_faster_rcnn_inception_v2_coco
         name: front yard left
     file_out:
       - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"

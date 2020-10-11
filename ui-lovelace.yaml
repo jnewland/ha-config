@@ -20,22 +20,27 @@ views:
         show_name: false
         show_state: false
         entity: camera.pergola
+        camera_view: live
       - type: picture-entity
         show_name: false
         show_state: false
         entity: camera.gate
+        camera_view: live
       - type: picture-entity
         show_name: false
         show_state: false
         entity: camera.garage
+        camera_view: live
       - type: picture-entity
         show_name: false
         show_state: false
         entity: camera.atrium
+        camera_view: live
       - type: picture-entity
         show_name: false
         show_state: false
         entity: camera.back_porch
+        camera_view: live
       - type: weather-forecast
         entity: weather.dark_sky
       - type: picture
@@ -270,6 +275,18 @@ views:
         show_name: false
         show_state: false
         entity: camera.doods_pergola
+      - type: picture-entity
+        show_name: false
+        show_state: false
+        entity: camera.doods_gate
+      - type: picture-entity
+        show_name: false
+        show_state: false
+        entity: camera.doods_garage
+      - type: picture-entity
+        show_name: false
+        show_state: false
+        entity: camera.doods_ac
       - type: custom:auto-entities
         show_header_toggle: false
         show_empty: false
