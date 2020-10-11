@@ -2,30 +2,30 @@ camera:
   - name: gate
     platform: generic
     stream_source: http://gate-stream.cameras/index.m3u8
-    still_image_url: http://gate.cameras/still.jpg
+    still_image_url: http://gate-stream.cameras/still.jpg
   - name: back porch
     platform: ffmpeg
     input: http://back-porch-stream.cameras/index.m3u8
   - name: front yard left
     platform: generic
     stream_source: http://front-yard-left-stream.cameras/index.m3u8
-    still_image_url: http://front-yard-left.cameras/still.jpg
+    still_image_url: http://front-yard-left-stream.cameras/still.jpg
   - name: atrium
     platform: generic
     stream_source: http://atrium-stream.cameras/index.m3u8
-    still_image_url: http://atrium.cameras/still.jpg
+    still_image_url: http://atrium-stream.cameras/still.jpg
   - name: garage
     platform: generic
     stream_source: http://garage-stream.cameras/index.m3u8
-    still_image_url: http://garage.cameras/still.jpg
+    still_image_url: http://garage-stream.cameras/still.jpg
   - name: ac
     platform: generic
     stream_source: http://ac-stream.cameras/index.m3u8
-    still_image_url: http://ac.cameras/still.jpg
+    still_image_url: http://ac-stream.cameras/still.jpg
   - name: pergola
     platform: generic
     stream_source: http://pergola-stream.cameras/index.m3u8
-    still_image_url: http://pergola.cameras/still.jpg
+    still_image_url: http://pergola-stream.cameras/still.jpg
 
   # local_file cameras are setup for to support displaying snapshots with objects highlighted
   - platform: local_file
