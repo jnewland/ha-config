@@ -160,6 +160,7 @@ views:
           - light.master_patio
           - light.master_closet
           - binary_sensor.closet_motion
+          - binary_sensor.master_door
       - type: entities
         title: bath
         entities:
