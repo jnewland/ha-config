@@ -6,7 +6,7 @@ camera:
   - name: back porch
     platform: generic
     stream_source: http://back-porch-stream.cameras/index.m3u8
-    still_image_url: http://back-porch.cameras/still.jpg
+    still_image_url: http://back-porch-stream.cameras/still.jpg
   - name: front yard left
     platform: generic
     stream_source: http://front-yard-left-stream.cameras/index.m3u8
