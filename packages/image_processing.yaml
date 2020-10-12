@@ -255,11 +255,11 @@ automation:
       event_type: state_changed
     condition:
       condition: template
-        value_template: |
-          {{
-            trigger.event.data.new_state.domain == "image_processing" and
-            (trigger.event.data.new_state.attributes.total_matches | default(0)) > 0
-          }}
+      value_template: |
+        {{
+          trigger.event.data.new_state.domain == "image_processing" and
+          (trigger.event.data.new_state.attributes.total_matches | default(0)) > 0
+        }}
     action:
       - service: notify.slack
         data_template:
