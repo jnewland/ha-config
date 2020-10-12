@@ -26,4 +26,4 @@ script:
 
 shell_command:
   notify_channels: |
-    curl -v --connect-time 0.4 -H 'Content-Type: application/json' --data '{% set _title = title | default("") %}{% set _message = message | default("") %}{{ {"title": _title, "message": _message} | to_json }}' {{ host }}:57000/api/notify
+    curl -v --connect-time 0.4 -H 'Content-Type: application/json' --data '{{ {"title": title, "message": message} | to_json }}' {{ host }}:57000/api/notify
