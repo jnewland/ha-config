@@ -105,7 +105,7 @@ image_processing:
       - entity_id: camera.pergola_faster_rcnn_inception_v2_coco
         name: pergola
     file_out:
-      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace("_faster_rcnn_inception_v2_coco", "") }}.jpg"
     labels:
       - name: dog
         confidence: 30
@@ -121,7 +121,7 @@ image_processing:
       - entity_id: camera.atrium_faster_rcnn_inception_v2_coco
         name: atrium
     file_out:
-      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace("_faster_rcnn_inception_v2_coco", "") }}.jpg"
     area:
       # Exclude left part of image
       left: 0.20
@@ -141,7 +141,7 @@ image_processing:
       - entity_id: camera.back_porch_faster_rcnn_inception_v2_coco
         name: back porch
     file_out:
-      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace("_faster_rcnn_inception_v2_coco", "") }}.jpg"
     labels:
       - name: dog
         confidence: 30
@@ -157,7 +157,7 @@ image_processing:
       - entity_id: camera.gate_faster_rcnn_inception_v2_coco
         name: gate
     file_out:
-      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace("_faster_rcnn_inception_v2_coco", "") }}.jpg"
     labels:
       - name: dog
         confidence: 30
@@ -173,7 +173,7 @@ image_processing:
       - entity_id: camera.garage_faster_rcnn_inception_v2_coco
         name: garage
     file_out:
-      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace("_faster_rcnn_inception_v2_coco", "") }}.jpg"
     labels:
       - name: dog
         confidence: 30
@@ -189,7 +189,7 @@ image_processing:
       - entity_id: camera.ac_faster_rcnn_inception_v2_coco
         name: ac
     file_out:
-      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace("_faster_rcnn_inception_v2_coco", "") }}.jpg"
     labels:
       - name: dog
         confidence: 30
@@ -206,7 +206,7 @@ image_processing:
       - entity_id: camera.front_yard_left_faster_rcnn_inception_v2_coco
         name: front yard left
     file_out:
-      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace("_faster_rcnn_inception_v2_coco", "") }}.jpg"
     area:
       # Exclude street
       top: 0.18
@@ -232,11 +232,17 @@ binary_sensor:
 # Adding a unit allows these values to be graphed in the UI
 homeassistant:
   customize:
+    image_processing.ac:
+      unit_of_measurement: objects
     image_processing.atrium:
       unit_of_measurement: objects
     image_processing.back_porch:
       unit_of_measurement: objects
     image_processing.front_yard_left:
+      unit_of_measurement: objects
+    image_processing.garage:
+      unit_of_measurement: objects
+    image_processing.gate:
       unit_of_measurement: objects
     image_processing.pergola:
       unit_of_measurement: objects
@@ -265,7 +271,7 @@ automation:
             {% for thing in trigger.event.data.new_state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %}
           data:
             file:
-              path: /tmp/doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] }}.jpg
+              path: /tmp/doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] | replace("_faster_rcnn_inception_v2_coco", "") }}.jpg
 
   - alias: change channel to streams with detected objects
     trigger:
