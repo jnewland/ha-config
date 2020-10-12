@@ -6,7 +6,6 @@ views:
     cards:
       - type: picture-glance
         camera_image: camera.front_yard_left
-        camera_view: live
         entities:
           - input_select.mode
           - alarm_control_panel.alarm
@@ -20,27 +19,22 @@ views:
         show_name: false
         show_state: false
         entity: camera.pergola
-        camera_view: live
       - type: picture-entity
         show_name: false
         show_state: false
         entity: camera.gate
-        camera_view: live
       - type: picture-entity
         show_name: false
         show_state: false
         entity: camera.garage
-        camera_view: live
       - type: picture-entity
         show_name: false
         show_state: false
         entity: camera.atrium
-        camera_view: live
       - type: picture-entity
         show_name: false
         show_state: false
         entity: camera.back_porch
-        camera_view: live
       - type: weather-forecast
         entity: weather.dark_sky
       - type: picture
