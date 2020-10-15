@@ -287,3 +287,10 @@ automation:
         data:
           entity_id: media_player.music_room_channels
           source: "{{ trigger.event.data.new_state.attributes.friendly_name | upper }} HD CAMERA"
+      - service: shell_command.notify_channels
+        data:
+          host: music-room
+          title: |
+            {{ trigger.event.data.new_state.attributes.friendly_name }}
+          message: |
+            {% for thing in trigger.event.data.new_state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %}
