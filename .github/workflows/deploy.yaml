@@ -5,6 +5,7 @@ on:
 jobs:
   validate-config:
     runs-on: ubuntu-latest
+    if: github.event.action != 'labeled'
     steps:
       - uses: actions/checkout@v1
       - name: Generate fake SSL cert
