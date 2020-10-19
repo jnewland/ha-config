@@ -35,7 +35,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment_id: ${{ steps.create-deployment.outputs.id }}
           state: pending
-          log_url: https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks
+          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: "Deploy home-assistant"
         env:
@@ -79,11 +79,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment_id: ${{ steps.create-deployment.outputs.id }}
           state: success
-          log_url: https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks
+          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
       - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
         if: failure()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment_id: ${{ steps.create-deployment.outputs.id }}
           state: failure
-          log_url: https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks
+          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
