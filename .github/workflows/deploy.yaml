@@ -1,7 +1,7 @@
 name: cd
 on:
   pull_request:
-    types: [synchronize, opened, reopened]
+    types: [synchronize, opened, reopened, labeled]
 jobs:
   validate-config:
     runs-on: ubuntu-latest
