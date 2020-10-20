@@ -2,31 +2,52 @@ camera:
   - name: gate
     platform: generic
     stream_source: http://gate-stream.cameras/index.m3u8
-    still_image_url: http://gate.cameras/still.jpg
+    still_image_url: http://gate-stream.cameras/still.jpg
+  - name: gate_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://gate-stream.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: back porch
     platform: generic
     stream_source: http://back-porch-stream.cameras/index.m3u8
-    still_image_url: http://back-porch.cameras/still.jpg
+    still_image_url: http://back-porch-stream.cameras/still.jpg
+  - name: back_porch_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://back-porch-stream.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: front yard left
     platform: generic
     stream_source: http://front-yard-left-stream.cameras/index.m3u8
-    still_image_url: http://front-yard-left.cameras/still.jpg
+    still_image_url: http://front-yard-left-stream.cameras/still.jpg
+  - name: front_yard_left_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://front-yard-left-stream.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: atrium
     platform: generic
     stream_source: http://atrium-stream.cameras/index.m3u8
-    still_image_url: http://atrium.cameras/still.jpg
+    still_image_url: http://atrium-stream.cameras/still.jpg
+  - name: atrium_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://atrium-stream.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: garage
     platform: generic
     stream_source: http://garage-stream.cameras/index.m3u8
-    still_image_url: http://garage.cameras/still.jpg
+    still_image_url: http://garage-stream.cameras/still.jpg
+  - name: garage_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://garage-stream.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: ac
     platform: generic
     stream_source: http://ac-stream.cameras/index.m3u8
-    still_image_url: http://ac.cameras/still.jpg
+    still_image_url: http://ac-stream.cameras/still.jpg
+  - name: ac_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://ac-stream.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: pergola
     platform: generic
     stream_source: http://pergola-stream.cameras/index.m3u8
-    still_image_url: http://pergola.cameras/still.jpg
+    still_image_url: http://pergola-stream.cameras/still.jpg
+  - name: pergola_faster_rcnn_inception_v2_coco
+    platform: generic
+    still_image_url: http://pergola-stream.cameras/faster_rcnn_inception_v2_coco.jpg
 
   # local_file cameras are setup for to support displaying snapshots with objects highlighted
   - platform: local_file
@@ -41,6 +62,15 @@ camera:
   - platform: local_file
     file_path: /tmp/doods_pergola.jpg
     name: doods_pergola
+  - platform: local_file
+    file_path: /tmp/doods_gate.jpg
+    name: doods_gate
+  - platform: local_file
+    file_path: /tmp/doods_garage.jpg
+    name: doods_garage
+  - platform: local_file
+    file_path: /tmp/doods_ac.jpg
+    name: doods_ac
 
 # Process images from selected cameras on an interval and look for interesting objects
 # Uses a copy of https://hub.docker.com/r/snowzach/doods running at http://doods:8080
@@ -48,9 +78,9 @@ camera:
 #
 #     cd /config
 #     mkdir -p models
-#     wget http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
+#     wget http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco.jpg_2018_01_28.tar.gz
 #     tar -zxvf faster_rcnn_inception_v2_coco_2018_01_28.tar.gz faster_rcnn_inception_v2_coco_2018_01_28/frozen_inference_graph.pb --strip=1
-#     mv frozen_inference_graph.pb models/faster_rcnn_inception_v2_coco_2018_01_28.pb
+#     mv frozen_inference_graph.pb models/faster_rcnn_inception_v2_coco.jpg_2018_01_28.pb
 #     rm faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
 #     wget https://raw.githubusercontent.com/amikelive/coco-labels/master/coco-labels-2014_2017.txt
 #     mv coco-labels-2014_2017.txt models/coco_labels1.txt
@@ -59,7 +89,7 @@ camera:
 #       detectors:
 #         - name: default
 #           type: tensorflow
-#           modelFile: /config/models/faster_rcnn_inception_v2_coco_2018_01_28.pb
+#           modelFile: /config/models/faster_rcnn_inception_v2_coco.jpg_2018_01_28.pb
 #           labelFile: /config/models/coco_labels1.txt
 #           numThreads: 1
 #           numConcurrent: 4
@@ -72,10 +102,10 @@ image_processing:
     url: "http://doods:8080"
     detector: default
     source:
-      - entity_id: camera.pergola
+      - entity_id: camera.pergola_faster_rcnn_inception_v2_coco
         name: pergola
     file_out:
-      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace('_faster_rcnn_inception_v2_coco', '') }}.jpg"
     labels:
       - name: dog
         confidence: 30
@@ -88,10 +118,10 @@ image_processing:
     url: "http://doods:8080"
     detector: default
     source:
-      - entity_id: camera.atrium
+      - entity_id: camera.atrium_faster_rcnn_inception_v2_coco
         name: atrium
     file_out:
-      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace('_faster_rcnn_inception_v2_coco', '') }}.jpg"
     area:
       # Exclude left part of image
       left: 0.20
@@ -108,10 +138,58 @@ image_processing:
     url: "http://doods:8080"
     detector: default
     source:
-      - entity_id: camera.back_porch
+      - entity_id: camera.back_porch_faster_rcnn_inception_v2_coco
         name: back porch
     file_out:
-      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace('_faster_rcnn_inception_v2_coco', '') }}.jpg"
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.gate_faster_rcnn_inception_v2_coco
+        name: gate
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace('_faster_rcnn_inception_v2_coco', '') }}.jpg"
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.garage_faster_rcnn_inception_v2_coco
+        name: garage
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace('_faster_rcnn_inception_v2_coco', '') }}.jpg"
+    labels:
+      - name: dog
+        confidence: 30
+      - name: person
+        confidence: 75
+
+  - platform: doods
+    scan_interval: 10
+    timeout: 60
+    url: "http://doods:8080"
+    detector: default
+    source:
+      - entity_id: camera.ac_faster_rcnn_inception_v2_coco
+        name: ac
+    file_out:
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace('_faster_rcnn_inception_v2_coco', '') }}.jpg"
     labels:
       - name: dog
         confidence: 30
@@ -125,10 +203,10 @@ image_processing:
     url: "http://doods:8080"
     detector: default
     source:
-      - entity_id: camera.front_yard_left
+      - entity_id: camera.front_yard_left_faster_rcnn_inception_v2_coco
         name: front yard left
     file_out:
-      - "/tmp/doods_{{ camera_entity.split('.')[1] }}.jpg"
+      - "/tmp/doods_{{ camera_entity.split('.')[1] | replace('_faster_rcnn_inception_v2_coco', '') }}.jpg"
     area:
       # Exclude street
       top: 0.18
@@ -154,11 +232,17 @@ binary_sensor:
 # Adding a unit allows these values to be graphed in the UI
 homeassistant:
   customize:
+    image_processing.ac:
+      unit_of_measurement: objects
     image_processing.atrium:
       unit_of_measurement: objects
     image_processing.back_porch:
       unit_of_measurement: objects
     image_processing.front_yard_left:
+      unit_of_measurement: objects
+    image_processing.garage:
+      unit_of_measurement: objects
+    image_processing.gate:
       unit_of_measurement: objects
     image_processing.pergola:
       unit_of_measurement: objects
@@ -170,14 +254,12 @@ automation:
       platform: event
       event_type: state_changed
     condition:
-      condition: and
-      conditions:
-        - condition: template
-          value_template: |
-            {{
-              trigger.event.data.new_state.domain == "image_processing" and
-              (trigger.event.data.new_state.attributes.total_matches | default(0)) > 0
-            }}
+      condition: template
+      value_template: |
+        {{
+          trigger.event.data.new_state.domain == "image_processing" and
+          (trigger.event.data.new_state.attributes.total_matches | default(0)) > 0
+        }}
     action:
       - service: notify.slack
         data_template:
@@ -187,4 +269,28 @@ automation:
             {% for thing in trigger.event.data.new_state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %}
           data:
             file:
-              path: /tmp/doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] }}.jpg
+              path: /tmp/doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] | replace('_faster_rcnn_inception_v2_coco', '') }}.jpg
+
+  - alias: change channel to streams with detected objects
+    trigger:
+      platform: event
+      event_type: state_changed
+    condition:
+      condition: template
+      value_template: |
+        {{
+          trigger.event.data.new_state.domain == "image_processing" and
+          (trigger.event.data.new_state.attributes.total_matches | default(0)) > 0
+        }}
+    action:
+      - service: media_player.select_source
+        data:
+          entity_id: media_player.music_room_channels
+          source: "{{ trigger.event.data.new_state.attributes.friendly_name | upper }} HD CAMERA"
+      - service: shell_command.notify_channels
+        data:
+          host: music-room
+          title: |
+            {{ trigger.event.data.new_state.attributes.friendly_name }}
+          message: |
+            {% for thing in trigger.event.data.new_state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %}

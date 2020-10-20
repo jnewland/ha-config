@@ -29,3 +29,12 @@
   host: !env_var MPR_API_IP
   port: !env_var MPR_API_PORT
   zone: 16
+- platform: channels
+  name: music room channels
+  host: music-room
+- platform: channels
+  name: lounge channels
+  host: office
+- platform: channels
+  name: bedroom channels
+  host: bedroom
