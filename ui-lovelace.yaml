@@ -414,7 +414,7 @@ views:
       - type: custom:auto-entities
         card:
           type: history-graph
-          hours_to_show: 80
+          hours_to_show: 12
         filter:
           include:
             - entity_id: "/core_ups/"
