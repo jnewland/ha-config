@@ -463,7 +463,7 @@ automation:
     trigger:
       platform: state
       entity_id:
-      - device_tracker.jphone_11_pro
+      - device_tracker.jphone_12
       - device_tracker.katie_s_iphone
     condition:
       condition: template

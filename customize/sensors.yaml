@@ -1,8 +1,8 @@
 sensor.alarm_sensors:
   icon: mdi:radar
-sensor.jphone_11_pro_battery_level:
+sensor.jphone_12_battery_level:
   friendly_name: jPhone 11 pro battery level
-sensor.jphone_11_pro_activity:
+sensor.jphone_12_activity:
   friendly_name: jPhone 11 pro activity
 sensor.katie_s_iphone_battery_level:
   friendly_name: Katie's iPhone battery level
