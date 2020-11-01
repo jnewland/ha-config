@@ -27,12 +27,12 @@ trigger:
     - binary_sensor.kitchen_motion
     - binary_sensor.front_gate
     - sensor.core_ups_state
-    - sensor.jphone_11_pro_battery_state
+    - sensor.jphone_12_battery_state
     - sensor.katie_s_iphone_battery_state
     - sensor.katie_s_iphone_activity
-    - sensor.jphone_11_pro_activity
+    - sensor.jphone_12_activity
     - device_tracker.katie_s_iphone
-    - device_tracker.jphone_11_pro
+    - device_tracker.jphone_12
     - device_tracker.jesses_ipad
     - device_tracker.jesse_music_room
     - binary_sensor.master_bath_motion
@@ -86,7 +86,7 @@ action:
       } %}
       {% set entity_emoji = {
         "media_player.office_tv":             ":tv:",
-        "sensor.jphone_11_pro_battery_state":      ":iphone:",
+        "sensor.jphone_12_battery_state":      ":iphone:",
         "sensor.katie_s_iphone_battery_state": ":iphone:",
         "sensor.alarm_sensors":               ":door:",
         "binary_sensor.master_ac_water_13":   ":droplet:",

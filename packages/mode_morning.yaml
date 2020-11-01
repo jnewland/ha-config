@@ -33,7 +33,7 @@ automation:
         to: 'on'
       - platform: state
         entity_id:
-        - sensor.jphone_11_pro_battery_state
+        - sensor.jphone_12_battery_state
         - sensor.katie_s_iphone_battery_state
         to: 'Not Charging'
         for:
