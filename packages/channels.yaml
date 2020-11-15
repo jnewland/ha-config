@@ -1,6 +1,35 @@
 
 script:
-  notify_channels:
+  change_all_to_camera:
+    sequence:
+      - service: script.change_to_camera
+        data:
+          entity_id: media_player.music_room_channels
+          camera: {{ camera }}
+      - service: script.change_to_camera
+        data:
+          entity_id: media_player.bedroom_channels
+          camera: {{ camera }}
+      - service: script.change_to_camera
+        data:
+          entity_id: media_player.lounge_channels
+          camera: {{ camera }}
+      - service: script.change_to_camera
+        data:
+          entity_id: media_player.garage_channels
+          camera: {{ camera }}
+
+  change_to_camera:
+    sequence:
+      - condition: template
+        value_template: |
+          {{ " camera" in states[entity_id].attributes.media_title }}
+      - service: media_player.select_source
+        data:
+          entity_id: {{ entity_id }}
+          source: "{{ camera | upper }} HD CAMERA"
+
+  notify_all_channels:
     sequence:
       - service: shell_command.notify_channels
         data:
@@ -19,6 +48,13 @@ script:
       - service: shell_command.notify_channels
         data:
           host: bedroom
+          title: |
+            {{ title | default("") }}
+          message: |
+            {{ message | default("") }}
+      - service: shell_command.notify_channels
+        data:
+          host: garage-tv
           title: |
             {{ title | default("") }}
           message: |

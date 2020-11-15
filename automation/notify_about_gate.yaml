@@ -17,7 +17,7 @@ action:
           content-type: jpeg
           hide-thumbnail: false
   - service: script.notify_with_lights
-  - service: script.notify_channels
+  - service: script.notify_all_channels
     data:
       message: the front gate just opened
   - service: notify.slack
