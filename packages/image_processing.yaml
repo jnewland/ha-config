@@ -283,6 +283,9 @@ automation:
           (trigger.event.data.new_state.attributes.total_matches | default(0)) > 0
         }}
     action:
+      - condition: template
+        value_template: |
+          {{ " camera" in states.media_player.music_room_channels.attributes.media_title }}
       - service: media_player.select_source
         data:
           entity_id: media_player.music_room_channels
