@@ -1,7 +1,7 @@
 FROM homeassistant/home-assistant:0.117.6
 
 RUN apk update && apk add --no-cache --update -q \
-  shadow sudo colordiff git-diff-highlight git make libstdc++ sudo ca-certificates vim curl tzdata htop
+  musl libgcc libstdc++ shadow sudo colordiff git-diff-highlight git make sudo ca-certificates vim curl tzdata htop
 
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID

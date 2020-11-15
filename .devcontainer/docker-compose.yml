@@ -7,8 +7,4 @@ services:
       - ..:/ha-config:cached
     user: vscode
     command: /ha-config/.devcontainer/entrypoint.sh
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - seccomp:unconfined
     env_file: ../.env
