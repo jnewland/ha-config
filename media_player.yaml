@@ -38,3 +38,6 @@
 - platform: channels
   name: bedroom channels
   host: bedroom
+- platform: channels
+  name: garage channels
+  host: garage-tv
