@@ -23,7 +23,10 @@ script:
     sequence:
       - condition: template
         value_template: |
-          {{ " camera" in states[entity_id].attributes.media_title }}
+          {{
+            " camera" in states[entity_id].attributes.media_title and
+            camera not in entity_id
+          }}
       - service: media_player.select_source
         data:
           entity_id: "{{ entity_id }}"
