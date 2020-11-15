@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  terminal:
+    build: .
+    volumes:
+      - ..:/ha-config:cached
+    user: vscode
+    command: /ha-config/.devcontainer/entrypoint.sh
+    env_file: ../.env

@@ -1,0 +1,20 @@
+{
+	"dockerComposeFile": "docker-compose.yml",
+	"workspaceFolder": "/ha-config",
+	"service": "terminal",
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash",
+	},
+    "extensions": [
+        "coenraads.bracket-pair-colorizer-2",
+        "eamodio.gitlens",
+        "github.vscode-pull-request-github",
+        "ms-azuretools.vscode-docker",
+        "ms-vsliveshare.vsliveshare",
+        "vscode-icons-team.vscode-icons",
+        "visualstudioexptteam.vscodeintellicode",
+        "redhat.vscode-yaml",
+        "sleistner.vscode-fileutils"
+    ],
+	"remoteUser": "vscode"
+}
