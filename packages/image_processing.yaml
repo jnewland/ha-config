@@ -285,7 +285,7 @@ automation:
     action:
       - service: script.change_all_to_camera
         data:
-          camera: {{ trigger.event.data.new_state.attributes.friendly_name }}
+          camera: "{{ trigger.event.data.new_state.attributes.friendly_name }}"
       - service: script.notify_all_channels
         data:
           title: |
