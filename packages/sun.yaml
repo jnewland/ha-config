@@ -36,6 +36,8 @@ script:
           {{ states.input_select.mode.state != "Away" }}
       - service: light.turn_on
         entity_id: light.bamboo
+      - service: homeassistant.turn_on
+        entity_id: group.trees
       - condition: template
         value_template: |
           {{
