@@ -9,7 +9,7 @@ action:
   - service: homeassistant.turn_on
     data:
       entity_id: '{{ trigger.event.data.action_data.entity_id }}'
-  - service_template: '{{ trigger.event.data.action_data.notify_service }}'
+  - service: '{{ trigger.event.data.action_data.notify_service }}'
     data:
       message: >
         {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}.

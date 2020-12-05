@@ -1,5 +1,5 @@
 sequence:
-  - service_template: |
+  - service: |
       {{ service | default("notify.iphones") }}
     data:
       message: |
