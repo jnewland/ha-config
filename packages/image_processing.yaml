@@ -262,7 +262,7 @@ automation:
         }}
     action:
       - service: notify.slack
-        data_template:
+        data:
           title: |
             {{ trigger.event.data.new_state.attributes.friendly_name }}
           message: |

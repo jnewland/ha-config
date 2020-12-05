@@ -1,7 +1,7 @@
 sequence:
   - service_template: |
       {{ service | default("notify.iphones") }}
-    data_template:
+    data:
       message: |
         {{ message | default("Turn on " + entity_id) }}
       data:
@@ -25,6 +25,6 @@ sequence:
           confirmation_message: |
             {{ confirmation_message | default("turned on " + entity_id) }}
   - service: notify.slack
-    data_template:
+    data:
       message: |
         :question: Asked {{ message | default("about turning on " + entity_id) }}

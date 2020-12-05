@@ -7,10 +7,10 @@ trigger:
     actionName: ACK_TURN_ON
 action:
   - service: homeassistant.turn_on
-    data_template:
+    data:
       entity_id: '{{ trigger.event.data.action_data.entity_id }}'
   - service_template: '{{ trigger.event.data.action_data.notify_service }}'
-    data_template:
+    data:
       message: >
         {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}.
       data:
@@ -18,5 +18,5 @@ action:
           'apns-collapse-id': >
             {{ trigger.event.data.action_data.apns_collapse_id | default(trigger.event.data.action_data.entity_id) }}
   - service: notify.slack
-    data_template:
+    data:
       message: ':+1: to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}'

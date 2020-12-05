@@ -5,7 +5,7 @@ trigger:
   entity_id: climate.great_room_27, climate.upstairs_28, climate.lounge
 action:
   service: notify.slack
-  data_template:
+  data:
     message: |
       {% set old_state = trigger.from_state %}
       {% set new_state = trigger.to_state %}

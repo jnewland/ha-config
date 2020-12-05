@@ -10,7 +10,7 @@ script:
   deploy:
     sequence:
     - service: notify.slack
-      data_template:
+      data:
         message: ':shipit:'
         data:
           blocks:
@@ -19,7 +19,7 @@ script:
               type: mrkdwn
               text: ':shipit: https://github.com/jnewland/ha-config/commit/{{ sha }}/checks'
     - service: shell_command.deploy
-      data_template:
+      data:
           sha: "{{ sha }}"
     - service: homeassistant.restart
 
