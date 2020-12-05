@@ -8,4 +8,5 @@ trigger:
 action:
   service: notify.slack
   data:
-    message: ':-1: to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}'
+    title: ':-1:'
+    message: nope to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}

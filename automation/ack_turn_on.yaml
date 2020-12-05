@@ -19,4 +19,5 @@ action:
             {{ trigger.event.data.action_data.apns_collapse_id | default(trigger.event.data.action_data.entity_id) }}
   - service: notify.slack
     data:
-      message: ':+1: to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}'
+      title: ':+1:'
+      message: yep to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}

@@ -26,5 +26,6 @@ sequence:
             {{ confirmation_message | default("turned on " + entity_id) }}
   - service: notify.slack
     data:
+      title: ':question:'
       message: |
-        :question: Asked {{ message | default("about turning on " + entity_id) }}
+        Asked {{ message | default("about turning on " + entity_id) }}

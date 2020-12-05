@@ -23,6 +23,7 @@ script:
         entity_id: group.security
       - service: notify.slack
         data:
+          title: sun
           message: ":city_sunrise:"
   sunset:
     sequence:
@@ -30,6 +31,7 @@ script:
         entity_id: group.security
       - service: notify.slack
         data:
+          title: sun
           message: ":city_sunset:"
       - condition: template
         value_template: |

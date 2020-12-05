@@ -22,7 +22,8 @@ action:
       message: the front gate just opened
   - service: notify.slack
     data:
-      message: ":camera_with_flash: The front gate just opened!"
+      title: ':camera_with_flash:'
+      message: The front gate just opened!
       data:
         file:
           url: |

@@ -1,5 +1,5 @@
 sequence:
   - service: notify.slack
     data:
-      message: ':house: Shutting down...'
-      target: '#general'
+      title: ':house:'
+      message: Shutting down...

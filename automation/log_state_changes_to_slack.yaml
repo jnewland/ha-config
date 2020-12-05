@@ -72,6 +72,7 @@ condition:
 action:
   service: notify.slack
   data:
+    title: state
     message: >
       {% set old_state = trigger.from_state %}
       {% set new_state = trigger.to_state %}
