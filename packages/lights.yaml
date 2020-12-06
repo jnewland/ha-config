@@ -727,4 +727,4 @@ script:
           entity_id: light.record_cabinet_right
 
 shell_command:
-  wake_bookshelf: curl -v --retry 3 --retry-max-time 10 --max-time 30 -X POST bookshelf:8686/wake
+  wake_bookshelf: curl -s --retry 3 --retry-max-time 10 --max-time 30 -X POST bookshelf:8686/wake
