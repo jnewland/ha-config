@@ -6,7 +6,7 @@ sequence:
 - service: homeassistant.turn_off
   entity_id:
   - group.upstairs
-- service: light.turn_off
+- service: homeassistant.turn_off
   data:
     entity_id: |
       {% if states.input_boolean.guests.state == "on" %}
