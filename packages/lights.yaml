@@ -187,9 +187,6 @@ homeassistant:
       notify_action: duck
     light.lounge_chandelier:
       notify_action: duck
-    light.lounge_desk_lamp:
-      notify_action: duck
-      duck_step: 192
     light.lounge_overhead:
       notify_action: duck
     light.pendants:
