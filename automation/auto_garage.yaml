@@ -8,7 +8,7 @@ trigger:
     minutes: 5
 action:
 - service: script.ask_about_turning_on
-  data_template:
+  data:
     entity_id: script.lock_up
     message: "The garage has been open for a bit. Close it up?"
     confirmation_message: closed the garage

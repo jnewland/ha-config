@@ -41,13 +41,13 @@ automation:
       value_template: "{{ state.attributes.temperature }}"
     action:
       - service: climate.set_hvac_mode
-        data_template:
+        data:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: heat
       - delay:
           seconds: 10
       - service: climate.set_temperature
-        data_template:
+        data:
           entity_id: "{{ trigger.to_state.entity_id }}"
           temperature: 72
 
@@ -69,13 +69,13 @@ automation:
       value_template: "{{ state.attributes.temperature }}"
     action:
       - service: climate.set_hvac_mode
-        data_template:
+        data:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: cool
       - delay:
           seconds: 10
       - service: climate.set_temperature
-        data_template:
+        data:
           entity_id: "{{ trigger.to_state.entity_id }}"
           temperature: 72
 
@@ -96,13 +96,13 @@ automation:
       value_template: "{{ state.attributes.temperature }}"
     action:
       - service: climate.set_hvac_mode
-        data_template:
+        data:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: heat
       - delay:
           seconds: 10
       - service: climate.set_temperature
-        data_template:
+        data:
           entity_id: "{{ trigger.to_state.entity_id }}"
           temperature: 69
 
@@ -118,13 +118,13 @@ automation:
         minutes: 3
     action:
       - service: climate.set_hvac_mode
-        data_template:
+        data:
           entity_id: "{{ trigger.to_state.entity_id }}"
           hvac_mode: cool
       - delay:
           seconds: 10
       - service: climate.set_temperature
-        data_template:
+        data:
           entity_id: "{{ trigger.to_state.entity_id }}"
           temperature: 73
 

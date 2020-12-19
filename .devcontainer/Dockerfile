@@ -1,4 +1,4 @@
-FROM homeassistant/home-assistant:0.118.5
+FROM homeassistant/home-assistant:1.0.0b1
 
 RUN apk update && apk add --no-cache --update -q \
   musl libgcc libstdc++ shadow sudo colordiff git-diff-highlight git make sudo ca-certificates vim curl tzdata htop

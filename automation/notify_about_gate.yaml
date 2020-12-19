@@ -5,7 +5,7 @@ trigger:
   to: 'on'
 action:
   - service: notify.iphones
-    data_template:
+    data:
       message: the front gate just opened!
       data:
         push:
@@ -21,8 +21,9 @@ action:
     data:
       message: the front gate just opened
   - service: notify.slack
-    data_template:
-      message: ":camera_with_flash: The front gate just opened!"
+    data:
+      title: ':camera_with_flash:'
+      message: The front gate just opened!
       data:
         file:
           url: |

@@ -18,7 +18,7 @@ condition:
     }}
 action:
   service: notify.mobile_app_jphone_12
-  data_template:
+  data:
     message: >
       {% set old_state = trigger.from_state %}
       {% set new_state = trigger.to_state %}

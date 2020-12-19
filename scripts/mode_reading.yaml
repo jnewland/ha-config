@@ -4,11 +4,11 @@ sequence:
   data:
     option: Reading
 - service: input_number.set_value
-  data_template:
+  data:
     entity_id: input_number.brightness
     value: 42
 - service: light.turn_on
-  data_template:
+  data:
     entity_id:
     - light.chandelier
     - light.chandelier_lamp
@@ -24,7 +24,7 @@ sequence:
     - light.master_overhead
     - light.stairs
 - service: light.turn_off
-  data_template:
+  data:
     entity_id: |
       {% if states.input_boolean.guests.state == "on" %}
       group.downstairs_non_guest
@@ -35,7 +35,7 @@ sequence:
   value_template: >
     {{ states.input_boolean.guests.state != "on" }}
 - service: script.ask_about_turning_on
-  data_template:
+  data:
     entity_id: script.arm
     message: "Arm the alarm?"
     confirmation_message: armed the alarm
