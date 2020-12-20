@@ -239,7 +239,7 @@ automation:
             at=on
             entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_entity_id }}
           logger: packages.lights
-          level: info
+          level: debug
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -309,7 +309,7 @@ automation:
             trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
             trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
           logger: packages.lights
-          level: info
+          level: debug
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -324,7 +324,7 @@ automation:
       - service: system_log.write
         data:
           logger: packages.lights
-          level: info
+          level: debug
           message: >
             at=delay_start
             event_id={{ trigger.event.data.event_id }}
@@ -350,7 +350,7 @@ automation:
             }}
             state={{ states(trigger.event.data.entity_id) }}
           logger: packages.lights
-          level: info
+          level: debug
       # Only continue if:
       # * The sensor is off
       # * It hasn't changed since we started delaying
@@ -378,7 +378,7 @@ automation:
             trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
             trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
           logger: packages.lights
-          level: info
+          level: debug
       - service: counter.increment
         entity_id: counter.light_automations
 
