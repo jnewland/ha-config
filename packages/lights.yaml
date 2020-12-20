@@ -226,7 +226,7 @@ automation:
           value_template: |
             {{ states.input_select.mode.state != "Away" }}
     action:
-      - service: |
+      - service: >
           {{ trigger.event.data.new_state.attributes.trigger_service | default('homeassistant.turn_on') }}
         data:
           entity_id: |
@@ -296,7 +296,7 @@ automation:
       event_data:
         delay: "False"
     action:
-      - service: |
+      - service: >
           {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
         data:
           entity_id: |
@@ -364,7 +364,7 @@ automation:
               as_timestamp(states[trigger.event.data.entity_id].last_changed) + (states[trigger.event.data.entity_id].attributes.off_delay_seconds | int)
             ) < as_timestamp(now())
           }}
-      - service: |
+      - service: >
           {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
         data:
           entity_id: |
@@ -481,7 +481,7 @@ automation:
           trigger.to_state.attributes.trigger_entity_id is defined
         }}
     action:
-      service: |
+      service: >
         {{ trigger.to_state.attributes.trigger_service | default('homeassistant.turn_on') }}
       data:
         entity_id: |
