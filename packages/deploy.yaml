@@ -16,7 +16,7 @@ script:
     - service: shell_command.deploy
       data:
           sha: "{{ sha }}"
-    - service: homeassistant.restart
+    - service: homeassistant.stop
 
 shell_command:
   deploy: /bin/bash ./script/deploy {{ sha }}
