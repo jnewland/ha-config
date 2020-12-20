@@ -248,21 +248,16 @@ automation:
     trigger:
       platform: event
       event_type: state_changed
-    condition:
-      condition: and
-      conditions:
-        - condition: template
-          value_template: |
-            {{
-              trigger.event.data.old_state != None and
-              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
-              trigger.event.data.new_state.domain == "binary_sensor" and
-              trigger.event.data.new_state.state == "off" and (
-                trigger.event.data.new_state.attributes.trigger_service_off is defined or
-                trigger.event.data.new_state.attributes.trigger_entity_id_off is defined
-              )
-            }}
-
+    condition: |
+      {{
+        trigger.event.data.old_state != None and
+        trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+        trigger.event.data.new_state.domain == "binary_sensor" and
+        trigger.event.data.new_state.state == "off" and (
+          trigger.event.data.new_state.attributes.trigger_service_off is defined or
+          trigger.event.data.new_state.attributes.trigger_entity_id_off is defined
+        )
+      }}
     action:
       # Emit a custom event including a boolean indicating whether or not to delay.
       - event: lights_motion_sensor_off
@@ -276,6 +271,22 @@ automation:
             {{ states[trigger.event.data.entity_id].last_changed }}
           event_id: |
             {{ (as_timestamp(now()) * 1000000) | int }}{{ range(0,9999) | random }}
+
+  - alias: Debug lights_motion_sensor_off
+    mode: parallel
+    trigger:
+      platform: event
+      event_type: lights_motion_sensor_off
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=lights_motion_sensor_off
+            trigger.event.data={{ trigger.event.data }}
+            trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
+            trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
+          logger: packages.lights
+          level: debug
 
   - alias: Turn off lights immediately
     mode: parallel
