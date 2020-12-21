@@ -272,22 +272,6 @@ automation:
           event_id: |
             {{ (as_timestamp(now()) * 1000000) | int }}{{ range(0,9999) | random }}
 
-  - alias: Debug lights_motion_sensor_off
-    mode: parallel
-    trigger:
-      platform: event
-      event_type: lights_motion_sensor_off
-    action:
-      - service: system_log.write
-        data:
-          message: >
-            at=lights_motion_sensor_off
-            trigger.event.data={{ trigger.event.data }}
-            trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
-            trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
-          logger: packages.lights
-          level: debug
-
   - alias: Turn off lights immediately
     mode: parallel
     trigger:
