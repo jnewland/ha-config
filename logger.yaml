@@ -1,6 +1,6 @@
 default: info
 logs:
-  packages.lights: debug
+  packages.lights: info
   requests.packages.urllib3.connectionpool: critical
   homeassistant.components.media_player: warn
   homeassistant.components.light: warn
