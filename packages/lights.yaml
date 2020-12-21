@@ -294,7 +294,7 @@ automation:
       platform: event
       event_type: lights_motion_sensor_off
       event_data:
-        delay: "False"
+        delay: false
     action:
       - service: >
           {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
@@ -319,7 +319,7 @@ automation:
       platform: event
       event_type: lights_motion_sensor_off
       event_data:
-        delay: "True"
+        delay: true
     action:
       - service: system_log.write
         data:
