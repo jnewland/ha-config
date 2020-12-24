@@ -53,7 +53,7 @@ jobs:
         env:
           HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
           HASS_URL: ${{ secrets.HASS_URL }}
-          TIMEOUT: "120"
+          TIMEOUT: "240"
         run: |
           while true; do
             curl \

@@ -226,7 +226,7 @@ automation:
           value_template: |
             {{ states.input_select.mode.state != "Away" }}
     action:
-      - service: |
+      - service: >
           {{ trigger.event.data.new_state.attributes.trigger_service | default('homeassistant.turn_on') }}
         data:
           entity_id: |
@@ -239,7 +239,7 @@ automation:
             at=on
             entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_entity_id }}
           logger: packages.lights
-          level: info
+          level: debug
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -248,21 +248,16 @@ automation:
     trigger:
       platform: event
       event_type: state_changed
-    condition:
-      condition: and
-      conditions:
-        - condition: template
-          value_template: |
-            {{
-              trigger.event.data.old_state != None and
-              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
-              trigger.event.data.new_state.domain == "binary_sensor" and
-              trigger.event.data.new_state.state == "off" and (
-                trigger.event.data.new_state.attributes.trigger_service_off is defined or
-                trigger.event.data.new_state.attributes.trigger_entity_id_off is defined
-              )
-            }}
-
+    condition: |
+      {{
+        trigger.event.data.old_state != None and
+        trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+        trigger.event.data.new_state.domain == "binary_sensor" and
+        trigger.event.data.new_state.state == "off" and (
+          trigger.event.data.new_state.attributes.trigger_service_off is defined or
+          trigger.event.data.new_state.attributes.trigger_entity_id_off is defined
+        )
+      }}
     action:
       # Emit a custom event including a boolean indicating whether or not to delay.
       - event: lights_motion_sensor_off
@@ -283,9 +278,9 @@ automation:
       platform: event
       event_type: lights_motion_sensor_off
       event_data:
-        delay: "False"
+        delay: false
     action:
-      - service: |
+      - service: >
           {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
         data:
           entity_id: |
@@ -298,7 +293,7 @@ automation:
             trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
             trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
           logger: packages.lights
-          level: info
+          level: debug
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -308,12 +303,12 @@ automation:
       platform: event
       event_type: lights_motion_sensor_off
       event_data:
-        delay: "True"
+        delay: true
     action:
       - service: system_log.write
         data:
           logger: packages.lights
-          level: info
+          level: debug
           message: >
             at=delay_start
             event_id={{ trigger.event.data.event_id }}
@@ -339,7 +334,7 @@ automation:
             }}
             state={{ states(trigger.event.data.entity_id) }}
           logger: packages.lights
-          level: info
+          level: debug
       # Only continue if:
       # * The sensor is off
       # * It hasn't changed since we started delaying
@@ -353,7 +348,7 @@ automation:
               as_timestamp(states[trigger.event.data.entity_id].last_changed) + (states[trigger.event.data.entity_id].attributes.off_delay_seconds | int)
             ) < as_timestamp(now())
           }}
-      - service: |
+      - service: >
           {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
         data:
           entity_id: |
@@ -367,7 +362,7 @@ automation:
             trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
             trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
           logger: packages.lights
-          level: info
+          level: debug
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -470,7 +465,7 @@ automation:
           trigger.to_state.attributes.trigger_entity_id is defined
         }}
     action:
-      service: |
+      service: >
         {{ trigger.to_state.attributes.trigger_service | default('homeassistant.turn_on') }}
       data:
         entity_id: |
@@ -497,7 +492,7 @@ automation:
       data:
         title: ':bulb:'
         message: |
-          *{{ trigger.event.data.new_state.name | capitalize }}*{{ " " -}}
+          :bulb: *{{ trigger.event.data.new_state.name | capitalize }}*{{ " " -}}
           {%- if trigger.event.data.new_state.state == "on" -%}
           *_{{ '%0.0f' % ( ( trigger.event.data.new_state.attributes.brightness / 255 | round ) * 100 ) }}%_*
           {%- else -%}

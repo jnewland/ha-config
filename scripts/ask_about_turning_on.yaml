@@ -1,5 +1,5 @@
 sequence:
-  - service: |
+  - service: >
       {{ service | default("notify.iphones") }}
     data:
       message: |
@@ -20,7 +20,7 @@ sequence:
             {{ apns_collapse_id | default(entity_id) }}
           entity_id: |
             {{ entity_id }}
-          notify_service: |
+          notify_service: >
             {{ service | default("notify.iphones") }}
           confirmation_message: |
             {{ confirmation_message | default("turned on " + entity_id) }}
