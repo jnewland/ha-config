@@ -44,17 +44,6 @@ trigger:
     - media_player.office
     - media_player.music_room
     - media_player.bedroom
-    - media_player.atrium_speakers
-    - media_player.house_back_porch
-    - media_player.house_jnewland
-    - media_player.kitchen_speakers
-    - media_player.living_speakers
-    - media_player.master_bathroom_speakers
-    - media_player.master_bedroom_speakers
-    - media_player.house_mpr6zhmaut
-    - media_player.house_lounge
-    - media_player.patio_speakers
-    - media_player.record_cabinet
     - binary_sensor.music_room_window
     - weather.dark_sky
 condition:
