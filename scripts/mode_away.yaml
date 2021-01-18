@@ -2,6 +2,7 @@ sequence:
   - service: homeassistant.turn_off
     entity_id:
       - group.indoor
+      - group.group_speakers
   - service: alarm_control_panel.alarm_arm_home
     entity_id: alarm_control_panel.alarm
   - service: input_select.select_option

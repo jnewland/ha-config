@@ -1,5 +1,34 @@
+media_player.atrium_speakers:
+  emulated_hue_hidden: false
+  friendly_name: "Atrium speakers"
+media_player.house_back_porch:
+  friendly_name: "Back porch speakers"
+media_player.kitchen_speakers:
+  emulated_hue_hidden: false
+  friendly_name: "Kitchen speakers"
+media_player.house_computer:
+  friendly_name: "Music room speakers"
+  emulated_hue_hidden: false
+media_player.living_speakers:
+  emulated_hue_hidden: false
+  friendly_name: "Living speakers"
+media_player.master_bathroom_speakers:
+  emulated_hue_hidden: false
+  friendly_name: "Master bathroom speakers"
+media_player.master_bedroom_speakers:
+  emulated_hue_hidden: false
+  friendly_name: "Master bedroom speakers"
+media_player.house_mpr6zhmaut:
+  friendly_name: "House speakers"
+  emulated_hue_hidden: false
 media_player.office:
   friendly_name: Lounge
+media_player.house_office:
+  emulated_hue_hidden: false
+  friendly_name: "Lounge speakers"
 media_player.patio_speakers:
   emulated_hue_hidden: false
   friendly_name: "Patio speakers"
+media_player.house_jnewland:
+  emulated_hue_hidden: false
+  friendly_name: "Laptop speakers"
