@@ -162,7 +162,7 @@ automation:
       - service: climate.set_fan_mode
         entity_id: climate.upstairs
         data:
-          fan_mode: "auto"
+          fan_mode: "on"
       - delay:
           seconds: 10
       - service: climate.set_hvac_mode
