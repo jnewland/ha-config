@@ -336,22 +336,6 @@ views:
           - light.record_cabinet_left
           - light.record_cabinet_right
 
-  - title: Speakers
-    icon: mdi:speaker
-    cards:
-      - type: media-control
-        entity: media_player.atrium_speakers
-      - type: media-control
-        entity: media_player.kitchen_speakers
-      - type: media-control
-        entity: media_player.living_speakers
-      - type: media-control
-        entity: media_player.master_bathroom_speakers
-      - type: media-control
-        entity: media_player.master_bedroom_speakers
-      - type: media-control
-        entity: media_player.patio_speakers
-
   - title: Climate
     icon: mdi:temperature-fahrenheit
     cards:

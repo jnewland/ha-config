@@ -1,4 +1,0 @@
-name: Upstairs speakers
-entities:
-- media_player.master_bedroom_speakers
-- media_player.master_bathroom_speakers
