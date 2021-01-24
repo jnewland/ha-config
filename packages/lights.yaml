@@ -17,6 +17,8 @@ homeassistant:
     # trigger_service_off: service
     # trigger_entity_id_off: entity_id
 
+    binary_sensor.master_door:
+      haunt: light.bookshelf_right
     binary_sensor.stairs_motion:
       trigger_entity_id: light.stairs
       trigger_entity_id_off: light.stairs
