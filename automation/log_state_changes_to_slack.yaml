@@ -46,7 +46,6 @@ trigger:
     - media_player.bedroom
     - binary_sensor.music_room_window
     - weather.dark_sky
-    - vacuum.downstairs980
 condition:
   condition: template
   value_template: |
