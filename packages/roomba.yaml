@@ -52,5 +52,21 @@ automation:
       - service: vacuum.start
         entity_id: vacuum.downstairs980
 
+  - alias: Roomba state
+    trigger:
+      - platform: state
+        entity_id: vacuum.downstairs980
+        # from:
+        #   - "cleaning"
+        #   - "returning"
+        # to: "error"
+    action:
+      - service: script.ask_about_turning_on
+        data:
+          entity_id: script.noop
+          apns_collapse_id: downstairs980
+          message: >
+            the roomba is {{ states.vacuum.downstairs980.state }}
+          confirmation_message: helped the robot
 
 
