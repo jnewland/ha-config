@@ -1,3 +1,9 @@
+input_boolean:
+  weatherized:
+    initial: off
+    name: weatherized
+    icon: mdi:home-thermometer-outline
+
 binary_sensor:
   - platform: template
     sensors:
@@ -20,10 +26,14 @@ automation:
       entity_id: binary_sensor.freeze_forecast
       from: "on"
       to: "off"
+    condition:
+      condition: state
+      entity_id: input_boolean.weatherized
+      state: "off"
     action:
       - service: script.ask_about_turning_on
         data:
-          entity_id: script.noop
+          entity_id: input_boolean.weatherized
           apns_collapse_id: weatherize
           message: There's a freeze in the forecast. Is everything weatherized?
           confirmation_message: weatherized, cool
@@ -35,10 +45,14 @@ automation:
       entity_id: binary_sensor.freeze
       from: "on"
       to: "off"
+    condition:
+      condition: state
+      entity_id: input_boolean.weatherized
+      state: "off"
     action:
       - service: script.ask_about_turning_on
         data:
-          entity_id: script.noop
+          entity_id: input_boolean.weatherized
           apns_collapse_id: feeze
           message: It's now below freezing. Is everything weatherized?
           confirmation_message: weatherized, cool
