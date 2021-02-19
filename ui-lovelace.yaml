@@ -17,12 +17,12 @@ views:
           - vacuum.downstairs980
       - type: conditional
         conditions:
-          - entity: input_boolean.weatherized
+          - entity: input_boolean.winterized
             state: "on"
         card:
           type: entities
           entities:
-            - input_boolean.weatherized
+            - input_boolean.winterized
             - weather.dark_sky
             - binary_sensor.freeze_forecast
       - type: picture-entity
