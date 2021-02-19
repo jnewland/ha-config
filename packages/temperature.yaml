@@ -1,0 +1,42 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      freeze_forecast:
+        friendly_name: Freeze in forecast
+        device_class: cold
+        value_template: |
+          {{ state_attr('weather.dark_sky', 'forecast') | default({'temperature':33}) | map(attribute='temperature') | min < 33 }}
+      freeze:
+        friendly_name: Freeze
+        device_class: cold
+        value_template: |
+          {{ state_attr('weather.dark_sky', 'temperature') | default(33) < 33 }}
+
+automation:
+  - alias: Freeze forecast notifications
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.freeze_forecast
+      from: "on"
+      to: "off"
+    action:
+      - service: script.ask_about_turning_on
+        data:
+          entity_id: script.noop
+          apns_collapse_id: weatherize
+          message: There's a freeze in the forecast. Is everything weatherized?
+          confirmation_message: weatherized, cool
+
+  - alias: Freeze notifications
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.freeze
+      from: "on"
+      to: "off"
+    action:
+      - service: script.ask_about_turning_on
+        data:
+          entity_id: script.noop
+          apns_collapse_id: feeze
+          message: It's now below freezing. Is everything weatherized?
+          confirmation_message: weatherized, cool
