@@ -14,6 +14,7 @@ binary_sensor:
 
 automation:
   - alias: Freeze forecast notifications
+    initial_state: off
     trigger:
     - platform: state
       entity_id: binary_sensor.freeze_forecast
@@ -28,6 +29,7 @@ automation:
           confirmation_message: weatherized, cool
 
   - alias: Freeze notifications
+    initial_state: off
     trigger:
     - platform: state
       entity_id: binary_sensor.freeze
