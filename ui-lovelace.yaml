@@ -23,7 +23,7 @@ views:
           type: entities
           entities:
             - input_boolean.weatherized
-            - binary_sensor.freeze
+            - weather.dark_sky
             - binary_sensor.freeze_forecast
       - type: picture-entity
         show_name: false
