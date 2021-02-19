@@ -15,6 +15,8 @@ views:
           - binary_sensor.front_gate
           - input_number.brightness
           - vacuum.downstairs980
+          - binary_sensor.freeze
+          - binary_sensor.freeze_forecast
       - type: entities
         entities:
           - switch.great_room_tree
