@@ -15,12 +15,16 @@ views:
           - binary_sensor.front_gate
           - input_number.brightness
           - vacuum.downstairs980
-      - type: entities
-        entities:
-          - switch.great_room_tree
-          - switch.hall_tree
-          - switch.lounge_tree
-          - switch.treeo
+      - type: conditional
+        conditions:
+          - entity: input_boolean.winterized
+            state: "on"
+        card:
+          type: entities
+          entities:
+            - input_boolean.winterized
+            - weather.dark_sky
+            - binary_sensor.freeze_forecast
       - type: picture-entity
         show_name: false
         show_state: false
