@@ -74,7 +74,7 @@ homeassistant:
       off_delay_seconds: 600
       haunt: light.bookshelf_middle
     binary_sensor.great_room_occupied:
-      trigger_service: script.living_lights
+      trigger_service: script.great_room_lights
       trigger_entity_id_off: group.great_room
       haunt: light.bookshelf_right
     binary_sensor.pantry_motion:
@@ -546,25 +546,14 @@ input_number:
     step: 1
 
 script:
-  living_lights:
+  great_room_lights:
     sequence:
-      - service: light.turn_on
+      - service: scene.turn_on
+        target:
+          entity_id: scene.great_room_{{ states.input_select.mode.state | lower }}
         data:
-          entity_id: light.cabinets
-      - condition: template
-        value_template: >
-          {{ states.input_select.mode.state != "Sleeping" }}
-      - service: light.turn_on
-        data:
-          entity_id:
-            - light.dining_room_table
-            - light.kitchen
-            - light.living
-            - light.pendants
-            - light.couch_lamp_right
-            - light.couch_lamp_left
-          brightness: |
-            {{ brightness | default(states('input_number.brightness') | int) }}
+          transition: >
+            {{ "5" if states.input_select.mode.state in ["Evening", "Cocktail", "Cooking"] else "0.1" }}
 
   master_bath_lights:
     sequence:

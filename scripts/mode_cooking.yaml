@@ -1,0 +1,8 @@
+sequence:
+- service: input_select.select_option
+  entity_id: input_select.mode
+  data:
+    option: Cooking
+- service: scene.turn_on
+  target:
+    entity_id: scene.great_room_cooking

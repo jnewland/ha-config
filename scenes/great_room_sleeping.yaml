@@ -1,0 +1,9 @@
+name: Great Room Sleeping
+entities:
+  light.cabinets: "on"
+  light.dining_room_table: "off"
+  light.kitchen: "off"
+  light.living: "off"
+  light.pendants: "off"
+  light.couch_lamp_right: "off"
+  light.couch_lamp_left: "off"
