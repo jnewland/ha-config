@@ -549,9 +549,9 @@ script:
   great_room_lights:
     sequence:
       - service: scene.turn_on
-        entity_id: >
-          scene.great_room_{{ states.input_select.mode.state | lower }}
         data:
+          entity_id: >
+            scene.great_room_{{ states.input_select.mode.state | lower }}
           transition: >
             {{ "5" if states.input_select.mode.state in ["Evening", "Cocktail", "Cooking"] else "0.1" }}
   mode_cocktail:
