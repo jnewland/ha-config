@@ -562,7 +562,7 @@ script:
         option: Cocktail
     - service: script.turn_on
       entity_id: script.great_room_lights
-  mode_coooking:
+  mode_cooking:
     sequence:
     - service: input_select.select_option
       entity_id: input_select.mode
@@ -570,6 +570,16 @@ script:
         option: Cooking
     - service: script.turn_on
       entity_id: script.great_room_lights
+  mode_day:
+    sequence:
+    - service: input_select.select_option
+      entity_id: input_select.mode
+      data:
+        option: Day
+    - service: script.turn_on
+      entity_id: script.great_room_lights
+
+
 
   master_bath_lights:
     sequence:
