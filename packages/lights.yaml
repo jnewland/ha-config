@@ -550,7 +550,8 @@ script:
     sequence:
       - service: scene.turn_on
         target:
-          entity_id: scene.great_room_{{ states.input_select.mode.state | lower }}
+          entity_id: >
+            scene.great_room_{{ states.input_select.mode.state | lower }}
         data:
           transition: >
             {{ "5" if states.input_select.mode.state in ["Evening", "Cocktail", "Cooking"] else "0.1" }}
