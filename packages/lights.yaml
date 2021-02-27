@@ -549,12 +549,27 @@ script:
   great_room_lights:
     sequence:
       - service: scene.turn_on
-        target:
-          entity_id: >
-            scene.great_room_{{ states.input_select.mode.state | lower }}
+        entity_id: >
+          scene.great_room_{{ states.input_select.mode.state | lower }}
         data:
           transition: >
             {{ "5" if states.input_select.mode.state in ["Evening", "Cocktail", "Cooking"] else "0.1" }}
+  mode_cocktail:
+    sequence:
+    - service: input_select.select_option
+      entity_id: input_select.mode
+      data:
+        option: Cocktail
+    - service: script.turn_on
+      entity_id: script.great_room_lights
+  mode_coooking:
+    sequence:
+    - service: input_select.select_option
+      entity_id: input_select.mode
+      data:
+        option: Cooking
+    - service: script.turn_on
+      entity_id: script.great_room_lights
 
   master_bath_lights:
     sequence:
