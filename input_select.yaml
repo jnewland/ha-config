@@ -3,8 +3,10 @@ mode:
   options:
    - Morning
    - Day
-   - Party
    - Evening
+   - Party
+   - Cocktail
+   - Cooking
    - Reading
    - Sleeping
    - Away
