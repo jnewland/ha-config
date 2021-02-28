@@ -10,3 +10,5 @@ sequence:
   - service: homeassistant.turn_off
     entity_id:
       - light.lounge_overhead
+  - service: script.turn_on
+    entity_id: script.great_room_lights

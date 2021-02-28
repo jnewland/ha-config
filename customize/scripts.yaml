@@ -5,7 +5,11 @@ script.mute:
 script.lounge_lights:
   friendly_name: Working
   emulated_hue_hidden: false
-script.living_lights:
+script.mode_cocktail:
+  friendly_name: Cocktail
+  emulated_hue_hidden: false
+  emulated_hue_name: Cooking
+script.mode_cooking:
   friendly_name: Cooking
   emulated_hue_hidden: false
   emulated_hue_name: Cooking

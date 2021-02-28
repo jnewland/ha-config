@@ -1,0 +1,9 @@
+name: Great Room Party
+entities:
+  light.cabinets: "on"
+  light.dining_room_table: "on"
+  light.kitchen: "on"
+  light.living: "on"
+  light.pendants: "on"
+  light.couch_lamp_right: "on"
+  light.couch_lamp_left: "on"
