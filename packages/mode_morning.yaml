@@ -13,6 +13,7 @@ automation:
     - service: homeassistant.turn_on
       entity_id:
         - media_player.record_cabinet_output_bedside_table
+        - media_player.record_cabinet_output_master
     - service: media_player.select_source
       entity_id: media_player.record_cabinet
       data:
