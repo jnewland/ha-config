@@ -14,7 +14,7 @@ homeassistant:
     - https://home.jnewland.com
 
 default_config:
-
+aerogarden: !include aerogarden.yaml
 alarm_control_panel: !include alarm_control_panel.yaml
 automation: !include_dir_list automation
 binary_sensor: !include_dir_list binary_sensors

@@ -1,0 +1,5 @@
+sensor:
+  - platform: bhyve
+
+switch:
+  - platform: bhyve

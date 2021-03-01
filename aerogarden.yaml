@@ -1,0 +1,2 @@
+username: !env_var AEROGARDEN_USERNAME
+password: !env_var AEROGARDEN_PASSWORD
