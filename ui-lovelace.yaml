@@ -421,6 +421,12 @@ views:
           - binary_sensor.kitchen_needs_water
           - sensor.kitchen_nutrients_days
           - sensor.kitchen_planted_days
+      - type: entities
+        title: Irrigation
+        entities:
+          - sensor.patio_irrigation_state
+          - sensor.patio_irrigation_battery_level
+          - switch.patio_irrigation_rain_delay
 
   - title: Core
     icon: mdi:server-network
