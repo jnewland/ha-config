@@ -408,6 +408,20 @@ views:
           include:
             - entity_id: "/^sensor.*_light$/"
 
+  - title: Garden
+    icon: mdi:shovel
+    cards:
+      - type: entities
+        title: Kitchen Herb Garden
+        show_header_toggle: false
+        entities:
+          - light.kitchen_light
+          - binary_sensor.kitchen_pump
+          - binary_sensor.kitchen_needs_nutrients
+          - binary_sensor.kitchen_needs_water
+          - sensor.kitchen_nutrient_days
+          - sensor.kitchen_planted_days
+
   - title: Core
     icon: mdi:server-network
     cards:
