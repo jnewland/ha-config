@@ -2,6 +2,8 @@
 
 set -ex
 
+: ${TMPDIR:=$RUNNER_TEMP}
+
 rm -rf custom_components/apple_tv
 git clone https://github.com/postlund/hass-atv-beta $TMPDIR/hass-atv-beta-$$
 mv $TMPDIR/hass-atv-beta-$$/custom_components/apple_tv custom_components
@@ -12,7 +14,7 @@ git clone https://github.com/sebr/bhyve-home-assistant $TMPDIR/bhyve-home-assist
 mv $TMPDIR/bhyve-home-assistant-$$/custom_components/bhyve custom_components
 rm -rf $TMPDIR/bhyve-home-assistant-$$
 
-rm -rf custom_components/homeassistant-aerogarden || true
+rm -rf custom_components/aerogarden || true
 git clone https://github.com/JeremyKennedy/homeassistant-aerogarden $TMPDIR/homeassistant-aerogarden-$$
 mv $TMPDIR/homeassistant-aerogarden-$$/custom_components/aerogarden custom_components
 rm -rf $TMPDIR/homeassistant-aerogarden-$$
