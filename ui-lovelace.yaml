@@ -427,6 +427,9 @@ views:
           - sensor.patio_irrigation_state
           - sensor.patio_irrigation_battery_level
           - switch.patio_irrigation_rain_delay
+          - switch.patio_irrigation_patio_program
+          - switch.patio_irrigation_zone
+          - sensor.patio_irrigation_zone_history
 
   - title: Core
     icon: mdi:server-network
