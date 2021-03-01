@@ -11,12 +11,7 @@ jobs:
       run: |
         git config --local user.email "hubot@github.com"
         git config --local user.name "GitHub Actions"
-        git rm -r custom_components/apple_tv || true
-
-        git clone https://github.com/postlund/hass-atv-beta /tmp/hass-atv-beta
-        mv /tmp/hass-atv-beta/custom_components/apple_tv custom_components
-        rm -rf /tmp/hass-atv-beta
-        git add .
+        ./script/sync-components
 
     - name: commit and push
       env:

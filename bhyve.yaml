@@ -1,0 +1,2 @@
+username: !env_var BHYVE_USERNAME
+password: !env_var BHYVE_PASSWORD
