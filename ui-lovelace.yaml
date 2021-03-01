@@ -419,7 +419,7 @@ views:
           - binary_sensor.kitchen_pump
           - binary_sensor.kitchen_needs_nutrients
           - binary_sensor.kitchen_needs_water
-          - sensor.kitchen_nutrient_days
+          - sensor.kitchen_nutrients_days
           - sensor.kitchen_planted_days
 
   - title: Core
