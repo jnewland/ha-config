@@ -10,8 +10,6 @@ views:
           - input_select.mode
           - alarm_control_panel.alarm
           - lock.front_door
-          - cover.garage
-          - cover.gate
           - binary_sensor.front_gate
           - input_number.brightness
           - vacuum.downstairs980
@@ -29,22 +27,26 @@ views:
         show_name: false
         show_state: false
         entity: camera.pergola
-      - type: picture-entity
-        show_name: false
-        show_state: false
-        entity: camera.gate
-      - type: picture-entity
-        show_name: false
-        show_state: false
-        entity: camera.garage
+      - type: picture-glance
+        camera_image: camera.gate
+        entities:
+          - cover.gate
+          - light.garage_door
+      - type: picture-glance
+        camera_image: camera.garage
+        entities:
+          - cover.garage
       - type: picture-entity
         show_name: false
         show_state: false
         entity: camera.atrium
-      - type: picture-entity
-        show_name: false
-        show_state: false
-        entity: camera.back_porch
+      - type: picture-glance
+        camera_image: camera.back_porch
+        entities:
+          - switch.back_porch
+          - switch.back_porch_fountain
+          - switch.bug_zapper
+
       - type: weather-forecast
         entity: weather.dark_sky
       - type: picture
