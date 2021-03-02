@@ -4,3 +4,9 @@ switch.hall_tree:
   icon: mdi:pine-tree
 switch.lounge_tree:
   icon: mdi:pine-tree
+switch.back_porch:
+  icon: mdi:fan
+switch.back_porch_fountain:
+  icon: mdi:fountain
+switch.bug_zapper:
+  icon: mdi:shield-bug

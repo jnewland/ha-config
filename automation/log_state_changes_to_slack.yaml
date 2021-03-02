@@ -57,6 +57,11 @@ trigger:
     - media_player.record_cabinet
     - binary_sensor.music_room_window
     - weather.dark_sky
+    - light.kitchen_light
+    - binary_sensor.kitchen_needs_nutrients
+    - binary_sensor.kitchen_needs_water
+    - switch.patio_irrigation_rain_delay
+    - switch.patio_zone
 condition:
   condition: template
   value_template: |
