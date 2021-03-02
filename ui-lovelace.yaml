@@ -13,7 +13,6 @@ views:
           - binary_sensor.front_gate
           - input_number.brightness
           - vacuum.downstairs980
-          - light.front_door
           - light.front_porch
       - type: conditional
         conditions:
@@ -42,8 +41,6 @@ views:
         camera_image: camera.atrium
         entities:
           - light.bamboo
-          - light.atrium
-          - light.atrium_door
       - type: picture-glance
         camera_image: camera.back_porch
         entities:
