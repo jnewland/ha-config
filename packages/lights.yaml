@@ -197,6 +197,9 @@ homeassistant:
     light.wine_room:
       fixed_brightness: 102
 
+    light.kitchen_light:
+      ignore_brightness: true
+
 binary_sensor:
   - platform: template
     sensors:
