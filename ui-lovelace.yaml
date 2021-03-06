@@ -439,28 +439,28 @@ views:
           - sensor.patio_next_watering
           - sensor.patio_irrigation_rain_delay_finishing
       - type: history-graph
-        title: history
+        title: light
         hours_to_show: 80
         entities:
           - sensor.greenhouse_light
           - sensor.bamboo_light
           - sensor.front_porch_planter_light
       - type: history-graph
-        title: history
+        title: moisture
         hours_to_show: 4
         entities:
           - sensor.greenhouse_moisture
           - sensor.bamboo_moisture
           - sensor.front_porch_planter_moisture
       - type: history-graph
-        title: history
+        title: temperature
         hours_to_show: 4
         entities:
           - sensor.greenhouse_temperature
           - sensor.bamboo_temperature
           - sensor.front_porch_planter_temperature
       - type: history-graph
-        title: history
+        title: soil conductivity
         hours_to_show: 4
         entities:
           - sensor.greenhouse_soil_conductivity
