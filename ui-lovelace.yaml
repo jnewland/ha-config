@@ -129,7 +129,7 @@ views:
           - binary_sensor.music_room_motion
           - binary_sensor.music_room_window
           - sensor.music_room_temp
-          - sensor.bookshelf_active
+          - binary_sensor.bookshelf_active
           - binary_sensor.bookshelf_camera_in_use
           - sensor.bookshelf_frontmost_app
         footer:
