@@ -438,6 +438,34 @@ views:
           - sensor.patio_zone_history
           - sensor.patio_next_watering
           - sensor.patio_irrigation_rain_delay_finishing
+      - type: history-graph
+        title: history
+        hours_to_show: 80
+        entities:
+          - sensor.greenhouse_light
+          - sensor.bamboo_light
+          - sensor.front_porch_planter_light
+      - type: history-graph
+        title: history
+        hours_to_show: 4
+        entities:
+          - sensor.greenhouse_moisture
+          - sensor.bamboo_moisture
+          - sensor.front_porch_planter_moisture
+      - type: history-graph
+        title: history
+        hours_to_show: 4
+        entities:
+          - sensor.greenhouse_temperature
+          - sensor.bamboo_temperature
+          - sensor.front_porch_planter_temperature
+      - type: history-graph
+        title: history
+        hours_to_show: 4
+        entities:
+          - sensor.greenhouse_soil_conductivity
+          - sensor.bamboo_soil_conductivity
+          - sensor.front_porch_planter_soil_conductivity
 
   - title: Core
     icon: mdi:server-network
