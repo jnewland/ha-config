@@ -730,6 +730,7 @@ script:
           seconds: 1
       - service: light.turn_on
         data:
+          color_temp: 396
           entity_id:
             - light.record_cabinet_left
             - light.record_cabinet_right
