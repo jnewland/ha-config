@@ -751,10 +751,10 @@ script:
     sequence:
       - service: light.turn_on
         data:
+          color_name: red
           entity_id:
             - light.record_cabinet_left
             - light.record_cabinet_right
-          color: red
 
 shell_command:
   wake_bookshelf: curl -s --retry 3 --retry-max-time 10 --max-time 30 -X POST bookshelf:8686/wake
