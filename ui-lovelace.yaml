@@ -445,6 +445,7 @@ views:
           - sensor.greenhouse_light
           - sensor.bamboo_light
           - sensor.patio_planter_light
+          - sensor.lime_tree_light
       - type: history-graph
         title: moisture
         hours_to_show: 80
@@ -452,6 +453,7 @@ views:
           - sensor.greenhouse_moisture
           - sensor.bamboo_moisture
           - sensor.patio_planter_moisture
+          - sensor.lime_tree_moisture
       - type: history-graph
         title: temperature
         hours_to_show: 80
@@ -459,6 +461,7 @@ views:
           - sensor.greenhouse_temperature
           - sensor.bamboo_temperature
           - sensor.patio_planter_temperature
+          - sensor.lime_tree_temperature
       - type: history-graph
         title: soil conductivity
         hours_to_show: 80
@@ -466,7 +469,7 @@ views:
           - sensor.greenhouse_soil_conductivity
           - sensor.bamboo_soil_conductivity
           - sensor.patio_planter_soil_conductivity
-
+          - sensor.lime_tree_soil_conductivity
   - title: Core
     icon: mdi:server-network
     cards:
