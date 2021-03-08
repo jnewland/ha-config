@@ -14,7 +14,7 @@ plant:
       moisture: sensor.lime_tree_moisture
       temperature: sensor.lime_tree_temperature
       conductivity: sensor.lime_tree_soil_conductivity
-      brightness: sensowr.lime_tree_light
+      brightness: sensor.lime_tree_light
     # appears that https://github.com/Olen/homeassistant-plant doesn't do C to F yet
     min_temperature: 41
     max_temperature: 95
@@ -26,7 +26,7 @@ plant:
       moisture: sensor.bamboo_moisture
       temperature: sensor.bamboo_temperature
       conductivity: sensor.bamboo_soil_conductivity
-      brightness: sensowr.bamboo_light
+      brightness: sensor.bamboo_light
     # appears that https://github.com/Olen/homeassistant-plant doesn't do C to F yet
     min_temperature: 41
     max_temperature: 89.6
@@ -36,7 +36,7 @@ plant:
       moisture: sensor.greenhouse_moisture
       temperature: sensor.greenhouse_temperature
       conductivity: sensor.greenhouse_soil_conductivity
-      brightness: sensowr.greenhouse_light
+      brightness: sensor.greenhouse_light
     min_moisture: 20
     max_moisture: 60
     min_temperature: 72
