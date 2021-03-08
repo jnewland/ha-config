@@ -19,10 +19,10 @@ automation:
 - alias: BHyve next watering & rain delay finishing updater
   trigger:
     - platform: state
-      entity_id: switch.patio_zone, switch.patio_irrigation_rain_delay
+      entity_id: switch.patio_planters, switch.patio_irrigation_rain_delay
     - platform: homeassistant
       event: start
   action:
     - service: python_script.bhyve_next_watering
       data:
-        entity_id: switch.patio_zone
+        entity_id: switch.patio_planters

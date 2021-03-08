@@ -430,16 +430,20 @@ views:
           - sensor.kitchen_planted_days
       - type: entities
         show_header_toggle: false
-        title: Irrigation
+        title: Patio planters
         entities:
-          - sensor.patio_irrigation_state
-          - sensor.patio_irrigation_battery_level
-          - switch.patio_irrigation_rain_delay
-          - switch.patio_irrigation_patio_program
-          - switch.patio_zone
-          - sensor.patio_zone_history
-          - sensor.patio_next_watering
-          - sensor.patio_irrigation_rain_delay_finishing
+          - sensor.patio_planter_moisture
+          - sensor.patio_planter_light
+          - sensor.patio_planter_temperature
+          - sensor.patio_planter_soil_conductivity
+          - sensor.patio_planters_state
+          - sensor.patio_planters_battery_level
+          - switch.patio_planters_rain_delay
+          - switch.patio_planters_patio_program
+          - switch.patio_planters
+          - sensor.patio_planters_history
+          - sensor.patio_planters_next_watering
+          - sensor.patio_planters_rain_delay_finishing
       - type: history-graph
         title: light
         hours_to_show: 80
