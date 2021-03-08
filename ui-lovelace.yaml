@@ -416,6 +416,8 @@ views:
   - title: Garden
     icon: mdi:shovel
     cards:
+      - type: custom:flower-card
+        entity: plant.lime_tree
       - type: entities
         title: Kitchen Herb Garden
         show_header_toggle: false

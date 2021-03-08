@@ -4,6 +4,17 @@ sensor:
 switch:
   - platform: bhyve
 
+plant:
+  # https://open.plantbook.io/browse-db
+  lime_tree:
+    name: lime tree
+    species: citrus latifolia
+    sensors:
+      moisture: sensor.lime_tree_moisture
+      temperature: sensor.lime_tree_temperature
+      conductivity: sensor.lime_tree_soil_conductivity
+      brightness: sensor.lime_tree_light
+
 automation:
 - alias: BHyve next watering & rain delay finishing updater
   trigger:
