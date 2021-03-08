@@ -31,6 +31,7 @@ plant:
     min_temperature: 41
     max_temperature: 89.6
   greenhouse:
+    name: greenhouse
     image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/ocimum%20basilicum.jpg
     sensors:
       moisture: sensor.greenhouse_moisture
