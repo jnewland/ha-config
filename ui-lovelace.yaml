@@ -418,6 +418,8 @@ views:
     cards:
       - type: custom:flower-card
         entity: plant.lime_tree
+      - type: custom:flower-card
+        entity: bamboo
       - type: entities
         title: Kitchen Herb Garden
         show_header_toggle: false
