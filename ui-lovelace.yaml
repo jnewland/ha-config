@@ -436,10 +436,6 @@ views:
         show_header_toggle: false
         title: Patio planters
         entities:
-          - sensor.patio_planter_moisture
-          - sensor.patio_planter_light
-          - sensor.patio_planter_temperature
-          - sensor.patio_planter_soil_conductivity
           - sensor.patio_planters_state
           - sensor.patio_planters_battery_level
           - switch.patio_planters_rain_delay
