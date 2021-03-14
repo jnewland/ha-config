@@ -446,8 +446,6 @@ views:
           - switch.patio_planters_patio_program
           - switch.patio_planters
           - sensor.patio_planters_history
-          - sensor.patio_planters_next_watering
-          - sensor.patio_planters_rain_delay_finishing
       - type: history-graph
         title: light
         hours_to_show: 80
