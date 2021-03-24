@@ -4,14 +4,41 @@ sensor:
 switch:
   - platform: bhyve
 
-automation:
-- alias: BHyve next watering & rain delay finishing updater
-  trigger:
-    - platform: state
-      entity_id: switch.patio_zone, switch.patio_irrigation_rain_delay
-    - platform: homeassistant
-      event: start
-  action:
-    - service: python_script.bhyve_next_watering
-      data:
-        entity_id: switch.patio_zone
+plant:
+  # https://open.plantbook.io/browse-db
+  lime_tree:
+    name: lime tree
+    species: citrus latifolia
+    image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/citrus%20latifolia.jpg
+    sensors:
+      moisture: sensor.lime_tree_moisture
+      temperature: sensor.lime_tree_temperature
+      conductivity: sensor.lime_tree_soil_conductivity
+      brightness: sensor.lime_tree_light
+    # appears that https://github.com/Olen/homeassistant-plant doesn't do C to F yet
+    min_temperature: 41
+    max_temperature: 95
+  bamboo:
+    name: bamboo
+    species: bamboo
+    image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/bamboo.jpg
+    sensors:
+      moisture: sensor.bamboo_moisture
+      temperature: sensor.bamboo_temperature
+      conductivity: sensor.bamboo_soil_conductivity
+      brightness: sensor.bamboo_light
+    # appears that https://github.com/Olen/homeassistant-plant doesn't do C to F yet
+    min_temperature: 41
+    max_temperature: 89.6
+  greenhouse:
+    name: greenhouse
+    image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/ocimum%20basilicum.jpg
+    sensors:
+      moisture: sensor.greenhouse_moisture
+      temperature: sensor.greenhouse_temperature
+      conductivity: sensor.greenhouse_soil_conductivity
+      brightness: sensor.greenhouse_light
+    min_moisture: 20
+    max_moisture: 60
+    min_temperature: 72
+    max_temperature: 95

@@ -20,5 +20,11 @@ git clone https://github.com/JeremyKennedy/homeassistant-aerogarden $TMPDIR/home
 mv $TMPDIR/homeassistant-aerogarden-$$/custom_components/aerogarden custom_components
 rm -rf $TMPDIR/homeassistant-aerogarden-$$
 
+rm -rf custom_components/plant || true
+git clone https://github.com/Olen/homeassistant-plant $TMPDIR/homeassistant-plant-$$
+mkdir -p custom_components/plant/
+mv $TMPDIR/homeassistant-plant-$$/* custom_components/plant/
+rm -rf $TMPDIR/homeassistant-plant-$$
+
 git add custom_components
 git add python_scripts

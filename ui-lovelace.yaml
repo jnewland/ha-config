@@ -416,6 +416,12 @@ views:
   - title: Garden
     icon: mdi:shovel
     cards:
+      - type: custom:flower-card
+        entity: plant.lime_tree
+      - type: custom:flower-card
+        entity: plant.bamboo
+      - type: custom:flower-card
+        entity: plant.greenhouse
       - type: entities
         title: Kitchen Herb Garden
         show_header_toggle: false
@@ -428,17 +434,46 @@ views:
           - sensor.kitchen_planted_days
       - type: entities
         show_header_toggle: false
-        title: Irrigation
+        title: Patio planters
         entities:
-          - sensor.patio_irrigation_state
-          - sensor.patio_irrigation_battery_level
-          - switch.patio_irrigation_rain_delay
-          - switch.patio_irrigation_patio_program
-          - switch.patio_zone
-          - sensor.patio_zone_history
-          - sensor.patio_next_watering
-          - sensor.patio_irrigation_rain_delay_finishing
-
+          - sensor.patio_planters_state
+          - sensor.patio_planters_battery_level
+          - switch.patio_planters_rain_delay
+          - switch.patio_planters_patio_program
+          - switch.patio_planters
+          - sensor.patio_planters_history
+      - type: history-graph
+        title: light
+        hours_to_show: 80
+        entities:
+          - sensor.greenhouse_light
+          - sensor.bamboo_light
+          - sensor.herb_light
+          - sensor.lime_tree_light
+      - type: history-graph
+        title: moisture
+        hours_to_show: 80
+        entities:
+          - sensor.greenhouse_moisture
+          - sensor.bamboo_moisture
+          - sensor.herb_moisture
+          - sensor.lime_tree_moisture
+      - type: history-graph
+        title: temperature
+        hours_to_show: 80
+        entities:
+          - sensor.greenhouse_temperature
+          - sensor.bamboo_temperature
+          - sensor.herb_temperature
+          - sensor.lime_tree_temperature
+      - type: history-graph
+        title: soil conductivity
+        hours_to_show: 80
+        entities:
+          - sensor.greenhouse_soil_conductivity
+          - sensor.bamboo_soil_conductivity
+          - sensor.herb_soil_conductivity
+          - sensor.lime_tree_soil_conductivity
   - title: Core
     icon: mdi:server-network
     cards:

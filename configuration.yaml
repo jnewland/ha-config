@@ -44,6 +44,10 @@ lovelace:
       type: js
     - url: /local/auto-entities.js
       type: module
+    - url: /local/card-tools.js
+      type: module
+    - url: /local/flower-card.js
+      type: module
   dashboards:
     lovelace-generated:
       mode: yaml
