@@ -427,7 +427,20 @@ views:
       - type: custom:flower-card
         entity: plant.greenhouse
       - type: entities
-        title: Kitchen Herb Garden
+        title: Greenhouse lights
+        show_header_toggle: false
+        entities:
+          - automation.greenhouse_led_automation
+          - input_datetime.greenhouse_led_on
+          - input_datetime.greenhouse_led_off
+        footer:
+          type: graph
+          entity: sensor.greenhouse_light
+          hours_to_show: 36
+          detail: 2
+
+      - type: entities
+        title: Kitchen herb garden
         show_header_toggle: false
         entities:
           - light.kitchen_light

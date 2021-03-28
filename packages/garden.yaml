@@ -42,3 +42,33 @@ plant:
     max_moisture: 60
     min_temperature: 72
     max_temperature: 95
+
+input_datetime:
+  greenhouse_led_on:
+    name: Greenhouse LED On
+    has_date: false
+    has_time: true
+    initial: '07:00:00'
+  greenhouse_led_off:
+    name: Greenhouse LED Off
+    has_date: false
+    has_time: true
+    initial: '20:00:00'
+
+automation:
+  - alias: Greenhouse LED Automation
+    trigger:
+      platform: time
+      at: input_datetime.greenhouse_led_on
+    action:
+      service: switch.turn_on
+      target:
+        entity_id: switch.greenhouse_left
+  - alias: Greenhouse LED Off
+    trigger:
+      platform: time
+      at: input_datetime.greenhouse_led_off
+    action:
+      service: switch.turn_off
+      target:
+        entity_id: switch.greenhouse_left
