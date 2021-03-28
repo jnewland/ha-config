@@ -421,12 +421,6 @@ views:
     path: greenhouse
     icon: mdi:shovel
     cards:
-      - type: custom:flower-card
-        entity: plant.lime_tree
-      - type: custom:flower-card
-        entity: plant.bamboo
-      - type: custom:flower-card
-        entity: plant.greenhouse
       - type: entities
         title: Greenhouse lights
         show_header_toggle: false
@@ -441,7 +435,6 @@ views:
           entity: sensor.greenhouse_light
           hours_to_show: 36
           detail: 2
-
       - type: entities
         title: Kitchen herb garden
         show_header_toggle: false
@@ -494,6 +487,12 @@ views:
           - sensor.bamboo_soil_conductivity
           - sensor.herb_soil_conductivity
           - sensor.lime_tree_soil_conductivity
+      - type: custom:flower-card
+        entity: plant.lime_tree
+      - type: custom:flower-card
+        entity: plant.bamboo
+      - type: custom:flower-card
+        entity: plant.greenhouse
   - title: Core
     icon: mdi:server-network
     cards:
