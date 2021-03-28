@@ -417,8 +417,8 @@ views:
           include:
             - entity_id: "/^sensor.*_light$/"
 
-  - title: Garden
-    path: garden
+  - title: Greenhouse
+    path: greenhouse
     icon: mdi:shovel
     cards:
       - type: custom:flower-card
