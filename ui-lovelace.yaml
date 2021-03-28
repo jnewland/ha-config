@@ -431,6 +431,8 @@ views:
         show_header_toggle: false
         entities:
           - automation.greenhouse_led_automation
+          - switch.greenhouse_left
+          - switch.greenhouse_right
           - input_datetime.greenhouse_led_on
           - input_datetime.greenhouse_led_off
         footer:
