@@ -433,7 +433,7 @@ views:
         footer:
           type: graph
           entity: sensor.greenhouse_light
-          hours_to_show: 36
+          hours_to_show: 80
           detail: 2
       - type: entities
         title: Kitchen herb garden
