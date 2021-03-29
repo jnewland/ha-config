@@ -417,17 +417,26 @@ views:
           include:
             - entity_id: "/^sensor.*_light$/"
 
-  - title: Garden
+  - title: Greenhouse
+    path: greenhouse
     icon: mdi:shovel
     cards:
-      - type: custom:flower-card
-        entity: plant.lime_tree
-      - type: custom:flower-card
-        entity: plant.bamboo
-      - type: custom:flower-card
-        entity: plant.greenhouse
       - type: entities
-        title: Kitchen Herb Garden
+        title: Greenhouse lights
+        show_header_toggle: false
+        entities:
+          - automation.greenhouse_led_automation
+          - switch.greenhouse_left
+          - switch.greenhouse_right
+          - input_datetime.greenhouse_led_on
+          - input_datetime.greenhouse_led_off
+        footer:
+          type: graph
+          entity: sensor.greenhouse_light
+          hours_to_show: 80
+          detail: 2
+      - type: entities
+        title: Kitchen herb garden
         show_header_toggle: false
         entities:
           - light.kitchen_light
@@ -478,6 +487,12 @@ views:
           - sensor.bamboo_soil_conductivity
           - sensor.herb_soil_conductivity
           - sensor.lime_tree_soil_conductivity
+      - type: custom:flower-card
+        entity: plant.lime_tree
+      - type: custom:flower-card
+        entity: plant.bamboo
+      - type: custom:flower-card
+        entity: plant.greenhouse
   - title: Core
     icon: mdi:server-network
     cards:
