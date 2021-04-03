@@ -613,12 +613,15 @@ views:
             - lock.garage.battery_level
             - switch.front_door.battery_level
             - switch.front_gate.battery_level
+            - switch.master_door.battery_level
+            - switch.master_ac_water.battery_level
+            - binary_sensor.closet_motion.battery_level
             - switch.garage_hall_motion.battery_level
-            - switch.great_hall_motion.battery_level
+            - switch.guest_hall_motion.battery_level
             - switch.guest_bath_motion.battery_level
+            - switch.great_hall_motion.battery_level
             - switch.kitchen_motion.battery_level
             - switch.lounge_motion.battery_level
-            - switch.master_ac_water.battery_level
             - switch.master_bath_motion.battery_level
             - switch.music_room_motion.battery_level
             - switch.pantry_motion.battery_level
