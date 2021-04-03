@@ -41,6 +41,7 @@ views:
         camera_image: camera.garage
         entities:
           - cover.garage
+          - lock.garage
       - type: picture-glance
         camera_image: camera.atrium
         entities:
@@ -51,6 +52,7 @@ views:
           - switch.back_porch
           - switch.back_porch_fountain
           - switch.bug_zapper
+          - lock.back_porch
       - type: weather-forecast
         entity: weather.dark_sky
       - type: picture
@@ -214,6 +216,7 @@ views:
           - switch.back_porch_fountain
           - switch.bug_zapper
           - light.ac
+          - lock.back_porch
       - type: entities
         title: atrium
         entities:
@@ -222,21 +225,20 @@ views:
           - light.atrium_door
           - light.garage_door
           - switch.atrium_fountain
+          - lock.garage
+          - cover.garage
+          - cover.gate
       - type: entities
         title: front porch
         entities:
           - light.front_porch
           - light.front_door
+          - binary_sensor.front_gate
       - type: entities
         title: patio
         entities:
           - light.patio
           - light.master_patio
-      - type: entities
-        entities:
-          - binary_sensor.front_gate
-          - cover.garage
-          - cover.gate
 
   - title: Cameras
     icon: mdi:video

@@ -36,6 +36,9 @@ automation:
 - alias: Mode away to day
   trigger:
     - platform: state
+      entity_id: lock.garage
+      to: 'unlocked'
+    - platform: state
       entity_id: lock.front_door
       to: 'unlocked'
     - platform: state

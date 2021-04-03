@@ -31,6 +31,11 @@ sequence:
       {% else %}
       group.downstairs
       {% endif %}
+- service: lock.lock
+  data:
+    entity_id:
+    - lock.back_porch
+    - lock.garage
 - condition: template
   value_template: >
     {{ states.input_boolean.guests.state != "on" }}
