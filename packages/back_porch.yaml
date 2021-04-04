@@ -3,7 +3,7 @@ automation:
     trigger:
       platform: state
       entity_id: binary_sensor.back_porch_occupancy
-      to: clear
+      to: 'off'
       for:
         minutes: 30
     condition:

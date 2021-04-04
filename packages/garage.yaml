@@ -16,7 +16,7 @@ automation:
     trigger:
       platform: state
       entity_id: binary_sensor.garage_occupancy
-      to: clear
+      to: 'off'
       for:
         minutes: 30
     condition:
