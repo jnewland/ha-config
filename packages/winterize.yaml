@@ -34,7 +34,6 @@ automation:
       - service: script.ask_about_turning_on
         data:
           entity_id: input_boolean.winterized
-          apns_collapse_id: winterize
           message: There's a freeze in the forecast. Is everything winterized?
           confirmation_message: winterized, cool
 
@@ -53,6 +52,5 @@ automation:
       - service: script.ask_about_turning_on
         data:
           entity_id: input_boolean.winterized
-          apns_collapse_id: feeze
           message: It's now below freezing. Is everything winterized?
           confirmation_message: winterized, cool

@@ -42,5 +42,6 @@ sequence:
 - service: script.ask_about_turning_on
   data:
     entity_id: script.arm
+    apns_collapse_id: alarm_control_panel.alarm
     message: "Arm the alarm?"
     confirmation_message: armed the alarm

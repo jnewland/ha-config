@@ -21,7 +21,7 @@ automation:
       - service: script.ask_about_turning_on
         data:
           entity_id: script.find_roomba
-          apns_collapse_id: roomba
+          apns_collapse_id: vacuum.downstairs980
           message: >
             The downstairs roomba is lost. Should I make it beep?
           confirmation_message: found the roomba
@@ -39,7 +39,7 @@ automation:
       - service: script.ask_about_turning_on
         data:
           entity_id: script.noop
-          apns_collapse_id: roomba
+          apns_collapse_id: vacuum.downstairs980
           message: The downstairs roomba is full. Did you empty it out?
           confirmation_message: emptied the roomba
 
@@ -66,7 +66,7 @@ automation:
       - service: script.ask_about_turning_on
         data:
           entity_id: script.noop
-          apns_collapse_id: downstairs980
+          apns_collapse_id: vacuum.downstairs980
           message: >
             the roomba is {{ states.vacuum.downstairs980.state }}
           confirmation_message: helped the robot
