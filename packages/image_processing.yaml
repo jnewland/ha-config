@@ -224,14 +224,34 @@ image_processing:
 binary_sensor:
   - platform: template
     sensors:
-      pergola_object_detected:
+      garage_occupancy:
+        friendly_name: garage occupancy
+        device_class: occupancy
+        delay_off:
+          minutes: 4
         value_template: |
-          {{ float(states.image_processing.pergola.state | default(0)) > 0}}
-  - platform: template
-    sensors:
-      front_yard_left_object_detected:
+          {{ float(states('image_processing.garage')) | default(0) > 0 }}
+      pergola_occupancy:
+        friendly_name: pergola occupancy
+        device_class: occupancy
+        delay_off:
+          minutes: 4
         value_template: |
-          {{ float(states.image_processing.front_yard_left.state | default(0)) > 0}}
+          {{ float(states('image_processing.pergola')) | default(0) > 0 }}
+      front_yard_left:
+        friendly_name: front yard left occupancy
+        device_class: occupancy
+        delay_off:
+          minutes: 4
+        value_template: |
+          {{ float(states('image_processing.front_yard_left')) | default(0) > 0 }}
+      back_porch:
+        friendly_name: back porch occupancy
+        device_class: occupancy
+        delay_off:
+          minutes: 4
+        value_template: |
+          {{ float(states('image_processing.back_porch')) | default(0) > 0 }}
 
 # Adding a unit allows these values to be graphed in the UI
 homeassistant:

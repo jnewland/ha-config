@@ -1,0 +1,25 @@
+automation:
+  - alias: Keep the back_porch door locked
+    trigger:
+      platform: state
+      entity_id: binary_sensor.back_porch_occupancy
+      to: clear
+      for:
+        minutes: 30
+    condition:
+      condition: state
+      entity_id: lock.back_porch
+      state: unlocked
+    action:
+    - service: script.ask_about_turning_on
+      data:
+        entity_id: script.lock_back_porch
+        apns_collapse_id: lock.back_porch
+        message: "The back porch door has been unlocked for a bit. Lock it up?"
+        confirmation_message: locked the back porch door
+script:
+  lock_back_porch:
+    sequence:
+      - service: lock.lock
+        data:
+          entity_id: lock.back_porch
