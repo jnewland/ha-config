@@ -238,14 +238,14 @@ binary_sensor:
           minutes: 4
         value_template: |
           {{ float(states('image_processing.pergola')) | default(0) > 0 }}
-      front_yard_left:
+      front_yard_left_occupancy:
         friendly_name: front yard left occupancy
         device_class: occupancy
         delay_off:
           minutes: 4
         value_template: |
           {{ float(states('image_processing.front_yard_left')) | default(0) > 0 }}
-      back_porch:
+      back_porch_occupancy:
         friendly_name: back porch occupancy
         device_class: occupancy
         delay_off:
