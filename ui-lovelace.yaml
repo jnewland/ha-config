@@ -41,6 +41,7 @@ views:
         camera_image: camera.garage
         entities:
           - cover.garage
+          - lock.garage
       - type: picture-glance
         camera_image: camera.atrium
         entities:
@@ -51,6 +52,7 @@ views:
           - switch.back_porch
           - switch.back_porch_fountain
           - switch.bug_zapper
+          - lock.back_porch
       - type: weather-forecast
         entity: weather.dark_sky
       - type: picture
@@ -214,6 +216,7 @@ views:
           - switch.back_porch_fountain
           - switch.bug_zapper
           - light.ac
+          - lock.back_porch
       - type: entities
         title: atrium
         entities:
@@ -222,11 +225,15 @@ views:
           - light.atrium_door
           - light.garage_door
           - switch.atrium_fountain
+          - lock.garage
+          - cover.garage
+          - cover.gate
       - type: entities
         title: front porch
         entities:
           - light.front_porch
           - light.front_door
+          - binary_sensor.front_gate
       - type: entities
         title: patio
         entities:
@@ -315,6 +322,13 @@ views:
         filter:
           include:
             - entity_id: "/image_processing/"
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+        filter:
+          include:
+            - entity_id: "/_occupancy/"
       - type: custom:auto-entities
         card:
           type: history-graph
@@ -601,21 +615,28 @@ views:
         name_attribute: friendly_name
         filter:
           include:
+            - lock.front_door.battery_level
+            - lock.back_door.battery_level
+            - lock.garage.battery_level
             - switch.front_door.battery_level
             - switch.front_gate.battery_level
-            - switch.garage_hall_motion.battery_level
-            - switch.great_hall_motion.battery_level
-            - switch.guest_bath_motion.battery_level
-            - switch.kitchen_motion.battery_level
-            - switch.pantry_motion.battery_level
-            - switch.master_bath_motion.battery_level
+            - switch.master_door.battery_level
             - switch.master_ac_water.battery_level
-            - switch.music_room_motion.battery_level
+            - binary_sensor.closet_motion.battery_level
+            - switch.garage_hall_motion.battery_level
+            - switch.guest_hall_motion.battery_level
+            - switch.guest_bath_motion.battery_level
+            - switch.great_hall_motion.battery_level
+            - switch.kitchen_motion.battery_level
             - switch.lounge_motion.battery_level
+            - switch.master_bath_motion.battery_level
+            - switch.music_room_motion.battery_level
+            - switch.pantry_motion.battery_level
             - switch.powder_room_motion.battery_level
             - switch.stairs_motion.battery_level
             - switch.upstairs_motion.battery_level
             - switch.wine_room_motion.battery_level
+            - switch.yoga_room_motion.battery_level
             - vacuum.downstairs980.battery_level
 
   - title: Settings

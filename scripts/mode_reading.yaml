@@ -31,11 +31,17 @@ sequence:
       {% else %}
       group.downstairs
       {% endif %}
+- service: lock.lock
+  data:
+    entity_id:
+    - lock.back_porch
+    - lock.garage
 - condition: template
   value_template: >
     {{ states.input_boolean.guests.state != "on" }}
 - service: script.ask_about_turning_on
   data:
     entity_id: script.arm
+    apns_collapse_id: alarm_control_panel.alarm
     message: "Arm the alarm?"
     confirmation_message: armed the alarm

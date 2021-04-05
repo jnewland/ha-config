@@ -41,6 +41,8 @@ trigger:
     - cover.gate
     - input_select.mode
     - lock.front_door
+    - lock.back_porch
+    - lock.garage
     - media_player.office
     - media_player.music_room
     - media_player.bedroom

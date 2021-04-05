@@ -8,3 +8,9 @@ sequence:
     data:
       entity_id: input_select.mode
       option: Away
+  - service: script.lock_up
+  - service: lock.lock
+    data:
+      entity_id:
+      - lock.back_porch
+      - lock.garage

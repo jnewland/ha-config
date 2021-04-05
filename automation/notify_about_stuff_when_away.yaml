@@ -4,6 +4,8 @@ trigger:
   platform: state
   entity_id:
     - lock.front_door
+    - lock.back_porch
+    - lock.garage
     - alarm_control_panel.alarm
     - binary_sensor.entry_door
     - binary_sensor.garage
