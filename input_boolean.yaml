@@ -1,4 +1,3 @@
 guests:
-  initial: off
   name: guests
   icon: mdi:cog

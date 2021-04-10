@@ -1,6 +1,5 @@
 input_boolean:
   winterized:
-    initial: off
     name: winterized
     icon: mdi:home-thermometer-outline
 
@@ -21,7 +20,6 @@ binary_sensor:
 automation:
   - alias: Freeze forecast notifications
     id: 63cf36f6-2881-42a6-83e3-d7ea5528dbef
-    initial_state: off
     trigger:
     - platform: state
       entity_id: binary_sensor.freeze_forecast
@@ -40,7 +38,6 @@ automation:
 
   - alias: Freeze notifications
     id: 23f45074-5827-4756-8f77-f592ac08cb39
-    initial_state: off
     trigger:
     - platform: state
       entity_id: binary_sensor.freeze

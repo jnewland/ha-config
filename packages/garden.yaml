@@ -48,12 +48,10 @@ input_datetime:
     name: Greenhouse LED On
     has_date: false
     has_time: true
-    initial: '07:00:00'
   greenhouse_led_off:
     name: Greenhouse LED Off
     has_date: false
     has_time: true
-    initial: '20:00:00'
 
 automation:
   - alias: Greenhouse LED Automation
