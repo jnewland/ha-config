@@ -1,4 +1,5 @@
 alias: notify when master ac is leaking
+id: 85023ab0-13e5-4b4a-aba1-3e7d58973ad1
 trigger:
   platform: state
   entity_id: binary_sensor.master_ac_water

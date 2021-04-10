@@ -1,4 +1,5 @@
 alias: 'Set theme at startup'
+id: cbc0adb8-7752-4fc1-b7f9-32302cfb05f1
 initial_state: 'on'
 trigger:
 - platform: homeassistant

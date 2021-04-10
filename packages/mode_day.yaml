@@ -1,68 +1,70 @@
 automation:
-- alias: Day mode
-  trigger:
-    - platform: state
-      entity_id: input_select.mode
-      to: Morning
-    - platform: state
-      entity_id: binary_sensor.master_bath_motion
-      from: 'off'
-      to: 'on'
-    - platform: state
-      entity_id:
-      - sensor.jphone_12_battery_state
-      - sensor.katie_s_iphone_battery_state
-      to: 'Not Charging'
-      for:
-        seconds: 30
-  condition:
-    condition: and
-    conditions:
-    - condition: state
-      entity_id: input_select.mode
-      state: Morning
-    - condition: template
-      value_template: |
-        {{
-          (states.device_tracker.jphone_12.state == "not_home" or states.sensor.jphone_12_battery_state.state == "Not Charging") and
-          (states.device_tracker.katie_s_iphone.state == "not_home" or states.sensor.katie_s_iphone_battery_state.state == "Not Charging")
-        }}
-  action:
-    - service: input_select.select_option
-      entity_id: input_select.mode
-      data:
-        option: Day
+  - alias: Day mode
+    id: 1b8d26f9-de80-446b-90c1-da385fd0e0b7
+    trigger:
+      - platform: state
+        entity_id: input_select.mode
+        to: Morning
+      - platform: state
+        entity_id: binary_sensor.master_bath_motion
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id:
+        - sensor.jphone_12_battery_state
+        - sensor.katie_s_iphone_battery_state
+        to: 'Not Charging'
+        for:
+          seconds: 30
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: input_select.mode
+        state: Morning
+      - condition: template
+        value_template: |
+          {{
+            (states.device_tracker.jphone_12.state == "not_home" or states.sensor.jphone_12_battery_state.state == "Not Charging") and
+            (states.device_tracker.katie_s_iphone.state == "not_home" or states.sensor.katie_s_iphone_battery_state.state == "Not Charging")
+          }}
+    action:
+      - service: input_select.select_option
+        entity_id: input_select.mode
+        data:
+          option: Day
 
-- alias: Mode away to day
-  trigger:
-    - platform: state
-      entity_id: lock.garage
-      to: 'unlocked'
-    - platform: state
-      entity_id: lock.front_door
-      to: 'unlocked'
-    - platform: state
-      entity_id: binary_sensor.garage
-      from: 'off'
-      to: 'on'
-    - platform: state
-      entity_id: binary_sensor.gate
-      from: 'off'
-      to: 'on'
-    - platform: zone
-      entity_id: device_tracker.jphone_12
-      zone: zone.home
-      event: enter
-    - platform: zone
-      entity_id: device_tracker.katie_s_iphone
-      zone: zone.home
-      event: enter
-  condition:
-    condition: state
-    entity_id: input_select.mode
-    state: Away
-  action:
-    - service: input_select.select_option
+  - alias: Mode away to day
+    id: 08bdb177-c691-4eb6-8cab-92f08689064b
+    trigger:
+      - platform: state
+        entity_id: lock.garage
+        to: 'unlocked'
+      - platform: state
+        entity_id: lock.front_door
+        to: 'unlocked'
+      - platform: state
+        entity_id: binary_sensor.garage
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.gate
+        from: 'off'
+        to: 'on'
+      - platform: zone
+        entity_id: device_tracker.jphone_12
+        zone: zone.home
+        event: enter
+      - platform: zone
+        entity_id: device_tracker.katie_s_iphone
+        zone: zone.home
+        event: enter
+    condition:
+      condition: state
       entity_id: input_select.mode
-      data:
-        option: Day
+      state: Away
+    action:
+      - service: input_select.select_option
+        entity_id: input_select.mode
+        data:
+          option: Day

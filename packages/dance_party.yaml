@@ -1,5 +1,6 @@
 automation:
   - alias: dance party
+    id: 435850db-0702-47fd-b7e5-463a160216ad
     trigger:
     - platform: event
       event_type: tag_scanned

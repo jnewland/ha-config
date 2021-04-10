@@ -1,5 +1,6 @@
 # Keep the front door locked
 alias: Auto lock
+id: 1a9f390d-888f-43af-ba51-6c13d9cb5931
 trigger:
   platform: state
   entity_id: lock.front_door

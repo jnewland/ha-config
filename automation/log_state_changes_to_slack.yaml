@@ -1,4 +1,5 @@
 alias: log state changes to slack
+id: 1dfd32fd-64e3-48cd-bc07-fee067110844
 mode: parallel
 trigger:
   platform: state

@@ -1,5 +1,6 @@
 alias: Ack no
 mode: parallel
+id: 7326c4e1-2f25-4619-be0b-07025456e3c7
 trigger:
   platform: event
   event_type: ios.notification_action_fired

@@ -24,6 +24,7 @@ sensor:
 
 automation:
   - alias: downstairs heat
+    id: fef857cc-1150-4429-baa9-383bdf0e2d67
     mode: queued
     trigger:
       platform: numeric_state
@@ -53,6 +54,7 @@ automation:
 
   - alias: downstairs AC
     mode: queued
+    id: 7c15a5cb-a1f8-4c0b-b908-2fd5b214fffd
     trigger:
       platform: numeric_state
       entity_id:
@@ -81,6 +83,7 @@ automation:
 
   - alias: upstairs heat
     mode: queued
+    id: 052a2e46-33e4-4964-8da4-42609ca7e683
     trigger:
       platform: numeric_state
       entity_id:
@@ -108,6 +111,7 @@ automation:
 
   - alias: upstairs AC
     mode: queued
+    id: c66cded8-2a60-4dd4-96cc-677ff080934c
     trigger:
       platform: numeric_state
       entity_id:
@@ -130,6 +134,7 @@ automation:
 
   - alias: upstairs reading
     mode: queued
+    id: f9784a98-1586-4f2f-b9fe-129bee235ac5
     trigger:
     - platform: state
       entity_id: input_select.mode
@@ -154,6 +159,7 @@ automation:
 
   - alias: upstairs sleeping
     mode: queued
+    id: de717eac-9b51-4f6e-b636-9c8ddcd7e610
     trigger:
     - platform: state
       entity_id: input_select.mode
@@ -178,6 +184,7 @@ automation:
 
   - alias: upstairs morning climate reset
     mode: queued
+    id: 16456902-c3b2-44ab-8765-454eab93d4b3
     trigger:
     - platform: state
       entity_id: input_select.mode

@@ -1,4 +1,5 @@
 alias: log media to slack
+id: 6c040050-a715-4a44-a34f-68f80d9e43fd
 trigger:
   platform: state
   entity_id:

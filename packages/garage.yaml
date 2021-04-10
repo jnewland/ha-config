@@ -1,5 +1,6 @@
 automation:
   - alias: Keep the garage door closed
+    id: 9b4c10ce-0960-4176-9bd5-e670c75dfc0d
     trigger:
       platform: state
       entity_id: cover.garage
@@ -13,6 +14,7 @@ automation:
         message: "The garage has been open for a bit. Close it up?"
         confirmation_message: closed the garage
   - alias: Keep the garage door locked
+    id: 85761fbe-a404-4b09-bce0-83acae8ce018
     trigger:
       platform: state
       entity_id: binary_sensor.garage_occupancy

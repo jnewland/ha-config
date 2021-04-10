@@ -1,5 +1,6 @@
 automation:
   - alias: Wake up
+    id: c4f39d11-9ede-433c-a719-f4438dfa189a
     trigger:
       - platform: template
         value_template: |
@@ -21,6 +22,7 @@ automation:
     - service: media_player.media_play
       entity_id: media_player.record_cabinet
   - alias: Morning mode
+    id: ea8d312a-ccd9-483c-949c-0b103480ec28
     trigger:
       - platform: state
         entity_id: binary_sensor.closet_motion
@@ -53,6 +55,7 @@ automation:
         option: Morning
 
   - alias: Run default morning actions
+    id: 81e7b2c0-f920-4cc0-9faa-2833da439f2c
     trigger:
     - platform: state
       entity_id: input_select.mode

@@ -57,6 +57,7 @@ input_datetime:
 
 automation:
   - alias: Greenhouse LED Automation
+    id: ffceaf67-f664-4ec9-ad9d-44be7e6fc220
     trigger:
       platform: time
       at: input_datetime.greenhouse_led_on
@@ -65,6 +66,7 @@ automation:
       target:
         entity_id: switch.greenhouse_left
   - alias: Greenhouse LED Off
+    id: b5d0b9e7-1a93-4b91-8e27-c81e8819a20f
     trigger:
       platform: time
       at: input_datetime.greenhouse_led_off

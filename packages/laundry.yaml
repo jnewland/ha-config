@@ -23,6 +23,7 @@ binary_sensor:
 
 automation:
   - alias: Laundry notifications
+    id: 25fad7c4-c57e-4c67-904a-69e606682ebd
     trigger:
     - platform: state
       entity_id: binary_sensor.laundry

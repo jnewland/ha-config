@@ -274,6 +274,7 @@ homeassistant:
 automation:
   - alias: Post doods matches to slack
     mode: parallel
+    id: 90fe8a3d-5171-4bc0-80db-b31435b62c33
     trigger:
       platform: event
       event_type: state_changed
@@ -296,6 +297,7 @@ automation:
               path: /tmp/doods_{{ trigger.event.data.new_state.entity_id.split('.')[1] | replace('_faster_rcnn_inception_v2_coco', '') }}.jpg
 
   - alias: change channel to streams with detected objects
+    id: 4263d895-3908-43ca-a87d-49ad963d8903
     trigger:
       platform: event
       event_type: state_changed

@@ -1,4 +1,5 @@
 alias: Reading mode
+id: bb53911c-ef20-4ed1-8a83-84937a0a484b
 trigger:
   platform: state
   entity_id: binary_sensor.master_door

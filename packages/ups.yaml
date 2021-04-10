@@ -25,6 +25,7 @@ binary_sensor:
 
 automation:
   - alias: Notify Jesse when UPS voltage is low
+    id: e03bf271-a580-41f0-81e0-ca0c13cefae3
     trigger:
       platform: state
       entity_id: binary_sensor.core_ups_voltage_low

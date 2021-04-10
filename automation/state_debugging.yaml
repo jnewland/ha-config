@@ -1,4 +1,5 @@
 alias: state debugging
+id: 6a4f2fae-23d9-41d8-9173-c6325ab9b371
 initial_state: off
 trigger:
   platform: state

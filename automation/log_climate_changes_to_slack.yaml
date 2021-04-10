@@ -1,4 +1,5 @@
 alias: log climate changes to slack
+id: 10f39381-28b1-427e-aec4-fb46bbf630a0
 mode: parallel
 trigger:
   platform: state
@@ -10,4 +11,4 @@ action:
     message: |
       {% set old_state = trigger.from_state %}
       {% set new_state = trigger.to_state %}
-      *{{ new_state.name | capitalize }}* is currently *_{{ new_state.attributes.current_temperature }}{{ new_state.attributes.unit_of_measurement }}_*, set to *_{{ new_state.attributes.temperature }}{{ new_state.attributes.unit_of_measurement }}_* in *_{{ new_state.state }}_* mode
+      *{{ new_state.name | capitalize }}* is currently *_{{ new_state.attributes.current_temperature }}{{ new_state.attributes.unit_of_measurement }}_*, set to *a new_state.attributes.temperature }}{{ new_state.attributes.unit_of_measurement }}_* in *_{{ new_state.state }}_* mode
