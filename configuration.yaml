@@ -19,7 +19,6 @@ alarm_control_panel: !include alarm_control_panel.yaml
 automation: !include_dir_list automation
 binary_sensor: !include_dir_list binary_sensors
 bhyve: !include bhyve.yaml
-cover: !include cover.yaml
 conversation:
 device_tracker: !include device_tracker.yaml
 discovery:
