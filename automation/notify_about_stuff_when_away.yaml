@@ -1,4 +1,5 @@
 alias: Notify about stuff when we're away
+id: 42bd3505-3443-4c3c-8ab3-75186cc628cf
 mode: parallel
 trigger:
   platform: state

@@ -1,40 +1,23 @@
-sensor:
-  - platform: nut
-    name: core UPS
-    alias: ups
-    host: diskstation
-    username: monuser
-    password: !env_var DISKSTATION_NUT_PASSWORD
-    resources:
-      - ups.load
-      - ups.realpower.nominal
-      - input.voltage
-      - battery.runtime
-  - platform: template
-    sensors:
-      core_ups_state:
-        friendly_name: Core UPS State
-        value_template: |
-          {{ states.sensor.core_ups_input_voltage.attributes.state }}
 binary_sensor:
   - platform: template
     sensors:
-      core_ups_voltage_low:
+      ups_voltage_low:
         value_template: |
-          {{ float(states.sensor.core_ups_input_voltage.state) | default(0) <= 114 }}
+          {{ float(states('sensor.ups_input_voltage')) | default(0) <= 114 }}
 
 automation:
   - alias: Notify Jesse when UPS voltage is low
+    id: e03bf271-a580-41f0-81e0-ca0c13cefae3
     trigger:
       platform: state
-      entity_id: binary_sensor.core_ups_voltage_low
+      entity_id: binary_sensor.ups_voltage_low
       to: "on"
     action:
       service: notify.mobile_app_jphone_12
       data:
         message: |
-          Core UPS reports status of {{ states.sensor.core_ups_state.state | default("Unknown") }} with input of {{ float(states.sensor.core_ups_input_voltage.state) | default(0) | round }} {{ states.sensor.core_ups_input_voltage.attributes.unit_of_measurement }}.{{" "-}}
-          Battery runtime estimated to be {{ ((float(states.sensor.core_ups_battery_runtime.state) | default(1))/60) | round }} minutes.
+          Core UPS reports status of {{ states('sensor.ups_status') | default("Unknown") }} with input of {{ float(states('sensor.ups_input_voltage') | default(0)) | round }}{{ state_attr('sensor.ups_input_voltage','unit_of_measurement') }}.{{" "-}}
+          Battery runtime estimated to be {{ (float(states('sensor.ups_battery_runtime') | default(60))/60) | round }} minutes.
         data:
           push:
             sound:

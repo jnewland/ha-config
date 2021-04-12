@@ -1,4 +1,5 @@
 alias: Away mode
+id: d9daa55b-e9a8-4066-8924-39ddbc7257f7
 trigger:
   platform: state
   entity_id:

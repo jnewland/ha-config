@@ -1,5 +1,6 @@
 # Keep the gate closed
 alias: Auto gate
+id: 478d2437-9749-4163-bd03-ddca0544a1d2
 trigger:
   platform: state
   entity_id: cover.gate

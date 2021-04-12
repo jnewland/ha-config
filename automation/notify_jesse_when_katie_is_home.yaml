@@ -1,4 +1,5 @@
 alias: Notify Jesse when Katie is home
+id: e483474f-9182-47f4-9c7a-726c096e732b
 trigger:
   platform: state
   entity_id: device_tracker.katie_s_iphone

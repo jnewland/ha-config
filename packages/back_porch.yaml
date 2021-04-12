@@ -1,5 +1,6 @@
 automation:
   - alias: Keep the back_porch door locked
+    id: 7f90d793-9f25-4690-8a88-92daf481d7d3
     trigger:
       platform: state
       entity_id: binary_sensor.back_porch_occupancy

@@ -1,5 +1,6 @@
 automation:
   - alias: Sunrise
+    id: 18c7095a-3986-4a0d-b56b-4b95182a532b
     trigger:
       platform: sun
       event: sunrise
@@ -9,6 +10,7 @@ automation:
       entity_id: script.sunrise
 
   - alias: Sunset
+    id: d10e1481-8130-4d7f-b702-419628c970cd
     trigger:
       platform: sun
       event: sunset

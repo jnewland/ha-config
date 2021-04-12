@@ -511,22 +511,12 @@ views:
     icon: mdi:server-network
     cards:
       - type: custom:auto-entities
-        show_empty: false
-        sort:
-          method: id
-        card:
-          type: glance
-          title: ups
-        filter:
-          include:
-            - entity_id: "/core_ups/"
-      - type: custom:auto-entities
         card:
           type: history-graph
           hours_to_show: 12
         filter:
           include:
-            - entity_id: "/core_ups/"
+            - entity_id: "/ups_/"
 
       - type: custom:auto-entities
         show_empty: false
@@ -545,17 +535,6 @@ views:
         filter:
           include:
             - entity_id: "/diskstation/"
-
-      - type: custom:auto-entities
-        show_empty: false
-        sort:
-          method: id
-        card:
-          type: glance
-          title: printer
-        filter:
-          include:
-            - entity_id: "/dcp_l2540dw/"
       - type: custom:auto-entities
         card:
           type: history-graph

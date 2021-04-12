@@ -213,6 +213,7 @@ binary_sensor:
 automation:
   - alias: Turn on lights when motion is detected
     mode: parallel
+    id: 429d9193-1b9e-4252-ba42-f3e36ed2d6f9
     trigger:
       platform: event
       event_type: state_changed
@@ -253,6 +254,7 @@ automation:
 
   - alias: Turn off lights after sensors have turned off
     mode: parallel
+    id: 9c61fca8-f391-43f0-9766-460006d47777
     trigger:
       platform: event
       event_type: state_changed
@@ -282,6 +284,7 @@ automation:
 
   - alias: Turn off lights immediately
     mode: parallel
+    id: 314ca48b-e8e4-4c17-b7ee-9ad0affd1e4a
     trigger:
       platform: event
       event_type: lights_motion_sensor_off
@@ -307,6 +310,7 @@ automation:
 
   - alias: Turn off lights with delay
     mode: parallel
+    id: 094daa86-4eb7-469d-bd9c-6f7176287ff2
     trigger:
       platform: event
       event_type: lights_motion_sensor_off
@@ -376,6 +380,7 @@ automation:
 
   - alias: React to changes of the brightness slider
     mode: queued
+    id: 65a92bfe-d4a4-4663-a023-c0b4aaee12ee
     trigger:
       platform: state
       entity_id: input_number.brightness
@@ -397,6 +402,7 @@ automation:
 
   - alias: Set lights to correct brightness when turned on
     mode: parallel
+    id: d6f32aaa-155b-46e7-97c4-0079c373a249
     trigger:
       platform: event
       event_type: state_changed
@@ -430,6 +436,7 @@ automation:
 
   - alias: Set lights to correct color temp when turned on
     mode: parallel
+    id: 38a8b2e3-85d2-48b3-8a38-2c1f7ccfdd50
     trigger:
       platform: event
       event_type: state_changed
@@ -460,6 +467,7 @@ automation:
 
   - alias: Turn on lights when devices enter zones
     mode: parallel
+    id: 7bff781f-10e6-4a38-9701-7dc2638c4515
     trigger:
       platform: state
       entity_id:
@@ -483,6 +491,7 @@ automation:
 
   - alias: log light changes to slack
     mode: parallel
+    id: 85753078-89dd-4750-840e-13ef98cd4216
     trigger:
       platform: event
       event_type: state_changed
@@ -516,6 +525,7 @@ automation:
 
   - alias: Haunt lights
     mode: parallel
+    id: 633ab695-cce9-4f15-a8dc-d21b2a303419
     trigger:
       platform: event
       event_type: state_changed

@@ -1,4 +1,5 @@
 alias: Mode selector
+id: a5d8a893-365d-4f4a-8297-ecaeff7fbe43
 trigger:
   platform: state
   entity_id: input_select.mode
