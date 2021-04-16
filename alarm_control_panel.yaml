@@ -1,4 +1,4 @@
 name: Alarm
-platform: alarmdotcomajax
+platform: alarmdotcom
 username: !env_var ALARM_USERNAME
 password: !env_var ALARM_PASSWORD
