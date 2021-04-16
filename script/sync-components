@@ -26,5 +26,10 @@ mkdir -p custom_components/plant/
 mv $TMPDIR/homeassistant-plant-$$/* custom_components/plant/
 rm -rf $TMPDIR/homeassistant-plant-$$
 
+ rm -rf custom_components/alarmdotcom || true
+git clone https://github.com/uvjustin/alarmdotcom $TMPDIR/alarmdotcom-$$
+mv $TMPDIR/alarmdotcom-$$/custom_components/alarmdotcom custom_components
+rm -rf $TMPDIR/alarmdotcom-$$
+
 git add custom_components
 git add python_scripts
