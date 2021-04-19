@@ -50,8 +50,8 @@ camera:
     still_image_url: http://pergola-stream.cameras/faster_rcnn_inception_v2_coco.jpg
   - name: dogs
     platform: generic
-    stream_source: http://dogs-stream.cameras/index.m3u8
-    still_image_url: http://dogs-stream.cameras/still.jpg
+    stream_source: rtmp://kustomize-frigate.cameras/live/dogs
+    still_image_url: http://kustomize-frigate.cameras:5000/api/dogs/latest.jpg
 
   # local_file cameras are setup for to support displaying snapshots with objects highlighted
   - platform: local_file
