@@ -283,6 +283,7 @@ views:
         show_name: false
         show_state: false
         entity: camera.garage
+
       - type: picture-entity
         show_name: false
         show_state: false
@@ -318,10 +319,10 @@ views:
           method: name
         card:
           type: entities
-          title: image processing
         filter:
           include:
-            - entity_id: "/image_processing/"
+            - entity_id: "/sensor..*_person/"
+            - entity_id: "/sensor..*_dog/"
       - type: custom:auto-entities
         card:
           type: history-graph
@@ -329,13 +330,6 @@ views:
         filter:
           include:
             - entity_id: "/_occupancy/"
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-        filter:
-          include:
-            - domain: image_processing
 
   - title: Record player
     path: record-player

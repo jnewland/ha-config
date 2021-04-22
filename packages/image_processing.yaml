@@ -8,28 +8,28 @@ binary_sensor:
         delay_off:
           minutes: 4
         value_template: |
-          {{ float(states('image_processing.garage')) | default(0) > 0 }}
+          {{ float(states('sensor.garage_person')) | default(0) > 0 }}
       pergola_occupancy:
         friendly_name: pergola occupancy
         device_class: occupancy
         delay_off:
           minutes: 4
         value_template: |
-          {{ float(states('image_processing.pergola')) | default(0) > 0 }}
+          {{ float(states('sensor.pergola_person')) | default(0) > 0 }}
       front_yard_left_occupancy:
         friendly_name: front yard left occupancy
         device_class: occupancy
         delay_off:
           minutes: 4
         value_template: |
-          {{ float(states('image_processing.front_yard_left')) | default(0) > 0 }}
+          {{ float(states('sensor.front_yard_left_person')) | default(0) > 0 }}
       back_porch_occupancy:
         friendly_name: back porch occupancy
         device_class: occupancy
         delay_off:
           minutes: 4
         value_template: |
-          {{ float(states('image_processing.back_porch')) | default(0) > 0 }}
+          {{ float(states('sensor.back_porch_person')) | default(0) > 0 }}
 
 
 automation:
