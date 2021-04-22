@@ -45,7 +45,7 @@ automation:
           title: |
             {{trigger.payload_json["after"]["label"]}}
           message: |
-            {{trigger.payload_json['after']['entered_zones']}}
+            {{trigger.payload_json["after"]["label"]}}
           data:
             file:
               url: https://home.jnewland.com/api/frigate/notifications/{{trigger.payload_json["after"]["id"]}}/thumbnail.jpg
