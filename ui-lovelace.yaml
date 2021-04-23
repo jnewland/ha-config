@@ -324,7 +324,8 @@ views:
         sort:
           method: name
         card:
-          type: entities
+          type: history-graph
+          hours_to_show: 72
         filter:
           include:
             - entity_id: "/sensor..*_person$/"
@@ -342,7 +343,8 @@ views:
         sort:
           method: name
         card:
-          type: entities
+          type: history-graph
+          hours_to_show: 72
         filter:
           include:
             - entity_id: "/sensor..*_camera_fps$/"
@@ -352,7 +354,8 @@ views:
         sort:
           method: name
         card:
-          type: entities
+          type: history-graph
+          hours_to_show: 72
         filter:
           include:
             - entity_id: "/sensor..*_detection_fps$/"
@@ -362,7 +365,8 @@ views:
         sort:
           method: name
         card:
-          type: entities
+          type: history-graph
+          hours_to_show: 72
         filter:
           include:
             - entity_id: "/sensor..*_processed_fps$/"
@@ -372,7 +376,8 @@ views:
         sort:
           method: name
         card:
-          type: entities
+          type: history-graph
+          hours_to_show: 72
         filter:
           include:
             - entity_id: "/sensor..*_skipped_fps$/"
