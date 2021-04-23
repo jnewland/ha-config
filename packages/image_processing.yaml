@@ -43,10 +43,10 @@ automation:
       - service: notify.slack
         data:
           title: |
-            {{trigger.payload_json["after"]["label"]}}
+            {{ trigger.payload_json["after"]["camera"] }}
           message: |
-            {{trigger.payload_json["after"]["label"]}}
+            {{ trigger.payload_json["after"]["label"] }}
           data:
             file:
-              url: https://home.jnewland.com/api/frigate/notifications/{{trigger.payload_json["after"]["id"]}}/thumbnail.jpg
+              url: https://home.jnewland.com/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/{{ trigger.payload_json["after"]["camera"] }}/clip.mp4
 
