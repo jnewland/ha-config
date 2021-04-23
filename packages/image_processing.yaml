@@ -33,20 +33,43 @@ binary_sensor:
 
 
 automation:
-  - alias: Post frigate matches to slack
+  - alias: Post frigate images during events
     mode: parallel
-    id: 90fe8a3d-5171-4bc0-80db-b31435b62c33
+    id: e4d0a9e9-b403-48dc-80d3-e3c750ad0cb8
     trigger:
       platform: mqtt
       topic: frigate/events
+    condition:
+      - "{{ trigger.payload_json['after']['end_time'] is none }}"
     action:
       - service: notify.slack
         data:
           title: |
-            {{trigger.payload_json["after"]["label"]}}
+            {{ trigger.payload_json["after"]["camera"] }}
           message: |
-            {{trigger.payload_json["after"]["label"]}}
+            {{ trigger.payload_json["after"]["label"] }}
           data:
             file:
-              url: https://home.jnewland.com/api/frigate/notifications/{{trigger.payload_json["after"]["id"]}}/thumbnail.jpg
+              url: https://home.jnewland.com/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
 
+  - alias: Post frigate clips at end of events
+    mode: parallel
+    id: fe6ff468-bf79-4dfe-8231-ab3f349a9b33
+    trigger:
+      platform: mqtt
+      topic: frigate/events
+    condition:
+      - "{{ trigger.payload_json['after']['end_time'] is not none }}"
+    action:
+      - delay:
+          # clip contains 5s after event end, needs to process a bit. give it some time
+          seconds: 30
+      - service: notify.slack
+        data:
+          title: |
+            {{ trigger.payload_json["after"]["camera"] }}
+          message: |
+            {{ trigger.payload_json["after"]["label"] }} event has ended
+          data:
+            file:
+              url: https://home.jnewland.com/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/{{ trigger.payload_json["after"]["camera"] }}/clip.mp4

@@ -1,6 +1,7 @@
 default: info
 logs:
   packages.lights: info
+  packages.image_processing: info
   requests.packages.urllib3.connectionpool: critical
   homeassistant.components.media_player: warn
   homeassistant.components.light: warn
