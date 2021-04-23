@@ -49,4 +49,9 @@ automation:
           data:
             file:
               url: https://home.jnewland.com/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
-
+      - service: system_log.write
+        data:
+          message: >
+            after.end_time={{ trigger.payload_json["after"]["end_time"] | default(0) }}
+          logger: packages.image_processing
+          level: info
