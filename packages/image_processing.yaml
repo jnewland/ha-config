@@ -62,7 +62,7 @@ automation:
       - "{{ trigger.payload_json['after']['end_time'] is not none }}"
     action:
       - delay:
-          seconds: 5
+          seconds: 15
       - service: notify.slack
         data:
           title: |
