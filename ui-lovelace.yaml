@@ -284,33 +284,40 @@ views:
         show_state: false
         entity: camera.garage
       - type: picture-entity
+        camera_view: live
         show_name: false
         show_state: false
-        entity: camera.doods_atrium
+        entity: camera.dogs
+
       - type: picture-entity
         show_name: false
         show_state: false
-        entity: camera.doods_back_porch
+        entity: camera.atrium_person
       - type: picture-entity
         show_name: false
         show_state: false
-        entity: camera.doods_front_yard_left
+        entity: camera.back_porch_person
       - type: picture-entity
         show_name: false
         show_state: false
-        entity: camera.doods_pergola
+        entity: camera.front_yard_left_person
       - type: picture-entity
         show_name: false
         show_state: false
-        entity: camera.doods_gate
+        entity: camera.pergola_person
       - type: picture-entity
         show_name: false
         show_state: false
-        entity: camera.doods_garage
+        entity: camera.gate_person
       - type: picture-entity
         show_name: false
         show_state: false
-        entity: camera.doods_ac
+        entity: camera.garage_person
+      - type: picture-entity
+        show_name: false
+        show_state: false
+        entity: camera.ac_person
+
       - type: custom:auto-entities
         show_header_toggle: false
         show_empty: false
@@ -318,10 +325,10 @@ views:
           method: name
         card:
           type: entities
-          title: image processing
         filter:
           include:
-            - entity_id: "/image_processing/"
+            - entity_id: "/sensor..*_person$/"
+            - entity_id: "/sensor..*_dog$/"
       - type: custom:auto-entities
         card:
           type: history-graph
@@ -329,13 +336,6 @@ views:
         filter:
           include:
             - entity_id: "/_occupancy/"
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-        filter:
-          include:
-            - domain: image_processing
 
   - title: Record player
     path: record-player
