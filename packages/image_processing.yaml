@@ -62,6 +62,7 @@ automation:
       - "{{ trigger.payload_json['after']['end_time'] is not none }}"
     action:
       - delay:
+          # clip contains 5s after event end, give it some time
           seconds: 15
       - service: notify.slack
         data:
