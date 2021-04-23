@@ -25,7 +25,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.sha }}
           auto_merge: "true"
-          required_contexts: validate-config
+          required_contexts: YAMBURGER,validate-config
           production_environment: "true"
 
       - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
