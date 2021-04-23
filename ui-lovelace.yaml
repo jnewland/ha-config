@@ -336,6 +336,46 @@ views:
         filter:
           include:
             - entity_id: "/_occupancy/"
+      - type: custom:auto-entities
+        show_header_toggle: false
+        show_empty: false
+        sort:
+          method: name
+        card:
+          type: entities
+        filter:
+          include:
+            - entity_id: "/sensor..*_camera_fps$/"
+      - type: custom:auto-entities
+        show_header_toggle: false
+        show_empty: false
+        sort:
+          method: name
+        card:
+          type: entities
+        filter:
+          include:
+            - entity_id: "/sensor..*_detection_fps$/"
+      - type: custom:auto-entities
+        show_header_toggle: false
+        show_empty: false
+        sort:
+          method: name
+        card:
+          type: entities
+        filter:
+          include:
+            - entity_id: "/sensor..*_processed_fps$/"
+      - type: custom:auto-entities
+        show_header_toggle: false
+        show_empty: false
+        sort:
+          method: name
+        card:
+          type: entities
+        filter:
+          include:
+            - entity_id: "/sensor..*_skipped_fps$/"
 
   - title: Record player
     path: record-player
