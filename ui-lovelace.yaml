@@ -369,7 +369,7 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/sensor..*_processed_fps$/"
+            - entity_id: "/sensor..*_process_fps$/"
       - type: custom:auto-entities
         show_header_toggle: false
         show_empty: false
