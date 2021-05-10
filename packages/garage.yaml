@@ -31,6 +31,36 @@ automation:
         entity_id: script.lock_garage
         message: "The garage door has been unlocked for a bit. Lock it up?"
         confirmation_message: locked the garage door
+  - alias: Unlock garage door lock with tag
+    id: 79bc5e96-faf8-4a56-85d4-2a5537134be0
+    trigger:
+      platform: event
+      event_type: tag_scanned
+      event_data:
+        tag_id: e847f665-dbaa-4458-9d48-433964d3da29
+    condition:
+      condition: state
+      entity_id: lock.garage
+      state: locked
+    action:
+    - service: lock.unlock
+      data:
+        entity_id: lock.garage
+  - alias: Lock garage door lock with tag
+    id: 64664fb7-cc21-4dc9-a05f-399e4e6caec4
+    trigger:
+      platform: event
+      event_type: tag_scanned
+      event_data:
+        tag_id: e847f665-dbaa-4458-9d48-433964d3da29
+    condition:
+      condition: state
+      entity_id: lock.garage
+      state: unlocked
+    action:
+    - service: lock.lock
+      data:
+        entity_id: lock.garage
 script:
   close_garage:
     sequence:
