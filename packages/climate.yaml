@@ -79,7 +79,7 @@ automation:
       - service: climate.set_temperature
         data:
           entity_id: "{{ trigger.to_state.entity_id }}"
-          temperature: 72
+          temperature: 73
 
   - alias: upstairs heat
     mode: queued
@@ -117,7 +117,7 @@ automation:
       entity_id:
         - climate.upstairs
       value_template: "{{ state.attributes.current_temperature }}"
-      above: 74
+      above: 73
       for:
         minutes: 3
     action:
