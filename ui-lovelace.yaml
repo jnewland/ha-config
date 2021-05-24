@@ -437,17 +437,11 @@ views:
     icon: mdi:temperature-fahrenheit
     cards:
       - type: thermostat
-        entity: climate.great_room
-      - type: thermostat
-        entity: climate.lounge
-      - type: thermostat
         entity: climate.upstairs
 
       - type: entities
         show_header_toggle: false
         entities:
-          - automation.downstairs_ac
-          - automation.downstairs_heat
           - automation.upstairs_ac
           - automation.upstairs_heat
           - automation.upstairs_reading
