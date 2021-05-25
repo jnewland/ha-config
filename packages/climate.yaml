@@ -7,12 +7,12 @@ sensor:
       value_template: |
         {{ state_attr('weather.dark_sky', 'temperature') }}
     downstairs_humidity:
-      friendly_name: downstairs
+      friendly_name: downstairs humidity
       unit_of_measurement: '%'
       value_template: |
         {{ state_attr('climate.downstairs', 'current_humidity') }}
     downstairs_temperature:
-      friendly_name: downstairs
+      friendly_name: downstairs temperature
       unit_of_measurement: '°F'
       value_template: |
         {{ state_attr('climate.downstairs', 'current_temperature') }}
