@@ -38,3 +38,4 @@ automation:
           after being {{ old_state.state | capitalize }}{{ old_state.attributes.unit_of_measurement }}{{ " " -}}
           for {{ relative_time(old_state.last_changed) }}
         target: "#general"
+
