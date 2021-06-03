@@ -1,4 +1,6 @@
 alias: Ack
+id: 097d52cd-442e-40ab-9d25-bbee32bc1fe4
+mode: parallel
 trigger:
   platform: event
   event_type: ios.notification_action_fired
@@ -6,10 +8,10 @@ trigger:
     actionName: ACK_TURN_ON
 action:
   - service: homeassistant.turn_on
-    data_template:
+    data:
       entity_id: '{{ trigger.event.data.action_data.entity_id }}'
-  - service_template: '{{ trigger.event.data.action_data.notify_service }}'
-    data_template:
+  - service: '{{ trigger.event.data.action_data.notify_service }}'
+    data:
       message: >
         {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}.
       data:
@@ -17,6 +19,6 @@ action:
           'apns-collapse-id': >
             {{ trigger.event.data.action_data.apns_collapse_id | default(trigger.event.data.action_data.entity_id) }}
   - service: notify.slack
-    data_template:
-      message: ':+1: to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}'
-      target: "#general"
+    data:
+      title: ':+1:'
+      message: yep to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}

@@ -1,5 +1,28 @@
 automation:
+  - alias: Wake up
+    id: c4f39d11-9ede-433c-a719-f4438dfa189a
+    trigger:
+      - platform: template
+        value_template: |
+          {{ 
+            states('sensor.time') ==
+            (state_attr('input_datetime.wake_up', 'timestamp') | int | timestamp_custom('%H:%M', False))
+          }}
+    action:
+    - service: homeassistant.turn_off
+      entity_id: group.outdoor_speakers
+    - service: homeassistant.turn_on
+      entity_id:
+        - media_player.record_cabinet_output_bedside_table
+        - media_player.record_cabinet_output_master
+    - service: media_player.select_source
+      entity_id: media_player.record_cabinet
+      data:
+        source: monkeys (playlist)
+    - service: media_player.media_play
+      entity_id: media_player.record_cabinet
   - alias: Morning mode
+    id: ea8d312a-ccd9-483c-949c-0b103480ec28
     trigger:
       - platform: state
         entity_id: binary_sensor.closet_motion
@@ -11,7 +34,7 @@ automation:
         to: 'on'
       - platform: state
         entity_id:
-        - sensor.jphone_11_pro_battery_state
+        - sensor.jphone_12_battery_state
         - sensor.katie_s_iphone_battery_state
         to: 'Not Charging'
         for:
@@ -32,6 +55,7 @@ automation:
         option: Morning
 
   - alias: Run default morning actions
+    id: 81e7b2c0-f920-4cc0-9faa-2833da439f2c
     trigger:
     - platform: state
       entity_id: input_select.mode
@@ -47,5 +71,7 @@ automation:
       entity_id:
         - group.speakers
         - light.cabinets
+        - light.record_cabinet_left
+        - light.record_cabinet_right
     - service: alarm_control_panel.alarm_disarm
       entity_id: alarm_control_panel.alarm

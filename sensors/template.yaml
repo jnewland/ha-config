@@ -1,9 +1,8 @@
 platform: template
 sensors:
   alarm_sensors:
-    value_template: >
-      {%- for state in (states.alarm_control_panel.alarm.attributes.sensor_status | default("")).split(".") if state|replace("low battery", "") == state and state != ""  -%}{{ state }}. {% endfor -%}
     friendly_name: Alarm sensors
+    value_template: '{{ state_attr("alarm_control_panel.alarm","sensor_status") | replace("Device Low Battery", "") | replace(" (","") | replace(")","") | trim | truncate}}'
   front_gate:
     value_template: '{% if is_state("binary_sensor.front_gate_121", "on") %}open{% else %}closed{% endif %}'
     friendly_name: Front gate

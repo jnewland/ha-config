@@ -1,4 +1,3 @@
-# Powered sub is attached to this zone's preamp out
 - platform: mpr_6zhmaut
   name: living speakers
   host: !env_var MPR_API_IP
@@ -29,3 +28,15 @@
   host: !env_var MPR_API_IP
   port: !env_var MPR_API_PORT
   zone: 16
+- platform: channels
+  name: music room channels
+  host: music-room
+- platform: channels
+  name: lounge channels
+  host: office
+- platform: channels
+  name: bedroom channels
+  host: bedroom
+- platform: channels
+  name: garage channels
+  host: garage-tv

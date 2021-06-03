@@ -1,5 +1,6 @@
 # Keep the front door locked
 alias: Auto lock
+id: 1a9f390d-888f-43af-ba51-6c13d9cb5931
 trigger:
   platform: state
   entity_id: lock.front_door
@@ -8,7 +9,8 @@ trigger:
     minutes: 5
 action:
 - service: script.ask_about_turning_on
-  data_template:
+  data:
     entity_id: script.lock_up
+    apns_collapse_id: lock.front_door
     message: "The front door's been unlocked for a bit. Lock up?"
     confirmation_message: locked up

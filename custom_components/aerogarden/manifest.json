@@ -1,0 +1,8 @@
+{
+    "domain": "aerogarden",
+    "name": "AeroGarden",
+    "documentation": "https://github.com/JeremyKennedy/homeassistant-aerogarden",
+    "dependencies": [],
+    "codeowners": [],
+    "requirements": []
+  }

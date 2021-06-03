@@ -1,5 +1,0 @@
-platform: template
-sensors:
-  entry_door:
-    value_template: |
-      {{ "Entry" in (states.sensor.alarm_sensors.state | default("")) }}

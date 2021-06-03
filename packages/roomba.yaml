@@ -2,13 +2,14 @@ script:
   find_roomba:
     sequence:
       - service: vacuum.locate
-        entity_id: vacuum.downstairs_roomba
+        entity_id: vacuum.downstairs980
   noop:
     sequence:
       - service: homeassistant.update_entity
         entity_id: binary_sensor.updater
 automation:
   - alias: Find the roomba in the morning
+    id: adfef972-4f7b-4e82-bb27-072858066f63
     trigger:
     - platform: state
       entity_id: input_select.mode
@@ -16,16 +17,18 @@ automation:
     condition:
       condition: template
       value_template: |
-        {{ not is_state_attr("vacuum.downstairs_roomba", "status", "Charging") }}
+        {{ not is_state_attr("vacuum.downstairs980", "status", "Charging") }}
     action:
       - service: script.ask_about_turning_on
-        data_template:
+        data:
           entity_id: script.find_roomba
+          apns_collapse_id: vacuum.downstairs980
           message: >
             The downstairs roomba is lost. Should I make it beep?
           confirmation_message: found the roomba
 
   - alias: Empty the roomba in the morning
+    id: 31ee6b53-6142-416f-bcdf-f5619bed4108
     trigger:
     - platform: state
       entity_id: input_select.mode
@@ -33,23 +36,43 @@ automation:
     condition:
       condition: template
       value_template: |
-        {{ is_state_attr("vacuum.downstairs_roomba", "bin_full", True) }}
+        {{ is_state_attr("vacuum.downstairs980", "bin_full", True) }}
     action:
       - service: script.ask_about_turning_on
-        data_template:
+        data:
           entity_id: script.noop
-          apns_collapse_id: roomba-full
+          apns_collapse_id: vacuum.downstairs980
           message: The downstairs roomba is full. Did you empty it out?
           confirmation_message: emptied the roomba
 
   - alias: Run roomba in reading mode
+    id: c41db5ac-9e79-4606-ab29-36d45a5ce1fa
     trigger:
     - platform: state
       entity_id: input_select.mode
       to: Reading
     action:
-      - service: vacuum.turn_on
-        entity_id: vacuum.downstairs_roomba
+      - service: vacuum.start
+        entity_id: vacuum.downstairs980
 
+  - alias: Roomba state
+    id: 0397f957-251c-425c-aa1e-842205bb6446
+    trigger:
+      - platform: state
+        entity_id: vacuum.downstairs980
+        from:
+          - cleaning
+          - returning
+        to:
+          - stuck
+          - error
+    action:
+      - service: script.ask_about_turning_on
+        data:
+          entity_id: script.noop
+          apns_collapse_id: vacuum.downstairs980
+          message: >
+            the roomba is {{ states.vacuum.downstairs980.state }}
+          confirmation_message: helped the robot
 
 

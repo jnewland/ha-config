@@ -1,8 +1,9 @@
 alias: Away mode
+id: d9daa55b-e9a8-4066-8924-39ddbc7257f7
 trigger:
   platform: state
   entity_id:
-    - device_tracker.jphone_11_pro
+    - device_tracker.jphone_12
     - device_tracker.katie_s_iphone
   to: not_home
   for:
@@ -13,7 +14,7 @@ condition:
                   {{
                     states.input_boolean.guests.state == "off" and
                     states.input_select.mode.state != "Away" and
-                    states.device_tracker.jphone_11_pro.state == "not_home" and
+                    states.device_tracker.jphone_12.state == "not_home" and
                     states.device_tracker.katie_s_iphone.state == "not_home"
                   }}
                   '

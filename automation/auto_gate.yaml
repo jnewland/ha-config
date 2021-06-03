@@ -1,5 +1,6 @@
 # Keep the gate closed
 alias: Auto gate
+id: 478d2437-9749-4163-bd03-ddca0544a1d2
 trigger:
   platform: state
   entity_id: cover.gate
@@ -8,7 +9,8 @@ trigger:
     minutes: 5
 action:
 - service: script.ask_about_turning_on
-  data_template:
+  data:
     entity_id: script.lock_up
+    apns_collapse_id: cover.gate
     message: "The gate has been open for a bit. Close it up?"
     confirmation_message: closed the gate

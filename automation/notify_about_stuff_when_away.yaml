@@ -1,8 +1,12 @@
 alias: Notify about stuff when we're away
+id: 42bd3505-3443-4c3c-8ab3-75186cc628cf
+mode: parallel
 trigger:
   platform: state
   entity_id:
     - lock.front_door
+    - lock.back_porch
+    - lock.garage
     - alarm_control_panel.alarm
     - binary_sensor.entry_door
     - binary_sensor.garage
@@ -23,8 +27,8 @@ condition:
         new_state.state != old_state.state
       }}
 action:
-  service: notify.mobile_app_jphone_11_pro
-  data_template:
+  service: notify.mobile_app_jphone_12
+  data:
     message: >
       {% set old_state = trigger.from_state %}
       {% set new_state = trigger.to_state %}

@@ -4,9 +4,11 @@ sequence:
     data:
       option: Evening
   - service: input_number.set_value
-    data_template:
+    data:
       entity_id: input_number.brightness
       value: 128
   - service: homeassistant.turn_off
     entity_id:
-      - light.office_overhead
+      - light.lounge_overhead
+  - service: script.turn_on
+    entity_id: script.great_room_lights

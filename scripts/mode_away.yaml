@@ -2,10 +2,15 @@ sequence:
   - service: homeassistant.turn_off
     entity_id:
       - group.indoor
-      - group.group_speakers
   - service: alarm_control_panel.alarm_arm_home
     entity_id: alarm_control_panel.alarm
   - service: input_select.select_option
     data:
       entity_id: input_select.mode
       option: Away
+  - service: script.lock_up
+  - service: lock.lock
+    data:
+      entity_id:
+      - lock.back_porch
+      - lock.garage

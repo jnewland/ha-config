@@ -1,0 +1,30 @@
+platform: template
+sensors:
+  entry_door:
+    friendly_name: entry door
+    value_template: |
+      {{ "Entry Door is Open" in states.sensor.alarm_sensors.state | default("") }}
+  master_patio_door:
+    friendly_name: master patio door
+    value_template: |
+      {{ "Master is Open" in states.sensor.alarm_sensors.state | default("") }}
+  downstairs_bathroom_window:
+    friendly_name: downstairs bathroom window
+    value_template: |
+      {{ "Downstairs Bathroom is Open" in states.sensor.alarm_sensors.state | default("") }}
+  downstairs_window:
+    friendly_name: downstairs window
+    value_template: |
+      {{ "Downstairs Window is Open" in states.sensor.alarm_sensors.state | default("") }}
+  music_room_window:
+    friendly_name: music room window
+    value_template: |
+      {{ "Bedroom Two is Open" in states.sensor.alarm_sensors.state | default("") }}
+  lounge_window:
+    friendly_name: lounge window
+    value_template: |
+      {{ "Lounge Window is Open" in states.sensor.alarm_sensors.state | default("") }}
+  living_room_motion:
+    friendly_name: living room motion
+    value_template: |
+      {{ "Motion Detector is Activated" in states.sensor.alarm_sensors.state | default("") }}

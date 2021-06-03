@@ -1,4 +1,5 @@
 alias: Mode day to evening
+id: b9bd62f2-3e44-4320-9b01-8b59ccd00fd0
 trigger:
   - platform: time
     at: '17:00:00'

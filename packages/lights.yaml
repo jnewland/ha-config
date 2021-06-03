@@ -17,9 +17,12 @@ homeassistant:
     # trigger_service_off: service
     # trigger_entity_id_off: entity_id
 
+    binary_sensor.master_door:
+      haunt: light.bookshelf_right
     binary_sensor.stairs_motion:
       trigger_entity_id: light.stairs
       trigger_entity_id_off: light.stairs
+      haunt: light.bookshelf_right
     binary_sensor.upstairs_motion:
       trigger_entity_id: light.stairs
       trigger_entity_id_off: light.stairs
@@ -29,44 +32,60 @@ homeassistant:
     binary_sensor.guest_hall_motion:
       trigger_entity_id: light.guest_hall
       trigger_entity_id_off: light.guest_hall
+      haunt: light.couch
     binary_sensor.guest_bath_motion:
       trigger_entity_id: group.guest_bath_lights
       trigger_entity_id_off: group.guest_bath
       off_delay_seconds: 1800
+      haunt: light.couch
     binary_sensor.powder_room_motion:
       trigger_entity_id: light.powder_room
       trigger_entity_id_off: group.powder_room
-    binary_sensor.office_motion:
-      trigger_service: script.office_lights
-      trigger_entity_id_off: group.office
+      haunt: light.drums
+    binary_sensor.lounge_motion:
+      trigger_service: script.lounge_lights
+      trigger_entity_id_off: group.lounge
+      off_delay_seconds: 1800
+      haunt: light.couch
+    binary_sensor.music_room_motion:
+      trigger_service: script.music_room
+      trigger_entity_id_off: group.music_room
       off_delay_seconds: 1800
     binary_sensor.master_bath_motion:
       trigger_service: script.master_bath_lights
       trigger_entity_id_off: group.master_bath
       off_delay_seconds: 1800
-    binary_sensor.master_motion:
-      trigger_service: script.master_lights
-      trigger_service_off: script.master_lights_off
+      haunt: light.bookshelf_left
     binary_sensor.wine_room_motion:
       trigger_entity_id: light.wine_room
       trigger_entity_id_off: light.wine_room
     binary_sensor.great_hall_motion:
       trigger_entity_id: light.great_hall
       trigger_entity_id_off: light.great_hall
+      haunt: light.drums
     binary_sensor.garage_hall_motion:
       trigger_entity_id: light.garage_hall
       trigger_entity_id_off: light.garage_hall
-    binary_sensor.music_room_motion:
-      friendly_name: music room motion
-      trigger_entity_id: light.music_room
-      trigger_entity_id_off: light.music_room
-      off_delay_seconds: 300
+      haunt: light.drums
+    binary_sensor.yoga_room_motion:
+      friendly_name: yoga room motion
+      trigger_entity_id: group.yoga_room
+      trigger_entity_id_off: group.yoga_room
+      off_delay_seconds: 600
+      haunt: light.bookshelf_middle
     binary_sensor.great_room_occupied:
-      trigger_service: script.living_lights
+      trigger_service: script.great_room_lights
       trigger_entity_id_off: group.great_room
+      haunt: light.bookshelf_right
     binary_sensor.pantry_motion:
       trigger_entity_id: light.pantry
       trigger_entity_id_off: light.pantry
+      haunt: light.bookshelf_right
+    binary_sensor.record_cabinet_playing:
+      trigger_service: script.pulse_record_cabinet_lights
+    binary_sensor.bookshelf_camera_in_use:
+      trigger_service: script.red_record_cabinet_lights
+      trigger_service_off: script.reset_record_cabinet_lights
 
     counter.light_automations:
       unit_of_measurement: occurances
@@ -77,7 +96,11 @@ homeassistant:
     # duck_step: int | default(127)
     light.atrium:
       notify_action: duck
-      fixed_brightness: 255
+      fixed_brightness: 127
+    light.bamboo:
+      notify_action: duck
+      fixed_brightness: 127
+      fixed_color_temp: 396
     light.front_porch:
       fixed_brightness: 255
     light.front_door:
@@ -94,8 +117,13 @@ homeassistant:
     light.cabinets:
       fixed_brightness: 255
 
-    light.bedside_table:
-      ignore_brightness: true
+    light.bookshelf:
+      fixed_color_temp: 396
+    light.keyboard:
+      fixed_brightness: 50
+    light.striped_lamp:
+      fixed_color_temp: 396
+
     light.bedside_table_white:
       ignore_brightness: true
     light.bedside_table_red:
@@ -107,19 +135,23 @@ homeassistant:
     light.bedside_table_brightness:
       ignore_brightness: true
 
-    light.back_porch_fountain_lights:
-      notify_action: duck
-      fixed_brightness: 255
-    light.back_porch_fountain_blue:
-      fixed_brightness: 0
-    light.back_porch_fountain_brightness:
-      fixed_brightness: 0
-    light.back_porch_fountain_green:
-      fixed_brightness: 0
-    light.back_porch_fountain_red:
-      fixed_brightness: 0
     light.back_porch_fountain_white:
-      fixed_brightness: 0
+      ignore_brightness: true
+    light.back_porch_fountain_green:
+      ignore_brightness: true
+    light.back_porch_fountain_red:
+      ignore_brightness: true
+    light.back_porch_fountain_blue:
+      ignore_brightness: true
+    light.back_porch_fountain_brightness:
+      ignore_brightness: true
+
+    light.garage_hall:
+      notify_action: duck
+    light.record_cabinet_left:
+      notify_action: duck
+    light.record_cabinet_right:
+      notify_action: duck
 
     light.dining_room_table:
       notify_action: duck
@@ -156,14 +188,11 @@ homeassistant:
       notify_action: duck
     light.master_toilet:
       notify_action: duck
-    light.music_room:
+    light.yoga_room:
       notify_action: duck
-    light.office_chandelier:
+    light.lounge_chandelier:
       notify_action: duck
-    light.office_desk_lamp:
-      notify_action: duck
-      duck_step: 192
-    light.office_overhead:
+    light.lounge_overhead:
       notify_action: duck
     light.pendants:
       notify_action: duck
@@ -171,8 +200,20 @@ homeassistant:
     light.wine_room:
       fixed_brightness: 102
 
+    light.kitchen_light:
+      ignore_brightness: true
+
+binary_sensor:
+  - platform: template
+    sensors:
+      record_cabinet_playing:
+        value_template: |
+          {{ is_state("media_player.record_cabinet", "playing") }}
+
 automation:
   - alias: Turn on lights when motion is detected
+    mode: parallel
+    id: 429d9193-1b9e-4252-ba42-f3e36ed2d6f9
     trigger:
       platform: event
       event_type: state_changed
@@ -194,46 +235,43 @@ automation:
           value_template: |
             {{ states.input_select.mode.state != "Away" }}
     action:
-      - service_template: |
+      - service: >
           {{ trigger.event.data.new_state.attributes.trigger_service | default('homeassistant.turn_on') }}
-        data_template:
+        data:
           entity_id: |
             {{ trigger.event.data.new_state.attributes.trigger_entity_id | default('') }}
           brightness: |
             {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
       - service: system_log.write
-        data_template:
+        data:
           message: >
             at=on
             entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_entity_id }}
           logger: packages.lights
-          level: info
+          level: debug
       - service: counter.increment
         entity_id: counter.light_automations
 
   - alias: Turn off lights after sensors have turned off
+    mode: parallel
+    id: 9c61fca8-f391-43f0-9766-460006d47777
     trigger:
       platform: event
       event_type: state_changed
-    condition:
-      condition: and
-      conditions:
-        - condition: template
-          value_template: |
-            {{
-              trigger.event.data.old_state != None and
-              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
-              trigger.event.data.new_state.domain == "binary_sensor" and
-              trigger.event.data.new_state.state == "off" and (
-                trigger.event.data.new_state.attributes.trigger_service_off is defined or
-                trigger.event.data.new_state.attributes.trigger_entity_id_off is defined
-              )
-            }}
-
+    condition: |
+      {{
+        trigger.event.data.old_state != None and
+        trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+        trigger.event.data.new_state.domain == "binary_sensor" and
+        trigger.event.data.new_state.state == "off" and (
+          trigger.event.data.new_state.attributes.trigger_service_off is defined or
+          trigger.event.data.new_state.attributes.trigger_entity_id_off is defined
+        )
+      }}
     action:
       # Emit a custom event including a boolean indicating whether or not to delay.
       - event: lights_motion_sensor_off
-        event_data_template:
+        event_data:
           entity_id: |
             {{ trigger.event.data.entity_id }}
           delay: |
@@ -245,40 +283,44 @@ automation:
             {{ (as_timestamp(now()) * 1000000) | int }}{{ range(0,9999) | random }}
 
   - alias: Turn off lights immediately
+    mode: parallel
+    id: 314ca48b-e8e4-4c17-b7ee-9ad0affd1e4a
     trigger:
       platform: event
       event_type: lights_motion_sensor_off
       event_data:
-        delay: "False"
+        delay: false
     action:
-      - service_template: |
+      - service: >
           {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
-        data_template:
+        data:
           entity_id: |
             {{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off | default('') }}
       - service: system_log.write
-        data_template:
+        data:
           message: >
             at=off
             entity_id={{ trigger.event.data.entity_id }}
             trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
             trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
           logger: packages.lights
-          level: info
+          level: debug
       - service: counter.increment
         entity_id: counter.light_automations
 
   - alias: Turn off lights with delay
+    mode: parallel
+    id: 094daa86-4eb7-469d-bd9c-6f7176287ff2
     trigger:
       platform: event
       event_type: lights_motion_sensor_off
       event_data:
-        delay: "True"
+        delay: true
     action:
       - service: system_log.write
-        data_template:
+        data:
           logger: packages.lights
-          level: info
+          level: debug
           message: >
             at=delay_start
             event_id={{ trigger.event.data.event_id }}
@@ -287,7 +329,7 @@ automation:
             event_last_changed={{ trigger.event.data.last_changed }}
       - delay: "{{ ((states[trigger.event.data.entity_id].attributes.off_delay_seconds | int) + 1) | timestamp_custom('%H:%M:%S',False) }}"
       - service: system_log.write
-        data_template:
+        data:
           message: >
             at=delay_end
             event_id={{ trigger.event.data.event_id }}
@@ -304,7 +346,7 @@ automation:
             }}
             state={{ states(trigger.event.data.entity_id) }}
           logger: packages.lights
-          level: info
+          level: debug
       # Only continue if:
       # * The sensor is off
       # * It hasn't changed since we started delaying
@@ -318,13 +360,13 @@ automation:
               as_timestamp(states[trigger.event.data.entity_id].last_changed) + (states[trigger.event.data.entity_id].attributes.off_delay_seconds | int)
             ) < as_timestamp(now())
           }}
-      - service_template: |
+      - service: >
           {{ states[trigger.event.data.entity_id].attributes.trigger_service_off | default('homeassistant.turn_off') }}
-        data_template:
+        data:
           entity_id: |
             {{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off | default('') }}
       - service: system_log.write
-        data_template:
+        data:
           message: >
             at=off
             event_id={{ trigger.event.data.event_id }}
@@ -332,20 +374,24 @@ automation:
             trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
             trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
           logger: packages.lights
-          level: info
+          level: debug
       - service: counter.increment
         entity_id: counter.light_automations
 
   - alias: React to changes of the brightness slider
+    mode: queued
+    id: 65a92bfe-d4a4-4663-a023-c0b4aaee12ee
     trigger:
       platform: state
       entity_id: input_number.brightness
     action:
       - service: light.turn_on
-        data_template:
+        data:
           entity_id: |
             {%- for l in states.light if (
-                not l.attributes.fixed_brightness and
+                l.attributes.is_hue_group is not defined and
+                l.attributes.fixed_brightness is not defined and
+                l.attributes.ignore_brightness is not defined and
                 l.state == "on") -%}
               {{l.entity_id}}{% if not loop.last %}{{ ", " }}{% endif %}
             {%- endfor -%}
@@ -355,6 +401,8 @@ automation:
         entity_id: counter.light_automations
 
   - alias: Set lights to correct brightness when turned on
+    mode: parallel
+    id: d6f32aaa-155b-46e7-97c4-0079c373a249
     trigger:
       platform: event
       event_type: state_changed
@@ -365,10 +413,12 @@ automation:
           value_template: |
             {{
               trigger.event.data.old_state != None and
+              trigger.event.data.new_state.attributes.is_hue_group is not defined and
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "light" and
               trigger.event.data.new_state.state == "on" and
-              trigger.event.data.new_state.attributes.ignore_brightness is not defined
+              trigger.event.data.new_state.attributes.ignore_brightness is not defined and
+              trigger.event.data.new_state.attributes.fixed_color_temp is not defined
             }}
         - condition: template
           value_template: |
@@ -376,7 +426,7 @@ automation:
               trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
     action:
       - service: light.turn_on
-        data_template:
+        data:
           entity_id: |
             {{ trigger.event.data.new_state.entity_id }}
           brightness: |
@@ -384,7 +434,64 @@ automation:
       - service: counter.increment
         entity_id: counter.light_automations
 
+  - alias: Set lights to correct color temp when turned on
+    mode: parallel
+    id: 38a8b2e3-85d2-48b3-8a38-2c1f7ccfdd50
+    trigger:
+      platform: event
+      event_type: state_changed
+    condition:
+      condition: and
+      conditions:
+        - condition: template
+          value_template: |
+            {{
+              trigger.event.data.old_state != None and
+              trigger.event.data.new_state.attributes.is_hue_group is not defined and
+              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+              trigger.event.data.new_state.domain == "light" and
+              trigger.event.data.new_state.state == "on" and
+              trigger.event.data.new_state.attributes.fixed_color_temp is defined
+            }}
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: |
+            {{ trigger.event.data.new_state.entity_id }}
+          color_temp: |
+            {{ trigger.event.data.new_state.attributes.fixed_color_temp }}
+          brightness: |
+            {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+      - service: counter.increment
+        entity_id: counter.light_automations
+
+  - alias: Turn on lights when devices enter zones
+    mode: parallel
+    id: 7bff781f-10e6-4a38-9701-7dc2638c4515
+    trigger:
+      platform: state
+      entity_id:
+      - device_tracker.jphone_12
+      - device_tracker.katie_s_iphone
+    condition:
+      condition: template
+      value_template: |
+        {{
+          trigger.from_state.state != trigger.to_state.state and
+          trigger.to_state.attributes.trigger_entity_id is defined
+        }}
+    action:
+      service: >
+        {{ trigger.to_state.attributes.trigger_service | default('homeassistant.turn_on') }}
+      data:
+        entity_id: |
+          {{ trigger.to_state.attributes.trigger_entity_id }}
+        brightness: |
+          {{ trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+
   - alias: log light changes to slack
+    mode: parallel
+    id: 85753078-89dd-4750-840e-13ef98cd4216
     trigger:
       platform: event
       event_type: state_changed
@@ -399,7 +506,8 @@ automation:
         }}
     action:
       service: notify.slack
-      data_template:
+      data:
+        title: ':bulb:'
         message: |
           :bulb: *{{ trigger.event.data.new_state.name | capitalize }}*{{ " " -}}
           {%- if trigger.event.data.new_state.state == "on" -%}
@@ -414,7 +522,33 @@ automation:
           Off
           {%- endif -%}{{ " " -}}
           for {{ relative_time(trigger.event.data.old_state.last_changed) }}
-        target: "#general"
+
+  - alias: Haunt lights
+    mode: parallel
+    id: 633ab695-cce9-4f15-a8dc-d21b2a303419
+    trigger:
+      platform: event
+      event_type: state_changed
+    condition:
+      condition: and
+      conditions:
+        - condition: template
+          value_template: |
+            {{
+              trigger.event.data.old_state != None and
+              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+              trigger.event.data.new_state.domain == "binary_sensor" and
+              trigger.event.data.new_state.state == "on" and
+              trigger.event.data.new_state.attributes.haunt is defined
+            }}
+        - condition: template
+          value_template: |
+            {{ states.input_select.mode.state != "Away" }}
+    action:
+      - service: script.haunt
+        data:
+          entity_id: |
+            {{ expand(trigger.event.data.new_state.attributes.haunt.split(",")) | selectattr("state", "equalto", "on") | map(attribute="entity_id") | join(",") }}
 
 counter:
   light_automations:
@@ -428,30 +562,45 @@ input_number:
     step: 1
 
 script:
-  living_lights:
+  great_room_lights:
     sequence:
-      - service: light.turn_on
+      - service: scene.turn_on
         data:
-          entity_id: light.cabinets
-      - condition: template
-        value_template: >
-          {{ states.input_select.mode.state != "Sleeping" }}
-      - service: light.turn_on
-        data_template:
-          entity_id:
-            - light.dining_room_table
-            - light.kitchen
-            - light.living
-            - light.pendants
-            - light.couch_lamp_right
-            - light.couch_lamp_left
-          brightness: |
-            {{ brightness | default(states('input_number.brightness') | int) }}
+          entity_id: >
+            scene.great_room_{{ states.input_select.mode.state | lower }}
+          transition: >
+            {{ "5" if states.input_select.mode.state in ["Evening", "Cocktail", "Cooking"] else "0.1" }}
+  mode_cocktail:
+    sequence:
+    - service: input_select.select_option
+      entity_id: input_select.mode
+      data:
+        option: Cocktail
+    - service: script.turn_on
+      entity_id: script.great_room_lights
+  mode_cooking:
+    sequence:
+    - service: input_select.select_option
+      entity_id: input_select.mode
+      data:
+        option: Cooking
+    - service: script.turn_on
+      entity_id: script.great_room_lights
+  mode_day:
+    sequence:
+    - service: input_select.select_option
+      entity_id: input_select.mode
+      data:
+        option: Day
+    - service: script.turn_on
+      entity_id: script.great_room_lights
+
+
 
   master_bath_lights:
     sequence:
       - service: light.turn_on
-        data_template:
+        data:
           entity_id: light.master_toilet
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
@@ -459,7 +608,7 @@ script:
         value_template: >
           {{ states.input_select.mode.state != "Sleeping" }}
       - service: light.turn_on
-        data_template:
+        data:
           entity_id:
           - light.master_bath_overhead
           - light.master_shower
@@ -473,7 +622,7 @@ script:
         value_template: >
           {{ states.input_select.mode.state not in ["Reading", "Morning"] }}
       - service: homeassistant.turn_on
-        data_template:
+        data:
           entity_id: |
             {{ "light.master_toilet" if states.input_select.mode.state == "Sleeping" else "group.master" }}
           brightness: |
@@ -485,9 +634,23 @@ script:
         value_template: >
           {{ states.input_select.mode.state not in ["Reading", "Morning"] }}
       - service: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: |
             group.master
+
+  music_room:
+    sequence:
+      - service: light.turn_on
+        entity_id: light.bookshelf
+        data:
+          color_temp: |
+            {{ states.light.bookshelf.attributes.fixed_color_temp | int }}
+      - service: light.turn_on
+        entity_id: light.striped_lamp
+        data:
+          color_temp: |
+            {{ states.light.striped_lamp.attributes.fixed_color_temp | int }}
+      - service: shell_command.wake_bookshelf
 
   notify_with_lights:
     sequence:
@@ -502,7 +665,7 @@ script:
           length > 0
         }}
     - service: script.pulse_light
-      data_template:
+      data:
         entity_id: |
           {{
             states.light |
@@ -512,39 +675,96 @@ script:
             join(', ')
           }}
 
-  office_lights:
+  lounge_lights:
     sequence:
       - service: light.turn_on
-        data_template:
+        data:
           entity_id:
-          - light.office_desk_lamp
-          - light.office_closet
-          - light.office_overhead
-          - light.office_chandelier
-          - light.exercise_bike
+          - light.lounge_closet
+          - light.lounge_overhead
+          - light.lounge_chandelier
+          - light.coat_closet
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
       - condition: template
         value_template: >
           {{ states.input_select.mode.state != "Evening" }}
       - service: light.turn_on
-        data_template:
+        data:
           entity_id:
-          - light.office_overhead
+          - light.lounge_overhead
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
 
   pulse_light:
     sequence:
     - service: python_script.dim_step
-      data_template:
+      data:
         action: down
         entity_id: |
           {{ entity_id }}
     - delay:
         seconds: 2
     - service: python_script.dim_step
-      data_template:
+      data:
         action: up
         entity_id: |
           {{ entity_id }}
+
+  haunt:
+    sequence:
+      - service: light.turn_on
+        data:
+          brightness_step_pct: |
+            -{{ step | default("50")}}
+          entity_id: |
+            {{ entity_id }}
+      - delay:
+          seconds: |
+            {{ delay | default("1")}}
+      - service: light.turn_on
+        data:
+          brightness_step_pct: |
+            {{ step | default("50")}}
+          entity_id: |
+            {{ entity_id }}
+
+  reset_record_cabinet_lights:
+    sequence:
+      - service: light.turn_off
+        data:
+          entity_id:
+            - light.record_cabinet_left
+            - light.record_cabinet_right
+      - delay:
+          seconds: 1
+      - service: light.turn_on
+        data:
+          color_temp: 396
+          entity_id:
+            - light.record_cabinet_left
+            - light.record_cabinet_right
+
+  pulse_record_cabinet_lights:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id:
+            - light.record_cabinet_left
+            - light.record_cabinet_right
+          effect: colorloop
+      - delay:
+          seconds: 30
+      - service: script.reset_record_cabinet_lights
+
+  red_record_cabinet_lights:
+    sequence:
+      - service: light.turn_on
+        data:
+          color_name: red
+          entity_id:
+            - light.record_cabinet_left
+            - light.record_cabinet_right
+
+shell_command:
+  wake_bookshelf: curl -s --retry 3 --retry-max-time 10 --max-time 30 -X POST bookshelf:8686/wake

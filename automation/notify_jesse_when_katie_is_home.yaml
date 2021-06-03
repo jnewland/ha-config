@@ -1,4 +1,5 @@
 alias: Notify Jesse when Katie is home
+id: e483474f-9182-47f4-9c7a-726c096e732b
 trigger:
   platform: state
   entity_id: device_tracker.katie_s_iphone
@@ -7,8 +8,8 @@ trigger:
 condition:
   condition: template
   value_template: |
-    {{ states.device_tracker.jphone_11_pro.state != "not_home" }}
+    {{ states.device_tracker.jphone_12.state != "not_home" }}
 action:
-  service: notify.mobile_app_jphone_11_pro
+  service: notify.mobile_app_jphone_12
   data:
     message: 'Katie is home!'

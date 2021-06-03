@@ -10,13 +10,12 @@ script:
   deploy:
     sequence:
     - service: notify.slack
-      data_template:
-        message: ':shipit: https://github.com/jnewland/ha-config/commit/{{ sha }}/checks'
-        target: "#general"
+      data:
+        title: ':shipit:'
+        message: 'https://github.com/jnewland/ha-config/commit/{{ sha }}/checks'
     - service: shell_command.deploy
-      data_template:
+      data:
           sha: "{{ sha }}"
-    - service: homeassistant.restart
 
 shell_command:
   deploy: /bin/bash ./script/deploy {{ sha }}

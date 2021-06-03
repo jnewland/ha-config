@@ -1,4 +1,6 @@
 alias: Ack no
+mode: parallel
+id: 7326c4e1-2f25-4619-be0b-07025456e3c7
 trigger:
   platform: event
   event_type: ios.notification_action_fired
@@ -6,6 +8,6 @@ trigger:
     actionName: ACK_NO
 action:
   service: notify.slack
-  data_template:
-    message: ':-1: to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}'
-    target: "#general"
+  data:
+    title: ':-1:'
+    message: nope to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}

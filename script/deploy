@@ -8,3 +8,7 @@ if [ -n "$ref" ]; then
     git reset --hard $ref
     git clean -d -f -e lost+found
 fi
+
+kill 1
+sleep 30
+kill -KILL 1

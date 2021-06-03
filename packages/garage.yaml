@@ -1,0 +1,73 @@
+automation:
+  - alias: Keep the garage door closed
+    id: 9b4c10ce-0960-4176-9bd5-e670c75dfc0d
+    trigger:
+      platform: state
+      entity_id: cover.garage
+      to: open
+      for:
+        minutes: 5
+    action:
+    - service: script.ask_about_turning_on
+      data:
+        entity_id: script.close_garage
+        message: "The garage has been open for a bit. Close it up?"
+        confirmation_message: closed the garage
+  - alias: Keep the garage door locked
+    id: 85761fbe-a404-4b09-bce0-83acae8ce018
+    trigger:
+      platform: state
+      entity_id: binary_sensor.garage_occupancy
+      to: 'off'
+      for:
+        minutes: 30
+    condition:
+      condition: state
+      entity_id: lock.garage
+      state: unlocked
+    action:
+    - service: script.ask_about_turning_on
+      data:
+        entity_id: script.lock_garage
+        message: "The garage door has been unlocked for a bit. Lock it up?"
+        confirmation_message: locked the garage door
+  - alias: Unlock garage door lock with tag
+    id: 79bc5e96-faf8-4a56-85d4-2a5537134be0
+    trigger:
+      platform: event
+      event_type: tag_scanned
+      event_data:
+        tag_id: e847f665-dbaa-4458-9d48-433964d3da29
+    condition:
+      condition: state
+      entity_id: lock.garage
+      state: locked
+    action:
+    - service: lock.unlock
+      data:
+        entity_id: lock.garage
+  - alias: Lock garage door lock with tag
+    id: 64664fb7-cc21-4dc9-a05f-399e4e6caec4
+    trigger:
+      platform: event
+      event_type: tag_scanned
+      event_data:
+        tag_id: e847f665-dbaa-4458-9d48-433964d3da29
+    condition:
+      condition: state
+      entity_id: lock.garage
+      state: unlocked
+    action:
+    - service: lock.lock
+      data:
+        entity_id: lock.garage
+script:
+  close_garage:
+    sequence:
+    - service: python_script.close_if_open
+      entity_id: cover.garage
+  lock_garage:
+    sequence:
+      - service: lock.lock
+        data:
+          entity_id: lock.garage

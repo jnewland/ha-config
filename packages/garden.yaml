@@ -1,0 +1,74 @@
+sensor:
+  - platform: bhyve
+
+switch:
+  - platform: bhyve
+
+plant:
+  # https://open.plantbook.io/browse-db
+  lime_tree:
+    name: lime tree
+    species: citrus latifolia
+    image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/citrus%20latifolia.jpg
+    sensors:
+      moisture: sensor.lime_tree_moisture
+      temperature: sensor.lime_tree_temperature
+      conductivity: sensor.lime_tree_soil_conductivity
+      brightness: sensor.lime_tree_light
+    # appears that https://github.com/Olen/homeassistant-plant doesn't do C to F yet
+    min_temperature: 41
+    max_temperature: 95
+  bamboo:
+    name: bamboo
+    species: bamboo
+    image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/bamboo.jpg
+    sensors:
+      moisture: sensor.bamboo_moisture
+      temperature: sensor.bamboo_temperature
+      conductivity: sensor.bamboo_soil_conductivity
+      brightness: sensor.bamboo_light
+    # appears that https://github.com/Olen/homeassistant-plant doesn't do C to F yet
+    min_temperature: 41
+    max_temperature: 89.6
+  greenhouse:
+    name: greenhouse
+    image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/ocimum%20basilicum.jpg
+    sensors:
+      moisture: sensor.greenhouse_moisture
+      temperature: sensor.greenhouse_temperature
+      conductivity: sensor.greenhouse_soil_conductivity
+      brightness: sensor.greenhouse_light
+    min_moisture: 20
+    max_moisture: 60
+    min_temperature: 72
+    max_temperature: 95
+
+input_datetime:
+  greenhouse_led_on:
+    name: Greenhouse LED On
+    has_date: false
+    has_time: true
+  greenhouse_led_off:
+    name: Greenhouse LED Off
+    has_date: false
+    has_time: true
+
+automation:
+  - alias: Greenhouse LED Automation
+    id: ffceaf67-f664-4ec9-ad9d-44be7e6fc220
+    trigger:
+      platform: time
+      at: input_datetime.greenhouse_led_on
+    action:
+      service: switch.turn_on
+      target:
+        entity_id: switch.greenhouse_left
+  - alias: Greenhouse LED Off
+    id: b5d0b9e7-1a93-4b91-8e27-c81e8819a20f
+    trigger:
+      platform: time
+      at: input_datetime.greenhouse_led_off
+    action:
+      service: switch.turn_off
+      target:
+        entity_id: switch.greenhouse_left

@@ -1,4 +1,5 @@
 alias: shutdown
+id: 2783965d-f361-41da-99eb-02a4241fdaf5
 trigger:
   platform: event
   event_type: homeassistant_stop

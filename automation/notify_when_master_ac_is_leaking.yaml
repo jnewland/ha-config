@@ -1,10 +1,11 @@
 alias: notify when master ac is leaking
+id: 85023ab0-13e5-4b4a-aba1-3e7d58973ad1
 trigger:
   platform: state
   entity_id: binary_sensor.master_ac_water
   from: 'off'
   to: 'on'
 action:
-  service: notify.mobile_app_jphone_11_pro
+  service: notify.mobile_app_jphone_12
   data:
     message: 'the master AC water sensor detected a leak'

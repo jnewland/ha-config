@@ -1,7 +1,0 @@
-exclude:
-  domains:
-  - automation
-  - updater
-  - group
-  entities:
-  - sun.sun

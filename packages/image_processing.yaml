@@ -1,15 +1,75 @@
-sensor:
-- platform: template
-  sensors:
-    image_processing_summary:
-      friendly_name: Image processing summary
-      entity_id:
-        - image_processing.atrium
-        - image_processing.back_porch
-        - image_processing.front_yard_left
-        - image_processing.pergola
-      value_template: |
-        {% for state in states.image_processing if state.attributes.total_matches > 0 -%}
-          {%- if loop.first %}Detected {% elif loop.last %}, and {% else %}, {% endif -%}
-          {% for thing in state.attributes.summary.keys() %}{%- if loop.first %}{% elif loop.last %} & {% else %}, {% endif -%}{{thing}}{%- endfor %} on {{ state.name | lower }} camera
-        {%- endfor %}
+binary_sensor:
+  # TODO
+  - platform: template
+    sensors:
+      garage_occupancy:
+        friendly_name: garage occupancy
+        device_class: occupancy
+        delay_off:
+          minutes: 4
+        value_template: |
+          {{ float(states('sensor.garage_person')) | default(0) > 0 }}
+      pergola_occupancy:
+        friendly_name: pergola occupancy
+        device_class: occupancy
+        delay_off:
+          minutes: 4
+        value_template: |
+          {{ float(states('sensor.pergola_person')) | default(0) > 0 }}
+      front_yard_left_occupancy:
+        friendly_name: front yard left occupancy
+        device_class: occupancy
+        delay_off:
+          minutes: 4
+        value_template: |
+          {{ float(states('sensor.front_yard_left_person')) | default(0) > 0 }}
+      back_porch_occupancy:
+        friendly_name: back porch occupancy
+        device_class: occupancy
+        delay_off:
+          minutes: 4
+        value_template: |
+          {{ float(states('sensor.back_porch_person')) | default(0) > 0 }}
+
+
+automation:
+  - alias: Post frigate images during events
+    mode: parallel
+    id: e4d0a9e9-b403-48dc-80d3-e3c750ad0cb8
+    trigger:
+      platform: mqtt
+      topic: frigate/events
+    condition:
+      - "{{ trigger.payload_json['after']['end_time'] is none }}"
+    action:
+      - service: notify.slack
+        data:
+          title: |
+            {{ trigger.payload_json["after"]["camera"] }}
+          message: |
+            {{ trigger.payload_json["after"]["label"] }}
+          data:
+            file:
+              url: https://home.jnewland.com/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
+
+  - alias: Post frigate clips at end of events
+    mode: parallel
+    id: fe6ff468-bf79-4dfe-8231-ab3f349a9b33
+    trigger:
+      platform: mqtt
+      topic: frigate/events
+    condition:
+      - "{{ trigger.payload_json['after']['end_time'] is not none }}"
+    action:
+      - delay:
+          # clip contains 5s after event end, needs to process a bit. give it some time
+          seconds: 30
+      - service: notify.slack
+        data:
+          title: |
+            {{ trigger.payload_json["after"]["camera"] }}
+          message: |
+            {{ trigger.payload_json["after"]["label"] }} event has ended
+          data:
+            file:
+              url: https://home.jnewland.com/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/{{ trigger.payload_json["after"]["camera"] }}/clip.mp4

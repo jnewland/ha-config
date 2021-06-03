@@ -1,5 +1,6 @@
 automation:
   - alias: Sunrise
+    id: 18c7095a-3986-4a0d-b56b-4b95182a532b
     trigger:
       platform: sun
       event: sunrise
@@ -9,6 +10,7 @@ automation:
       entity_id: script.sunrise
 
   - alias: Sunset
+    id: d10e1481-8130-4d7f-b702-419628c970cd
     trigger:
       platform: sun
       event: sunset
@@ -22,21 +24,29 @@ script:
       - service: light.turn_off
         entity_id: group.security
       - service: notify.slack
-        data_template:
+        data:
+          title: sun
           message: ":city_sunrise:"
   sunset:
     sequence:
       - service: light.turn_on
         entity_id: group.security
       - service: notify.slack
-        data_template:
+        data:
+          title: sun
           message: ":city_sunset:"
       - condition: template
         value_template: |
+          {{ states.input_select.mode.state != "Away" }}
+      - service: light.turn_on
+        entity_id: light.bamboo
+      - service: homeassistant.turn_on
+        entity_id: group.trees
+      - condition: template
+        value_template: |
           {{
-            states.input_select.mode.state != "Away" and
-            states.weather.dark_sky.attributes.visibility > 5 and
-            states.weather.dark_sky.attributes.temperature > 50
+            (state_attr('weather.dark_sky', 'visibility') | default(0)) > 5 and
+            (state_attr('weather.dark_sky', 'temperature') | default(0)) > 50
           }}
       - service: notify.iphones
         data:

@@ -5,22 +5,22 @@ zone.hall:
 zone.outside:
   track_ios: false
 
-zone.office:
-  trigger_entity_id: script.office_lights
+zone.lounge:
+  trigger_entity_id: script.lounge_lights
   beacon:
     uuid: 74278BDA-B644-4520-8F0C-720EAF059935
     major: 10001
     minor: 19641
 
 zone.kitchen:
-  trigger_entity_id: script.living_lights
+  trigger_entity_id: script.great_room_lights
   beacon:
     uuid: 74278BDA-B644-4520-8F0C-720EAF059935
     major: 10001
     minor: 19642
 
 zone.living:
-  trigger_entity_id: script.living_lights
+  trigger_entity_id: script.great_room_lights
   beacon:
     uuid: 74278BDA-B644-4520-8F0C-720EAF059935
     major: 10001

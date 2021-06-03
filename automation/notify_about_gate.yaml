@@ -1,25 +1,31 @@
 alias: Gate Bell
+id: c228fcbc-a5ea-4d1f-8094-a884be31e362
 trigger:
   platform: state
   entity_id: binary_sensor.front_gate
   to: 'on'
 action:
   - service: notify.iphones
-    data_template:
+    data:
       message: the front gate just opened!
       data:
         push:
           category: camera
         entity_id: camera.front_yard_left
         attachment:
-          url: "https://home.jnewland.com/{{ states.camera.front_yard_left.attributes.entity_picture }}"
+          url: |
+            https://home.jnewland.com{{ states.camera.front_yard_left.attributes.entity_picture }}
           content-type: jpeg
           hide-thumbnail: false
   - service: script.notify_with_lights
+  - service: script.notify_all_channels
+    data:
+      message: the front gate just opened
   - service: notify.slack
-    data_template:
-      message: ":camera_with_flash: The front gate just opened!"
+    data:
+      title: ':camera_with_flash:'
+      message: The front gate just opened!
       data:
-        attachments:
-        - title: Front yard left
-          image_url: "https://home.jnewland.com/{{ states.camera.front_yard_left.attributes.entity_picture }}"
+        file:
+          url: |
+            https://home.jnewland.com{{ states.camera.front_yard_left.attributes.entity_picture }}
