@@ -1,6 +1,6 @@
 import logging
 
-from homeassistant.components.light import Light
+from homeassistant.components.light import LightEntity
 
 from .. import aerogarden
 
@@ -13,7 +13,7 @@ DEPENDENCIES = ["aerogarden"]
 UPDATE_STATE_FROM_CLOUD = True
 
 
-class AerogardenLight(Light):
+class AerogardenLight(LightEntity):
     def __init__(self, macaddr, aerogarden_api, field="lightStat", label="Light"):
         self._aerogarden = aerogarden_api
         self._macaddr = macaddr
