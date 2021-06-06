@@ -3,6 +3,7 @@
 set -ex
 
 : ${TMPDIR:=$RUNNER_TEMP}
+: ${TMPDIR:=$(mktemp -d)}
 
 rm -rf custom_components/apple_tv
 git clone https://github.com/postlund/hass-atv-beta $TMPDIR/hass-atv-beta-$$
@@ -16,7 +17,7 @@ mv $TMPDIR/bhyve-home-assistant-$$/custom_components/bhyve custom_components
 rm -rf $TMPDIR/bhyve-home-assistant-$$
 
 rm -rf custom_components/aerogarden || true
-git clone https://github.com/JeremyKennedy/homeassistant-aerogarden $TMPDIR/homeassistant-aerogarden-$$
+git clone https://github.com/GoPosi/homeassistant-aerogarden $TMPDIR/homeassistant-aerogarden-$$
 mv $TMPDIR/homeassistant-aerogarden-$$/custom_components/aerogarden custom_components
 rm -rf $TMPDIR/homeassistant-aerogarden-$$
 
