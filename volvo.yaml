@@ -1,0 +1,3 @@
+username: !env_var VOLVO_USERNAME
+password: !env_var VOLVO_PASSWORD
+region: na
