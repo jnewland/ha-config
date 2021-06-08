@@ -678,6 +678,7 @@ views:
 
   - title: Car
     icon: mdi:car-estate
+    path: car
     cards:
       - type: custom:auto-entities
         show_empty: false
