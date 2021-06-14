@@ -1,0 +1,5 @@
+username: !env_var VOLVO_USERNAME
+password: !env_var VOLVO_PASSWORD
+region: na
+name:
+  yv4br0dk4m1846963: xc60
