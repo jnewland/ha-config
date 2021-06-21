@@ -13,5 +13,6 @@
   "after_dependencies": ["discovery"],
   "codeowners": [
     "@postlund"
-  ]
+  ],
+  "version": "1.0.0"
 }

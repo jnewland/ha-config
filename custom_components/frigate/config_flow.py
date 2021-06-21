@@ -8,12 +8,13 @@ import voluptuous as vol
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
-from .api import FrigateApiClient
+from .api import FrigateApiClient, FrigateApiClientError
 from .const import DEFAULT_HOST, DOMAIN
 
-_LOGGER: logging.Logger = logging.getLogger(__package__)
+_LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 class FrigateFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -35,10 +36,17 @@ class FrigateFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             return self._show_config_form()
 
         try:
+            # Cannot use cv.url validation in the schema itself, so
+            # apply extra validation here.
+            cv.url(user_input[CONF_HOST])
+        except vol.Invalid:
+            return self._show_config_form(user_input, errors={"base": "invalid_url"})
+
+        try:
             session = async_create_clientsession(self.hass)
             client = FrigateApiClient(user_input[CONF_HOST], session)
             await client.async_get_stats()
-        except Exception:  # pylint: disable=broad-except
+        except FrigateApiClientError:
             return self._show_config_form(user_input, errors={"base": "cannot_connect"})
 
         return self.async_create_entry(title="Frigate", data=user_input)
