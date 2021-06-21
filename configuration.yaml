@@ -79,6 +79,7 @@ system_log:
 tts:
   - platform: google_translate
 vera: !include vera.yaml
+volvooncall: !include volvo.yaml
 weather:
   - platform: darksky
     api_key: !env_var FORECAST_API_KEY
