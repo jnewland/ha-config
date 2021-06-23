@@ -534,7 +534,7 @@ views:
           hours_to_show: 80
         filter:
           include:
-            - entity_id: "/.*_zone$/
+            - entity_id: "/.*_zone$/"
             
       - type: history-graph
         title: light
