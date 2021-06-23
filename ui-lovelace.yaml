@@ -527,6 +527,7 @@ views:
             - entity_id: "/.*_program/"
             - entity_id: "/.*_rain_delay/"
             - entity_id: "/.*_history/"
+            - entity_id: "/.*_zone/"
 
       - type: history-graph
         title: light
