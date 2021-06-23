@@ -646,6 +646,35 @@ views:
         filter:
           include:
             - entity_id: "/.*battery_level/"
+      - type: custom:entity-attributes-card
+        heading_name: Sensor
+        heading_state: Battery level
+        name_attribute: friendly_name
+        filter:
+          include:
+            - lock.front_door.battery_level
+            - lock.back_door.battery_level
+            - lock.garage.battery_level
+            - switch.front_door.battery_level
+            - switch.front_gate.battery_level
+            - switch.master_door.battery_level
+            - switch.master_ac_water.battery_level
+            - binary_sensor.closet_motion.battery_level
+            - switch.garage_hall_motion.battery_level
+            - switch.guest_hall_motion.battery_level
+            - switch.guest_bath_motion.battery_level
+            - switch.great_hall_motion.battery_level
+            - switch.kitchen_motion.battery_level
+            - switch.lounge_motion.battery_level
+            - switch.master_bath_motion.battery_level
+            - switch.music_room_motion.battery_level
+            - switch.pantry_motion.battery_level
+            - switch.powder_room_motion.battery_level
+            - switch.stairs_motion.battery_level
+            - switch.upstairs_motion.battery_level
+            - switch.wine_room_motion.battery_level
+            - switch.yoga_room_motion.battery_level
+            - vacuum.downstairs980.battery_level
 
   - title: Car
     icon: mdi:car-estate
