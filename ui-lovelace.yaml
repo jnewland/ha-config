@@ -12,7 +12,7 @@ views:
           - lock.front_door
           - binary_sensor.front_gate
           - input_number.brightness
-          - vacuum.downstairs980
+          - vacuum.downstairs
           - light.front_porch
       - type: conditional
         conditions:
