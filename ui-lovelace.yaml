@@ -493,30 +493,30 @@ views:
     path: greenhouse
     icon: mdi:shovel
     cards:
-      - type: entities
-        title: Greenhouse lights
-        show_header_toggle: false
-        entities:
-          - automation.greenhouse_led_automation
-          - switch.greenhouse_left
-          - switch.greenhouse_right
-          - input_datetime.greenhouse_led_on
-          - input_datetime.greenhouse_led_off
-        footer:
-          type: graph
-          entity: sensor.greenhouse_light
-          hours_to_show: 80
-          detail: 2
-      - type: entities
-        title: Kitchen herb garden
-        show_header_toggle: false
-        entities:
-          - light.kitchen_light
-          - binary_sensor.kitchen_pump
-          - binary_sensor.kitchen_needs_nutrients
-          - binary_sensor.kitchen_needs_water
-          - sensor.kitchen_nutrients_days
-          - sensor.kitchen_planted_days
+      # - type: entities
+      #   title: Greenhouse lights
+      #   show_header_toggle: false
+      #   entities:
+      #     - automation.greenhouse_led_automation
+      #     - switch.greenhouse_left
+      #     - switch.greenhouse_right
+      #     - input_datetime.greenhouse_led_on
+      #     - input_datetime.greenhouse_led_off
+      #   footer:
+      #     type: graph
+      #     entity: sensor.greenhouse_light
+      #     hours_to_show: 80
+      #     detail: 2
+      # - type: entities
+      #   title: Kitchen herb garden
+      #   show_header_toggle: false
+      #   entities:
+      #     - light.kitchen_light
+      #     - binary_sensor.kitchen_pump
+      #     - binary_sensor.kitchen_needs_nutrients
+      #     - binary_sensor.kitchen_needs_water
+      #     - sensor.kitchen_nutrients_days
+      #     - sensor.kitchen_planted_days
       - type: entities
         show_header_toggle: false
         title: Patio planters
