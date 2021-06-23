@@ -517,16 +517,17 @@ views:
       #     - binary_sensor.kitchen_needs_water
       #     - sensor.kitchen_nutrients_days
       #     - sensor.kitchen_planted_days
-      - type: entities
-        show_header_toggle: false
-        title: Patio planters
-        entities:
-          - sensor.patio_planters_state
-          - sensor.patio_planters_battery_level
-          - switch.patio_planters_rain_delay
-          - switch.patio_planters_patio_program
-          - switch.patio_planters
-          - sensor.patio_planters_history
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: false
+          title: Irrigation
+        filter:
+          include:
+            - entity_id: "/.*_program/"
+            - entity_id: "/.*_rain_delay/"
+            - entity_id: "/.*_history/"
+
       - type: history-graph
         title: light
         hours_to_show: 80
