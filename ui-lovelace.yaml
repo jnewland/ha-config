@@ -524,11 +524,18 @@ views:
           title: Irrigation
         filter:
           include:
-            - entity_id: "/.*_program/"
-            - entity_id: "/.*_rain_delay/"
-            - entity_id: "/.*_history/"
-            - entity_id: "/.*_zone/"
+            - entity_id: "/.*_zone$/"
+            - entity_id: "/.*_program$/"
+            - entity_id: "/.*_rain_delay$/"
 
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 80
+        filter:
+          include:
+            - entity_id: "/.*_zone$/
+            
       - type: history-graph
         title: light
         hours_to_show: 80
