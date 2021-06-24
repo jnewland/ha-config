@@ -37,5 +37,10 @@ git clone https://github.com/blakeblackshear/frigate-hass-integration $TMPDIR/fr
 mv $TMPDIR/frigate-$$/custom_components/frigate custom_components
 rm -rf $TMPDIR/frigate-$$
 
+rm -rf custom_components/senseme || true
+git clone https://github.com/mikelawrence/senseme-hacs $TMPDIR/sensme-$$
+mv $TMPDIR/sensme-$$/custom_components/senseme custom_components
+rm -rf $TMPDIR/sensme-$$
+
 git add custom_components
 git add python_scripts
