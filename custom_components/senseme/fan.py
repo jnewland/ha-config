@@ -2,6 +2,7 @@
 import math
 from typing import Any, List, Optional
 
+import voluptuous as vol
 from aiosenseme import SensemeFan
 from homeassistant.components.fan import (
     DIRECTION_FORWARD,
@@ -15,6 +16,8 @@ from homeassistant.util.percentage import (
     percentage_to_ranged_value,
     ranged_value_to_percentage,
 )
+from homeassistant.util.temperature import convert, TEMP_CELSIUS
+from homeassistant.helpers import config_validation as cv, entity_platform, service
 
 from . import SensemeEntity
 from .const import (
@@ -27,9 +30,21 @@ from .const import (
 
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up SenseME fans."""
+    platform = entity_platform.current_platform.get()
     device = hass.data[DOMAIN][entry.entry_id][CONF_DEVICE]
     if device.is_fan:
         async_add_entities([HASensemeFan(device)])
+
+        platform.async_register_entity_service(
+            "smart_mode",
+            {
+                vol.Required("auto_comfort"): cv.string,
+                vol.Optional("cool_temp"): cv.positive_float,
+                vol.Optional("cool_min_speed"): cv.positive_int,
+                vol.Optional("cool_max_speed"): cv.positive_int,
+            },
+            "async_set_smart_mode",
+        )
 
 
 class HASensemeFan(SensemeEntity, FanEntity):
@@ -138,3 +153,27 @@ class HASensemeFan(SensemeEntity, FanEntity):
             self._device.fan_dir = SENSEME_DIRECTION_FORWARD
         else:
             self._device.fan_dir = SENSEME_DIRECTION_REVERSE
+
+    async def async_set_smart_mode(
+        self,
+        auto_comfort: str = None,
+        cool_temp: float = None,
+        cool_min_speed: int = None,
+        cool_max_speed: int = None,
+    ) -> None:
+        """Configure smart_mode settings"""
+        if auto_comfort is not None:
+            self._device.fan_smartmode = auto_comfort.upper()
+
+        if cool_temp is not None:
+            self._device.fan_cooltemp = convert(
+                cool_temp,
+                self.hass.config.units.temperature_unit,
+                TEMP_CELSIUS,
+            )
+
+        if cool_min_speed is not None:
+            self._device.fan_coolminspeed = cool_min_speed
+
+        if cool_max_speed is not None:
+            self._device.fan_coolmaxspeed = cool_max_speed
