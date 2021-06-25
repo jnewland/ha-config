@@ -139,7 +139,10 @@ views:
         entities:
           - light.bookshelf
           - light.striped_lamp
+          - light.music_room_haiku_light
           - light.network_closet
+          - fan.music_room_haiku
+          - binary_sensor.music_room_haiku_occupancy
           - binary_sensor.music_room_motion
           - binary_sensor.music_room_window
           - sensor.music_room_temp

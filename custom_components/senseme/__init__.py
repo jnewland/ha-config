@@ -2,9 +2,9 @@
 import asyncio
 import logging
 
-from aiosenseme import SensemeDevice
+from .aiosenseme.device import SensemeDevice
+from .aiosenseme import async_get_device_by_device_info
 from aiosenseme import __version__ as aiosenseme_version
-from aiosenseme import async_get_device_by_device_info
 from homeassistant.components.binary_sensor import DOMAIN as BINARYSENSOR_DOMAIN
 from homeassistant.components.fan import DOMAIN as FAN_DOMAIN
 from homeassistant.components.light import DOMAIN as LIGHT_DOMAIN
