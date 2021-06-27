@@ -686,7 +686,7 @@ views:
             - switch.upstairs_motion.battery_level
             - switch.wine_room_motion.battery_level
             - switch.yoga_room_motion.battery_level
-            - vacuum.downstairs980.battery_level
+            - vacuum.downstairs.battery_level
 
   - title: Car
     icon: mdi:car-estate
@@ -712,7 +712,7 @@ views:
         entities:
           - input_boolean.guests
           - automation.away_mode
-          - vacuum.downstairs980
+          - vacuum.downstairs
       - type: entities
         entities:
           - sensor.current_version
