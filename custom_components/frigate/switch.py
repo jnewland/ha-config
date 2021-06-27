@@ -12,8 +12,14 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from . import FrigateMQTTEntity, get_friendly_name, get_frigate_device_identifier
+from . import (
+    FrigateMQTTEntity,
+    get_friendly_name,
+    get_frigate_device_identifier,
+    get_frigate_entity_unique_id,
+)
 from .const import (
+    ATTR_CONFIG,
     DOMAIN,
     ICON_FILM_MULTIPLE,
     ICON_IMAGE_MULTIPLE,
@@ -29,7 +35,7 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Switch entry setup."""
-    frigate_config = hass.data[DOMAIN]["config"]
+    frigate_config = hass.data[DOMAIN][entry.entry_id][ATTR_CONFIG]
 
     entities = []
     for camera in frigate_config["cameras"].keys():
@@ -90,7 +96,11 @@ class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):
     @property
     def unique_id(self) -> str:
         """Return a unique ID to use for this entity."""
-        return f"{DOMAIN}_{self._cam_name}_{self._switch_name}_switch"
+        return get_frigate_entity_unique_id(
+            self._config_entry.entry_id,
+            "switch",
+            f"{self._cam_name}_{self._switch_name}",
+        )
 
     @property
     def device_info(self) -> DeviceInfo:
