@@ -512,7 +512,7 @@ views:
       #     - input_datetime.greenhouse_led_off
       #   footer:
       #     type: graph
-      #     entity: sensor.greenhouse_light
+      #     entity: sensor.angel_trumpet_light
       #     hours_to_show: 80
       #     detail: 2
       # - type: entities
@@ -548,7 +548,7 @@ views:
         title: light
         hours_to_show: 80
         entities:
-          - sensor.greenhouse_light
+          - sensor.angel_trumpet_light
           - sensor.bamboo_light
           - sensor.herb_light
           - sensor.lime_tree_light
@@ -556,7 +556,7 @@ views:
         title: moisture
         hours_to_show: 80
         entities:
-          - sensor.greenhouse_moisture
+          - sensor.angel_trumpet_moisture
           - sensor.bamboo_moisture
           - sensor.herb_moisture
           - sensor.lime_tree_moisture
@@ -564,7 +564,7 @@ views:
         title: temperature
         hours_to_show: 80
         entities:
-          - sensor.greenhouse_temperature
+          - sensor.angel_trumpet_temperature
           - sensor.bamboo_temperature
           - sensor.herb_temperature
           - sensor.lime_tree_temperature
@@ -572,7 +572,7 @@ views:
         title: soil conductivity
         hours_to_show: 80
         entities:
-          - sensor.greenhouse_soil_conductivity
+          - sensor.angel_trumpet_soil_conductivity
           - sensor.bamboo_soil_conductivity
           - sensor.herb_soil_conductivity
           - sensor.lime_tree_soil_conductivity
@@ -581,7 +581,9 @@ views:
       - type: custom:flower-card
         entity: plant.bamboo
       - type: custom:flower-card
-        entity: plant.greenhouse
+        entity: plant.angel_trumpet
+      - type: custom:flower-card
+        entity: plant.basil
   - title: Core
     icon: mdi:server-network
     cards:
@@ -691,7 +693,7 @@ views:
             - switch.upstairs_motion.battery_level
             - switch.wine_room_motion.battery_level
             - switch.yoga_room_motion.battery_level
-            - vacuum.downstairs980.battery_level
+            - vacuum.downstairs.battery_level
 
   - title: Car
     icon: mdi:car-estate
@@ -717,7 +719,7 @@ views:
         entities:
           - input_boolean.guests
           - automation.away_mode
-          - vacuum.downstairs980
+          - vacuum.downstairs
       - type: entities
         entities:
           - sensor.current_version
