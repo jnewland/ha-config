@@ -8,20 +8,31 @@ from __future__ import annotations
 
 from datetime import timedelta
 import logging
-from typing import Any
+import re
+from typing import Any, Final
 
+from custom_components.frigate.config_flow import get_config_entry_title
 from homeassistant.components.mqtt.models import Message
 from homeassistant.components.mqtt.subscription import async_subscribe_topics
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_HOST, CONF_URL
 from homeassistant.core import Config, HomeAssistant, callback
 from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import slugify
 
 from .api import FrigateApiClient, FrigateApiClientError
-from .const import DOMAIN, PLATFORMS, STARTUP_MESSAGE
+from .const import (
+    ATTR_CLIENT,
+    ATTR_CONFIG,
+    ATTR_COORDINATOR,
+    DOMAIN,
+    PLATFORMS,
+    STARTUP_MESSAGE,
+)
 from .views import ClipsProxyView, NotificationsProxyView, RecordingsProxyView
 
 SCAN_INTERVAL = timedelta(seconds=5)
@@ -37,6 +48,13 @@ def get_frigate_device_identifier(
         return (DOMAIN, f"{entry.entry_id}:{slugify(camera_name)}")
     else:
         return (DOMAIN, entry.entry_id)
+
+
+def get_frigate_entity_unique_id(
+    config_entry_id: str, type_name: str, name: str
+) -> str:
+    """Get the unique_id for a Frigate entity."""
+    return f"{config_entry_id}:{type_name}:{name}"
 
 
 def get_friendly_name(name: str) -> str:
@@ -66,39 +84,34 @@ def get_cameras_zones_and_objects(config: dict[str, Any]) -> {(str, str)}:
 
 async def async_setup(hass: HomeAssistant, config: Config) -> bool:
     """Set up this integration using YAML is not supported."""
+    _LOGGER.info(STARTUP_MESSAGE)
+
+    hass.data.setdefault(DOMAIN, {})
+
+    session = async_get_clientsession(hass)
+    hass.http.register_view(ClipsProxyView(session))
+    hass.http.register_view(RecordingsProxyView(session))
+    hass.http.register_view(NotificationsProxyView(session))
     return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up this integration using UI."""
-    if hass.data.get(DOMAIN) is None:
-        hass.data.setdefault(DOMAIN, {})
-        _LOGGER.info(STARTUP_MESSAGE)
 
-    frigate_host = hass.data[DOMAIN]["host"] = entry.data.get("host")
-
-    # register views
-    websession = hass.helpers.aiohttp_client.async_get_clientsession()
-    hass.http.register_view(ClipsProxyView(frigate_host, websession))
-    hass.http.register_view(RecordingsProxyView(frigate_host, websession))
-    hass.http.register_view(NotificationsProxyView(frigate_host, websession))
-
-    # setup api polling
-    session = async_get_clientsession(hass)
-    client = FrigateApiClient(frigate_host, session)
-
-    # start the coordinator
+    client = FrigateApiClient(entry.data.get(CONF_URL), async_get_clientsession(hass))
     coordinator = FrigateDataUpdateCoordinator(hass, client=client)
     await coordinator.async_config_entry_first_refresh()
-
-    hass.data[DOMAIN][entry.entry_id] = coordinator
 
     try:
         config = await client.async_get_config()
     except FrigateApiClientError as exc:
         raise ConfigEntryNotReady from exc
 
-    hass.data[DOMAIN]["config"] = config
+    hass.data[DOMAIN][entry.entry_id] = {
+        ATTR_COORDINATOR: coordinator,
+        ATTR_CLIENT: client,
+        ATTR_CONFIG: config,
+    }
 
     hass.config_entries.async_setup_platforms(entry, PLATFORMS)
     entry.add_update_listener(_async_entry_updated)
@@ -135,6 +148,73 @@ async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> 
 async def _async_entry_updated(hass: HomeAssistant, config_entry: ConfigEntry) -> None:
     """Handle entry updates."""
     await hass.config_entries.async_reload(config_entry.entry_id)
+
+
+async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry):
+    """Migrate from v1 entry."""
+
+    if config_entry.version == 1:
+        _LOGGER.debug("Migrating config entry from version '%s'", config_entry.version)
+
+        data = {**config_entry.data}
+        data[CONF_URL] = data.pop(CONF_HOST)
+        hass.config_entries.async_update_entry(
+            config_entry, data=data, title=get_config_entry_title(data[CONF_URL])
+        )
+        config_entry.version = 2
+
+        @callback
+        def update_unique_id(entity_entry: er.RegistryEntry):
+            """Update unique ID of entity entry."""
+
+            converters: Final = {
+                re.compile(rf"^{DOMAIN}_(?P<cam_obj>\S+)_binary_sensor$"): lambda m: [
+                    "motion_sensor",
+                    m.group("cam_obj"),
+                ],
+                re.compile(rf"^{DOMAIN}_(?P<cam>\S+)_camera$"): lambda m: [
+                    "camera",
+                    m.group("cam"),
+                ],
+                re.compile(rf"^{DOMAIN}_(?P<cam_obj>\S+)_snapshot$"): lambda m: [
+                    "camera_snapshots",
+                    m.group("cam_obj"),
+                ],
+                re.compile(rf"^{DOMAIN}_detection_fps$"): lambda m: [
+                    "sensor_fps",
+                    "detection",
+                ],
+                re.compile(
+                    rf"^{DOMAIN}_(?P<detector>\S+)_inference_speed$"
+                ): lambda m: ["sensor_detector_speed", m.group("detector")],
+                re.compile(rf"^{DOMAIN}_(?P<cam_fps>\S+)_fps$"): lambda m: [
+                    "sensor_fps",
+                    m.group("cam_fps"),
+                ],
+                re.compile(rf"^{DOMAIN}_(?P<cam_switch>\S+)_switch$"): lambda m: [
+                    "switch",
+                    m.group("cam_switch"),
+                ],
+                # Caution: This is a broad but necessary match (keep until last).
+                re.compile(rf"^{DOMAIN}_(?P<cam_obj>\S+)$"): lambda m: [
+                    "sensor_object_count",
+                    m.group("cam_obj"),
+                ],
+            }
+
+            for regexp, func in converters.items():
+                match = regexp.match(entity_entry.unique_id)
+                if match:
+                    args = [config_entry.entry_id] + func(match)
+                    return {"new_unique_id": get_frigate_entity_unique_id(*args)}
+            return None
+
+        await er.async_migrate_entries(hass, config_entry.entry_id, update_unique_id)
+        _LOGGER.debug(
+            "Migrating config entry to version '%s' successful", config_entry.version
+        )
+
+    return True
 
 
 class FrigateEntity(Entity):
