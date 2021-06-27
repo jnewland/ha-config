@@ -582,6 +582,8 @@ views:
         entity: plant.bamboo
       - type: custom:flower-card
         entity: plant.angel_trumpet
+      - type: custom:flower-card
+        entity: plant.basil
   - title: Core
     icon: mdi:server-network
     cards:

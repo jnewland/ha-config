@@ -39,8 +39,17 @@ plant:
       temperature: sensor.angel_trumpet_temperature
       conductivity: sensor.angel_trumpet_soil_conductivity
       brightness: sensor.angel_trumpet_light
-    min_moisture: 20
-    max_moisture: 60
+    min_temperature: 72
+    max_temperature: 95
+  basil:
+    name: basil
+    species: ocimum basilicum
+    image: https://upload.wikimedia.org/wikipedia/commons/9/90/Basil-Basilico-Ocimum_basilicum-albahaca.jpg
+    sensors:
+      moisture: sensor.herb_moisture
+      temperature: sensor.herb_temperature
+      conductivity: sensor.herb_soil_conductivity
+      brightness: sensor.herb_light
     min_temperature: 72
     max_temperature: 95
 
