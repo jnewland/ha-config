@@ -124,6 +124,10 @@ homeassistant:
     light.striped_lamp:
       fixed_color_temp: 396
 
+    light.pergola_pendants:
+      fixed_brightness: 29
+
+
     light.bedside_table_white:
       ignore_brightness: true
     light.bedside_table_red:

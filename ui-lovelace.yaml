@@ -251,6 +251,11 @@ views:
           - light.patio
           - light.master_patio
       - type: entities
+        title: pergola
+        entities:
+          - light.pergola_pendants
+          - switch.pergola_overhead
+      - type: entities
         entities:
           - binary_sensor.front_gate
           - cover.garage
