@@ -30,14 +30,15 @@ plant:
     # appears that https://github.com/Olen/homeassistant-plant doesn't do C to F yet
     min_temperature: 41
     max_temperature: 89.6
-  greenhouse:
-    name: greenhouse
-    image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/ocimum%20basilicum.jpg
+  angel_trumpet:
+    name: angel trumpet
+    species: brugmansia arborea
+    image: https://www.brugmansia.us/gallery/category_55/gallery_2200_55_995985.jpg
     sensors:
-      moisture: sensor.greenhouse_moisture
-      temperature: sensor.greenhouse_temperature
-      conductivity: sensor.greenhouse_soil_conductivity
-      brightness: sensor.greenhouse_light
+      moisture: sensor.angel_trumpet_moisture
+      temperature: sensor.angel_trumpet_temperature
+      conductivity: sensor.angel_trumpet_soil_conductivity
+      brightness: sensor.angel_trumpet_light
     min_moisture: 20
     max_moisture: 60
     min_temperature: 72
