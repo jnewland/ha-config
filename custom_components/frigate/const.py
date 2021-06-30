@@ -2,8 +2,6 @@
 # Base component constants
 NAME = "Frigate"
 DOMAIN = "frigate"
-VERSION = "0.0.1"
-ISSUE_URL = "https://github.com/blakeblackshear/frigate-hass-integration/issues"
 
 # Icons
 ICON_CAR = "mdi:shield-car"
@@ -35,20 +33,23 @@ ATTR_MQTT = "mqtt"
 ATTR_CLIENT_ID = "client_id"
 
 # Configuration and options
+CONF_CAMERA_STATIC_IMAGE_HEIGHT = "camera_image_height"
+CONF_NOTIFICATION_PROXY_ENABLE = "notification_proxy_enable"
 CONF_RTMP_URL_TEMPLATE = "rtmp_url_template"
 
 # Defaults
+DEFAULT_CAMERA_STATIC_IMAGE_HEIGHT = 277
 DEFAULT_NAME = DOMAIN
 DEFAULT_HOST = "http://ccab4aaf-frigate:5000"
 
 
-STARTUP_MESSAGE = f"""
+STARTUP_MESSAGE = """
 -------------------------------------------------------------------
-{NAME}
-Version: {VERSION}
+{title}
+Integration Version: {integration_version}
 This is a custom integration!
 If you have any issues with this you need to open an issue here:
-{ISSUE_URL}
+https://github.com/blakeblackshear/frigate-hass-integration/issues
 -------------------------------------------------------------------
 """
 

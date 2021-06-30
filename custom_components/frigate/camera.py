@@ -2,8 +2,9 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, cast
 
+import aiohttp
 import async_timeout
 from jinja2 import Template
 from yarl import URL
@@ -27,12 +28,13 @@ from . import (
 )
 from .const import (
     ATTR_CONFIG,
+    CONF_CAMERA_STATIC_IMAGE_HEIGHT,
     CONF_RTMP_URL_TEMPLATE,
+    DEFAULT_CAMERA_STATIC_IMAGE_HEIGHT,
     DOMAIN,
     NAME,
     STATE_DETECTED,
     STATE_IDLE,
-    VERSION,
 )
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
@@ -57,7 +59,7 @@ async def async_setup_entry(
     )
 
 
-class FrigateCamera(FrigateEntity, Camera):
+class FrigateCamera(FrigateEntity, Camera):  # type: ignore[misc]
     """Representation a Frigate camera."""
 
     def __init__(
@@ -69,9 +71,6 @@ class FrigateCamera(FrigateEntity, Camera):
         self._cam_name = cam_name
         self._camera_config = camera_config
         self._url = config_entry.data[CONF_URL]
-        self._latest_url = str(
-            URL(self._url) / f"api/{self._cam_name}/latest.jpg" % {"h": 277}
-        )
         self._stream_enabled = self._camera_config["rtmp"]["enabled"]
 
         streaming_template = config_entry.options.get(
@@ -104,7 +103,7 @@ class FrigateCamera(FrigateEntity, Camera):
         return get_friendly_name(self._cam_name)
 
     @property
-    def device_info(self) -> dict[str, any]:
+    def device_info(self) -> dict[str, Any]:
         """Return the device information."""
         return {
             "identifiers": {
@@ -112,7 +111,7 @@ class FrigateCamera(FrigateEntity, Camera):
             },
             "via_device": get_frigate_device_identifier(self._config_entry),
             "name": get_friendly_name(self._cam_name),
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
@@ -121,24 +120,34 @@ class FrigateCamera(FrigateEntity, Camera):
         """Return supported features of this camera."""
         if not self._stream_enabled:
             return 0
-        return SUPPORT_STREAM
+        return cast(int, SUPPORT_STREAM)
 
     async def async_camera_image(self) -> bytes:
         """Return bytes of camera image."""
-        websession = async_get_clientsession(self.hass)
+        websession = cast(aiohttp.ClientSession, async_get_clientsession(self.hass))
+
+        height = self._config_entry.options.get(
+            CONF_CAMERA_STATIC_IMAGE_HEIGHT, DEFAULT_CAMERA_STATIC_IMAGE_HEIGHT
+        )
+
+        image_url = str(
+            URL(self._url)
+            / f"api/{self._cam_name}/latest.jpg"
+            % ({"h": height} if height > 0 else {})
+        )
 
         with async_timeout.timeout(10):
-            response = await websession.get(self._latest_url)
+            response = await websession.get(image_url)
             return await response.read()
 
-    async def stream_source(self) -> str:
+    async def stream_source(self) -> str | None:
         """Return the source of the stream."""
         if not self._stream_enabled:
             return None
         return self._stream_source
 
 
-class FrigateMqttSnapshots(FrigateMQTTEntity, Camera):
+class FrigateMqttSnapshots(FrigateMQTTEntity, Camera):  # type: ignore[misc]
     """Frigate best camera class."""
 
     def __init__(
@@ -151,7 +160,7 @@ class FrigateMqttSnapshots(FrigateMQTTEntity, Camera):
         """Construct a FrigateMqttSnapshots camera."""
         self._cam_name = cam_name
         self._obj_name = obj_name
-        self._last_image = None
+        self._last_image: bytes | None = None
 
         FrigateMQTTEntity.__init__(
             self,
@@ -167,7 +176,7 @@ class FrigateMqttSnapshots(FrigateMQTTEntity, Camera):
         )
         Camera.__init__(self)
 
-    @callback
+    @callback  # type: ignore[misc]
     def _state_message_received(self, msg: Message) -> None:
         """Handle a new received MQTT state message."""
         self._last_image = msg.payload
@@ -191,7 +200,7 @@ class FrigateMqttSnapshots(FrigateMQTTEntity, Camera):
             },
             "via_device": get_frigate_device_identifier(self._config_entry),
             "name": get_friendly_name(self._cam_name),
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
@@ -200,7 +209,7 @@ class FrigateMqttSnapshots(FrigateMQTTEntity, Camera):
         """Return the name of the sensor."""
         return f"{get_friendly_name(self._cam_name)} {self._obj_name}".title()
 
-    async def async_camera_image(self) -> bytes:
+    async def async_camera_image(self) -> bytes | None:
         """Return image response."""
         return self._last_image
 
