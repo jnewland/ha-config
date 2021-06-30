@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, cast
 
 from homeassistant.components.binary_sensor import (
     DEVICE_CLASS_MOTION,
@@ -20,7 +20,7 @@ from . import (
     get_frigate_device_identifier,
     get_frigate_entity_unique_id,
 )
-from .const import ATTR_CONFIG, DOMAIN, NAME, VERSION
+from .const import ATTR_CONFIG, DOMAIN, NAME
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -38,7 +38,7 @@ async def async_setup_entry(
     )
 
 
-class FrigateMotionSensor(FrigateMQTTEntity, BinarySensorEntity):
+class FrigateMotionSensor(FrigateMQTTEntity, BinarySensorEntity):  # type: ignore[misc]
     """Frigate Motion Sensor class."""
 
     def __init__(
@@ -64,7 +64,7 @@ class FrigateMotionSensor(FrigateMQTTEntity, BinarySensorEntity):
             },
         )
 
-    @callback
+    @callback  # type: ignore[misc]
     def _state_message_received(self, msg: Message) -> None:
         """Handle a new received MQTT state message."""
         try:
@@ -91,7 +91,7 @@ class FrigateMotionSensor(FrigateMQTTEntity, BinarySensorEntity):
             },
             "via_device": get_frigate_device_identifier(self._config_entry),
             "name": get_friendly_name(self._cam_name),
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
@@ -108,4 +108,4 @@ class FrigateMotionSensor(FrigateMQTTEntity, BinarySensorEntity):
     @property
     def device_class(self) -> str:
         """Return the device class."""
-        return DEVICE_CLASS_MOTION
+        return cast(str, DEVICE_CLASS_MOTION)

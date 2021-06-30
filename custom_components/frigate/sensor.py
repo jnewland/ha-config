@@ -33,7 +33,6 @@ from .const import (
     ICON_SPEEDOMETER,
     MS,
     NAME,
-    VERSION,
 )
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
@@ -73,7 +72,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class FrigateFpsSensor(FrigateEntity, CoordinatorEntity):
+class FrigateFpsSensor(FrigateEntity, CoordinatorEntity):  # type: ignore[misc]
     """Frigate Sensor class."""
 
     def __init__(
@@ -96,7 +95,7 @@ class FrigateFpsSensor(FrigateEntity, CoordinatorEntity):
         return {
             "identifiers": {get_frigate_device_identifier(self._config_entry)},
             "name": NAME,
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
@@ -128,7 +127,7 @@ class FrigateFpsSensor(FrigateEntity, CoordinatorEntity):
         return ICON_SPEEDOMETER
 
 
-class DetectorSpeedSensor(FrigateEntity, CoordinatorEntity):
+class DetectorSpeedSensor(FrigateEntity, CoordinatorEntity):  # type: ignore[misc]
     """Frigate Detector Speed class."""
 
     def __init__(
@@ -155,7 +154,7 @@ class DetectorSpeedSensor(FrigateEntity, CoordinatorEntity):
         return {
             "identifiers": {get_frigate_device_identifier(self._config_entry)},
             "name": NAME,
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
@@ -191,7 +190,7 @@ class DetectorSpeedSensor(FrigateEntity, CoordinatorEntity):
         return ICON_SPEEDOMETER
 
 
-class CameraFpsSensor(FrigateEntity, CoordinatorEntity):
+class CameraFpsSensor(FrigateEntity, CoordinatorEntity):  # type: ignore[misc]
     """Frigate Camera Fps class."""
 
     def __init__(
@@ -225,7 +224,7 @@ class CameraFpsSensor(FrigateEntity, CoordinatorEntity):
             },
             "via_device": get_frigate_device_identifier(self._config_entry),
             "name": get_friendly_name(self._cam_name),
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
@@ -297,7 +296,7 @@ class FrigateObjectCountSensor(FrigateMQTTEntity):
             },
         )
 
-    @callback
+    @callback  # type: ignore[misc]
     def _state_message_received(self, msg: Message) -> None:
         """Handle a new received MQTT state message."""
         try:
@@ -325,7 +324,7 @@ class FrigateObjectCountSensor(FrigateMQTTEntity):
             },
             "via_device": get_frigate_device_identifier(self._config_entry),
             "name": get_friendly_name(self._cam_name),
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
