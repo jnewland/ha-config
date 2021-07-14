@@ -1,8 +1,9 @@
-customize:
-  binary_sensor.precipitation_in_forecast:
-    icon: mdi:weather-rainy
-  sensor.precipitation_in_forecast:
-    icon: mdi:weather-rainy
+homeassistant:
+  customize:
+    binary_sensor.precipitation_in_forecast:
+      icon: mdi:weather-rainy
+    sensor.precipitation_in_forecast:
+      icon: mdi:weather-rainy
 
 automation:
   - alias: Precipitation notifications
