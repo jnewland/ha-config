@@ -79,7 +79,7 @@ views:
         entities:
           - binary_sensor.precipitation_in_forecast
           - sensor.precipitation_in_forecast
-          - input_number.rain_forecast_hours
+          - input_number.rain_precipitation_forecast_hours
           - automation.precipitation_notifications
           - automation.sunshine_notifications
 
