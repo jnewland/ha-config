@@ -75,7 +75,7 @@ sensor:
         value_template: |
           {{ 
             state_attr("weather.dark_sky", "forecast") | 
-            default([{}]) | batch(states("input_number.rain_forecast_hours") | default(12))| first |
+            default([{}]) | batch(states("input_number.rain_forecast_hours") | default(12)) | first |
             rejectattr("precipitation", "none") | 
             sum(attribute="precipitation")
           }}
