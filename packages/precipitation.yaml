@@ -44,7 +44,7 @@ automation:
           confirmation_message: prepped for sunshine, cool.
 
 input_number:
-  precipitation_precipitation_forecast_hours:
+  precipitation_forecast_hours:
     name: Precipitation forecast hours
     min: 4
     max: 48
