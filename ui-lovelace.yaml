@@ -75,12 +75,12 @@ views:
       - type: picture
         image: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=GRK&brand=wui&num=10&delay=25&type=N0R&frame=0&scale=1&noclutter=0&showstorms=99&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=1&rainsnow=1&lightning=1&smooth=1&rand=24691285&lat=0&lon=0&label=you
       - type: entities
-        title: Precipitation
+        title: Precipitation notifications
         entities:
           - binary_sensor.precipitation_in_forecast
           - sensor.precipitation_in_forecast
           - input_number.rain_forecast_hours
-          - automation.preciptation_notifications
+          - automation.precipitation_notifications
           - automation.sunshine_notifications
 
   - title: Great Room

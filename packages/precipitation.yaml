@@ -47,8 +47,7 @@ input_number:
   rain_forecast_hours:
     name: Rain forecast hours
     min: 4
-    initial: 12
-    max: 72
+    max: 48
     step: 1
 
 binary_sensor:
