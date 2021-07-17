@@ -29,3 +29,14 @@ sequence:
   value_template: >
     {{ states.input_boolean.guests.state != "on" }}
 - service: script.arm
+- service: remote.send_command
+  target:
+    entity_id: remote.lounge
+  data:
+    delay_secs: 1
+    command:
+      - home_hold
+      - select
+- service: media_player.turn_off
+  target:
+    entity_id: media_player.lounge
