@@ -44,7 +44,7 @@ trigger:
     - lock.front_door
     - lock.back_porch
     - lock.garage
-    - media_player.office
+    - media_player.lounge
     - media_player.music_room
     - media_player.bedroom
     - media_player.atrium_speakers
@@ -94,7 +94,6 @@ action:
         "weather":             ":cloud:"
       } %}
       {% set entity_emoji = {
-        "media_player.office_tv":             ":tv:",
         "sensor.jphone_12_battery_state":      ":iphone:",
         "sensor.katie_s_iphone_battery_state": ":iphone:",
         "sensor.alarm_sensors":               ":door:",
