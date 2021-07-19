@@ -1,0 +1,41 @@
+sensor:
+  - platform: template
+    sensors:
+      jphone_12_areas_of_interest:
+        friendly_name: jPhone 12 areas of interest
+        entity_id:
+          - sensor.jphone_12_geocoded_location
+        value_template: |
+          {{ state_attr('sensor.jphone_12_geocoded_location', 'Areas Of Interest') | join(' ,') }}
+
+automation:
+  - alias: log area of interest changes to slack
+    trigger:
+      platform: state
+      entity_id:
+        - sensor.jphone_12_areas_of_interest
+    condition:
+      condition: template
+      value_template: |
+        {% set old_state = trigger.from_state %}
+        {% set new_state = trigger.to_state %}
+        {{
+          (
+            old_state != None and
+            new_state.state != old_state.state and
+            old_state.state != "Unknown"
+          )
+        }}
+    action:
+      service: notify.slack
+      data_template:
+        message: >
+          {% set old_state = trigger.from_state %}
+          {% set new_state = trigger.to_state %}
+          :iphone:
+          *{{ new_state.name | capitalize -}}*{{ " " -}}
+          is {% if new_state.state == "" %}{{ "'' " }}{% else %}*_{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_*{{ " " }}{% endif -%}
+          after being {{ old_state.state | capitalize }}{{ old_state.attributes.unit_of_measurement }}{{ " " -}}
+          for {{ relative_time(old_state.last_changed) }}
+        target: "#general"
+
