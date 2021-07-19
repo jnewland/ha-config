@@ -688,9 +688,13 @@ script:
           - light.lounge_closet
           - light.lounge_overhead
           - light.lounge_chandelier
-          - light.coat_closet
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
+      - service: switch.turn_on
+        data:
+          entity_id:
+          - switch.lounge_left
+          - switch.lounge_right
       - condition: template
         value_template: >
           {{ states.input_select.mode.state != "Evening" }}
