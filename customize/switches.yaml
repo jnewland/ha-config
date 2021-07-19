@@ -9,6 +9,6 @@ switch.back_porch_fountain:
 switch.bug_zapper:
   icon: mdi:shield-bug
 switch.lounge_left:
-  icon: mdi:floor-light-torchiere
+  icon: mdi:floor-lamp
 switch.lounge_right:
-  icon: mdi:floor-light-torchiere
+  icon: mdi:floor-lamp
