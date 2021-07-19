@@ -44,3 +44,4 @@ rm -rf $TMPDIR/sensme-$$
 
 git add custom_components
 git add python_scripts
+
