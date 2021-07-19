@@ -2,11 +2,13 @@ switch.great_room_tree:
   icon: mdi:pine-tree
 switch.hall_tree:
   icon: mdi:pine-tree
-switch.lounge_tree:
-  icon: mdi:pine-tree
 switch.back_porch:
   icon: mdi:fan
 switch.back_porch_fountain:
   icon: mdi:fountain
 switch.bug_zapper:
   icon: mdi:shield-bug
+switch.lounge_left:
+  icon: mdi:floor-light-torchiere
+switch.lounge_right:
+  icon: mdi:floor-light-torchiere
