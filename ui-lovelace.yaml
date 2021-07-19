@@ -116,7 +116,8 @@ views:
         entities:
           - light.lounge_overhead
           - light.lounge_chandelier
-          - light.exercise_bike
+          - switch.lounge_left
+          - switch.lounge_right
           - binary_sensor.lounge_motion
           - sensor.lounge_temp
         footer:
@@ -125,7 +126,7 @@ views:
           hours_to_show: 36
           detail: 2
       - type: media-control
-        entity: media_player.office
+        entity: media_player.lounge
       - type: media-control
         entity: media_player.lounge_channels
       - type: entities

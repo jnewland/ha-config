@@ -2,5 +2,5 @@
 - light.lounge_closet
 - light.lounge_overhead
 - light.lounge_chandelier
-- light.exercise_bike
-- switch.lounge_tree
+- switch.lounge_left
+- switch.lounge_right
