@@ -25,4 +25,4 @@ filter:
     - script.mode_party
     - script.mode_cooking
     - script.mode_cocktail
-    - vacuum.downstairs980
+    - vacuum.downstairs

@@ -124,6 +124,9 @@ homeassistant:
     light.striped_lamp:
       fixed_color_temp: 396
 
+    light.pergola_pendants:
+      fixed_brightness: 29
+
     light.bedside_table_white:
       ignore_brightness: true
     light.bedside_table_red:
@@ -650,6 +653,8 @@ script:
         data:
           color_temp: |
             {{ states.light.striped_lamp.attributes.fixed_color_temp | int }}
+      - service: light.turn_on
+        entity_id: light.music_room_haiku_light
       - service: shell_command.wake_bookshelf
 
   notify_with_lights:
@@ -683,9 +688,16 @@ script:
           - light.lounge_closet
           - light.lounge_overhead
           - light.lounge_chandelier
-          - light.coat_closet
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
+      - service: switch.turn_on
+        data:
+          entity_id:
+          - switch.lounge_left
+      - service: switch.turn_on
+        data:
+          entity_id:
+          - switch.lounge_right
       - condition: template
         value_template: >
           {{ states.input_select.mode.state != "Evening" }}

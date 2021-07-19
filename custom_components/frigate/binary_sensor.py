@@ -2,24 +2,25 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, cast
 
 from homeassistant.components.binary_sensor import (
     DEVICE_CLASS_MOTION,
     BinarySensorEntity,
 )
-from homeassistant.components.mqtt.models import Message
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import (
     FrigateMQTTEntity,
+    ReceiveMessage,
     get_cameras_zones_and_objects,
     get_friendly_name,
     get_frigate_device_identifier,
+    get_frigate_entity_unique_id,
 )
-from .const import DOMAIN, NAME, VERSION
+from .const import ATTR_CONFIG, DOMAIN, NAME
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -28,7 +29,7 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Binary sensor entry setup."""
-    frigate_config = hass.data[DOMAIN]["config"]
+    frigate_config = hass.data[DOMAIN][entry.entry_id][ATTR_CONFIG]
     async_add_entities(
         [
             FrigateMotionSensor(entry, frigate_config, cam_name, obj)
@@ -37,7 +38,7 @@ async def async_setup_entry(
     )
 
 
-class FrigateMotionSensor(FrigateMQTTEntity, BinarySensorEntity):
+class FrigateMotionSensor(FrigateMQTTEntity, BinarySensorEntity):  # type: ignore[misc]
     """Frigate Motion Sensor class."""
 
     def __init__(
@@ -63,8 +64,8 @@ class FrigateMotionSensor(FrigateMQTTEntity, BinarySensorEntity):
             },
         )
 
-    @callback
-    def _state_message_received(self, msg: Message) -> None:
+    @callback  # type: ignore[misc]
+    def _state_message_received(self, msg: ReceiveMessage) -> None:
         """Handle a new received MQTT state message."""
         try:
             self._is_on = int(msg.payload) > 0
@@ -75,7 +76,11 @@ class FrigateMotionSensor(FrigateMQTTEntity, BinarySensorEntity):
     @property
     def unique_id(self) -> str:
         """Return a unique ID for this entity."""
-        return f"{DOMAIN}_{self._cam_name}_{self._obj_name}_binary_sensor"
+        return get_frigate_entity_unique_id(
+            self._config_entry.entry_id,
+            "motion_sensor",
+            f"{self._cam_name}_{self._obj_name}",
+        )
 
     @property
     def device_info(self) -> dict[str, Any]:
@@ -86,7 +91,7 @@ class FrigateMotionSensor(FrigateMQTTEntity, BinarySensorEntity):
             },
             "via_device": get_frigate_device_identifier(self._config_entry),
             "name": get_friendly_name(self._cam_name),
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
@@ -103,4 +108,4 @@ class FrigateMotionSensor(FrigateMQTTEntity, BinarySensorEntity):
     @property
     def device_class(self) -> str:
         """Return the device class."""
-        return DEVICE_CLASS_MOTION
+        return cast(str, DEVICE_CLASS_MOTION)

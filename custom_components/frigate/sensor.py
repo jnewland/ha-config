@@ -4,7 +4,6 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from homeassistant.components.mqtt.models import Message
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity import DeviceInfo
@@ -15,11 +14,15 @@ from . import (
     FrigateDataUpdateCoordinator,
     FrigateEntity,
     FrigateMQTTEntity,
+    ReceiveMessage,
     get_cameras_zones_and_objects,
     get_friendly_name,
     get_frigate_device_identifier,
+    get_frigate_entity_unique_id,
 )
 from .const import (
+    ATTR_CONFIG,
+    ATTR_COORDINATOR,
     DOMAIN,
     FPS,
     ICON_CAR,
@@ -30,7 +33,6 @@ from .const import (
     ICON_SPEEDOMETER,
     MS,
     NAME,
-    VERSION,
 )
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
@@ -42,7 +44,7 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Sensor entry setup."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator = hass.data[DOMAIN][entry.entry_id][ATTR_COORDINATOR]
 
     entities = []
     for key, value in coordinator.data.items():
@@ -60,7 +62,7 @@ async def async_setup_entry(
                 [CameraFpsSensor(coordinator, entry, key, t) for t in CAMERA_FPS_TYPES]
             )
 
-    frigate_config = hass.data[DOMAIN]["config"]
+    frigate_config = hass.data[DOMAIN][entry.entry_id][ATTR_CONFIG]
     entities.extend(
         [
             FrigateObjectCountSensor(entry, frigate_config, cam_name, obj)
@@ -70,7 +72,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class FrigateFpsSensor(FrigateEntity, CoordinatorEntity):
+class FrigateFpsSensor(FrigateEntity, CoordinatorEntity):  # type: ignore[misc]
     """Frigate Sensor class."""
 
     def __init__(
@@ -83,7 +85,9 @@ class FrigateFpsSensor(FrigateEntity, CoordinatorEntity):
     @property
     def unique_id(self) -> str:
         """Return a unique ID to use for this entity."""
-        return f"{DOMAIN}_detection_fps"
+        return get_frigate_entity_unique_id(
+            self._config_entry.entry_id, "sensor_fps", "detection"
+        )
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -91,7 +95,7 @@ class FrigateFpsSensor(FrigateEntity, CoordinatorEntity):
         return {
             "identifiers": {get_frigate_device_identifier(self._config_entry)},
             "name": NAME,
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
@@ -123,7 +127,7 @@ class FrigateFpsSensor(FrigateEntity, CoordinatorEntity):
         return ICON_SPEEDOMETER
 
 
-class DetectorSpeedSensor(FrigateEntity, CoordinatorEntity):
+class DetectorSpeedSensor(FrigateEntity, CoordinatorEntity):  # type: ignore[misc]
     """Frigate Detector Speed class."""
 
     def __init__(
@@ -140,7 +144,9 @@ class DetectorSpeedSensor(FrigateEntity, CoordinatorEntity):
     @property
     def unique_id(self) -> str:
         """Return a unique ID to use for this entity."""
-        return f"{DOMAIN}_{self._detector_name}_inference_speed"
+        return get_frigate_entity_unique_id(
+            self._config_entry.entry_id, "sensor_detector_speed", self._detector_name
+        )
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -148,7 +154,7 @@ class DetectorSpeedSensor(FrigateEntity, CoordinatorEntity):
         return {
             "identifiers": {get_frigate_device_identifier(self._config_entry)},
             "name": NAME,
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
@@ -184,7 +190,7 @@ class DetectorSpeedSensor(FrigateEntity, CoordinatorEntity):
         return ICON_SPEEDOMETER
 
 
-class CameraFpsSensor(FrigateEntity, CoordinatorEntity):
+class CameraFpsSensor(FrigateEntity, CoordinatorEntity):  # type: ignore[misc]
     """Frigate Camera Fps class."""
 
     def __init__(
@@ -203,7 +209,11 @@ class CameraFpsSensor(FrigateEntity, CoordinatorEntity):
     @property
     def unique_id(self) -> str:
         """Return a unique ID to use for this entity."""
-        return f"{DOMAIN}_{self._cam_name}_{self._fps_type}_fps"
+        return get_frigate_entity_unique_id(
+            self._config_entry.entry_id,
+            "sensor_fps",
+            f"{self._cam_name}_{self._fps_type}",
+        )
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -214,7 +224,7 @@ class CameraFpsSensor(FrigateEntity, CoordinatorEntity):
             },
             "via_device": get_frigate_device_identifier(self._config_entry),
             "name": get_friendly_name(self._cam_name),
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
@@ -286,8 +296,8 @@ class FrigateObjectCountSensor(FrigateMQTTEntity):
             },
         )
 
-    @callback
-    def _state_message_received(self, msg: Message) -> None:
+    @callback  # type: ignore[misc]
+    def _state_message_received(self, msg: ReceiveMessage) -> None:
         """Handle a new received MQTT state message."""
         try:
             self._state = int(msg.payload)
@@ -298,7 +308,11 @@ class FrigateObjectCountSensor(FrigateMQTTEntity):
     @property
     def unique_id(self) -> str:
         """Return a unique ID to use for this entity."""
-        return f"{DOMAIN}_{self._cam_name}_{self._obj_name}"
+        return get_frigate_entity_unique_id(
+            self._config_entry.entry_id,
+            "sensor_object_count",
+            f"{self._cam_name}_{self._obj_name}",
+        )
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -310,7 +324,7 @@ class FrigateObjectCountSensor(FrigateMQTTEntity):
             },
             "via_device": get_frigate_device_identifier(self._config_entry),
             "name": get_friendly_name(self._cam_name),
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 

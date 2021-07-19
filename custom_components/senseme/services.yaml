@@ -1,0 +1,35 @@
+smart_mode:
+  name: Smart Mode
+  description: Smart Mode allows the fan to monitor and adjust to room conditions like temperature, humidity and occupancy.
+  target:
+    entity:
+      domain: fan
+      integration: senseme
+  fields:
+    auto_comfort:
+      name: Auto Comfort
+      required: false
+      example: cooling
+      selector:
+        select:
+          options:
+            - off
+            - cooling
+            - heating
+            - followstat
+    cool_temp:
+      name: Cool Temperature
+      description: Ideal temperature when cooling
+      required: false
+      example: 70
+    cool_min_speed:
+      name: Cool Min Fan Speed
+      description: Minimum fan speed when cooling
+      required: false
+      example: 2
+    cool_max_speed:
+      name: Cool Max Fan Speed
+      description: Minimum fan speed when cooling
+      required: false
+      example: 6
+

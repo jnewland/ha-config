@@ -45,3 +45,7 @@ sequence:
     apns_collapse_id: alarm_control_panel.alarm
     message: "Arm the alarm?"
     confirmation_message: armed the alarm
+- service: light.turn_on
+  data:
+    entity_id:
+      - light.striped_lamp

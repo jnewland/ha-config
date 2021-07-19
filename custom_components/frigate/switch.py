@@ -5,21 +5,26 @@ import logging
 from typing import Any
 
 from homeassistant.components.mqtt import async_publish
-from homeassistant.components.mqtt.models import Message
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from . import FrigateMQTTEntity, get_friendly_name, get_frigate_device_identifier
+from . import (
+    FrigateMQTTEntity,
+    ReceiveMessage,
+    get_friendly_name,
+    get_frigate_device_identifier,
+    get_frigate_entity_unique_id,
+)
 from .const import (
+    ATTR_CONFIG,
     DOMAIN,
     ICON_FILM_MULTIPLE,
     ICON_IMAGE_MULTIPLE,
     ICON_MOTION_SENSOR,
     NAME,
-    VERSION,
 )
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
@@ -29,7 +34,7 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Switch entry setup."""
-    frigate_config = hass.data[DOMAIN]["config"]
+    frigate_config = hass.data[DOMAIN][entry.entry_id][ATTR_CONFIG]
 
     entities = []
     for camera in frigate_config["cameras"].keys():
@@ -43,7 +48,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):
+class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):  # type: ignore[misc]
     """Frigate Switch class."""
 
     def __init__(
@@ -81,8 +86,8 @@ class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):
             },
         )
 
-    @callback
-    def _state_message_received(self, msg: Message) -> None:
+    @callback  # type: ignore[misc]
+    def _state_message_received(self, msg: ReceiveMessage) -> None:
         """Handle a new received MQTT state message."""
         self._is_on = msg.payload == "ON"
         super()._state_message_received(msg)
@@ -90,7 +95,11 @@ class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):
     @property
     def unique_id(self) -> str:
         """Return a unique ID to use for this entity."""
-        return f"{DOMAIN}_{self._cam_name}_{self._switch_name}_switch"
+        return get_frigate_entity_unique_id(
+            self._config_entry.entry_id,
+            "switch",
+            f"{self._cam_name}_{self._switch_name}",
+        )
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -101,7 +110,7 @@ class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):
             },
             "via_device": get_frigate_device_identifier(self._config_entry),
             "name": get_friendly_name(self._cam_name),
-            "model": VERSION,
+            "model": self._get_model(),
             "manufacturer": NAME,
         }
 
@@ -115,7 +124,7 @@ class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):
         """Return true if the binary sensor is on."""
         return self._is_on
 
-    async def async_turn_on(self, **kwargs) -> None:
+    async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the device on."""
         async_publish(
             self.hass,
@@ -125,7 +134,7 @@ class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):
             True,
         )
 
-    async def async_turn_off(self, **kwargs) -> None:
+    async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the device off."""
         async_publish(
             self.hass,

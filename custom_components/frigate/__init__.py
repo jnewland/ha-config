@@ -8,25 +8,55 @@ from __future__ import annotations
 
 from datetime import timedelta
 import logging
-from typing import Any
+import re
+from typing import Any, Callable, Final
 
-from homeassistant.components.mqtt.models import Message
+from awesomeversion import AwesomeVersion
+
+from custom_components.frigate.config_flow import get_config_entry_title
 from homeassistant.components.mqtt.subscription import async_subscribe_topics
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import ATTR_MODEL, CONF_HOST, CONF_URL, __version__
 from homeassistant.core import Config, HomeAssistant, callback
 from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify
 
+# To be removed once 2021.8 has been officially released.
+if AwesomeVersion(__version__) < AwesomeVersion("2021.8.0.dev0"):
+    from homeassistant.components.mqtt.models import (  # pylint: disable=no-name-in-module  # pragma: no cover
+        Message as ReceiveMessage,
+    )
+else:
+    from homeassistant.components.mqtt.models import (  # pylint: disable=no-name-in-module  # pragma: no cover
+        ReceiveMessage,
+    )
 from .api import FrigateApiClient, FrigateApiClientError
-from .const import DOMAIN, PLATFORMS, STARTUP_MESSAGE
+from .const import (
+    ATTR_CLIENT,
+    ATTR_CONFIG,
+    ATTR_COORDINATOR,
+    DOMAIN,
+    NAME,
+    PLATFORMS,
+    STARTUP_MESSAGE,
+)
 from .views import ClipsProxyView, NotificationsProxyView, RecordingsProxyView
 
 SCAN_INTERVAL = timedelta(seconds=5)
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
+
+# Typing notes:
+# - The HomeAssistant library does not provide usable type hints for custom
+#   components. Certain type checks (e.g. decorators and class inheritance) need
+#   to be marked as ignored or casted, when using the default Home Assistant
+#   mypy settings. Using the same settings is preferable, to smoothen a future
+#   migration to Home Assistant Core.
 
 
 def get_frigate_device_identifier(
@@ -39,12 +69,19 @@ def get_frigate_device_identifier(
         return (DOMAIN, entry.entry_id)
 
 
+def get_frigate_entity_unique_id(
+    config_entry_id: str, type_name: str, name: str
+) -> str:
+    """Get the unique_id for a Frigate entity."""
+    return f"{config_entry_id}:{type_name}:{name}"
+
+
 def get_friendly_name(name: str) -> str:
     """Get a friendly version of a name."""
     return name.replace("_", " ").title()
 
 
-def get_cameras_and_objects(config: dict[str, Any]) -> {(str, str)}:
+def get_cameras_and_objects(config: dict[str, Any]) -> set[tuple[str, str]]:
     """Get cameras and tracking object tuples."""
     camera_objects = set()
     for cam_name, cam_config in config["cameras"].items():
@@ -53,7 +90,7 @@ def get_cameras_and_objects(config: dict[str, Any]) -> {(str, str)}:
     return camera_objects
 
 
-def get_cameras_zones_and_objects(config: dict[str, Any]) -> {(str, str)}:
+def get_cameras_zones_and_objects(config: dict[str, Any]) -> set[tuple[str, str]]:
     """Get cameras/zones and tracking object tuples."""
     camera_objects = get_cameras_and_objects(config)
 
@@ -66,46 +103,51 @@ def get_cameras_zones_and_objects(config: dict[str, Any]) -> {(str, str)}:
 
 async def async_setup(hass: HomeAssistant, config: Config) -> bool:
     """Set up this integration using YAML is not supported."""
+    integration = await async_get_integration(hass, DOMAIN)
+    _LOGGER.info(
+        STARTUP_MESSAGE.format(
+            title=NAME,
+            integration_version=integration.version,
+        )
+    )
+
+    hass.data.setdefault(DOMAIN, {})
+
+    session = async_get_clientsession(hass)
+    hass.http.register_view(ClipsProxyView(session))
+    hass.http.register_view(RecordingsProxyView(session))
+    hass.http.register_view(NotificationsProxyView(session))
     return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up this integration using UI."""
-    if hass.data.get(DOMAIN) is None:
-        hass.data.setdefault(DOMAIN, {})
-        _LOGGER.info(STARTUP_MESSAGE)
 
-    frigate_host = hass.data[DOMAIN]["host"] = entry.data.get("host")
-
-    # register views
-    websession = hass.helpers.aiohttp_client.async_get_clientsession()
-    hass.http.register_view(ClipsProxyView(frigate_host, websession))
-    hass.http.register_view(RecordingsProxyView(frigate_host, websession))
-    hass.http.register_view(NotificationsProxyView(frigate_host, websession))
-
-    # setup api polling
-    session = async_get_clientsession(hass)
-    client = FrigateApiClient(frigate_host, session)
-
-    # start the coordinator
+    client = FrigateApiClient(entry.data.get(CONF_URL), async_get_clientsession(hass))
     coordinator = FrigateDataUpdateCoordinator(hass, client=client)
     await coordinator.async_config_entry_first_refresh()
 
-    hass.data[DOMAIN][entry.entry_id] = coordinator
-
     try:
+        server_version = await client.async_get_version()
         config = await client.async_get_config()
     except FrigateApiClientError as exc:
         raise ConfigEntryNotReady from exc
 
-    hass.data[DOMAIN]["config"] = config
+    model = f"{(await async_get_integration(hass, DOMAIN)).version}/{server_version}"
+
+    hass.data[DOMAIN][entry.entry_id] = {
+        ATTR_COORDINATOR: coordinator,
+        ATTR_CLIENT: client,
+        ATTR_CONFIG: config,
+        ATTR_MODEL: model,
+    }
 
     hass.config_entries.async_setup_platforms(entry, PLATFORMS)
-    entry.add_update_listener(_async_entry_updated)
+    entry.async_on_unload(entry.add_update_listener(_async_entry_updated))
     return True
 
 
-class FrigateDataUpdateCoordinator(DataUpdateCoordinator):
+class FrigateDataUpdateCoordinator(DataUpdateCoordinator):  # type: ignore[misc]
     """Class to manage fetching data from the API."""
 
     def __init__(self, hass: HomeAssistant, client: FrigateApiClient):
@@ -123,8 +165,8 @@ class FrigateDataUpdateCoordinator(DataUpdateCoordinator):
 
 async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Handle removal of an entry."""
-    unload_ok = await hass.config_entries.async_unload_platforms(
-        config_entry, PLATFORMS
+    unload_ok = bool(
+        await hass.config_entries.async_unload_platforms(config_entry, PLATFORMS)
     )
     if unload_ok:
         hass.data[DOMAIN].pop(config_entry.entry_id)
@@ -137,10 +179,77 @@ async def _async_entry_updated(hass: HomeAssistant, config_entry: ConfigEntry) -
     await hass.config_entries.async_reload(config_entry.entry_id)
 
 
-class FrigateEntity(Entity):
+async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
+    """Migrate from v1 entry."""
+
+    if config_entry.version == 1:
+        _LOGGER.debug("Migrating config entry from version '%s'", config_entry.version)
+
+        data = {**config_entry.data}
+        data[CONF_URL] = data.pop(CONF_HOST)
+        hass.config_entries.async_update_entry(
+            config_entry, data=data, title=get_config_entry_title(data[CONF_URL])
+        )
+        config_entry.version = 2
+
+        @callback  # type: ignore[misc]
+        def update_unique_id(entity_entry: er.RegistryEntry) -> dict[str, str] | None:
+            """Update unique ID of entity entry."""
+
+            converters: Final[dict[re.Pattern, Callable[[re.Match], list[str]]]] = {
+                re.compile(rf"^{DOMAIN}_(?P<cam_obj>\S+)_binary_sensor$"): lambda m: [
+                    "motion_sensor",
+                    m.group("cam_obj"),
+                ],
+                re.compile(rf"^{DOMAIN}_(?P<cam>\S+)_camera$"): lambda m: [
+                    "camera",
+                    m.group("cam"),
+                ],
+                re.compile(rf"^{DOMAIN}_(?P<cam_obj>\S+)_snapshot$"): lambda m: [
+                    "camera_snapshots",
+                    m.group("cam_obj"),
+                ],
+                re.compile(rf"^{DOMAIN}_detection_fps$"): lambda m: [
+                    "sensor_fps",
+                    "detection",
+                ],
+                re.compile(
+                    rf"^{DOMAIN}_(?P<detector>\S+)_inference_speed$"
+                ): lambda m: ["sensor_detector_speed", m.group("detector")],
+                re.compile(rf"^{DOMAIN}_(?P<cam_fps>\S+)_fps$"): lambda m: [
+                    "sensor_fps",
+                    m.group("cam_fps"),
+                ],
+                re.compile(rf"^{DOMAIN}_(?P<cam_switch>\S+)_switch$"): lambda m: [
+                    "switch",
+                    m.group("cam_switch"),
+                ],
+                # Caution: This is a broad but necessary match (keep until last).
+                re.compile(rf"^{DOMAIN}_(?P<cam_obj>\S+)$"): lambda m: [
+                    "sensor_object_count",
+                    m.group("cam_obj"),
+                ],
+            }
+
+            for regexp, func in converters.items():
+                match = regexp.match(entity_entry.unique_id)
+                if match:
+                    args = [config_entry.entry_id] + func(match)
+                    return {"new_unique_id": get_frigate_entity_unique_id(*args)}
+            return None
+
+        await er.async_migrate_entries(hass, config_entry.entry_id, update_unique_id)
+        _LOGGER.debug(
+            "Migrating config entry to version '%s' successful", config_entry.version
+        )
+
+    return True
+
+
+class FrigateEntity(Entity):  # type: ignore[misc]
     """Base class for Frigate entities."""
 
-    def __init__(self, config_entry: str):
+    def __init__(self, config_entry: ConfigEntry):
         """Construct a FrigateEntity."""
         Entity.__init__(self)
 
@@ -152,13 +261,17 @@ class FrigateEntity(Entity):
         """Return the availability of the entity."""
         return self._available
 
+    def _get_model(self) -> str:
+        """Get the Frigate device model string."""
+        return str(self.hass.data[DOMAIN][self._config_entry.entry_id][ATTR_MODEL])
+
 
 class FrigateMQTTEntity(FrigateEntity):
     """Base class for MQTT-based Frigate entities."""
 
     def __init__(
         self,
-        config_entry,
+        config_entry: ConfigEntry,
         frigate_config: dict[str, Any],
         state_topic_config: dict[str, Any],
     ) -> None:
@@ -188,13 +301,13 @@ class FrigateMQTTEntity(FrigateEntity):
             },
         )
 
-    @callback
-    def _state_message_received(self, msg: Message) -> None:
+    @callback  # type: ignore[misc]
+    def _state_message_received(self, msg: ReceiveMessage) -> None:
         """State message received."""
         self.async_write_ha_state()
 
-    @callback
-    def _availability_message_received(self, msg: Message) -> None:
+    @callback  # type: ignore[misc]
+    def _availability_message_received(self, msg: ReceiveMessage) -> None:
         """Handle a new received MQTT availability message."""
         self._available = msg.payload == "online"
         self.async_write_ha_state()

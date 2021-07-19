@@ -1,0 +1,81 @@
+homeassistant:
+  customize:
+    binary_sensor.precipitation_in_forecast:
+      icon: mdi:weather-rainy
+    sensor.precipitation_in_forecast:
+      icon: mdi:weather-rainy
+
+automation:
+  - alias: Precipitation notifications
+    id: adeaa17d-9184-4cd4-9086-47dcc8817b71
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.precipitation_in_forecast
+      from: "on"
+      to: "off"
+    condition: |
+      {{ states('device_tracker.jphone_12') != 'not_home' }}
+    action:
+      - service: script.ask_about_turning_on
+        data:
+          service: notify.mobile_app_jphone_12
+          notify_service: notify.mobile_app_jphone_12
+          entity_id: script.noop
+          apns_collapse_id: precipitation
+          message: Rain is forecasted soon. Prep for rain?
+          confirmation_message: prepped for rain, cool.
+  - alias: Sunshine notifications
+    id: ad844a6c-87f8-4e72-9839-9af40bd4c500
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.precipitation_in_forecast
+      from: "off"
+      to: "on"
+    condition: |
+      {{ states('device_tracker.jphone_12') != 'not_home' }}
+    action:
+      - service: script.ask_about_turning_on
+        data:
+          service: notify.mobile_app_jphone_12
+          notify_service: notify.mobile_app_jphone_12
+          entity_id: script.noop
+          apns_collapse_id: precipitation
+          message: No rain in the forecast. Prep for sunshine?
+          confirmation_message: prepped for sunshine, cool.
+
+input_number:
+  precipitation_forecast_hours:
+    name: Precipitation forecast hours
+    min: 4
+    max: 48
+    step: 1
+
+binary_sensor:
+  - platform: template
+    sensors:
+      precipitation_in_forecast:
+        friendly_name: Precipitation in forecast
+        value_template: |
+          {{ 
+            states("sensor.precipitation_in_forecast") |
+            default("0.0")  |
+            float > 0.0
+          }}
+        delay_on:
+          minutes: 30
+        delay_off:
+          minutes: 30
+sensor:
+  - platform: template
+    sensors:
+      precipitation_in_forecast:
+        friendly_name: Precipitation in forecast
+        unit_of_measurement: 'in'
+        value_template: |
+          {{ 
+            state_attr("weather.dark_sky", "forecast") | 
+            default([{}]) | batch(states("input_number.rain_precipitation_forecast_hours") | default(12)) | first |
+            rejectattr("precipitation", "none") | 
+            sum(attribute="precipitation")
+          }}
+
