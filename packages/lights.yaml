@@ -694,6 +694,9 @@ script:
         data:
           entity_id:
           - switch.lounge_left
+      - service: switch.turn_on
+        data:
+          entity_id:
           - switch.lounge_right
       - condition: template
         value_template: >
