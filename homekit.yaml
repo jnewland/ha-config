@@ -25,4 +25,5 @@ filter:
     - script.mode_party
     - script.mode_cooking
     - script.mode_cocktail
+    - script.makeup
     - vacuum.downstairs
