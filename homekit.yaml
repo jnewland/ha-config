@@ -25,4 +25,4 @@ filter:
     - script.mode_cooking
     - script.mode_cocktail
     - vacuum.downstairs
-    - light.gloabl_brightness
+    - light.global_brightness
