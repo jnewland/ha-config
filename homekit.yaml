@@ -3,8 +3,6 @@ filter:
     - alarm_control_panel
     - climate
     - cover
-    - lock
-    - media_player
   exclude_domains:
     - sensor
     - script
@@ -12,11 +10,12 @@ filter:
     - switch
     - scene
     - light
+    - lock
+    - media_player
   include_entities:
     - switch.atrium_fountain
     - switch.back_porch
     - switch.back_porch_fountain
-    - switch.bug_zapper
     - switch.master_bath_fan
     - script.mode_away
     - script.lounge_lights
@@ -26,3 +25,4 @@ filter:
     - script.mode_cooking
     - script.mode_cocktail
     - vacuum.downstairs
+    - light.global_brightness

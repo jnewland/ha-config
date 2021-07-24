@@ -557,6 +557,29 @@ counter:
   light_automations:
     name: Light Automations
 
+light:
+  - platform: template
+    lights:
+      global_brightness:
+        friendly_name: "Global Brightness"
+        level_template: "{{ states('input_number.brightness')|int }}"
+        value_template: "{{ states('input_number.brightness')|int > 0 }}"
+        turn_on:
+          service: input_number.set_value
+          data:
+            entity_id: input_number.brightness
+            value: 255
+        turn_off:
+          service: input_number.set_value
+          data:
+            entity_id: input_number.brightness
+            value: 0
+        set_level:
+          service: input_number.set_value
+          data:
+            entity_id: input_number.brightness
+            value: "{{ brightness }}"
+
 input_number:
   brightness:
     name: Brightness
