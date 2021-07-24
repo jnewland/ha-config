@@ -578,7 +578,7 @@ light:
           service: input_number.set_value
           data:
             entity_id: input_number.brightness
-            brightness: "{{ brightness }}"
+            value: "{{ brightness }}"
 
 input_number:
   brightness:
