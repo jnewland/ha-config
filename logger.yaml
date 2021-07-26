@@ -15,3 +15,5 @@ logs:
   roomba.roomba.Roomba: warn
   pyhap.hap_server: critical
   homeassistant.components.shell_command: debug
+  # pyatv: debug
+  # custom_components.apple_tv: debug

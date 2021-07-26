@@ -708,7 +708,6 @@ script:
       - service: light.turn_on
         data:
           entity_id:
-          - light.lounge_closet
           - light.lounge_overhead
           - light.lounge_chandelier
           brightness: |

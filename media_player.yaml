@@ -33,7 +33,7 @@
   host: music-room
 - platform: channels
   name: lounge channels
-  host: office
+  host: lounge
 - platform: channels
   name: bedroom channels
   host: bedroom
