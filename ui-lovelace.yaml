@@ -61,11 +61,13 @@ views:
         show_state: false
         entity: camera.front_yard_left_person
 
-      - type: map
-        entities:
-          - device_tracker.jphone_12
-          - device_tracker.katie_s_iphone
-        hours_to_show: 24
+      - type: custom:auto-entities
+        card:
+          type: map
+          hours_to_show: 24
+        filter:
+          include:
+            - entity_id: "/device_tracker/"
 
   - title: Weather
     icon: mdi:weather-rainy
@@ -712,16 +714,45 @@ views:
     icon: mdi:car-estate
     path: car
     cards:
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - switch.xc60_climate
+          - sensor.xc60_time_to_fully_charged
+          - sensor.xc60_odometer
+
       - type: custom:auto-entities
         show_empty: false
         sort:
           method: id
         card:
-          type: glance
-          title: xc60
+          type: history-graph
+          hours_to_show: 80
         filter:
           include:
-            - entity_id: "/xc60/"
+            - entity_id: "/^sensor.xc60.*_level/"
+
+      - type: custom:auto-entities
+        show_empty: false
+        sort:
+          method: id
+        card:
+          type: history-graph
+          hours_to_show: 80
+        filter:
+          include:
+            - entity_id: "/^sensor.xc60.*_range/"
+
+      - type: custom:auto-entities
+        show_empty: false
+        sort:
+          method: id
+        card:
+          type: history-graph
+          hours_to_show: 80
+        filter:
+          include:
+            - entity_id: "/^binary_sensor.xc60/"
 
   - title: Settings
     icon: mdi:cog
