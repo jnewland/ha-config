@@ -717,7 +717,7 @@ views:
       - type: entities
         show_header_toggle: false
         entities:
-          - switch.climate
+          - switch.xc60_climate
           - sensor.xc60_time_to_fully_charged
           - sensor.xc60_odometer
 
