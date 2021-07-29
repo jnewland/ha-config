@@ -727,7 +727,6 @@ views:
           method: id
         card:
           type: history-graph
-          title: history
           hours_to_show: 80
         filter:
           include:
@@ -739,7 +738,6 @@ views:
           method: id
         card:
           type: history-graph
-          title: history
           hours_to_show: 80
         filter:
           include:
@@ -751,7 +749,6 @@ views:
           method: id
         card:
           type: history-graph
-          title: history
           hours_to_show: 80
         filter:
           include:
