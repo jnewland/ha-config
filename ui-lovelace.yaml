@@ -62,7 +62,8 @@ views:
         entity: camera.front_yard_left_person
 
       -  type: map
-         geo_location_sources: all
+         geo_location_sources:
+          - all
          hours_to_show: 24
   - title: Weather
     icon: mdi:weather-rainy
