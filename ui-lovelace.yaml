@@ -60,11 +60,6 @@ views:
         show_name: false
         show_state: false
         entity: camera.front_yard_left_person
-
-      -  type: map
-         geo_location_sources:
-          - gps
-         hours_to_show: 24
   - title: Weather
     icon: mdi:weather-rainy
     cards:

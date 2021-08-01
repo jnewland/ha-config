@@ -47,14 +47,6 @@ lovelace:
       type: module
     - url: /local/flower-card.js
       type: module
-  dashboards:
-    lovelace-generated:
-      mode: yaml
-      filename: notexist.yaml
-      title: Generated
-      icon: mdi:tools
-      show_in_sidebar: true
-      require_admin: true
 light:
 logger: !include logger.yaml
 map:
