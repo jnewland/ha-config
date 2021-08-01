@@ -1,40 +1,18 @@
 name: custom_components
 on:
-  pull_request:
-    types: [synchronize,opened,reopened]
+  schedule:
+    - cron:  '0 1 * * 1'
+  workflow_dispatch:
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: sync
-      run: |
-        git config --local user.email "hubot@github.com"
-        git config --local user.name "GitHub Actions"
-        ./script/sync-components
-
-    - name: commit and push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        GITHUB_USER=$(echo ${GITHUB_REPOSITORY} | cut -f 1 -d /)
-        cat >> ~/.netrc <<EOF
-        machine github.com
-          login $GITHUB_USER
-          password $GITHUB_TOKEN
-        EOF
-
-        git commit -am "sync custom_components" || exit 0
-        git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}"
-        
-        # Push & rebase 5 times
-        rebases=0
-        until [ $rebases -ge 5 ]; do
-          if git push origin HEAD:${GITHUB_HEAD_REF}; then
-            exit 0
-          else
-            git pull --rebase origin ${GITHUB_HEAD_REF}
-          fi
-          rebases=$[$rebases+1]
-        done
-        exit 1
+      - uses: actions/checkout@v2
+      - run: ./script/sync-components
+      - uses: peter-evans/create-pull-request@v3
+        with:
+            token: ${{ secrets.UR_BOT_TOKEN }}
+            commit-message: Update custom components
+            title: Update custom components
+            body: Update custom components
+            branch: sync-components
