@@ -63,7 +63,7 @@ views:
 
       -  type: map
          geo_location_sources:
-          - all
+          - gps
          hours_to_show: 24
   - title: Weather
     icon: mdi:weather-rainy
