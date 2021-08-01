@@ -61,14 +61,9 @@ views:
         show_state: false
         entity: camera.front_yard_left_person
 
-      - type: custom:auto-entities
-        card:
-          type: map
-          hours_to_show: 24
-        filter:
-          include:
-            - entity_id: "/device_tracker/"
-
+      -  type: map
+         geo_location_sources: all
+         hours_to_show: 24
   - title: Weather
     icon: mdi:weather-rainy
     cards:
