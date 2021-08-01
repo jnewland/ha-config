@@ -1,0 +1,18 @@
+name: sync-components
+on:
+  schedule:
+    - cron:  '0 1 * * 1'
+  workflow_dispatch:
+jobs:
+  sync-components:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./script/sync-components
+      - uses: peter-evans/create-pull-request@v3
+        with:
+            token: ${{ secrets.UR_BOT_TOKEN }}
+            commit-message: Update custom components
+            title: Update custom components
+            body: Update custom components
+            branch: sync-components
