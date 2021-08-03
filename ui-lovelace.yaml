@@ -79,11 +79,6 @@ views:
           - binary_sensor.precipitation_in_forecast
           - automation.precipitation_notifications
           - automation.sunshine_notifications
-        footer:
-          type: graph
-          entity: sensor.precipitation_in_forecast
-          hours_to_show: 36
-          detail: 2
 
   - title: Great Room
     icon: mdi:sofa
@@ -140,6 +135,11 @@ views:
           - binary_sensor.guest_bath_motion
           - binary_sensor.guest_hall_motion
           - sensor.guest_bath_temp
+        footer:
+          type: graph
+          entity: sensor.guest_bath_temp
+          hours_to_show: 36
+          detail: 2
 
   - title: Music Room
     icon: mdi:guitar-pick
