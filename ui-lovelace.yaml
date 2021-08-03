@@ -71,6 +71,10 @@ views:
         hours_to_show: 80
         entities:
           - sensor.hours_until_rain
+      - type: history-graph
+        hours_to_show: 80
+        entities:
+          - sensor.precipitation_in_forecast
       - type: entities
         title: Precipitation notifications
         entities:
