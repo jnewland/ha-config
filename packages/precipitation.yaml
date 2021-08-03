@@ -56,7 +56,7 @@ binary_sensor:
       precipitation_in_forecast:
         friendly_name: Precipitation in forecast
         value_template: |
-          {{ 
+          {{
             states("sensor.precipitation_in_forecast") |
             default("0.0")  |
             float > 0.0
@@ -72,10 +72,24 @@ sensor:
         friendly_name: Precipitation in forecast
         unit_of_measurement: 'in'
         value_template: |
-          {{ 
-            state_attr("weather.dark_sky", "forecast") | 
+          {{
+            state_attr("weather.dark_sky", "forecast") |
             default([{}]) | batch(states("input_number.rain_precipitation_forecast_hours") | default(12)) | first |
-            rejectattr("precipitation", "none") | 
+            rejectattr("precipitation", "none") |
             sum(attribute="precipitation")
           }}
-
+      hours_until_rain:
+        friendly_name: Hours until rain
+        unit_of_measurement: 'hours'
+        value_template: |
+          {% set next_rain = state_attr("weather.dark_sky", "forecast") |
+                      default([{}]) |
+                      rejectattr("precipitation", "none") |
+                      map(attribute='datetime') |
+                      first %}
+          {% for item in state_attr("weather.dark_sky", "forecast") |
+                      default([{}]) %}
+              {% if item.datetime == next_rain %}
+                {{ loop.index }}
+              {% endif %}
+          {% endfor %}
