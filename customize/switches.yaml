@@ -3,6 +3,8 @@ switch.great_room_tree:
 switch.hall_tree:
   icon: mdi:pine-tree
 switch.back_porch:
+  icon: mdi:ceiling-light
+switch.back_porch_fan:
   icon: mdi:fan
 switch.back_porch_fountain:
   icon: mdi:fountain
