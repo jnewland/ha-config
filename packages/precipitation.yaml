@@ -86,7 +86,8 @@ sensor:
                       default([{}]) |
                       rejectattr("precipitation", "none") |
                       map(attribute='datetime') |
-                      first %}
+                      first |
+                      default(false) %}
           {% if not next_rain %}
             {{ state_attr("weather.dark_sky", "forecast")| length }}
           {% else %}
