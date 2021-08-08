@@ -747,6 +747,9 @@ script:
 
   haunt:
     sequence:
+      - condition: template
+        value_template: |
+          {{ states(entity_id) != "unknown" }}
       - service: light.turn_on
         data:
           brightness_step_pct: |
