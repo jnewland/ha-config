@@ -119,7 +119,7 @@ action:
           {{ domain_emoji[new_state.domain] | default(":control_knobs:") -}}{{ " " -}}
         {% endif -%}
         *{{ new_state.name | capitalize -}}*{{ " " -}}
-        is {% if new_state.state == "" %}{{ "'' " }}{% else %}*_{{ new_state.state | capitalize }}{{ new_state.attributes.unit_of_measurement }}_*{{ " " }}{% endif -%}
-        after being {{ old_state.state | capitalize }}{{ old_state.attributes.unit_of_measurement }}{{ " " -}}
+        is {% if new_state.state == "" %}{{ "'' " }}{% else %}*_{{ new_state.state | capitalize }}{{ state_attr(new_state.entity_id, 'unit_of_measurement') }}_*{{ " " }}{% endif -%}
+        after being {{ old_state.state | capitalize }}{{ state_attr(old_state.entity_id, 'unit_of_measurement') }}{{ " " -}}
         for {{ relative_time(old_state.last_changed) }}
       {% endif -%}
