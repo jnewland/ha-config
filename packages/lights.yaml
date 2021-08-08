@@ -230,8 +230,8 @@ automation:
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "binary_sensor" and
               trigger.event.data.new_state.state == "on" and (
-                state_attr(trigger.event.data.new_state.entity_id, 'trigger_service') is defined or
-                state_attr(trigger.event.data.new_state.entity_id, 'trigger_entity_id') is defined
+                state_attr(trigger.event.data.entity_id, 'trigger_service') is defined or
+                state_attr(trigger.event.data.entity_id, 'trigger_entity_id') is defined
               )
             }}
         - condition: template
@@ -239,17 +239,17 @@ automation:
             {{ states.input_select.mode.state != "Away" }}
     action:
       - service: >
-          {{ state_attr(trigger.event.data.new_state.entity_id, 'trigger_service') | default('homeassistant.turn_on') }}
+          {{ state_attr(trigger.event.data.entity_id, 'trigger_service') | default('homeassistant.turn_on') }}
         data:
           entity_id: |
-            {{ state_attr(trigger.event.data.new_state.entity_id, 'trigger_entity_id') | default('') }}
+            {{ state_attr(trigger.event.data.entity_id, 'trigger_entity_id') | default('') }}
           brightness: |
-            {{ state_attr(trigger.event.data.new_state.entity_id, 'fixed_brightness') | default(states('input_number.brightness') | int) }}
+            {{ state_attr(state_attr(trigger.event.data.entity_id, 'trigger_entity_id') | default('input_number.brightness'), 'fixed_brightness') | default(states('input_number.brightness') | int) }}
       - service: system_log.write
         data:
           message: >
             at=on
-            entity_id={{ trigger.event.data.entity_id }} trigger_service={{ state_attr(trigger.event.data.new_state.entity_id, 'trigger_service') }} trigger_entity_id={{ state_attr(trigger.event.data.new_state.entity_id, 'trigger_entity_id') }}
+            entity_id={{ trigger.event.data.entity_id }} trigger_service={{ state_attr(trigger.event.data.entity_id, 'trigger_service') }} trigger_entity_id={{ state_attr(trigger.event.data.entity_id, 'trigger_entity_id') }}
           logger: packages.lights
           level: debug
       - service: counter.increment
@@ -267,8 +267,8 @@ automation:
         trigger.event.data.new_state.state != trigger.event.data.old_state.state and
         trigger.event.data.new_state.domain == "binary_sensor" and
         trigger.event.data.new_state.state == "off" and (
-          state_attr(trigger.event.data.new_state.entity_id, 'trigger_service_off') is defined or
-          state_attr(trigger.event.data.new_state.entity_id, 'trigger_entity_id_off') is defined
+          state_attr(trigger.event.data.entity_id, 'trigger_service_off') is defined or
+          state_attr(trigger.event.data.entity_id, 'trigger_entity_id_off') is defined
         )
       }}
     action:
@@ -416,24 +416,24 @@ automation:
           value_template: |
             {{
               trigger.event.data.old_state != None and
-              state_attr(trigger.event.data.new_state.entity_id, 'is_hue_group') is not defined and
+              state_attr(trigger.event.data.entity_id, 'is_hue_group') is not defined and
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "light" and
               trigger.event.data.new_state.state == "on" and
-              state_attr(trigger.event.data.new_state.entity_id, 'ignore_brightness') is not defined and
-              state_attr(trigger.event.data.new_state.entity_id, 'fixed_color_temp') is not defined
+              state_attr(trigger.event.data.entity_id, 'ignore_brightness') is not defined and
+              state_attr(trigger.event.data.entity_id, 'fixed_color_temp') is not defined
             }}
         - condition: template
           value_template: |
-            {{ state_attr(trigger.event.data.new_state.entity_id, 'brightness') | default(255) !=
-              state_attr(trigger.event.data.new_state.entity_id, 'fixed_brightness') | default(states('input_number.brightness') | int) }}
+            {{ state_attr(trigger.event.data.entity_id, 'brightness') | default(255) !=
+              state_attr(trigger.event.data.entity_id, 'fixed_brightness') | default(states('input_number.brightness') | int) }}
     action:
       - service: light.turn_on
         data:
           entity_id: |
-            {{ trigger.event.data.new_state.entity_id }}
+            {{ trigger.event.data.entity_id }}
           brightness: |
-            {{ state_attr(trigger.event.data.new_state.entity_id, 'fixed_brightness') | default(states('input_number.brightness') | int) }}
+            {{ state_attr(trigger.event.data.entity_id, 'fixed_brightness') | default(states('input_number.brightness') | int) }}
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -450,21 +450,21 @@ automation:
           value_template: |
             {{
               trigger.event.data.old_state != None and
-              state_attr(trigger.event.data.new_state.entity_id, 'is_hue_group') is not defined and
+              state_attr(trigger.event.data.entity_id, 'is_hue_group') is not defined and
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "light" and
               trigger.event.data.new_state.state == "on" and
-              state_attr(trigger.event.data.new_state.entity_id, 'fixed_color_temp') is defined
+              state_attr(trigger.event.data.entity_id, 'fixed_color_temp') is defined
             }}
     action:
       - service: light.turn_on
         data:
           entity_id: |
-            {{ trigger.event.data.new_state.entity_id }}
+            {{ trigger.event.data.entity_id }}
           color_temp: |
-            {{ state_attr(trigger.event.data.new_state.entity_id, 'fixed_color_temp') }}
+            {{ state_attr(trigger.event.data.entity_id, 'fixed_color_temp') }}
           brightness: |
-            {{ state_attr(trigger.event.data.new_state.entity_id, 'fixed_brightness') | default(states('input_number.brightness') | int) }}
+            {{ state_attr(trigger.event.data.entity_id, 'fixed_brightness') | default(states('input_number.brightness') | int) }}
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -505,7 +505,7 @@ automation:
           trigger.event.data.new_state.domain == "light" and
           trigger.event.data.old_state != None and
           ( trigger.event.data.new_state.state != trigger.event.data.old_state.state or
-            state_attr(trigger.event.data.new_state.entity_id, 'brightness') != state_attr(trigger.event.data.old_state.entity_id, 'brightness') )
+            state_attr(trigger.event.data.entity_id, 'brightness') != state_attr(trigger.event.data.old_state.entity_id, 'brightness') )
         }}
     action:
       service: notify.slack
@@ -514,7 +514,7 @@ automation:
         message: |
           :bulb: *{{ trigger.event.data.new_state.name | capitalize }}*{{ " " -}}
           {%- if trigger.event.data.new_state.state == "on" -%}
-          *_{{ '%0.0f' % ( ( state_attr(trigger.event.data.new_state.entity_id, 'brightness') / 255 | round ) * 100 ) }}%_*
+          *_{{ '%0.0f' % ( ( state_attr(trigger.event.data.entity_id, 'brightness') / 255 | round ) * 100 ) }}%_*
           {%- else -%}
           *_Off_*
           {%- endif -%}{{ " " -}}
@@ -542,7 +542,7 @@ automation:
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "binary_sensor" and
               trigger.event.data.new_state.state == "on" and
-              state_attr(trigger.event.data.new_state.entity_id, 'haunt') is defined
+              state_attr(trigger.event.data.entity_id, 'haunt') is defined
             }}
         - condition: template
           value_template: |
