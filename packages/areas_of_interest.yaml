@@ -3,8 +3,6 @@ sensor:
     sensors:
       jphone_12_areas_of_interest:
         friendly_name: jPhone 12 areas of interest
-        entity_id:
-          - sensor.jphone_12_geocoded_location
         value_template: |
           {{ state_attr('sensor.jphone_12_geocoded_location', 'Areas Of Interest') | join(' ,') }}
 
