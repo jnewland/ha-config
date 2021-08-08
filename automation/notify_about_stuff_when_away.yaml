@@ -40,9 +40,9 @@ action:
       push:
         category: camera
       entity_id: >
-        {%- if trigger.to_state.entity_id == "binary_sensor.gate" -%}
+        {%- if trigger.entity_id == "binary_sensor.gate" -%}
         camera.gate
-        {%- elif trigger.to_state.entity_id == "binary_sensor.garage" -%}
+        {%- elif trigger.entity_id == "binary_sensor.garage" -%}
         camera.garage
         {%- else -%}
         camera.front_yard_left
@@ -50,9 +50,9 @@ action:
       attachment:
         url: >
           https://home.jnewland.com/
-          {%- if trigger.to_state.entity_id == "binary_sensor.gate" -%}
+          {%- if trigger.entity_id == "binary_sensor.gate" -%}
           {{ state_attr('camera.gate', 'entity_picture') }}
-          {%- elif trigger.to_state.entity_id == "binary_sensor.garage" -%}
+          {%- elif trigger.entity_id == "binary_sensor.garage" -%}
           {{ state_attr('camera.garage', 'entity_picture') }}
           {%- else -%}
           {{ state_attr('camera.front_yard_left', 'entity_picture') }}

@@ -481,16 +481,16 @@ automation:
       value_template: |
         {{
           trigger.from_state.state != trigger.to_state.state and
-          state_attr(trigger.to_state.entity_id, 'trigger_entity_id') is defined
+          state_attr(trigger.entity_id, 'trigger_entity_id') is defined
         }}
     action:
       service: >
-        {{ state_attr(trigger.to_state.entity_id, 'trigger_service') | default('homeassistant.turn_on') }}
+        {{ state_attr(trigger.entity_id, 'trigger_service') | default('homeassistant.turn_on') }}
       data:
         entity_id: |
-          {{ state_attr(trigger.to_state.entity_id, 'trigger_entity_id') }}
+          {{ state_attr(trigger.entity_id, 'trigger_entity_id') }}
         brightness: |
-          {{ state_attr(trigger.to_state.entity_id, 'fixed_brightness') | default(states('input_number.brightness') | int) }}
+          {{ state_attr(trigger.entity_id, 'fixed_brightness') | default(states('input_number.brightness') | int) }}
 
   - alias: log light changes to slack
     mode: parallel

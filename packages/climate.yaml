@@ -42,13 +42,13 @@ automation:
     action:
       - service: climate.set_hvac_mode
         data:
-          entity_id: "{{ trigger.to_state.entity_id }}"
+          entity_id: "{{ trigger.entity_id }}"
           hvac_mode: heat
       - delay:
           seconds: 10
       - service: climate.set_temperature
         data:
-          entity_id: "{{ trigger.to_state.entity_id }}"
+          entity_id: "{{ trigger.entity_id }}"
           temperature: 69
 
   - alias: upstairs AC
@@ -65,13 +65,13 @@ automation:
     action:
       - service: climate.set_hvac_mode
         data:
-          entity_id: "{{ trigger.to_state.entity_id }}"
+          entity_id: "{{ trigger.entity_id }}"
           hvac_mode: cool
       - delay:
           seconds: 10
       - service: climate.set_temperature
         data:
-          entity_id: "{{ trigger.to_state.entity_id }}"
+          entity_id: "{{ trigger.entity_id }}"
           temperature: 73
 
   - alias: upstairs reading
