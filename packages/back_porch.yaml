@@ -23,3 +23,22 @@ script:
       - service: lock.lock
         data:
           entity_id: lock.back_porch
+  turn_on_switch:
+    sequence:
+      - service: switch.turn_on
+        data:
+          entity_id: >
+            {{ entity_id }}
+  turn_off_switch:
+    sequence:
+      - service: switch.turn_off
+        data:
+          entity_id: >
+            {{ entity_id }}
+
+homeassistant:
+  customize:
+    binary_sensor.back_porch_occupancy:
+      trigger_service: script.turn_on_switch
+      trigger_service_off: script.turn_off_switch
+      trigger_entity_id: switch.back_porch_fan

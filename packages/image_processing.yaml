@@ -31,10 +31,6 @@ binary_sensor:
         value_template: |
           {{ float(states('sensor.back_porch_person')) | default(0) > 0 }}
 
-homeassistant:
-  customize:
-    binary_sensor.back_porch_occupancy:
-      trigger_entity_id: switch.back_porch_fan
 
 automation:
   - alias: Post frigate images during events
