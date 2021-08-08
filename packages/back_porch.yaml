@@ -42,3 +42,4 @@ homeassistant:
       trigger_service: script.turn_on_switch
       trigger_service_off: script.turn_off_switch
       trigger_entity_id: switch.back_porch_fan
+      trigger_entity_id_off: switch.back_porch_fan
