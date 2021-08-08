@@ -236,6 +236,7 @@ views:
           - switch.back_porch
           - switch.back_porch_fountain
           - switch.bug_zapper
+          - switch.back_porch_fan
           - light.ac
           - lock.back_porch
       - type: entities
