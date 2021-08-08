@@ -551,7 +551,7 @@ automation:
       - service: script.haunt
         data:
           entity_id: |
-            {{ expand(state_attr(trigger.event.data.entity_id, 'haunt').split(",")) | selectattr("state", "equalto", "on") | map(attribute="entity_id") | join(",") }}
+            {{ expand(( state_attr(trigger.event.data.entity_id, 'haunt') | default('') ).split(",")) | selectattr("state", "equalto", "on") | map(attribute="entity_id") | join(",") }}
 
 counter:
   light_automations:
