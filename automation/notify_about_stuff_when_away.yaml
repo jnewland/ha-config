@@ -51,11 +51,11 @@ action:
         url: >
           https://home.jnewland.com/
           {%- if trigger.to_state.entity_id == "binary_sensor.gate" -%}
-          {{ states.camera.gate.attributes.entity_picture }}
+          {{ state_attr('camera.gate', 'entity_picture') }}
           {%- elif trigger.to_state.entity_id == "binary_sensor.garage" -%}
-          {{ states.camera.garage.attributes.entity_picture }}
+          {{ state_attr('camera.garage', 'entity_picture') }}
           {%- else -%}
-          {{ states.camera.front_yard_left.attributes.entity_picture }}
+          {{ state_attr('camera.front_yard_left', 'entity_picture') }}
           {%- endif -%}
         content-type: jpeg
         hide-thumbnail: false

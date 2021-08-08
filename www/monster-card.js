@@ -9,7 +9,7 @@ class MonsterCard extends HTMLElement {
       return stateObj.entity_id.search(regEx) === 0;
     }
     function _filterName(stateObj, pattern) {
-      let compareEntity = stateObj.attributes.title ? stateObj.attributes.title : stateObj.attributes.friendly_name;
+      let compareEntity = state_attr(stateObj.entity_id, 'title') ? state_attr(stateObj.entity_id, 'title') : stateObj.attributes.friendly_name;
       if (!compareEntity) compareEntity = stateObj.entity_id;
       if (pattern.indexOf('*') === -1) {
         return compareEntity === pattern;

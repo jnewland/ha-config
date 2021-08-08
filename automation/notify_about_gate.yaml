@@ -14,7 +14,7 @@ action:
         entity_id: camera.front_yard_left
         attachment:
           url: |
-            https://home.jnewland.com{{ states.camera.front_yard_left.attributes.entity_picture }}
+            https://home.jnewland.com{{ state_attr('camera.front_yard_left', 'entity_picture') }}
           content-type: jpeg
           hide-thumbnail: false
   - service: script.notify_with_lights
@@ -28,4 +28,4 @@ action:
       data:
         file:
           url: |
-            https://home.jnewland.com{{ states.camera.front_yard_left.attributes.entity_picture }}
+            https://home.jnewland.com{{ state_attr('camera.front_yard_left', 'entity_picture') }}

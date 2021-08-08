@@ -24,7 +24,7 @@ script:
       - condition: template
         value_template: |
           {{
-            " camera" in states[entity_id].attributes.media_title and
+            " camera" in state_attr(entity_id, 'media_title') and
             camera not in entity_id
           }}
       - service: media_player.select_source

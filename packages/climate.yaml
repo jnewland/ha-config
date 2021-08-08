@@ -30,7 +30,7 @@ automation:
       platform: numeric_state
       entity_id:
         - climate.upstairs
-      value_template: "{{ state.attributes.current_temperature }}"
+      value_template: "{{ state_attr(state.entity_id, 'current_temperature') }}"
       below: 68
       for:
         minutes: 3
@@ -38,7 +38,7 @@ automation:
       condition: numeric_state
       entity_id: weather.dark_sky
       below: 68
-      value_template: "{{ state.attributes.temperature }}"
+      value_template: "{{ state_attr(state.entity_id, 'temperature') }}"
     action:
       - service: climate.set_hvac_mode
         data:
@@ -58,7 +58,7 @@ automation:
       platform: numeric_state
       entity_id:
         - climate.upstairs
-      value_template: "{{ state.attributes.current_temperature }}"
+      value_template: "{{ state_attr(state.entity_id, 'current_temperature') }}"
       above: 73
       for:
         minutes: 3
