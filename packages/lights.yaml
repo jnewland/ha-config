@@ -125,7 +125,7 @@ homeassistant:
       fixed_color_temp: 396
 
     light.pergola_pendants:
-      fixed_brightness: 64
+      fixed_brightness: 103
 
     light.bedside_table_white:
       ignore_brightness: true
