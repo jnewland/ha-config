@@ -1,6 +1,6 @@
 name: Great Room Away
 entities:
-  light.cabinets: "on"
+  light.kitchen_cabinets: "on"
   light.dining_room_table: "on"
   light.kitchen: "on"
   light.living: "on"

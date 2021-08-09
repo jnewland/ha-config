@@ -114,8 +114,8 @@ homeassistant:
       fixed_brightness: 255
     light.garage_door:
       fixed_brightness: 255
-    light.cabinets:
-      fixed_brightness: 255
+    light.kitchen_cabinets:
+      notify_action: duck
 
     light.bookshelf:
       fixed_color_temp: 396

@@ -86,7 +86,7 @@ views:
       - type: entities
         title: great room
         entities:
-          - light.cabinets
+          - light.kitchen_cabinets
           - light.kitchen
           - light.pendants
           - light.dining_room_table
