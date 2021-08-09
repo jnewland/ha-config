@@ -21,6 +21,8 @@ sequence:
     - lock.garage
 - service: light.turn_off
   entity_id: light.bamboo
+- service: light.turn_off
+  entity_id: light.pergola_pendants
 - service: input_number.set_value
   data:
     entity_id: input_number.brightness

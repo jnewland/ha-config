@@ -70,7 +70,7 @@ automation:
     - service: light.turn_on
       entity_id:
         - group.speakers
-        - light.cabinets
+        - light.kitchen_cabinets
         - light.record_cabinet_left
         - light.record_cabinet_right
     - service: alarm_control_panel.alarm_disarm

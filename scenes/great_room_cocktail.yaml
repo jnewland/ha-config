@@ -1,6 +1,6 @@
 name: Great Room Cocktail
 entities:
-  light.cabinets: "off"
+  light.kitchen_cabinets: "off"
   light.dining_room_table: "off"
   light.kitchen: "off"
   light.living: "off"

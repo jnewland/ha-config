@@ -1,6 +1,6 @@
 name: Great Room Cooking
 entities:
-  light.cabinets: "on"
+  light.kitchen_cabinets: "on"
   light.dining_room_table: "off"
   light.kitchen: "on"
   light.living: "off"

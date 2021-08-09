@@ -1,6 +1,6 @@
 name: great room
 entities:
-- light.cabinets
+- light.kitchen_cabinets
 - light.dining_room_table
 - light.kitchen
 - light.living

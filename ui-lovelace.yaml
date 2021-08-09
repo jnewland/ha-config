@@ -46,7 +46,7 @@ views:
       - type: picture-glance
         camera_image: camera.back_porch
         entities:
-          - switch.back_porch
+          - switch.back_porch_fan
           - switch.back_porch_fountain
           - switch.bug_zapper
           - lock.back_porch
@@ -86,7 +86,7 @@ views:
       - type: entities
         title: great room
         entities:
-          - light.cabinets
+          - light.kitchen_cabinets
           - light.kitchen
           - light.pendants
           - light.dining_room_table
@@ -234,9 +234,9 @@ views:
         title: back porch
         entities:
           - switch.back_porch
+          - switch.back_porch_fan
           - switch.back_porch_fountain
           - switch.bug_zapper
-          - switch.back_porch_fan
           - light.ac
           - lock.back_porch
       - type: entities
