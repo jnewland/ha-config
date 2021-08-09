@@ -46,7 +46,7 @@ views:
       - type: picture-glance
         camera_image: camera.back_porch
         entities:
-          - switch.back_porch_fan
+          - group.back_porch_fan
           - switch.back_porch_fountain
           - switch.bug_zapper
           - lock.back_porch
@@ -234,7 +234,7 @@ views:
         title: back porch
         entities:
           - switch.back_porch
-          - switch.back_porch_fan
+          - group.back_porch_fan
           - switch.back_porch_fountain
           - switch.bug_zapper
           - light.ac
