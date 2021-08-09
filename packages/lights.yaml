@@ -553,6 +553,36 @@ automation:
           entity_id: |
             {{ expand(trigger.event.data.new_state.attributes.haunt.split(",")) | selectattr("state", "equalto", "on") | map(attribute="entity_id") | join(",") }}
 
+  - id: 9202d1a3-9f1e-40fd-b63b-b3d98793335e
+    alias: cabinet sync on
+    trigger:
+      - platform: state
+        entity_id: light.cabinets
+        to: 'on'
+      - platform: state
+        entity_id: light.kitchen_cabinets
+        to: 'on'
+    action:
+      - service: light.turn_on
+        entity_id: light.cabinets
+      - service: light.turn_on
+        entity_id: light.kitchen_cabinets
+
+  - id: 484d656f-27dd-401a-8b84-0b4dee730a78
+    alias: cabinet sync off
+    trigger:
+      - platform: state
+        entity_id: light.cabinets
+        to: 'off'
+      - platform: state
+        entity_id: light.kitchen_cabinets
+        to: 'off'
+    action:
+      - service: light.turn_off
+        entity_id: light.cabinets
+      - service: light.turn_off
+        entity_id: light.kitchen_cabinets
+
 counter:
   light_automations:
     name: Light Automations
