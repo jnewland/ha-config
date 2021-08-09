@@ -96,7 +96,7 @@ homeassistant:
     # duck_step: int | default(127)
     light.atrium:
       notify_action: duck
-      fixed_brightness: 127
+      fixed_brightness: 64
     light.bamboo:
       notify_action: duck
       fixed_brightness: 127
@@ -125,7 +125,7 @@ homeassistant:
       fixed_color_temp: 396
 
     light.pergola_pendants:
-      fixed_brightness: 128
+      fixed_brightness: 64
 
     light.bedside_table_white:
       ignore_brightness: true
