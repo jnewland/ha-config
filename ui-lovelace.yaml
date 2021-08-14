@@ -536,16 +536,29 @@ views:
       #     - binary_sensor.kitchen_needs_water
       #     - sensor.kitchen_nutrients_days
       #     - sensor.kitchen_planted_days
+
       - type: custom:auto-entities
         card:
           type: entities
           show_header_toggle: false
-          title: Irrigation
+          title: quick run
         filter:
           include:
+            - entity_id: "/.*_sprayers$/"
+            - entity_id: "/.*_drip$/"
             - entity_id: "/.*_zone$/"
+            - entity_id: "/.*_schedule$/"
+
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: false
+          title: schedule
+        filter:
+          include:
             - entity_id: "/.*_program$/"
             - entity_id: "/.*_rain_delay$/"
+            - entity_id: "/^switch.*irrigation/"
 
       - type: custom:auto-entities
         card:
@@ -554,6 +567,9 @@ views:
         filter:
           include:
             - entity_id: "/.*_zone$/"
+            - entity_id: "/.*_drip$/"
+            - entity_id: "/.*_sprayers$/"
+            - entity_id: "/.*_schedule$/"
             
       - type: history-graph
         title: light
