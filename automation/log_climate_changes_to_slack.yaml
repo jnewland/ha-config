@@ -8,7 +8,18 @@ action:
   service: notify.slack
   data:
     title: ':thermometer:'
-    message: |
-      {% set old_state = trigger.from_state %}
+    message: >-
       {% set new_state = trigger.to_state %}
-      *{{ new_state.name | capitalize }}* is currently *_{{ new_state.attributes.current_temperature }}{{ new_state.attributes.unit_of_measurement }}_*, set to *_{{ new_state.attributes.temperature }}{{ new_state.attributes.unit_of_measurement }}_* in *_{{ new_state.state }}_* mode
+      {% set unit_of_measurement = state_attr(new_state.entity_id, 'unit_of_measurement') if state_attr(new_state.entity_id, 'unit_of_measurement') is not none %}
+      *{{ new_state.name | capitalize }}*
+      is currently
+      *_{{ state_attr(new_state.entity_id, 'current_temperature') }}{{ unit_of_measurement }}_*,
+      set to
+      {% if state_attr(new_state.entity_id, 'temperature') is not none %}
+      *_{{ state_attr(new_state.entity_id, 'temperature') }}{{ unit_of_measurement }}_*
+      {% endif %}
+      {% if state_attr(new_state.entity_id, 'target_temp_high') is not none %}
+      *_{{ state_attr(new_state.entity_id, 'target_temp_low') }}{{ unit_of_measurement }}_* -
+      *_{{ state_attr(new_state.entity_id, 'target_temp_high') }}{{ unit_of_measurement }}_*
+      {% endif %}
+      in *_{{ states(new_state.entity_id) }}_* mode
