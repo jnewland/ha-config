@@ -1,11 +1,11 @@
 default: info
 logs:
-  packages.lights: debug
   packages.image_processing: info
   requests.packages.urllib3.connectionpool: critical
   homeassistant.components.media_player: warn
   homeassistant.components.light: warn
   homeassistant.components.binary_sensor: warn
+  homeassistant.components.rachio: debug
   homeassistant.components.switch: warn
   homeassistant.components.sensor: warn
   homeassistant.components.http: warn
