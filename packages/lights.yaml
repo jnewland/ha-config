@@ -249,7 +249,9 @@ automation:
         data:
           message: >
             at=on
-            entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_entity_id }}
+            entity_id={{ trigger.event.data.entity_id }}
+            trigger_service={{ state_attr(trigger.event.data.new_state.entity_id,'trigger_service') }}
+            trigger_entity_id={{ state_attr(trigger.event.data.new_state.entity_id,'trigger_entity_id') }}
           logger: packages.lights
           level: debug
       - service: counter.increment
