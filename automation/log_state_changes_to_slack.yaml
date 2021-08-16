@@ -84,6 +84,7 @@ action:
     message: >
       {% set old_state = trigger.from_state %}
       {% set new_state = trigger.to_state %}
+      {% set unit_of_measurement = state_attr(new_state.entity_id, 'unit_of_measurement') if state_attr(new_state.entity_id, 'unit_of_measurement') is not none %}
       {% set domain_emoji = {
         "alarm_control_panel": ":rotating_light:",
         "automation":          ":gear:",
@@ -100,17 +101,17 @@ action:
         "binary_sensor.master_ac_water_13":   ":droplet:",
         "binary_sensor.front_gate_121":       ":house_with_garden:"
       } %}
-      {% set entity_state = new_state.entity_id + "." + new_state.state %}
-      {% set entity_state_emoji = {
-        "lock.front_door.locked":   ":lock:",
-        "lock.front_door.unlocked": ":unlock:"
+      {% set domain_state = new_state.domain + "." + new_state.state %}
+      {% set domain_state_emojis = {
+        "lock.locked":   ":lock:",
+        "lock.unlocked": ":unlock:"
       } %}
-      {% if entity_state_emoji[entity_state] | default(none) != none -%}
-        {{ entity_state_emoji[entity_state] -}}
+      {% if domain_state_emojis[domain_state] | default(none) != none -%}
+        {{ domain_state_emojis[domain_state] -}}
         *{{ new_state.name | capitalize -}}*{{ " " -}}
-        is {{ entity_state_emoji[entity_state] -}}
-        {% set old_entity_state = new_state.entity_id + "." + old_state.state -%}
-        after being {{ entity_state_emoji[old_entity_state] }}{{ " " -}}
+        is {{ domain_state_emojis[domain_state] -}}
+        {% set old_domain_state = new_state.domain + "." + old_state.state -%}
+        after being {{ domain_state_emojis[domain_state] }}{{ " " -}}
         for {{ relative_time(old_state.last_changed) }}
       {% else -%}
         {% if entity_emoji[new_state.entity_id] | default(none) != none -%}
@@ -119,7 +120,7 @@ action:
           {{ domain_emoji[new_state.domain] | default(":control_knobs:") -}}{{ " " -}}
         {% endif -%}
         *{{ new_state.name | capitalize -}}*{{ " " -}}
-        is {% if new_state.state == "" %}{{ "'' " }}{% else %}*_{{ new_state.state | capitalize }}{{ state_attr(new_state.entity_id, 'unit_of_measurement') }}_*{{ " " }}{% endif -%}
-        after being {{ old_state.state | capitalize }}{{ state_attr(old_state.entity_id, 'unit_of_measurement') }}{{ " " -}}
+        is {% if new_state.state == "" %}{{ "'' " }}{% else %}*_{{ new_state.state | capitalize }}{{ unit_of_measurement }}_*{{ " " }}{% endif -%}
+        after being {{ old_state.state | capitalize }}{{ unit_of_measurement }}{{ " " -}}
         for {{ relative_time(old_state.last_changed) }}
       {% endif -%}
