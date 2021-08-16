@@ -249,7 +249,9 @@ automation:
         data:
           message: >
             at=on
-            entity_id={{ trigger.event.data.entity_id }} trigger_service={{ trigger.event.data.new_state.attributes.trigger_service }} trigger_entity_id={{ trigger.event.data.new_state.attributes.trigger_entity_id }}
+            entity_id={{ trigger.event.data.entity_id }}
+            trigger_service={{ state_attr(trigger.event.data.new_state.entity_id,'trigger_service') }}
+            trigger_entity_id={{ state_attr(trigger.event.data.new_state.entity_id,'trigger_entity_id') }}
           logger: packages.lights
           level: debug
       - service: counter.increment
@@ -304,8 +306,8 @@ automation:
           message: >
             at=off
             entity_id={{ trigger.event.data.entity_id }}
-            trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
-            trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
+            trigger_service_off={{ state_attr(trigger.event.data.entity_id,'trigger_service_off') }}
+            trigger_entity_id_off={{ state_attr(trigger.event.data.entity_id,'trigger_entity_id_off') }}
           logger: packages.lights
           level: debug
       - service: counter.increment
@@ -374,8 +376,8 @@ automation:
             at=off
             event_id={{ trigger.event.data.event_id }}
             entity_id={{ trigger.event.data.entity_id }}
-            trigger_service_off={{ states[trigger.event.data.entity_id].attributes.trigger_service_off }}
-            trigger_entity_id_off={{ states[trigger.event.data.entity_id].attributes.trigger_entity_id_off }}
+            trigger_service_off={{ state_attr(trigger.event.data.entity_id,'trigger_service_off') }}
+            trigger_entity_id_off={{ state_attr(trigger.event.data.entity_id,'trigger_entity_id_off') }}
           logger: packages.lights
           level: debug
       - service: counter.increment
