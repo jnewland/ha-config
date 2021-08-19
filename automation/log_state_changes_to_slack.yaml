@@ -65,6 +65,7 @@ trigger:
     - binary_sensor.kitchen_needs_water
     - switch.patio_irrigation_rain_delay
     - switch.patio_zone
+    - group.back_porch_fan
 condition:
   condition: template
   value_template: |
