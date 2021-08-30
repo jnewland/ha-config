@@ -55,13 +55,28 @@ automation:
     mode: queued
     id: c66cded8-2a60-4dd4-96cc-677ff080934c
     trigger:
-      platform: numeric_state
-      entity_id:
-        - climate.upstairs
-      value_template: "{{ state.attributes.current_temperature }}"
-      above: 73
-      for:
-        minutes: 3
+      - platform: numeric_state
+        entity_id:
+          - climate.upstairs
+        value_template: "{{ state.attributes.current_temperature }}"
+        above: 73
+        for:
+          minutes: 3
+      - platform: numeric_state
+        entity_id:
+          - climate.upstairs
+        value_template: "{{ state.attributes.current_temperature }}"
+        above: 74
+      - platform: numeric_state
+        entity_id:
+          - climate.upstairs
+        value_template: "{{ state.attributes.current_temperature }}"
+        above: 75
+      - platform: numeric_state
+        entity_id:
+          - climate.upstairs
+        value_template: "{{ state.attributes.current_temperature }}"
+        above: 75
     action:
       - service: climate.set_hvac_mode
         data:
