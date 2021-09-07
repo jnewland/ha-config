@@ -58,6 +58,7 @@ automation:
           confirmation_message: locked up after the cleaners
 script:
   lock_up_after_cleaners:
+    sequence:
     - service: script.turn_on
       data:
         entity_id: script.mode_away
