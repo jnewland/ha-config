@@ -76,4 +76,3 @@ input_datetime:
     has_date: false
     has_time: true
     initial: "07:45:00"
-diff --git a/homekit.yaml b/homekit.yaml
