@@ -8,6 +8,13 @@ automation:
             states('sensor.time') ==
             (state_attr('input_datetime.wake_up', 'timestamp') | int | timestamp_custom('%H:%M', False))
           }}
+    condition:
+      condition: template
+      value_template: |
+        {{
+          states.device_tracker.jphone_12.state != "not_home" or 
+          states.device_tracker.katie_s_iphone.state != "not_home"
+        }}
     action:
     - service: homeassistant.turn_off
       entity_id: group.outdoor_speakers
