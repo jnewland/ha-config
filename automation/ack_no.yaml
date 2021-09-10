@@ -7,7 +7,7 @@ trigger:
   event_data:
     actionName: ACK_NO
 action:
-  service: notify.slack
-  data:
-    title: ':-1:'
-    message: nope to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}
+  - service: notify.slack
+    data:
+      title: ':-1:'
+      message: nope to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}

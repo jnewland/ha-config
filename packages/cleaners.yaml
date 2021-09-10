@@ -1,0 +1,79 @@
+automation:
+  - alias: Prep for cleaners
+    id: 294b8206-9e32-4968-979b-96ffbfb45f68
+    trigger:
+      - platform: time
+        at: input_datetime.cleaners_prep_time
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: input_boolean.cleaners
+        state: "on"
+      - condition: state
+        entity_id: device_tracker.jphone_12
+        state: "not_home"
+      - condition: state
+        entity_id: device_tracker.katie_s_iphone
+        state: "not_home"
+    action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.mode
+        option: Morning
+    - service: lock.unlock
+      data:
+        entity_id: lock.front_door
+    - delay: 30
+    - service: notify.iphones
+      data:
+        message: house prepped for cleaners. front door is {{ states.lock.front_door.state }}. alarm is {{ states.alarm_control_panel.alarm.state }}.
+        data:
+          apns_headers:
+            'apns-collapse-id': cleaners
+          push:
+            category: camera
+          entity_id: camera.front_yard_left
+          attachment:
+            url: |
+              https://home.jnewland.com{{ states.camera.front_yard_left.attributes.entity_picture }}
+            content-type: jpeg
+            hide-thumbnail: false
+  - alias: Notify about cleaners departure
+    id: f655bd99-1c9d-41e0-8ba8-f3c696e6dcef
+    trigger:
+      platform: state
+      entity_id: lock.front_door
+      to: locked
+    condition:
+      condition: state
+      entity_id: input_boolean.cleaners
+      state: "on"
+    action:
+      - service: script.ask_about_turning_on
+        data:
+          entity_id: script.lock_up_after_cleaners
+          apns_collapse_id: cleaners
+          message: "The front door has been locked. Turn off cleaning mode and turn on away?"
+          confirmation_message: locked up after the cleaners
+script:
+  lock_up_after_cleaners:
+    sequence:
+    - service: script.turn_on
+      data:
+        entity_id: script.mode_away
+    - service: homeassistant.turn_off
+      data:
+        entity_id: input_boolean.cleaners
+
+input_boolean:
+  cleaners:
+    name: Cleaners
+    icon: mdi:broom
+
+input_datetime:
+  cleaners_prep_time:
+    name: Cleaners Prep Time
+    has_date: false
+    has_time: true
+    initial: "07:45:00"

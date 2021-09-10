@@ -7,6 +7,10 @@ trigger:
   to: unlocked
   for:
     minutes: 5
+condition:
+  condition: state
+  entity_id: input_boolean.cleaners
+  state: "off"
 action:
 - service: script.ask_about_turning_on
   data:

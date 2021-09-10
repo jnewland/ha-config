@@ -13,6 +13,7 @@ views:
           - binary_sensor.front_gate
           - input_number.brightness
           - vacuum.downstairs
+          - input_boolean.cleaners
           - light.front_porch
       - type: conditional
         conditions:
@@ -773,6 +774,8 @@ views:
         title: settings
         show_header_toggle: false
         entities:
+          - input_boolean.cleaners
+          - input_datetime.cleaners_prep_time
           - input_boolean.guests
           - automation.away_mode
           - vacuum.downstairs
