@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: script-deploy
     steps:
-      - uses: actions/github-script@v4
+      - uses: actions/github-script@v5
         with:
           script: |
             await github.repos.createCommitStatus({
