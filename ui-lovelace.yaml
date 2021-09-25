@@ -114,6 +114,8 @@ views:
         entities:
           - light.lounge_overhead
           - light.lounge_chandelier
+          - light.tv_left
+          - light.tv_right
           - switch.lounge_left
           - switch.lounge_right
           - binary_sensor.lounge_motion
