@@ -49,3 +49,13 @@ script:
       - service: notify.iphones
         data:
           message: 'Check out the sunset!'
+          data:
+            push:
+              category: camera
+            entity_id: camera.roof_deck
+            attachment:
+              url: |
+                https://home.jnewland.com{{ states.camera.frontroof_deck_yard_left.attributes.entity_picture }}
+              content-type: jpeg
+              hide-thumbnail: false
+
