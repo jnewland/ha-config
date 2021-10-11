@@ -55,7 +55,7 @@ script:
             entity_id: camera.roof_deck
             attachment:
               url: |
-                https://home.jnewland.com{{ states.camera.frontroof_deck_yard_left.attributes.entity_picture }}
+                https://home.jnewland.com{{ states.camera.roof_deck.attributes.entity_picture }}
               content-type: jpeg
               hide-thumbnail: false
 
