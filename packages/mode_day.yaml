@@ -1,5 +1,16 @@
 automation:
   - alias: Day mode
+    id: 2dae0bc7-1bb7-43c2-a283-e6b5def2f72c
+    trigger:
+      - platform: state
+        entity_id: input_select.mode
+        to: Day
+    action:
+      - service: homeassistant.turn_off
+        entity_id:
+          - group.indoor_cams
+
+  - alias: Morning to day
     id: 1b8d26f9-de80-446b-90c1-da385fd0e0b7
     trigger:
       - platform: state
