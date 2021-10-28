@@ -620,6 +620,12 @@ input_number:
     step: 1
 
 script:
+  makeup:
+    sequence:
+      - service: input_number.set_value
+        data:
+          entity_id: input_number.brightness
+          value: 255
   great_room_lights:
     sequence:
       - service: scene.turn_on
