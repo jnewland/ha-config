@@ -14,11 +14,7 @@ sequence:
       {% else %}
       group.downstairs
       {% endif %}
-- service: lock.lock
-  data:
-    entity_id:
-    - lock.back_porch
-    - lock.garage
+- service: script.lock_up
 - service: light.turn_off
   entity_id: light.bamboo
 - service: light.turn_off

@@ -1,6 +1,9 @@
 sequence:
   - service: lock.lock
-    entity_id: lock.front_door
+    entity_id:
+    - lock.front_door
+    - lock.back_porch
+    - lock.garage
   - service: python_script.close_if_open
     entity_id: cover.garage
   - service: python_script.close_if_open
