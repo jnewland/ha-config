@@ -26,6 +26,6 @@ filter:
     - script.mode_party
     - script.mode_cooking
     - script.mode_cocktail
-    - switch.makeup
+    - script.makeup
     - vacuum.downstairs
     - light.global_brightness
