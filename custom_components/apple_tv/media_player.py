@@ -1,5 +1,7 @@
 """Support for Apple TV media player."""
+import asyncio
 import logging
+from os import path
 
 from pyatv.const import (
     DeviceState,
@@ -9,6 +11,7 @@ from pyatv.const import (
     RepeatState,
     ShuffleState,
 )
+from pyatv.helpers import is_streamable
 
 from homeassistant.components.media_player import MediaPlayerEntity
 from homeassistant.components.media_player.const import (
@@ -49,9 +52,14 @@ _LOGGER = logging.getLogger(__name__)
 
 PARALLEL_UPDATES = 0
 
+# We always consider these to be supported
+SUPPORT_BASE = SUPPORT_TURN_ON | SUPPORT_TURN_OFF
+
+# This is the "optimistic" view of supported features and will be returned until the
+# actual set of supported feature have been determined (will always be all or a subset
+# of these).
 SUPPORT_APPLE_TV = (
-    SUPPORT_TURN_ON
-    | SUPPORT_TURN_OFF
+    SUPPORT_BASE
     | SUPPORT_PLAY_MEDIA
     | SUPPORT_PAUSE
     | SUPPORT_PLAY
@@ -65,6 +73,23 @@ SUPPORT_APPLE_TV = (
 )
 
 
+# Map features in pyatv to Home Assistant
+SUPPORT_FEATURE_MAPPING = {
+    FeatureName.PlayUrl: SUPPORT_PLAY_MEDIA,
+    FeatureName.StreamFile: SUPPORT_PLAY_MEDIA,
+    FeatureName.Pause: SUPPORT_PAUSE,
+    FeatureName.Play: SUPPORT_PLAY,
+    FeatureName.SetPosition: SUPPORT_SEEK,
+    FeatureName.Stop: SUPPORT_STOP,
+    FeatureName.Next: SUPPORT_NEXT_TRACK,
+    FeatureName.Previous: SUPPORT_PREVIOUS_TRACK,
+    FeatureName.VolumeUp: SUPPORT_VOLUME_STEP,
+    FeatureName.VolumeDown: SUPPORT_VOLUME_STEP,
+    FeatureName.SetRepeat: SUPPORT_REPEAT_SET,
+    FeatureName.SetShuffle: SUPPORT_SHUFFLE_SET,
+}
+
+
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Load Apple TV media player based on a config entry."""
     name = config_entry.data[CONF_NAME]
@@ -75,6 +100,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class AppleTvMediaPlayer(AppleTVEntity, MediaPlayerEntity):
     """Representation of an Apple TV media player."""
 
+    _attr_supported_features = SUPPORT_APPLE_TV
+
     def __init__(self, name, identifier, manager, **kwargs):
         """Initialize the Apple TV media player."""
         super().__init__(name, identifier, manager, **kwargs)
@@ -83,14 +110,32 @@ class AppleTvMediaPlayer(AppleTVEntity, MediaPlayerEntity):
     @callback
     def async_device_connected(self, atv):
         """Handle when connection is made to device."""
-        self.atv.push_updater.listener = self
-        self.atv.push_updater.start()
+        # NB: Do not use _is_feature_available here as it only works when playing
+        if self.atv.features.in_state(FeatureState.Available, FeatureName.PushUpdates):
+            self.atv.push_updater.listener = self
+            self.atv.push_updater.start()
+
+        self._attr_supported_features = SUPPORT_BASE
+
+        # Determine the actual set of supported features. All features not reported as
+        # "Unsupported" are considered here as the state of such a feature can never
+        # change after a connection has been established, i.e. an unsupported feature
+        # can never change to be supported.
+        all_features = self.atv.features.all_features()
+        for feature_name, support_flag in SUPPORT_FEATURE_MAPPING.items():
+            feature_info = all_features.get(feature_name)
+            if feature_info and feature_info.state != FeatureState.Unsupported:
+                self._attr_supported_features |= support_flag
+
+        # No need to schedule state update here as that will happen when the first
+        # metadata update arrives (sometime very soon after this callback returns)
 
     @callback
     def async_device_disconnected(self):
         """Handle when connection was lost to device."""
         self.atv.push_updater.stop()
         self.atv.push_updater.listener = None
+        self._attr_supported_features = SUPPORT_APPLE_TV
 
     @property
     def state(self):
@@ -171,13 +216,49 @@ class AppleTvMediaPlayer(AppleTVEntity, MediaPlayerEntity):
 
     async def async_play_media(self, media_type, media_id, **kwargs):
         """Send the play_media command to the media player."""
-        await self.atv.stream.play_url(media_id)
+        # TODO: When streaming audio, only local files are supported (by AirPlay). So
+        # this is a hack to wait for the media file to be written to cache when playing
+        # a TTS stream. Obviously this should not be here, a proper solution is needed.
+        # Maybe a support flag stating if playback of local files is supported?
+        if "/api/tts_proxy/" in media_id:
+            media_id = path.join(
+                self.hass.config.config_dir, "tts", media_id.split("/")[-1]
+            )
+
+            try:
+
+                async def _wait_for_tts_file(tts_file):
+                    _LOGGER.debug("Waiting for TTS file %s to appear", tts_file)
+                    while not path.exists(tts_file):
+                        await asyncio.sleep(0.5)
+
+                await asyncio.wait_for(_wait_for_tts_file(media_id), 5.0)
+            except asyncio.TimeoutError:
+                _LOGGER.error("Timed out while waiting for TTS file")
+                return
+
+        # If input (file) has a file format supported by pyatv, then stream it with
+        # RAOP. Otherwise try to play it with regular AirPlay.
+        if self._is_feature_available(FeatureName.StreamFile) and await is_streamable(
+            media_id
+        ):
+            _LOGGER.debug("Streaming %s via RAOP", media_id)
+            await self.atv.stream.stream_file(media_id)
+        elif self._is_feature_available(FeatureName.PlayUrl):
+            _LOGGER.debug("Playing %s via AirPlay", media_id)
+            await self.atv.stream.play_url(media_id)
+        else:
+            _LOGGER.error("Media streaming is not possible with current configuration")
 
     @property
     def media_image_hash(self):
         """Hash value for media image."""
         state = self.state
-        if self._playing and state not in [None, STATE_OFF, STATE_IDLE]:
+        if (
+            self._playing
+            and self._is_feature_available(FeatureName.Artwork)
+            and state not in [None, STATE_OFF, STATE_IDLE]
+        ):
             return self.atv.metadata.artwork_id
         return None
 
@@ -229,11 +310,6 @@ class AppleTvMediaPlayer(AppleTVEntity, MediaPlayerEntity):
             return self._playing.shuffle != ShuffleState.Off
         return None
 
-    @property
-    def supported_features(self):
-        """Flag media player features that are supported."""
-        return SUPPORT_APPLE_TV
-
     def _is_feature_available(self, feature):
         """Return if a feature is available."""
         if self.atv and self._playing:
@@ -253,7 +329,6 @@ class AppleTvMediaPlayer(AppleTVEntity, MediaPlayerEntity):
         """Pause media on media player."""
         if self._playing:
             await self.atv.remote_control.play_pause()
-        return None
 
     async def async_media_play(self):
         """Play media."""
@@ -288,12 +363,12 @@ class AppleTvMediaPlayer(AppleTVEntity, MediaPlayerEntity):
     async def async_volume_up(self):
         """Turn volume up for media player."""
         if self.atv:
-            await self.atv.remote_control.volume_up()
+            await self.atv.audio.volume_up()
 
     async def async_volume_down(self):
         """Turn volume down for media player."""
         if self.atv:
-            await self.atv.remote_control.volume_down()
+            await self.atv.audio.volume_down()
 
     async def async_set_repeat(self, repeat):
         """Set repeat mode."""

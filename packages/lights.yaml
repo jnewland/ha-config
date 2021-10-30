@@ -740,7 +740,8 @@ script:
       - service: light.turn_on
         data:
           entity_id:
-          - light.lounge_overhead
+          - light.tv_left
+          - light.tv_right
           - light.lounge_chandelier
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}

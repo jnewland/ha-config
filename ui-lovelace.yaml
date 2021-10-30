@@ -55,7 +55,7 @@ views:
       - type: picture-entity
         show_name: false
         show_state: false
-        entity: camera.dogs
+        entity: camera.roof_deck
 
       - type: picture-entity
         show_name: false
@@ -114,6 +114,8 @@ views:
         entities:
           - light.lounge_overhead
           - light.lounge_chandelier
+          - light.tv_left
+          - light.tv_right
           - switch.lounge_left
           - switch.lounge_right
           - binary_sensor.lounge_motion
@@ -315,7 +317,7 @@ views:
         camera_view: live
         show_name: false
         show_state: false
-        entity: camera.dogs
+        entity: camera.roof_deck
 
       - type: picture-entity
         show_name: false
