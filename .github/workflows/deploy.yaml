@@ -94,7 +94,7 @@ jobs:
       - uses: actions/github-script@v5
         with:
           script: |
-            await github.repos.createCommitStatus({
+            await github.rest.repos.createCommitStatus({
               ...context.repo,
               sha:         context.payload.pull_request.head.sha,
               state:       'success',
