@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -ex
 
 ref=$1
