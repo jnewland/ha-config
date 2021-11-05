@@ -127,10 +127,6 @@ views:
           detail: 2
       - type: media-control
         entity: media_player.lg_webos_tv_d510
-      - type: media-control
-        entity: media_player.lounge
-      - type: media-control
-        entity: media_player.lounge_channels
       - type: entities
         title: guest
         entities:
@@ -169,14 +165,6 @@ views:
           entity: sensor.music_room_temp
           hours_to_show: 36
           detail: 2
-      - type: entities
-        show_header_toggle: false
-        entities:
-          - automation.change_channel_to_streams_with_detected_objects
-      - type: media-control
-        entity: media_player.music_room
-      - type: media-control
-        entity: media_player.music_room_channels
 
   - title: Yoga Studio
     icon: mdi:yoga
@@ -227,10 +215,6 @@ views:
           entity: sensor.master_bath_temp
           hours_to_show: 36
           detail: 2
-      - type: media-control
-        entity: media_player.bedroom
-      - type: media-control
-        entity: media_player.bedroom_channels
 
   - title: Outdoor
     icon: mdi:tree
