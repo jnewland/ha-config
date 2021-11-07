@@ -471,10 +471,12 @@ views:
           include:
             - domain: media_player
           exclude:
-            - state: "/^[0-9]+$/"
             - state: "off"
             - state: "unavailable"
             - state: "idle"
+            - state: "paused"
+            - state: "unknown"
+            - state: "on"
 
   - title: Climate
     icon: mdi:temperature-fahrenheit
