@@ -457,6 +457,27 @@ views:
       - type: media-control
         entity: media_player.patio_speakers
 
+  - title: Airplay
+    icon: mdi:cast-audio-variant
+    cards:
+      - type: custom:auto-entities
+        show_empty: false
+        sort:
+          method: name
+        card:
+          type: entities
+          show_header_toggle: false
+        filter:
+          include:
+            - domain: media_player
+          exclude:
+            - state: "off"
+            - state: "unavailable"
+            - state: "idle"
+            - state: "paused"
+            - state: "unknown"
+            - state: "on"
+
   - title: Climate
     icon: mdi:temperature-fahrenheit
     cards:
