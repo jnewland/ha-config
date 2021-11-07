@@ -6,6 +6,11 @@ set -ex
 : ${TMPDIR:=$RUNNER_TEMP}
 : ${TMPDIR:=$(mktemp -d)}
 
+rm -rf custom_components/apple_tv
+git clone https://github.com/postlund/hass-atv-beta $TMPDIR/hass-atv-beta-$$
+mv $TMPDIR/hass-atv-beta-$$/custom_components/apple_tv custom_components
+rm -rf $TMPDIR/hass-atv-beta-$$
+
 rm -rf custom_components/bhyve || true
 git clone https://github.com/sebr/bhyve-home-assistant $TMPDIR/bhyve-home-assistant-$$
 mv $TMPDIR/bhyve-home-assistant-$$/python_scripts/*.py python_scripts/
