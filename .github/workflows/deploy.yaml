@@ -14,7 +14,7 @@ jobs:
         uses: docker://homeassistant/home-assistant:2021.11.1
         with:
           entrypoint: ./script/cibuild
-  deploy:
+  script-deploy:
     runs-on: ubuntu-latest
     needs: validate-config
     if: |
@@ -58,3 +58,19 @@ jobs:
               sleep 5;
             fi
           done
+
+  create-deploy-status:
+    runs-on: ubuntu-latest
+    needs: script-deploy
+    steps:
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              ...context.repo,
+              sha:         context.payload.pull_request.head.sha,
+              state:       'success',
+              context:     'deploy',
+              description: 'PR was deployed with GitHub Actions',
+              target_url:  'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            });
