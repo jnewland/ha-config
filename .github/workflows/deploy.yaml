@@ -20,24 +20,9 @@ jobs:
     if: |
       ( github.event.action == 'labeled' && github.event.label.name == 'deploy') ||
       ( github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy') )
+    environment: production
+    concurrency: production
     steps:
-      - uses: maxkomarychev/oction-create-deployment@v0.7.1
-        id: create-deployment
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ github.event.pull_request.head.sha }}
-          auto_merge: "true"
-          required_contexts: YAMBURGER,validate-config
-          production_environment: "true"
-
-      - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
-        id: pending
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          deployment_id: ${{ steps.create-deployment.outputs.id }}
-          state: pending
-          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
       - name: "Deploy home-assistant"
         env:
           HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
@@ -73,21 +58,6 @@ jobs:
               sleep 5;
             fi
           done
-
-      - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
-        if: success()
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          deployment_id: ${{ steps.create-deployment.outputs.id }}
-          state: success
-          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-      - uses: maxkomarychev/oction-create-deployment-status@v0.7.1
-        if: failure()
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          deployment_id: ${{ steps.create-deployment.outputs.id }}
-          state: failure
-          log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
   create-deploy-status:
     runs-on: ubuntu-latest
