@@ -1,14 +1,26 @@
 """Support for Orbit BHyve sensors."""
 import logging
 
-from homeassistant.const import ATTR_BATTERY_LEVEL, DEVICE_CLASS_BATTERY
+from homeassistant.const import (
+    ATTR_BATTERY_LEVEL,
+    DEVICE_CLASS_BATTERY,
+    DEVICE_CLASS_TEMPERATURE,
+    TEMP_FAHRENHEIT,
+    ENTITY_CATEGORY_DIAGNOSTIC,
+)
 from homeassistant.helpers.icon import icon_for_battery_level
+
+from homeassistant.components.sensor import (
+    DEVICE_CLASS_TEMPERATURE,
+)
 
 from . import BHyveDeviceEntity
 from .const import (
     DATA_BHYVE,
     DEVICE_SPRINKLER,
+    DEVICE_FLOOD,
     EVENT_CHANGE_MODE,
+    EVENT_FS_ALARM,
     EVENT_DEVICE_IDLE,
 )
 from .pybhyve.errors import BHyveError
@@ -17,14 +29,14 @@ from .util import orbit_time_to_local_time
 _LOGGER = logging.getLogger(__name__)
 
 ATTR_BUDGET = "budget"
+ATTR_CONSUMPTION_GALLONS = "consumption_gallons"
+ATTR_CONSUMPTION_LITRES = "consumption_litres"
 ATTR_IRRIGATION = "irrigation"
 ATTR_PROGRAM = "program"
 ATTR_PROGRAM_NAME = "program_name"
 ATTR_RUN_TIME = "run_time"
-ATTR_STATUS = "status"
-ATTR_CONSUMPTION_GALLONS = "consumption_gallons"
-ATTR_CONSUMPTION_LITRES = "consumption_litres"
 ATTR_START_TIME = "start_time"
+ATTR_STATUS = "status"
 
 
 async def async_setup_platform(hass, config, async_add_entities, _discovery_info=None):
@@ -41,6 +53,9 @@ async def async_setup_platform(hass, config, async_add_entities, _discovery_info
 
             if device.get("battery", None) is not None:
                 sensors.append(BHyveBatterySensor(hass, bhyve, device))
+        if device.get("type") == DEVICE_FLOOD:
+            sensors.append(BHyveTemperatureSensor(hass, bhyve, device))
+            sensors.append(BHyveBatterySensor(hass, bhyve, device))
 
     async_add_entities(sensors, True)
 
@@ -53,7 +68,12 @@ class BHyveBatterySensor(BHyveDeviceEntity):
         name = "{} battery level".format(device.get("name"))
         _LOGGER.info("Creating battery sensor: %s", name)
         super().__init__(
-            hass, bhyve, device, name, "battery", DEVICE_CLASS_BATTERY,
+            hass,
+            bhyve,
+            device,
+            name,
+            "battery",
+            DEVICE_CLASS_BATTERY,
         )
 
         self._unit = "%"
@@ -98,6 +118,11 @@ class BHyveBatterySensor(BHyveDeviceEntity):
         """Return a unique, unchanging string that represents this sensor."""
         return f"{self._mac_address}:{self._device_id}:battery"
 
+    @property
+    def entity_category(self):
+        """Battery is a diagnostic category"""
+        return ENTITY_CATEGORY_DIAGNOSTIC
+
     def _should_handle_event(self, event_name, data):
         return event_name in [EVENT_CHANGE_MODE]
 
@@ -113,6 +138,7 @@ class BHyveZoneHistorySensor(BHyveDeviceEntity):
 
     def __init__(self, hass, bhyve, device, zone):
         """Initialize the sensor."""
+        self._history = None
         self._zone = zone
         self._zone_id = zone.get("station")
 
@@ -120,7 +146,11 @@ class BHyveZoneHistorySensor(BHyveDeviceEntity):
         _LOGGER.info("Creating history sensor: %s", name)
 
         super().__init__(
-            hass, bhyve, device, name, "history",
+            hass,
+            bhyve,
+            device,
+            name,
+            "history",
         )
 
     def _setup(self, device):
@@ -133,6 +163,7 @@ class BHyveZoneHistorySensor(BHyveDeviceEntity):
         """Return the state of the entity"""
         return self._state
 
+    @property
     def should_poll(self):
         """Enable polling."""
         return True
@@ -141,6 +172,11 @@ class BHyveZoneHistorySensor(BHyveDeviceEntity):
     def unique_id(self):
         """Return a unique, unchanging string that represents this sensor."""
         return f"{self._mac_address}:{self._device_id}:{self._zone_id}:history"
+
+    @property
+    def entity_category(self):
+        """History is a diagnostic category"""
+        return ENTITY_CATEGORY_DIAGNOSTIC
 
     def _should_handle_event(self, event_name, data):
         return event_name in [EVENT_DEVICE_IDLE]
@@ -171,7 +207,7 @@ class BHyveZoneHistorySensor(BHyveDeviceEntity):
                     self._state = orbit_time_to_local_time(
                         latest_irrigation.get("start_time")
                     )
-                    
+
                     self._attrs = {
                         ATTR_BUDGET: latest_irrigation.get(ATTR_BUDGET),
                         ATTR_PROGRAM: latest_irrigation.get(ATTR_PROGRAM),
@@ -185,10 +221,7 @@ class BHyveZoneHistorySensor(BHyveDeviceEntity):
                     break
 
         except BHyveError as err:
-            _LOGGER.warning(
-                f"Unable to retreive data for {self._name}: {err}"
-            )
-
+            _LOGGER.warning(f"Unable to retreive data for {self._name}: {err}")
 
 
 class BHyveStateSensor(BHyveDeviceEntity):
@@ -218,9 +251,14 @@ class BHyveStateSensor(BHyveDeviceEntity):
         """Return a unique, unchanging string that represents this sensor."""
         return f"{self._mac_address}:{self._device_id}:state"
 
+    @property
+    def entity_category(self):
+        """Run state is a diagnostic category"""
+        return ENTITY_CATEGORY_DIAGNOSTIC
+
     def _on_ws_data(self, data):
         """
-            {'event': 'change_mode', 'mode': 'auto', 'device_id': 'id', 'timestamp': '2020-01-09T20:30:00.000Z'}
+        {'event': 'change_mode', 'mode': 'auto', 'device_id': 'id', 'timestamp': '2020-01-09T20:30:00.000Z'}
         """
         event = data.get("event")
         if event == EVENT_CHANGE_MODE:
@@ -228,3 +266,57 @@ class BHyveStateSensor(BHyveDeviceEntity):
 
     def _should_handle_event(self, event_name, data):
         return event_name in [EVENT_CHANGE_MODE]
+
+
+class BHyveTemperatureSensor(BHyveDeviceEntity):
+    """Define a BHyve sensor."""
+
+    def __init__(self, hass, bhyve, device):
+        """Initialize the sensor."""
+        name = "{0} temperature sensor".format(device.get("name"))
+        _LOGGER.info("Creating temperature sensor: %s", name)
+        super().__init__(
+            hass, bhyve, device, name, "thermometer", DEVICE_CLASS_TEMPERATURE
+        )
+
+    def _setup(self, device):
+        self._state = device.get("status", {}).get("temp_f")
+        self._available = device.get("is_connected", False)
+        self._unit = "°F"
+        self._attrs = {
+            "location": device.get("location_name"),
+            "rssi": device.get("status", {}).get("rssi"),
+            "temperature_alarm": device.get("status", {}).get("temp_alarm_status"),
+        }
+        _LOGGER.debug(
+            f"Temperature sensor {self._name} setup: State: {self._state} | Available: {self._available}"
+        )
+
+    @property
+    def state(self):
+        """Return the state of the entity"""
+        return self._state
+
+    @property
+    def unit_of_measurement(self):
+        """Return the unit of measurement for the sensor."""
+        return self._unit
+
+    @property
+    def unique_id(self):
+        """Return a unique, unchanging string that represents this sensor."""
+        return f"{self._mac_address}:{self._device_id}:temp"
+
+    def _on_ws_data(self, data):
+        """
+        {"last_flood_alarm_at":"2021-08-29T16:32:35.585Z","rssi":-60,"onboard_complete":true,"temp_f":75.2,"provisioned":true,"phy":"le_1m_1000","event":"fs_status_update","temp_alarm_status":"ok","status_updated_at":"2021-08-29T16:33:17.089Z","identify_enabled":false,"device_id":"612ad9134f0c6c9c9faddbba","timestamp":"2021-08-29T16:33:17.089Z","flood_alarm_status":"ok","last_temp_alarm_at":null}
+        """
+        _LOGGER.info("Received program data update {}".format(data))
+        event = data.get("event")
+        if event == EVENT_FS_ALARM:
+            self._state = data.get("temp_f")
+            self._attrs["rssi"] = data.get("rssi")
+            self._attrs["temperature_alarm"] = data.get("temp_alarm_status")
+
+    def _should_handle_event(self, event_name, data):
+        return event_name in [EVENT_FS_ALARM]
