@@ -7,17 +7,14 @@ group:
     icon: mdi:pine-tree
     entities:
       - switch.great_room_tree
-      # - switch.hall_tree
-      # - switch.lounge_left
       - switch.treeo
+      - switch.lounge_tree
 
 homeassistant:
   customize:
     switch.great_room_tree:
       icon: mdi:pine-tree
-    switch.hall_tree:
-      icon: mdi:pine-tree
-    switch.lounge_left:
+    switch.lounge_tree:
       icon: mdi:pine-tree
     switch.treeo:
       icon: mdi:pine-tree
