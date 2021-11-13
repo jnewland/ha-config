@@ -49,7 +49,7 @@ lovelace:
     - url: /local/flower-card.js
       type: module
     - url: /local/group-card.js
-      type: module
+      type: js
 light:
 logger: !include logger.yaml
 map:
