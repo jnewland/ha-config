@@ -1,10 +1,14 @@
+input_boolean:
+  christmas:
+    icon: mdi:pine-tree
+
 group:
   trees:
     icon: mdi:pine-tree
     entities:
       - switch.great_room_tree
-      - switch.hall_tree
-      - switch.lounge_left
+      # - switch.hall_tree
+      # - switch.lounge_left
       - switch.treeo
 
 homeassistant:
