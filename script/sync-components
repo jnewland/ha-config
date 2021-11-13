@@ -43,6 +43,8 @@ git clone https://github.com/barlock/senseme-hacs $TMPDIR/sensme-$$
 mv $TMPDIR/sensme-$$/custom_components/senseme custom_components
 rm -rf $TMPDIR/sensme-$$
 
+curl -L -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/master/group-card.js
+
 git add custom_components
 git add python_scripts
-
+git add www
