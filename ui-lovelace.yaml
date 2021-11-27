@@ -482,6 +482,7 @@ views:
             - state: "paused"
             - state: "unknown"
             - state: "on"
+            - state: "standby"
 
   - title: Climate
     icon: mdi:temperature-fahrenheit
