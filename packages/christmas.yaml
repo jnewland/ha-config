@@ -7,7 +7,8 @@ group:
     icon: mdi:pine-tree
     entities:
       - switch.great_room_tree
-      - switch.grove
+      - switch.treeo
+      - switch.quatro
       - switch.lounge_tree
 
 homeassistant:
