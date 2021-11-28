@@ -7,7 +7,7 @@ group:
     icon: mdi:pine-tree
     entities:
       - switch.great_room_tree
-      - switch.treeo
+      - switch.grove
       - switch.lounge_tree
 
 homeassistant:
@@ -18,7 +18,10 @@ homeassistant:
       icon: mdi:pine-tree
     switch.treeo:
       icon: mdi:pine-tree
-
+    switch.quatro:
+      icon: mdi:pine-tree
+    switch.grove:
+      icon: mdi:pine-tree
 automation:
   - alias: Sunset
     id: 1496390b-4ca0-4a9d-9a3e-23a69ef028c8
