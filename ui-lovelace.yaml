@@ -5,7 +5,7 @@ views:
     theme: dark-mode
     cards:
       - type: picture-glance
-        camera_image: camera.front_yard_left
+        camera_image: camera.front_door
         entities:
           - input_select.mode
           - alarm_control_panel.alarm
@@ -65,7 +65,7 @@ views:
       - type: picture-entity
         show_name: false
         show_state: false
-        entity: camera.front_yard_left_person
+        entity: camera.front_door_person
   - title: Weather
     icon: mdi:weather-rainy
     cards:
@@ -289,7 +289,7 @@ views:
         camera_view: live
         show_name: false
         show_state: false
-        entity: camera.front_yard_left
+        entity: camera.front_door
       - type: picture-entity
         camera_view: live
         show_name: false
@@ -329,7 +329,7 @@ views:
       - type: picture-entity
         show_name: false
         show_state: false
-        entity: camera.front_yard_left_person
+        entity: camera.front_door_person
       - type: picture-entity
         show_name: false
         show_state: false

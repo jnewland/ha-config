@@ -33,10 +33,10 @@ automation:
             'apns-collapse-id': cleaners
           push:
             category: camera
-          entity_id: camera.front_yard_left
+          entity_id: camera.front_door
           attachment:
             url: |
-              https://home.jnewland.com{{ states.camera.front_yard_left.attributes.entity_picture }}
+              https://home.jnewland.com{{ states.camera.front_door.attributes.entity_picture }}
             content-type: jpeg
             hide-thumbnail: false
   - alias: Notify about cleaners departure
