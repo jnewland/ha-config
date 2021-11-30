@@ -45,7 +45,7 @@ action:
         {%- elif trigger.to_state.entity_id == "binary_sensor.garage" -%}
         camera.garage
         {%- else -%}
-        camera.front_yard_left
+        camera.front_door
         {%- endif -%}
       attachment:
         url: >
@@ -55,7 +55,7 @@ action:
           {%- elif trigger.to_state.entity_id == "binary_sensor.garage" -%}
           {{ states.camera.garage.attributes.entity_picture }}
           {%- else -%}
-          {{ states.camera.front_yard_left.attributes.entity_picture }}
+          {{ states.camera.front_door.attributes.entity_picture }}
           {%- endif -%}
         content-type: jpeg
         hide-thumbnail: false
