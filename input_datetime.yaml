@@ -1,4 +1,0 @@
-wake_up:
-  name: Wake up
-  has_date: false
-  has_time: true

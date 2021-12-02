@@ -439,10 +439,6 @@ views:
       - type: entities
         show_header_toggle: false
         entities:
-          - input_datetime.wake_up
-      - type: entities
-        show_header_toggle: false
-        entities:
           - light.record_cabinet_left
           - light.record_cabinet_right
 
