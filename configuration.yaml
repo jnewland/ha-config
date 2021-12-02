@@ -33,7 +33,6 @@ homekit: !include homekit.yaml
 ifttt: !include ifttt.yaml
 ios: !include ios.yaml
 input_boolean: !include input_boolean.yaml
-input_datetime: !include input_datetime.yaml
 input_select: !include input_select.yaml
 lovelace:
   mode: yaml
