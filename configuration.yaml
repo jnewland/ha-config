@@ -37,17 +37,17 @@ input_select: !include input_select.yaml
 lovelace:
   mode: yaml
   resources:
-    - url: /local/monster-card.js?v=1
+    - url: /local/monster-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: js
-    - url: /local/entity-attributes-card.js?v=3
+    - url: /local/entity-attributes-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: js
-    - url: /local/auto-entities.js
+    - url: /local/auto-entities.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: module
-    - url: /local/card-tools.js
+    - url: /local/card-tools.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: module
-    - url: /local/flower-card.js
+    - url: /local/flower-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: module
-    - url: /local/group-card.js
+    - url: /local/group-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: js
 light:
 logger: !include logger.yaml
