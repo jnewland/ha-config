@@ -44,6 +44,7 @@ mv $TMPDIR/sensme-$$/custom_components/senseme custom_components
 rm -rf $TMPDIR/sensme-$$
 
 curl -L -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/master/group-card.js
+curl -L -o www/auto-entities.js https://github.com/thomasloven/lovelace-auto-entities/raw/master/auto-entities.js
 
 git add custom_components
 git add python_scripts
