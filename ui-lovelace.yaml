@@ -5,7 +5,7 @@ views:
     theme: dark-mode
     cards:
       - type: picture-glance
-        camera_image: camera.front_door
+        camera_image: camera.pergola
         entities:
           - input_select.mode
           - alarm_control_panel.alarm
@@ -15,6 +15,15 @@ views:
           - vacuum.downstairs
           - input_boolean.cleaners
           - light.front_porch
+      - type: conditional
+        conditions:
+          - entity: input_select.mode
+            state: Away
+        card:
+          type: picture-entity
+          show_name: false
+          show_state: false
+          entity: camera.great_room
       - type: conditional
         conditions:
           - entity: input_boolean.winterized
@@ -34,38 +43,23 @@ views:
           card:
             type: entities
           group: group.trees
-      - type: picture-glance
-        camera_image: camera.atrium
-        entities:
-          - light.bamboo
 
-      - type: picture-glance
-        camera_image: camera.gate
-        entities:
-          - cover.gate
-          - light.garage_door
-      - type: picture-glance
-        camera_image: camera.garage
+      - type: entities
+        show_header_toggle: false
         entities:
           - cover.garage
+          - cover.gate
           - lock.garage
-      - type: picture-glance
-        camera_image: camera.back_porch
-        entities:
-          - group.back_porch_fan
-          - switch.back_porch_fountain
-          - switch.bug_zapper
-          - lock.back_porch
-
-      - type: picture-entity
-        show_name: false
-        show_state: false
-        entity: camera.roof_deck
 
       - type: picture-entity
         show_name: false
         show_state: false
         entity: camera.front_door_person
+      - type: picture-entity
+        show_name: false
+        show_state: false
+        entity: camera.pergola_person
+
   - title: Weather
     icon: mdi:weather-rainy
     cards:
