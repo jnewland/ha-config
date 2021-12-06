@@ -41,7 +41,7 @@ lovelace:
       type: js
     - url: /local/entity-attributes-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: js
-    - url: /local/auto-entities.js?v=9961ee0c56b22b46af0234857a019e47954b6c0f
+    - url: /local/auto-entities.js?v=9961ee0c56b22b46af0234857a019e47954b6c0f-2
       type: module
     - url: /local/card-tools.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: module
