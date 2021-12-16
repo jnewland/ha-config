@@ -1,0 +1,13 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      great_room_occupancy:
+        friendly_name: great room occupied
+        device_class: occupancy
+        value_template: |
+          {{ 
+            states('binary_sensor.living_room_motion') == 'on' or
+            states('binary_sensor.kitchen_motion') == 'on'
+          }}
+        delay_off:
+          minutes: 30

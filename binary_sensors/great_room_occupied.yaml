@@ -1,9 +1,0 @@
-platform: template
-sensors:
-  great_room_occupied:
-    friendly_name: great room occupied
-    value_template: |
-      {{
-      states.binary_sensor.living_room_motion.state == "on" or
-      states.binary_sensor.kitchen_motion.state == "on"
-      }}

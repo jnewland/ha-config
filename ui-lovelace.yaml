@@ -97,7 +97,7 @@ views:
           - light.couch_lamp_right
           - light.couch_lamp_left
           - binary_sensor.living_room_motion
-          - binary_sensor.great_room_occupied
+          - binary_sensor.great_room_occupancy
           - sensor.kitchen_temp
         footer:
           type: graph
@@ -151,10 +151,8 @@ views:
       - type: entities
         title: music room
         entities:
-          - light.bookshelf
-          - light.striped_lamp
+          - light.music_room
           - light.music_room_haiku_light
-          - light.network_closet
           - fan.music_room_haiku
           - binary_sensor.music_room_haiku_occupancy
           - binary_sensor.music_room_motion
