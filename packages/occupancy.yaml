@@ -8,6 +8,21 @@ binary_sensor:
           {{ 
             states('binary_sensor.living_room_motion') == 'on' or
             states('binary_sensor.kitchen_motion') == 'on'
+            states('device_tracker.katie_s_iphone') == 'Kitchen' or
+            states('device_tracker.jphone_12') == 'Kitchen'
           }}
         delay_off:
           minutes: 30
+  - platform: template
+    sensors:
+      lounge_occupancy:
+        friendly_name: lounge occupied
+        device_class: occupancy
+        value_template: |
+          {{ 
+            states('binary_sensor.lounge_motion') == 'on' or
+            states('device_tracker.katie_s_iphone') == 'Lounge' or
+            states('device_tracker.jphone_12') == 'Lounge'
+          }}
+        delay_off:
+          minutes: 15
