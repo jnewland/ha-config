@@ -1,25 +1,3 @@
-homeassistant:
-  customize:
-    binary_sensor.great_room_occupancy:
-      speaker_entity: group.great_room_speakers
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.record_cabinet
-    binary_sensor.lounge_occupancy:
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.lounge_surround
-    binary_sensor.master_bath_motion:
-      speaker_entity: media_player.master_bathroom_speakers
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.shower
-    binary_sensor.master_door:
-      speaker_entity: media_player.master_bedroom_speakers
-    binary_sensor.front_porch_occupancy:
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.front_porch
-    binary_sensor.garage_occupancy:
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.move
-
 group:
   great_room_speakers:
     icon: mdi:speaker
