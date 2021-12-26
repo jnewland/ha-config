@@ -1,3 +1,12 @@
+homeassistant:
+  customize:
+    binary_sensor.back_porch_occupancy:
+      sonos_group_master: media_player.house
+      sonos_group_entity_id: media_player.back_porch
+      trigger_service: script.turn_on_entity_id
+      trigger_entity_id: group.back_porch_fan
+      trigger_entity_id_off: group.back_porch_fan
+
 binary_sensor:
   - platform: template
     sensors:

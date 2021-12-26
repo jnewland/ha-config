@@ -13,9 +13,6 @@ homeassistant:
       sonos_group_entity_id: media_player.shower
     binary_sensor.master_door:
       speaker_entity: media_player.master_bedroom_speakers
-    binary_sensor.back_porch_occupancy:
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.back_porch
     binary_sensor.front_porch_occupancy:
       sonos_group_master: media_player.house
       sonos_group_entity_id: media_player.front_porch
