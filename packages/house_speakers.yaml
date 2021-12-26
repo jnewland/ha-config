@@ -81,7 +81,7 @@ automation:
           trigger.event.data.new_state.state == "on" and
           trigger.event.data.new_state.attributes.sonos_group_master is defined and
           trigger.event.data.new_state.attributes.sonos_group_entity_id is defined and
-          state_attr(trigger.event.data.new_state.attributes.sonos_group_entity_id, "sonos_group") | default([]) | select("equalto", trigger.event.data.new_state.attributes.sonos_group_master) | join("") =! trigger.event.data.new_state.attributes.sonos_group_master
+          (state_attr(trigger.event.data.new_state.attributes.sonos_group_entity_id, "sonos_group") | default([]) | select("equalto", trigger.event.data.new_state.attributes.sonos_group_master) | join("")) != trigger.event.data.new_state.attributes.sonos_group_master
         }}
     action:
       - service: sonos.join
@@ -107,7 +107,7 @@ automation:
           trigger.event.data.new_state.state == "off" and
           trigger.event.data.new_state.attributes.sonos_group_master is defined and
           trigger.event.data.new_state.attributes.sonos_group_entity_id is defined and
-          state_attr(trigger.event.data.new_state.attributes.sonos_group_entity_id, "sonos_group") | default([]) | select("equalto", trigger.event.data.new_state.attributes.sonos_group_master) | join("") == trigger.event.data.new_state.attributes.sonos_group_master
+          (state_attr(trigger.event.data.new_state.attributes.sonos_group_entity_id, "sonos_group") | default([]) | select("equalto", trigger.event.data.new_state.attributes.sonos_group_master) | join("")) == trigger.event.data.new_state.attributes.sonos_group_master
         }}
     action:
     - service: sonos.unjoin
