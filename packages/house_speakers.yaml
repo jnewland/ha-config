@@ -74,7 +74,6 @@ automation:
       condition: template
       value_template: |
         {{
-          states('media_player.house') == 'playing' and
           trigger.event.data.old_state != None and
           trigger.event.data.new_state.state != trigger.event.data.old_state.state and
           trigger.event.data.new_state.domain == "binary_sensor" and
@@ -100,7 +99,6 @@ automation:
       condition: template
       value_template: |
         {{
-          states('media_player.house') == 'playing' and
           trigger.event.data.old_state != None and
           trigger.event.data.new_state.state != trigger.event.data.old_state.state and
           trigger.event.data.new_state.domain == "binary_sensor" and
