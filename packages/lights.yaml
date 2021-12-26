@@ -73,10 +73,6 @@ homeassistant:
       trigger_entity_id_off: group.yoga_room
       off_delay_seconds: 600
       haunt: light.bookshelf_middle
-    binary_sensor.great_room_occupancy:
-      trigger_service: script.great_room_lights
-      trigger_entity_id_off: group.great_room
-      haunt: light.bookshelf_right
     binary_sensor.pantry_motion:
       trigger_entity_id: light.pantry
       trigger_entity_id_off: light.pantry
@@ -418,10 +414,10 @@ automation:
           value_template: |
             {{
               trigger.event.data.old_state != None and
-              trigger.event.data.new_state.attributes.is_hue_group is not defined and
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "light" and
               trigger.event.data.new_state.state == "on" and
+              trigger.event.data.new_state.attributes.is_hue_group is not defined and
               trigger.event.data.new_state.attributes.ignore_brightness is not defined and
               trigger.event.data.new_state.attributes.fixed_color_temp is not defined
             }}
@@ -452,10 +448,10 @@ automation:
           value_template: |
             {{
               trigger.event.data.old_state != None and
-              trigger.event.data.new_state.attributes.is_hue_group is not defined and
               trigger.event.data.new_state.state != trigger.event.data.old_state.state and
               trigger.event.data.new_state.domain == "light" and
               trigger.event.data.new_state.state == "on" and
+              trigger.event.data.new_state.attributes.is_hue_group is not defined and
               trigger.event.data.new_state.attributes.fixed_color_temp is defined
             }}
     action:

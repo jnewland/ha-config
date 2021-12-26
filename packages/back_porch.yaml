@@ -37,10 +37,3 @@ group:
     entities:
       - switch.back_porch_fan_east
       - switch.back_porch_fan_west
-
-homeassistant:
-  customize:
-    binary_sensor.back_porch_occupancy:
-      trigger_service: script.turn_on_entity_id
-      trigger_entity_id: group.back_porch_fan
-      trigger_entity_id_off: group.back_porch_fan
