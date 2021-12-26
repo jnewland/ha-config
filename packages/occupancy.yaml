@@ -13,8 +13,6 @@ binary_sensor:
           }}
         delay_off:
           minutes: 30
-  - platform: template
-    sensors:
       lounge_occupancy:
         friendly_name: lounge occupied
         device_class: occupancy
@@ -26,3 +24,28 @@ binary_sensor:
           }}
         delay_off:
           minutes: 15
+      garage_occupancy:
+        friendly_name: garage occupied
+        device_class: occupancy
+        value_template: |
+          {{ 
+            states('cover.garage') == 'open' or 
+            states('lock.garage') == 'unlocked'
+          }}
+      back_porch_occupancy:
+        friendly_name: back porch occupancy
+        device_class: occupancy
+        value_template: |
+          {{ 
+            states('lock.back_porch') == 'unlocked'
+          }}
+      front_porch_occupancy:
+        friendly_name: front purch occupancy
+        device_class: occupancy
+        # dog / packages etc
+        delay_on:
+          seconds: 10
+        value_template: |
+          {{ 
+            states('lock.front_door') == 'unlocked'
+          }}
