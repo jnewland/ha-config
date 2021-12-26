@@ -7,7 +7,7 @@ binary_sensor:
         value_template: |
           {{ 
             states('binary_sensor.living_room_motion') == 'on' or
-            states('binary_sensor.kitchen_motion') == 'on'
+            states('binary_sensor.kitchen_motion') == 'on' or
             states('device_tracker.katie_s_iphone') == 'Kitchen' or
             states('device_tracker.jphone_12') == 'Kitchen'
           }}
