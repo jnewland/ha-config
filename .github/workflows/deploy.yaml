@@ -1,7 +1,7 @@
 name: cd
 on:
   pull_request:
-    types: [synchronize, reopened, labeled]
+    types: [opened, synchronize, reopened, labeled]
 concurrency:
   group: cd-${{ github.event.pull_request.number }}
   cancel-in-progress: true
