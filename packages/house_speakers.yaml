@@ -2,7 +2,7 @@ group:
   great_room_speakers:
     icon: mdi:speaker
     entities:
-      - media_player.living_room_speakers
+      - media_player.living_speakers
       - media_player.kitchen_speakers
 
 automation:
