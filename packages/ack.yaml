@@ -38,7 +38,7 @@ automation:
   id: 7326c4e1-2f25-4619-be0b-07025456e3c7
   trigger:
     platform: event
-    event_type: mobile_app_notification_action
+    event_type: ios.notification_action_fired
     event_data:
       action: ACK_NO
   action:
@@ -51,7 +51,7 @@ automation:
   mode: parallel
   trigger:
     platform: event
-    event_type: mobile_app_notification_action
+    event_type: ios.notification_action_fired
     event_data:
       action: ACK_TURN_ON
   action:
