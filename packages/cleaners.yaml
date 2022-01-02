@@ -29,8 +29,7 @@ automation:
       data:
         message: house prepped for cleaners. front door is {{ states.lock.front_door.state }}. alarm is {{ states.alarm_control_panel.alarm.state }}.
         data:
-          apns_headers:
-            'apns-collapse-id': cleaners
+          tag: cleaners
           push:
             category: camera
           entity_id: camera.front_door
@@ -53,7 +52,7 @@ automation:
       - service: script.ask_about_turning_on
         data:
           entity_id: script.lock_up_after_cleaners
-          apns_collapse_id: cleaners
+          tag: cleaners
           message: "The front door has been locked. Turn off cleaning mode and turn on away?"
           confirmation_message: locked up after the cleaners
 script:

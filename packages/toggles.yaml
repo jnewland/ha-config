@@ -13,7 +13,7 @@ script:
         data:
           service: >
             {{ service | default('notify.mobile_app_jphone_12') }}
-          apns_collapse_id: alarm_control_panel.alarm
+          tag: alarm_control_panel.alarm
           entity_id: >
             {%- if states.alarm_control_panel.alarm.state == "disarmed" -%}
             script.arm

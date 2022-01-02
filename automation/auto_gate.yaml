@@ -11,6 +11,6 @@ action:
 - service: script.ask_about_turning_on
   data:
     entity_id: script.lock_up
-    apns_collapse_id: cover.gate
+    tag: cover.gate
     message: "The gate has been open for a bit. Close it up?"
     confirmation_message: closed the gate

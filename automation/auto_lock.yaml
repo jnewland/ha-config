@@ -15,6 +15,6 @@ action:
 - service: script.ask_about_turning_on
   data:
     entity_id: script.lock_up
-    apns_collapse_id: lock.front_door
+    tag: lock.front_door
     message: "The front door's been unlocked for a bit. Lock up?"
     confirmation_message: locked up
