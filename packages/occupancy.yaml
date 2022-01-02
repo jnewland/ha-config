@@ -92,7 +92,8 @@ binary_sensor:
         value_template: |
           {{ 
             states('cover.garage') == 'open' or 
-            states('lock.garage') == 'unlocked'
+            states('lock.garage') == 'unlocked' or 
+            float(states('sensor.garage_person')) | default(0) > 0 
           }}
 
       back_porch_occupancy:
@@ -100,16 +101,18 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{ 
-            states('lock.back_porch') == 'unlocked'
+            states('lock.back_porch') == 'unlocked' or
+            float(states('sensor.back_porch_person')) | default(0) > 0 
           }}
 
       front_porch_occupancy:
-        friendly_name: front purch occupancy
+        friendly_name: front porch occupancy
         device_class: occupancy
         # dog / packages etc
         delay_on:
           seconds: 10
         value_template: |
           {{ 
-            states('lock.front_door') == 'unlocked'
+            states('lock.front_door') == 'unlocked' or
+            float(states('sensor.front_yard_left_person')) | default(0) > 0 
           }}
