@@ -55,6 +55,13 @@ automation:
     event_data:
       action: ACK_TURN_ON
   action:
+    - service: system_log.write
+      data:
+        message: >
+          at=ack
+          event_data={{ trigger.event.data }}
+        logger: packages.ack
+        level: debug
     - service: homeassistant.turn_on
       data:
         entity_id: '{{ trigger.event.data.action_data.entity_id }}'
