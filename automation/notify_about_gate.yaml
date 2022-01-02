@@ -11,10 +11,10 @@ action:
       data:
         push:
           category: camera
-        entity_id: camera.front_door
+        entity_id: camera.pergola
         attachment:
           url: |
-            https://home.jnewland.com{{ states.camera.front_door.attributes.entity_picture }}
+            https://home.jnewland.com{{ states.camera.pergola.attributes.entity_picture }}
           content-type: jpeg
           hide-thumbnail: false
   - service: script.notify_with_lights
@@ -28,4 +28,4 @@ action:
       data:
         file:
           url: |
-            https://home.jnewland.com{{ states.camera.front_door.attributes.entity_picture }}
+            https://home.jnewland.com{{ states.camera.pergola.attributes.entity_picture }}
