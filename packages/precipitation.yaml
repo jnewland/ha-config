@@ -21,7 +21,7 @@ automation:
           service: notify.mobile_app_jphone_12
           notify_service: notify.mobile_app_jphone_12
           entity_id: script.noop
-          apns_collapse_id: precipitation
+          tag: precipitation
           message: Rain is forecasted soon. Prep for rain?
           confirmation_message: prepped for rain, cool.
   - alias: Sunshine notifications
@@ -39,7 +39,7 @@ automation:
           service: notify.mobile_app_jphone_12
           notify_service: notify.mobile_app_jphone_12
           entity_id: script.noop
-          apns_collapse_id: precipitation
+          tag: precipitation
           message: No rain in the forecast. Prep for sunshine?
           confirmation_message: prepped for sunshine, cool.
 

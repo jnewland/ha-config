@@ -7,9 +7,8 @@ script:
           message: |
             {{ message | default("Turn on " + entity_id) }}
           data:
-            apns_headers:
-              'apns-collapse-id': >
-                {{ apns_collapse_id | default(entity_id) }}
+            tag: >
+              {{ tag | default(entity_id) }}
             actions:
               - action: ACK_TURN_ON
                 title: Hell yeah
@@ -19,8 +18,8 @@ script:
               - action: ACK_NO
                 title: Nah
             action_data:
-              apns_collapse_id: >
-                {{ apns_collapse_id | default(entity_id) }}
+              tag: >
+                {{ tag | default(entity_id) }}
               entity_id: |
                 {{ entity_id }}
               notify_service: >
@@ -64,9 +63,8 @@ automation:
         message: >
           {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}.
         data:
-          apns_headers:
-            'apns-collapse-id': >
-              {{ trigger.event.data.action_data.apns_collapse_id | default(trigger.event.data.action_data.entity_id) }}
+          tag: >
+            {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
     - service: notify.slack
       data:
         title: ':+1:'
