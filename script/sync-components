@@ -19,8 +19,7 @@ rm -rf $TMPDIR/homeassistant-aerogarden-$$
 
 rm -rf custom_components/plant || true
 git clone https://github.com/Olen/homeassistant-plant $TMPDIR/homeassistant-plant-$$
-mkdir -p custom_components/plant/
-mv $TMPDIR/homeassistant-plant-$$/* custom_components/plant/
+mv $TMPDIR/homeassistant-plant-$$/custom_components/plant custom_components
 rm -rf $TMPDIR/homeassistant-plant-$$
 
 rm -rf custom_components/alarmdotcom || true
