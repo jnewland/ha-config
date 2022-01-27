@@ -1,7 +1,3 @@
-binary_sensor.entry_door:
-  friendly_name: Entry door
-binary_sensor.master_patio_door:
-  friendly_name: Master patio door
 binary_sensor.front_gate:
   device_class: opening
   icon: mdi:gate
