@@ -6,9 +6,9 @@ trigger:
   entity_id:
     - binary_sensor.living_room_motion
     - binary_sensor.master_patio_door
-    - binary_sensor.downstairs_bathroom_window
+    - binary_sensor.downstairs_bathroom
     - binary_sensor.downstairs_window
-    - binary_sensor.bedroom_two_window
+    - binary_sensor.music_room_window
     - binary_sensor.lounge_window
     - binary_sensor.entry_door
     - binary_sensor.garage
@@ -58,7 +58,6 @@ trigger:
     - media_player.house_lounge
     - media_player.patio_speakers
     - media_player.record_cabinet
-    - binary_sensor.music_room_window
     - weather.dark_sky
     - light.kitchen_light
     - binary_sensor.kitchen_needs_nutrients
