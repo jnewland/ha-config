@@ -1,0 +1,4 @@
+{
+    "github-actions.workflows.pinned.workflows": [".github/workflows/deploy.yaml"],
+    "github-actions.workflows.pinned.refresh.enabled": true,
+}
