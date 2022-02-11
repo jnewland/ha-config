@@ -22,11 +22,14 @@ template:
             {% if state_attr('group.ignored_unavailable_entities','entity_id') != none %}
               {% set ignore_seconds = 60 %}
               {% set ignore_ts = (now().timestamp() - ignore_seconds)|as_datetime %}
-              {% set entities = states|rejectattr('domain','in',['group','button'])|selectattr('state','in',['unavailable','unknown','none'])|list %}
+              {% set entities = states|rejectattr('domain','in',['group','button','scene'])|selectattr('state','in',['unavailable','unknown','none'])|list %}
               {% set buttons = states.button|selectattr('state','eq','unavailable')|list %}
               {{ (entities + buttons)
                 |rejectattr('entity_id','in',state_attr('group.ignored_unavailable_entities','entity_id'))
                 |rejectattr('last_changed','ge',ignore_ts)
+                |rejectattr('entity_id','search','_channels')
+                |rejectattr('entity_id','search','webos_tv')
+                |rejectattr('entity_id','search','book')
                 |map(attribute='entity_id')|list }}
             {% endif %}
 
