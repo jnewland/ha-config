@@ -20,6 +20,7 @@ from homeassistant.const import (
     Platform,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.config_validation import make_entity_service_schema
 from homeassistant.helpers.entity_platform import (
     AddEntitiesCallback,
     async_get_current_platform,
@@ -32,14 +33,14 @@ _LOGGER = logging.getLogger(__name__)
 
 ATTR_LAST_USER_NAME = "changed_by_name"
 ATTR_LOW_BATTERY = "low_battery"
-SET_PIN_SCHEMA = vol.Schema(
+SET_PIN_SCHEMA = make_entity_service_schema(
     {
         vol.Required(CONF_NAME): vol.All(str, vol.Length(min=1)),
         vol.Required(CONF_PIN): vol.All(str, vol.Range(min=4, max=8)),
         vol.Optional("slot"): vol.All(int, vol.Range(min=1, max=244)),
     }
 )
-CLEAR_PIN_SCHEMA = vol.Schema(
+CLEAR_PIN_SCHEMA = make_entity_service_schema(
     {
         vol.Optional(CONF_NAME): vol.All(str, vol.Length(min=1)),
         vol.Required("slot"): vol.All(int, vol.Range(min=1, max=244)),
@@ -95,7 +96,7 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
 
     async def set_lock_pin(self, **kwargs: Any) -> None:
         """Set pin on the device."""
-        _LOGGER.debug("calling veralock.setpin to add with pin")
+        _LOGGER.debug("calling veralock.set_lock_pin to add with pin")
         result = self.vera_device.set_lock_pin(
             name=kwargs[CONF_NAME],
             pin=int(kwargs[CONF_PIN]),
@@ -104,7 +105,7 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
             self._cmd_status = "Added"
         else:
             self._cmd_status = result.text
-            _LOGGER.error("Failed to call %s: %s", "veralock.setpin", result.text)
+            _LOGGER.error("Failed to call %s: %s", "veralock.set_lock_pin", result.text)
             raise ValueError(result.text)
 
     async def clear_lock_pin(self, **kwargs: Any) -> None:
@@ -115,7 +116,9 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
             self._cmd_status = "Removed"
         else:
             self._cmd_status = result.text
-            _LOGGER.error("Failed to call %s: %s", "veralock.clearpin", result.text)
+            _LOGGER.error(
+                "Failed to call %s: %s", "veralock.clear_lock_pin", result.text
+            )
             raise ValueError(result.text)
 
     @property
@@ -138,8 +141,12 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
             data[ATTR_LAST_USER_NAME] = last_user[1]
 
         data[ATTR_LOW_BATTERY] = self.vera_device.get_low_battery_alert()
-        data[ATTR_CREDENTIALS] = f"{self.vera_device.get_pin_codes()}"
-        data[CONF_COMMAND_STATE] = self._cmd_status
+        credentials = self.vera_device.get_pin_codes()
+        if credentials is not None:
+            data[ATTR_CREDENTIALS] = f"{credentials}"
+        status = self._cmd_status
+        if status is not None:
+            data[CONF_COMMAND_STATE] = self._cmd_status
         return data
 
     @property
