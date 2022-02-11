@@ -20,8 +20,8 @@ template:
         attributes:
           entity_id: >
             {% if state_attr('group.ignored_unavailable_entities','entity_id') != none %}
-              {% set ignore_seconds = 60 %}
-              {% set ignore_ts = (now().timestamp() - ignore_seconds)|as_datetime %}
+              {% set thirty_minutes = 1800 %}
+              {% set ignore_ts = (now().timestamp() - thirty_minutes)|as_datetime %}
               {% set entities = states|rejectattr('domain','in',['group','button','scene'])|selectattr('state','in',['unavailable','unknown','none'])|list %}
               {% set buttons = states.button|selectattr('state','eq','unavailable')|list %}
               {{ (entities + buttons)
@@ -38,7 +38,7 @@ template:
 group:
   ignored_unavailable_entities:
     entities:
-      - sensor.unavailable_entities # prevent template loop warnings?
+      - sensor.unavailable_entities # prevent template loop warnings
       - binary_sensor.updater # always unknown after restart
 
 # OPTIONAL - filter template loop warnings from the Home Assistant log.
@@ -47,7 +47,6 @@ logger:
     homeassistant.components.template.template_entity:
       - 'Template loop detected while processing event'
 
-# OPTIONAL Example automation to demonstrate how you can utilize this sensor
 automation:
   - id: unavailable_entities_notification
     alias: 'Unavailable Entities Notification'
