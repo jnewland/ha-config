@@ -1,35 +1,35 @@
-setpin:
-  # Service name as shown in UI
-  name: Add New Door Code To The Lock
-  # Description of the service
-  description: Adds New Door Code To The Lock.
-  # Different fields that your service accepts
+set_lock_pin:
+  name: Add new PIN to the Lock
+  description: Adds a new PIN to the Lock
+  target:
+    entity:
+      domain: lock
+      integration: vera
   fields:
     name:
-      # Field name as shown in UI
       name: Name
       description: Name of PIN
       example: "John Doe"
       default: "John Doe"
       required: true
     pin:
-      name: Pin
+      name: PIN
       description: 4-8 digit PIN
       example: "0123"
       default: "0123"
       required: true
 
-clearpin:
-  # Service name as shown in UI
-  name: Remove/Delete A Door Code From The Lock
-  # Description of the service
-  description: Removes/Deletes A Door Code From The Lock
-  # Different fields that your service accepts
+clear_lock_pin:
+  name: Remove a PIN from the Lock
+  description: Removes a PIN from the Lock
+  target:
+    entity:
+      domain: lock
+      integration: vera
   fields:
     slot:
-      # Field name as shown in UI
       name: Slot
-      description: Slot number of the user/pin to be deleted. Expecting Integer Value, not in String Format.
-      example: 244
-      default: 244
+      description: Slot number of the PIN to be deleted
+      example: 1
+      default: 1
       required: true

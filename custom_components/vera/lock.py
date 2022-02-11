@@ -54,10 +54,12 @@ async def async_setup_entry(
     controller_data = get_controller_data(hass, entry)
     platform = async_get_current_platform()
     platform.async_register_entity_service(
-        name="setpin", schema=SET_PIN_SCHEMA, func=VeraLock.set_new_pin.__name__
+        name="set_lock_pin", schema=SET_PIN_SCHEMA, func=VeraLock.set_lock_pin.__name__
     )
     platform.async_register_entity_service(
-        name="clearpin", schema=CLEAR_PIN_SCHEMA, func=VeraLock.clear_slot_pin.__name__
+        name="clear_lock_pin",
+        schema=CLEAR_PIN_SCHEMA,
+        func=VeraLock.clear_lock_pin.__name__,
     )
 
     async_add_entities(
@@ -91,10 +93,10 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
         self.vera_device.unlock()
         self._state = STATE_UNLOCKED
 
-    async def set_new_pin(self, **kwargs: Any) -> None:
+    async def set_lock_pin(self, **kwargs: Any) -> None:
         """Set pin on the device."""
         _LOGGER.debug("calling veralock.setpin to add with pin")
-        result = self.vera_device.set_new_pin(
+        result = self.vera_device.set_lock_pin(
             name=kwargs[CONF_NAME],
             pin=int(kwargs[CONF_PIN]),
         )
@@ -105,10 +107,10 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
             _LOGGER.error("Failed to call %s: %s", "veralock.setpin", result.text)
             raise ValueError(result.text)
 
-    async def clear_slot_pin(self, **kwargs: Any) -> None:
+    async def clear_lock_pin(self, **kwargs: Any) -> None:
         """Clear pin on the device."""
-        _LOGGER.debug("calling veralock.clear_slot_pin")
-        result = self.vera_device.clear_slot_pin(slot=kwargs["slot"])
+        _LOGGER.debug("calling veralock.clear_lock_pin")
+        result = self.vera_device.clear_lock_pin(slot=kwargs["slot"])
         if result.status_code == STATE_OK:
             self._cmd_status = "Removed"
         else:
