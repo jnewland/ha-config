@@ -30,6 +30,7 @@ template:
                 |rejectattr('entity_id','search','_channels')
                 |rejectattr('entity_id','search','webos_tv')
                 |rejectattr('entity_id','search','book')
+                |rejectattr('entity_id','search','xc60')
                 |map(attribute='entity_id')|list }}
             {% endif %}
 
