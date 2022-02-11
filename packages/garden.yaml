@@ -4,54 +4,54 @@ sensor:
 switch:
   - platform: bhyve
 
-plant:
-  # https://open.plantbook.io/browse-db
-  lime_tree:
-    name: lime tree
-    species: citrus latifolia
-    image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/citrus%20latifolia.jpg
-    sensors:
-      moisture: sensor.lime_tree_moisture
-      temperature: sensor.lime_tree_temperature
-      conductivity: sensor.lime_tree_soil_conductivity
-      brightness: sensor.lime_tree_light
-    # appears that https://github.com/Olen/homeassistant-plant doesn't do C to F yet
-    min_temperature: 41
-    max_temperature: 95
-  bamboo:
-    name: bamboo
-    species: bamboo
-    image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/bamboo.jpg
-    sensors:
-      moisture: sensor.bamboo_moisture
-      temperature: sensor.bamboo_temperature
-      conductivity: sensor.bamboo_soil_conductivity
-      brightness: sensor.bamboo_light
-    # appears that https://github.com/Olen/homeassistant-plant doesn't do C to F yet
-    min_temperature: 41
-    max_temperature: 89.6
-  angel_trumpet:
-    name: angel trumpet
-    species: brugmansia arborea
-    image: https://www.brugmansia.us/gallery/category_55/gallery_2200_55_995985.jpg
-    sensors:
-      moisture: sensor.angel_trumpet_moisture
-      temperature: sensor.angel_trumpet_temperature
-      conductivity: sensor.angel_trumpet_soil_conductivity
-      brightness: sensor.angel_trumpet_light
-    min_temperature: 72
-    max_temperature: 95
-  basil:
-    name: basil
-    species: ocimum basilicum
-    image: https://upload.wikimedia.org/wikipedia/commons/9/90/Basil-Basilico-Ocimum_basilicum-albahaca.jpg
-    sensors:
-      moisture: sensor.herb_moisture
-      temperature: sensor.herb_temperature
-      conductivity: sensor.herb_soil_conductivity
-      brightness: sensor.herb_light
-    min_temperature: 72
-    max_temperature: 95
+# plant:
+#   # https://open.plantbook.io/browse-db
+#   lime_tree:
+#     name: lime tree
+#     species: citrus latifolia
+#     image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/citrus%20latifolia.jpg
+#     sensors:
+#       moisture: sensor.lime_tree_moisture
+#       temperature: sensor.lime_tree_temperature
+#       conductivity: sensor.lime_tree_soil_conductivity
+#       brightness: sensor.lime_tree_light
+#     # appears that https://github.com/Olen/homeassistant-plant doesn't do C to F yet
+#     min_temperature: 41
+#     max_temperature: 95
+#   bamboo:
+#     name: bamboo
+#     species: bamboo
+#     image: https://objectstorage.ap-sydney-1.oraclecloud.com/n/sdyd5yr3jypo/b/plant-img/o/bamboo.jpg
+#     sensors:
+#       moisture: sensor.bamboo_moisture
+#       temperature: sensor.bamboo_temperature
+#       conductivity: sensor.bamboo_soil_conductivity
+#       brightness: sensor.bamboo_light
+#     # appears that https://github.com/Olen/homeassistant-plant doesn't do C to F yet
+#     min_temperature: 41
+#     max_temperature: 89.6
+#   angel_trumpet:
+#     name: angel trumpet
+#     species: brugmansia arborea
+#     image: https://www.brugmansia.us/gallery/category_55/gallery_2200_55_995985.jpg
+#     sensors:
+#       moisture: sensor.angel_trumpet_moisture
+#       temperature: sensor.angel_trumpet_temperature
+#       conductivity: sensor.angel_trumpet_soil_conductivity
+#       brightness: sensor.angel_trumpet_light
+#     min_temperature: 72
+#     max_temperature: 95
+#   basil:
+#     name: basil
+#     species: ocimum basilicum
+#     image: https://upload.wikimedia.org/wikipedia/commons/9/90/Basil-Basilico-Ocimum_basilicum-albahaca.jpg
+#     sensors:
+#       moisture: sensor.herb_moisture
+#       temperature: sensor.herb_temperature
+#       conductivity: sensor.herb_soil_conductivity
+#       brightness: sensor.herb_light
+#     min_temperature: 72
+#     max_temperature: 95
 
 input_datetime:
   greenhouse_led_on:
