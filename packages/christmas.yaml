@@ -24,7 +24,7 @@ homeassistant:
     switch.grove:
       icon: mdi:pine-tree
 automation:
-  - alias: Sunset
+  - alias: Trees at Sunset
     id: 1496390b-4ca0-4a9d-9a3e-23a69ef028c8
     trigger:
       platform: sun
