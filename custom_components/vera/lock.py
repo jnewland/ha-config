@@ -36,7 +36,7 @@ ATTR_LOW_BATTERY = "low_battery"
 SET_PIN_SCHEMA = make_entity_service_schema(
     {
         vol.Required(CONF_NAME): vol.All(str, vol.Length(min=1)),
-        vol.Required(CONF_PIN): vol.All(str, vol.Range(min=4, max=8)),
+        vol.Required(CONF_PIN): vol.All(str, vol.Length(min=4, max=8)),
         vol.Optional("slot"): vol.All(int, vol.Range(min=1, max=244)),
     }
 )
