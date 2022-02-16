@@ -1,6 +1,7 @@
 """Support for Vera locks."""
 from __future__ import annotations
 
+from http import HTTPStatus
 import logging
 from typing import Any
 
@@ -102,7 +103,7 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
             # fix upstream to expect a string here
             pin=int(kwargs[CONF_PIN]),
         )
-        if result.status_code == STATE_OK:
+        if result.status_code == HTTPStatus.OK:
             self._cmd_status = STATE_OK
         else:
             self._cmd_status = result.text
@@ -118,7 +119,7 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
         """Clear pin on the device."""
         _LOGGER.debug("calling veralock.clear_lock_pin")
         result = self.vera_device.clear_slot_pin(slot=kwargs["slot"])
-        if result.status_code == STATE_OK:
+        if result.status_code == HTTPStatus.OK:
             self._cmd_status = STATE_OK
         else:
             self._cmd_status = result.text
