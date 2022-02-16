@@ -17,5 +17,5 @@ logs:
   homeassistant.components.shell_command: debug
   # pyatv: debug
   # custom_components.apple_tv: debug
-  # pyvera: debug
+  pyvera: critical
   # homeassistant.components.vera: debug
