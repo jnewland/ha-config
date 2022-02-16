@@ -4,7 +4,7 @@
   "name": "Vera",
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/vera",
-  "requirements": ["git+https://github.com/jnewland/pyvera@handle-missing-pin#egg=pyvera"],
+  "requirements": ["git+https://github.com/jnewland/pyvera@handle-missing-pin#egg"],
   "codeowners": ["@pavoni"],
   "iot_class": "local_polling",
   "loggers": ["pyvera"]
