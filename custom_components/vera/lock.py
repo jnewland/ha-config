@@ -97,7 +97,7 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
     def set_lock_pin(self, **kwargs: Any) -> None:
         """Set pin on the device."""
         _LOGGER.debug("calling veralock.set_lock_pin to add with pin")
-        result = self.vera_device.set_lock_pin(
+        result = self.vera_device.set_new_pin(
             name=kwargs[CONF_NAME],
             # fix upstream to expect a string here
             pin=int(kwargs[CONF_PIN]),
@@ -112,7 +112,7 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
     def clear_lock_pin(self, **kwargs: Any) -> None:
         """Clear pin on the device."""
         _LOGGER.debug("calling veralock.clear_lock_pin")
-        result = self.vera_device.clear_lock_pin(slot=kwargs["slot"])
+        result = self.vera_device.clear_slot_pin(slot=kwargs["slot"])
         if result.status_code == STATE_OK:
             self._cmd_status = STATE_OK
         else:
