@@ -106,7 +106,12 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
             self._cmd_status = STATE_OK
         else:
             self._cmd_status = result.text
-            _LOGGER.error("Failed to call %s: %s", "veralock.set_lock_pin", result.text)
+            _LOGGER.error(
+                "Failed to call %s: (%d) %s",
+                "veralock.set_lock_pin",
+                result.status_code,
+                result.text,
+            )
             raise ValueError(result.text)
 
     def clear_lock_pin(self, **kwargs: Any) -> None:
@@ -118,7 +123,10 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
         else:
             self._cmd_status = result.text
             _LOGGER.error(
-                "Failed to call %s: %s", "veralock.clear_lock_pin", result.text
+                "Failed to call %s: (%d) %s",
+                "veralock.clear_lock_pin",
+                result.status_code,
+                result.text,
             )
             raise ValueError(result.text)
 
