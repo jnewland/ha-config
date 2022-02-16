@@ -94,26 +94,27 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
         self.vera_device.unlock()
         self._state = STATE_UNLOCKED
 
-    async def set_lock_pin(self, **kwargs: Any) -> None:
+    def set_lock_pin(self, **kwargs: Any) -> None:
         """Set pin on the device."""
         _LOGGER.debug("calling veralock.set_lock_pin to add with pin")
         result = self.vera_device.set_lock_pin(
             name=kwargs[CONF_NAME],
+            # fix upstream to expect a string here
             pin=int(kwargs[CONF_PIN]),
         )
         if result.status_code == STATE_OK:
-            self._cmd_status = "Added"
+            self._cmd_status = STATE_OK
         else:
             self._cmd_status = result.text
             _LOGGER.error("Failed to call %s: %s", "veralock.set_lock_pin", result.text)
             raise ValueError(result.text)
 
-    async def clear_lock_pin(self, **kwargs: Any) -> None:
+    def clear_lock_pin(self, **kwargs: Any) -> None:
         """Clear pin on the device."""
         _LOGGER.debug("calling veralock.clear_lock_pin")
         result = self.vera_device.clear_lock_pin(slot=kwargs["slot"])
         if result.status_code == STATE_OK:
-            self._cmd_status = "Removed"
+            self._cmd_status = STATE_OK
         else:
             self._cmd_status = result.text
             _LOGGER.error(
@@ -163,4 +164,6 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
 
     def update(self) -> None:
         """Update state by the Vera device callback."""
-        self._state = STATE_LOCKED if self.vera_device.is_locked(True) else STATE_LOCKED
+        self._state = (
+            STATE_LOCKED if self.vera_device.is_locked(True) else STATE_UNLOCKED
+        )
