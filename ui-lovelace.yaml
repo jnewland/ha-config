@@ -45,6 +45,36 @@ views:
             - sensor.visitor_door_code
             - input_datetime.visitor_prep
 
+      - type: custom:mini-media-player
+        entity: media_player.house
+        hide:
+          power: true
+          icon: true
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.house
+              name: house
+            - entity_id: media_player.back_porch
+              name: back porch
+            - entity_id: media_player.front_porch
+              name: front porch
+            - entity_id: media_player.hall
+              name: hall
+            - entity_id: media_player.lounge_surround
+              name: lounge surround
+            - entity_id: media_player.master_patio
+              name: master patio
+            - entity_id: media_player.move
+              name: move
+            - entity_id: media_player.pergola
+              name: pergola
+            - entity_id: media_player.record_cabinet
+              name: record cabinet
+            - entity_id: media_player.shower
+              name: shower
+
       - type: custom:auto-entities
         show_empty: false
         sort:
