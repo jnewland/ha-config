@@ -77,10 +77,10 @@ automation:
             tag: visitor
             push:
               category: camera
-            entity_id: camera.front_door
+            entity_id: camera.great_room
             attachment:
               url: |
-                https://home.jnewland.com{{ states.camera.front_door.attributes.entity_picture }}
+                https://home.jnewland.com{{ states.camera.great_room.attributes.entity_picture }}
               content-type: jpeg
               hide-thumbnail: false
 
@@ -109,10 +109,10 @@ automation:
             tag: visitor
             push:
               category: camera
-            entity_id: camera.front_door
+            entity_id: camera.great_room
             attachment:
               url: |
-                https://home.jnewland.com{{ states.camera.front_door.attributes.entity_picture }}
+                https://home.jnewland.com{{ states.camera.great_room.attributes.entity_picture }}
               content-type: jpeg
               hide-thumbnail: false
 
@@ -177,10 +177,10 @@ automation:
           tag: visitor
           push:
             category: camera
-          entity_id: camera.front_door
+          entity_id: camera.great_room
           attachment:
             url: |
-              https://home.jnewland.com{{ states.camera.front_door.attributes.entity_picture }}
+              https://home.jnewland.com{{ states.camera.great_room.attributes.entity_picture }}
             content-type: jpeg
             hide-thumbnail: false
 
