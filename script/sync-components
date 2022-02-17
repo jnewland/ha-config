@@ -37,6 +37,12 @@ git clone https://github.com/barlock/senseme-hacs $TMPDIR/sensme-$$
 mv $TMPDIR/sensme-$$/custom_components/senseme custom_components
 rm -rf $TMPDIR/sensme-$$
 
+rm -rf custom_components/vera || true
+git clone https://github.com/jnewland/core -b vera-lock-pin $TMPDIR/core-$$
+mv $TMPDIR/core-$$/homeassistant/components/vera custom_components
+rm -rf $TMPDIR/core-$$
+cp hack/vera.json custom_components/vera/manifest.json
+
 curl -L -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/master/group-card.js
 curl -L -o www/auto-entities.js https://github.com/thomasloven/lovelace-auto-entities/raw/master/auto-entities.js
 

@@ -13,8 +13,6 @@ views:
           - binary_sensor.front_gate
           - input_number.brightness
           - vacuum.downstairs
-          - input_boolean.cleaners
-          - light.front_porch
       - type: conditional
         conditions:
           - entity: input_select.mode
@@ -24,6 +22,29 @@ views:
           show_name: false
           show_state: false
           entity: camera.great_room
+
+      - type: conditional
+        conditions:
+          - entity: input_boolean.visitor
+            state: "off"
+        card:
+          type: entities
+          show_header_toggle: false
+          entities:
+            - input_boolean.visitor
+
+      - type: conditional
+        conditions:
+          - entity: input_boolean.visitor
+            state: "on"
+        card:
+          type: entities
+          show_header_toggle: false
+          entities:
+            - input_boolean.visitor
+            - sensor.visitor_door_code
+            - input_datetime.visitor_prep
+
       - type: custom:auto-entities
         show_empty: false
         sort:
@@ -853,8 +874,6 @@ views:
         title: settings
         show_header_toggle: false
         entities:
-          - input_boolean.cleaners
-          - input_datetime.cleaners_prep_time
           - input_boolean.guests
           - automation.away_mode
           - input_boolean.christmas

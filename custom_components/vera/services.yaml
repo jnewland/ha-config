@@ -1,0 +1,41 @@
+set_lock_pin:
+  name: Add new PIN to the Lock
+  description: Adds a new PIN to the Lock
+  target:
+    entity:
+      domain: lock
+      integration: vera
+  fields:
+    name:
+      name: Name
+      description: Name of PIN
+      example: "John Doe"
+      default: "John Doe"
+      required: true
+      selector:
+        text:
+    pin:
+      name: PIN
+      description: 4-8 digit PIN
+      example: "0123"
+      default: "0123"
+      required: true
+      selector:
+        text:
+
+clear_lock_pin:
+  name: Remove a PIN from the Lock
+  description: Removes a PIN from the Lock
+  target:
+    entity:
+      domain: lock
+      integration: vera
+  fields:
+    name:
+      name: Name
+      description: Name of PIN
+      example: "John Doe"
+      default: "John Doe"
+      required: true
+      selector:
+        text:
