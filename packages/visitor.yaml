@@ -3,6 +3,12 @@ input_boolean:
     name: Visitor mode
     icon: mdi:home-import-outline
 
+input_text:
+  visitor_door_code:
+    name: Visitor door code
+    min: 4
+    max: 8
+
 input_datetime:
   visitor_prep:
     name: Visitor Prep Time
@@ -24,7 +30,7 @@ automation:
         entity_id: input_boolean.visitor
         to: 'on'
     action:
-      - service: input_text.value
+      - service: input_text.set_value
         target:
           entity_id: input_text.visitor_door_code
         data:
