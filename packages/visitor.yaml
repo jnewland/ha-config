@@ -89,13 +89,11 @@ automation:
           until: |
             {{ is_state("binary_sensor.visitor_pin_ready", "off") }}
           sequence: 
-            # TODO make this work by slot name
             - service: vera.clear_lock_pin
               target:
                 entity_id: lock.front_door
               data:
                 name: visitor
-                slot: 3
             - delay: 15
       - service: notify.iphones
         data:

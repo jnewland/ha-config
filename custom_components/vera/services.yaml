@@ -31,13 +31,11 @@ clear_lock_pin:
       domain: lock
       integration: vera
   fields:
-    slot:
-      name: Slot
-      description: Slot number of the PIN to be deleted
-      example: 1
-      default: 1
+    name:
+      name: Name
+      description: Name of PIN
+      example: "John Doe"
+      default: "John Doe"
       required: true
       selector:
-        number:
-          min: 1
-          max: 244
+        text:

@@ -38,13 +38,11 @@ SET_PIN_SCHEMA = make_entity_service_schema(
     {
         vol.Required(CONF_NAME): vol.All(str, vol.Length(min=1)),
         vol.Required(CONF_PIN): vol.All(str, vol.Length(min=4, max=8)),
-        vol.Optional("slot"): vol.All(int, vol.Range(min=1, max=244)),
     }
 )
 CLEAR_PIN_SCHEMA = make_entity_service_schema(
     {
         vol.Optional(CONF_NAME): vol.All(str, vol.Length(min=1)),
-        vol.Required("slot"): vol.All(int, vol.Range(min=1, max=244)),
     }
 )
 
@@ -97,10 +95,10 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
 
     def set_lock_pin(self, **kwargs: Any) -> None:
         """Set pin on the device."""
-        _LOGGER.debug("calling veralock.set_lock_pin to add with pin")
+        _LOGGER.debug("calling veralock.set_lock_pin")
         result = self.vera_device.set_new_pin(
             name=kwargs[CONF_NAME],
-            # fix upstream to expect a string here
+            # fix upstream to accept strings
             pin=int(kwargs[CONF_PIN]),
         )
         if result.status_code == HTTPStatus.OK:
@@ -118,7 +116,20 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
     def clear_lock_pin(self, **kwargs: Any) -> None:
         """Clear pin on the device."""
         _LOGGER.debug("calling veralock.clear_lock_pin")
-        result = self.vera_device.clear_slot_pin(slot=kwargs["slot"])
+        credentials = self.vera_device.get_pin_codes()
+        if credentials is None:
+            self._cmd_status = STATE_OK
+            return
+
+        found_slot = None
+        for slot, name, _ in credentials:
+            if name == kwargs["name"]:
+                found_slot = slot
+        if found_slot is None:
+            self._cmd_status = STATE_OK
+            return
+
+        result = self.vera_device.clear_slot_pin(slot=found_slot)
         if result.status_code == HTTPStatus.OK:
             self._cmd_status = STATE_OK
         else:
@@ -151,9 +162,13 @@ class VeraLock(VeraDevice[veraApi.VeraLock], LockEntity):
             data[ATTR_LAST_USER_NAME] = last_user[1]
 
         data[ATTR_LOW_BATTERY] = self.vera_device.get_low_battery_alert()
+
         credentials = self.vera_device.get_pin_codes()
         if credentials is not None:
-            data[ATTR_CREDENTIALS] = f"{credentials}"
+            data[
+                ATTR_CREDENTIALS
+            ] = f"{','.join(str(name) for _slot, name, _pin in credentials)}"
+
         status = self._cmd_status
         if status is not None:
             data[CONF_COMMAND_STATE] = self._cmd_status
