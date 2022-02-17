@@ -21,7 +21,7 @@ from homeassistant.const import (
     Platform,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.config_validation import make_entity_service_schema
+import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import (
     AddEntitiesCallback,
     async_get_current_platform,
@@ -34,15 +34,15 @@ _LOGGER = logging.getLogger(__name__)
 
 ATTR_LAST_USER_NAME = "changed_by_name"
 ATTR_LOW_BATTERY = "low_battery"
-SET_PIN_SCHEMA = make_entity_service_schema(
+SET_PIN_SCHEMA = cv.make_entity_service_schema(
     {
-        vol.Required(CONF_NAME): vol.All(str, vol.Length(min=1)),
-        vol.Required(CONF_PIN): vol.All(str, vol.Length(min=4, max=8)),
+        vol.Required(CONF_NAME): cv.string,
+        vol.Required(CONF_PIN): cv.string,
     }
 )
-CLEAR_PIN_SCHEMA = make_entity_service_schema(
+CLEAR_PIN_SCHEMA = cv.make_entity_service_schema(
     {
-        vol.Optional(CONF_NAME): vol.All(str, vol.Length(min=1)),
+        vol.Optional(CONF_NAME): cv.string,
     }
 )
 
