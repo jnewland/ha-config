@@ -12,6 +12,7 @@ condition:
   condition: template
   value_template: '
                   {{
+                    states.input_boolean.visitor.state == "off" and
                     states.input_boolean.guests.state == "off" and
                     states.input_select.mode.state != "Away" and
                     states.device_tracker.jphone_12.state == "not_home" and

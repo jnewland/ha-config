@@ -1,0 +1,193 @@
+input_boolean:
+  visitor:
+    name: Visitor mode
+    icon: mdi:home-import-outline
+
+input_datetime:
+  visitor_prep:
+    name: Visitor Prep Time
+    has_date: true
+    has_time: true
+
+template:
+  - binary_sensor:
+    - name: Visitor PIN ready
+      state: |
+        {{ "visitor" in state_attr("lock.front_door", "credentials") }}
+
+  - trigger:
+      - platform: state
+        entity_id: input_boolean.visitor
+        to: 'on'
+    sensor:
+      - name: visitor Door Code
+        state: |
+          {{ range(1000,9999) | random | string }}
+
+automation:
+
+  - alias: Set random visitor door code
+    id: 09ee2a51-77dc-4e3f-8efc-1ffafec8e112
+    trigger:
+      - platform: state
+        entity_id: sensor.visitor_door_code
+    action:
+      - repeat:
+          until: |
+            {{ is_state("binary_sensor.visitor_pin_ready", "on") }}
+          sequence: 
+            - service: vera.set_lock_pin
+              target:
+                entity_id: lock.front_door
+              data:
+                name: visitor
+                pin: |
+                  {{ state('sensor.visitor_door_code') }}
+            - delay: 15
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.visitor_prep
+        data:
+          datetime: |
+            {{ (now()+timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S') }}
+
+  - alias: Notify when visitor schedule is adjusted
+    id: 8a197b68-f87d-41d6-81df-8bc265a60a10
+    trigger:
+      - platform: state
+        entity_id: input_datetime.visitor_prep
+    action:
+      - service: notify.iphones
+        data:
+          message: >
+            visitor scheduled for {{ state('input_datetime.visitor_prep') }}.
+            door code is {{ state('sensor.visitor_door_code') }}.
+            alarm is {{ state('alarm_control_panel.alarm') }}.
+          data:
+            tag: visitor
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                https://home.jnewland.com{{ states.camera.front_door.attributes.entity_picture }}
+              content-type: jpeg
+              hide-thumbnail: false
+
+  - alias: Clear door code when visitor mode turned off
+    id: ac8cef99-0dcf-4625-9e17-75116e9a7acd
+    trigger:
+      - platform: state
+        entity_id: input_boolean.visitor
+        to: 'off'
+    action:
+      - repeat:
+          until: |
+            {{ is_state("binary_sensor.visitor_pin_ready", "off") }}
+          sequence: 
+            # TODO make this work by slot name
+            - service: vera.clear_lock_pin
+              target:
+                entity_id: lock.front_door
+              data:
+                name: visitor
+                slot: "3"
+      - service: notify.iphones
+        data:
+          message: >
+            visitor mode disabled. door code cleared.
+          data:
+            tag: visitor
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                https://home.jnewland.com{{ states.camera.front_door.attributes.entity_picture }}
+              content-type: jpeg
+              hide-thumbnail: false
+
+  - alias: Turn on away if necessary when disabling visitor mode
+    id: f8a50592-7270-4c4a-9d30-c3d2c89a3a8c
+    trigger:
+      - platform: state
+        entity_id: input_boolean.visitor
+        to: 'off'
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: device_tracker.jphone_12
+        state: "not_home"
+      - condition: state
+        entity_id: device_tracker.katie_s_iphone
+        state: "not_home"
+    action:
+      - service: script.turn_on
+        data:
+          entity_id: script.mode_away
+
+  - alias: Prep for visitor
+    id: 63d4d825-b354-4fd0-bd65-6e052bd33292
+    trigger:
+      - platform: time
+        at: input_datetime.visitor_prep
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: input_boolean.visitor
+        state: "on"
+      - condition: state
+        entity_id: device_tracker.jphone_12
+        state: "not_home"
+      - condition: state
+        entity_id: device_tracker.katie_s_iphone
+        state: "not_home"
+    action:
+    - service: alarm_control_panel.alarm_disarm
+      entity_id: alarm_control_panel.alarm
+    - delay: 30
+    - service: notify.iphones
+      data:
+        message: >
+          house prepped for visitor.
+          front door is {{ states.lock.front_door.state }}.
+          door code is {{ state('sensor.visitor_door_code') }}.
+          alarm is {{ states.alarm_control_panel.alarm.state }}.
+        data:
+          tag: visitor
+          push:
+            category: camera
+          entity_id: camera.front_door
+          attachment:
+            url: |
+              https://home.jnewland.com{{ states.camera.front_door.attributes.entity_picture }}
+            content-type: jpeg
+            hide-thumbnail: false
+
+  - alias: Notify about visitor departure
+    id: 0c1978a8-30d2-4fc5-a126-9a5064b2eeda
+    trigger:
+      platform: state
+      entity_id: lock.front_door
+      to: locked
+      for:
+        hours: 1
+    condition:
+      condition: state
+      entity_id: input_boolean.visitor
+      state: "on"
+    action:
+      - service: script.ask_about_turning_on
+        data:
+          entity_id: script.lock_up_after_visitor
+          tag: visitor
+          message: "The front door has been locked for a while. Turn off visitor mode?"
+          confirmation_message: locked up after the visitor
+script:
+  lock_up_after_visitor:
+    sequence:
+    - service: homeassistant.turn_off
+      data:
+        entity_id: input_boolean.visitor
