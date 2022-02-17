@@ -20,7 +20,7 @@ template:
         entity_id: input_boolean.visitor
         to: 'on'
     sensor:
-      - name: visitor Door Code
+      - name: Visitor Door Code
         state: |
           {{ range(1000,9999) | random | string }}
 
@@ -42,7 +42,7 @@ automation:
               data:
                 name: visitor
                 pin: |
-                  {{ state('sensor.visitor_door_code') }}
+                  {{ states('sensor.visitor_door_code') }}
             - delay: 15
       - service: input_datetime.set_datetime
         target:
@@ -60,9 +60,9 @@ automation:
       - service: notify.iphones
         data:
           message: >
-            visitor scheduled for {{ state('input_datetime.visitor_prep') }}.
-            door code is {{ state('sensor.visitor_door_code') }}.
-            alarm is {{ state('alarm_control_panel.alarm') }}.
+            visitor scheduled for {{ states('input_datetime.visitor_prep') }}.
+            door code is {{ states('sensor.visitor_door_code') }}.
+            alarm is {{ states('alarm_control_panel.alarm') }}.
           data:
             tag: visitor
             push:
@@ -153,7 +153,7 @@ automation:
         message: >
           house prepped for visitor.
           front door is {{ states.lock.front_door.state }}.
-          door code is {{ state('sensor.visitor_door_code') }}.
+          door code is {{ states('sensor.visitor_door_code') }}.
           alarm is {{ states.alarm_control_panel.alarm.state }}.
         data:
           tag: visitor
