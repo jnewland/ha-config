@@ -91,7 +91,7 @@ automation:
                 entity_id: lock.front_door
               data:
                 name: visitor
-                slot: "3"
+                slot: 3
       - service: notify.iphones
         data:
           message: >
