@@ -15,22 +15,26 @@ template:
       state: |
         {{ "visitor" in state_attr("lock.front_door", "credentials") }}
 
-  - trigger:
+automation:
+
+  - alias: Randomize door code
+    id: 1ec613f6-08ea-4d37-bffa-1bb63a13f03e
+    trigger:
       - platform: state
         entity_id: input_boolean.visitor
         to: 'on'
-    sensor:
-      - name: Visitor Door Code
-        state: |
-          {{ range(1000,9999) | random | string }}
-
-automation:
-
+    action:
+      - service: input_text.value
+        target:
+          entity_id: input_text.visitor_door_code
+        data:
+          value: |
+            {{ range(1000,9999) | random | string }}
   - alias: Set random visitor door code
     id: 09ee2a51-77dc-4e3f-8efc-1ffafec8e112
     trigger:
       - platform: state
-        entity_id: sensor.visitor_door_code
+        entity_id: input_text.visitor_door_code
     action:
       - repeat:
           until: |
@@ -42,7 +46,7 @@ automation:
               data:
                 name: visitor
                 pin: |
-                  {{ states('sensor.visitor_door_code') }}
+                  {{ states('input_text.visitor_door_code') }}
             - delay: 15
       - service: input_datetime.set_datetime
         target:
@@ -61,7 +65,7 @@ automation:
         data:
           message: >
             visitor scheduled for {{ states('input_datetime.visitor_prep') }}.
-            door code is {{ states('sensor.visitor_door_code') }}.
+            door code is {{ states('input_text.visitor_door_code') }}.
             alarm is {{ states('alarm_control_panel.alarm') }}.
           data:
             tag: visitor
@@ -163,7 +167,7 @@ automation:
         message: >
           house prepped for visitor.
           front door is {{ states.lock.front_door.state }}.
-          door code is {{ states('sensor.visitor_door_code') }}.
+          door code is {{ states('input_text.visitor_door_code') }}.
           alarm is {{ states.alarm_control_panel.alarm.state }}.
         data:
           tag: visitor
