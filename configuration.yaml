@@ -47,6 +47,8 @@ lovelace:
       type: module
     - url: /local/group-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: js
+    - url: /local/mini-media-player-bundle.js?v=08f8c455-2c18-485b-9a47-b55ef88d7064
+      type: module
 light:
 logger: !include logger.yaml
 map:

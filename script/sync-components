@@ -45,6 +45,7 @@ cp hack/vera.json custom_components/vera/manifest.json
 
 curl -L -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/master/group-card.js
 curl -L -o www/auto-entities.js https://github.com/thomasloven/lovelace-auto-entities/raw/master/auto-entities.js
+curl -L -o www/mini-media-player-bundle.js https://github.com/kalkih/mini-media-player/releases/download/v1.15.0/mini-media-player-bundle.js
 
 git add custom_components
 git add python_scripts
