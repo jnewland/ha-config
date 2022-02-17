@@ -207,6 +207,30 @@ automation:
             content-type: jpeg
             hide-thumbnail: false
 
+  - alias: Notify about visitor arrival
+    id: ae6f51af-3ea0-445c-b2de-1c37be2f83a4
+    trigger:
+      - platform: state
+        entity_id: lock.front_door
+        attribute: changed_by_name
+        to: visitor
+    action:
+    - service: notify.iphones
+      data:
+        message: >
+          visitor arrived.
+          alarm is {{ states("alarm_control_panel.alarm") }}.
+        data:
+          tag: visitor
+          push:
+            category: camera
+          entity_id: camera.great_room
+          attachment:
+            url: |
+              https://home.jnewland.com{{ state_attr("camera.great_room","entity_picture") }}
+            content-type: jpeg
+            hide-thumbnail: false
+
   - alias: Notify about visitor departure
     id: 0c1978a8-30d2-4fc5-a126-9a5064b2eeda
     trigger:
