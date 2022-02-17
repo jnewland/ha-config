@@ -16,8 +16,13 @@ input_datetime:
     has_time: true
 
 template:
+  - sensor:
+    - name: Visitor door code
+      state: |
+        {{ states('input_text.visitor_door_code') }}
+
   - binary_sensor:
-    - name: Visitor PIN ready
+    - name: Visitor door code ready
       state: |
         {{ "visitor" in state_attr("lock.front_door", "credentials") }}
 
@@ -59,7 +64,7 @@ automation:
     action:
       - repeat:
           until: |
-            {{ is_state("binary_sensor.visitor_pin_ready", "on") }}
+            {{ is_state("binary_sensor.visitor_door_code_ready", "on") }}
           sequence: 
             - service: vera.set_lock_pin
               target:
@@ -69,7 +74,7 @@ automation:
                 pin: |
                   {{ states('input_text.visitor_door_code') }}
             - wait_template: |
-                {{ is_state("binary_sensor.visitor_pin_ready", "on") }}
+                {{ is_state("binary_sensor.visitor_door_code_ready", "on") }}
               timeout: 15
 
   - alias: Notify when visitor schedule is adjusted
@@ -80,7 +85,7 @@ automation:
         for: 15
     action:
       - wait_template: |
-          {{ is_state("binary_sensor.visitor_pin_ready", "on") }}
+          {{ is_state("binary_sensor.visitor_door_code_ready", "on") }}
       - service: notify.iphones
         data:
           message: >
@@ -107,7 +112,7 @@ automation:
     action:
       - repeat:
           until: |
-            {{ is_state("binary_sensor.visitor_pin_ready", "off") }}
+            {{ is_state("binary_sensor.visitor_door_code_ready", "off") }}
           sequence: 
             - service: vera.clear_lock_pin
               target:
@@ -115,7 +120,7 @@ automation:
               data:
                 name: visitor
             - wait_template: |
-                {{ is_state("binary_sensor.visitor_pin_ready", "off") }}
+                {{ is_state("binary_sensor.visitor_door_code_ready", "off") }}
               timeout: 15
       - service: notify.iphones
         data:

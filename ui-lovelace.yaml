@@ -42,7 +42,7 @@ views:
           show_header_toggle: false
           entities:
             - input_boolean.visitor
-            - input_text.visitor_door_code
+            - sensor.visitor_door_code
             - input_datetime.visitor_prep
 
       - type: custom:auto-entities
