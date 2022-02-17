@@ -92,6 +92,7 @@ automation:
               data:
                 name: visitor
                 slot: 3
+            - delay: 15
       - service: notify.iphones
         data:
           message: >
@@ -123,9 +124,14 @@ automation:
         entity_id: device_tracker.katie_s_iphone
         state: "not_home"
     action:
-      - service: script.turn_on
-        data:
-          entity_id: script.mode_away
+    - repeat:
+        until: |
+          {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
+        sequence:
+          - service: script.turn_on
+            data:
+              entity_id: script.mode_away
+          - delay: 15
 
   - alias: Prep for visitor
     id: 63d4d825-b354-4fd0-bd65-6e052bd33292
@@ -145,9 +151,13 @@ automation:
         entity_id: device_tracker.katie_s_iphone
         state: "not_home"
     action:
-    - service: alarm_control_panel.alarm_disarm
-      entity_id: alarm_control_panel.alarm
-    - delay: 30
+    - repeat:
+        until: |
+          {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+        sequence:
+          - service: alarm_control_panel.alarm_disarm
+            entity_id: alarm_control_panel.alarm
+          - delay: 15
     - service: notify.iphones
       data:
         message: >
