@@ -236,12 +236,8 @@ class SlackNotificationService(BaseNotificationService):
         data = FormData(form_data, charset="utf-8")
         data.add_field("file", resp.content, filename=filename)
 
-        _LOGGER.debug("About to upload file %r", data)
-
         try:
-            async with session.post("https://www.slack.com/api/files.upload", data=data) as resp:
-                print(resp.status)
-                print(await resp.text())
+            await session.post("https://slack.com/api/files.upload", data=data)
         except ClientError as err:
             _LOGGER.error("Error while uploading file message: %r", err)
 
