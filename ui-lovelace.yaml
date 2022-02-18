@@ -127,6 +127,7 @@ views:
               controls: true
               source: true
               power: true
+              progress: true
           - type: custom:mini-media-player
             entity: media_player.front_porch
             group: true
@@ -136,6 +137,7 @@ views:
               controls: true
               source: true
               power: true
+              progress: true
           - type: custom:mini-media-player
             entity: media_player.hall
             group: true
@@ -145,6 +147,7 @@ views:
               controls: true
               source: true
               power: true
+              progress: true
           - type: custom:mini-media-player
             entity: media_player.lounge_surround
             group: true
@@ -153,6 +156,7 @@ views:
             hide:
               controls: true
               power: true
+              progress: true
           - type: custom:mini-media-player
             entity: media_player.master_patio
             group: true
@@ -162,6 +166,7 @@ views:
               controls: true
               source: true
               power: true
+              progress: true
           - type: custom:mini-media-player
             entity: media_player.move
             group: true
@@ -171,6 +176,7 @@ views:
               controls: true
               source: true
               power: true
+              progress: true
           - type: custom:mini-media-player
             entity: media_player.pergola
             group: true
@@ -180,6 +186,7 @@ views:
               controls: true
               source: true
               power: true
+              progress: true
           - type: custom:mini-media-player
             entity: media_player.record_cabinet
             group: true
@@ -188,6 +195,7 @@ views:
             hide:
               controls: true
               power: true
+              progress: true
           - type: custom:mini-media-player
             entity: media_player.shower
             group: true
@@ -197,6 +205,7 @@ views:
               controls: true
               source: true
               power: true
+              progress: true
 
       - type: custom:auto-entities
         show_empty: false
