@@ -81,7 +81,7 @@ views:
             conditions:
               - entity: media_player.house
                 state: playing
-            row:
+            card:
               type: entities
               show_header_toggle: false
               entities:
