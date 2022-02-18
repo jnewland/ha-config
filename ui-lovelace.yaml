@@ -138,136 +138,136 @@ views:
                     - entity: media_player.back_porch
                       state_not: "idle"
                   row:
-                    - type: custom:mini-media-player
-                      entity: media_player.back_porch
-                      group: true
-                      source: icon
-                      info: short
-                      hide:
-                        controls: true
-                        source: true
-                        power: true
-                        progress: true
+                    type: custom:mini-media-player
+                    entity: media_player.back_porch
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
                 - type: conditional
                   conditions:
                     - entity: media_player.front_porch
                       state_not: "idle"
                   row:
-                    - type: custom:mini-media-player
-                      entity: media_player.front_porch
-                      group: true
-                      source: icon
-                      info: short
-                      hide:
-                        controls: true
-                        source: true
-                        power: true
-                        progress: true
+                    type: custom:mini-media-player
+                    entity: media_player.front_porch
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
                 - type: conditional
                   conditions:
                     - entity: media_player.hall
                       state_not: "idle"
                   row:
-                    - type: custom:mini-media-player
-                      entity: media_player.hall
-                      group: true
-                      source: icon
-                      info: short
-                      hide:
-                        controls: true
-                        source: true
-                        power: true
-                        progress: true
+                    type: custom:mini-media-player
+                    entity: media_player.hall
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
                 - type: conditional
                   conditions:
                     - entity: media_player.lounge_surround
                       state_not: "idle"
                   row:
-                    - type: custom:mini-media-player
-                      entity: media_player.lounge_surround
-                      group: true
-                      source: icon
-                      info: short
-                      hide:
-                        controls: true
-                        source: true
-                        power: true
-                        progress: true
+                    type: custom:mini-media-player
+                    entity: media_player.lounge_surround
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
                 - type: conditional
                   conditions:
                     - entity: media_player.master_patio
                       state_not: "idle"
                   row:
-                    - type: custom:mini-media-player
-                      entity: media_player.master_patio
-                      group: true
-                      source: icon
-                      info: short
-                      hide:
-                        controls: true
-                        source: true
-                        power: true
-                        progress: true
+                    type: custom:mini-media-player
+                    entity: media_player.master_patio
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
                 - type: conditional
                   conditions:
                     - entity: media_player.move
                       state_not: "idle"
                   row:
-                    - type: custom:mini-media-player
-                      entity: media_player.move
-                      group: true
-                      source: icon
-                      info: short
-                      hide:
-                        controls: true
-                        source: true
-                        power: true
-                        progress: true
+                    type: custom:mini-media-player
+                    entity: media_player.move
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
                 - type: conditional
                   conditions:
                     - entity: media_player.pergola
                       state_not: "idle"
                   row:
-                    - type: custom:mini-media-player
-                      entity: media_player.pergola
-                      group: true
-                      source: icon
-                      info: short
-                      hide:
-                        controls: true
-                        source: true
-                        power: true
-                        progress: true
+                    type: custom:mini-media-player
+                    entity: media_player.pergola
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
                 - type: conditional
                   conditions:
                     - entity: media_player.record_cabinet
                       state_not: "idle"
                   row:
-                    - type: custom:mini-media-player
-                      entity: media_player.record_cabinet
-                      group: true
-                      source: icon
-                      info: short
-                      hide:
-                        controls: true
-                        source: true
-                        power: true
-                        progress: true
+                    type: custom:mini-media-player
+                    entity: media_player.record_cabinet
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
                 - type: conditional
                   conditions:
                     - entity: media_player.shower
                       state_not: "idle"
                   row:
-                    - type: custom:mini-media-player
-                      entity: media_player.shower
-                      group: true
-                      source: icon
-                      info: short
-                      hide:
-                        controls: true
-                        source: true
-                        power: true
-                        progress: true
+                    type: custom:mini-media-player
+                    entity: media_player.shower
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
 
       - type: custom:auto-entities
         show_empty: false
