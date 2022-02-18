@@ -121,6 +121,14 @@ views:
                   controls: true
                   source: true
               - type: custom:mini-media-player
+                entity: media_player.patio_speakers
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+              - type: custom:mini-media-player
                 entity: media_player.back_porch
                 group: true
                 source: icon
