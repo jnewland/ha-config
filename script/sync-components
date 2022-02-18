@@ -40,6 +40,7 @@ rm -rf $TMPDIR/sensme-$$
 rm -rf custom_components/vera || true
 git clone https://github.com/jnewland/core -b vera-lock-pin $TMPDIR/core-$$
 mv $TMPDIR/core-$$/homeassistant/components/vera custom_components
+# mv $TMPDIR/core-$$/homeassistant/components/slack custom_components
 rm -rf $TMPDIR/core-$$
 cp hack/vera.json custom_components/vera/manifest.json
 
