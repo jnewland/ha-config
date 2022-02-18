@@ -84,120 +84,111 @@ views:
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.kitchen_speakers
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.living_speakers
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.master_bathroom_speakers
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.master_bedroom_speakers
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
-          - type: custom:mini-media-player
-            entity: media_player.master_speakers
-            group: true
-            source: icon
-            info: short
-            hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.back_porch
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.front_porch
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.hall
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.lounge_surround
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.master_patio
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.move
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.pergola
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
           - type: custom:mini-media-player
             entity: media_player.record_cabinet
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
           - type: custom:mini-media-player
             entity: media_player.shower
             group: true
             source: icon
             info: short
             hide:
-              volume: true
-              power: true
+              controls: true
+              source: true
 
       - type: custom:auto-entities
         show_empty: false
