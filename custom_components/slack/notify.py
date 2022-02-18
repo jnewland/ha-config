@@ -237,7 +237,7 @@ class SlackNotificationService(BaseNotificationService):
         data.add_field("file", resp.content, filename=filename)
 
         try:
-            await session.post("https://slack.com/api/files.upload", data=data)
+            await session.post("https://www.slack.com/api/files.upload", data=data)
         except ClientError as err:
             _LOGGER.error("Error while uploading file message: %r", err)
 
