@@ -157,6 +157,7 @@ views:
                 info: short
                 hide:
                   controls: true
+                  source: true
                   power: true
                   progress: true
               - type: custom:mini-media-player
@@ -196,6 +197,7 @@ views:
                 info: short
                 hide:
                   controls: true
+                  source: true
                   power: true
                   progress: true
               - type: custom:mini-media-player
