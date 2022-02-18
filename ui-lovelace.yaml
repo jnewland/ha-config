@@ -75,6 +75,129 @@ views:
               name: record cabinet
             - entity_id: media_player.shower
               name: shower
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - type: custom:mini-media-player
+            entity: media_player.atrium_speakers
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.kitchen_speakers
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.living_speakers
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.master_bathroom_speakers
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.master_bedroom_speakers
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.master_speakers
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.back_porch
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.front_porch
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.hall
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.lounge_surround
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.master_patio
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.move
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.pergola
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.record_cabinet
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
+          - type: custom:mini-media-player
+            entity: media_player.shower
+            group: true
+            source: icon
+            info: short
+            hide:
+              volume: true
+              power: true
 
       - type: custom:auto-entities
         show_empty: false
@@ -85,9 +208,11 @@ views:
           show_header_toggle: false
         filter:
           include:
-            - domain: media_player
+            - attributes:
+                supported_features: 450487
+            - entity_id: "/media_player.*_channels$/"
+            - entity_id: "/media_player.*_tv.*/"
           exclude:
-            - state: "ok"
             - state: "problem"
             - state: "off"
             - state: "unavailable"
@@ -95,6 +220,7 @@ views:
             - state: "paused"
             - state: "unknown"
             - state: "standby"
+
       - type: conditional
         conditions:
           - entity: input_boolean.winterized
@@ -498,66 +624,6 @@ views:
         filter:
           include:
             - entity_id: "/sensor..*_skipped_fps$/"
-
-  - title: Record player
-    path: record-player
-    icon: mdi:record-player
-    cards:
-      - type: media-control
-        entity: media_player.record_cabinet
-      - type: custom:auto-entities
-        show_empty: false
-        sort:
-          method: id
-        card:
-          type: entities
-          show_header_toggle: false
-        filter:
-          include:
-            - entity_id: "/media_player..*_output_.*/"
-      - type: entities
-        show_header_toggle: false
-        entities:
-          - light.record_cabinet_left
-          - light.record_cabinet_right
-
-  - title: Speakers
-    icon: mdi:speaker
-    cards:
-      - type: media-control
-        entity: media_player.atrium_speakers
-      - type: media-control
-        entity: media_player.kitchen_speakers
-      - type: media-control
-        entity: media_player.living_speakers
-      - type: media-control
-        entity: media_player.master_bathroom_speakers
-      - type: media-control
-        entity: media_player.master_bedroom_speakers
-      - type: media-control
-        entity: media_player.patio_speakers
-
-  - title: Airplay
-    icon: mdi:cast-audio-variant
-    cards:
-      - type: custom:auto-entities
-        show_empty: false
-        sort:
-          method: name
-        card:
-          type: entities
-          show_header_toggle: false
-        filter:
-          include:
-            - domain: media_player
-          exclude:
-            - state: "problem"
-            - state: "off"
-            - state: "unavailable"
-            - state: "idle"
-            - state: "paused"
-            - state: "unknown"
-            - state: "standby"
 
   - title: Climate
     icon: mdi:temperature-fahrenheit
