@@ -126,6 +126,7 @@ views:
             hide:
               controls: true
               source: true
+              power: true
           - type: custom:mini-media-player
             entity: media_player.front_porch
             group: true
@@ -134,6 +135,7 @@ views:
             hide:
               controls: true
               source: true
+              power: true
           - type: custom:mini-media-player
             entity: media_player.hall
             group: true
@@ -142,6 +144,7 @@ views:
             hide:
               controls: true
               source: true
+              power: true
           - type: custom:mini-media-player
             entity: media_player.lounge_surround
             group: true
@@ -149,7 +152,7 @@ views:
             info: short
             hide:
               controls: true
-              source: true
+              power: true
           - type: custom:mini-media-player
             entity: media_player.master_patio
             group: true
@@ -158,6 +161,7 @@ views:
             hide:
               controls: true
               source: true
+              power: true
           - type: custom:mini-media-player
             entity: media_player.move
             group: true
@@ -166,6 +170,7 @@ views:
             hide:
               controls: true
               source: true
+              power: true
           - type: custom:mini-media-player
             entity: media_player.pergola
             group: true
@@ -174,6 +179,7 @@ views:
             hide:
               controls: true
               source: true
+              power: true
           - type: custom:mini-media-player
             entity: media_player.record_cabinet
             group: true
@@ -181,6 +187,7 @@ views:
             info: short
             hide:
               controls: true
+              power: true
           - type: custom:mini-media-player
             entity: media_player.shower
             group: true
@@ -189,6 +196,7 @@ views:
             hide:
               controls: true
               source: true
+              power: true
 
       - type: custom:auto-entities
         show_empty: false
