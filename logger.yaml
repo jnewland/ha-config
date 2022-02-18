@@ -1,5 +1,8 @@
 default: info
 logs:
+  aiohttp.client: debug
+  slackclient: debug
+  homeassistant.components.slack: debug
   packages.ack: debug
   packages.image_processing: info
   requests.packages.urllib3.connectionpool: critical
