@@ -47,7 +47,7 @@ views:
 
       - type: custom:mini-media-player
         entity: media_player.house
-        artwork: full-cover-fit
+        artwork: material
         hide:
           power: true
           icon: true
