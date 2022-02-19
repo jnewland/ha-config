@@ -28,4 +28,4 @@ action:
       data:
         file:
           url: |
-            https://home.jnewland.com{{ states.camera.pergola.attributes.entity_picture }}
+            {{ states('input_text.frigate_url') }}/api/front_door/latest.jpg
