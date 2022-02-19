@@ -53,6 +53,7 @@ views:
             hide:
               power: true
               icon: true
+              shuffle: false
             speaker_group:
               platform: sonos
               show_group_count: true
