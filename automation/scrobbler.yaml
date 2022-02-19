@@ -27,5 +27,5 @@ action:
     data:
       file:
         url: |
-          https://home.jnewland.com{{ trigger.to_state.attributes.entity_picture }}
+          {{ states('input_text.external_url') }}{{ trigger.to_state.attributes.entity_picture }}
 

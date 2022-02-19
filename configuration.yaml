@@ -12,7 +12,8 @@ homeassistant:
   allowlist_external_dirs:
     - /tmp
   allowlist_external_urls:
-    - https://home.jnewland.com
+    - !env_var SELF_LINK
+    - !env_var FRIGATE_URL
 
 default_config:
 aerogarden: !include aerogarden.yaml

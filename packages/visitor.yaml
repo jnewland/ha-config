@@ -99,7 +99,7 @@ automation:
             entity_id: camera.great_room
             attachment:
               url: |
-                https://home.jnewland.com{{ states.camera.great_room.attributes.entity_picture }}
+                {{ states('input_text.external_url') }}{{ states.camera.great_room.attributes.entity_picture }}
               content-type: jpeg
               hide-thumbnail: false
 
@@ -133,7 +133,7 @@ automation:
             entity_id: camera.great_room
             attachment:
               url: |
-                https://home.jnewland.com{{ states.camera.great_room.attributes.entity_picture }}
+                {{ states('input_text.external_url') }}{{ states.camera.great_room.attributes.entity_picture }}
               content-type: jpeg
               hide-thumbnail: false
 
@@ -203,7 +203,7 @@ automation:
           entity_id: camera.great_room
           attachment:
             url: |
-              https://home.jnewland.com{{ states.camera.great_room.attributes.entity_picture }}
+              {{ states('input_text.external_url') }}{{ states.camera.great_room.attributes.entity_picture }}
             content-type: jpeg
             hide-thumbnail: false
 
@@ -227,7 +227,7 @@ automation:
           entity_id: camera.great_room
           attachment:
             url: |
-              https://home.jnewland.com{{ state_attr("camera.great_room","entity_picture") }}
+              {{ states('input_text.external_url') }}{{ state_attr("camera.great_room","entity_picture") }}
             content-type: jpeg
             hide-thumbnail: false
 

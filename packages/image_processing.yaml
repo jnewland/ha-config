@@ -16,7 +16,8 @@ automation:
             {{ trigger.payload_json["after"]["label"] }}
           data:
             file:
-              url: https://home.jnewland.com/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
+              url: |
+                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
 
   - alias: Post frigate clips at end of events
     mode: parallel
@@ -38,4 +39,5 @@ automation:
             {{ trigger.payload_json["after"]["label"] }} event has ended
           data:
             file:
-              url: https://home.jnewland.com/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/{{ trigger.payload_json["after"]["camera"] }}/clip.mp4
+              url: |
+                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/{{ trigger.payload_json["after"]["camera"] }}/clip.mp4

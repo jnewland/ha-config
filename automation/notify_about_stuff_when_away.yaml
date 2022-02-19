@@ -49,7 +49,7 @@ action:
         {%- endif -%}
       attachment:
         url: >
-          https://home.jnewland.com/
+          {{ states('input_text.external_url') }}
           {%- if trigger.to_state.entity_id == "binary_sensor.gate" -%}
           {{ states.camera.gate.attributes.entity_picture }}
           {%- elif trigger.to_state.entity_id == "binary_sensor.garage" -%}

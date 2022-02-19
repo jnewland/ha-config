@@ -14,7 +14,7 @@ action:
         entity_id: camera.pergola
         attachment:
           url: |
-            https://home.jnewland.com{{ states.camera.pergola.attributes.entity_picture }}
+            {{ states('input_text.external_url') }}{{ states.camera.pergola.attributes.entity_picture }}
           content-type: jpeg
           hide-thumbnail: false
   - service: script.notify_with_lights
@@ -28,4 +28,4 @@ action:
       data:
         file:
           url: |
-            https://home.jnewland.com{{ states.camera.pergola.attributes.entity_picture }}
+            {{ states('input_text.frigate_url') }}/api/front_door/latest.jpg
