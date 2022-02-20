@@ -53,6 +53,7 @@ views:
             hide:
               power: true
               icon: true
+              shuffle: false
             speaker_group:
               platform: sonos
               show_group_count: true
@@ -137,6 +138,8 @@ views:
                   conditions:
                     - entity: media_player.back_porch
                       state_not: "idle"
+                    - entity: media_player.back_porch
+                      state_not: "paused"
                   row:
                     type: custom:mini-media-player
                     entity: media_player.back_porch
@@ -152,6 +155,8 @@ views:
                   conditions:
                     - entity: media_player.front_porch
                       state_not: "idle"
+                    - entity: media_player.front_porch
+                      state_not: "paused"
                   row:
                     type: custom:mini-media-player
                     entity: media_player.front_porch
@@ -167,6 +172,8 @@ views:
                   conditions:
                     - entity: media_player.hall
                       state_not: "idle"
+                    - entity: media_player.hall
+                      state_not: "paused"
                   row:
                     type: custom:mini-media-player
                     entity: media_player.hall
@@ -182,6 +189,8 @@ views:
                   conditions:
                     - entity: media_player.lounge_surround
                       state_not: "idle"
+                    - entity: media_player.lounge_surround
+                      state_not: "paused"
                   row:
                     type: custom:mini-media-player
                     entity: media_player.lounge_surround
@@ -197,6 +206,8 @@ views:
                   conditions:
                     - entity: media_player.master_patio
                       state_not: "idle"
+                    - entity: media_player.master_patio
+                      state_not: "paused"
                   row:
                     type: custom:mini-media-player
                     entity: media_player.master_patio
@@ -212,6 +223,8 @@ views:
                   conditions:
                     - entity: media_player.move
                       state_not: "idle"
+                    - entity: media_player.move
+                      state_not: "paused"
                   row:
                     type: custom:mini-media-player
                     entity: media_player.move
@@ -227,6 +240,8 @@ views:
                   conditions:
                     - entity: media_player.pergola
                       state_not: "idle"
+                    - entity: media_player.pergola
+                      state_not: "paused"
                   row:
                     type: custom:mini-media-player
                     entity: media_player.pergola
@@ -242,6 +257,8 @@ views:
                   conditions:
                     - entity: media_player.record_cabinet
                       state_not: "idle"
+                    - entity: media_player.record_cabinet
+                      state_not: "paused"
                   row:
                     type: custom:mini-media-player
                     entity: media_player.record_cabinet
@@ -257,6 +274,8 @@ views:
                   conditions:
                     - entity: media_player.shower
                       state_not: "idle"
+                    - entity: media_player.shower
+                      state_not: "paused"
                   row:
                     type: custom:mini-media-player
                     entity: media_player.shower
@@ -282,6 +301,7 @@ views:
                 supported_features: 450487
             - entity_id: "/media_player.*_channels$/"
             - entity_id: "/media_player.*_tv.*/"
+            - entity_id: "/media_player.*_surround$/"
           exclude:
             - state: "problem"
             - state: "off"
