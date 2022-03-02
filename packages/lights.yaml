@@ -82,6 +82,9 @@ homeassistant:
     binary_sensor.bookshelf_camera_in_use:
       trigger_service: script.red_record_cabinet_lights
       trigger_service_off: script.reset_record_cabinet_lights
+    binary_sensor.spacebook_camera_in_use:
+      trigger_service: script.red_record_cabinet_lights
+      trigger_service_off: script.reset_record_cabinet_lights
 
     counter.light_automations:
       unit_of_measurement: occurances
