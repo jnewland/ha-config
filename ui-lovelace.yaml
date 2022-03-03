@@ -64,8 +64,8 @@ views:
                   name: back porch
                 - entity_id: media_player.front_porch
                   name: front porch
-                - entity_id: media_player.hall
-                  name: hall
+                - entity_id: media_player.yoga
+                  name: yoga
                 - entity_id: media_player.lounge_surround
                   name: lounge surround
                 - entity_id: media_player.master_patio
@@ -170,13 +170,13 @@ views:
                       progress: true
                 - type: conditional
                   conditions:
-                    - entity: media_player.hall
+                    - entity: media_player.yoga
                       state_not: "idle"
-                    - entity: media_player.hall
+                    - entity: media_player.yoga
                       state_not: "paused"
                   row:
                     type: custom:mini-media-player
-                    entity: media_player.hall
+                    entity: media_player.yoga
                     group: true
                     source: icon
                     info: short
