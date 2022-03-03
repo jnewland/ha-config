@@ -67,12 +67,6 @@ homeassistant:
       trigger_entity_id: light.garage_hall
       trigger_entity_id_off: light.garage_hall
       haunt: light.drums
-    binary_sensor.yoga_room_motion:
-      friendly_name: yoga room motion
-      trigger_entity_id: group.yoga_room
-      trigger_entity_id_off: group.yoga_room
-      off_delay_seconds: 600
-      haunt: light.bookshelf_middle
     binary_sensor.pantry_motion:
       trigger_entity_id: light.pantry
       trigger_entity_id_off: light.pantry
