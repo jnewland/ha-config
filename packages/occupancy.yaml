@@ -36,6 +36,15 @@ homeassistant:
       sonos_group_master: media_player.house
       sonos_group_entity_id: media_player.move
 
+    binary_sensor.yoga_room_motion:
+      friendly_name: yoga room motion
+      trigger_entity_id: group.yoga_room
+      trigger_entity_id_off: group.yoga_room
+      off_delay_seconds: 600
+      haunt: light.bookshelf_middle
+      sonos_group_master: media_player.house
+      sonos_group_entity_id: media_player.yoga
+
 binary_sensor:
   - platform: template
     sensors:
