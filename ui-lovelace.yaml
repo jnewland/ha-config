@@ -49,10 +49,9 @@ views:
         cards:
           - type: custom:mini-media-player
             entity: media_player.house
-            artwork: material
+            artwork: cover
             hide:
               power: true
-              icon: true
               shuffle: false
             speaker_group:
               platform: sonos
