@@ -38,6 +38,8 @@ script:
       - condition: template
         value_template: |
           {{ states.input_select.mode.state != "Away" }}
+      - service: light.turn_on
+        entity_id: group.outdoor_mood
       - condition: template
         value_template: |
           {{
