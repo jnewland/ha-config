@@ -1,0 +1,30 @@
+{
+  "labels": ["renovate", "{{datasource}}"],
+  "extends": ["config:base"],
+  "rebaseWhen": "conflicted",
+  "prFooter": "",
+  "prHeader": "Greetings. Auto-update behavior is configured via [`renovate.json`](https://github.com/jnewland/ha-config/blob/master/renovate.json).",
+  "packageRules": [
+    {
+      "updateTypes": ["major"],
+      "addLabels": ["major"]
+    },
+    {
+      "updateTypes": ["minor"],
+      "addLabels": ["minor"]
+    },
+    {
+      "updateTypes": ["patch"],
+      "addLabels": ["patch"]
+    }
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": [".+"],
+      "datasourceTemplate": "github-releases",
+      "matchStrings": [
+        "https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/(?<currentValue>[^/]+)/"
+      ]
+    }
+  ]
+}
