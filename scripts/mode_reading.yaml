@@ -3,6 +3,14 @@ sequence:
   entity_id: input_select.mode
   data:
     option: Reading
+- service: light.turn_off
+  data:
+    entity_id: |
+      {% if states.input_boolean.guests.state == "on" %}
+      group.downstairs_non_guest
+      {% else %}
+      group.downstairs
+      {% endif %}
 - service: input_number.set_value
   data:
     entity_id: input_number.brightness
@@ -16,6 +24,7 @@ sequence:
     - light.bedside_table
     - light.master_nook
     - light.master_patio
+    - light.striped_lamp
     brightness: |
       {{ states('input_number.brightness') | int }}
 - service: light.turn_off
@@ -23,14 +32,6 @@ sequence:
     entity_id:
     - light.master_overhead
     - light.stairs
-- service: light.turn_off
-  data:
-    entity_id: |
-      {% if states.input_boolean.guests.state == "on" %}
-      group.downstairs_non_guest
-      {% else %}
-      group.downstairs
-      {% endif %}
 - service: script.lock_up
 - condition: template
   value_template: >
@@ -41,7 +42,3 @@ sequence:
     tag: alarm_control_panel.alarm
     message: "Arm the alarm?"
     confirmation_message: armed the alarm
-- service: light.turn_on
-  data:
-    entity_id:
-      - light.striped_lamp
