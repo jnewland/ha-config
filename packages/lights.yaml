@@ -29,10 +29,6 @@ homeassistant:
     binary_sensor.closet_motion:
       trigger_entity_id: light.master_closet
       trigger_entity_id_off: light.master_closet
-    binary_sensor.guest_hall_motion:
-      trigger_entity_id: light.guest_hall
-      trigger_entity_id_off: light.guest_hall
-      haunt: light.couch
     binary_sensor.guest_bath_motion:
       trigger_entity_id: group.guest_bath_lights
       trigger_entity_id_off: group.guest_bath
@@ -59,14 +55,6 @@ homeassistant:
     binary_sensor.wine_room_motion:
       trigger_entity_id: light.wine_room
       trigger_entity_id_off: light.wine_room
-    binary_sensor.great_hall_motion:
-      trigger_entity_id: light.great_hall
-      trigger_entity_id_off: light.great_hall
-      haunt: light.drums
-    binary_sensor.garage_hall_motion:
-      trigger_entity_id: light.garage_hall
-      trigger_entity_id_off: light.garage_hall
-      haunt: light.drums
     binary_sensor.pantry_motion:
       trigger_entity_id: light.pantry
       trigger_entity_id_off: light.pantry

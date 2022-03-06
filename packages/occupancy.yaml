@@ -7,7 +7,7 @@ homeassistant:
       haunt: light.bookshelf_right
       speaker_entity: group.great_room_speakers
       sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.record_cabinet
+      sonos_group_entity_id: media_player.sub
 
     binary_sensor.lounge_occupancy:
       sonos_group_master: media_player.house
@@ -44,6 +44,27 @@ homeassistant:
       haunt: light.bookshelf_middle
       sonos_group_master: media_player.house
       sonos_group_entity_id: media_player.yoga
+
+    binary_sensor.garage_hall_motion:
+      trigger_entity_id: light.garage_hall
+      trigger_entity_id_off: light.garage_hall
+      haunt: light.drums
+      sonos_group_master: media_player.house
+      sonos_group_entity_id: media_player.record_cabinet
+
+    binary_sensor.guest_hall_motion:
+      trigger_entity_id: light.guest_hall
+      trigger_entity_id_off: light.guest_hall
+      haunt: light.couch
+      sonos_group_master: media_player.house
+      sonos_group_entity_id: media_player.record_cabinet
+
+    binary_sensor.great_hall_motion:
+      trigger_entity_id: light.great_hall
+      trigger_entity_id_off: light.great_hall
+      haunt: light.drums
+      sonos_group_master: media_player.house
+      sonos_group_entity_id: media_player.record_cabinet
 
 binary_sensor:
   - platform: template
