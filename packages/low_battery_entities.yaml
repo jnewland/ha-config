@@ -45,8 +45,7 @@ automation:
     condition:
       - condition: template
         value_template: >
-          {{ is_number(trigger.from_state.state)
-              and is_number(trigger.to_state.state) }}
+          {{ is_number(trigger.to_state.state) }}
     action:
       - choose:
           conditions:
