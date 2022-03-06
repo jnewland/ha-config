@@ -64,7 +64,8 @@ automation:
           trigger.event.data.new_state.state == "on" and
           trigger.event.data.new_state.attributes.sonos_group_master is defined and
           trigger.event.data.new_state.attributes.sonos_group_entity_id is defined and
-          states(trigger.event.data.new_state.attributes.sonos_group_entity_id) == 'idle'
+          ( is_state(trigger.event.data.new_state.attributes.sonos_group_entity_id, 'idle') or
+            is_state(trigger.event.data.new_state.attributes.sonos_group_entity_id, 'paused') )
         }}
     action:
       - service: sonos.join
