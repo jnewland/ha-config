@@ -59,24 +59,26 @@ views:
               entities:
                 - entity_id: media_player.house
                   name: house
+                - entity_id: media_player.sub
+                  name: sub
+                - entity_id: media_player.record_cabinet
+                  name: record cabinet
+                - entity_id: media_player.lounge_surround
+                  name: lounge surround
+                - entity_id: media_player.move
+                  name: move
+                - entity_id: media_player.yoga
+                  name: yoga
+                - entity_id: media_player.shower
+                  name: shower
+                - entity_id: media_player.master_patio
+                  name: master patio
                 - entity_id: media_player.back_porch
                   name: back porch
                 - entity_id: media_player.front_porch
                   name: front porch
-                - entity_id: media_player.yoga
-                  name: yoga
-                - entity_id: media_player.lounge_surround
-                  name: lounge surround
-                - entity_id: media_player.master_patio
-                  name: master patio
-                - entity_id: media_player.move
-                  name: move
                 - entity_id: media_player.pergola
                   name: pergola
-                - entity_id: media_player.record_cabinet
-                  name: record cabinet
-                - entity_id: media_player.shower
-                  name: shower
           - type: conditional
             conditions:
               - entity: media_player.house
@@ -261,6 +263,23 @@ views:
                   row:
                     type: custom:mini-media-player
                     entity: media_player.record_cabinet
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
+                - type: conditional
+                  conditions:
+                    - entity: media_player.sub
+                      state_not: "idle"
+                    - entity: media_player.sub
+                      state_not: "paused"
+                  row:
+                    type: custom:mini-media-player
+                    entity: media_player.sub
                     group: true
                     source: icon
                     info: short
