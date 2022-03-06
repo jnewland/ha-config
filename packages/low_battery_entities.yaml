@@ -40,8 +40,6 @@ automation:
       - platform: state
         entity_id: sensor.low_battery_entities
         to: ~
-      - platform: homeassistant
-        event: start
     condition:
       - condition: template
         value_template: >
