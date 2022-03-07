@@ -86,6 +86,10 @@ homeassistant:
       fixed_brightness: 255
     light.front_door:
       fixed_brightness: 255
+    light.gate:
+      notify_action: duck
+      fixed_brightness: 192
+      fixed_color_temp: 396
     light.patio:
       fixed_brightness: 255
     light.ac:
