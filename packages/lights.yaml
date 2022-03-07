@@ -54,7 +54,7 @@ homeassistant:
       haunt: light.bookshelf_left
     binary_sensor.wine_room_motion:
       trigger_entity_id: light.wine_room
-      trigger_entity_id_off: light.wine_room
+      trigger_service_off: script.maybe_turn_off_wine_room
     binary_sensor.pantry_motion:
       trigger_entity_id: light.pantry
       trigger_entity_id_off: light.pantry
@@ -815,6 +815,14 @@ script:
           entity_id:
             - light.record_cabinet_left
             - light.record_cabinet_right
+
+  maybe_turn_off_wine_room:
+    sequence:
+    - condition: template
+      value_template: >
+        {{ is_state('group.outdoor_mood', 'off') }}
+    - service: light.turn_off
+      entity_id: light.wine_room
 
 shell_command:
   wake_bookshelf: curl -s --retry 3 --retry-max-time 10 --max-time 30 -X POST bookshelf:8686/wake
