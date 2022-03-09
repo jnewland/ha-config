@@ -40,7 +40,6 @@ homeassistant:
       haunt: light.bookshelf_middle
 
     binary_sensor.yoga_room_occupancy:
-      friendly_name: yoga room motion
       trigger_entity_id: group.yoga_room
       trigger_entity_id_off: group.yoga_room
       sonos_group_master: media_player.house
