@@ -37,11 +37,12 @@ homeassistant:
       sonos_group_entity_id: media_player.move
 
     binary_sensor.yoga_room_motion:
+      haunt: light.bookshelf_middle
+
+    binary_sensor.yoga_room_occupancy:
       friendly_name: yoga room motion
       trigger_entity_id: group.yoga_room
       trigger_entity_id_off: group.yoga_room
-      off_delay_seconds: 600
-      haunt: light.bookshelf_middle
       sonos_group_master: media_player.house
       sonos_group_entity_id: media_player.yoga
 
@@ -115,6 +116,16 @@ binary_sensor:
           }}
         delay_off:
           minutes: 15
+
+      yoga_room_occupancy:
+        friendly_name: yoga room occupied
+        device_class: occupancy
+        value_template: |
+          {{ 
+            states('binary_sensor.yoga_room_motion') == 'on'
+          }}
+        delay_off:
+          minutes: 30
 
       garage_occupancy:
         friendly_name: garage occupied
