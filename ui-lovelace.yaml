@@ -1080,6 +1080,7 @@ views:
         image: https://cctv.austinmobility.io/image/244.jpg
 
   - title: Zwave Migration
+    icon: mdi:z-wave
     cards:
       - type: custom:auto-entities
         card:
