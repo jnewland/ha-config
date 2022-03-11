@@ -1095,6 +1095,8 @@ views:
         content: |
           # Migrating a node
 
+          > {% set entity = states[integration_entities('vera') | random] %}Why not migrate the {{ entity.name }} {{entity.domain}} (`{{entity.entity_id}}`) right now?
+
           1. ALTUI -> More -> Table Controllers -> Exclude
           1. Exclude the node
           1. Integrations -> Vera -> Reload
