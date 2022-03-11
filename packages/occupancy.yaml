@@ -66,6 +66,17 @@ homeassistant:
       sonos_group_master: media_player.house
       sonos_group_entity_id: media_player.record_cabinet
 
+    binary_sensor.stairs_occupancy:
+      trigger_entity_id: light.stairs
+      trigger_entity_id_off: light.stairs
+
+    binary_sensor.stairs_motion:
+      haunt: light.bookshelf_right
+
+    binary_sensor.upstairs_home_security_motion_detection:
+      haunt: light.bookshelf_right
+
+
 binary_sensor:
   - platform: template
     sensors:
@@ -145,4 +156,15 @@ binary_sensor:
           {{ 
             states('lock.front_door') == 'unlocked' or
             float(states('sensor.front_yard_left_person')) | default(0) > 0 
+          }}
+
+  - platform: template
+    sensors:
+      stairs_occupancy:
+        friendly_name: stairs occupied
+        device_class: occupancy
+        value_template: |
+          {{ 
+            states('binary_sensor.stairs_motion') == 'on' or
+            states('binary_sensor.upstairs_home_security_motion_detection') == 'on'
           }}
