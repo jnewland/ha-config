@@ -1113,6 +1113,9 @@ views:
         filter:
           include:
             - entity_id: "/^sensor.*_node_status$/"
+          # exclude:
+          #   - state: "alive"
+          #   - state: "asleep"
 
   - title: Settings
     icon: mdi:cog
