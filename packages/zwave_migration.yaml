@@ -4,19 +4,10 @@ template:
         unique_id: vera_entities
         unit_of_measurement: entities
         state: >
-          {% if state_attr('sensor.vera_entities','entity_id') != none %}
-            {{ state_attr('sensor.vera_entities','entity_id')|count }}
-          {% endif %}
-        attributes:
-          entity_id: >
-            {{ integration_entities('vera') | sort }}
+          {{ integration_entities('vera') | count }}
+  - sensor:
       - name: ZwaveJS Entities
         unique_id: zwave_js_entities
         unit_of_measurement: entities
         state: >
-          {% if state_attr('sensor.zwave_js_entities','entity_id') != none %}
-            {{ state_attr('sensor.zwave_js_entities','entity_id')|count }}
-          {% endif %}
-        attributes:
-          entity_id: >
-            {{ integration_entities('zwave_js') | sort }}
+          {{ integration_entities('zwave_js') | count }}

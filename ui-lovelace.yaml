@@ -1082,21 +1082,18 @@ views:
   - title: Zwave Migration
     icon: mdi:z-wave
     cards:
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-          title: motion
-        filter:
-          include:
-            - entity_id: sensor.vera_entities
-            - entity_id: sensor.zwave_js_entities
+      - type: history-graph
+        title: history
+        hours_to_show: 80
+        entities:
+          - sensor.vera_entities
+          - sensor.zwave_js_entities
       - type: markdown
         entity_id:
           - sensor.vera_entities
           - sensor.zwave_js_entities
         content: >
-          ## Migration status
+          ## status.json
 
           ```
           {{ {'zwave_js': integration_entities('zwave_js') | sort, 'vera': integration_entities('vera') | sort } | tojson(indent=2) }}
