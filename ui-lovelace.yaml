@@ -1097,8 +1097,8 @@ views:
         content: >
           ## Migration status
 
-          ```json
-          {{ {'zwave_js': integration_entities('zwave_js') | sort, 'vera': integration_entities('vera') | sort } | to_json }}
+          ```
+          {{ {'zwave_js': integration_entities('zwave_js') | sort, 'vera': integration_entities('vera') | sort } | tojson(indent=2) }}
           ```
 
   - title: Settings
