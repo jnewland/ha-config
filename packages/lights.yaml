@@ -19,13 +19,6 @@ homeassistant:
 
     binary_sensor.master_door:
       haunt: light.bookshelf_right
-    binary_sensor.stairs_motion:
-      trigger_entity_id: light.stairs
-      trigger_entity_id_off: light.stairs
-      haunt: light.bookshelf_right
-    binary_sensor.upstairs_motion:
-      trigger_entity_id: light.stairs
-      trigger_entity_id_off: light.stairs
     binary_sensor.closet_motion:
       trigger_entity_id: light.master_closet
       trigger_entity_id_off: light.master_closet

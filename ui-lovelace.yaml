@@ -1006,7 +1006,6 @@ views:
             - switch.pantry_motion.battery_level
             - switch.powder_room_motion.battery_level
             - switch.stairs_motion.battery_level
-            - switch.upstairs_motion.battery_level
             - switch.wine_room_motion.battery_level
             - switch.yoga_room_motion.battery_level
             - vacuum.downstairs.battery_level
