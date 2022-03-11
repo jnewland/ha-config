@@ -1105,6 +1105,15 @@ views:
           1. `./script/template < migration/status.jinja  > migration/status.json`
           1. Search & Replace in config if entity IDs change
 
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+          title: node status
+        filter:
+          include:
+            - entity_id: "/^sensor.*_node_status$/"
+
   - title: Settings
     icon: mdi:cog
     cards:
