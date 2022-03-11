@@ -1,0 +1,12 @@
+{{ integration_entities('zwave_js') | sort | join("\n") }}
+
+binary_sensor.upstairs_home_security_motion_detection
+binary_sensor.upstairs_home_security_tampering_product_cover_removed
+binary_sensor.upstairs_low_battery_level
+button.upstairs_ping
+sensor.upstairs_air_temperature
+sensor.upstairs_battery_level
+sensor.upstairs_humidity
+sensor.upstairs_illuminance
+sensor.upstairs_node_status
+sensor.upstairs_ultraviolet

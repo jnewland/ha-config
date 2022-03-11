@@ -1,7 +1,4 @@
-{%- for domain, vstates in states | selectattr('attributes.Vera Device Id', 'in', range(1000)) | groupby('domain') %}
-{%- for s in vstates %}
-{{ s.entity_id  }}{% endfor %}
-{%- endfor %}
+{{ integration_entities('vera') | sort | join("\n") }}
 
 binary_sensor.closet_motion
 binary_sensor.front_gate
