@@ -1,0 +1,6 @@
+#!/bin/bash
+curl \
+  -H "Authorization: Bearer $HASS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d - \
+  "$HASS_URL/api/template"

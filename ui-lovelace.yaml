@@ -1093,11 +1093,17 @@ views:
           - sensor.vera_entities
           - sensor.zwavejs_entities
         content: >
-          ## status.json
+          # Migrating a node
 
-          ```
-          {{ {'zwave_js': integration_entities('zwave_js') | sort, 'vera': integration_entities('vera') | sort } | tojson(indent=2) }}
-          ```
+          1. ALTUI -> More -> Table Controllers--> Exclude
+          1. Exclude the node
+          1. Integrations -> Vera -> Reload
+          1. Entities -> Sort by status -> Remove failed
+          1. Zwavejs2Mqtt -> Manage Nodes -> Include
+          1. Include the node
+          1. Integrations -> Zwavejs -> Entities -> find the new node
+          2. Update status.json to denote progress
+          3. Search & Replace in config if entity IDs change
 
   - title: Settings
     icon: mdi:cog
