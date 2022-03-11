@@ -1079,6 +1079,28 @@ views:
       - type: picture
         image: https://cctv.austinmobility.io/image/244.jpg
 
+  - title: Zwave Migration
+    cards:
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+          title: motion
+        filter:
+          include:
+            - entity_id: sensor.vera_entities
+            - entity_id: sensor.zwave_js_entities
+      - type: markdown
+        entity_id:
+          - sensor.vera_entities
+          - sensor.zwave_js_entities
+        content: >
+          ## Migration status
+
+          ```json
+          {{ {'zwave_js': integration_entities('zwave_js') | sort, 'vera': integration_entities('vera') | sort } | to_json }}
+          ```
+
   - title: Settings
     icon: mdi:cog
     cards:
