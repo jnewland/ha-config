@@ -15,10 +15,8 @@ sequence:
       group.downstairs
       {% endif %}
 - service: script.lock_up
-- service: light.turn_off
-  entity_id: light.bamboo
-- service: light.turn_off
-  entity_id: light.pergola_pendants
+- service: homeassistant.turn_off
+  entity_id: group.outdoor_mood
 - service: input_number.set_value
   data:
     entity_id: input_number.brightness
