@@ -1087,11 +1087,11 @@ views:
         hours_to_show: 80
         entities:
           - sensor.vera_entities
-          - sensor.zwave_js_entities
+          - sensor.zwavejs_entities
       - type: markdown
         entity_id:
           - sensor.vera_entities
-          - sensor.zwave_js_entities
+          - sensor.zwavejs_entities
         content: >
           ## status.json
 
