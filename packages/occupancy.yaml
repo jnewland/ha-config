@@ -53,8 +53,8 @@ homeassistant:
       sonos_group_entity_id: media_player.record_cabinet
 
     binary_sensor.guest_hall_motion:
-      trigger_entity_id: light.guest_hall
-      trigger_entity_id_off: light.guest_hall
+      trigger_entity_id: light.guest_hall_overhead
+      trigger_entity_id_off: light.guest_hall_overhead
       haunt: light.couch
       sonos_group_master: media_player.house
       sonos_group_entity_id: media_player.record_cabinet

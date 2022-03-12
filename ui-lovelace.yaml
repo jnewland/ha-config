@@ -438,8 +438,8 @@ views:
       - type: entities
         title: guest
         entities:
-          - light.guest_hall
-          - light.guest_bath
+          - light.guest_hall_overhead
+          - light.guest_bath_mirror
           - light.guest_shower
           - binary_sensor.guest_bath_home_security_motion_detection
           - binary_sensor.guest_hall_motion
