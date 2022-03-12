@@ -443,10 +443,10 @@ views:
           - light.guest_shower
           - binary_sensor.guest_bath_home_security_motion_detection
           - binary_sensor.guest_hall_motion
-          - sensor.guest_bath_temp
+          - sensor.guest_bath_air_temperature
         footer:
           type: graph
-          entity: sensor.guest_bath_temp
+          entity: sensor.guest_bath_air_temperature
           hours_to_show: 36
           detail: 2
 
@@ -796,6 +796,7 @@ views:
         filter:
           include:
             - entity_id: "/^sensor.*_light$/"
+            - entity_id: "/^sensor.*_ultraviolet$/"
 
   - title: Greenhouse
     path: greenhouse
