@@ -1079,6 +1079,46 @@ views:
       - type: picture
         image: https://cctv.austinmobility.io/image/244.jpg
 
+  - title: Zwave Migration
+    icon: mdi:z-wave
+    cards:
+      - type: history-graph
+        title: history
+        hours_to_show: 80
+        entities:
+          - sensor.vera_entities
+          - sensor.zwavejs_entities
+      - type: markdown
+        entity_id:
+          - sensor.vera_entities
+          - sensor.zwavejs_entities
+        content: |
+          # Migrating a node
+
+          > {% set entity = states[integration_entities('vera') | random] %}Why not migrate the {{ entity.name }} {{entity.domain}} (`{{entity.entity_id}}`) right now?
+
+          1. ALTUI -> More -> Table Controllers -> Exclude
+          1. Exclude the node
+          1. Integrations -> Vera -> Reload
+          1. Entities -> Sort by status -> Remove failed
+          1. Zwavejs2Mqtt -> Manage Nodes -> Include
+          1. Include the node
+          1. Integrations -> Zwavejs -> Entities -> find the new node
+          1. `./script/template < migration/status.jinja  > migration/status.json`
+          1. Search & Replace in config if entity IDs change
+
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+          title: node status
+        filter:
+          include:
+            - entity_id: "/^sensor.*_node_status$/"
+          # exclude:
+          #   - state: "alive"
+          #   - state: "asleep"
+
   - title: Settings
     icon: mdi:cog
     cards:

@@ -1,0 +1,9 @@
+#!/bin/bash
+JSON="$(jq -a --raw-output --arg value "$(</dev/stdin)" '.["template"]=$value' <<< '{}')"
+curl \
+  -H "Authorization: Bearer $HASS_TOKEN" \
+  -H "Content-Type: application/json" \
+  --data-binary "$JSON" \
+  --no-buffer \
+  "$HASS_URL/api/template"
+echo

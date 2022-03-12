@@ -1,0 +1,14 @@
+template:
+  - sensor:
+      - name: Vera Entities
+        unique_id: vera_entities
+        unit_of_measurement: entities
+        state: >
+          {{ integration_entities('vera') | count }}
+
+  - sensor:
+      - name: ZwaveJS Entities
+        unique_id: zwavejs_entities
+        unit_of_measurement: entities
+        state: >
+          {{ integration_entities('zwave_js') | count }}
