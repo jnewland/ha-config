@@ -27,7 +27,7 @@ homeassistant:
       trigger_entity_id_off: group.guest_bath
       off_delay_seconds: 1800
       haunt: light.couch
-    binary_sensor.powder_room_motion:
+    binary_sensor.powder_room_home_security_motion_detection:
       trigger_entity_id: light.powder_room
       trigger_entity_id_off: group.powder_room
       haunt: light.drums
