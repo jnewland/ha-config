@@ -40,7 +40,7 @@ lovelace:
       type: js
     - url: /local/entity-attributes-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: js
-    - url: /local/auto-entities.js?v=9961ee0c56b22b46af0234857a019e47954b6c0f-2
+    - url: /local/auto-entities.js?source=https://github.com/thomasloven/lovelace-auto-entities/raw/1.11.0/auto-entities.js
       type: module
     - url: /local/card-tools.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: module
@@ -48,7 +48,7 @@ lovelace:
       type: module
     - url: /local/group-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: js
-    - url: /local/mini-media-player-bundle.js?v=7adbec5d-fe57-4ad4-90c8-4c266b06fe65
+    - url: /local/mini-media-player-bundle.js?source=https://github.com/kalkih/mini-media-player/releases/download/v1.16.2/mini-media-player-bundle.js
       type: module
 light:
 logger: !include logger.yaml
