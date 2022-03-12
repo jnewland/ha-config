@@ -813,7 +813,7 @@ script:
     sequence:
     - condition: template
       value_template: >
-        {{ is_state('group.outdoor_mood', 'off') }}
+        {{ expand('group.outdoor_mood') | selectattr('entity_id', '!=', 'light.wine_room') | selectattr('state', '==', 'on') | list == [] }}
     - service: light.turn_off
       entity_id: light.wine_room
 
