@@ -192,9 +192,11 @@
     "button.guest_hall_overhead_ping",
     "button.guest_shower_ping",
     "button.upstairs_ping",
+    "button.wine_room_ping",
     "light.guest_bath_mirror",
     "light.guest_hall_overhead",
     "light.guest_shower",
+    "light.wine_room",
     "sensor.guest_bath_air_temperature",
     "sensor.guest_bath_battery_level",
     "sensor.guest_bath_fan_node_status",
@@ -211,6 +213,7 @@
     "sensor.upstairs_illuminance",
     "sensor.upstairs_node_status",
     "sensor.upstairs_ultraviolet",
+    "sensor.wine_room_node_status",
     "switch.guest_bath_fan"
   ]
 }
