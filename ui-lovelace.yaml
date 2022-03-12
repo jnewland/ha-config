@@ -1101,15 +1101,19 @@ views:
 
           > {% set entity = states[integration_entities('vera') | random] %}Why not migrate the {{ entity.name }} {{entity.domain}} (`{{entity.entity_id}}`) right now?
 
-          1. ALTUI -> More -> Table Controllers -> Exclude
-          1. Exclude the node
-          1. Integrations -> Vera -> Reload
-          1. Entities -> Sort by status -> Remove failed
-          1. Zwavejs2Mqtt -> Manage Nodes -> Include
-          1. Include the node
-          1. Integrations -> Zwavejs -> Entities -> find the new node
-          1. `./script/template < migration/status.jinja  > migration/status.json`
-          1. Search & Replace in config if entity IDs change
+          1. Exclude:
+            1. ALTUI -> More -> Table Controllers -> Exclude
+            1. Exclude the node. Maybe exclude a few more if you want to migrate a whole room
+          1. Cleanup:
+            1. Integrations -> Vera -> Reload
+            1. Entities -> Sort by status -> Remove failed
+          1. Include:
+            1. Zwavejs2Mqtt -> Manage Nodes -> Include
+            1. Include the node
+          1. Migrate config:
+            1. `./script/template < migration/status.jinja  > migration/status.json`
+            1. Cleanup entity IDs as necessary
+            1. Search & Replace in config if entity IDs change
 
       - type: custom:auto-entities
         card:
