@@ -797,7 +797,7 @@ views:
         filter:
           include:
             - entity_id: "/^sensor.*_light$/"
-            - entity_id: "/^sensor.*_ultraviolet$/"
+            - entity_id: "/^sensor.*_illuminance$/"
 
   - title: Greenhouse
     path: greenhouse
