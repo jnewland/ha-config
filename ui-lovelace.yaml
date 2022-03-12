@@ -442,7 +442,7 @@ views:
           - light.guest_bath_mirror
           - light.guest_shower
           - binary_sensor.guest_bath_home_security_motion_detection
-          - binary_sensor.guest_hall_motion
+          - binary_sensor.guest_hall_home_security_motion_detection
           - sensor.guest_bath_air_temperature
           - switch.guest_bath_fan
         footer:
