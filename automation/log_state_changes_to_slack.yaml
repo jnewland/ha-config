@@ -19,7 +19,7 @@ trigger:
     - binary_sensor.master_bath_motion
     - binary_sensor.stairs_motion
     - binary_sensor.closet_motion
-    - binary_sensor.guest_bath_motion
+    - binary_sensor.guest_bath_home_security_motion_detection
     - binary_sensor.powder_room_motion
     - binary_sensor.lounge_motion
     - binary_sensor.upstairs_home_security_motion_detection

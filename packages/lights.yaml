@@ -22,7 +22,7 @@ homeassistant:
     binary_sensor.closet_motion:
       trigger_entity_id: light.master_closet
       trigger_entity_id_off: light.master_closet
-    binary_sensor.guest_bath_motion:
+    binary_sensor.guest_bath_home_security_motion_detection:
       trigger_entity_id: group.guest_bath_lights
       trigger_entity_id_off: group.guest_bath
       off_delay_seconds: 1800

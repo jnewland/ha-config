@@ -441,7 +441,7 @@ views:
           - light.guest_hall
           - light.guest_bath
           - light.guest_shower
-          - binary_sensor.guest_bath_motion
+          - binary_sensor.guest_bath_home_security_motion_detection
           - binary_sensor.guest_hall_motion
           - sensor.guest_bath_temp
         footer:
