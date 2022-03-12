@@ -981,6 +981,8 @@ views:
         filter:
           include:
             - entity_id: "/.*battery_level/"
+          exclude:
+            - state: "off"
       - type: custom:entity-attributes-card
         heading_name: Sensor
         heading_state: Battery level
