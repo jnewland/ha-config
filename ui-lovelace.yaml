@@ -461,7 +461,7 @@ views:
           - light.music_room_haiku_light
           - fan.music_room_haiku
           - binary_sensor.music_room_haiku_occupancy
-          - binary_sensor.music_room_motion
+          - binary_sensor.music_room_home_security_motion_detection
           - binary_sensor.music_room_window
           - sensor.music_room_temp
           - binary_sensor.bookshelf_active

@@ -158,6 +158,7 @@
     "binary_sensor.lounge_home_security_motion_detection",
     "binary_sensor.lounge_home_security_tampering_product_cover_removed",
     "binary_sensor.lounge_low_battery_level",
+    "binary_sensor.music_room_home_security_motion_detection",
     "binary_sensor.music_room_home_security_tampering_product_cover_removed",
     "binary_sensor.music_room_low_battery_level",
     "binary_sensor.powder_room_home_security_motion_detection",
