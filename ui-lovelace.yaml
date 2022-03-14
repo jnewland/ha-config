@@ -1101,7 +1101,7 @@ views:
           ### Exclude
 
             1. [ALTUI]({{ states('input_text.vera_url') }}data_request?id=lr_ALTUI_Handler&command=home) -> More -> Table Controllers -> Exclude
-            1. Watch logs on the [Vera]({{ states('input_text.vera_url') }})
+            1. Watch logs on the [Vera]({{ states('input_text.vera_url').split(':')[0] }}:{{ states('input_text.vera_url').split(':')[1] }}/cmh#devices)
             1. Exclude the node. Maybe exclude a few more if you want to migrate a whole room
 
           ### Cleanup
