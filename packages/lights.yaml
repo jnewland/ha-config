@@ -31,7 +31,7 @@ homeassistant:
       trigger_entity_id: light.powder_room_mirror
       trigger_entity_id_off: group.powder_room
       haunt: light.drums
-    binary_sensor.lounge_motion:
+    binary_sensor.lounge_home_security_motion_detection:
       trigger_service: script.lounge_lights
       trigger_entity_id_off: group.lounge
       off_delay_seconds: 1800

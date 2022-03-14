@@ -98,7 +98,7 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{ 
-            states('binary_sensor.lounge_motion') == 'on' or
+            states('binary_sensor.lounge_home_security_motion_detection') == 'on' or
             states('device_tracker.katie_s_iphone') == 'Lounge' or
             states('device_tracker.jphone_12') == 'Lounge'
           }}

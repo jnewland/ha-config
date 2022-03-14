@@ -422,7 +422,7 @@ views:
           - light.tv_right
           - switch.lounge_left
           - switch.lounge_right
-          - binary_sensor.lounge_motion
+          - binary_sensor.lounge_home_security_motion_detection
           - sensor.lounge_temp
         footer:
           type: graph
@@ -1002,7 +1002,6 @@ views:
             - switch.garage_hall_motion.battery_level
             - switch.great_hall_motion.battery_level
             - switch.kitchen_motion.battery_level
-            - switch.lounge_motion.battery_level
             - switch.master_bath_motion.battery_level
             - switch.music_room_motion.battery_level
             - switch.pantry_motion.battery_level
