@@ -36,6 +36,9 @@ homeassistant:
       sonos_group_master: media_player.house
       sonos_group_entity_id: media_player.move
 
+    binary_sensor.atrium_occupancy:
+      speaker_entity: media_player.atrium_speakers
+
     binary_sensor.yoga_room_motion:
       haunt: light.bookshelf_middle
 
@@ -167,6 +170,16 @@ binary_sensor:
             states('lock.front_door') == 'unlocked' or
             float(states('sensor.front_yard_left_person')) | default(0) > 0 
           }}
+
+      atrium_occupancy:
+        friendly_name: atrium occupied
+        device_class: occupancy
+        value_template: |
+          {{
+            float(states('sensor.atrium_person')) | default(0) > 0
+          }}
+        delay_off:
+          minutes: 10
 
   - platform: template
     sensors:
