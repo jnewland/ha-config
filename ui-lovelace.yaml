@@ -423,10 +423,10 @@ views:
           - switch.lounge_left
           - switch.lounge_right
           - binary_sensor.lounge_home_security_motion_detection
-          - sensor.lounge_temp
+          - sensor.lounge_air_temperature
         footer:
           type: graph
-          entity: sensor.lounge_temp
+          entity: sensor.lounge_air_temperature
           hours_to_show: 36
           detail: 2
       - type: media-control
