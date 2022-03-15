@@ -22,21 +22,21 @@ homeassistant:
     binary_sensor.closet_motion:
       trigger_entity_id: light.master_closet
       trigger_entity_id_off: light.master_closet
-    binary_sensor.guest_bath_motion:
+    binary_sensor.guest_bath_home_security_motion_detection:
       trigger_entity_id: group.guest_bath_lights
       trigger_entity_id_off: group.guest_bath
       off_delay_seconds: 1800
       haunt: light.couch
-    binary_sensor.powder_room_motion:
-      trigger_entity_id: light.powder_room
+    binary_sensor.powder_room_home_security_motion_detection:
+      trigger_entity_id: light.powder_room_mirror
       trigger_entity_id_off: group.powder_room
       haunt: light.drums
-    binary_sensor.lounge_motion:
+    binary_sensor.lounge_home_security_motion_detection:
       trigger_service: script.lounge_lights
       trigger_entity_id_off: group.lounge
       off_delay_seconds: 1800
       haunt: light.couch
-    binary_sensor.music_room_motion:
+    binary_sensor.music_room_home_security_motion_detection:
       trigger_service: script.music_room
       trigger_entity_id_off: group.music_room
       off_delay_seconds: 1800
@@ -813,7 +813,7 @@ script:
     sequence:
     - condition: template
       value_template: >
-        {{ is_state('group.outdoor_mood', 'off') }}
+        {{ expand('group.outdoor_mood') | selectattr('entity_id', '!=', 'light.wine_room') | selectattr('state', '==', 'on') | list == [] }}
     - service: light.turn_off
       entity_id: light.wine_room
 

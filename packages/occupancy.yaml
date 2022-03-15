@@ -52,9 +52,9 @@ homeassistant:
       sonos_group_master: media_player.house
       sonos_group_entity_id: media_player.record_cabinet
 
-    binary_sensor.guest_hall_motion:
-      trigger_entity_id: light.guest_hall
-      trigger_entity_id_off: light.guest_hall
+    binary_sensor.guest_hall_home_security_motion_detection:
+      trigger_entity_id: light.guest_hall_overhead
+      trigger_entity_id_off: light.guest_hall_overhead
       haunt: light.couch
       sonos_group_master: media_player.house
       sonos_group_entity_id: media_player.record_cabinet
@@ -98,7 +98,7 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{ 
-            states('binary_sensor.lounge_motion') == 'on' or
+            states('binary_sensor.lounge_home_security_motion_detection') == 'on' or
             states('device_tracker.katie_s_iphone') == 'Lounge' or
             states('device_tracker.jphone_12') == 'Lounge'
           }}
