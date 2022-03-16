@@ -204,7 +204,7 @@
     "sensor.laundry_electric_consumption_kwh",
     "sensor.laundry_electric_consumption_w",
     "sensor.laundry_node_status",
-    "sensor.laundry_power_2",
+    "sensor.laundry_power",
     "sensor.lounge_air_temperature",
     "sensor.lounge_battery_level",
     "sensor.lounge_chandelier_node_status",
