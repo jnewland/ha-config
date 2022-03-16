@@ -179,7 +179,7 @@ binary_sensor:
             float(states('sensor.atrium_person')) | default(0) > 0
           }}
         delay_off:
-          minutes: 10
+          minutes: 30
 
   - platform: template
     sensors:
