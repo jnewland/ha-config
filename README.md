@@ -6,7 +6,3 @@
 
 * Walk around. Carry your phone with you. Observe sensors try to do the right thing.
 * Use [Siri](./doc/siri.md) when they don't.
-
-### Related projects
-
-* [monoprice amp api](https://github.com/jnewland/mpr-6zhmaut-api)
