@@ -81,7 +81,7 @@ homeassistant:
       fixed_brightness: 255
     light.gate:
       notify_action: duck
-      fixed_brightness: 192
+      fixed_brightness: 127
       fixed_color_temp: 396
     light.patio:
       fixed_brightness: 255
@@ -179,7 +179,7 @@ homeassistant:
       notify_action: duck
       duck_step: 192
     light.wine_room:
-      fixed_brightness: 102
+      fixed_brightness: 5
 
     light.kitchen_light:
       ignore_brightness: true
