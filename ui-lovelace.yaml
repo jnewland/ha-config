@@ -803,15 +803,15 @@ views:
     path: greenhouse
     icon: mdi:shovel
     cards:
-      # - type: entities
-      #   title: Greenhouse lights
-      #   show_header_toggle: false
-      #   entities:
-      #     - automation.greenhouse_led_automation
-      #     - switch.greenhouse_left
-      #     - switch.greenhouse_right
-      #     - input_datetime.greenhouse_led_on
-      #     - input_datetime.greenhouse_led_off
+      - type: entities
+        title: Greenhouse lights
+        show_header_toggle: false
+        entities:
+          - automation.greenhouse_light_automation
+          - switch.greenhouse_light
+          # - switch.greenhouse_left
+          - input_datetime.greenhouse_light_on
+          - input_datetime.greenhouse_light_off
       #   footer:
       #     type: graph
       #     entity: sensor.angel_trumpet_light

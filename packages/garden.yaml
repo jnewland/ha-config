@@ -54,31 +54,31 @@ switch:
 #     max_temperature: 95
 
 input_datetime:
-  greenhouse_led_on:
-    name: Greenhouse LED On
+  greenhouse_light_on:
+    name: Greenhouse Light On
     has_date: false
     has_time: true
-  greenhouse_led_off:
-    name: Greenhouse LED Off
+  greenhouse_light_off:
+    name: Greenhouse Light Off
     has_date: false
     has_time: true
 
 automation:
-  - alias: Greenhouse LED Automation
-    id: ffceaf67-f664-4ec9-ad9d-44be7e6fc220
+  - alias: Greenhouse Light Automation
+    id: 23ce464f-7d00-4b45-9dcb-9fb3a01e9fd9
     trigger:
       platform: time
-      at: input_datetime.greenhouse_led_on
+      at: input_datetime.greenhouse_light_on
     action:
       service: switch.turn_on
       target:
-        entity_id: switch.greenhouse_left
-  - alias: Greenhouse LED Off
-    id: b5d0b9e7-1a93-4b91-8e27-c81e8819a20f
+        entity_id: switch.greenhouse_light
+  - alias: Greenhouse Light Off
+    id: 43d25dc4-d53b-4c8d-9207-1783ed6800e7
     trigger:
       platform: time
-      at: input_datetime.greenhouse_led_off
+      at: input_datetime.greenhouse_light_off
     action:
       service: switch.turn_off
       target:
-        entity_id: switch.greenhouse_left
+        entity_id: switch.greenhouse_light
