@@ -1151,6 +1151,32 @@ views:
           #   - state: "alive"
           #   - state: "asleep"
 
+  - title: Tula
+    icon: mdi:triangle-outline
+    cards:
+      - type: history-graph
+        title: balance
+        hours_to_show: 80
+        entities:
+          - sensor.tula_hours_balance
+      - type: history-graph
+        title: todos
+        hours_to_show: 80
+        entities:
+          - sensor.tula_todos_in_progress
+          - sensor.tula_todos_pending
+      - type: history-graph
+        title: hours saved
+        hours_to_show: 80
+        entities:
+          - sensor.tula_hours_saved
+      - type: markdown
+        content: |
+          {% set todos = state_attr('sensor.tula', 'todos') | selectattr("fields.listStatus", "==", "inProgress") | sort(attribute="createdTime") | list %}
+          {% for todo in todos -%}
+          * {{ todo.fields.itemNames | first }} assigned to {{ todo.fields.assistantName | first }} ({{ todo.fields.assistantPhone | first }})
+          {% endfor %}
+
   - title: Settings
     icon: mdi:cog
     cards:
