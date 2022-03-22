@@ -34,7 +34,7 @@ sensor:
 
 automation:
   - alias: Notify when Tula TODOs are assigned
-    id: 29a70545-0df5-497c-933b-3b2ad9797786
+    id: a567e2e0-4892-497d-9329-bd6f34ebc969
     trigger:
       platform: state
       entity_id: state.tula_todo_assignments
@@ -48,7 +48,7 @@ automation:
           message: |
             {{ states('sensor.tula_todo_assignments') }}
   - alias: Notify when Tula TODOs are completed
-    id: 29a70545-0df5-497c-933b-3b2ad9797786
+    id: 8df045de-8947-44a9-852c-aef00afb6bf0
     trigger:
       platform: state
       entity_id: state.tula_todo_assignments
