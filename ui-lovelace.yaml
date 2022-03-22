@@ -1174,7 +1174,7 @@ views:
         content: |
           {% set todos = state_attr('sensor.tula', 'todos') | selectattr("fields.listStatus", "==", "inProgress") | sort(attribute="createdTime") | list %}
           {% for todo in todos -%}
-          * {{ todo.fields.itemNames | first }} assigned to {{ todo.fields.assistantName | first }} ({{ todo.fields.assistantPhone | first }})
+          * {{ todo.fields.itemNames | first }} assigned to {{ todo.fields.assistantName | first }} (<a href="tel:{{ todo.fields.assistantPhone | first }}">{{ todo.fields.assistantPhone | first }}</a>)
           {% endfor %}
 
   - title: Settings
