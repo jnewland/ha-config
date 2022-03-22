@@ -10,5 +10,54 @@ sensor:
   - platform: template
     sensors:
       tula_hours_balance:
-        value_template: "{{ state_attr('sensor.tula', 'customer')['fields']['hoursBalance'] }}"
+        value_template: >
+          {{ state_attr('sensor.tula', 'customer')['fields']['hoursBalance'] }}
         unit_of_measurement: hours
+      tula_hours_saved:
+        value_template: >
+          {{ state_attr('sensor.tula', 'todos') | selectattr("fields.listStatus", "==", "completed") | list | sum(attribute="fields.hoursAgreement") }}
+        unit_of_measurement: hours
+      tula_todos_in_progress:
+        value_template: >
+          {{ state_attr('sensor.tula', 'todos') | selectattr("fields.listStatus", "==", "inProgress") | list | count }}
+        unit_of_measurement: todos
+      tula_todos_pending:
+        value_template: >
+          {{ state_attr('sensor.tula', 'todos') | selectattr("fields.listStatus", "==", "pending") | list | count }}
+        unit_of_measurement: todos
+      tula_todo_assignments:
+        value_template: |
+          {% set todos = state_attr('sensor.tula', 'todos') | selectattr("fields.listStatus", "==", "inProgress") | sort(attribute="createdTime") | list %}
+          {% for todo in todos -%}
+          {{ todo.fields.itemNames | first }} assigned to {{ todo.fields.assistantName | first }}{{ ". " }}
+          {% endfor %}
+
+automation:
+  - alias: Notify when Tula TODOs are assigned
+    id: 29a70545-0df5-497c-933b-3b2ad9797786
+    trigger:
+      platform: state
+      entity_id: state.tula_todo_assignments
+    condition:
+      condition: numeric_state
+      entity_id: state.tula_todos_in_progress
+      above: 0
+    action:
+      - service: notify.iphones
+        data:
+          message: |
+            {{ states('sensor.tula_todo_assignments') }}
+  - alias: Notify when Tula TODOs are completed
+    id: 29a70545-0df5-497c-933b-3b2ad9797786
+    trigger:
+      platform: state
+      entity_id: state.tula_todo_assignments
+    condition:
+      condition: numeric_state
+      entity_id: state.tula_todos_in_progress
+      below: 1
+    action:
+      - service: notify.iphones
+        data:
+          message: |
+            All Tula TODOs have been completed! {{ states('sensor.tula_hours_saved') }} hours saved so far.
