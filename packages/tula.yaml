@@ -1,0 +1,16 @@
+sensor:
+  - platform: rest
+    name: tula
+    scan_interval: 900
+    resource: !env_var TULA_URL
+    json_attributes:
+      - todos
+      - customer
+    value_template: "OK"
+    unit_of_measurement: hours
+        force_update: true
+  - platform: template
+    sensors:
+      tula_hours_balance:
+        value_template: "{{ state_attr('sensor.tula', 'customer')['fields']['hoursBalance'] }}"
+        unit_of_measurement: hours
