@@ -8,7 +8,6 @@ sensor:
       - customer
     value_template: "OK"
     unit_of_measurement: hours
-        force_update: true
   - platform: template
     sensors:
       tula_hours_balance:
