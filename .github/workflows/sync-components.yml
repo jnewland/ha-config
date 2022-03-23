@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: ./script/sync-components
-      - uses: peter-evans/create-pull-request@v3
+      - uses: peter-evans/create-pull-request@v4
         with:
             token: ${{ secrets.UR_BOT_TOKEN }}
             commit-message: Update custom components
