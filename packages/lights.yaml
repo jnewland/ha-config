@@ -686,6 +686,7 @@ script:
       - service: shell_command.wake_bookshelf
 
   notify_with_lights:
+    mode: queued
     sequence:
     - condition: template
       value_template: |
@@ -752,6 +753,7 @@ script:
           {{ entity_id }}
 
   haunt:
+    mode: parallel
     sequence:
       - condition: template
         value_template: |
