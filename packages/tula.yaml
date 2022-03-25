@@ -37,7 +37,7 @@ automation:
     id: a567e2e0-4892-497d-9329-bd6f34ebc969
     trigger:
       platform: numeric_state
-      entity_id: state.tula_todos_in_progress
+      entity_id: sensor.tula_todos_in_progress
       above: 0
     action:
       - service: notify.iphones
@@ -48,7 +48,7 @@ automation:
     id: 8df045de-8947-44a9-852c-aef00afb6bf0
     trigger:
       platform: numeric_state
-      entity_id: state.tula_todos_in_progress
+      entity_id: sensor.tula_todos_in_progress
       below: 1
     action:
       - service: notify.iphones
