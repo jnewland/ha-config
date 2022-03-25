@@ -79,6 +79,8 @@ views:
                   name: front porch
                 - entity_id: media_player.pergola
                   name: pergola
+                - entity_id: media_player.rock
+                  name: rock
           - type: conditional
             conditions:
               - entity: media_player.house
@@ -95,6 +97,23 @@ views:
                   hide:
                     controls: true
                     source: true
+                - type: conditional
+                  conditions:
+                    - entity: media_player.rock
+                      state_not: "idle"
+                    - entity: media_player.rock
+                      state_not: "paused"
+                  row:
+                    type: custom:mini-media-player
+                    entity: media_player.rock
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
                 - type: custom:mini-media-player
                   entity: media_player.kitchen_speakers
                   group: true
