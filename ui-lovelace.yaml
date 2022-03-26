@@ -602,6 +602,11 @@ views:
           - binary_sensor.front_gate
           - cover.garage
           - cover.gate
+      - type: history-graph
+        hours_to_show: 72
+        entities:
+          - binary_sensor.atrium_couch_motion
+          - binary_sensor.pergola_motion
 
   - title: Cameras
     icon: mdi:video
