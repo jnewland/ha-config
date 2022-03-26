@@ -97,23 +97,6 @@ views:
                   hide:
                     controls: true
                     source: true
-                - type: conditional
-                  conditions:
-                    - entity: media_player.rock
-                      state_not: "idle"
-                    - entity: media_player.rock
-                      state_not: "paused"
-                  row:
-                    type: custom:mini-media-player
-                    entity: media_player.rock
-                    group: true
-                    source: icon
-                    info: short
-                    hide:
-                      controls: true
-                      source: true
-                      power: true
-                      progress: true
                 - type: custom:mini-media-player
                   entity: media_player.kitchen_speakers
                   group: true
@@ -248,6 +231,23 @@ views:
                   row:
                     type: custom:mini-media-player
                     entity: media_player.move
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
+                - type: conditional
+                  conditions:
+                    - entity: media_player.rock
+                      state_not: "idle"
+                    - entity: media_player.rock
+                      state_not: "paused"
+                  row:
+                    type: custom:mini-media-player
+                    entity: media_player.rock
                     group: true
                     source: icon
                     info: short
