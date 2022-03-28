@@ -38,6 +38,12 @@ homeassistant:
 
     binary_sensor.atrium_occupancy:
       speaker_entity: media_player.atrium_speakers
+      sonos_group_master: media_player.house
+      sonos_group_entity_id: media_player.rock
+
+    binary_sensor.pergola_occupancy:
+      sonos_group_master: media_player.house
+      sonos_group_entity_id: media_player.pergola
 
     binary_sensor.yoga_room_motion:
       haunt: light.bookshelf_middle
@@ -176,7 +182,18 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{
+            states('binary_sensor.atrium_couch_motion') == 'on' or
             float(states('sensor.atrium_person')) | default(0) > 0
+          }}
+        delay_off:
+          minutes: 30
+
+      pergola_occupancy:
+        friendly_name: pergola occupied
+        device_class: occupancy
+        value_template: |
+          {{
+            states('binary_sensor.pergola_motion') == 'on'
           }}
         delay_off:
           minutes: 30

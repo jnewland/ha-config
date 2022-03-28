@@ -17,6 +17,24 @@ automation:
         entity_id: script.lock_back_porch
         message: "The back porch door has been unlocked for a bit. Lock it up?"
         confirmation_message: locked the back porch door
+  - alias: Toggle back porch door lock with tag
+    id: 223b7406-420e-4771-9851-ad153002b973
+    trigger:
+    - platform: tag
+      tag_id: e29d845b-8645-4d15-9fea-3adc99575f22
+    action:
+      - choose:
+          - alias: unlock
+            conditions: >
+              {{ is_state('lock.back_porch', 'locked') }}
+            sequence:
+              - service: lock.unlock
+                target:
+                  entity_id: lock.back_porch
+        default:
+          - service: lock.lock
+            target:
+              entity_id: lock.back_porch
 script:
   lock_back_porch:
     sequence:

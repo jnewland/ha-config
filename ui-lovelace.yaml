@@ -79,6 +79,8 @@ views:
                   name: front porch
                 - entity_id: media_player.pergola
                   name: pergola
+                - entity_id: media_player.rock
+                  name: rock
           - type: conditional
             conditions:
               - entity: media_player.house
@@ -229,6 +231,23 @@ views:
                   row:
                     type: custom:mini-media-player
                     entity: media_player.move
+                    group: true
+                    source: icon
+                    info: short
+                    hide:
+                      controls: true
+                      source: true
+                      power: true
+                      progress: true
+                - type: conditional
+                  conditions:
+                    - entity: media_player.rock
+                      state_not: "idle"
+                    - entity: media_player.rock
+                      state_not: "paused"
+                  row:
+                    type: custom:mini-media-player
+                    entity: media_player.rock
                     group: true
                     source: icon
                     info: short
@@ -463,13 +482,13 @@ views:
           - binary_sensor.music_room_haiku_occupancy
           - binary_sensor.music_room_home_security_motion_detection
           - binary_sensor.music_room_window
-          - sensor.music_room_temp
+          - sensor.music_room_air_temperature
           - binary_sensor.bookshelf_active
           - binary_sensor.bookshelf_camera_in_use
           - sensor.bookshelf_frontmost_app
         footer:
           type: graph
-          entity: sensor.music_room_temp
+          entity: sensor.music_room_air_temperature
           hours_to_show: 36
           detail: 2
       - type: media-control
@@ -583,6 +602,11 @@ views:
           - binary_sensor.front_gate
           - cover.garage
           - cover.gate
+      - type: history-graph
+        hours_to_show: 72
+        entities:
+          - binary_sensor.atrium_couch_motion
+          - binary_sensor.pergola_motion
 
   - title: Cameras
     icon: mdi:video
