@@ -40,7 +40,7 @@ automation:
     platform: event
     event_type: ios.notification_action_fired
     event_data:
-      action: ACK_NO
+      actionName: ACK_NO
   action:
     - service: notify.slack
       data:
@@ -53,7 +53,7 @@ automation:
     platform: event
     event_type: ios.notification_action_fired
     event_data:
-      action: ACK_TURN_ON
+      actionName: ACK_TURN_ON
   action:
     - service: system_log.write
       data:
