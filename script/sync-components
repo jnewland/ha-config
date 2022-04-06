@@ -7,7 +7,9 @@ set -ex
 : ${TMPDIR:=$(mktemp -d)}
 
 rm -rf custom_components/bhyve || true
-git clone https://github.com/sebr/bhyve-home-assistant $TMPDIR/bhyve-home-assistant-$$
+# renovate: datasource=github-releases depName=sebr/bhyve-home-assistant
+BHYVE_VERSION=2.2.2
+git clone --depth 1 --branch $BHYVE_VERSION https://github.com/sebr/bhyve-home-assistant $TMPDIR/bhyve-home-assistant-$$
 mv $TMPDIR/bhyve-home-assistant-$$/python_scripts/*.py python_scripts/
 mv $TMPDIR/bhyve-home-assistant-$$/custom_components/bhyve custom_components
 rm -rf $TMPDIR/bhyve-home-assistant-$$
