@@ -47,21 +47,6 @@ views:
 
       - type: vertical-stack
         cards:
-
-          - type: custom:custom-sonos-card
-            mediaTitle: favorites
-            shuffleFavorites: false
-            selectedPlayer: media_player.home
-            layout:
-              mediaBrowser:
-                width: '100%'
-                mobileWidth: '100%'
-            styles:
-               groups:
-                 display: none
-               players:
-                 display: none
-
           - type: custom:mini-media-player
             entity: media_player.house
             artwork: cover
@@ -356,6 +341,7 @@ views:
             - entity_id: "/media_player.*_surround$/"
           exclude:
             - state: "problem"
+            - state: "ok"
             - state: "off"
             - state: "unavailable"
             - state: "idle"
@@ -398,6 +384,25 @@ views:
         show_name: false
         show_state: false
         entity: camera.pergola_person
+
+
+      - type: custom:custom-sonos-card
+        mediaTitle: favorites
+        shuffleFavorites: false
+        selectedPlayer: media_player.home
+        layout:
+          mediaBrowser:
+            width: '100%'
+            mobileWidth: '100%'
+            mediaItem:
+              width: '20%'
+              mobileWidth: '33%'
+        styles:
+            groups:
+              display: none
+            players:
+              display: none
+
 
   - title: Weather
     icon: mdi:weather-rainy
