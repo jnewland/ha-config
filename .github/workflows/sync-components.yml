@@ -3,11 +3,6 @@ on:
   schedule:
     - cron:  '0 1 * * *'
   workflow_dispatch:
-  push:
-    branches: [ $default-branch ]
-    paths:
-      - '.github/workflows/sync-components.yml'
-      - script/sync-components
 jobs:
   sync-components:
     runs-on: ubuntu-latest
