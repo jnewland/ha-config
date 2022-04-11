@@ -51,6 +51,7 @@ views:
           - type: custom:custom-sonos-card
             mediaTitle: favorites
             shuffleFavorites: false
+            selectedPlayer: media_player.home
             layout:
               groups:
                 width: '0%'
@@ -64,7 +65,6 @@ views:
               mediaItem:
                 width: '0%'
                 mobileWidth: '0%'
-              selectedPlayer: media_player.home
 
           - type: custom:mini-media-player
             entity: media_player.house
