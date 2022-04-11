@@ -341,6 +341,7 @@ views:
             - entity_id: "/media_player.*_surround$/"
           exclude:
             - state: "problem"
+            - state: "ok"
             - state: "off"
             - state: "unavailable"
             - state: "idle"
@@ -383,6 +384,34 @@ views:
         show_name: false
         show_state: false
         entity: camera.pergola_person
+
+
+      - type: custom:custom-sonos-card
+        mediaTitle: " "
+        shuffleFavorites: false
+        selectedPlayer: media_player.home
+        layout:
+          mediaBrowser:
+            width: '100%'
+            mobileWidth: '100%'
+          mediaItem:
+            width: '25%'
+            mobileWidth: '33%'
+        styles:
+            groups:
+              display: none
+            players:
+              display: none
+            ha-card:
+              background: none
+            button-section:
+              background: none
+              border: none
+            media-button:
+              border: none
+            media-button-title:
+              textOverflow: clip
+
 
   - title: Weather
     icon: mdi:weather-rainy

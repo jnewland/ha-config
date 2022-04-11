@@ -50,6 +50,9 @@ lovelace:
       type: js
     - url: /local/mini-media-player-bundle.js?source=https://github.com/kalkih/mini-media-player/releases/download/v1.16.2/mini-media-player-bundle.js
       type: module
+    - url: /local/custom-sonos-card.js?source=https://github.com/johanfrick/custom-sonos-card/releases/download/v5.1.0/custom-sonos-card.js
+      type: module
+
 light:
 logger: !include logger.yaml
 map:
