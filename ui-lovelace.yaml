@@ -387,7 +387,7 @@ views:
 
 
       - type: custom:custom-sonos-card
-        mediaTitle: favorites
+        mediaTitle: " "
         shuffleFavorites: false
         selectedPlayer: media_player.home
         layout:
