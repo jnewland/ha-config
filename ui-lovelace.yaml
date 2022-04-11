@@ -49,21 +49,15 @@ views:
         cards:
 
           - type: custom:custom-sonos-card
-            name: ''
-            groupsTitle: ''
-            groupingTitle: ''
-            mediaTitle: ''
-            headerImage: ''
+            mediaTitle: favorites
             shuffleFavorites: false
-            noMediaText: 'No media selected'
-            allVolumesText: 'All volumes'
-            entityNameRegexToReplace: 'SONOS '
-            entityNameReplacement: ''
+            style:
+              groups:
+                display: none
+              players:
+                display: none
             layout:
               selectedPlayer: media_player.home
-              hideGroupCurrentTrack: true # default is false, which means song/track info for groups will be shown
-              skipAdditionalPlayerSwitches: true # default is false, which means additional switches will be shown in player if available (such as crossfade button)
-              entities: []
 
           - type: custom:mini-media-player
             entity: media_player.house
