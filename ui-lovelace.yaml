@@ -402,6 +402,15 @@ views:
               display: none
             players:
               display: none
+            ha-card:
+              background: none
+            button-section:
+              background: none
+              border: none
+            media-button:
+              border: none
+            media-button-title:
+              textOverflow: clip
 
 
   - title: Weather
