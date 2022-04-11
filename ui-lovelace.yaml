@@ -51,12 +51,19 @@ views:
           - type: custom:custom-sonos-card
             mediaTitle: favorites
             shuffleFavorites: false
-            style:
-              groups:
-                display: none
-              players:
-                display: none
             layout:
+              groups:
+                width: '0%'
+                mobileWidth: '0%'
+              players:
+                width: '0%'
+                mobileWidth: '0%'
+              mediaBrowser:
+                width: '100%'
+                mobileWidth: '100%'
+              mediaItem:
+                width: '0%'
+                mobileWidth: '0%'
               selectedPlayer: media_player.home
 
           - type: custom:mini-media-player
