@@ -394,9 +394,9 @@ views:
           mediaBrowser:
             width: '100%'
             mobileWidth: '100%'
-            mediaItem:
-              width: '20%'
-              mobileWidth: '33%'
+          mediaItem:
+            width: '20%'
+            mobileWidth: '33%'
         styles:
             groups:
               display: none
