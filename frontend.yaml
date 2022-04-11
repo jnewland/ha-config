@@ -4,7 +4,6 @@ themes:
     paper-item-icon-color: darkgrey
     sonos-ha-card-background-color: none
     sonos-border-radius: 0
-    sonos-border-width: 0
   black:
     primary-color: black
     paper-item-icon-color: darkgrey
