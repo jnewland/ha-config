@@ -21,6 +21,9 @@ action:
   - service: script.notify_all_channels
     data:
       message: the front gate just opened
+  - service: notify.tidbyt_jesse_once
+    data:
+      message: The front gate just opened!
   - service: notify.slack
     data:
       title: ':camera_with_flash:'
