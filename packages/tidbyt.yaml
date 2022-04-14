@@ -1,5 +1,6 @@
 notify:
-  - name: tidbyt_jesse
+
+  - name: tidbyt_jesse_background
     platform: rest
     resource: http://pixlet:8080/api/v1/push
     method: POST_JSON
@@ -8,5 +9,25 @@ notify:
       installationID: push
       deviceID: surgically-vaulting-mutual-angelfish-704
       apiToken: !env_var TIDBYT_JESSE_API_TOKEN
+      background: "true"      
+
+  - name: tidbyt_jesse_banner
+    platform: rest
+    resource: http://pixlet:8080/api/v1/push
+    method: POST_JSON
+    message_param_name: msg
+    data:
+      installationID: push
+      deviceID: surgically-vaulting-mutual-angelfish-704
+      apiToken: !env_var TIDBYT_JESSE_API_TOKEN
+      background: "false"      
+
+  - name: tidbyt_jesse_once
+    platform: rest
+    resource: http://pixlet:8080/api/v1/push
+    method: POST_JSON
+    message_param_name: msg
+    data:
+      deviceID: surgically-vaulting-mutual-angelfish-704
+      apiToken: !env_var TIDBYT_JESSE_API_TOKEN
       background: "false"
-      
