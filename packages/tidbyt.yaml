@@ -2,7 +2,7 @@ notify:
   - name: tidbyt_jesse
     platform: rest
     resource: http://pixlet:8080/api/v1/push
-    method: push
+    method: POST
     data:
       installationID: push
       deviceID: surgically-vaulting-mutual-angelfish-704
