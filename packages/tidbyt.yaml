@@ -2,7 +2,7 @@ notify:
   - name: tidbyt_jesse
     platform: rest
     resource: http://pixlet:8080/api/v1/push
-    method: POST
+    method: POST_JSON
     message_param_name: msg
     data:
       installationID: push
