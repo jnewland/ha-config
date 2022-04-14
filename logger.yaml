@@ -25,3 +25,4 @@ logs:
   # custom_components.apple_tv: debug
   pyvera: critical
   # homeassistant.components.vera: debug
+  homeassistant.components.rachio: debug
