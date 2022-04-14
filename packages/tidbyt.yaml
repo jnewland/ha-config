@@ -1,0 +1,11 @@
+notify:
+  - name: tidbyt_jesse
+    platform: rest
+    resource: http://pixlet:8080/api/v1/push
+    method: push
+    data:
+      installationID: push
+      deviceID: surgically-vaulting-mutual-angelfish-704
+      apiToken: !env_var TIDBYT_JESSE_API_TOKEN
+      background: "false"
+      
