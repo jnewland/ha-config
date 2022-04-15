@@ -606,6 +606,7 @@ views:
           - light.atrium
           - light.atrium_door
           - light.garage_door
+          - light.gate
           - switch.atrium_fountain
           - lock.garage
           - cover.garage
