@@ -141,7 +141,8 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{ 
-            states('binary_sensor.yoga_room_motion') == 'on'
+            states('binary_sensor.yoga_room_motion') == 'on' or
+            states('binary_sensor.yoga_chair_home_security_motion_detection') == 'on'
           }}
         delay_off:
           minutes: 30
