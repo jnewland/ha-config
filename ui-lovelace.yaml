@@ -662,6 +662,7 @@ views:
             state: recording
         card:
           type: grid
+          square: false
           cards:
             - type: conditional
               conditions:
