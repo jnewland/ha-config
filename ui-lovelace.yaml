@@ -4,15 +4,20 @@ views:
     icon: mdi:home
     theme: dark-mode
     cards:
-      - type: picture-glance
-        camera_image: camera.pergola
-        entities:
-          - input_select.mode
-          - alarm_control_panel.alarm
-          - lock.front_door
-          - binary_sensor.front_gate
-          - input_number.brightness
-          - vacuum.downstairs
+      - type: conditional
+        conditions:
+          - entity: camera.pergola
+            state: 'recording'
+        card:
+          type: picture-glance
+          camera_image: camera.pergola
+          entities:
+            - input_select.mode
+            - alarm_control_panel.alarm
+            - lock.front_door
+            - binary_sensor.front_gate
+            - input_number.brightness
+            - vacuum.downstairs
       - type: conditional
         conditions:
           - entity: input_select.mode
