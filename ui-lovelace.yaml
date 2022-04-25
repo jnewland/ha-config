@@ -535,6 +535,7 @@ views:
           - light.marble_lamp
           - light.yoga_closet
           - binary_sensor.yoga_room_motion
+          - binary_sensor.yoga_chair_home_security_motion_detection
           - binary_sensor.yoga_room_occupancy
           - sensor.yoga_room_temp
         footer:
