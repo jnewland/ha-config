@@ -4,28 +4,33 @@ from __future__ import annotations
 import asyncio
 import logging
 from typing import Any
+from typing import Literal
 
 import aiohttp
 from homeassistant import config_entries
-from homeassistant.const import CONF_CODE, CONF_PASSWORD, CONF_USERNAME
+from homeassistant.const import CONF_UNIT_OF_MEASUREMENT
 from homeassistant.data_entry_flow import FlowResult
-from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
+from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import selector
 from homeassistant.helpers.update_coordinator import UpdateFailed
-from pyalarmdotcomajax.const import ArmingOption as ADCArmingOption, AuthResult
-from pyalarmdotcomajax.errors import AuthenticationFailed, DataFetchFailed
+from pyalarmdotcomajax.const import AuthResult
+from pyalarmdotcomajax.errors import AuthenticationFailed
+from pyalarmdotcomajax.errors import DataFetchFailed
 import voluptuous as vol
 
 from . import const as adci
 from .controller import ADCIController
 
 log = logging.getLogger(__name__)
+LegacyArmingOptions = Literal["home", "away", "true", "false"]
 
 
 class ADCFlowHandler(config_entries.ConfigFlow, domain=adci.DOMAIN):  # type: ignore
     """Handle a Alarmdotcom config flow."""
 
-    VERSION = 2
+    VERSION = 3
 
     def __init__(self) -> None:
         """Initialize the Alarmdotcom flow."""
@@ -70,6 +75,7 @@ class ADCFlowHandler(config_entries.ConfigFlow, domain=adci.DOMAIN):  # type: ig
                     username=self.config[adci.CONF_USERNAME],
                     password=self.config[adci.CONF_PASSWORD],
                     twofactorcookie=self.config[adci.CONF_2FA_COOKIE],
+                    new_websession=True,
                 )
 
                 log.debug("Login result: %s", login_result)
@@ -77,15 +83,14 @@ class ADCFlowHandler(config_entries.ConfigFlow, domain=adci.DOMAIN):  # type: ig
                 if login_result == AuthResult.ENABLE_TWO_FACTOR:
                     return self.async_abort(reason="must_enable_2fa")
 
-                elif login_result == AuthResult.OTP_REQUIRED:
+                if login_result == AuthResult.OTP_REQUIRED:
                     log.debug("OTP code required.")
                     return await self.async_step_otp()
 
-                elif login_result == AuthResult.SUCCESS:
+                if login_result == AuthResult.SUCCESS:
                     return await self.async_step_final()
 
-                else:
-                    errors["base"] = "unknown"
+                errors["base"] = "unknown"
 
             except (UpdateFailed, ConfigEntryNotReady) as err:
                 log.error(
@@ -191,12 +196,15 @@ class ADCFlowHandler(config_entries.ConfigFlow, domain=adci.DOMAIN):  # type: ig
 
             return self.async_abort(reason="reauth_successful")
 
-        # TODO: For non-imported flows, set options to defaults as defined in options flow handler.
-        # TODO: For imported flows, validate options through schema.
+        options = (
+            self._imported_options
+            if self._imported_options
+            else adci.CONF_OPTIONS_DEFAULT
+        )
 
         # Named async_ but doesn't require await!
         return self.async_create_entry(
-            title=self._config_title, data=self.config, options=self._imported_options
+            title=self._config_title, data=self.config, options=options
         )
 
     # #
@@ -209,8 +217,8 @@ class ADCFlowHandler(config_entries.ConfigFlow, domain=adci.DOMAIN):  # type: ig
 
         log.debug("%s: Importing configuration data from configuration.yaml.", __name__)
 
-        self.config = _convert_imported_configuration(import_config)
-        self._imported_options = _convert_imported_options(import_config)
+        self.config = _convert_v_0_1_imported_configuration(import_config)
+        self._imported_options = _convert_v_0_1_imported_options(import_config)
 
         log.debug("%s: Done reading config options. Logging in...", __name__)
 
@@ -223,6 +231,7 @@ class ADCFlowHandler(config_entries.ConfigFlow, domain=adci.DOMAIN):  # type: ig
                 username=self.config[adci.CONF_USERNAME],
                 password=self.config[adci.CONF_PASSWORD],
                 twofactorcookie=self.config[adci.CONF_2FA_COOKIE],
+                new_websession=True,
             )
 
             log.debug("Login result: %s", login_result)
@@ -281,109 +290,150 @@ class ADCOptionsFlowHandler(config_entries.OptionsFlow):  # type: ignore
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
-        """Manage the options for the custom component."""
+        """First screen for configuration options. Sets arming code."""
+        errors: dict = {}
+
+        if user_input is not None:
+            if user_input.get(adci.CONF_ARM_CODE) == "CLEAR!":
+                user_input[adci.CONF_ARM_CODE] = ""
+            self.options.update(user_input)
+            return await self.async_step_modes()
+
+        schema = vol.Schema(
+            {
+                vol.Optional(
+                    adci.CONF_ARM_CODE,
+                    default=""
+                    if not (arm_code_raw := self.options.get(adci.CONF_ARM_CODE))
+                    else arm_code_raw,
+                ): selector.selector({"text": {"type": "password"}}),
+                vol.Required(
+                    adci.CONF_UPDATE_INTERVAL,
+                    default=self.options.get(
+                        adci.CONF_UPDATE_INTERVAL, adci.CONF_UPDATE_INTERVAL_DEFAULT
+                    ),
+                ): selector.selector(
+                    {
+                        "number": {
+                            "mode": "box",
+                            CONF_UNIT_OF_MEASUREMENT: "seconds",
+                        }
+                    }
+                ),
+            }
+        )
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=schema,
+            errors=errors,
+            last_step=False,
+        )
+
+    async def async_step_modes(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """First screen for configuration options. Sets arming mode profiles."""
         errors: dict = {}
 
         if user_input is not None:
             self.options.update(user_input)
             return self.async_create_entry(title="", data=self.options)
 
+        schema = vol.Schema(
+            {
+                vol.Required(
+                    adci.CONF_ARM_HOME,
+                    default=self.options.get(
+                        adci.CONF_ARM_HOME, adci.CONF_ARM_MODE_OPTIONS_DEFAULT
+                    ),
+                ): cv.multi_select(adci.CONF_ARM_MODE_OPTIONS),
+                vol.Required(
+                    adci.CONF_ARM_AWAY,
+                    default=self.options.get(
+                        adci.CONF_ARM_AWAY, adci.CONF_ARM_MODE_OPTIONS_DEFAULT
+                    ),
+                ): cv.multi_select(adci.CONF_ARM_MODE_OPTIONS),
+                vol.Required(
+                    adci.CONF_ARM_NIGHT,
+                    default=self.options.get(
+                        adci.CONF_ARM_NIGHT, adci.CONF_ARM_MODE_OPTIONS_DEFAULT
+                    ),
+                ): cv.multi_select(adci.CONF_ARM_MODE_OPTIONS),
+            }
+        )
+
         return self.async_show_form(
-            step_id="init",
-            data_schema=self.schema,
+            step_id="modes",
+            data_schema=schema,
             errors=errors,
             last_step=True,
         )
 
-    @property
-    def schema(self) -> vol.Schema:
-        """Input schema for integration options."""
 
-        ARMING_OPTIONS = [
-            adci.ADCIArmingOption.NEVER.value,
-            adci.ADCIArmingOption.ALWAYS.value,
-            adci.ADCIArmingOption.STAY.value,
-            adci.ADCIArmingOption.AWAY.value,
-        ]
-
-        return vol.Schema(
-            {
-                vol.Optional(
-                    adci.CONF_ARM_CODE,
-                    default=self.options.get(adci.CONF_ARM_CODE, ""),
-                ): cv.string,
-                vol.Optional(
-                    adci.CONF_USE_ARM_CODE,
-                    default=self.options.get(adci.CONF_USE_ARM_CODE),
-                ): cv.boolean,
-                vol.Required(
-                    adci.CONF_FORCE_BYPASS,
-                    default=self.options.get(
-                        adci.CONF_FORCE_BYPASS, adci.ADCIArmingOption.NEVER.value
-                    ),
-                ): vol.In(ARMING_OPTIONS),
-                vol.Required(
-                    adci.CONF_NO_DELAY,
-                    default=self.options.get(
-                        adci.CONF_NO_DELAY, adci.ADCIArmingOption.NEVER.value
-                    ),
-                ): vol.In(ARMING_OPTIONS),
-                vol.Required(
-                    adci.CONF_SILENT_ARM,
-                    default=self.options.get(
-                        adci.CONF_SILENT_ARM, adci.ADCIArmingOption.NEVER.value
-                    ),
-                ): vol.In(ARMING_OPTIONS),
-            }
-        )
-
-
-def _convert_imported_configuration(config: dict[str, Any | None]) -> Any:
+def _convert_v_0_1_imported_configuration(config: dict[str, Any | None]) -> Any:
     """Convert a key from the imported configuration."""
 
-    username = config.get(CONF_USERNAME)
-    password = config.get(CONF_PASSWORD)
-    two_factor_cookie = config.get(adci.LEGACY_CONF_TWO_FACTOR_COOKIE)
+    username = config.get("username")
+    password = config.get("password")
+    two_factor_cookie = config.get("two_factor_cookie")
 
     data: dict = {}
 
     data[adci.CONF_USERNAME] = username
     data[adci.CONF_PASSWORD] = password
-
     data[adci.CONF_2FA_COOKIE] = two_factor_cookie if two_factor_cookie else None
 
     return data
 
 
-def _convert_imported_options(config: dict[str, Any]) -> Any:
+def _convert_v_0_1_imported_options(config: dict[str, Any]) -> Any:
     """Convert a key from the imported configuration."""
 
-    code: str | int | None = config.get(CONF_CODE)
-    force_bypass: ADCArmingOption | None = config.get(adci.LEGACY_CONF_FORCE_BYPASS)
-    no_entry_delay: ADCArmingOption | None = config.get(adci.LEGACY_CONF_NO_ENTRY_DELAY)
-    silent_arming: ADCArmingOption | None = config.get(adci.LEGACY_CONF_SILENT_ARMING)
+    code: str | int | None = config.get("code")
+    force_bypass: LegacyArmingOptions | None = config.get("force_bypass")
+    no_entry_delay: LegacyArmingOptions | None = config.get("no_entry_delay")
+    silent_arming: LegacyArmingOptions | None = config.get("silent_arming")
 
     data: dict = {}
 
     if code:
         data[adci.CONF_ARM_CODE] = str(code)
-        data[adci.CONF_USE_ARM_CODE] = True
-    else:
-        data[adci.CONF_USE_ARM_CODE] = False
 
-    if force_bypass:
-        data[adci.CONF_FORCE_BYPASS] = adci.ADCIArmingOption.from_config_yaml(
-            force_bypass
-        ).value
+    # Populate Arm Home
+    new_arm_home = []
 
-    if no_entry_delay:
-        data[adci.CONF_NO_DELAY] = adci.ADCIArmingOption.from_config_yaml(
-            no_entry_delay
-        ).value
+    if force_bypass in ["home", "true"]:
+        new_arm_home.append("bypass")
+    if silent_arming in ["home", "true"]:
+        new_arm_home.append("silent")
+    if no_entry_delay not in ["home", "true"]:
+        new_arm_home.append("delay")
 
-    if silent_arming:
-        data[adci.CONF_SILENT_ARM] = adci.ADCIArmingOption.from_config_yaml(
-            silent_arming
-        ).value
+    data[adci.CONF_ARM_HOME] = new_arm_home
+
+    # Populate Arm Away
+    new_arm_away = []
+
+    if force_bypass in ["away", "true"]:
+        new_arm_away.append("bypass")
+    if silent_arming in ["away", "true"]:
+        new_arm_away.append("silent")
+    if no_entry_delay not in ["away", "true"]:
+        new_arm_away.append("delay")
+
+    data[adci.CONF_ARM_AWAY] = new_arm_away
+
+    # Populate Arm Night
+    new_arm_night = []
+
+    if force_bypass == "true":
+        new_arm_night.append("bypass")
+    if silent_arming == "true":
+        new_arm_night.append("silent")
+    if no_entry_delay != "true":
+        new_arm_night.append("delay")
+
+    data[adci.CONF_ARM_NIGHT] = new_arm_night
 
     return data
