@@ -1,0 +1,14 @@
+name: renovate
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: {}
+  schedule:
+    - cron:  '0 */4 * * *'
+jobs:
+  renovate:
+    uses: jnewland/.github/.github/workflows/renovate.yaml@main
+    secrets:
+      RENOVATE_APP_ID: ${{ secrets.RENOVATE_APP_ID }}
+      RENOVATE_APP_PEM: ${{ secrets.RENOVATE_APP_PEM }}
