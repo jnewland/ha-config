@@ -1,3 +1,8 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json"
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "postUpgradeTasks": {
+    "commands": ["./script/sync-components"],
+    "fileFilters": ["custom_components/**/*"],
+    "executionMode": "branch"
+  }
 }
