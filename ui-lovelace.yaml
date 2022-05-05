@@ -416,7 +416,7 @@ views:
             groups:
               display: none
             players:
-            #  display: none
+              display: none
             ha-card:
               background: none
             button-section:
