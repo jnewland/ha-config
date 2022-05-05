@@ -1,27 +1,20 @@
 default: info
 logs:
-  # aiohttp: debug
-  # aiohttp.client: debug
-  # slackclient: debug
-  # slack: debug
-  # custom_components.slack.notify: debug
-  # homeassistant.components.slack: debug
+  homeassistant.components.binary_sensor: warn
+  homeassistant.components.cover.myq: debug
+  homeassistant.components.http: warn
+  homeassistant.components.light: warn
+  homeassistant.components.media_player: warn
+  homeassistant.components.sensor: warn
+  homeassistant.components.shell_command: debug
+  homeassistant.components.sonos: debug
+  homeassistant.components.switch: warn
   packages.ack: debug
   packages.image_processing: info
-  requests.packages.urllib3.connectionpool: critical
-  homeassistant.components.media_player: warn
-  homeassistant.components.light: warn
-  homeassistant.components.binary_sensor: warn
-  homeassistant.components.switch: warn
-  homeassistant.components.sensor: warn
-  homeassistant.components.http: warn
-  root: warn
-  pyvera.subscribe: warn
-  homeassistant.components.cover.myq: debug
-  roomba.roomba.Roomba: warn
   pyhap.hap_server: critical
-  homeassistant.components.shell_command: debug
-  # pyatv: debug
-  # custom_components.apple_tv: debug
   pyvera: critical
-  # homeassistant.components.vera: debug
+  pyvera.subscribe: warn
+  requests.packages.urllib3.connectionpool: critical
+  roomba.roomba.Roomba: warn
+  root: warn
+  soco: debug
