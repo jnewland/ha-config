@@ -405,8 +405,6 @@ views:
         mediaTitle: " "
         shuffleFavorites: false
         selectedPlayer: media_player.home
-        entities:
-        - media_player.home
         layout:
           mediaBrowser:
             width: '100%'
@@ -418,7 +416,7 @@ views:
             groups:
               display: none
             players:
-              display: none
+            #  display: none
             ha-card:
               background: none
             button-section:
