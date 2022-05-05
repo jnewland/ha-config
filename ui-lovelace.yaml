@@ -405,6 +405,8 @@ views:
         mediaTitle: " "
         shuffleFavorites: false
         selectedPlayer: media_player.home
+        entities:
+        - media_player.home
         layout:
           mediaBrowser:
             width: '100%'
