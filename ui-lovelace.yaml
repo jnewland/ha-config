@@ -723,6 +723,11 @@ views:
               show_name: false
               show_state: false
               entity: camera.roof_deck
+            - type: picture-entity
+              camera_view: live
+              show_name: false
+              show_state: false
+              entity: camera.peppers
 
             - type: picture-entity
               show_name: false
@@ -756,6 +761,10 @@ views:
               show_name: false
               show_state: false
               entity: camera.ac_person
+            - type: picture-entity
+              show_name: false
+              show_state: false
+              entity: camera.peppers_person
 
       - type: custom:auto-entities
         show_header_toggle: false
