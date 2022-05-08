@@ -729,6 +729,15 @@ views:
               show_state: false
               entity: camera.peppers
 
+      - type: conditional
+        conditions:
+          - entity: camera.pergola
+            state: recording
+        card:
+          type: grid
+          square: false
+          columns: 1
+          cards:
             - type: picture-entity
               show_name: false
               show_state: false
