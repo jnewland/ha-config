@@ -664,6 +664,7 @@ views:
         card:
           type: grid
           square: false
+          columns: 1
           cards:
             - type: conditional
               conditions:
