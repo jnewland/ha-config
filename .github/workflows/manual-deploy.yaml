@@ -1,0 +1,24 @@
+name: manual deploy
+on:
+  pull_request:
+    types:
+      - labeled
+      - synchronize
+jobs:
+  attest:
+    runs-on: ubuntu-latest
+    if: |
+      ( github.event.action == 'labeled' && github.event.label.name == 'deploy:manually-deployed' ) ||
+      ( github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy:manually-deployed') )
+    steps:
+      - uses: actions/github-script@9ac08808f993958e9de277fe43a64532a609130e # tag=v6
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              ...context.repo,
+              sha:         context.payload.pull_request.head.sha,
+              state:       'success',
+              context:     'deploy',
+              description: 'Deploy attested by ${{ github.actor }}',
+              target_url:  'https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks'
+            });
