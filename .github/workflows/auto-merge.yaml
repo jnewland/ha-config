@@ -1,0 +1,14 @@
+name: auto merge
+on:
+  pull_request:
+    types:
+      - labeled
+jobs:
+  enable:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'deploy:auto-merge')
+    steps:
+      - uses: alexwilson/enable-github-automerge-action@806273af1eb89acabbd4f43de826932c7e349b33
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          merge-method: SQUASH
