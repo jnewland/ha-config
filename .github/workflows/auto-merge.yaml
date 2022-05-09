@@ -10,4 +10,5 @@ jobs:
     steps:
       - uses: alexwilson/enable-github-automerge-action@806273af1eb89acabbd4f43de826932c7e349b33
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           merge-method: SQUASH
