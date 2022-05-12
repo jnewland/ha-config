@@ -31,6 +31,11 @@ automation:
 sensor:
  - platform: mqtt
    state_topic: "homeassistant/sensor/flameboss/136958/send/open"
+   name: "Flameboss Cook Link"
+   force_update: true
+   value_template: "https://myflameboss.com/cooks/{{ value_json.cook_id }}"
+ - platform: mqtt
+   state_topic: "homeassistant/sensor/flameboss/136958/send/open"
    name: "Grill Probe Temp"
    unit_of_measurement: "°F"
    device_class: "temperature"

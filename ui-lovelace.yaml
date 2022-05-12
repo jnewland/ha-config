@@ -611,6 +611,9 @@ views:
         entities:
           - light.pergola_pendants
           - switch.pergola_overhead
+      - type: markdown
+        content: |
+          [View cook on Flameboss]({{ states('sensor.flameboss_cook_link') }})
       - type: entities
         entities:
           - sensor.grill_probe_temp
