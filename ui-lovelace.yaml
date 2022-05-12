@@ -603,6 +603,35 @@ views:
       - type: media-control
         entity: media_player.bedroom_channels
 
+  - title: Grill
+    icon: mdi:bbq
+    cards:
+      - type: entities
+        title: pergola
+        entities:
+          - light.pergola_pendants
+          - switch.pergola_overhead
+      - type: entities
+        entities:
+          - sensor.grill_probe_temp
+          - sensor.red_probe_temp
+          - sensor.green_probe_temp
+          - sensor.black_probe_temp
+      - type: history-graph
+        hours_to_show: 1
+        entities:
+          - sensor.grill_probe_temp
+          - sensor.red_probe_temp
+          - sensor.green_probe_temp
+          - sensor.black_probe_temp
+      - type: history-graph
+        hours_to_show: 3
+        entities:
+          - sensor.grill_probe_temp
+          - sensor.red_probe_temp
+          - sensor.green_probe_temp
+          - sensor.black_probe_temp
+
   - title: Outdoor
     icon: mdi:tree
     cards:
