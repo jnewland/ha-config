@@ -604,7 +604,7 @@ views:
         entity: media_player.bedroom_channels
 
   - title: Grill
-    icon: mdi:bbq
+    icon: mdi:grill
     cards:
       - type: entities
         title: pergola
