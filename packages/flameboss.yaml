@@ -1,5 +1,5 @@
 automation:
-  - alias: Debug flameboss data
+  - alias: Debug flameboss open
     mode: parallel
     id: 855d1317-0767-4e0a-a307-284d270893bd
     trigger:
@@ -10,6 +10,20 @@ automation:
         data:
           message: >
             at=open
+            payload={{ trigger.payload_json }}
+          logger: packages.flameboss
+          level: debug
+  - alias: Debug flameboss data
+    mode: parallel
+    id: e7ed78f4-5876-4190-9134-6e65f4caed9e
+    trigger:
+      platform: mqtt
+      topic: "homeassistant/sensor/flameboss/136958/send/data"
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=data
             payload={{ trigger.payload_json }}
           logger: packages.flameboss
           level: debug
