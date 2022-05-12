@@ -115,14 +115,14 @@ notify:
       installationID: date-progress
       value_multiplier: "200"
 
-automation:
-  - alias: Music Room Date Progress
-    mode: parallel
-    id: 2567b3d9-6cfa-423f-888e-9c5b6c09fbfb
-    trigger:
-      - platform: time_pattern
-        minutes: "/5"
-    action:
-      service: notify.tidbyt_music_room_date_progress
-      data:
-        message: "$"
+# automation:
+#   - alias: Music Room Date Progress
+#     mode: parallel
+#     id: 2567b3d9-6cfa-423f-888e-9c5b6c09fbfb
+#     trigger:
+#       - platform: time_pattern
+#         minutes: "/5"
+#     action:
+#       service: notify.tidbyt_music_room_date_progress
+#       data:
+#         message: "$"
