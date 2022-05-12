@@ -1,0 +1,64 @@
+automation:
+  - alias: Debug flameboss open
+    mode: parallel
+    id: 855d1317-0767-4e0a-a307-284d270893bd
+    trigger:
+      platform: mqtt
+      topic: "homeassistant/sensor/flameboss/136958/send/open"
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=open
+            payload={{ trigger.payload_json }}
+          logger: packages.flameboss
+          level: debug
+  - alias: Debug flameboss data
+    mode: parallel
+    id: e7ed78f4-5876-4190-9134-6e65f4caed9e
+    trigger:
+      platform: mqtt
+      topic: "homeassistant/sensor/flameboss/136958/send/data"
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=data
+            payload={{ trigger.payload_json }}
+          logger: packages.flameboss
+          level: debug
+
+sensor:
+ - platform: mqtt
+   state_topic: "homeassistant/sensor/flameboss/136958/send/open"
+   name: "Flameboss Cook Link"
+   force_update: true
+   value_template: "https://myflameboss.com/cooks/{{ value_json.cook_id }}"
+ - platform: mqtt
+   state_topic: "homeassistant/sensor/flameboss/136958/send/open"
+   name: "Grill Probe Temp"
+   unit_of_measurement: "°F"
+   device_class: "temperature"
+   force_update: true
+   value_template: "{{(float(value_json.temps[0]) * (9/50) +32) | round(0)}}"
+ - platform: mqtt
+   state_topic: "homeassistant/sensor/flameboss/136958/send/open"
+   name: "Red Probe Temp"
+   unit_of_measurement: "°F"
+   device_class: "temperature"
+   force_update: true
+   value_template: "{{(float(value_json.temps[1]) * (9/50) +32) | round(0)}}"
+ - platform: mqtt
+   state_topic: "homeassistant/sensor/flameboss/136958/send/open"
+   name: "Green Probe Temp"
+   unit_of_measurement: "°F"
+   device_class: "temperature"
+   force_update: true
+   value_template: "{{(float(value_json.temps[2]) * (9/50) +32) | round(0)}}"
+ - platform: mqtt
+   state_topic: "homeassistant/sensor/flameboss/136958/send/open"
+   name: "Black Probe Temp"
+   unit_of_measurement: "°F"
+   device_class: "temperature"
+   force_update: true
+   value_template: "{{(float(value_json.temps[3]) * (9/50) +32) | round(0)}}"

@@ -15,3 +15,4 @@
 /custom_components/*/__pycache__
 /.vscode
 /pythonenv*
+.nfs*

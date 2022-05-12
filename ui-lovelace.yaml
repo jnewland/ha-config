@@ -603,6 +603,44 @@ views:
       - type: media-control
         entity: media_player.bedroom_channels
 
+  - title: Grill
+    icon: mdi:grill
+    cards:
+      - type: entities
+        title: pergola
+        entities:
+          - light.pergola_pendants
+          - switch.pergola_overhead
+      - type: markdown
+        content: |
+          [View cook on Flameboss]({{ states('sensor.flameboss_cook_link') }})
+      - type: entities
+        entities:
+          - sensor.grill_probe_temp
+          - sensor.red_probe_temp
+          - sensor.green_probe_temp
+          - sensor.black_probe_temp
+      - type: history-graph
+        hours_to_show: 1
+        entities:
+          - sensor.grill_probe_temp
+          - sensor.red_probe_temp
+          - sensor.green_probe_temp
+          - sensor.black_probe_temp
+      - type: history-graph
+        hours_to_show: 3
+        entities:
+          - sensor.grill_probe_temp
+          - sensor.red_probe_temp
+          - sensor.green_probe_temp
+          - sensor.black_probe_temp
+      - type: custom:mini-media-player
+        entity: media_player.pergola
+        artwork: cover
+        hide:
+          power: true
+          shuffle: false
+
   - title: Outdoor
     icon: mdi:tree
     cards:
