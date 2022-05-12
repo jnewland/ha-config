@@ -9,7 +9,7 @@ automation:
       - service: system_log.write
         data:
           message: >
-            at=on
+            at=open
             payload={{ trigger.payload_json }}
           logger: packages.flameboss
           level: debug
