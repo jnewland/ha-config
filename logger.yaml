@@ -9,7 +9,6 @@ logs:
   homeassistant.components.shell_command: debug
   homeassistant.components.switch: warn
   packages.ack: debug
-  packages.flameboss: debug
   packages.image_processing: info
   pyhap.hap_server: critical
   pyvera: critical
