@@ -631,6 +631,12 @@ views:
           - sensor.red_probe_temp
           - sensor.green_probe_temp
           - sensor.black_probe_temp
+      - type: custom:mini-media-player
+        entity: media_player.pergola
+        artwork: cover
+        hide:
+          power: true
+          shuffle: false
 
   - title: Outdoor
     icon: mdi:tree
