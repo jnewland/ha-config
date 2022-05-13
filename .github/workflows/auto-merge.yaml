@@ -3,12 +3,14 @@ on:
   pull_request:
     types:
       - labeled
+      - synchronize
 jobs:
   enable:
-    runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.labels.*.name, 'deploy:auto-merge')
-    steps:
-      - uses: alexwilson/enable-github-automerge-action@5685505752ffe1f20f432646b54b05eb49e77023
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          merge-method: SQUASH
+    if: |
+      ( github.event.action == 'labeled' && github.event.label.name == 'deploy:auto-merge' ) ||
+      ( github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy:auto-merge') )
+    uses: jnewland/.github/.github/workflows/auto-merge.yaml@main
+    with:
+      pullRequestId: ${{ github.event.pull_request.node_id }}
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}

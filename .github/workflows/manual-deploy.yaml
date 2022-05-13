@@ -1,4 +1,4 @@
-name: manual deploy
+name: manually deployed
 on:
   pull_request:
     types:
@@ -6,19 +6,12 @@ on:
       - synchronize
 jobs:
   attest:
-    runs-on: ubuntu-latest
     if: |
       ( github.event.action == 'labeled' && github.event.label.name == 'deploy:manually-deployed' ) ||
       ( github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy:manually-deployed') )
-    steps:
-      - uses: actions/github-script@7a5c598405937d486b0331594b5da2b14db670da # tag=v6.1.0
-        with:
-          script: |
-            await github.rest.repos.createCommitStatus({
-              ...context.repo,
-              sha:         context.payload.pull_request.head.sha,
-              state:       'success',
-              context:     'deploy',
-              description: 'Deploy attested by ${{ github.actor }}',
-              target_url:  'https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks'
-            });
+    uses: jnewland/.github/.github/workflows/manually-deployed.yaml@main
+    with:
+      sha: ${{ github.event.pull_request.head.sha }}
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+
