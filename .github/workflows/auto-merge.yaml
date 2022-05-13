@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'deploy:auto-merge')
     steps:
-      - uses: alexwilson/enable-github-automerge-action@2f131b7f38ab9854c10ba23af77241bf7e674edb
+      - uses: alexwilson/enable-github-automerge-action@5685505752ffe1f20f432646b54b05eb49e77023
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           merge-method: SQUASH
