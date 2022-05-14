@@ -622,6 +622,7 @@ views:
           - sensor.black_probe_temp
       - type: custom:mini-graph-card
         hours_to_show: 1
+        points_per_hour: 120
         lower_bound: 100
         name: last hour
         entities:
@@ -631,6 +632,7 @@ views:
           - sensor.black_probe_temp
       - type: custom:mini-graph-card
         hours_to_show: 3
+        points_per_hour: 120
         lower_bound: 100
         name: last 3 hours
         entities:
