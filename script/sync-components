@@ -31,7 +31,9 @@ mv $TMPDIR/alarmdotcom-$$/custom_components/alarmdotcom custom_components
 rm -rf $TMPDIR/alarmdotcom-$$
 
 rm -rf custom_components/frigate || true
-git clone https://github.com/blakeblackshear/frigate-hass-integration $TMPDIR/frigate-$$
+# renovate: datasource=github-releases depName=blakeblackshear/frigate-hass-integration
+FRIGATE_VERSION=v2.3
+git clone --depth 1 --branch $FRIGATE_VERSION https://github.com/blakeblackshear/frigate-hass-integration $TMPDIR/frigate-$$
 mv $TMPDIR/frigate-$$/custom_components/frigate custom_components
 rm -rf $TMPDIR/frigate-$$
 
