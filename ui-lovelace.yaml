@@ -620,15 +620,19 @@ views:
           - sensor.red_probe_temp
           - sensor.green_probe_temp
           - sensor.black_probe_temp
-      - type: history-graph
+      - type: custom:mini-graph-card
         hours_to_show: 1
+        lower_bound: 100
+        name: last hour
         entities:
           - sensor.grill_probe_temp
           - sensor.red_probe_temp
           - sensor.green_probe_temp
           - sensor.black_probe_temp
-      - type: history-graph
+      - type: custom:mini-graph-card
         hours_to_show: 3
+        lower_bound: 100
+        name: last 3 hours
         entities:
           - sensor.grill_probe_temp
           - sensor.red_probe_temp
