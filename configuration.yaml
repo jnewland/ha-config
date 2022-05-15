@@ -52,6 +52,8 @@ lovelace:
       type: module
     - url: /local/custom-sonos-card.js?source=https://github.com/johanfrick/custom-sonos-card/releases/download/v5.1.1/custom-sonos-card.js
       type: module
+    - url: /local/mini-graph-card-bundle.js?source=https://github.com/kalkih/mini-graph-card/releases/download/v0.11.0/mini-graph-card-bundle.js
+      type: module
 
 light:
 logger: !include logger.yaml
