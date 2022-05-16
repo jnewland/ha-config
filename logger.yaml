@@ -1,5 +1,7 @@
 default: info
 logs:
+  custom_components.bhyve: debug
+  bhyve: debug
   homeassistant.components.binary_sensor: warn
   homeassistant.components.cover.myq: debug
   homeassistant.components.http: warn
