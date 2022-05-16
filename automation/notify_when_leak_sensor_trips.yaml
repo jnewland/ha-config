@@ -2,7 +2,7 @@ alias: notify when leak sensor trips
 id: 85023ab0-13e5-4b4a-aba1-3e7d58973ad1
 trigger:
   platform: state
-  entity_id: binary_sensor.leak_sensor
+  entity_id: binary_sensor.leak_sensor_water_alarm_water_leak_detected
   from: 'off'
   to: 'on'
 action:
