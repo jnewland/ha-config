@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
 concurrency:
-  group: cd-${{ github.event.pull_request.number }}
+  group: cd-${{ github.event.pull_request.number }}-${{ github.event_name }}-${{ github.event.label.name }}
   cancel-in-progress: true
 jobs:
   validate-config:
