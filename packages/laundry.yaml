@@ -22,7 +22,7 @@ automation:
         data:
           entity_id: script.noop
           tag: laundry
-          message: Time to do the laundry thing
+          message: Time to do the laundry thing. You have a second?
           confirmation_message: is doing the laundry thing, cool
   - alias: Clear laundry notifications
     id: e1432f38-834f-417a-b976-2bb627e06046
