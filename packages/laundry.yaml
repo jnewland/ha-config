@@ -6,8 +6,6 @@ binary_sensor:
         device_class: power
         value_template: |
           {{ states('sensor.laundry_electric_consumption_w') != 'unknown' and float(states('sensor.laundry_electric_consumption_w') | default(0)) > 0 }}
-        delay_on:
-          minutes: 5
         delay_off:
           minutes: 5
 
@@ -26,3 +24,16 @@ automation:
           tag: laundry
           message: Time to do the laundry thing
           confirmation_message: is doing the laundry thing, cool
+  - alias: Clear laundry notifications
+    id: e1432f38-834f-417a-b976-2bb627e06046
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.laundry
+      from: "off"
+      to: "on"
+    action:
+      - service: notify.iphones
+        data:
+          message: "clear_notification"
+          data:
+            tag: laundry
