@@ -5,9 +5,22 @@ binary_sensor:
         friendly_name: Laundry
         device_class: power
         value_template: |
-          {{ states('sensor.laundry_electric_consumption_w') != 'unknown' and float(states('sensor.laundry_electric_consumption_w') | default(0)) > 0 }}
+          {{ 
+            states('sensor.laundry_electric_consumption_w') != 'unknown' and 
+            float(states('sensor.laundry_electric_consumption_w') | default(0)) > 10
+          }}
         delay_off:
           minutes: 5
+      laundry_door:
+        friendly_name: Laundry door
+        device_class: door
+        value_template: |
+          {{ 
+            states('sensor.laundry_electric_consumption_w') != 'unknown' and 
+            is_state('binary_sensor.laundry', 'off') and 
+            float(states('sensor.laundry_electric_consumption_w') | default(0)) > 0 and
+            float(states('sensor.laundry_electric_consumption_w') | default(0)) < 10 
+          }}
 
 automation:
   - alias: Laundry notifications
@@ -28,7 +41,7 @@ automation:
     id: e1432f38-834f-417a-b976-2bb627e06046
     trigger:
     - platform: state
-      entity_id: binary_sensor.laundry
+      entity_id: binary_sensor.laundry_door
       from: "off"
       to: "on"
     action:
