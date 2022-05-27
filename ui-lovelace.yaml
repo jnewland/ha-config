@@ -994,6 +994,7 @@ views:
         entities:
           - automation.greenhouse_light_automation
           - switch.greenhouse_light
+          # - switch.greenhouse_right
       - type: conditional
         conditions:
           - entity: automation.greenhouse_light_automation
@@ -1003,8 +1004,6 @@ views:
           title: Greenhouse light automation
           show_header_toggle: false
           entities:
-            - switch.greenhouse_light
-            # - switch.greenhouse_right
             - input_datetime.greenhouse_light_on
             - input_datetime.greenhouse_light_off
       #   footer:
