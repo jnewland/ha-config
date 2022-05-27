@@ -1023,7 +1023,6 @@ views:
             - entity_id: "/.*_sprayers$/"
             - entity_id: "/.*_drip$/"
             - entity_id: "/.*_zone$/"
-            - entity_id: "/.*_schedule$/"
 
       - type: custom:auto-entities
         card:
@@ -1032,9 +1031,17 @@ views:
           title: schedule
         filter:
           include:
+            - entity_id: "/.*_schedule$/"
             - entity_id: "/.*_program$/"
-            - entity_id: "/.*_rain_delay$/"
             - entity_id: "/^switch.*irrigation/"
+
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: false
+          title: rain delay
+        filter:
+            - entity_id: "/.*_rain_delay$/"
 
       - type: custom:auto-entities
         card:
@@ -1045,8 +1052,17 @@ views:
             - entity_id: "/.*_zone$/"
             - entity_id: "/.*_drip$/"
             - entity_id: "/.*_sprayers$/"
-            - entity_id: "/.*_schedule$/"
-            
+
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: false
+          title: history
+        filter:
+          include:
+            - integration: bhyve
+              entity_id: "/.*_history$/"
+
       # - type: history-graph
       #   title: light
       #   hours_to_show: 80
