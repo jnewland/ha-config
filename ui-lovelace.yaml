@@ -984,19 +984,29 @@ views:
             - entity_id: "/^sensor.*_light$/"
             - entity_id: "/^sensor.*_illuminance$/"
 
-  - title: Greenhouse
-    path: greenhouse
-    icon: mdi:shovel
+  - title: Garden
+    path: garden
+    icon: mdi:sprout
     cards:
       - type: entities
-        title: Greenhouse lights
         show_header_toggle: false
+        title: Greenhouse
         entities:
           - automation.greenhouse_light_automation
           - switch.greenhouse_light
-          # - switch.greenhouse_left
-          - input_datetime.greenhouse_light_on
-          - input_datetime.greenhouse_light_off
+      - type: conditional
+        conditions:
+          - entity: automation.greenhouse_light_automation
+            state: "on"
+        card:
+          type: entities
+          title: Greenhouse light automation
+          show_header_toggle: false
+          entities:
+            - switch.greenhouse_light
+            # - switch.greenhouse_right
+            - input_datetime.greenhouse_light_on
+            - input_datetime.greenhouse_light_off
       #   footer:
       #     type: graph
       #     entity: sensor.angel_trumpet_light
@@ -1041,12 +1051,22 @@ views:
           show_header_toggle: false
           title: rain delay
         filter:
-            - entity_id: "/.*_rain_delay$/"
+            - entity_id: "/rain_delay/"
 
       - type: custom:auto-entities
         card:
-          type: history-graph
-          hours_to_show: 80
+          type: custom:mini-graph-card
+          hours_to_show: 72
+          points_per_hour: 60
+          aggregate_func: max
+          line_width: 2
+          smoothing: false
+          state_map:
+            - value: "off"
+              label: "off"
+            - value: "on"
+              label: "on"
+
         filter:
           include:
             - entity_id: "/.*_zone$/"
