@@ -433,7 +433,7 @@ views:
 
   - title: Garden
     path: garden
-    icon: mdi:garden
+    icon: mdi:sprout
     cards:
       - type: entities
         show_header_toggle: false
