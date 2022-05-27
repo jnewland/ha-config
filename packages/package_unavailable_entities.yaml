@@ -41,6 +41,12 @@ group:
     entities:
       - sensor.unavailable_entities # prevent template loop warnings
       - binary_sensor.updater # always unknown after restart
+      # occasional-use
+      - sensor.black_probe_temp
+      - sensor.flameboss_cook_link
+      - sensor.green_probe_temp
+      - sensor.grill_probe_temp
+      - sensor.red_probe_temp
 
 # OPTIONAL - filter template loop warnings from the Home Assistant log.
 logger:
