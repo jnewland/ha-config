@@ -1073,6 +1073,30 @@ views:
             - integration: bhyve
               entity_id: "/.*_state$/"
 
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.dark_sky_temperature
+            aggregate_func: max
+            name: Max
+            color: #e74c3c
+          - entity: sensor.dark_sky_temperature
+            aggregate_func: min
+            name: Min
+          - entity: sensor.dark_sky_temperature
+            aggregate_func: avg
+            name: Avg
+            color: green
+        name: Outdoor temperature
+        hours_to_show: 168
+        group_by: date
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.dark_sky_temperature
+        name: Outdoor temperature
+        hours_to_show: 168
+        group_by: hour
+
       # - type: history-graph
       #   title: light
       #   hours_to_show: 80
