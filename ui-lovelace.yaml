@@ -1033,6 +1033,7 @@ views:
             - entity_id: "/.*_sprayers$/"
             - entity_id: "/.*_drip$/"
             - entity_id: "/.*_zone$/"
+            - entity_id: "/.*_schedule$/"
 
       - type: custom:auto-entities
         card:
@@ -1041,9 +1042,7 @@ views:
           title: schedule
         filter:
           include:
-            - entity_id: "/.*_schedule$/"
             - entity_id: "/.*_program$/"
-            - entity_id: "/^switch.*irrigation/"
 
       - type: custom:auto-entities
         card:
@@ -1051,27 +1050,7 @@ views:
           show_header_toggle: false
           title: rain delay
         filter:
-            - entity_id: "/rain_delay/"
-
-      - type: custom:auto-entities
-        card:
-          type: custom:mini-graph-card
-          hours_to_show: 72
-          points_per_hour: 60
-          aggregate_func: max
-          line_width: 2
-          smoothing: false
-          state_map:
-            - value: "off"
-              label: "off"
-            - value: "on"
-              label: "on"
-
-        filter:
-          include:
-            - entity_id: "/.*_zone$/"
-            - entity_id: "/.*_drip$/"
-            - entity_id: "/.*_sprayers$/"
+            - entity_id: "/.*rain_delay.*/"
 
       - type: custom:auto-entities
         card:
@@ -1082,6 +1061,17 @@ views:
           include:
             - integration: bhyve
               entity_id: "/.*_history$/"
+
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: false
+          title: status
+        filter:
+          include:
+            - entity_id: binary_sensor.newland
+            - integration: bhyve
+              entity_id: "/.*_state$/"
 
       # - type: history-graph
       #   title: light
