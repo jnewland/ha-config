@@ -1050,7 +1050,8 @@ views:
           show_header_toggle: false
           title: rain delay
         filter:
-            - entity_id: "/.*rain_delay.*/"
+          include:
+            - entity_id: "/.*_rain_delay$/"
 
       - type: custom:auto-entities
         card:
