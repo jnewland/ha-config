@@ -426,19 +426,172 @@ views:
               border: none
             media-button-title:
               textOverflow: clip
-
-
-  - title: Weather
-    icon: mdi:weather-rainy
-    cards:
       - type: weather-forecast
         entity: weather.dark_sky
       - type: picture
         image: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=GRK&brand=wui&num=10&delay=25&type=N0R&frame=0&scale=1&noclutter=0&showstorms=99&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=1&rainsnow=1&lightning=1&smooth=1&rand=24691285&lat=0&lon=0&label=you
+
+  - title: Garden
+    path: garden
+    icon: mdi:garden
+    cards:
+      - type: entities
+        show_header_toggle: false
+        title: Greenhouse
+        entities:
+          - automation.greenhouse_light_automation
+          - switch.greenhouse_light
+          # - switch.greenhouse_right
+      - type: conditional
+        conditions:
+          - entity: automation.greenhouse_light_automation
+            state: "on"
+        card:
+          type: entities
+          title: Greenhouse light automation
+          show_header_toggle: false
+          entities:
+            - input_datetime.greenhouse_light_on
+            - input_datetime.greenhouse_light_off
+      #   footer:
+      #     type: graph
+      #     entity: sensor.angel_trumpet_light
+      #     hours_to_show: 80
+      #     detail: 2
+      # - type: entities
+      #   title: Kitchen herb garden
+      #   show_header_toggle: false
+      #   entities:
+      #     - light.kitchen_light
+      #     - binary_sensor.kitchen_pump
+      #     - binary_sensor.kitchen_needs_nutrients
+      #     - binary_sensor.kitchen_needs_water
+      #     - sensor.kitchen_nutrients_days
+      #     - sensor.kitchen_planted_days
+
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: false
+          title: quick run
+        filter:
+          include:
+            - entity_id: "/.*_sprayers$/"
+            - entity_id: "/.*_drip$/"
+            - entity_id: "/.*_zone$/"
+            - entity_id: "/.*_schedule$/"
+
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: false
+          title: schedule
+        filter:
+          include:
+            - entity_id: "/.*_program$/"
+
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: false
+          title: rain delay
+        filter:
+          include:
+            - entity_id: "/.*_rain_delay$/"
+
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: false
+          title: history
+        filter:
+          include:
+            - integration: bhyve
+              entity_id: "/.*_history$/"
+
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: false
+          title: status
+        filter:
+          include:
+            - entity_id: binary_sensor.newland
+            - integration: bhyve
+              entity_id: "/.*_state$/"
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.dark_sky_temperature
+            aggregate_func: max
+            name: Max
+            color: #e74c3c
+          - entity: sensor.dark_sky_temperature
+            aggregate_func: min
+            name: Min
+          - entity: sensor.dark_sky_temperature
+            aggregate_func: avg
+            name: Avg
+            color: green
+        name: Outdoor temperature
+        hours_to_show: 168
+        group_by: date
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.dark_sky_temperature
+        name: Outdoor temperature
+        hours_to_show: 168
+        group_by: hour
+
+      # - type: history-graph
+      #   title: light
+      #   hours_to_show: 80
+      #   entities:
+      #     - sensor.angel_trumpet_light
+      #     - sensor.bamboo_light
+      #     - sensor.herb_light
+      #     - sensor.lime_tree_light
+      # - type: history-graph
+      #   title: moisture
+      #   hours_to_show: 80
+      #   entities:
+      #     - sensor.angel_trumpet_moisture
+      #     - sensor.bamboo_moisture
+      #     - sensor.herb_moisture
+      #     - sensor.lime_tree_moisture
+      # - type: history-graph
+      #   title: temperature
+      #   hours_to_show: 80
+      #   entities:
+      #     - sensor.angel_trumpet_temperature
+      #     - sensor.bamboo_temperature
+      #     - sensor.herb_temperature
+      #     - sensor.lime_tree_temperature
+      # - type: history-graph
+      #   title: soil conductivity
+      #   hours_to_show: 80
+      #   entities:
+      #     - sensor.angel_trumpet_soil_conductivity
+      #     - sensor.bamboo_soil_conductivity
+      #     - sensor.herb_soil_conductivity
+      #     - sensor.lime_tree_soil_conductivity
+      # - type: custom:flower-card
+      #   entity: plant.lime_tree
+      # - type: custom:flower-card
+      #   entity: plant.bamboo
+      # - type: custom:flower-card
+      #   entity: plant.angel_trumpet
+      # - type: custom:flower-card
+      #   entity: plant.basil
       - type: history-graph
         hours_to_show: 36
         entities:
           - sensor.hours_until_rain
+      - type: history-graph
+        hours_to_show: 36
+        entities:
+          - sensor.precipitation_in_forecast
       - type: entities
         title: Precipitation
         show_header_toggle: false
@@ -984,159 +1137,6 @@ views:
             - entity_id: "/^sensor.*_light$/"
             - entity_id: "/^sensor.*_illuminance$/"
 
-  - title: Garden
-    path: garden
-    icon: mdi:sprout
-    cards:
-      - type: entities
-        show_header_toggle: false
-        title: Greenhouse
-        entities:
-          - automation.greenhouse_light_automation
-          - switch.greenhouse_light
-          # - switch.greenhouse_right
-      - type: conditional
-        conditions:
-          - entity: automation.greenhouse_light_automation
-            state: "on"
-        card:
-          type: entities
-          title: Greenhouse light automation
-          show_header_toggle: false
-          entities:
-            - input_datetime.greenhouse_light_on
-            - input_datetime.greenhouse_light_off
-      #   footer:
-      #     type: graph
-      #     entity: sensor.angel_trumpet_light
-      #     hours_to_show: 80
-      #     detail: 2
-      # - type: entities
-      #   title: Kitchen herb garden
-      #   show_header_toggle: false
-      #   entities:
-      #     - light.kitchen_light
-      #     - binary_sensor.kitchen_pump
-      #     - binary_sensor.kitchen_needs_nutrients
-      #     - binary_sensor.kitchen_needs_water
-      #     - sensor.kitchen_nutrients_days
-      #     - sensor.kitchen_planted_days
-
-      - type: custom:auto-entities
-        card:
-          type: entities
-          show_header_toggle: false
-          title: quick run
-        filter:
-          include:
-            - entity_id: "/.*_sprayers$/"
-            - entity_id: "/.*_drip$/"
-            - entity_id: "/.*_zone$/"
-            - entity_id: "/.*_schedule$/"
-
-      - type: custom:auto-entities
-        card:
-          type: entities
-          show_header_toggle: false
-          title: schedule
-        filter:
-          include:
-            - entity_id: "/.*_program$/"
-
-      - type: custom:auto-entities
-        card:
-          type: entities
-          show_header_toggle: false
-          title: rain delay
-        filter:
-          include:
-            - entity_id: "/.*_rain_delay$/"
-
-      - type: custom:auto-entities
-        card:
-          type: entities
-          show_header_toggle: false
-          title: history
-        filter:
-          include:
-            - integration: bhyve
-              entity_id: "/.*_history$/"
-
-      - type: custom:auto-entities
-        card:
-          type: entities
-          show_header_toggle: false
-          title: status
-        filter:
-          include:
-            - entity_id: binary_sensor.newland
-            - integration: bhyve
-              entity_id: "/.*_state$/"
-
-      - type: custom:mini-graph-card
-        entities:
-          - entity: sensor.dark_sky_temperature
-            aggregate_func: max
-            name: Max
-            color: #e74c3c
-          - entity: sensor.dark_sky_temperature
-            aggregate_func: min
-            name: Min
-          - entity: sensor.dark_sky_temperature
-            aggregate_func: avg
-            name: Avg
-            color: green
-        name: Outdoor temperature
-        hours_to_show: 168
-        group_by: date
-
-      - type: custom:mini-graph-card
-        entities:
-          - entity: sensor.dark_sky_temperature
-        name: Outdoor temperature
-        hours_to_show: 168
-        group_by: hour
-
-      # - type: history-graph
-      #   title: light
-      #   hours_to_show: 80
-      #   entities:
-      #     - sensor.angel_trumpet_light
-      #     - sensor.bamboo_light
-      #     - sensor.herb_light
-      #     - sensor.lime_tree_light
-      # - type: history-graph
-      #   title: moisture
-      #   hours_to_show: 80
-      #   entities:
-      #     - sensor.angel_trumpet_moisture
-      #     - sensor.bamboo_moisture
-      #     - sensor.herb_moisture
-      #     - sensor.lime_tree_moisture
-      # - type: history-graph
-      #   title: temperature
-      #   hours_to_show: 80
-      #   entities:
-      #     - sensor.angel_trumpet_temperature
-      #     - sensor.bamboo_temperature
-      #     - sensor.herb_temperature
-      #     - sensor.lime_tree_temperature
-      # - type: history-graph
-      #   title: soil conductivity
-      #   hours_to_show: 80
-      #   entities:
-      #     - sensor.angel_trumpet_soil_conductivity
-      #     - sensor.bamboo_soil_conductivity
-      #     - sensor.herb_soil_conductivity
-      #     - sensor.lime_tree_soil_conductivity
-      # - type: custom:flower-card
-      #   entity: plant.lime_tree
-      # - type: custom:flower-card
-      #   entity: plant.bamboo
-      # - type: custom:flower-card
-      #   entity: plant.angel_trumpet
-      # - type: custom:flower-card
-      #   entity: plant.basil
   - title: Core
     icon: mdi:server-network
     cards:
