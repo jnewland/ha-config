@@ -511,14 +511,16 @@ views:
 
       - type: custom:auto-entities
         card:
-          type: entities
-          show_header_toggle: false
-          title: status
+          type: custom:mini-graph-card
+          name: zone runtime
+          hours_to_show: 168
+          group_by: date
+          smoothing: false
         filter:
           include:
-            - entity_id: binary_sensor.newland
-            - integration: bhyve
-              entity_id: "/.*_state$/"
+            - entity_id: "/.*_zone_runtime$/"
+              options:
+                aggregate_func: sum
 
       - type: custom:mini-graph-card
         entities:
