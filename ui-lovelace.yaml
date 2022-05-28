@@ -512,11 +512,10 @@ views:
       - type: custom:auto-entities
         card:
           type: custom:mini-graph-card
-          name: irrigation zone runtime minutes
+          name: irrigation zone runtime
           hours_to_show: 168
           group_by: date
           smoothing: false
-          value_factor: 60
         filter:
           include:
             - entity_id: "/.*_zone_runtime$/"
