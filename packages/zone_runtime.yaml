@@ -69,9 +69,9 @@ template:
       - name: atrium drippers zone runtime
         state_class: measurement
         device_class: duration
-        unit_of_measurement: minutes
+        unit_of_measurement: hours
         state: >
-          {{ state_attr('sensor.atrium_drippers_zone_history', 'run_time') }}
+          {{ state_attr('sensor.atrium_drippers_zone_history', 'run_time') | float / 60 }}
 
   - trigger:
       - platform: state
@@ -81,9 +81,9 @@ template:
       - name: fountain refill zone runtime
         state_class: measurement
         device_class: duration
-        unit_of_measurement: minutes
+        unit_of_measurement: hours
         state: >
-          {{ state_attr('sensor.fountain_refill_zone_history', 'run_time') }}
+          {{ state_attr('sensor.fountain_refill_zone_history', 'run_time') | float / 60 }}
 
   - trigger:
       - platform: state
@@ -93,9 +93,9 @@ template:
       - name: front yard drippers zone runtime
         state_class: measurement
         device_class: duration
-        unit_of_measurement: minutes
+        unit_of_measurement: hours
         state: >
-          {{ state_attr('sensor.front_yard_drippers_zone_history', 'run_time') }}
+          {{ state_attr('sensor.front_yard_drippers_zone_history', 'run_time') | float / 60 }}
 
   - trigger:
       - platform: state
@@ -105,9 +105,9 @@ template:
       - name: patio drippers zone runtime
         state_class: measurement
         device_class: duration
-        unit_of_measurement: minutes
+        unit_of_measurement: hours
         state: >
-          {{ state_attr('sensor.patio_drippers_zone_history', 'run_time') }}
+          {{ state_attr('sensor.patio_drippers_zone_history', 'run_time') | float / 60 }}
 
 
   - trigger:
@@ -118,7 +118,7 @@ template:
       - name: pergola drippers zone runtime
         state_class: measurement
         device_class: duration
-        unit_of_measurement: minutes
+        unit_of_measurement: hours
         state: >
-          {{ state_attr('sensor.pergola_drippers_zone_history', 'run_time') }}
+          {{ state_attr('sensor.pergola_drippers_zone_history', 'run_time') | float / 60 }}
 
