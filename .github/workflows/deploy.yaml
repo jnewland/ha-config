@@ -6,47 +6,47 @@ concurrency:
   group: cd-${{ github.event.pull_request.number }}-${{ github.event_name }}-${{ github.event.label.name }}
   cancel-in-progress: true
 jobs:
-  debug:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/github-script@7a5c598405937d486b0331594b5da2b14db670da # tag=v6.1.0
-        env:
-          CURRENT_REF: ${{ github.event.pull_request.head.ref }}
-          ENVIRONMENT: production
-        with:
-          script: |
-            var deployments = await github.rest.repos.listDeployments({
-              ...context.repo,
-              environment: process.env.ENVIRONMENT,
-            })
-            for (const deployment of deployments.data) {
-              if (deployment.ref == process.env.CURRENT_REF) {
-                console.log(`deployment ${deployment.id} is for the current ref`);
-                continue;
-              }
-              console.log(`querying status of deployment ${deployment.id}`);
-              var statuses = await github.rest.repos.listDeploymentStatuses({
-                ...context.repo,
-                deployment_id: deployment.id,
-              }) 
-              for (const status of statuses.data) {
-                console.log(`deployment ${deployment.id} status ${status.state}`);
-                if (status.state == 'success' || status.state == 'in_progress' || status.state == 'pending' || status.state == 'queued') {
-                  var pulls = await github.rest.pulls.list({
-                    ...context.repo,
-                    ref: context.repo.owner + ':' + deployment.ref,
-                    state: 'open'
-                  });
-                  if (pulls.data.length > 0) {
-                    console.log(`deployment ${deployment.id} has open pull requests`);
-                    break;
-                  }
-                } else {
-                  console.log("skipping")
-                  continue;
-                }
-              }
-            }
+  # debug:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/github-script@7a5c598405937d486b0331594b5da2b14db670da # tag=v6.1.0
+  #       env:
+  #         CURRENT_REF: ${{ github.event.pull_request.head.ref }}
+  #         ENVIRONMENT: production
+  #       with:
+  #         script: |
+  #           var deployments = await github.rest.repos.listDeployments({
+  #             ...context.repo,
+  #             environment: process.env.ENVIRONMENT,
+  #           })
+  #           for (const deployment of deployments.data) {
+  #             if (deployment.ref == process.env.CURRENT_REF) {
+  #               console.log(`deployment ${deployment.id} is for the current ref`);
+  #               continue;
+  #             }
+  #             console.log(`querying status of deployment ${deployment.id}`);
+  #             var statuses = await github.rest.repos.listDeploymentStatuses({
+  #               ...context.repo,
+  #               deployment_id: deployment.id,
+  #             }) 
+  #             for (const status of statuses.data) {
+  #               console.log(`deployment ${deployment.id} status ${status.state}`);
+  #               if (status.state == 'success' || status.state == 'in_progress' || status.state == 'pending' || status.state == 'queued') {
+  #                 var pulls = await github.rest.pulls.list({
+  #                   ...context.repo,
+  #                   ref: context.repo.owner + ':' + deployment.ref,
+  #                   state: 'open'
+  #                 });
+  #                 if (pulls.data.length > 0) {
+  #                   console.log(`deployment ${deployment.id} has open pull requests`);
+  #                   break;
+  #                 }
+  #               } else {
+  #                 console.log("skipping")
+  #                 continue;
+  #               }
+  #             }
+  #           }
 
   validate-config:
     runs-on: ubuntu-latest
