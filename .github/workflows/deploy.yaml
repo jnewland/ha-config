@@ -39,8 +39,11 @@ jobs:
                   });
                   if (pulls.data.length > 0) {
                     console.log(`deployment ${deployment.id} has open pull requests`);
-                    return;
+                    break;
                   }
+                } else {
+                  console.log("skipping")
+                  continue;
                 }
               }
             }
