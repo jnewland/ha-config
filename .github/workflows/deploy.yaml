@@ -88,29 +88,25 @@ jobs:
               environment: process.env.ENVIRONMENT,
             }).then((deployments) => {
               for (const deployment of deployments.data) {
+                console.log(`deployment ${deployment.id}`);
                 github.rest.repos.listDeploymentStatuses({
                   ...context.repo,
                   deployment_id: deployment.id,
                 }).then((statuses) => {
                   for (const status of statuses.data) {
+                    console.log(`deployment ${deployment.id} status ${status.state}`);
                     if (status.state == 'success' || status.state == 'in_progress' || status.state == 'pending' || status.state == 'queued') {
-                      console.log(deployment)
                       github.rest.pulls.list({
                         ...context.repo,
                         ref: context.repo.owner + ':' + deployment.ref,
                         state: 'open'
                       }).then((pulls) => {
-                        console.log(pulls.data)
-                        throw new Error("Found an active deployment");
-                      }).catch((err) => {
-                        console.log(err);
-                        break;
-                      })
+                        return pulls.data;
+                      });
                     }
                   }
-                }).catch((err) => {
-                  console.log(err)
-                  break;
                 });
               }
+            }).then((pulls) => {
+              console.log(pulls)
             });
