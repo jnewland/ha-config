@@ -20,25 +20,24 @@ jobs:
             }).then((deployments) => {
               for (const deployment of deployments.data) {
                 console.log(`deployment ${deployment.id}`);
-                github.rest.repos.listDeploymentStatuses({
+                var pulls = await github.rest.repos.listDeploymentStatuses({
                   ...context.repo,
                   deployment_id: deployment.id,
                 }).then((statuses) => {
                   for (const status of statuses.data) {
                     console.log(`deployment ${deployment.id} status ${status.state}`);
                     if (status.state == 'success' || status.state == 'in_progress' || status.state == 'pending' || status.state == 'queued') {
-                      github.rest.pulls.list({
+                      return github.rest.pulls.list({
                         ...context.repo,
                         ref: context.repo.owner + ':' + deployment.ref,
                         state: 'open'
-                      }).then((pulls) => {
-                        return pulls;
                       });
                     }
                   }
-                }).then((pulls) => {
-                  return pulls;
                 });
+                if (pulls) {
+                  return pulls;
+                }
               }
             }).then((pulls) => {
               console.log(pulls)
