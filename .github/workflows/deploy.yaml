@@ -6,6 +6,44 @@ concurrency:
   group: cd-${{ github.event.pull_request.number }}-${{ github.event_name }}-${{ github.event.label.name }}
   cancel-in-progress: true
 jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@7a5c598405937d486b0331594b5da2b14db670da # tag=v6.1.0
+        env:
+          ENVIRONMENT: production
+        with:
+          script: |
+            github.rest.repos.listDeployments({
+              ...context.repo,
+              environment: process.env.ENVIRONMENT,
+            }).then((deployments) => {
+              for (const deployment of deployments.data) {
+                console.log(`deployment ${deployment.id}`);
+                github.rest.repos.listDeploymentStatuses({
+                  ...context.repo,
+                  deployment_id: deployment.id,
+                }).then((statuses) => {
+                  for (const status of statuses.data) {
+                    console.log(`deployment ${deployment.id} status ${status.state}`);
+                    if (status.state == 'success' || status.state == 'in_progress' || status.state == 'pending' || status.state == 'queued') {
+                      github.rest.pulls.list({
+                        ...context.repo,
+                        ref: context.repo.owner + ':' + deployment.ref,
+                        state: 'open'
+                      }).then((pulls) => {
+                        return pulls;
+                      });
+                    }
+                  }
+                }).then((pulls) => {
+                  return pulls;
+                });
+              }
+            }).then((pulls) => {
+              console.log(pulls)
+            });
+
   validate-config:
     runs-on: ubuntu-latest
     steps:
@@ -78,35 +116,3 @@ jobs:
               target_url:  'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
             });
 
-      - uses: actions/github-script@7a5c598405937d486b0331594b5da2b14db670da # tag=v6.1.0
-        env:
-          ENVIRONMENT: production
-        with:
-          script: |
-            github.rest.repos.listDeployments({
-              ...context.repo,
-              environment: process.env.ENVIRONMENT,
-            }).then((deployments) => {
-              for (const deployment of deployments.data) {
-                console.log(`deployment ${deployment.id}`);
-                github.rest.repos.listDeploymentStatuses({
-                  ...context.repo,
-                  deployment_id: deployment.id,
-                }).then((statuses) => {
-                  for (const status of statuses.data) {
-                    console.log(`deployment ${deployment.id} status ${status.state}`);
-                    if (status.state == 'success' || status.state == 'in_progress' || status.state == 'pending' || status.state == 'queued') {
-                      github.rest.pulls.list({
-                        ...context.repo,
-                        ref: context.repo.owner + ':' + deployment.ref,
-                        state: 'open'
-                      }).then((pulls) => {
-                        return pulls.data;
-                      });
-                    }
-                  }
-                });
-              }
-            }).then((pulls) => {
-              console.log(pulls)
-            });
