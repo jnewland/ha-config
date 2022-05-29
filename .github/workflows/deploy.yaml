@@ -95,10 +95,16 @@ jobs:
                   deployment_id: deployment.id,
                 }).then((deployment) => {
                   for (const status of deployment.data) {
-                    if (status.state == 'success') {
-                      console.log("Found a successful deployment");
+                    if (status.state == 'success' || status.state == 'in_progress' || status.state == 'pending' || status.state == 'queued') {
+                      console.log("Found an active deployment");
                       console.log(deployment)
                       done = true;
+                      github.rest.pulls.list({
+                        ...context.repo,
+                        ref: context.repo.owner + ':' + deployment.ref,
+                      }).then((pulls) => {
+                        console.log(pulls)
+                      });
                       break;
                     }
                   }
