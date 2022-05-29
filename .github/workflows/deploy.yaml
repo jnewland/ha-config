@@ -77,3 +77,15 @@ jobs:
               description: 'PR was deployed with GitHub Actions',
               target_url:  'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
             });
+
+      - uses: actions/github-script@7a5c598405937d486b0331594b5da2b14db670da # tag=v6.1.0
+        env:
+          ENVIRONMENT: production
+        with:
+          script: |
+            github.rest.repos.listDeployments({
+              ...context.repo,
+              environment: process.env.ENVIRONMENT,
+            }).then((deployments) => {
+              console.log(deployments);
+            });
