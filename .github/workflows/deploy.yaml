@@ -93,8 +93,8 @@ jobs:
                 github.rest.repos.listDeploymentStatuses({
                   ...context.repo,
                   deployment_id: deployment.id,
-                }).then((deployment) => {
-                  for (const status of deployment.data) {
+                }).then((statuses) => {
+                  for (const status of statuses.data) {
                     if (status.state == 'success' || status.state == 'in_progress' || status.state == 'pending' || status.state == 'queued') {
                       console.log("Found an active deployment");
                       console.log(deployment)
@@ -102,6 +102,7 @@ jobs:
                       github.rest.pulls.list({
                         ...context.repo,
                         ref: context.repo.owner + ':' + deployment.ref,
+                        state: 'open'
                       }).then((pulls) => {
                         console.log(pulls)
                       });
