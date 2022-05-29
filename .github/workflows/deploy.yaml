@@ -83,9 +83,25 @@ jobs:
           ENVIRONMENT: production
         with:
           script: |
+            var done = false;
             github.rest.repos.listDeployments({
               ...context.repo,
               environment: process.env.ENVIRONMENT,
             }).then((deployments) => {
-              console.log(deployments);
+              for (const deployment of deployments.data) {
+                if (done) { break; }
+                github.rest.repos.listDeploymentStatuses({
+                  ...context.repo,
+                  deployment_id: deployment.id,
+                }).then((deployment) => {
+                  for (const status of deployment.data) {
+                    if (status.state == 'success') {
+                      console.log("Found a successful deployment");
+                      console.log(deployment)
+                      done = true;
+                      break;
+                    }
+                  }
+                });
+              }
             });
