@@ -3,7 +3,7 @@ sensor:
 
 
   - platform: history_stats
-    name: atrium zone runtime
+    name: atrium zone daily runtime
     entity_id: switch.atrium_garden_drip
     state: "on"
     type: time
@@ -11,7 +11,7 @@ sensor:
     end: "{{ now() }}"
 
   - platform: history_stats
-    name: backyard zone runtime
+    name: backyard zone daily runtime
     entity_id: switch.backyard_drip
     state: "on"
     type: time
@@ -19,7 +19,7 @@ sensor:
     end: "{{ now() }}"
 
   - platform: history_stats
-    name: pecan tree zone runtime
+    name: pecan tree zone daily runtime
     entity_id: switch.pecan_tree_garden_sprayers
     state: "on"
     type: time
@@ -27,7 +27,7 @@ sensor:
     end: "{{ now() }}"
 
   - platform: history_stats
-    name: boardwalk zone runtime
+    name: boardwalk zone daily runtime
     entity_id: switch.boardwalk_sprayers
     state: "on"
     type: time
@@ -35,7 +35,7 @@ sensor:
     end: "{{ now() }}"
 
   - platform: history_stats
-    name: driveway lawn zone runtime
+    name: driveway lawn zone daily runtime
     entity_id: switch.driveway_lawn_sprayers
     state: "on"
     type: time
@@ -43,7 +43,7 @@ sensor:
     end: "{{ now() }}"
 
   - platform: history_stats
-    name: oak tree bed zone runtime
+    name: oak tree bed zone daily runtime
     entity_id: switch.oak_tree_bed_sprayers
     state: "on"
     type: time
@@ -51,7 +51,7 @@ sensor:
     end: "{{ now() }}"
 
   - platform: history_stats
-    name: oak tree lawn zone runtime
+    name: oak tree lawn zone daily runtime
     entity_id: switch.oak_tree_lawn_sprayers
     state: "on"
     type: time
@@ -66,7 +66,7 @@ template:
         entity_id: sensor.atrium_drippers_zone_history
         to:
     sensor:
-      - name: atrium drippers zone runtime
+      - name: atrium drippers zone last runtime
         state_class: measurement
         device_class: duration
         unit_of_measurement: hours
@@ -78,7 +78,7 @@ template:
         entity_id: sensor.fountain_refill_zone_history
         to:
     sensor:
-      - name: fountain refill zone runtime
+      - name: fountain refill zone last runtime
         state_class: measurement
         device_class: duration
         unit_of_measurement: hours
@@ -90,7 +90,7 @@ template:
         entity_id: sensor.front_yard_drippers_zone_history
         to:
     sensor:
-      - name: front yard drippers zone runtime
+      - name: front yard drippers zone last runtime
         state_class: measurement
         device_class: duration
         unit_of_measurement: hours
@@ -102,7 +102,7 @@ template:
         entity_id: sensor.patio_drippers_zone_history
         to:
     sensor:
-      - name: patio drippers zone runtime
+      - name: patio drippers zone last runtime
         state_class: measurement
         device_class: duration
         unit_of_measurement: hours
@@ -115,7 +115,7 @@ template:
         entity_id: sensor.pergola_drippers_zone_history
         to:
     sensor:
-      - name: pergola drippers zone runtime
+      - name: pergola drippers zone last runtime
         state_class: measurement
         device_class: duration
         unit_of_measurement: hours
