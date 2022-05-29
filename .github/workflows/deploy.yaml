@@ -11,37 +11,39 @@ jobs:
     steps:
       - uses: actions/github-script@7a5c598405937d486b0331594b5da2b14db670da # tag=v6.1.0
         env:
+          CURRENT_REF: ${{ github.event.pull_request.head.ref }}
           ENVIRONMENT: production
         with:
           script: |
-            github.rest.repos.listDeployments({
+            var deployments = await github.rest.repos.listDeployments({
               ...context.repo,
               environment: process.env.ENVIRONMENT,
-            }).then((deployments) => {
-              for (const deployment of deployments.data) {
-                console.log(`deployment ${deployment.id}`);
-                var pulls = await github.rest.repos.listDeploymentStatuses({
-                  ...context.repo,
-                  deployment_id: deployment.id,
-                }).then((statuses) => {
-                  for (const status of statuses.data) {
-                    console.log(`deployment ${deployment.id} status ${status.state}`);
-                    if (status.state == 'success' || status.state == 'in_progress' || status.state == 'pending' || status.state == 'queued') {
-                      return github.rest.pulls.list({
-                        ...context.repo,
-                        ref: context.repo.owner + ':' + deployment.ref,
-                        state: 'open'
-                      });
-                    }
+            })
+            for (const deployment of deployments.data) {
+              if (deployment.ref == process.env.CURRENT_REF) {
+                console.log(`deployment ${deployment.id} is for the current ref`);
+                continue;
+              }
+              console.log(`querying status of deployment ${deployment.id}`);
+              var statuses = await github.rest.repos.listDeploymentStatuses({
+                ...context.repo,
+                deployment_id: deployment.id,
+              }) 
+              for (const status of statuses.data) {
+                console.log(`deployment ${deployment.id} status ${status.state}`);
+                if (status.state == 'success' || status.state == 'in_progress' || status.state == 'pending' || status.state == 'queued') {
+                  var pulls = await github.rest.pulls.list({
+                    ...context.repo,
+                    ref: context.repo.owner + ':' + deployment.ref,
+                    state: 'open'
+                  });
+                  if (pulls.data.length > 0) {
+                    console.log(`deployment ${deployment.id} has open pull requests`);
+                    return;
                   }
-                });
-                if (pulls) {
-                  return pulls;
                 }
               }
-            }).then((pulls) => {
-              console.log(pulls)
-            });
+            }
 
   validate-config:
     runs-on: ubuntu-latest
