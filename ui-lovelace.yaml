@@ -518,9 +518,14 @@ views:
           smoothing: false
         filter:
           include:
-            - entity_id: "/.*_zone_runtime$/"
+            - integration: template
+              entity_id: "/.*_zone_runtime$/"
               options:
                 aggregate_func: sum
+            - integration: history_stats
+              entity_id: "/.*_zone_runtime$/"
+              options:
+                aggregate_func: max
 
       - type: custom:mini-graph-card
         entities:
