@@ -7,8 +7,8 @@ sequence:
       - group.indoor_cams
   - service: alarm_control_panel.alarm_arm_home
     entity_id: alarm_control_panel.alarm
+  - service: script.lock_up
   - service: input_select.select_option
     data:
       entity_id: input_select.mode
       option: Away
-  - service: script.lock_up
