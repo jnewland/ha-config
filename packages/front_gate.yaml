@@ -50,11 +50,12 @@ automation:
       - choose:
         - conditions:
             - condition: template
-              value_template: "{{ is_state('alarm_control_panel.alarm', 'armed') }}"
+              value_template: "{{ not is_state('alarm_control_panel.alarm', 'disarmed') }}"
           sequence:
             - service: script.ask_about_turning_on
               data:
                 secure: "true"
+                tag: front_gate_tag
                 entity_id: script.unlock_and_disarm
                 message: "Unlock and disarm?"
                 confirmation_message: unlocked
@@ -63,6 +64,7 @@ automation:
           - service: script.ask_about_turning_on
             data:
               entity_id: script.mode_away
+              tag: front_gate_tag
               message: "Turn on away?"
               confirmation_message: turned on away mode
 
