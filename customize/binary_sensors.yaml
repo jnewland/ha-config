@@ -1,5 +1,2 @@
-binary_sensor.front_gate:
-  device_class: opening
-  icon: mdi:gate
 binary_sensor.updater:
   friendly_name: Update

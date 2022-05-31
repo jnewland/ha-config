@@ -1,0 +1,93 @@
+homeassistant:
+  customize:
+    binary_sensor.front_gate_access_control_window_door_is_open:
+      device_class: opening
+      icon: mdi:gate
+automation:
+  - alias: Gate Bell
+    id: c228fcbc-a5ea-4d1f-8094-a884be31e362
+    trigger:
+      platform: state
+      entity_id: binary_sensor.front_gate_access_control_window_door_is_open
+      to: 'on'
+    action:
+      - service: notify.iphones
+        data:
+          message: the front gate just opened!
+          data:
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ states.camera.front_door.attributes.entity_picture }}
+              content-type: jpeg
+              hide-thumbnail: false
+      - service: script.notify_with_lights
+      - service: notify.tidbyt_once
+        data:
+          message: The front gate just opened!
+      - service: notify.slack
+        data:
+          title: ':camera_with_flash:'
+          message: The front gate just opened!
+          data:
+            file:
+              url: |
+                {{ states('input_text.frigate_url') }}/api/front_door/latest.jpg
+      - service: script.notify_all_channels
+        data:
+          message: the front gate just opened
+
+  - alias: front gate tag
+    id: 3b768555-8dae-416f-8470-9db76f385ec9
+    trigger:
+      platform: event
+      event_type: tag_scanned
+      event_data:
+        tag_id: 16263437-bc67-4c90-8834-f2daa29bcc71
+    mode: queued
+    action:
+      - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ not is_state('alarm_control_panel.alarm', 'disarmed') }}"
+          sequence:
+            - service: script.ask_about_turning_on
+              data:
+                secure: "true"
+                tag: front_gate_tag
+                entity_id: script.unlock_and_disarm
+                message: "Unlock and disarm?"
+                confirmation_message: unlocked
+
+        default:
+          - service: script.ask_about_turning_on
+            data:
+              entity_id: script.mode_away
+              tag: front_gate_tag
+              message: "Turn on away?"
+              confirmation_message: turned on away mode
+
+script:
+  unlock_and_disarm:
+    sequence:
+      - repeat:
+          until: |
+            {{ is_state('lock.front_door', 'unlocked') }}
+          sequence:
+            - service: lock.unlock
+              target:
+                entity_id: lock.front_door
+            - wait_template: |
+                {{ is_state('lock.front_door', 'unlocked') }}
+              timeout: 5
+      - repeat:
+          until: |
+            {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: alarm_control_panel.alarm_disarm
+              entity_id: alarm_control_panel.alarm
+            - wait_template: |
+                {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+              timeout: 5

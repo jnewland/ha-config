@@ -15,7 +15,7 @@ views:
             - input_select.mode
             - alarm_control_panel.alarm
             - lock.front_door
-            - binary_sensor.front_gate
+            - binary_sensor.front_gate_access_control_window_door_is_open
             - input_number.brightness
             - vacuum.downstairs
       - type: conditional
@@ -834,7 +834,7 @@ views:
         entities:
           - light.front_porch
           - light.front_door
-          - binary_sensor.front_gate
+          - binary_sensor.front_gate_access_control_window_door_is_open
       - type: entities
         title: patio
         entities:
@@ -847,7 +847,7 @@ views:
           - switch.pergola_overhead
       - type: entities
         entities:
-          - binary_sensor.front_gate
+          - binary_sensor.front_gate_access_control_window_door_is_open
           - cover.garage
           - cover.gate
       - type: history-graph
