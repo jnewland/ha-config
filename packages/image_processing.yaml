@@ -24,6 +24,35 @@ automation:
         data:
           message: >
             {{ trigger.to_state.name }} too low for {{ trigger.for }}!
+          notification_id: >
+            {{ trigger.entity_id }}_low
+  - alias: Dismiss camera failure notifications
+    id: b9c16063-bd35-4c1d-834f-6a1cd4bf1892
+    mode: parallel
+    trigger:
+      - platform: numeric_state
+        entity_id:
+        - sensor.ac_camera_fps
+        - sensor.atrium_camera_fps
+        - sensor.back_porch_camera_fps
+        - sensor.front_door_camera_fps
+        - sensor.front_yard_left_camera_fps
+        - sensor.garage_camera_fps
+        - sensor.gate_camera_fps
+        - sensor.great_room_camera_fps
+        - sensor.peppers_camera_fps
+        - sensor.pergola_camera_fps
+        - sensor.roof_deck_camera_fps
+        below: 8
+        above: 4
+        for:
+          minutes: 2
+    action:
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: >
+            {{ trigger.entity_id }}_low
+
 
   - alias: Reboot unreliable great room camera automatically
     id: f14e2300-ca01-4f4e-91cd-b3611c90634b
