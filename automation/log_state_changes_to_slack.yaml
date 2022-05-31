@@ -26,7 +26,7 @@ trigger:
     - binary_sensor.guest_hall_home_security_motion_detection
     - binary_sensor.yoga_room_motion
     - binary_sensor.kitchen_motion
-    - binary_sensor.front_gate
+    - binary_sensor.front_gate_access_control_window_door_is_open
     - sensor.ups_state
     - sensor.jphone_12_battery_state
     - sensor.katie_s_iphone_battery_state
@@ -98,7 +98,7 @@ action:
         "sensor.jphone_12_battery_state":      ":iphone:",
         "sensor.katie_s_iphone_battery_state": ":iphone:",
         "binary_sensor.master_ac_water_13":   ":droplet:",
-        "binary_sensor.front_gate_121":       ":house_with_garden:"
+        "binary_sensor.front_gate_access_control_window_door_is_open":       ":house_with_garden:"
       } %}
       {% set domain_state = new_state.domain + "." + new_state.state %}
       {% set domain_state_emojis = {

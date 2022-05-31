@@ -2,7 +2,7 @@ alias: Gate Bell
 id: c228fcbc-a5ea-4d1f-8094-a884be31e362
 trigger:
   platform: state
-  entity_id: binary_sensor.front_gate
+  entity_id: binary_sensor.front_gate_access_control_window_door_is_open
   to: 'on'
 action:
   - service: notify.iphones
