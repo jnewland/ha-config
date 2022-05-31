@@ -52,18 +52,12 @@ automation:
             - condition: template
               value_template: "{{ is_state('alarm_control_panel.alarm', 'armed') }}"
           sequence:
-            - service: lock.unlock
-              target:
-                entity_id: lock.front_door
-            - repeat:
-                until: |
-                  {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
-                sequence:
-                  - service: alarm_control_panel.alarm_disarm
-                    entity_id: alarm_control_panel.alarm
-                  - wait_template: |
-                      {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
-                    timeout: 5
+            - service: script.ask_about_turning_on
+              data:
+                secure: "true"
+                entity_id: script.unlock_and_disarm
+                message: "Unlock and disarm?"
+                confirmation_message: unlocked
 
         default:
           - service: script.ask_about_turning_on
@@ -71,3 +65,26 @@ automation:
               entity_id: script.mode_away
               message: "Turn on away?"
               confirmation_message: turned on away mode
+
+script:
+  unlock_and_disarm:
+    sequence:
+      - repeat:
+          until: |
+            {{ is_state('lock.front_door', 'unlocked') }}
+          sequence:
+            - service: lock.unlock
+              target:
+                entity_id: lock.front_door
+            - wait_template: |
+                {{ is_state('lock.front_door', 'unlocked') }}
+              timeout: 5
+      - repeat:
+          until: |
+            {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: alarm_control_panel.alarm_disarm
+              entity_id: alarm_control_panel.alarm
+            - wait_template: |
+                {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+              timeout: 5
