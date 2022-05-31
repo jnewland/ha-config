@@ -25,7 +25,7 @@ rm -rf $TMPDIR/homeassistant-plant-$$
 
 rm -rf custom_components/alarmdotcom || true
 # renovate: datasource=github-releases depName=uvjustin/alarmdotcom
-ALARM_DOT_COM_VERSION=v0.2.7
+ALARM_DOT_COM_VERSION=v0.2.8
 git clone --depth 1 --branch $ALARM_DOT_COM_VERSION https://github.com/uvjustin/alarmdotcom $TMPDIR/alarmdotcom-$$
 mv $TMPDIR/alarmdotcom-$$/custom_components/alarmdotcom custom_components
 rm -rf $TMPDIR/alarmdotcom-$$
