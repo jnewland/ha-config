@@ -23,7 +23,7 @@ automation:
       for:
         minutes: 5
     action:
-      - service: mobile_app_jphone_12
+      - service: notify.mobile_app_jphone_12
         data:
           message: request_location_update
 
