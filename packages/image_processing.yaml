@@ -12,13 +12,13 @@ automation:
         - sensor.front_yard_left_camera_fps
         - sensor.garage_camera_fps
         - sensor.gate_camera_fps
-        - sensor.great_room_camera_fps
+        # - sensor.great_room_camera_fps
         - sensor.peppers_camera_fps
         - sensor.pergola_camera_fps
         - sensor.roof_deck_camera_fps
-        below: 5
+        below: 1
         for:
-          minutes: 5
+          minutes: 2
     action:
       - service: persistent_notification.create
         data:
@@ -43,7 +43,7 @@ automation:
         - sensor.peppers_camera_fps
         - sensor.pergola_camera_fps
         - sensor.roof_deck_camera_fps
-        below: 8
+        below: 6
         above: 4
         for:
           minutes: 2
