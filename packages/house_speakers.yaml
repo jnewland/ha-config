@@ -61,7 +61,7 @@ automation:
           trigger.event.data.new_state.state == "on" and
           trigger.event.data.new_state.attributes.media_player_group_members is defined and
           trigger.event.data.new_state.attributes.media_player_entity_id is defined and
-          trigger.event.data.new_state.attributes.media_player_group_members not in trigger.event.data.new_state.attributes.group_members and
+          trigger.event.data.new_state.attributes.media_player_group_members not in state_attr(trigger.event.data.new_state.attributes.media_player_entity_id, 'group_members') and
           ( is_state(trigger.event.data.new_state.attributes.media_player_group_members, 'idle') or
             is_state(trigger.event.data.new_state.attributes.media_player_group_members, 'paused') )
         }}
