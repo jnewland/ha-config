@@ -58,20 +58,18 @@ homeassistant:
       trigger_entity_id: light.garage_hall
       trigger_entity_id_off: light.garage_hall
       haunt: light.drums
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.record_cabinet
 
     binary_sensor.guest_hall_home_security_motion_detection:
       trigger_entity_id: light.guest_hall_overhead
       trigger_entity_id_off: light.guest_hall_overhead
       haunt: light.couch
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.record_cabinet
 
     binary_sensor.great_hall_motion:
       trigger_entity_id: light.great_hall
       trigger_entity_id_off: light.great_hall
       haunt: light.drums
+
+    binary_sensor.common_area_occupancy:
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.record_cabinet
 
@@ -89,11 +87,23 @@ homeassistant:
 binary_sensor:
   - platform: template
     sensors:
+      common_area_occupancy:
+        friendly_name: common area occupied
+        device_class: occupancy
+        value_template: |
+          {{
+            states('binary_sensor.great_room_occupancy') == 'on' or
+            states('binary_sensor.garage_hall_motion') == 'on' or
+            states('binary_sensor.guest_hall_home_security_motion_detection') == 'on' or
+            states('binary_sensor.great_hall_motion') == 'on' or
+            states('binary_sensor.stairs_motion') == 'on'
+          }}
+
       great_room_occupancy:
         friendly_name: great room occupied
         device_class: occupancy
         value_template: |
-          {{ 
+          {{
             states('binary_sensor.living_room_motion') == 'on' or
             states('binary_sensor.kitchen_motion') == 'on' or
             states('device_tracker.katie_s_iphone') == 'Kitchen' or
@@ -106,7 +116,7 @@ binary_sensor:
         friendly_name: lounge occupied
         device_class: occupancy
         value_template: |
-          {{ 
+          {{
             states('binary_sensor.lounge_home_security_motion_detection') == 'on' or
             states('device_tracker.katie_s_iphone') == 'Lounge' or
             states('device_tracker.jphone_12') == 'Lounge'
@@ -118,7 +128,7 @@ binary_sensor:
         friendly_name: bedroom occupied
         device_class: occupancy
         value_template: |
-          {{ 
+          {{
             states('binary_sensor.master_bath_motion') == 'on' or
             states('binary_sensor.closet_motion') == 'on' or
             states('binary_sensor.master_door') == 'off'
@@ -130,7 +140,7 @@ binary_sensor:
         friendly_name: bathroom occupied
         device_class: occupancy
         value_template: |
-          {{ 
+          {{
             states('binary_sensor.master_bath_motion') == 'on'
           }}
         delay_off:
@@ -140,7 +150,7 @@ binary_sensor:
         friendly_name: yoga room occupied
         device_class: occupancy
         value_template: |
-          {{ 
+          {{
             states('binary_sensor.yoga_room_motion') == 'on' or
             states('binary_sensor.yoga_chair_home_security_motion_detection') == 'on'
           }}
@@ -151,9 +161,9 @@ binary_sensor:
         friendly_name: garage occupied
         device_class: occupancy
         value_template: |
-          {{ 
-            states('cover.garage') == 'open' or 
-            states('lock.garage') == 'unlocked' or 
+          {{
+            states('cover.garage') == 'open' or
+            states('lock.garage') == 'unlocked' or
             float(states('sensor.garage_person')) | default(0) > 0  or
             states.sensor.garage_person.last_changed > (now() - timedelta(minutes=10))
           }}
@@ -162,7 +172,7 @@ binary_sensor:
         friendly_name: back porch occupancy
         device_class: occupancy
         value_template: |
-          {{ 
+          {{
             states('lock.back_porch') == 'unlocked' or
             float(states('sensor.back_porch_person')) | default(0) > 0 or
             states.sensor.back_porch_person.last_changed > (now() - timedelta(minutes=5))
@@ -175,7 +185,7 @@ binary_sensor:
         delay_on:
           seconds: 15
         value_template: |
-          {{ 
+          {{
             states('lock.front_door') == 'unlocked' or
             float(states('sensor.front_yard_left_person')) | default(0) > 0 or
             states.sensor.front_yard_left_person.last_changed > (now() - timedelta(minutes=5))
@@ -208,7 +218,7 @@ binary_sensor:
         friendly_name: stairs occupied
         device_class: occupancy
         value_template: |
-          {{ 
+          {{
             states('binary_sensor.stairs_motion') == 'on' or
             states('binary_sensor.upstairs_home_security_motion_detection') == 'on'
           }}
