@@ -84,7 +84,7 @@ homeassistant:
       haunt: light.bookshelf_right
 
 template:
-  - binary:
+  - binary_sensor:
       - name: common area occupancy
         device_class: occupancy
         state: "{{ this.attributes.reason != '' | default(false) }}"
