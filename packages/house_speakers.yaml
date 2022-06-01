@@ -17,7 +17,6 @@ automation:
       value_template: |
         {{
           trigger.event.data.old_state != None and
-          trigger.event.data.new_state.state != trigger.event.data.old_state.state and
           trigger.event.data.new_state.domain == "binary_sensor" and
           trigger.event.data.new_state.state == "on" and
           trigger.event.data.new_state.attributes.speaker_entity is defined
@@ -38,7 +37,6 @@ automation:
       value_template: |
         {{
           trigger.event.data.old_state != None and
-          trigger.event.data.new_state.state != trigger.event.data.old_state.state and
           trigger.event.data.new_state.domain == "binary_sensor" and
           trigger.event.data.new_state.state == "off" and
           trigger.event.data.new_state.attributes.speaker_entity is defined
@@ -59,11 +57,11 @@ automation:
       value_template: |
         {{
           trigger.event.data.old_state != None and
-          trigger.event.data.new_state.state != trigger.event.data.old_state.state and
           trigger.event.data.new_state.domain == "binary_sensor" and
           trigger.event.data.new_state.state == "on" and
           trigger.event.data.new_state.attributes.media_player_group_members is defined and
           trigger.event.data.new_state.attributes.media_player_entity_id is defined and
+          trigger.event.data.new_state.attributes.media_player_group_members not in trigger.event.data.new_state.attributes.group_members and
           ( is_state(trigger.event.data.new_state.attributes.media_player_group_members, 'idle') or
             is_state(trigger.event.data.new_state.attributes.media_player_group_members, 'paused') )
         }}
@@ -74,6 +72,14 @@ automation:
             {{ trigger.event.data.new_state.attributes.media_player_group_members }}
           entity_id: |
             {{ trigger.event.data.new_state.attributes.media_player_entity_id }}
+      - service: system_log.write
+        data:
+          message: >
+            at=media_player.join
+            group_members={{ trigger.event.data.new_state.attributes.media_player_group_members }}
+            entity_id={{ trigger.event.data.new_state.attributes.media_player_entity_id }}
+          logger: packages.house_speakers
+          level: debug
   - alias: Ungroup sonos speakers
     mode: parallel
     id: b301d317-ef17-4285-a2de-a96353d12712
@@ -85,7 +91,6 @@ automation:
       value_template: |
         {{
           trigger.event.data.old_state != None and
-          trigger.event.data.new_state.state != trigger.event.data.old_state.state and
           trigger.event.data.new_state.domain == "binary_sensor" and
           trigger.event.data.new_state.state == "off" and
           trigger.event.data.new_state.attributes.media_player_group_members is defined and
@@ -97,3 +102,10 @@ automation:
       target:
         entity_id: |
           {{ trigger.event.data.new_state.attributes.media_player_entity_id }}
+    - service: system_log.write
+      data:
+        message: >
+          at=media_player.unjoin
+          entity_id={{ trigger.event.data.new_state.attributes.media_player_entity_id }}
+        logger: packages.house_speakers
+        level: debug

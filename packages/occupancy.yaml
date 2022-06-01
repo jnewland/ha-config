@@ -83,22 +83,22 @@ homeassistant:
     binary_sensor.upstairs_home_security_motion_detection:
       haunt: light.bookshelf_right
 
+template:
+  - binary:
+      - name: common area occupancy
+        device_class: occupancy
+        state: "{{ this.attributes.reason != '' | default(false) }}"
+        attributes:
+          reason: |
+            {{ 'binary_sensor.great_room_occupancy' if is_state('binary_sensor.great_room_occupancy', 'on') }}
+            {{ 'binary_sensor.garage_hall_motion' if is_state('binary_sensor.garage_hall_motion', 'on') }}
+            {{ 'binary_sensor.guest_hall_home_security_motion_detection' if is_state('binary_sensor.guest_hall_home_security_motion_detection', 'on') }}
+            {{ 'binary_sensor.great_hall_motion' if is_state('binary_sensor.great_hall_motion', 'on') }}
+            {{ 'binary_sensor.stairs_motion' if is_state('binary_sensor.stairs_motion', 'on') }}
 
 binary_sensor:
   - platform: template
     sensors:
-      common_area_occupancy:
-        friendly_name: common area occupied
-        device_class: occupancy
-        value_template: |
-          {{
-            states('binary_sensor.great_room_occupancy') == 'on' or
-            states('binary_sensor.garage_hall_motion') == 'on' or
-            states('binary_sensor.guest_hall_home_security_motion_detection') == 'on' or
-            states('binary_sensor.great_hall_motion') == 'on' or
-            states('binary_sensor.stairs_motion') == 'on'
-          }}
-
       great_room_occupancy:
         friendly_name: great room occupied
         device_class: occupancy
