@@ -62,18 +62,18 @@ automation:
           trigger.event.data.new_state.state != trigger.event.data.old_state.state and
           trigger.event.data.new_state.domain == "binary_sensor" and
           trigger.event.data.new_state.state == "on" and
-          trigger.event.data.new_state.attributes.sonos_group_master is defined and
-          trigger.event.data.new_state.attributes.sonos_group_entity_id is defined and
-          ( is_state(trigger.event.data.new_state.attributes.sonos_group_entity_id, 'idle') or
-            is_state(trigger.event.data.new_state.attributes.sonos_group_entity_id, 'paused') )
+          trigger.event.data.new_state.attributes.media_player_group_members is defined and
+          trigger.event.data.new_state.attributes.media_player_entity_id is defined and
+          ( is_state(trigger.event.data.new_state.attributes.media_player_entity_id, 'idle') or
+            is_state(trigger.event.data.new_state.attributes.media_player_entity_id, 'paused') )
         }}
     action:
-      - service: sonos.join
+      - service: media_player.join
         data:
-          master: |
-            {{ trigger.event.data.new_state.attributes.sonos_group_master }}
+          group_members: |
+            {{ trigger.event.data.new_state.attributes.media_player_group_members }}
           entity_id: |
-            {{ trigger.event.data.new_state.attributes.sonos_group_entity_id }}
+            {{ trigger.event.data.new_state.attributes.media_player_entity_id }}
   - alias: Ungroup sonos speakers
     mode: parallel
     id: b301d317-ef17-4285-a2de-a96353d12712
@@ -88,12 +88,12 @@ automation:
           trigger.event.data.new_state.state != trigger.event.data.old_state.state and
           trigger.event.data.new_state.domain == "binary_sensor" and
           trigger.event.data.new_state.state == "off" and
-          trigger.event.data.new_state.attributes.sonos_group_master is defined and
-          trigger.event.data.new_state.attributes.sonos_group_entity_id is defined
+          trigger.event.data.new_state.attributes.media_player_group_members is defined and
+          trigger.event.data.new_state.attributes.media_player_entity_id is defined
         }}
     action:
-    - service: sonos.unjoin
+    - service: media_player.unjoin
       data: {}
       target:
         entity_id: |
-          {{ trigger.event.data.new_state.attributes.sonos_group_entity_id }}
+          {{ trigger.event.data.new_state.attributes.media_player_entity_id }}
