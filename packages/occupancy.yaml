@@ -6,44 +6,44 @@ homeassistant:
       trigger_entity_id_off: group.great_room
       haunt: light.bookshelf_right
       speaker_entity: group.great_room_speakers
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.sub
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.sub
 
     binary_sensor.lounge_occupancy:
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.lounge_surround
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.lounge_surround
 
     binary_sensor.bedroom_occupancy:
       speaker_entity: media_player.master_bedroom_speakers
 
     binary_sensor.bathroom_occupancy:
       speaker_entity: media_player.master_bathroom_speakers
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.shower
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.shower
 
     binary_sensor.front_porch_occupancy:
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.front_porch
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.front_porch
 
     binary_sensor.back_porch_occupancy:
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.back_porch
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.back_porch
       trigger_service: script.turn_on_entity_id
       trigger_entity_id: group.back_porch_fan
       trigger_entity_id_off: group.back_porch_fan
 
     binary_sensor.garage_occupancy:
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.move
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.move
 
     binary_sensor.atrium_occupancy:
       speaker_entity: media_player.atrium_speakers
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.rock
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.rock
 
     binary_sensor.pergola_occupancy:
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.pergola
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.pergola
 
     binary_sensor.yoga_room_motion:
       haunt: light.bookshelf_middle
@@ -51,29 +51,29 @@ homeassistant:
     binary_sensor.yoga_room_occupancy:
       trigger_entity_id: group.yoga_room
       trigger_entity_id_off: group.yoga_room
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.yoga
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.yoga
 
     binary_sensor.garage_hall_motion:
       trigger_entity_id: light.garage_hall
       trigger_entity_id_off: light.garage_hall
       haunt: light.drums
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.record_cabinet
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.record_cabinet
 
     binary_sensor.guest_hall_home_security_motion_detection:
       trigger_entity_id: light.guest_hall_overhead
       trigger_entity_id_off: light.guest_hall_overhead
       haunt: light.couch
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.record_cabinet
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.record_cabinet
 
     binary_sensor.great_hall_motion:
       trigger_entity_id: light.great_hall
       trigger_entity_id_off: light.great_hall
       haunt: light.drums
-      sonos_group_master: media_player.house
-      sonos_group_entity_id: media_player.record_cabinet
+      media_player_group_members: media_player.house
+      media_player_entity_id: media_player.record_cabinet
 
     binary_sensor.stairs_occupancy:
       trigger_entity_id: light.stairs
