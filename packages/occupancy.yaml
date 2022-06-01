@@ -164,7 +164,7 @@ binary_sensor:
           {{
             states('cover.garage') == 'open' or
             states('lock.garage') == 'unlocked' or
-            float(states('sensor.garage_person')) | default(0) > 0  or
+            float(states('sensor.garage_person'), default=0) > 0  or
             states.sensor.garage_person.last_changed > (now() - timedelta(minutes=10))
           }}
 
@@ -174,7 +174,7 @@ binary_sensor:
         value_template: |
           {{
             states('lock.back_porch') == 'unlocked' or
-            float(states('sensor.back_porch_person')) | default(0) > 0 or
+            float(states('sensor.back_porch_person'), default=0) > 0 or
             states.sensor.back_porch_person.last_changed > (now() - timedelta(minutes=5))
           }}
 
@@ -187,7 +187,7 @@ binary_sensor:
         value_template: |
           {{
             states('lock.front_door') == 'unlocked' or
-            float(states('sensor.front_yard_left_person')) | default(0) > 0 or
+            float(states('sensor.front_yard_left_person'), default=0) > 0 or
             states.sensor.front_yard_left_person.last_changed > (now() - timedelta(minutes=5))
           }}
 
@@ -197,7 +197,7 @@ binary_sensor:
         value_template: |
           {{
             states('binary_sensor.atrium_couch_motion') == 'on' or
-            float(states('sensor.atrium_person')) | default(0) > 0
+            float(states('sensor.atrium_person'), default=0) > 0
           }}
         delay_off:
           minutes: 15
