@@ -64,8 +64,8 @@ automation:
           trigger.event.data.new_state.state == "on" and
           trigger.event.data.new_state.attributes.media_player_group_members is defined and
           trigger.event.data.new_state.attributes.media_player_entity_id is defined and
-          ( is_state(trigger.event.data.new_state.attributes.media_player_entity_id, 'idle') or
-            is_state(trigger.event.data.new_state.attributes.media_player_entity_id, 'paused') )
+          ( is_state(trigger.event.data.new_state.attributes.media_player_group_members, 'idle') or
+            is_state(trigger.event.data.new_state.attributes.media_player_group_members, 'paused') )
         }}
     action:
       - service: media_player.join
