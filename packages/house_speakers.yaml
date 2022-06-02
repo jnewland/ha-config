@@ -101,11 +101,11 @@ automation:
       data: {}
       target:
         entity_id: |
-          {{ trigger.event.data.new_state.attributes.media_player_entity_id }}
+          {{ trigger.event.data.new_state.attributes.media_player_group_members }}
     - service: system_log.write
       data:
         message: >
           at=media_player.unjoin
-          entity_id={{ trigger.event.data.new_state.attributes.media_player_entity_id }}
+          entity_id={{ trigger.event.data.new_state.attributes.media_player_group_members }}
         logger: packages.house_speakers
         level: debug
