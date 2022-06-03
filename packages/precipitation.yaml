@@ -88,6 +88,7 @@ sensor:
           }}
       next_precipitation:
         friendly_name: Next precipitation
+        unit_of_measurement: timestamp
         value_template: |
           {% set next_precip = state_attr("weather.dark_sky", "forecast") |
                       default([{}]) |
