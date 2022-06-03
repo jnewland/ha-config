@@ -102,7 +102,7 @@ sensor:
                       map(attribute='datetime') |
                       first |
                       default(false) %}
-          {{ next_precip or next_rainy }}
+          {{ next_precip or next_rainy or "" }}
       hours_until_rain:
         friendly_name: Hours until rain
         unit_of_measurement: 'hours'
