@@ -107,12 +107,12 @@ sensor:
         friendly_name: Hours until rain
         unit_of_measurement: 'hours'
         value_template: |
-          {% if state('sensor.next_precipitation') == '' %}
+          {% if states('sensor.next_precipitation') == 'unavailable' or states('sensor.next_precipitation') == '' %}
             {{ states("next_precipitation", "forecast")| length }}
           {% else %}
             {% for item in state_attr("weather.dark_sky", "forecast") |
                       default([{}]) %}
-              {% if item.datetime == state('sensor.next_precipitation') %}
+              {% if item.datetime == states('sensor.next_precipitation') %}
                 {{ loop.index }}
               {% endif %}
             {% endfor %}
