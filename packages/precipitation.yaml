@@ -56,10 +56,19 @@ binary_sensor:
       precipitation_in_forecast:
         friendly_name: Precipitation in forecast
         value_template: |
-          {{
-            states("sensor.precipitation_in_forecast") |
-            float(default=0.0) > 0.0
-          }}
+          {% set next_precip = state_attr("weather.dark_sky", "forecast") |
+                      default([{}]) |
+                      rejectattr("precipitation", "none") |
+                      map(attribute='datetime') |
+                      first |
+                      default(false) %}
+          {% set next_rainy = state_attr("weather.dark_sky", "forecast") |
+                      default([{}]) |
+                      selectattr("condition", "==", "rainy") |
+                      map(attribute='datetime') |
+                      first |
+                      default(false) %}
+          {{ True if next_precip or next_rainy else False }}
         delay_on:
           minutes: 30
         delay_off:
@@ -77,22 +86,33 @@ sensor:
             rejectattr("precipitation", "none") |
             sum(attribute="precipitation")
           }}
-      hours_until_rain:
-        friendly_name: Hours until rain
-        unit_of_measurement: 'hours'
+      next_precipitation:
+        friendly_name: Next precipitation
+        unit_of_measurement: timestamp
         value_template: |
-          {% set next_rain = state_attr("weather.dark_sky", "forecast") |
+          {% set next_precip = state_attr("weather.dark_sky", "forecast") |
                       default([{}]) |
                       rejectattr("precipitation", "none") |
                       map(attribute='datetime') |
                       first |
                       default(false) %}
-          {% if not next_rain %}
-            {{ state_attr("weather.dark_sky", "forecast")| length }}
+          {% set next_rainy = state_attr("weather.dark_sky", "forecast") |
+                      default([{}]) |
+                      selectattr("condition", "==", "rainy") |
+                      map(attribute='datetime') |
+                      first |
+                      default(false) %}
+          {{ next_precip or next_rainy or "" }}
+      hours_until_rain:
+        friendly_name: Hours until rain
+        unit_of_measurement: 'hours'
+        value_template: |
+          {% if states('sensor.next_precipitation') == 'unavailable' or states('sensor.next_precipitation') == '' %}
+            {{ state_attr("weather.dark_sky", "forecast") | length }}
           {% else %}
             {% for item in state_attr("weather.dark_sky", "forecast") |
                       default([{}]) %}
-              {% if item.datetime == next_rain %}
+              {% if item.datetime == states('sensor.next_precipitation') %}
                 {{ loop.index }}
               {% endif %}
             {% endfor %}
