@@ -3,7 +3,7 @@ binary_sensor:
     sensors:
       ups_voltage_low:
         value_template: |
-          {{ float(states('sensor.ups_input_voltage')) | default(0) <= 114 }}
+          {{ float(states('sensor.ups_input_voltage'), default=0) <= 114 }}
 
 automation:
   - alias: Notify Jesse when UPS voltage is low
@@ -16,8 +16,8 @@ automation:
       service: notify.mobile_app_jphone_12
       data:
         message: |
-          Core UPS reports status of {{ states('sensor.ups_status') | default("Unknown") }} with input of {{ float(states('sensor.ups_input_voltage') | default(0)) | round }}{{ state_attr('sensor.ups_input_voltage','unit_of_measurement') }}.{{" "-}}
-          Battery runtime estimated to be {{ (float(states('sensor.ups_battery_runtime') | default(60))/60) | round }} minutes.
+          Core UPS reports status of {{ states('sensor.ups_status') | default("Unknown") }} with input of {{ float(states('sensor.ups_input_voltage', default=0)) | round }}{{ state_attr('sensor.ups_input_voltage','unit_of_measurement') }}.{{" "-}}
+          Battery runtime estimated to be {{ float(states('sensor.ups_battery_runtime', default=60)/60) | round }} minutes.
         data:
           push:
             sound:
