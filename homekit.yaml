@@ -13,7 +13,6 @@ filter:
     - lock
     - media_player
   include_entities:
-    - input_boolean.cleaners
     - switch.xc60_climate
     - switch.atrium_fountain
     - switch.back_porch

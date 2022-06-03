@@ -7,7 +7,7 @@ binary_sensor:
         value_template: |
           {{ 
             states('sensor.laundry_electric_consumption_w') != 'unknown' and 
-            float(states('sensor.laundry_electric_consumption_w') | default(0)) > 10
+            float(states('sensor.laundry_electric_consumption_w'), default=0) > 10
           }}
         delay_off:
           minutes: 5
@@ -18,8 +18,8 @@ binary_sensor:
           {{ 
             states('sensor.laundry_electric_consumption_w') != 'unknown' and 
             is_state('binary_sensor.laundry', 'off') and 
-            float(states('sensor.laundry_electric_consumption_w') | default(0)) > 0 and
-            float(states('sensor.laundry_electric_consumption_w') | default(0)) < 10 
+            float(states('sensor.laundry_electric_consumption_w'), default=0) > 0 and
+            float(states('sensor.laundry_electric_consumption_w'), default=0) < 10 
           }}
 
 automation:

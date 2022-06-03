@@ -28,37 +28,33 @@ automation:
           logger: packages.flameboss
           level: debug
 
-sensor:
- - platform: mqtt
-   state_topic: "homeassistant/sensor/flameboss/136958/send/open"
-   name: "Flameboss Cook Link"
-   force_update: true
-   value_template: "https://myflameboss.com/cooks/{{ value_json.cook_id }}"
- - platform: mqtt
-   state_topic: "homeassistant/sensor/flameboss/136958/send/open"
-   name: "Grill Probe Temp"
-   unit_of_measurement: "°F"
-   device_class: "temperature"
-   force_update: true
-   value_template: "{{(float(value_json.temps[0]) * (9/50) +32) | round(0)}}"
- - platform: mqtt
-   state_topic: "homeassistant/sensor/flameboss/136958/send/open"
-   name: "Red Probe Temp"
-   unit_of_measurement: "°F"
-   device_class: "temperature"
-   force_update: true
-   value_template: "{{(float(value_json.temps[1]) * (9/50) +32) | round(0)}}"
- - platform: mqtt
-   state_topic: "homeassistant/sensor/flameboss/136958/send/open"
-   name: "Green Probe Temp"
-   unit_of_measurement: "°F"
-   device_class: "temperature"
-   force_update: true
-   value_template: "{{(float(value_json.temps[2]) * (9/50) +32) | round(0)}}"
- - platform: mqtt
-   state_topic: "homeassistant/sensor/flameboss/136958/send/open"
-   name: "Black Probe Temp"
-   unit_of_measurement: "°F"
-   device_class: "temperature"
-   force_update: true
-   value_template: "{{(float(value_json.temps[3]) * (9/50) +32) | round(0)}}"
+mqtt:
+  sensor:
+    - state_topic: "homeassistant/sensor/flameboss/136958/send/open"
+      name: "Flameboss Cook Link"
+      force_update: true
+      value_template: "https://myflameboss.com/cooks/{{ value_json.cook_id }}"
+    - state_topic: "homeassistant/sensor/flameboss/136958/send/open"
+      name: "Grill Probe Temp"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      force_update: true
+      value_template: "{{(float(value_json.temps[0]) * (9/50) +32) | round(0)}}"
+    - state_topic: "homeassistant/sensor/flameboss/136958/send/open"
+      name: "Red Probe Temp"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      force_update: true
+      value_template: "{{(float(value_json.temps[1]) * (9/50) +32) | round(0)}}"
+    - state_topic: "homeassistant/sensor/flameboss/136958/send/open"
+      name: "Green Probe Temp"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      force_update: true
+      value_template: "{{(float(value_json.temps[2]) * (9/50) +32) | round(0)}}"
+    - state_topic: "homeassistant/sensor/flameboss/136958/send/open"
+      name: "Black Probe Temp"
+      unit_of_measurement: "°F"
+      device_class: "temperature"
+      force_update: true
+      value_template: "{{(float(value_json.temps[3]) * (9/50) +32) | round(0)}}"
