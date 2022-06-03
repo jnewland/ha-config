@@ -2,51 +2,50 @@
 
 set -ex
 
-: ${TMPDIR:=$RUNNER_TEMP}
 : ${TMPDIR:=$(mktemp -d)}
 
-rm -rf custom_components/bhyve || true
 # renovate: datasource=github-releases depName=sebr/bhyve-home-assistant
 BHYVE_VERSION=2.2.3
-git clone --depth 1 --branch $BHYVE_VERSION https://github.com/sebr/bhyve-home-assistant $TMPDIR/bhyve-home-assistant-$$
-mv $TMPDIR/bhyve-home-assistant-$$/python_scripts/*.py python_scripts/
-mv $TMPDIR/bhyve-home-assistant-$$/custom_components/bhyve custom_components
-rm -rf $TMPDIR/bhyve-home-assistant-$$
+git clone --depth 1 --branch $BHYVE_VERSION https://github.com/sebr/bhyve-home-assistant $TMPDIR/$$-bhyve-home-assistant
+rm -rf custom_components/bhyve || true
+mv $TMPDIR/$$-bhyve-home-assistant/python_scripts/*.py python_scripts/
+mv $TMPDIR/$$-bhyve-home-assistant/custom_components/bhyve custom_components
+sync
 
+git clone https://github.com/GoPosi/homeassistant-aerogarden $TMPDIR/$$-homeassistant-aerogarden
 rm -rf custom_components/aerogarden || true
-git clone https://github.com/GoPosi/homeassistant-aerogarden $TMPDIR/homeassistant-aerogarden-$$
-mv $TMPDIR/homeassistant-aerogarden-$$/custom_components/aerogarden custom_components
-rm -rf $TMPDIR/homeassistant-aerogarden-$$
+mv $TMPDIR/$$-homeassistant-aerogarden/custom_components/aerogarden custom_components
+sync
 
+git clone https://github.com/Olen/homeassistant-plant $TMPDIR/$$-homeassistant-plant
 rm -rf custom_components/plant || true
-git clone https://github.com/Olen/homeassistant-plant $TMPDIR/homeassistant-plant-$$
-mv $TMPDIR/homeassistant-plant-$$/custom_components/plant custom_components
-rm -rf $TMPDIR/homeassistant-plant-$$
+mv $TMPDIR/$$-homeassistant-plant/custom_components/plant custom_components
+sync
 
-rm -rf custom_components/alarmdotcom || true
 # renovate: datasource=github-releases depName=uvjustin/alarmdotcom
 ALARM_DOT_COM_VERSION=v0.2.9
-git clone --depth 1 --branch $ALARM_DOT_COM_VERSION https://github.com/uvjustin/alarmdotcom $TMPDIR/alarmdotcom-$$
-mv $TMPDIR/alarmdotcom-$$/custom_components/alarmdotcom custom_components
-rm -rf $TMPDIR/alarmdotcom-$$
+git clone --depth 1 --branch $ALARM_DOT_COM_VERSION https://github.com/uvjustin/alarmdotcom $TMPDIR/$$-alarmdotcom
+rm -rf custom_components/alarmdotcom || true
+mv $TMPDIR/$$-alarmdotcom/custom_components/alarmdotcom custom_components
+sync
 
-rm -rf custom_components/frigate || true
 # renovate: datasource=github-releases depName=blakeblackshear/frigate-hass-integration
 FRIGATE_VERSION=v2.3
-git clone --depth 1 --branch $FRIGATE_VERSION https://github.com/blakeblackshear/frigate-hass-integration $TMPDIR/frigate-$$
-mv $TMPDIR/frigate-$$/custom_components/frigate custom_components
-rm -rf $TMPDIR/frigate-$$
+git clone --depth 1 --branch $FRIGATE_VERSION https://github.com/blakeblackshear/frigate-hass-integration $TMPDIR/$$-frigate
+rm -rf custom_components/frigate || true
+mv $TMPDIR/$$-frigate/custom_components/frigate custom_components
+sync
 
+git clone https://github.com/barlock/senseme-hacs --depth 1 $TMPDIR/$$-sensme
 rm -rf custom_components/senseme || true
-git clone https://github.com/barlock/senseme-hacs $TMPDIR/sensme-$$
-mv $TMPDIR/sensme-$$/custom_components/senseme custom_components
-rm -rf $TMPDIR/sensme-$$
+mv $TMPDIR/$$-sensme/custom_components/senseme custom_components
+sync
 
+git clone https://github.com/jnewland/core --depth 1 -b vera-lock-pin $TMPDIR/$$-core
 rm -rf custom_components/vera || true
-git clone https://github.com/jnewland/core -b vera-lock-pin $TMPDIR/core-$$
-mv $TMPDIR/core-$$/homeassistant/components/vera custom_components
-rm -rf $TMPDIR/core-$$
+mv $TMPDIR/$$-core/homeassistant/components/vera custom_components
 cp hack/vera.json custom_components/vera/manifest.json
+sync
 
 curl -L -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
 curl -L -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/1.11.0/auto-entities.js
@@ -57,3 +56,5 @@ curl -L -o www/mini-graph-card-bundle.js https://github.com/kalkih/mini-graph-ca
 git add custom_components
 git add python_scripts
 git add www
+
+rm -rf $TMPDIR/$$-*
