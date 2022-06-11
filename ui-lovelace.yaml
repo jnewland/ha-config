@@ -820,6 +820,7 @@ views:
       - type: entities
         title: atrium
         entities:
+          - switch.atrium_fan
           - light.bamboo
           - light.atrium
           - light.atrium_door

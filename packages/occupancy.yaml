@@ -37,6 +37,9 @@ homeassistant:
       media_player_group_members: media_player.move
 
     binary_sensor.atrium_occupancy:
+      trigger_entity_id: switch.atrium_fan
+      trigger_entity_id_off: switch.atrium_fan
+
       speaker_entity: media_player.atrium_speakers
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.rock
