@@ -106,6 +106,14 @@ template:
           seconds: 5
         delay_off:
           minutes: 10
+      - name: pergola occupancy
+        device_class: occupancy
+        state: |
+          {{
+            is_state('binary_sensor.pergola_motion', 'on')
+          }}
+        delay_off:
+          minutes: 10
 
 binary_sensor:
   - platform: template
@@ -201,16 +209,6 @@ binary_sensor:
             float(states('sensor.front_yard_left_person'), default=0) > 0 or
             states.sensor.front_yard_left_person.last_changed > (now() - timedelta(minutes=5))
           }}
-
-      pergola_occupancy:
-        friendly_name: pergola occupied
-        device_class: occupancy
-        value_template: |
-          {{
-            states('binary_sensor.pergola_motion') == 'on'
-          }}
-        delay_off:
-          minutes: 30
 
   - platform: template
     sensors:
