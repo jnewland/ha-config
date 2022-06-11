@@ -14,7 +14,7 @@ Siri integration is limited, and is designed for situations when an Echo isn't n
 
 ### Switches
 
-> Turn on the **bug_zapper**.
+> Turn on the **atrium fountain**.
 
 #### Developing
 
