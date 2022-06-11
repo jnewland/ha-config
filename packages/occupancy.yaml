@@ -95,6 +95,17 @@ template:
             {{ 'binary_sensor.guest_hall_home_security_motion_detection' if is_state('binary_sensor.guest_hall_home_security_motion_detection', 'on') }}
             {{ 'binary_sensor.great_hall_motion' if is_state('binary_sensor.great_hall_motion', 'on') }}
             {{ 'binary_sensor.stairs_motion' if is_state('binary_sensor.stairs_motion', 'on') }}
+      - name: atrium occupancy
+        state: "{{ this.attributes.reason != '' | default(false) }}"
+        device_class: occupancy
+        attributes:
+          reason: |
+            {{ 'binary_sensor.atrium_couch_motion' if is_state('binary_sensor.atrium_couch_motion', 'on') }}
+            {{ 'sensor.atrium_person' if float(states('sensor.atrium_person'), default=0) > 0 }}
+        delay_on:
+          seconds: 5
+        delay_off:
+          minutes: 10
 
 binary_sensor:
   - platform: template
@@ -190,17 +201,6 @@ binary_sensor:
             float(states('sensor.front_yard_left_person'), default=0) > 0 or
             states.sensor.front_yard_left_person.last_changed > (now() - timedelta(minutes=5))
           }}
-
-      atrium_occupancy:
-        friendly_name: atrium occupied
-        device_class: occupancy
-        value_template: |
-          {{
-            states('binary_sensor.atrium_couch_motion') == 'on' or
-            float(states('sensor.atrium_person'), default=0) > 0
-          }}
-        delay_off:
-          minutes: 15
 
       pergola_occupancy:
         friendly_name: pergola occupied
