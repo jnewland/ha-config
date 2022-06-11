@@ -1,4 +1,4 @@
-FROM homeassistant/home-assistant:2022.6.4@sha256:79e3205fdc1dcc5910370e851d5d504fcf7206d7274ba141d648a08c54268a82
+FROM homeassistant/home-assistant:2022.6.5@sha256:bc9113b9b483e059948d6e01530deaa02c584a3d17419d10136ee29deed50641
 
 RUN apk update && apk add --no-cache --update -q \
   musl libgcc libstdc++ shadow sudo colordiff git-diff-highlight git make sudo ca-certificates vim curl tzdata htop
