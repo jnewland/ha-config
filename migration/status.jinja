@@ -1,1 +1,6 @@
-{{ {'zwave_js': integration_entities('zwave_js') | sort, 'vera': integration_entities('vera') | sort } | tojson(indent=2) }}
+{{
+  {
+    'zwave_js': integration_entities('zwave_js') | sort,
+    'vera':     integration_entities('vera')     | sort
+  } | tojson(indent=2)
+}}

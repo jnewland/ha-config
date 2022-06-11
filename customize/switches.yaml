@@ -1,3 +1,5 @@
+switch.atrium_fan:
+  icon: mdi:fan
 switch.back_porch:
   icon: mdi:ceiling-light
 switch.back_porch_fan_east:

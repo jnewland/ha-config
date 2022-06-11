@@ -1375,7 +1375,7 @@ views:
 
           ### Migrate config
 
-          1. `./script/template < migration/status.jinja  > migration/status.json`
+          1. `make`
           1. Cleanup [entity IDs]({{ states('input_text.external_url') }}/config/entities?historyBack=1&config_entry=a9f84a8f738383dc934b1198292374dc) as necessary
           1. Search & Replace in [config](https://github.com/jnewland/ha-config) if entity IDs change
 
