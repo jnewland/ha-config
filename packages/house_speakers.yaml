@@ -18,7 +18,7 @@ automation:
         {{
           trigger.event.data.old_state != None and
           trigger.event.data.new_state.domain == "binary_sensor" and
-          trigger.event.data.new_state.state == "on" and
+          is_state(trigger.event.data.new_state.entity_id, "on") and
           trigger.event.data.new_state.attributes.speaker_entity is defined
         }}
     action:
@@ -38,7 +38,7 @@ automation:
         {{
           trigger.event.data.old_state != None and
           trigger.event.data.new_state.domain == "binary_sensor" and
-          trigger.event.data.new_state.state == "off" and
+          is_state(trigger.event.data.new_state.entity_id, "off") and
           trigger.event.data.new_state.attributes.speaker_entity is defined
         }}
     action:
@@ -58,7 +58,7 @@ automation:
         {{
           trigger.event.data.old_state != None and
           trigger.event.data.new_state.domain == "binary_sensor" and
-          trigger.event.data.new_state.state == "on" and
+          is_state(trigger.event.data.new_state.entity_id, "on") and
           trigger.event.data.new_state.attributes.media_player_group_members is defined and
           trigger.event.data.new_state.attributes.media_player_entity_id is defined and
           trigger.event.data.new_state.attributes.media_player_group_members not in state_attr(trigger.event.data.new_state.attributes.media_player_entity_id, 'group_members') and
@@ -92,7 +92,7 @@ automation:
         {{
           trigger.event.data.old_state != None and
           trigger.event.data.new_state.domain == "binary_sensor" and
-          trigger.event.data.new_state.state == "off" and
+          is_state(trigger.event.data.new_state.entity_id, "off") and
           trigger.event.data.new_state.attributes.media_player_group_members is defined and
           trigger.event.data.new_state.attributes.media_player_entity_id is defined
         }}

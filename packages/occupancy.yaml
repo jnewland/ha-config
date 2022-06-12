@@ -37,6 +37,9 @@ homeassistant:
       media_player_group_members: media_player.move
 
     binary_sensor.atrium_occupancy:
+      trigger_entity_id: switch.atrium_fan
+      trigger_entity_id_off: switch.atrium_fan
+
       speaker_entity: media_player.atrium_speakers
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.rock
@@ -87,14 +90,33 @@ template:
   - binary_sensor:
       - name: common area occupancy
         device_class: occupancy
-        state: "{{ this.attributes.reason != '' | default(false) }}"
-        attributes:
-          reason: |
-            {{ 'binary_sensor.great_room_occupancy' if is_state('binary_sensor.great_room_occupancy', 'on') }}
-            {{ 'binary_sensor.garage_hall_motion' if is_state('binary_sensor.garage_hall_motion', 'on') }}
-            {{ 'binary_sensor.guest_hall_home_security_motion_detection' if is_state('binary_sensor.guest_hall_home_security_motion_detection', 'on') }}
-            {{ 'binary_sensor.great_hall_motion' if is_state('binary_sensor.great_hall_motion', 'on') }}
-            {{ 'binary_sensor.stairs_motion' if is_state('binary_sensor.stairs_motion', 'on') }}
+        state: |
+          {{
+            is_state('binary_sensor.great_room_occupancy', 'on') or
+            is_state('binary_sensor.garage_hall_motion', 'on') or
+            is_state('binary_sensor.guest_hall_home_security_motion_detection', 'on') or
+            is_state('binary_sensor.great_hall_motion', 'on') or
+            is_state('binary_sensor.stairs_motion', 'on')
+          }}
+      - name: atrium occupancy
+        device_class: occupancy
+        state: |
+          {{
+            is_state('binary_sensor.atrium_couch_motion', 'on') or
+            float(states('sensor.atrium_person'), default=0) > 0
+          }}
+        delay_on:
+          seconds: 5
+        delay_off:
+          minutes: 10
+      - name: pergola occupancy
+        device_class: occupancy
+        state: |
+          {{
+            is_state('binary_sensor.pergola_motion', 'on')
+          }}
+        delay_off:
+          minutes: 10
 
 binary_sensor:
   - platform: template
@@ -190,27 +212,6 @@ binary_sensor:
             float(states('sensor.front_yard_left_person'), default=0) > 0 or
             states.sensor.front_yard_left_person.last_changed > (now() - timedelta(minutes=5))
           }}
-
-      atrium_occupancy:
-        friendly_name: atrium occupied
-        device_class: occupancy
-        value_template: |
-          {{
-            states('binary_sensor.atrium_couch_motion') == 'on' or
-            float(states('sensor.atrium_person'), default=0) > 0
-          }}
-        delay_off:
-          minutes: 15
-
-      pergola_occupancy:
-        friendly_name: pergola occupied
-        device_class: occupancy
-        value_template: |
-          {{
-            states('binary_sensor.pergola_motion') == 'on'
-          }}
-        delay_off:
-          minutes: 30
 
   - platform: template
     sensors:
