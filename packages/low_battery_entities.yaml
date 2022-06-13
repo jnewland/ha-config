@@ -16,7 +16,7 @@ template:
             {% set threshold = 10 %}
             {% set result = namespace(states=[], entities=[]) %}
             {% for state in states | selectattr('attributes.device_class', '==', 'battery') %}
-              {% if 0 <= state.state | int(-1) < threshold | int and not state.entity_id in result.entities %}
+              {% if (state.state == 'Low' or 0 <= state.state | int(-1) < threshold | int) and not state.entity_id in result.entities %}
                 {% set result.states = result.states + [state.name ~ ' (' ~ state.state ~ '%)'] %}
                 {% set result.entities = result.entities + [state.entity_id] %}
               {% endif %}
