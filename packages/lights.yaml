@@ -192,6 +192,47 @@ binary_sensor:
           {{ is_state("media_player.record_cabinet", "playing") }}
 
 automation:
+  - alias: Turn on switches when motion is detected
+    mode: parallel
+    id: aa04b3bc-1f47-4ea7-81f5-3d3d41da2ab7
+    trigger:
+      platform: event
+      event_type: state_changed
+    condition:
+      condition: and
+      conditions:
+        - condition: template
+          value_template: |
+            {{
+              trigger.event.data.old_state != None and
+              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+              trigger.event.data.new_state.domain == "binary_sensor" and
+              trigger.event.data.new_state.state == "on" and
+              trigger.event.data.new_state.attributes.trigger_entity_id is defined and
+              "switch." is in trigger.event.data.new_state.attributes.trigger_entity_id
+            }}
+        - condition: template
+          value_template: |
+            {{ states.input_select.mode.state != "Away" }}
+    action:
+      - service: >
+          {{ trigger.event.data.new_state.attributes.trigger_service | default('homeassistant.turn_on') }}
+        data:
+          entity_id: |
+            {{ trigger.event.data.new_state.attributes.trigger_entity_id | default('') }}
+
+      - service: system_log.write
+        data:
+          message: >
+            at=on
+            entity_id={{ trigger.event.data.entity_id }}
+            trigger_service={{ state_attr(trigger.event.data.new_state.entity_id,'trigger_service') }}
+            trigger_entity_id={{ state_attr(trigger.event.data.new_state.entity_id,'trigger_entity_id') }}
+          logger: packages.lights
+          level: debug
+      - service: counter.increment
+        entity_id: counter.light_automations
+
   - alias: Turn on lights when motion is detected
     mode: parallel
     id: 429d9193-1b9e-4252-ba42-f3e36ed2d6f9
@@ -209,7 +250,10 @@ automation:
               trigger.event.data.new_state.domain == "binary_sensor" and
               trigger.event.data.new_state.state == "on" and (
                 trigger.event.data.new_state.attributes.trigger_service is defined or
-                trigger.event.data.new_state.attributes.trigger_entity_id is defined
+                (
+                  trigger.event.data.new_state.attributes.trigger_entity_id is defined and
+                  "switch." is not in trigger.event.data.new_state.attributes.trigger_entity_id
+                )
               )
             }}
         - condition: template
@@ -230,6 +274,7 @@ automation:
             entity_id={{ trigger.event.data.entity_id }}
             trigger_service={{ state_attr(trigger.event.data.new_state.entity_id,'trigger_service') }}
             trigger_entity_id={{ state_attr(trigger.event.data.new_state.entity_id,'trigger_entity_id') }}
+            brightness={{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
           logger: packages.lights
           level: debug
       - service: counter.increment

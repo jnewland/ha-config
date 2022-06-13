@@ -28,9 +28,8 @@ homeassistant:
     binary_sensor.back_porch_occupancy:
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.back_porch
-      trigger_service: script.turn_on_entity_id
-      trigger_entity_id: group.back_porch_fan
-      trigger_entity_id_off: group.back_porch_fan
+      # trigger_entity_id: group.back_porch_fan
+      # trigger_entity_id_off: group.back_porch_fan
 
     binary_sensor.garage_occupancy:
       media_player_entity_id: media_player.house
