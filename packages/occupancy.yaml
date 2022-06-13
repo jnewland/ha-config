@@ -98,15 +98,22 @@ template:
             is_state('binary_sensor.great_hall_motion', 'on') or
             is_state('binary_sensor.stairs_motion', 'on')
           }}
-      - name: atrium occupancy
+      - name: atrium couch motion with delay
         device_class: occupancy
         state: |
           {{
             is_state('binary_sensor.atrium_couch_motion', 'on') or
-            float(states('sensor.atrium_person'), default=0) > 0
           }}
         delay_on:
-          seconds: 5
+          seconds: 15
+
+      - name: atrium occupancy
+        device_class: occupancy
+        state: |
+          {{
+            is_state('binary_sensor.atrium_couch_motion_with_delay', 'on') or
+            float(states('sensor.atrium_person'), default=0) > 0
+          }}
         delay_off:
           minutes: 10
       - name: pergola occupancy
