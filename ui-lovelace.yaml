@@ -853,8 +853,8 @@ views:
       - type: history-graph
         hours_to_show: 72
         entities:
-          - binary_sensor.atrium_couch_motion
-          - binary_sensor.pergola_motion
+          - binary_sensor.atrium_occupancy
+          - binary_sensor.pergola_occupancy
 
   - title: Cameras
     icon: mdi:video
