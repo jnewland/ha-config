@@ -79,7 +79,7 @@ automation:
         entity_id: scene.all_shades_open
 
 - alias: Close shades in reading and sleeping modes
-  id: 81dbe453-9844-470f-af98-56673e86bdc5
+  id: 806d4e21-9d09-40fd-8f8f-67476d216e7c
   trigger:
     - platform: state
       entity_id: input_select.mode
