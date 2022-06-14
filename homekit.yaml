@@ -2,7 +2,6 @@ filter:
   include_domains:
     - alarm_control_panel
     - climate
-    - cover
   exclude_domains:
     - sensor
     - script
@@ -12,7 +11,13 @@ filter:
     - light
     - lock
     - media_player
+    - cover
   include_entities:
+    - cover.garage
+    - cover.gate
+    - cover.shades
+    - cover.bedroom_shades
+    - cover.yoga_room_shades
     - switch.xc60_climate
     - switch.atrium_fountain
     - switch.back_porch

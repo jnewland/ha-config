@@ -1,0 +1,93 @@
+binary_sensor:
+  - platform: workday
+    country: US
+    workdays: [mon, tue, wed, thu, fri]
+    excludes: [sat, sun, holiday]
+
+cover:
+  - platform: group
+    name: All shades
+    entities:
+      - cover.master_bathroom_shade
+      - cover.master_bedroom_closet
+      - cover.master_bedroom_corner
+      - cover.master_bedroom_door
+      - cover.master_bedroom_wall_bottom
+      - cover.master_bedroom_wall_left
+      - cover.master_bedroom_wall_right
+      - cover.master_bedroom_wall_top
+      - cover.yoga_bottom
+      - cover.yoga_top
+
+  - platform: group
+    name: Bedroom shades
+    entities:
+      - cover.master_bedroom_closet
+      - cover.master_bedroom_corner
+      - cover.master_bedroom_door
+      - cover.master_bedroom_wall_bottom
+      - cover.master_bedroom_wall_left
+      - cover.master_bedroom_wall_right
+      - cover.master_bedroom_wall_top
+
+  - platform: group
+    name: Yoga room shades
+    entities:
+      - cover.yoga_bottom
+      - cover.yoga_top
+
+  - platform: template
+    covers:
+      shades:
+        device_class: shade
+        template: >
+          {{ states('cover.master_bedroom_door') }}
+        position_template: >
+          {{ state_attr('cover.master_bedroom_door', 'current_position') }}
+        open_cover:
+          - service: scene.turn_on
+            data:
+              entity_id: scene.all_shades_open
+        close_cover:
+          - service: scene.turn_on
+            data:
+              entity_id: scene.all_shades_closed
+
+automation:
+- alias: Open shades on workday mornings at 7am
+  id: 81dbe453-9844-470f-af98-56673e86bdc5
+  trigger:
+    - platform: time
+      at: '07:00:00'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: "on"
+    - condition: or
+      conditions:
+      - condition: zone
+        entity_id: device_tracker.katie_s_iphone
+        zone: zone.home
+      - condition: zone
+        entity_id: device_tracker.jphone_12
+        zone: zone.home
+  action:
+    - service: scene.turn_on
+      data:
+        entity_id: scene.all_shades_open
+
+- alias: Close shades in reading and sleeping modes
+  id: 81dbe453-9844-470f-af98-56673e86bdc5
+  trigger:
+    - platform: state
+      entity_id: input_select.mode
+      to: Reading
+    - platform: state
+      entity_id: input_select.mode
+      to: Sleeping
+  action:
+    - service: scene.turn_on
+      data:
+        entity_id: scene.all_shades_closed

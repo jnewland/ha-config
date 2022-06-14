@@ -710,6 +710,7 @@ views:
           - binary_sensor.yoga_room_motion
           - binary_sensor.yoga_chair_home_security_motion_detection
           - binary_sensor.yoga_room_occupancy
+          - cover.yoga_room_shades
           - sensor.yoga_room_temp
         footer:
           type: graph
@@ -741,6 +742,7 @@ views:
           - light.master_closet
           - binary_sensor.closet_motion
           - binary_sensor.master_door
+          - cover.bedroom_shades
       - type: entities
         title: bath
         entities:
@@ -751,6 +753,7 @@ views:
           - switch.master_bath_fan
           - binary_sensor.master_bath_motion
           - sensor.master_bath_temp
+          - cover.master_bathroom_shade
         footer:
           type: graph
           entity: sensor.master_bath_temp

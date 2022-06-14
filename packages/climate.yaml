@@ -72,12 +72,10 @@ automation:
           - climate.upstairs
         value_template: "{{ state.attributes.current_temperature }}"
         above: 75
-      - platform: numeric_state
-        entity_id:
-          - climate.upstairs
-        value_template: "{{ state.attributes.current_temperature }}"
-        above: 75
     action:
+      - service: scene.turn_on
+        data:
+          entity_id: scene.all_shades_closed
       - service: climate.set_hvac_mode
         data:
           entity_id: "{{ trigger.to_state.entity_id }}"
