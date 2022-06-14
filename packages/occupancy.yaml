@@ -28,9 +28,8 @@ homeassistant:
     binary_sensor.back_porch_occupancy:
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.back_porch
-      trigger_service: script.turn_on_entity_id
-      trigger_entity_id: group.back_porch_fan
-      trigger_entity_id_off: group.back_porch_fan
+      # trigger_entity_id: group.back_porch_fan
+      # trigger_entity_id_off: group.back_porch_fan
 
     binary_sensor.garage_occupancy:
       media_player_entity_id: media_player.house
@@ -98,15 +97,20 @@ template:
             is_state('binary_sensor.great_hall_motion', 'on') or
             is_state('binary_sensor.stairs_motion', 'on')
           }}
+      - name: atrium couch motion with delay
+        device_class: occupancy
+        state: |
+          {{ is_state('binary_sensor.atrium_couch_motion', 'on') }}
+        delay_on:
+          seconds: 15
+
       - name: atrium occupancy
         device_class: occupancy
         state: |
           {{
-            is_state('binary_sensor.atrium_couch_motion', 'on') or
+            is_state('binary_sensor.atrium_couch_motion_with_delay', 'on') or
             float(states('sensor.atrium_person'), default=0) > 0
           }}
-        delay_on:
-          seconds: 5
         delay_off:
           minutes: 10
       - name: pergola occupancy
