@@ -20,6 +20,11 @@ cover:
       - cover.yoga_top
 
   - platform: group
+    name: Bathroom shades
+    entities:
+      - cover.master_bathroom_shade
+
+  - platform: group
     name: Bedroom shades
     entities:
       - cover.master_bedroom_closet
