@@ -6,6 +6,7 @@
 /*.xml
 /*.conf
 /*.json
+*.pem
 /.homekit.state
 /OZW_Log.txt
 /motion_detection
