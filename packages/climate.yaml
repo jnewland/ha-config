@@ -73,9 +73,9 @@ automation:
         value_template: "{{ state.attributes.current_temperature }}"
         above: 75
     action:
-      - service: scene.turn_on
+      - service: cover.close_cover
         data:
-          entity_id: scene.all_shades_closed
+          entity_id: cover.bedroom_shades
       - service: climate.set_hvac_mode
         data:
           entity_id: "{{ trigger.to_state.entity_id }}"
