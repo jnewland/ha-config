@@ -40,7 +40,7 @@ cover:
     covers:
       shades:
         device_class: shade
-        template: >
+        value_template: >
           {{ states('cover.master_bedroom_door') }}
         position_template: >
           {{ state_attr('cover.master_bedroom_door', 'current_position') }}
