@@ -13,23 +13,21 @@ template:
           {% endif %}
         attributes:
           entity_id: >
-            {% set threshold = 10 %}
-            {% set result = namespace(states=[], entities=[]) %}
-            {% for state in states | selectattr('attributes.device_class', '==', 'battery') %}
-              {% if state.state == 'Low' or (0 <= state.state | int(-1) < threshold | int) and not state.entity_id in result.entities %}
-                {% set result.states = result.states + [state.name ~ ' (' ~ state.state ~ '%)'] %}
-                {% set result.entities = result.entities + [state.entity_id] %}
-              {% endif %}
-            {% endfor %}
+            {% set threshold = 30 %}
+            {% set result = namespace(entities=[]) %}
             {% for state in states %}
+              {% if 'device_class' in state.attributes and state.attributes.device_class == 'battery' %}
+                {% if state.state == 'Low' or (0 <= state.state | int(-1) < threshold | int) and not state.entity_id in result.entities %}
+                  {% set result.entities = result.entities + [state.entity_id] %}
+                {% endif %}
+              {% endif %}
               {% if 'battery_level' in state.attributes %}
-                {% if state_attr(state.entity_id, 'battery_level') | int < threshold and not state.state == 'unavailable' and not state.entity_id in result.entities %}
-                  {% set result.states = result.states + [state.name ~ ' (' ~ state_attr(state.entity_id, 'battery_level') ~ '%)'] %}
+                {% if state_attr(state.entity_id, 'battery_level') == 'Low' or state_attr(state.entity_id, 'battery_level') | int(default=threshold) < threshold and not state.state == 'unavailable' and not state.entity_id in result.entities %}
                   {% set result.entities = result.entities + [state.entity_id] %}
                 {% endif %}
               {% endif %}
             {% endfor %}
-            {{result.entities|list}}
+            {{result.entities}}
 
 automation:
   - id: low_battery_entities_notification
