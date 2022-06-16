@@ -24,7 +24,10 @@ template:
   - binary_sensor:
     - name: Visitor door code ready
       state: |
-        {{ "visitor" in state_attr("lock.front_door", "credentials") }}
+        {{ 
+          state_attr("lock.front_door", "credentials") and 
+          "visitor" in state_attr("lock.front_door", "credentials")
+        }}
 
 automation:
 
