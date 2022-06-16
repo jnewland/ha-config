@@ -1,0 +1,15 @@
+automation:
+  - alias: Log Pico events
+    mode: parallel
+    trigger:
+      - platform: event
+        event_type: lutron_caseta_button_event
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=lutron_caseta_button_event
+            data={{ trigger.event.data }}
+          logger: packages.picos
+          level: debug
+
