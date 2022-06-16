@@ -11,6 +11,7 @@ logs:
   packages.ack: debug
   packages.house_speakers: debug
   packages.image_processing: info
+  packages.picos: info
   pyhap.hap_server: critical
   pyvera: critical
   pyvera.subscribe: warn
