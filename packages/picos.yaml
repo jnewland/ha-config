@@ -64,7 +64,7 @@ automation:
                   entity_id: media_player.house
                 data:
                   media_content_id: >
-                    {{ state_attr("sensor.sonos_favorites", "items").items() | map('first') | list | random }}
+                    {{ state_attr("sensor.sonos_favorites", "items") | list | random }}
                   media_content_type: favorite_item_id                
 
         default: []
