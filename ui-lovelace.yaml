@@ -516,6 +516,8 @@ views:
           hours_to_show: 168
           group_by: date
           smoothing: false
+          show:
+            legend: false
         filter:
           include:
             - entity_id: "/.*_zone_daily_runtime$/"
