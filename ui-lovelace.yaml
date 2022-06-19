@@ -538,7 +538,7 @@ views:
             aggregate_func: avg
             name: Avg
             color: green
-        name: Outdoor temperature
+        name: outdoor temperature range
         hours_to_show: 168
         group_by: date
 
@@ -547,7 +547,7 @@ views:
           - entity: sensor.dark_sky_temperature
           - entity: sensor.peppers_temperature
           - entity: sensor.bamboo_temperature
-        name: Outdoor temperature
+        name: outdoor temperature
         hours_to_show: 168
         group_by: hour
 
@@ -556,7 +556,7 @@ views:
         entities:
           - entity: sensor.bamboo_light
           - entity: sensor.peppers_light
-        name: Outdoor temperature
+        name: outdoor light
         hours_to_show: 168
         group_by: hour
 
@@ -577,15 +577,6 @@ views:
         filter:
           include:
             - entity_id: "/.*_soil_conductivity$/"
-
-      - type: custom:mini-graph-card
-        entities:
-          - entity: sensor.bamboo_light
-          - entity: sensor.peppers_light
-        name: Outdoor temperature
-        hours_to_show: 168
-        group_by: hour
-
 
       - type: custom:mini-graph-card
         entities:
