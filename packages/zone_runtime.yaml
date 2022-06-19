@@ -67,7 +67,7 @@ template:
         to:
     sensor:
       - name: atrium drippers zone last runtime
-        state_class: measurement
+        state_class: total_increasing
         device_class: duration
         unit_of_measurement: hours
         state: >
@@ -79,7 +79,7 @@ template:
         to:
     sensor:
       - name: fountain refill zone last runtime
-        state_class: measurement
+        state_class: total_increasing
         device_class: duration
         unit_of_measurement: hours
         state: >
@@ -91,7 +91,7 @@ template:
         to:
     sensor:
       - name: front yard drippers zone last runtime
-        state_class: measurement
+        state_class: total_increasing
         device_class: duration
         unit_of_measurement: hours
         state: >
@@ -103,7 +103,7 @@ template:
         to:
     sensor:
       - name: patio drippers zone last runtime
-        state_class: measurement
+        state_class: total_increasing
         device_class: duration
         unit_of_measurement: hours
         state: >
@@ -116,7 +116,7 @@ template:
         to:
     sensor:
       - name: pergola drippers zone last runtime
-        state_class: measurement
+        state_class: total_increasing
         device_class: duration
         unit_of_measurement: hours
         state: >
