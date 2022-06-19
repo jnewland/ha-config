@@ -896,6 +896,8 @@ views:
         entities:
           - binary_sensor.atrium_occupancy
           - binary_sensor.pergola_occupancy
+          - binary_sensor.back_porch_occupancy
+          - binary_sensor.front_porch_occupancy
 
   - title: Cameras
     icon: mdi:video
