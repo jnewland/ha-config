@@ -70,8 +70,6 @@ template:
         state_class: total_increasing
         device_class: duration
         unit_of_measurement: hours
-        last_reset_value_template: >
-          {{ states.sensor.atrium_drippers_zone_history.last_changed }}
         state: >
           {{ state_attr('sensor.atrium_drippers_zone_history', 'run_time') | float / 60 }}
 
@@ -84,8 +82,6 @@ template:
         state_class: total_increasing
         device_class: duration
         unit_of_measurement: hours
-        last_reset_value_template: >
-          {{ states.sensor.fountain_refill_zone_history.last_changed }}
         state: >
           {{ state_attr('sensor.fountain_refill_zone_history', 'run_time') | float / 60 }}
 
@@ -98,8 +94,6 @@ template:
         state_class: total_increasing
         device_class: duration
         unit_of_measurement: hours
-        last_reset_value_template: >
-          {{ states.sensor.front_yard_drippers_zone_history.last_changed }}
         state: >
           {{ state_attr('sensor.front_yard_drippers_zone_history', 'run_time') | float / 60 }}
 
@@ -112,8 +106,6 @@ template:
         state_class: total_increasing
         device_class: duration
         unit_of_measurement: hours
-        last_reset_value_template: >
-          {{ states.sensor.patio_drippers_zone_history.last_changed }}
         state: >
           {{ state_attr('sensor.patio_drippers_zone_history', 'run_time') | float / 60 }}
 
@@ -127,8 +119,6 @@ template:
         state_class: total_increasing
         device_class: duration
         unit_of_measurement: hours
-        last_reset_value_template: >
-          {{ states.sensor.pergola_drippers_zone_history.last_changed }}
         state: >
           {{ state_attr('sensor.pergola_drippers_zone_history', 'run_time') | float / 60 }}
 
