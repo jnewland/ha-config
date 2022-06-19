@@ -892,7 +892,7 @@ views:
           - cover.garage
           - cover.gate
       - type: history-graph
-        hours_to_show: 72
+        hours_to_show: 3
         entities:
           - binary_sensor.atrium_occupancy
           - binary_sensor.pergola_occupancy
