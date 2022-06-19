@@ -545,58 +545,60 @@ views:
       - type: custom:mini-graph-card
         entities:
           - entity: sensor.dark_sky_temperature
+          - entity: sensor.peppers_temperature
+          - entity: sensor.bamboo_temperature
         name: Outdoor temperature
         hours_to_show: 168
         group_by: hour
 
-      # - type: history-graph
-      #   title: light
-      #   hours_to_show: 80
-      #   entities:
-      #     - sensor.angel_trumpet_light
-      #     - sensor.bamboo_light
-      #     - sensor.herb_light
-      #     - sensor.lime_tree_light
-      # - type: history-graph
-      #   title: moisture
-      #   hours_to_show: 80
-      #   entities:
-      #     - sensor.angel_trumpet_moisture
-      #     - sensor.bamboo_moisture
-      #     - sensor.herb_moisture
-      #     - sensor.lime_tree_moisture
-      # - type: history-graph
-      #   title: temperature
-      #   hours_to_show: 80
-      #   entities:
-      #     - sensor.angel_trumpet_temperature
-      #     - sensor.bamboo_temperature
-      #     - sensor.herb_temperature
-      #     - sensor.lime_tree_temperature
-      # - type: history-graph
-      #   title: soil conductivity
-      #   hours_to_show: 80
-      #   entities:
-      #     - sensor.angel_trumpet_soil_conductivity
-      #     - sensor.bamboo_soil_conductivity
-      #     - sensor.herb_soil_conductivity
-      #     - sensor.lime_tree_soil_conductivity
-      # - type: custom:flower-card
-      #   entity: plant.lime_tree
-      # - type: custom:flower-card
-      #   entity: plant.bamboo
-      # - type: custom:flower-card
-      #   entity: plant.angel_trumpet
-      # - type: custom:flower-card
-      #   entity: plant.basil
-      - type: history-graph
-        hours_to_show: 36
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.bamboo_light
+          - entity: sensor.peppers_light
+        name: Outdoor temperature
+        hours_to_show: 168
+        group_by: hour
+
+      - type: custom:auto-entities
+        card:
+          type: custom:mini-graph-card
+          hours_to_show: 168
+          group_by: hour
+        filter:
+          include:
+            - entity_id: "/.*_rssi$/"
+
+      - type: custom:auto-entities
+        card:
+          type: custom:mini-graph-card
+          hours_to_show: 168
+          group_by: hour
+        filter:
+          include:
+            - entity_id: "/.*_soil_conductivity$/"
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.bamboo_light
+          - entity: sensor.peppers_light
+        name: Outdoor temperature
+        hours_to_show: 168
+        group_by: hour
+
+
+      - type: custom:mini-graph-card
         entities:
           - sensor.hours_until_rain
-      - type: history-graph
+        name: hours until rain
         hours_to_show: 36
+
+      - type: custom:mini-graph-card
         entities:
           - sensor.precipitation_in_forecast
+        name: hours until rain
+        hours_to_show: 36
+
       - type: entities
         title: Precipitation
         show_header_toggle: false
