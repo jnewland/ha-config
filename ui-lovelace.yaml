@@ -529,6 +529,19 @@ views:
               options:
                 aggregate_func: first
 
+      - type: custom:auto-entities
+        card:
+          type: custom:mini-graph-card
+          hours_to_show: 168
+          group_by: hour
+          show:
+            extrema: true
+            state: false
+          fill: false
+        filter:
+          include:
+            - entity_id: "/.*_soil_conductivity$/"
+
       - type: custom:mini-graph-card
         entities:
           - entity: sensor.dark_sky_temperature
@@ -585,19 +598,6 @@ views:
         filter:
           include:
             - entity_id: "/.*_rssi$/"
-
-      - type: custom:auto-entities
-        card:
-          type: custom:mini-graph-card
-          hours_to_show: 72
-          group_by: hour
-          show:
-            extrema: true
-            state: false
-          fill: false
-        filter:
-          include:
-            - entity_id: "/.*_soil_conductivity$/"
 
       - type: conditional
         conditions:
