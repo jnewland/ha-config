@@ -517,6 +517,7 @@ views:
           group_by: date
           smoothing: false
           show:
+            fill: false
             legend: false
             state: false
         filter:
@@ -545,6 +546,7 @@ views:
         hours_to_show: 168
         group_by: date
         show:
+          fill: false
           extrema: true
           state: false
 
@@ -556,6 +558,8 @@ views:
         name: outdoor temperature
         hours_to_show: 72
         group_by: hour
+        show:
+          fill: false
 
       - type: custom:mini-graph-card
         entities:
@@ -567,6 +571,7 @@ views:
         show:
           extrema: true
           state: false
+          fill: false
 
       - type: custom:auto-entities
         card:
@@ -576,6 +581,7 @@ views:
           show:
             extrema: true
             state: false
+          fill: false
         filter:
           include:
             - entity_id: "/.*_rssi$/"
@@ -588,6 +594,7 @@ views:
           show:
             extrema: true
             state: false
+          fill: false
         filter:
           include:
             - entity_id: "/.*_soil_conductivity$/"
@@ -602,6 +609,8 @@ views:
             - sensor.hours_until_rain
           name: hours until rain
           hours_to_show: 36
+          show:
+            fill: false
 
       - type: conditional
         conditions:
@@ -613,6 +622,8 @@ views:
             - sensor.precipitation_in_forecast
           name: precipitation in forecast
           hours_to_show: 36
+          show:
+            fill: false
 
       - type: entities
         title: Precipitation
@@ -809,6 +820,7 @@ views:
           - sensor.green_probe_temp
           - sensor.black_probe_temp
         show:
+          fill: false
           extrema: true
           state: false
 
@@ -823,6 +835,7 @@ views:
           - sensor.green_probe_temp
           - sensor.black_probe_temp
         show:
+          fill: false
           extrema: true
           state: false
 
