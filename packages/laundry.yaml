@@ -10,7 +10,7 @@ binary_sensor:
             float(states('sensor.laundry_electric_consumption_w'), default=0) > 10
           }}
         delay_off:
-          minutes: 5
+          minutes: 7
       laundry_door:
         friendly_name: Laundry door
         device_class: door
