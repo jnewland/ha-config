@@ -518,6 +518,7 @@ views:
           smoothing: false
           show:
             legend: false
+            state: false
         filter:
           include:
             - entity_id: "/.*_zone_daily_runtime$/"
@@ -543,6 +544,9 @@ views:
         name: outdoor temperature range
         hours_to_show: 168
         group_by: date
+        show:
+          extrema: true
+          state: false
 
       - type: custom:mini-graph-card
         entities:
@@ -553,7 +557,6 @@ views:
         hours_to_show: 72
         group_by: hour
 
-
       - type: custom:mini-graph-card
         entities:
           - entity: sensor.bamboo_light
@@ -561,12 +564,18 @@ views:
         name: outdoor light
         hours_to_show: 72
         group_by: hour
+        show:
+          extrema: true
+          state: false
 
       - type: custom:auto-entities
         card:
           type: custom:mini-graph-card
           hours_to_show: 72
           group_by: hour
+          show:
+            extrema: true
+            state: false
         filter:
           include:
             - entity_id: "/.*_rssi$/"
@@ -576,6 +585,9 @@ views:
           type: custom:mini-graph-card
           hours_to_show: 72
           group_by: hour
+          show:
+            extrema: true
+            state: false
         filter:
           include:
             - entity_id: "/.*_soil_conductivity$/"
@@ -596,6 +608,7 @@ views:
           - entity: binary_sensor.precipitation_in_forecast
             state: "on"
         card:
+          type: custom:mini-graph-card
           entities:
             - sensor.precipitation_in_forecast
           name: precipitation in forecast
@@ -795,6 +808,10 @@ views:
           - sensor.red_probe_temp
           - sensor.green_probe_temp
           - sensor.black_probe_temp
+        show:
+          extrema: true
+          state: false
+
       - type: custom:mini-graph-card
         hours_to_show: 3
         points_per_hour: 120
@@ -805,6 +822,10 @@ views:
           - sensor.red_probe_temp
           - sensor.green_probe_temp
           - sensor.black_probe_temp
+        show:
+          extrema: true
+          state: false
+
       - type: custom:mini-media-player
         entity: media_player.pergola
         artwork: cover
