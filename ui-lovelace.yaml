@@ -537,7 +537,7 @@ views:
           show:
             extrema: true
             state: false
-          fill: false
+            fill: false
         filter:
           include:
             - entity_id: "/.*_soil_conductivity$/"
@@ -594,7 +594,7 @@ views:
           show:
             extrema: true
             state: false
-          fill: false
+            fill: false
         filter:
           include:
             - entity_id: "/.*_rssi$/"
