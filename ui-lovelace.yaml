@@ -523,7 +523,7 @@ views:
                 aggregate_func: max
             - entity_id: "/.*_zone_last_runtime$/"
               options:
-                aggregate_func: sum
+                aggregate_func: first
 
       - type: custom:mini-graph-card
         entities:
@@ -548,7 +548,7 @@ views:
           - entity: sensor.peppers_temperature
           - entity: sensor.bamboo_temperature
         name: outdoor temperature
-        hours_to_show: 168
+        hours_to_show: 72
         group_by: hour
 
 
@@ -557,13 +557,13 @@ views:
           - entity: sensor.bamboo_light
           - entity: sensor.peppers_light
         name: outdoor light
-        hours_to_show: 168
+        hours_to_show: 72
         group_by: hour
 
       - type: custom:auto-entities
         card:
           type: custom:mini-graph-card
-          hours_to_show: 168
+          hours_to_show: 72
           group_by: hour
         filter:
           include:
@@ -572,23 +572,32 @@ views:
       - type: custom:auto-entities
         card:
           type: custom:mini-graph-card
-          hours_to_show: 168
+          hours_to_show: 72
           group_by: hour
         filter:
           include:
             - entity_id: "/.*_soil_conductivity$/"
 
-      - type: custom:mini-graph-card
-        entities:
-          - sensor.hours_until_rain
-        name: hours until rain
-        hours_to_show: 36
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.precipitation_in_forecast
+            state: "on"
+        card:
+          type: custom:mini-graph-card
+          entities:
+            - sensor.hours_until_rain
+          name: hours until rain
+          hours_to_show: 36
 
-      - type: custom:mini-graph-card
-        entities:
-          - sensor.precipitation_in_forecast
-        name: hours until rain
-        hours_to_show: 36
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.precipitation_in_forecast
+            state: "on"
+        card:
+          entities:
+            - sensor.precipitation_in_forecast
+          name: precipitation in forecast
+          hours_to_show: 36
 
       - type: entities
         title: Precipitation
