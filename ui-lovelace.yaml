@@ -48,7 +48,6 @@ views:
           entities:
             - input_boolean.visitor
             - sensor.visitor_door_code
-            - input_datetime.visitor_prep
 
       - type: vertical-stack
         cards:
