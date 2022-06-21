@@ -199,6 +199,12 @@ automation:
       - condition: state
         entity_id: alarm_control_panel.alarm
         state: "disarmed"
+      - condition: state
+        entity_id: device_tracker.jphone_12
+        state: "not_home"
+      - condition: state
+        entity_id: device_tracker.katie_s_iphone
+        state: "not_home"
     action:
       - repeat:
           until: |
