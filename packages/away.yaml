@@ -97,8 +97,8 @@ automation:
           {% set old_state = trigger.from_state %}
           {% set new_state = trigger.to_state %}
           {{ new_state.name | capitalize -}}{{ " " -}}
-          is {{ new_state.state | capitalize }}{{ state_attr(new_state.entity_id, 'unit_of_measurement') }}{{ " " -}}
-          after being {{ old_state.state | capitalize }}{{ state_attr(old_state.entity_id, 'unit_of_measurement') }}{{ " " -}}
+          is {{ new_state.state | capitalize }}{{ " " -}}
+          after being {{ old_state.state | capitalize }}{{ " " -}}
           for {{ relative_time(old_state.last_changed) }}
         data:
           push:
