@@ -28,17 +28,3 @@ automation:
             event={{ trigger.event }}
           logger: packages.zwave
           level: debug
-  - alias: debug zwave value events
-    mode: parallel
-    id: 02f917a5-ec6a-4b19-bade-a614d8d9a7f8
-    trigger:
-    - platform: event
-      event_type: zwave_js_value_notification
-    action:
-      - service: system_log.write
-        data:
-          message: >
-            at=zwave_js_value_notification
-            event={{ trigger.event }}
-          logger: packages.zwave
-          level: debug

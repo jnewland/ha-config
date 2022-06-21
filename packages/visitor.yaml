@@ -2,9 +2,6 @@ input_boolean:
   visitor:
     name: Visitor mode
     icon: mdi:home-import-outline
-  visitor_door_code_ready:
-    name: Visitor door code ready
-    icon: mdi:dialpad
 
 input_text:
   visitor_door_code:
@@ -60,20 +57,14 @@ automation:
       - platform: state
         entity_id: input_text.visitor_door_code
     action:
-      - repeat:
-          until: |
-            {{ is_state("input_boolean.visitor_door_code_ready", "on") }}
-          sequence: 
-            - service: zwave_js.set_lock_usercode
-              target:
-                entity_id: lock.front_door
-              data:
-                code_slot: 3
-                usercode: |
-                  {{ states('input_text.visitor_door_code') }}
-            - wait_template: |
-                {{ is_state("input_boolean.visitor_door_code_ready", "on") }}
-              timeout: 15
+      - service: zwave_js.set_lock_usercode
+        target:
+          entity_id: lock.front_door
+        data:
+          code_slot: 3
+          usercode: |
+            {{ states('input_text.visitor_door_code') }}
+
 
   - alias: Notify when visitor schedule is adjusted
     id: 8a197b68-f87d-41d6-81df-8bc265a60a10
@@ -82,8 +73,6 @@ automation:
         entity_id: input_datetime.visitor_prep
         for: 15
     action:
-      - wait_template: |
-          {{ is_state("input_boolean.visitor_door_code_ready", "on") }}
       - service: notify.iphones
         data:
           message: >
@@ -108,18 +97,11 @@ automation:
         entity_id: input_boolean.visitor
         to: 'off'
     action:
-      - repeat:
-          until: |
-            {{ is_state("input_boolean.visitor_door_code_ready", "off") }}
-          sequence: 
-            - service: zwave_js.clear_lock_usercode
-              target:
-                entity_id: lock.front_door
-              data:
-                code_slot: 3
-            - wait_template: |
-                {{ is_state("input_boolean.visitor_door_code_ready", "off") }}
-              timeout: 15
+      - service: zwave_js.clear_lock_usercode
+        target:
+          entity_id: lock.front_door
+        data:
+          code_slot: 3
       - service: notify.iphones
         data:
           message: >
