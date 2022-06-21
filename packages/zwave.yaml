@@ -1,0 +1,30 @@
+template:
+  - sensor:
+      - name: Vera Entities
+        unique_id: vera_entities
+        unit_of_measurement: entities
+        state: >
+          {{ integration_entities('vera') | count }}
+
+  - sensor:
+      - name: ZwaveJS Entities
+        unique_id: zwavejs_entities
+        unit_of_measurement: entities
+        state: >
+          {{ integration_entities('zwave_js') | count }}
+
+automation:
+  - alias: debug zwave events
+    mode: parallel
+    id: 2a4654c0-122c-4166-ad30-c8bde5156ddf
+    trigger:
+    - platform: event
+      event_type: zwave_js_notification
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=zwave_js_notification
+            payload={{ trigger.payload_json }}
+          logger: packages.zwave
+          level: debug
