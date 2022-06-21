@@ -25,6 +25,6 @@ automation:
         data:
           message: >
             at=zwave_js_notification
-            payload={{ trigger.payload_json }}
+            event={{ trigger.event }}
           logger: packages.zwave
           level: debug
