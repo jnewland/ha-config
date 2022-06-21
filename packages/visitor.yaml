@@ -197,7 +197,8 @@ automation:
           {{ trigger.event.data.parameters.userId | int(default=0) == 3 }}
       - choose:
           conditions:
-            - condition: |
+            - condition: template
+              value_template: |
                 {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
           sequence:
             - service: notify.iphones
