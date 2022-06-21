@@ -156,11 +156,8 @@ automation:
         entity_id: input_boolean.visitor
         state: "on"
       - condition: state
-        entity_id: device_tracker.jphone_12
-        state: "not_home"
-      - condition: state
-        entity_id: device_tracker.katie_s_iphone
-        state: "not_home"
+        entity_id: input_select.mode
+        state: Away
     action:
     - repeat:
         until: |
@@ -187,6 +184,86 @@ automation:
             content-type: jpeg
             hide-thumbnail: false
 
+  - alias: Disable alarm when visitor arrives
+    trigger:
+      - platform: event
+        event_type: zwave_js_notification
+        event_data:
+          node_id: 49
+          event_label: "Keypad unlock operation"
+    action:
+      - condition: |
+          {{ trigger.event.data.parameters.userId | int(default=0) == 3 }}
+      - choose:
+          conditions:
+            - condition: |
+                {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: notify.iphones
+              data:
+                message: >
+                  visitor arrived.
+                  alarm is {{ states("alarm_control_panel.alarm") }}.
+                  attempting to disable.
+                data:
+                  tag: visitor
+                  sound:
+                    name: default
+                    critical: 1
+                    volume: 1.0
+                  push:
+                    category: camera
+                  entity_id: camera.great_room
+                  attachment:
+                    url: |
+                      {{ states('input_text.external_url') }}{{ state_attr("camera.great_room","entity_picture") }}
+                    content-type: jpeg
+                    hide-thumbnail: false
+
+            - repeat:
+                until: |
+                  {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+                sequence:
+                  - service: alarm_control_panel.alarm_disarm
+                    entity_id: alarm_control_panel.alarm
+                  - delay: 15
+            - service: light.turn_on
+              data:
+                rgb_color:
+                  - 0
+                  - 249
+                  - 0
+              target:
+                entity_id: light.dining_room_extender
+        default:
+          - service: light.turn_on
+            data:
+              rgb_color:
+                - 0
+                - 249
+                - 0
+            target:
+              entity_id: light.dining_room_extender
+          - service: notify.iphones
+            data:
+              message: >
+                visitor arrived.
+                alarm is {{ states("alarm_control_panel.alarm") }}.
+              data:
+                tag: visitor
+                push:
+                  category: camera
+                entity_id: camera.great_room
+                attachment:
+                  url: |
+                    {{ states('input_text.external_url') }}{{ state_attr("camera.great_room","entity_picture") }}
+                  content-type: jpeg
+                  hide-thumbnail: false
+      - delay:
+          seconds: 30
+      - service: light.turn_off
+        target:
+          entity_id: light.dining_room_extender
   - alias: Notify about visitor arrival
     id: ae6f51af-3ea0-445c-b2de-1c37be2f83a4
     trigger:
