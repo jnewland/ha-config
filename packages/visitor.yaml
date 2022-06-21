@@ -192,7 +192,8 @@ automation:
           node_id: 49
           event_label: "Keypad unlock operation"
     action:
-      - condition: |
+      - condition: template
+        value_template: |
           {{ trigger.event.data.parameters.userId | int(default=0) == 3 }}
       - choose:
           conditions:
