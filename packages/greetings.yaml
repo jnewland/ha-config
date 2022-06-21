@@ -11,11 +11,10 @@ automation:
       - condition: template
         value_template: |
           {{ trigger.event.data.parameters.userId | int(default=99) < 3 }}
-      - until: |
-          {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
-        sequence:
-          - service: alarm_control_panel.alarm_disarm
-            entity_id: alarm_control_panel.alarm
-          - wait_template: |
-              {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
-            timeout: 5
+      - repeat:
+          until: |
+            {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: alarm_control_panel.alarm_disarm
+              entity_id: alarm_control_panel.alarm
+            - delay: 15
