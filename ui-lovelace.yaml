@@ -20,9 +20,9 @@ views:
             - vacuum.downstairs
       - type: conditional
         conditions:
-          - entity_id: device_tracker.jphone_12
+          - entity: device_tracker.jphone_12
             state: "not_home"
-          - entity_id: device_tracker.katie_s_iphone
+          - entity: device_tracker.katie_s_iphone
             state: "not_home"
         card:
           type: picture-entity
