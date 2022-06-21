@@ -2,6 +2,9 @@ input_boolean:
   visitor:
     name: Visitor mode
     icon: mdi:home-import-outline
+  visitor_door_code_ready:
+    name: Visitor door code ready
+    icon: mdi:dialpad
 
 input_text:
   visitor_door_code:
@@ -20,14 +23,6 @@ template:
     - name: Visitor door code
       state: |
         {{ states('input_text.visitor_door_code') }}
-
-  - binary_sensor:
-    - name: Visitor door code ready
-      state: |
-        {{ 
-          state_attr("lock.front_door", "credentials") and 
-          "visitor" in state_attr("lock.front_door", "credentials")
-        }}
 
 automation:
 
@@ -67,17 +62,17 @@ automation:
     action:
       - repeat:
           until: |
-            {{ is_state("binary_sensor.visitor_door_code_ready", "on") }}
+            {{ is_state("input_boolean.visitor_door_code_ready", "on") }}
           sequence: 
-            - service: vera.set_lock_pin
+            - service: zwave_js.set_lock_usercode
               target:
                 entity_id: lock.front_door
               data:
-                name: visitor
-                pin: |
+                code_slot: 3
+                usercode: |
                   {{ states('input_text.visitor_door_code') }}
             - wait_template: |
-                {{ is_state("binary_sensor.visitor_door_code_ready", "on") }}
+                {{ is_state("input_boolean.visitor_door_code_ready", "on") }}
               timeout: 15
 
   - alias: Notify when visitor schedule is adjusted
@@ -88,7 +83,7 @@ automation:
         for: 15
     action:
       - wait_template: |
-          {{ is_state("binary_sensor.visitor_door_code_ready", "on") }}
+          {{ is_state("input_boolean.visitor_door_code_ready", "on") }}
       - service: notify.iphones
         data:
           message: >
@@ -115,15 +110,15 @@ automation:
     action:
       - repeat:
           until: |
-            {{ is_state("binary_sensor.visitor_door_code_ready", "off") }}
+            {{ is_state("input_boolean.visitor_door_code_ready", "off") }}
           sequence: 
-            - service: vera.clear_lock_pin
+            - service: zwave_js.clear_lock_usercode
               target:
                 entity_id: lock.front_door
               data:
-                name: visitor
+                code_slot: 3
             - wait_template: |
-                {{ is_state("binary_sensor.visitor_door_code_ready", "off") }}
+                {{ is_state("input_boolean.visitor_door_code_ready", "off") }}
               timeout: 15
       - service: notify.iphones
         data:
