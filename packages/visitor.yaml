@@ -246,21 +246,21 @@ automation:
                 - 0
             target:
               entity_id: light.dining_room_extender
-          - service: notify.iphones
-            data:
-              message: >
-                visitor arrived.
-                alarm is {{ states("alarm_control_panel.alarm") }}.
-              data:
-                tag: visitor
-                push:
-                  category: camera
-                entity_id: camera.great_room
-                attachment:
-                  url: |
-                    {{ states('input_text.external_url') }}{{ state_attr("camera.great_room","entity_picture") }}
-                  content-type: jpeg
-                  hide-thumbnail: false
+      - service: notify.iphones
+        data:
+          message: >
+            visitor arrived.
+            alarm is {{ states("alarm_control_panel.alarm") }}.
+          data:
+            tag: visitor
+            push:
+              category: camera
+            entity_id: camera.great_room
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ state_attr("camera.great_room","entity_picture") }}
+              content-type: jpeg
+              hide-thumbnail: false
       - delay:
           minutes: 3
       - service: light.turn_off
