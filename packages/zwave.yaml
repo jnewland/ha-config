@@ -35,7 +35,7 @@ automation:
     id: 02f917a5-ec6a-4b19-bade-a614d8d9a7f8
     trigger:
     - platform: event
-      event_type: zwave_js_notification
+      event_type: zwave_js_value_notification
       event_data:
         node_id: 49
     action:
