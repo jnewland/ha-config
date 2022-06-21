@@ -10,7 +10,7 @@ automation:
     action:
       - condition: template
         value_template: |
-          {{ trigger.event.data.parameters.userId | int(default=0) < 3 }}
+          {{ trigger.event.data.parameters.userId | int(default=99) < 3 }}
       - until: |
           {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
         sequence:
