@@ -20,8 +20,10 @@ views:
             - vacuum.downstairs
       - type: conditional
         conditions:
-          - entity: input_select.mode
-            state: Away
+          - entity_id: device_tracker.jphone_12
+            state: "not_home"
+          - entity_id: device_tracker.katie_s_iphone
+            state: "not_home"
         card:
           type: picture-entity
           show_name: false
@@ -903,8 +905,10 @@ views:
     cards:
       - type: conditional
         conditions:
-          - entity: input_select.mode
-            state: Away
+          - entity_id: device_tracker.jphone_12
+            state: "not_home"
+          - entity_id: device_tracker.katie_s_iphone
+            state: "not_home"
         card:
           type: picture-entity
           camera_view: live

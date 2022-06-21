@@ -130,10 +130,10 @@ automation:
                   #   volume: 1.0
                   push:
                     category: camera
-                  entity_id: camera.great_room
+                  entity_id: camera.front_door
                   attachment:
                     url: |
-                      {{ states('input_text.external_url') }}{{ state_attr("camera.great_room","entity_picture") }}
+                      {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
                     content-type: jpeg
                     hide-thumbnail: false
 
@@ -170,10 +170,10 @@ automation:
             tag: visitor
             push:
               category: camera
-            entity_id: camera.great_room
+            entity_id: camera.front_door
             attachment:
               url: |
-                {{ states('input_text.external_url') }}{{ state_attr("camera.great_room","entity_picture") }}
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
               content-type: jpeg
               hide-thumbnail: false
       - delay:
