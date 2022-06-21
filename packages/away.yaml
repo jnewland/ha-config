@@ -127,14 +127,14 @@ automation:
 script:
   mode_away:
     sequence:
+      - service: alarm_control_panel.alarm_arm_home
+        entity_id: alarm_control_panel.alarm
       - service: homeassistant.turn_off
         entity_id:
           - group.indoor
       - service: homeassistant.turn_on
         entity_id:
           - group.indoor_cams
-      - service: alarm_control_panel.alarm_arm_home
-        entity_id: alarm_control_panel.alarm
       - service: script.lock_up
       - service: input_select.select_option
         data:

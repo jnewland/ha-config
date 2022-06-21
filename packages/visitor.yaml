@@ -185,11 +185,11 @@ automation:
   - alias: Turn on away when visitor departs
     id: 0c1978a8-30d2-4fc5-a126-9a5064b2eeda
     trigger:
-      platform: state
-      entity_id: lock.front_door
-      to: locked
-      for:
-        minutes: 5
+      - platform: event
+        event_type: zwave_js_notification
+        event_data:
+          node_id: 49
+          event_label: "Keypad lock operation"
     condition:
       condition: and
       conditions:
@@ -209,19 +209,19 @@ automation:
                 entity_id: script.mode_away
             - wait_template: |
                 {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
-              timeout: 30
+              timeout: 5
       - service: notify.iphones
         data:
           message: >
-            visitor locked the front door 5 minutes ago.
+            visitor locked the front door.
             alarm set to {{ states("alarm_control_panel.alarm") }}.
           data:
             tag: visitor
             push:
               category: camera
-            entity_id: camera.great_room
+            entity_id: camera.front_door
             attachment:
               url: |
-                {{ states('input_text.external_url') }}{{ state_attr("camera.great_room","entity_picture") }}
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
               content-type: jpeg
               hide-thumbnail: false
