@@ -41,12 +41,6 @@ rm -rf custom_components/senseme || true
 mv $TMPDIR/$$-sensme/custom_components/senseme custom_components
 sync
 
-git clone https://github.com/jnewland/core --depth 1 -b vera-lock-pin $TMPDIR/$$-core
-rm -rf custom_components/vera || true
-mv $TMPDIR/$$-core/homeassistant/components/vera custom_components
-cp hack/vera.json custom_components/vera/manifest.json
-sync
-
 curl -L -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
 curl -L -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/1.11.0/auto-entities.js
 curl -L -o www/mini-media-player-bundle.js https://github.com/kalkih/mini-media-player/releases/download/v1.16.4/mini-media-player-bundle.js
