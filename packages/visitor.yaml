@@ -9,25 +9,11 @@ input_text:
     min: 4
     max: 8
 
-input_datetime:
-  visitor_prep:
-    name: Visitor Prep Time
-    has_date: true
-    has_time: true
-
 template:
   - sensor:
     - name: Visitor door code
       state: |
         {{ states('input_text.visitor_door_code') }}
-
-  - binary_sensor:
-    - name: Visitor door code ready
-      state: |
-        {{ 
-          state_attr("lock.front_door", "credentials") and 
-          "visitor" in state_attr("lock.front_door", "credentials")
-        }}
 
 automation:
 
@@ -45,66 +31,19 @@ automation:
           value: |
             {{ range(1000,9999) | random | string }}
 
-  - alias: Schedule initial visitor prep time
-    id: b709e4b9-f077-4003-a656-c05d710e1c2e
-    trigger:
-      - platform: state
-        entity_id: input_boolean.visitor
-        to: 'on'
-    action:
-      - service: input_datetime.set_datetime
-        target:
-          entity_id: input_datetime.visitor_prep
-        data:
-          datetime: |
-            {{ (now()+timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S') }}
-
   - alias: Set visitor door code
     id: 09ee2a51-77dc-4e3f-8efc-1ffafec8e112
     trigger:
       - platform: state
         entity_id: input_text.visitor_door_code
     action:
-      - repeat:
-          until: |
-            {{ is_state("binary_sensor.visitor_door_code_ready", "on") }}
-          sequence: 
-            - service: vera.set_lock_pin
-              target:
-                entity_id: lock.front_door
-              data:
-                name: visitor
-                pin: |
-                  {{ states('input_text.visitor_door_code') }}
-            - wait_template: |
-                {{ is_state("binary_sensor.visitor_door_code_ready", "on") }}
-              timeout: 15
-
-  - alias: Notify when visitor schedule is adjusted
-    id: 8a197b68-f87d-41d6-81df-8bc265a60a10
-    trigger:
-      - platform: state
-        entity_id: input_datetime.visitor_prep
-        for: 15
-    action:
-      - wait_template: |
-          {{ is_state("binary_sensor.visitor_door_code_ready", "on") }}
-      - service: notify.iphones
+      - service: zwave_js.set_lock_usercode
+        target:
+          entity_id: lock.front_door
         data:
-          message: >
-            visitor scheduled for {{ states('input_datetime.visitor_prep') }}.
-            door code is {{ states('input_text.visitor_door_code') }}.
-            alarm is {{ states('alarm_control_panel.alarm') }}.
-          data:
-            tag: visitor
-            push:
-              category: camera
-            entity_id: camera.great_room
-            attachment:
-              url: |
-                {{ states('input_text.external_url') }}{{ states.camera.great_room.attributes.entity_picture }}
-              content-type: jpeg
-              hide-thumbnail: false
+          code_slot: 3
+          usercode: |
+            {{ states('input_text.visitor_door_code') }}
 
   - alias: Clear door code when visitor mode turned off
     id: ac8cef99-0dcf-4625-9e17-75116e9a7acd
@@ -113,18 +52,11 @@ automation:
         entity_id: input_boolean.visitor
         to: 'off'
     action:
-      - repeat:
-          until: |
-            {{ is_state("binary_sensor.visitor_door_code_ready", "off") }}
-          sequence: 
-            - service: vera.clear_lock_pin
-              target:
-                entity_id: lock.front_door
-              data:
-                name: visitor
-            - wait_template: |
-                {{ is_state("binary_sensor.visitor_door_code_ready", "off") }}
-              timeout: 15
+      - service: zwave_js.clear_lock_usercode
+        target:
+          entity_id: lock.front_door
+        data:
+          code_slot: 3
       - service: notify.iphones
         data:
           message: >
@@ -167,11 +99,97 @@ automation:
               {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
             timeout: 30
 
-  - alias: Prep for visitor
-    id: 63d4d825-b354-4fd0-bd65-6e052bd33292
+  - alias: Disable alarm when visitor arrives
     trigger:
-      - platform: time
-        at: input_datetime.visitor_prep
+      - platform: event
+        event_type: zwave_js_notification
+        event_data:
+          node_id: 49
+          event_label: "Keypad unlock operation"
+    action:
+      - condition: template
+        value_template: |
+          {{ trigger.event.data.parameters.userId | int(default=0) == 3 }}
+      - choose:
+          conditions:
+            - condition: template
+              value_template: |
+                {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: notify.iphones
+              data:
+                message: >
+                  visitor arrived.
+                  alarm is {{ states("alarm_control_panel.alarm") }}.
+                  attempting to disable.
+                data:
+                  tag: visitor
+                  # sound:
+                  #   name: default
+                  #   critical: 1
+                  #   volume: 1.0
+                  push:
+                    category: camera
+                  entity_id: camera.front_door
+                  attachment:
+                    url: |
+                      {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+                    content-type: jpeg
+                    hide-thumbnail: false
+
+            - repeat:
+                until: |
+                  {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+                sequence:
+                  - service: alarm_control_panel.alarm_disarm
+                    entity_id: alarm_control_panel.alarm
+                  - delay: 3
+            - service: light.turn_on
+              data:
+                rgb_color:
+                  - 0
+                  - 249
+                  - 0
+              target:
+                entity_id: light.dining_room_extender
+        default:
+          - service: light.turn_on
+            data:
+              rgb_color:
+                - 0
+                - 249
+                - 0
+            target:
+              entity_id: light.dining_room_extender
+      - service: notify.iphones
+        data:
+          message: >
+            visitor arrived.
+            alarm is {{ states("alarm_control_panel.alarm") }}.
+          data:
+            tag: visitor
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+              content-type: jpeg
+              hide-thumbnail: false
+      - delay:
+          minutes: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.dining_room_extender
+
+  - alias: Turn on away when visitor departs
+    id: 0c1978a8-30d2-4fc5-a126-9a5064b2eeda
+    trigger:
+      - platform: event
+        event_type: zwave_js_notification
+        event_data:
+          node_id: 49
+          event_label: "Keypad lock operation"
     condition:
       condition: and
       conditions:
@@ -179,83 +197,37 @@ automation:
         entity_id: input_boolean.visitor
         state: "on"
       - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: "disarmed"
+      - condition: state
         entity_id: device_tracker.jphone_12
         state: "not_home"
       - condition: state
         entity_id: device_tracker.katie_s_iphone
         state: "not_home"
     action:
-    - repeat:
-        until: |
-          {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
-        sequence:
-          - service: alarm_control_panel.alarm_disarm
-            entity_id: alarm_control_panel.alarm
-          - delay: 15
-    - service: notify.iphones
-      data:
-        message: >
-          house prepped for visitor.
-          front door is {{ states.lock.front_door.state }}.
-          door code is {{ states('input_text.visitor_door_code') }}.
-          alarm is {{ states.alarm_control_panel.alarm.state }}.
+      - repeat:
+          until: |
+            {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: script.turn_on
+              data:
+                entity_id: script.mode_away
+            - wait_template: |
+                {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
+              timeout: 5
+      - service: notify.iphones
         data:
-          tag: visitor
-          push:
-            category: camera
-          entity_id: camera.great_room
-          attachment:
-            url: |
-              {{ states('input_text.external_url') }}{{ states.camera.great_room.attributes.entity_picture }}
-            content-type: jpeg
-            hide-thumbnail: false
-
-  - alias: Notify about visitor arrival
-    id: ae6f51af-3ea0-445c-b2de-1c37be2f83a4
-    trigger:
-      - platform: state
-        entity_id: lock.front_door
-        attribute: changed_by_name
-        to: visitor
-    action:
-    - service: notify.iphones
-      data:
-        message: >
-          visitor arrived.
-          alarm is {{ states("alarm_control_panel.alarm") }}.
-        data:
-          tag: visitor
-          push:
-            category: camera
-          entity_id: camera.great_room
-          attachment:
-            url: |
-              {{ states('input_text.external_url') }}{{ state_attr("camera.great_room","entity_picture") }}
-            content-type: jpeg
-            hide-thumbnail: false
-
-  - alias: Notify about visitor departure
-    id: 0c1978a8-30d2-4fc5-a126-9a5064b2eeda
-    trigger:
-      platform: state
-      entity_id: lock.front_door
-      to: locked
-      for:
-        hours: 1
-    condition:
-      condition: state
-      entity_id: input_boolean.visitor
-      state: "on"
-    action:
-      - service: script.ask_about_turning_on
-        data:
-          entity_id: script.lock_up_after_visitor
-          tag: visitor
-          message: "The front door has been locked for a while. Turn off visitor mode?"
-          confirmation_message: locked up after the visitor
-script:
-  lock_up_after_visitor:
-    sequence:
-    - service: homeassistant.turn_off
-      data:
-        entity_id: input_boolean.visitor
+          message: >
+            visitor locked the front door.
+            alarm set to {{ states("alarm_control_panel.alarm") }}.
+          data:
+            tag: visitor
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+              content-type: jpeg
+              hide-thumbnail: false
