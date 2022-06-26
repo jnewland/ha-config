@@ -100,6 +100,7 @@ automation:
             timeout: 30
 
   - alias: Log Keypad App Events
+    id: 92c2f78a-567d-4b5f-b716-8e5e02228af8
     mode: parallel
     trigger:
     - platform: event
@@ -109,11 +110,64 @@ automation:
         data:
           message: >
             at=keypad_event
-            data={{ trigger.event.data }}
+            action={{ trigger.event.action }}
           logger: packages.visitor
           level: debug
 
+  - alias: Handle Keypad App Lock
+    id: 600bc5da-24d7-41fb-be3d-6357ebdb6022
+    mode: queued
+    trigger:
+    - platform: event
+      event_type: keypad_event
+      event_data:
+        action: lock
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action=lock
+            automation=running
+          logger: packages.visitor
+          level: info
+      - repeat:
+          until: |
+            {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: script.turn_on
+              data:
+                entity_id: script.mode_away
+            - wait_template: |
+                {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
+              timeout: 5
+      - service: notify.iphones
+        data:
+          message: >
+            visitor locked up with keypad.
+            front door is {{ states('lock.front_door') }}.
+            alarm set to {{ states("alarm_control_panel.alarm") }}.
+          data:
+            tag: visitor
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+              content-type: jpeg
+              hide-thumbnail: false
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action=lock
+            automation=done
+          logger: packages.visitor
+          level: info
+
   - alias: Handle Keypad App Unlock
+    id: 93b6a2e4-ac04-4d78-8d1e-2c47b39b3e45
     mode: queued
     trigger:
     - platform: event
@@ -126,6 +180,7 @@ automation:
           message: >
             at=keypad_event
             action=unlock
+            automation=running
           logger: packages.visitor
           level: info
       - condition: template
@@ -141,6 +196,34 @@ automation:
       - service: lock.unlock
         target:
           entity_id: lock.front_door
+      - service: notify.iphones
+        data:
+          message: >
+            visitor unlocked with keypad.
+            front door is {{ states('lock.front_door') }}.
+            alarm set to {{ states("alarm_control_panel.alarm") }}.
+          data:
+            tag: visitor
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+              content-type: jpeg
+              hide-thumbnail: false
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action=unlock
+            automation=done
+          logger: packages.visitor
+          level: info
 
   - alias: Disable alarm when visitor arrives
     trigger:
