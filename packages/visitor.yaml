@@ -99,6 +99,43 @@ automation:
               {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
             timeout: 30
 
+  - alias: Log Keypad App Events
+    mode: parallel
+    trigger:
+    - platform: event
+      event_type: keypad_event
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action={{ trigger.event.data.action }}
+            message={{ trigger.event.data.message }}
+          logger: packages.visitor
+          level: debug
+
+  - alias: Handle Keypad App Unlock
+    mode: queued
+    trigger:
+    - platform: event
+      event_type: keypad_event
+      event_data:
+        action: unlock
+    action:
+      - condition: template
+        value_template: |
+          {{ states('input_text.visitor_door_code') == trigger.event.data.message }}
+      - repeat:
+          until: |
+            {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: alarm_control_panel.alarm_disarm
+              entity_id: alarm_control_panel.alarm
+            - delay: 3
+      - service: lock.unlock
+        target:
+          entity_id: lock.front_door
+
   - alias: Disable alarm when visitor arrives
     trigger:
       - platform: event
