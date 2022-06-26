@@ -110,7 +110,7 @@ automation:
         data:
           message: >
             at=keypad_event
-            action={{ trigger.event.action }}
+            action={{ trigger.event.data.action }}
           logger: packages.visitor
           level: debug
 
@@ -141,6 +141,9 @@ automation:
             - wait_template: |
                 {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
               timeout: 5
+      - service: lock.unlock
+        target:
+          entity_id: lock.front_door
       - service: notify.iphones
         data:
           message: >
