@@ -225,6 +225,45 @@ automation:
           logger: packages.visitor
           level: info
 
+  - alias: Handle Keypad App Error
+    id: 448f1b65-b5fc-401f-be67-c14a671b29cc
+    mode: queued
+    trigger:
+    - platform: event
+      event_type: keypad_event
+      event_data:
+        action: error
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action=error
+            message={{ trigger.event.data.message }}
+          logger: packages.visitor
+          level: info
+      - service: notify.iphones
+        data:
+          message: >
+            visitor encountered an error with keypad.
+            {{ trigger.event.data.message }}.
+            front door is {{ states('lock.front_door') }}.
+            alarm set to {{ states("alarm_control_panel.alarm") }}.
+          data:
+            tag: visitor
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+              content-type: jpeg
+              hide-thumbnail: false
+
   - alias: Disable alarm when visitor arrives
     trigger:
       - platform: event
