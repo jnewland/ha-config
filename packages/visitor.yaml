@@ -109,7 +109,7 @@ automation:
         data:
           message: >
             at=keypad_event
-            event={{ trigger.event }}
+            data={{ trigger.event.data }}
           logger: packages.visitor
           level: debug
 
@@ -121,9 +121,16 @@ automation:
       event_data:
         action: unlock
     action:
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action=unlock
+          logger: packages.visitor
+          level: info
       - condition: template
         value_template: |
-          {{ states('input_text.visitor_door_code') == trigger.event.message }}
+          {{ states('input_text.visitor_door_code') == trigger.event.data.message }}
       - repeat:
           until: |
             {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
