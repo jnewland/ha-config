@@ -124,10 +124,10 @@ automation:
                   attempting to disable.
                 data:
                   tag: visitor
-                  # sound:
-                  #   name: default
-                  #   critical: 1
-                  #   volume: 1.0
+                  sound:
+                    name: default
+                    critical: 1
+                    volume: 1.0
                   push:
                     category: camera
                   entity_id: camera.front_door
