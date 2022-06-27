@@ -99,6 +99,192 @@ automation:
               {{ not is_state('alarm_control_panel.alarm', 'disarmed') }}
             timeout: 30
 
+  - alias: Log Keypad App Events
+    id: 92c2f78a-567d-4b5f-b716-8e5e02228af8
+    mode: parallel
+    trigger:
+    - platform: event
+      event_type: keypad_event
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action={{ trigger.event.data.action }}
+          logger: packages.visitor
+          level: debug
+
+  - alias: Handle Keypad App Lock
+    id: 600bc5da-24d7-41fb-be3d-6357ebdb6022
+    mode: queued
+    trigger:
+    - platform: event
+      event_type: keypad_event
+      event_data:
+        action: lock
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action=lock
+            automation=running
+          logger: packages.visitor
+          level: info
+      - repeat:
+          until: |
+            {{ is_state('alarm_control_panel.alarm', 'armed_home') }}
+          sequence:
+            - service: alarm_control_panel.alarm_arm_home
+              entity_id: alarm_control_panel.alarm
+            - wait_template: |
+                {{ is_state('alarm_control_panel.alarm', 'armed_home') }}
+              timeout: 5
+      - repeat:
+          until: |
+            {{ is_state('lock.front_door', 'locked') }}
+          sequence:
+            - service: lock.lock
+              target:
+                entity_id: lock.front_door
+            - wait_template: |
+                {{ is_state('lock.front_door', 'locked') }}
+              timeout: 5
+      - service: notify.iphones
+        data:
+          message: >
+            visitor locked up with keypad.
+            front door is {{ states('lock.front_door') }}.
+            alarm set to {{ states("alarm_control_panel.alarm") }}.
+          data:
+            tag: visitor
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+              content-type: jpeg
+              hide-thumbnail: false
+      - service: script.turn_on
+        data:
+          entity_id: script.mode_away
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action=lock
+            automation=done
+          logger: packages.visitor
+          level: info
+
+  - alias: Handle Keypad App Unlock
+    id: 93b6a2e4-ac04-4d78-8d1e-2c47b39b3e45
+    mode: queued
+    trigger:
+    - platform: event
+      event_type: keypad_event
+      event_data:
+        action: unlock
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action=unlock
+            automation=running
+          logger: packages.visitor
+          level: info
+      - condition: template
+        value_template: |
+          {{ states('input_text.visitor_door_code') == trigger.event.data.message }}
+      - repeat:
+          until: |
+            {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: alarm_control_panel.alarm_disarm
+              entity_id: alarm_control_panel.alarm
+            - wait_template: |
+                {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+              timeout: 5
+      - repeat:
+          until: |
+            {{ not is_state('lock.front_door', 'locked') }}
+          sequence:
+            - service: lock.unlock
+              target:
+                entity_id: lock.front_door
+            - wait_template: |
+                {{ not is_state('lock.front_door', 'locked') }}
+              timeout: 5
+      - service: notify.iphones
+        data:
+          message: >
+            visitor unlocked with keypad.
+            front door is {{ states('lock.front_door') }}.
+            alarm set to {{ states("alarm_control_panel.alarm") }}.
+          data:
+            tag: visitor
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+              content-type: jpeg
+              hide-thumbnail: false
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action=unlock
+            automation=done
+          logger: packages.visitor
+          level: info
+
+  - alias: Handle Keypad App Error
+    id: 448f1b65-b5fc-401f-be67-c14a671b29cc
+    mode: queued
+    trigger:
+    - platform: event
+      event_type: keypad_event
+      event_data:
+        action: error
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=keypad_event
+            action=error
+            message={{ trigger.event.data.message }}
+          logger: packages.visitor
+          level: info
+      - service: notify.iphones
+        data:
+          message: >
+            visitor encountered an error with keypad.
+            {{ trigger.event.data.message }}.
+            front door is {{ states('lock.front_door') }}.
+            alarm set to {{ states("alarm_control_panel.alarm") }}.
+          data:
+            tag: visitor
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+              content-type: jpeg
+              hide-thumbnail: false
+
   - alias: Disable alarm when visitor arrives
     trigger:
       - platform: event
@@ -124,10 +310,10 @@ automation:
                   attempting to disable.
                 data:
                   tag: visitor
-                  # sound:
-                  #   name: default
-                  #   critical: 1
-                  #   volume: 1.0
+                  sound:
+                    name: default
+                    critical: 1
+                    volume: 1.0
                   push:
                     category: camera
                   entity_id: camera.front_door
@@ -143,7 +329,9 @@ automation:
                 sequence:
                   - service: alarm_control_panel.alarm_disarm
                     entity_id: alarm_control_panel.alarm
-                  - delay: 3
+                  - wait_template: |
+                      {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+                    timeout: 5
             - service: light.turn_on
               data:
                 rgb_color:

@@ -102,7 +102,7 @@ template:
         state: |
           {{ is_state('binary_sensor.atrium_couch_motion', 'on') }}
         delay_on:
-          seconds: 15
+          seconds: 3
 
       - name: atrium occupancy
         device_class: occupancy
