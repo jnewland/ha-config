@@ -228,7 +228,7 @@ automation:
             sound:
               name: default
               critical: 1
-              volume: 1.0
+              volume: 0.1
             push:
               category: camera
             entity_id: camera.front_door
@@ -275,7 +275,7 @@ automation:
             sound:
               name: default
               critical: 1
-              volume: 1.0
+              volume: 0.1
             push:
               category: camera
             entity_id: camera.front_door
@@ -313,7 +313,7 @@ automation:
                   sound:
                     name: default
                     critical: 1
-                    volume: 1.0
+                    volume: 0.1
                   push:
                     category: camera
                   entity_id: camera.front_door
