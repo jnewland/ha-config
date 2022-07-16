@@ -17,6 +17,7 @@ logs:
   pyhap.hap_server: critical
   pyvera: critical
   pyvera.subscribe: warn
+  soco: debug
   requests.packages.urllib3.connectionpool: critical
   roomba.roomba.Roomba: warn
   root: warn
