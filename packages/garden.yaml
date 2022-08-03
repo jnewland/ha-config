@@ -1,9 +1,3 @@
-sensor:
-  - platform: bhyve
-
-switch:
-  - platform: bhyve
-
 # plant:
 #   # https://open.plantbook.io/browse-db
 #   lime_tree:
