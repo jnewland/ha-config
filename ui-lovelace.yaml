@@ -645,7 +645,7 @@ views:
           - light.kitchen
           - light.pendants
           - light.dining_room_table
-          - binary_sensor.kitchen_motion
+          - binary_sensor.dining_room_home_security_motion_detection
           - light.pantry
           - binary_sensor.pantry_motion
           - light.living
@@ -1287,7 +1287,6 @@ views:
             - binary_sensor.closet_motion.battery_level
             - switch.garage_hall_motion.battery_level
             - switch.great_hall_motion.battery_level
-            - switch.kitchen_motion.battery_level
             - switch.master_bath_motion.battery_level
             - switch.music_room_motion.battery_level
             - switch.pantry_motion.battery_level
