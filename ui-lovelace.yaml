@@ -653,10 +653,10 @@ views:
           - light.couch_lamp_left
           - binary_sensor.living_room_motion
           - binary_sensor.great_room_occupancy
-          - sensor.kitchen_temp
+          - sensor.dining_room_air_temperature
         footer:
           type: graph
-          entity: sensor.kitchen_temp
+          entity: sensor.dining_room_air_temperature
           hours_to_show: 36
           detail: 2
 
