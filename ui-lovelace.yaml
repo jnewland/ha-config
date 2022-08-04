@@ -710,7 +710,7 @@ views:
           - light.music_room
           - light.music_room_fan_light
           - fan.music_room
-          - binary_sensor.music_room_haiku_occupancy
+          - binary_sensor.music_room_fan_occupancy
           - binary_sensor.music_room_home_security_motion_detection
           - binary_sensor.music_room_window
           - sensor.music_room_air_temperature
