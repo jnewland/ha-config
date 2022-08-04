@@ -25,7 +25,7 @@ trigger:
     - binary_sensor.upstairs_home_security_motion_detection
     - binary_sensor.guest_hall_home_security_motion_detection
     - binary_sensor.yoga_room_motion
-    - binary_sensor.kitchen_motion
+    - binary_sensor.dining_room_home_security_motion_detection
     - binary_sensor.front_gate_access_control_window_door_is_open
     - sensor.ups_state
     - sensor.jphone_12_battery_state
