@@ -47,7 +47,7 @@
   latitude: !env_var OFFICE_LAT
   longitude: !env_var OFFICE_LONG
   radius: 1
-  icon: mdi:desktop-mac
+  icon: mdi:monitor
 
 - name: Music room
   latitude: !env_var OFFICE_LAT
