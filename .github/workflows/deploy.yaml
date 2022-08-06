@@ -68,24 +68,11 @@ jobs:
     environment: production
     concurrency: production
     steps:
-      - name: "Deploy home-assistant"
-        env:
-          HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
-          HASS_URL: ${{ secrets.HASS_URL }}
-        run: |
-          curl \
-            --silent \
-            --output /dev/null \
-            -H "Authorization: Bearer $HASS_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"sha\": \"${{ github.event.pull_request.head.sha }}\"}" \
-            "$HASS_URL/api/services/script/deploy"
-
       - name: "Wait for deployment to complete"
         env:
           HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
           HASS_URL: ${{ secrets.HASS_URL }}
-          TIMEOUT: "240"
+          TIMEOUT: "300"
         run: |
           while true; do
             curl \
