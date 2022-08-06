@@ -59,6 +59,7 @@ binary_sensor:
           {% set next_precip = state_attr("weather.dark_sky", "forecast") |
                       default([{}]) |
                       rejectattr("precipitation", "none") |
+                      rejectattr("precipitation", "undefined") |
                       map(attribute='datetime') |
                       first |
                       default(false) %}
@@ -84,6 +85,7 @@ sensor:
             state_attr("weather.dark_sky", "forecast") |
             default([{}]) | batch(states("input_number.precipitation_forecast_hours") | default(12)) | first |
             rejectattr("precipitation", "none") |
+            rejectattr("precipitation", "undefined") |
             sum(attribute="precipitation")
           }}
       next_precipitation:
@@ -93,6 +95,7 @@ sensor:
           {% set next_precip = state_attr("weather.dark_sky", "forecast") |
                       default([{}]) |
                       rejectattr("precipitation", "none") |
+                      rejectattr("precipitation", "undefined") |
                       map(attribute='datetime') |
                       first |
                       default(false) %}
