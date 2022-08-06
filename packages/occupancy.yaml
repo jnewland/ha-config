@@ -38,7 +38,6 @@ homeassistant:
     binary_sensor.atrium_occupancy:
       trigger_entity_id: switch.atrium_fan
       trigger_entity_id_off: switch.atrium_fan
-
       speaker_entity: media_player.atrium_speakers
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.rock
@@ -97,22 +96,17 @@ template:
             is_state('binary_sensor.great_hall_motion', 'on') or
             is_state('binary_sensor.stairs_motion', 'on')
           }}
-      - name: atrium couch motion with delay
-        device_class: occupancy
-        state: |
-          {{ is_state('binary_sensor.atrium_couch_motion', 'on') }}
-        delay_on:
-          seconds: 3
 
       - name: atrium occupancy
         device_class: occupancy
         state: |
           {{
-            is_state('binary_sensor.atrium_couch_motion_with_delay', 'on') or
+            is_state('binary_sensor.atrium_couch_motion', 'on') or
             float(states('sensor.atrium_person'), default=0) > 0
           }}
         delay_off:
           minutes: 10
+
       - name: pergola occupancy
         device_class: occupancy
         state: |
