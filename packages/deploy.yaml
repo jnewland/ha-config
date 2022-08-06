@@ -19,3 +19,15 @@ script:
 
 shell_command:
   deploy: /bin/bash ./script/deploy {{ sha }}
+
+automation:
+- alias: Deploy latest deployment
+  id: ef2019dd-0eda-437e-a8b1-b5860e262a7e
+  trigger:
+    platform: state
+    entity_id: sensor.latest_deployment_sha
+  action:
+    service: script.deploy
+    data:
+      sha: >
+        {{ states('sensor.latest_deployment_sha') }}
