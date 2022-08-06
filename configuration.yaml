@@ -73,7 +73,6 @@ system_log:
   fire_event: true
 tts:
   - platform: google_translate
-vera: !include vera.yaml
 volvooncall: !include volvo.yaml
 weather:
   - platform: darksky
