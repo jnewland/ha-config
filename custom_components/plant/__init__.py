@@ -1,550 +1,788 @@
 """Support for monitoring plants."""
-from collections import deque
-from contextlib import suppress
-from datetime import datetime, timedelta
+from __future__ import annotations
+
 import logging
 
 import voluptuous as vol
 
-from homeassistant.components.recorder import get_instance, history
+from homeassistant.components import websocket_api
+from homeassistant.components.utility_meter.const import (
+    DATA_TARIFF_SENSORS,
+    DATA_UTILITY,
+)
+from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import (
-    ATTR_TEMPERATURE,
-    ATTR_UNIT_OF_MEASUREMENT,
+    ATTR_ENTITY_PICTURE,
+    ATTR_ICON,
     ATTR_NAME,
-    CONDUCTIVITY,
-    CONF_SENSORS,
-    LIGHT_LUX,
-    CONF_NAME,
-    PERCENTAGE,
+    ATTR_UNIT_OF_MEASUREMENT,
     STATE_OK,
     STATE_PROBLEM,
     STATE_UNAVAILABLE,
     STATE_UNKNOWN,
-    TEMP_CELSIUS,
 )
-from homeassistant.core import HomeAssistant, callback
-from homeassistant.exceptions import HomeAssistantError
-import homeassistant.helpers.config_validation as cv
-from homeassistant.helpers.entity import Entity
+from homeassistant.core import HomeAssistant, ServiceCall, callback
+from homeassistant.helpers import device_registry as dr, entity_registry as er
+from homeassistant.helpers.entity import Entity, async_generate_entity_id
 from homeassistant.helpers.entity_component import EntityComponent
-from homeassistant.helpers.event import async_track_state_change_event
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.typing import ConfigType
-from homeassistant.util import dt as dt_util
+
+from .const import (
+    ATTR_CONDUCTIVITY,
+    ATTR_CURRENT,
+    ATTR_DLI,
+    ATTR_HUMIDITY,
+    ATTR_ILLUMINANCE,
+    ATTR_LIMITS,
+    ATTR_MAX,
+    ATTR_METERS,
+    ATTR_MIN,
+    ATTR_MOISTURE,
+    ATTR_PLANT,
+    ATTR_SENSOR,
+    ATTR_SENSORS,
+    ATTR_SPECIES,
+    ATTR_TEMPERATURE,
+    DATA_SOURCE,
+    DOMAIN,
+    FLOW_CONDUCTIVITY_TRIGGER,
+    FLOW_DLI_TRIGGER,
+    FLOW_HUMIDITY_TRIGGER,
+    FLOW_ILLUMINANCE_TRIGGER,
+    FLOW_MOISTURE_TRIGGER,
+    FLOW_PLANT_INFO,
+    FLOW_TEMPERATURE_TRIGGER,
+    OPB_DISPLAY_PID,
+    READING_CONDUCTIVITY,
+    READING_DLI,
+    READING_HUMIDITY,
+    READING_ILLUMINANCE,
+    READING_MOISTURE,
+    READING_TEMPERATURE,
+    SERVICE_REPLACE_SENSOR,
+    STATE_HIGH,
+    STATE_LOW,
+)
+from .plant_helpers import PlantHelper
+from .plant_meters import (
+    PlantCurrentConductivity,
+    PlantCurrentHumidity,
+    PlantCurrentIlluminance,
+    PlantCurrentMoisture,
+    PlantCurrentPpfd,
+    PlantCurrentTemperature,
+    PlantDailyLightIntegral,
+    PlantTotalLightIntegral,
+)
+from .plant_thresholds import (
+    PlantMaxConductivity,
+    PlantMaxDli,
+    PlantMaxHumidity,
+    PlantMaxIlluminance,
+    PlantMaxMoisture,
+    PlantMaxTemperature,
+    PlantMinConductivity,
+    PlantMinDli,
+    PlantMinHumidity,
+    PlantMinIlluminance,
+    PlantMinMoisture,
+    PlantMinTemperature,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
-DEFAULT_NAME = "plant"
 
-READING_BATTERY = "battery"
-READING_TEMPERATURE = ATTR_TEMPERATURE
-READING_MOISTURE = "moisture"
-READING_CONDUCTIVITY = "conductivity"
-READING_BRIGHTNESS = "brightness"
-
-ATTR_PROBLEM = "problem"
-ATTR_SENSORS = "sensors"
-PROBLEM_NONE = "none"
-ATTR_MAX_BRIGHTNESS_HISTORY = "max_brightness"
-ATTR_SPECIES = "species"
-ATTR_LIMITS = "limits"
-ATTR_IMAGE = "image"
-
-# we're not returning only one value, we're returning a dict here. So we need
-# to have a separate literal for it to avoid confusion.
-ATTR_DICT_OF_UNITS_OF_MEASUREMENT = "unit_of_measurement_dict"
-
-CONF_MIN_BATTERY_LEVEL = f"min_{READING_BATTERY}"
-CONF_MIN_TEMPERATURE = f"min_{READING_TEMPERATURE}"
-CONF_MAX_TEMPERATURE = f"max_{READING_TEMPERATURE}"
-CONF_MIN_MOISTURE = f"min_{READING_MOISTURE}"
-CONF_MAX_MOISTURE = f"max_{READING_MOISTURE}"
-CONF_MIN_CONDUCTIVITY = f"min_{READING_CONDUCTIVITY}"
-CONF_MAX_CONDUCTIVITY = f"max_{READING_CONDUCTIVITY}"
-CONF_MIN_BRIGHTNESS = f"min_{READING_BRIGHTNESS}"
-CONF_MAX_BRIGHTNESS = f"max_{READING_BRIGHTNESS}"
-CONF_CHECK_DAYS = "check_days"
-CONF_SPECIES = "species"
-CONF_IMAGE = "image"
-
-CONF_PLANTBOOK = "openplantbook"
-CONF_PLANTBOOK_CLIENT = "client_id"
-CONF_PLANTBOOK_SECRET = "secret"
+# Use this during testing to generate some dummy-sensors
+# to provide random readings for temperature, moisture etc.
+#
+SETUP_DUMMY_SENSORS = False
+USE_DUMMY_SENSORS = False
 
 
-CONF_SENSOR_BATTERY_LEVEL = READING_BATTERY
-CONF_SENSOR_MOISTURE = READING_MOISTURE
-CONF_SENSOR_CONDUCTIVITY = READING_CONDUCTIVITY
-CONF_SENSOR_TEMPERATURE = READING_TEMPERATURE
-CONF_SENSOR_BRIGHTNESS = READING_BRIGHTNESS
+async def async_setup(hass: HomeAssistant, config: dict):
+    """
+    Set up the plant component
 
-CONF_WARN_BRIGHTNESS = "warn_low_brightness"
-
-DEFAULT_MIN_BATTERY_LEVEL = 20
-DEFAULT_MIN_TEMPERATURE = 10
-DEFAULT_MAX_TEMPERATURE = 40
-DEFAULT_MIN_MOISTURE = 20
-DEFAULT_MAX_MOISTURE = 60
-DEFAULT_MIN_CONDUCTIVITY = 500
-DEFAULT_MAX_CONDUCTIVITY = 3000
-DEFAULT_MIN_BRIGHTNESS = 0
-DEFAULT_MAX_BRIGHTNESS = 100000
-DEFAULT_CHECK_DAYS = 3
-
-SCHEMA_SENSORS = vol.Schema(
-    {
-        vol.Optional(CONF_SENSOR_BATTERY_LEVEL): cv.entity_id,
-        vol.Optional(CONF_SENSOR_MOISTURE): cv.entity_id,
-        vol.Optional(CONF_SENSOR_CONDUCTIVITY): cv.entity_id,
-        vol.Optional(CONF_SENSOR_TEMPERATURE): cv.entity_id,
-        vol.Optional(CONF_SENSOR_BRIGHTNESS): cv.entity_id,
-    }
-)
-
-PLANT_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_SENSORS): vol.Schema(SCHEMA_SENSORS),
-        vol.Optional(
-            CONF_MIN_BATTERY_LEVEL, default=DEFAULT_MIN_BATTERY_LEVEL
-        ): cv.positive_int,
-        vol.Optional(CONF_MIN_TEMPERATURE, default=DEFAULT_MIN_TEMPERATURE): vol.Coerce(float),
-        vol.Optional(CONF_MAX_TEMPERATURE, default=DEFAULT_MAX_TEMPERATURE): vol.Coerce(float),
-        vol.Optional(CONF_MIN_MOISTURE, default=DEFAULT_MIN_MOISTURE): cv.positive_int,
-        vol.Optional(CONF_MAX_MOISTURE, default=DEFAULT_MAX_MOISTURE): cv.positive_int,
-        vol.Optional(
-            CONF_MIN_CONDUCTIVITY, default=DEFAULT_MIN_CONDUCTIVITY
-        ): cv.positive_int,
-        vol.Optional(
-            CONF_MAX_CONDUCTIVITY, default=DEFAULT_MAX_CONDUCTIVITY
-        ): cv.positive_int,
-        vol.Optional(CONF_MIN_BRIGHTNESS, default=DEFAULT_MIN_BRIGHTNESS): cv.positive_int,
-        vol.Optional(CONF_MAX_BRIGHTNESS, default=DEFAULT_MAX_BRIGHTNESS): cv.positive_int,
-        vol.Optional(CONF_CHECK_DAYS, default=DEFAULT_CHECK_DAYS): cv.positive_int,
-        vol.Optional(CONF_NAME): cv.string,
-        vol.Optional(CONF_SPECIES): cv.string,
-        vol.Optional(CONF_IMAGE): cv.string,
-        vol.Optional(CONF_WARN_BRIGHTNESS, default=True): cv.boolean,
-    }
-)
-PLANTBOOK_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_PLANTBOOK_CLIENT): cv.string,
-        vol.Required(CONF_PLANTBOOK_SECRET): cv.string,
-    }
-)
-
-DOMAIN = "plant"
-
-CONFIG_SCHEMA = vol.Schema(
-    {
-        DOMAIN: {cv.string:(
-            vol.Any(PLANT_SCHEMA, PLANTBOOK_SCHEMA)
-        )}
-    },
-    extra=vol.ALLOW_EXTRA,
-)
-
-PLANTBOOK_TOKEN = None
-
-
-async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-    """Set up the Plant component."""
-    component = EntityComponent(_LOGGER, DOMAIN, hass)
-    if CONF_PLANTBOOK in config[DOMAIN]:
-        plantbook_config = config[DOMAIN][CONF_PLANTBOOK]
-        await _get_plantbook_token(
-            hass=hass,
-            client_id=plantbook_config.get(CONF_PLANTBOOK_CLIENT),
-            secret=plantbook_config.get(CONF_PLANTBOOK_SECRET),
-        )
-
-    entities = []
-    for plant_name, plant_config in config[DOMAIN].items():
-        if plant_name != CONF_PLANTBOOK:
-            _LOGGER.info("Added plant %s", plant_name)
-            entity = Plant(plant_name, plant_config)
-            entities.append(entity)
-
-    await component.async_add_entities(entities)
+    Configuration.yaml is no longer used.
+    This function only tries to migrate the legacy config.
+    """
+    if config.get(DOMAIN):
+        # Only import if we haven't before.
+        config_entry = _async_find_matching_config_entry(hass)
+        if not config_entry:
+            _LOGGER.debug("Old setup - with config: %s", config[DOMAIN])
+            for plant in config[DOMAIN]:
+                _LOGGER.warning("Migrating plant: %s", plant)
+                await async_migrate_plant(hass, plant, config[DOMAIN][plant])
+        else:
+            _LOGGER.warning(
+                "Config already imported. Please delete all your %s related config from configuration.yaml",
+                DOMAIN,
+            )
     return True
 
 
-async def _get_plantbook_token(hass, client_id=None, secret=None):
-    if not client_id or not secret:
-        return None
-    global PLANTBOOK_TOKEN
-    """ Gets the token from the openplantbook API """
-    url = "https://open.plantbook.io/api/v1/token/"
-    data = {
-        "grant_type": "client_credentials",
-        "client_id": client_id,
-        "client_secret": secret,
-    }
-    try:
-        session = async_get_clientsession(hass)
-        async with session.post(url, data=data) as result:
-            token = await result.json()
-            _LOGGER.debug(
-                "Got token {}...{} from {}".format(
-                    token["access_token"][:4], token["access_token"][-4:], url
-                )
+@callback
+def _async_find_matching_config_entry(hass: HomeAssistant) -> ConfigEntry | None:
+    """Check if there are migrated entities"""
+    for entry in hass.config_entries.async_entries(DOMAIN):
+        if entry.source == SOURCE_IMPORT:
+            return entry
+
+
+async def async_migrate_plant(hass: HomeAssistant, plant_id: str, config: dict) -> None:
+    """Try to migrate the config from yaml"""
+
+    plant_helper = PlantHelper(hass)
+    plant_config = await plant_helper.generate_configentry(config=config)
+    hass.async_create_task(
+        hass.config_entries.flow.async_init(
+            DOMAIN, context={"source": SOURCE_IMPORT}, data=plant_config
+        )
+    )
+
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Set up Plant from a config entry."""
+    hass.data.setdefault(DOMAIN, {})
+    hass.data[DOMAIN].setdefault(entry.entry_id, {})
+
+    if FLOW_PLANT_INFO not in entry.data:
+        return True
+
+    if SETUP_DUMMY_SENSORS:
+        # We are creating some dummy sensors to play with during testing
+        await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
+
+    plant = PlantDevice(hass, entry)
+    pmaxm = PlantMaxMoisture(hass, entry, plant)
+    pminm = PlantMinMoisture(hass, entry, plant)
+    pmaxt = PlantMaxTemperature(hass, entry, plant)
+    pmint = PlantMinTemperature(hass, entry, plant)
+    pmaxb = PlantMaxIlluminance(hass, entry, plant)
+    pminb = PlantMinIlluminance(hass, entry, plant)
+    pmaxc = PlantMaxConductivity(hass, entry, plant)
+    pminc = PlantMinConductivity(hass, entry, plant)
+    pmaxh = PlantMaxHumidity(hass, entry, plant)
+    pminh = PlantMinHumidity(hass, entry, plant)
+    pmaxmm = PlantMaxDli(hass, entry, plant)
+    pminmm = PlantMinDli(hass, entry, plant)
+
+    pcurb = PlantCurrentIlluminance(hass, entry, plant)
+    pcurc = PlantCurrentConductivity(hass, entry, plant)
+    pcurm = PlantCurrentMoisture(hass, entry, plant)
+    pcurt = PlantCurrentTemperature(hass, entry, plant)
+    pcurh = PlantCurrentHumidity(hass, entry, plant)
+
+    hass.data[DOMAIN][entry.entry_id][ATTR_PLANT] = plant
+
+    plant_entities = [
+        plant,
+    ]
+    plant_maxmin = [
+        pmaxm,
+        pminm,
+        pmaxt,
+        pmint,
+        pmaxb,
+        pminb,
+        pmaxc,
+        pminc,
+        pmaxh,
+        pminh,
+        pmaxmm,
+        pminmm,
+    ]
+    plant_sensors = [
+        pcurb,
+        pcurc,
+        pcurm,
+        pcurt,
+        pcurh,
+    ]
+    plant_entities.extend(plant_maxmin)
+    plant_entities.extend(plant_sensors)
+
+    # Add all the entities to Hass
+    component = EntityComponent(_LOGGER, DOMAIN, hass)
+    await component.async_add_entities(plant_entities)
+
+    # Store the entities for later
+    hass.data[DOMAIN][entry.entry_id][ATTR_METERS] = plant_maxmin
+    hass.data[DOMAIN][entry.entry_id][ATTR_SENSORS] = plant_sensors
+
+    # Add the rest of the entities to device registry together with plant
+    device_id = plant.device_id
+    await _plant_add_to_device_registry(hass, plant_entities, device_id)
+
+    plant.add_sensors(
+        temperature=pcurt,
+        moisture=pcurm,
+        conductivity=pcurc,
+        illuminance=pcurb,
+        humidity=pcurh,
+    )
+
+    plant.add_thresholds(
+        max_moisture=pmaxm,
+        min_moisture=pminm,
+        max_temperature=pmaxt,
+        min_temperature=pmint,
+        max_illuminance=pmaxb,
+        min_illuminance=pminb,
+        max_conductivity=pmaxc,
+        min_conductivity=pminc,
+        max_humidity=pmaxh,
+        min_humidity=pminh,
+        max_dli=pmaxmm,
+        min_dli=pminmm,
+    )
+
+    # Crete and add the integral-entities
+    # Must be run after the sensors are added to the plant
+    integral_entities = []
+
+    pcurppfd = PlantCurrentPpfd(hass, entry, plant)
+    await component.async_add_entities([pcurppfd])
+    integral_entities.append(pcurppfd)
+
+    pintegral = PlantTotalLightIntegral(hass, entry, pcurppfd)
+    await component.async_add_entities([pintegral])
+    integral_entities.append(pintegral)
+
+    pdli = PlantDailyLightIntegral(hass, entry, pintegral)
+    await component.async_add_entities([pdli])
+    integral_entities.append(pdli)
+
+    plant.add_dli(dli=pdli)
+
+    # Set up utility sensor
+    hass.data.setdefault(DATA_UTILITY, {})
+    hass.data[DATA_UTILITY].setdefault(entry.entry_id, {})
+    hass.data[DATA_UTILITY][entry.entry_id].setdefault(DATA_TARIFF_SENSORS, [])
+    hass.data[DATA_UTILITY][entry.entry_id][DATA_TARIFF_SENSORS].append(pdli)
+    await _plant_add_to_device_registry(hass, integral_entities, device_id)
+
+    #
+    # Service call to replace sensors
+    #
+    async def replace_sensor(call: ServiceCall) -> None:
+        """Replace a sensor entity within a plant device"""
+        meter_entity = call.data.get("meter_entity")
+        new_sensor = call.data.get("new_sensor")
+        if not meter_entity.startswith(DOMAIN + "."):
+            _LOGGER.warning(
+                "Refuse to update non-%s entities: %s", DOMAIN, meter_entity
             )
-            PLANTBOOK_TOKEN = token["access_token"]
-    except Exception as e:
-        _LOGGER.error("Unable to get token from plantbook API: {}".format(e))
+            return False
+        if not new_sensor.startswith("sensor.") and new_sensor != "":
+            _LOGGER.warning("%s is not a sensor", new_sensor)
+            return False
+
+        try:
+            meter = hass.states.get(meter_entity)
+        except AttributeError:
+            _LOGGER.error("Meter entity %s not found", meter_entity)
+            return False
+        if meter is None:
+            _LOGGER.error("Meter entity %s not found", meter_entity)
+            return False
+
+        if new_sensor != "":
+            try:
+                test = hass.states.get(new_sensor)
+            except AttributeError:
+                _LOGGER.error("New sensor entity %s not found", meter_entity)
+                return False
+            if test is None:
+                _LOGGER.error("New sensor entity %s not found", meter_entity)
+                return False
+        else:
+            new_sensor = None
+
+        _LOGGER.info(
+            "Going to replace the external sensor for %s with %s",
+            meter_entity,
+            new_sensor,
+        )
+        for key in hass.data[DOMAIN]:
+            if ATTR_SENSORS in hass.data[DOMAIN][key]:
+                meters = hass.data[DOMAIN][key][ATTR_SENSORS]
+                for meter in meters:
+                    if meter.entity_id == meter_entity:
+                        meter.replace_external_sensor(new_sensor)
+        return
+
+    hass.services.async_register(DOMAIN, SERVICE_REPLACE_SENSOR, replace_sensor)
+    hass.components.websocket_api.async_register_command(ws_get_info)
+    plant.async_schedule_update_ha_state(True)
+
+    # Lets add the dummy sensors automatically if we are testing stuff
+    if USE_DUMMY_SENSORS is True:
+        for sensor in plant_sensors:
+            if sensor.external_sensor is None:
+                await hass.services.async_call(
+                    domain=DOMAIN,
+                    service=SERVICE_REPLACE_SENSOR,
+                    service_data={
+                        "meter_entity": sensor.entity_id,
+                        "new_sensor": sensor.entity_id.replace(
+                            "plant.", "sensor.dummy_"
+                        ),
+                    },
+                    blocking=False,
+                    limit=30,
+                )
+
+    return True
 
 
-class Plant(Entity):
-    """Plant monitors the well-being of a plant.
+async def _plant_add_to_device_registry(
+    hass: HomeAssistant, plant_entities: list[Entity], device_id: str
+) -> None:
+    """Add all related entities to the correct device_id"""
 
-    It also checks the measurements against
-    configurable min and max values.
-    """
+    # There must be a better way to do this, but I just can't find a way to set the
+    # device_id when adding the entities.
+    for entity in plant_entities:
+        erreg = er.async_get(hass)
+        erreg.async_update_entity(entity.registry_entry.entity_id, device_id=device_id)
 
-    READINGS = {
-        READING_BATTERY: {
-            ATTR_UNIT_OF_MEASUREMENT: PERCENTAGE,
-            "min": CONF_MIN_BATTERY_LEVEL,
-        },
-        READING_TEMPERATURE: {
-            ATTR_UNIT_OF_MEASUREMENT: TEMP_CELSIUS,
-            "min": CONF_MIN_TEMPERATURE,
-            "max": CONF_MAX_TEMPERATURE,
-        },
-        READING_MOISTURE: {
-            ATTR_UNIT_OF_MEASUREMENT: PERCENTAGE,
-            "min": CONF_MIN_MOISTURE,
-            "max": CONF_MAX_MOISTURE,
-        },
-        READING_CONDUCTIVITY: {
-            ATTR_UNIT_OF_MEASUREMENT: CONDUCTIVITY,
-            "min": CONF_MIN_CONDUCTIVITY,
-            "max": CONF_MAX_CONDUCTIVITY,
-        },
-        READING_BRIGHTNESS: {
-            ATTR_UNIT_OF_MEASUREMENT: LIGHT_LUX,
-            "min": CONF_MIN_BRIGHTNESS,
-            "max": CONF_MAX_BRIGHTNESS,
-        },
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "plant/get_info",
+        vol.Required("entity_id"): str,
     }
+)
+@callback
+def ws_get_info(
+    hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict
+) -> None:
+    """Handle the websocket command."""
 
-    def __init__(self, name, config):
+    for key in hass.data[DOMAIN]:
+        if not ATTR_PLANT in hass.data[DOMAIN][key]:
+            connection.send_error(
+                msg["id"], "domain_not_found", f"Domain {DOMAIN} not found"
+            )
+            return
+        plant_entity = hass.data[DOMAIN][key][ATTR_PLANT]
+        if plant_entity.entity_id == msg["entity_id"]:
+            _LOGGER.debug("Websocket info: %s", plant_entity.websocket_info)
+            connection.send_result(msg["id"], {"result": plant_entity.websocket_info})
+            return
+    connection.send_error(
+        msg["id"], "entity_not_found", f"Entity {msg['entity_id']} not found"
+    )
+
+    return
+
+
+class PlantDevice(Entity):
+    """Base device for plants"""
+
+    def __init__(self, hass: HomeAssistant, config: ConfigEntry) -> None:
         """Initialize the Plant component."""
         self._config = config
-        self._sensormap = {}
-        self._readingmap = {}
-        self._unit_of_measurement = {}
-        for reading, entity_id in config["sensors"].items():
-            self._sensormap[entity_id] = reading
-            self._readingmap[reading] = entity_id
-        self._state = None
-        self._name = name
-        self._plant_name = self._config.get(CONF_NAME)
-        self._battery = None
-        self._moisture = None
-        self._conductivity = None
-        self._temperature = None
-        self._brightness = None
-        self._problems = PROBLEM_NONE
-        self._species = None
-        if self._config.get(CONF_SPECIES):
-            self._species = self._config.get(CONF_SPECIES).lower().replace("_", " ")
-        self._image = self._config.get(CONF_IMAGE)
-        if not self._image and self._species:
-            self._image = "/local/images/plants/{}.jpg".format(self._species)
-        if PLANTBOOK_TOKEN is not None:
-            _LOGGER.debug(
-                "Adding plant {} Token {}...{}".format(
-                    name, PLANTBOOK_TOKEN[:4], PLANTBOOK_TOKEN[-4:]
-                )
+        self._hass = hass
+        self._attr_name = config.data[FLOW_PLANT_INFO][ATTR_NAME]
+        self._config_entries = []
+        self._data_source = config.data[FLOW_PLANT_INFO].get(DATA_SOURCE)
+
+        # Get entity_picture from options or from initial config
+        self._attr_entity_picture = self._config.options.get(
+            ATTR_ENTITY_PICTURE,
+            self._config.data[FLOW_PLANT_INFO].get(ATTR_ENTITY_PICTURE),
+        )
+        # Get species from options or from initial config
+        self.species = self._config.options.get(
+            ATTR_SPECIES, self._config.data[FLOW_PLANT_INFO].get(ATTR_SPECIES)
+        )
+        # Get display_species from options or from initial config
+        self.display_species = (
+            self._config.options.get(
+                OPB_DISPLAY_PID, self._config.data[FLOW_PLANT_INFO].get(OPB_DISPLAY_PID)
             )
+            or self.species
+        )
+        self._attr_unique_id = self._config.entry_id
 
-        self._conf_check_days = 3  # default check interval: 3 days
-        if CONF_CHECK_DAYS in self._config:
-            self._conf_check_days = self._config[CONF_CHECK_DAYS]
-        self._brightness_history = DailyHistory(self._conf_check_days)
+        self.entity_id = async_generate_entity_id(
+            f"{DOMAIN}.{{}}", self.name, current_ids={}
+        )
 
-    @callback
-    def _state_changed_event(self, event):
-        """Sensor state change event."""
-        self.state_changed(event.data.get("entity_id"), event.data.get("new_state"))
+        self.plant_complete = False
+        self._device_id = None
 
-    @callback
-    def state_changed(self, entity_id, new_state):
-        """Update the sensor status."""
-        if new_state is None:
-            return
-        value = new_state.state
-        _LOGGER.debug("Received callback from %s with value %s", entity_id, value)
-        if value == STATE_UNKNOWN:
-            return
+        self._check_days = None
 
-        reading = self._sensormap[entity_id]
-        if reading == READING_MOISTURE:
-            if value != STATE_UNAVAILABLE:
-                value = int(float(value))
-            self._moisture = value
-        elif reading == READING_BATTERY:
-            if value != STATE_UNAVAILABLE:
-                value = int(float(value))
-            self._battery = value
-        elif reading == READING_TEMPERATURE:
-            if value != STATE_UNAVAILABLE:
-                value = float(value)
-            self._temperature = value
-        elif reading == READING_CONDUCTIVITY:
-            if value != STATE_UNAVAILABLE:
-                value = int(float(value))
-            self._conductivity = value
-        elif reading == READING_BRIGHTNESS:
-            if value != STATE_UNAVAILABLE:
-                value = int(float(value))
-            self._brightness = value
-            self._brightness_history.add_measurement(
-                self._brightness, new_state.last_updated
-            )
-        else:
-            raise HomeAssistantError(
-                f"Unknown reading from sensor {entity_id}: {value}"
-            )
-        if ATTR_UNIT_OF_MEASUREMENT in new_state.attributes:
-            self._unit_of_measurement[reading] = new_state.attributes.get(
-                ATTR_UNIT_OF_MEASUREMENT
-            )
-        self._update_state()
+        self.max_moisture = None
+        self.min_moisture = None
+        self.max_temperature = None
+        self.min_temperature = None
+        self.max_conductivity = None
+        self.min_conductivity = None
+        self.max_illuminance = None
+        self.min_illuminance = None
+        self.max_humidity = None
+        self.min_humidity = None
+        self.max_dli = None
+        self.min_dli = None
 
-    def _update_state(self):
-        """Update the state of the class based sensor data."""
-        result = []
-        for sensor_name in self._sensormap.values():
-            params = self.READINGS[sensor_name]
-            if (value := getattr(self, f"_{sensor_name}")) is not None:
-                if value == STATE_UNAVAILABLE:
-                    result.append(f"{sensor_name} unavailable")
-                else:
-                    if sensor_name == READING_BRIGHTNESS:
-                        if self._config.get(CONF_WARN_BRIGHTNESS):
-                            result.append(
-                                self._check_min(
-                                    sensor_name, self._brightness_history.max, params
-                                )
-                            )
-                    else:
-                        result.append(self._check_min(sensor_name, value, params))
-                    result.append(self._check_max(sensor_name, value, params))
+        self.sensor_moisture = None
+        self.sensor_temperature = None
+        self.sensor_conductivity = None
+        self.sensor_illuminance = None
+        self.sensor_humidity = None
 
-        result = [r for r in result if r is not None]
+        self.dli = None
+        self.micro_dli = None
 
-        if result:
-            self._state = STATE_PROBLEM
-            self._problems = ", ".join(result)
-        else:
-            self._state = STATE_OK
-            self._problems = PROBLEM_NONE
-        _LOGGER.debug("New data processed")
-        self.async_write_ha_state()
+        self.conductivity_status = None
+        self.illuminance_status = None
+        self.moisture_status = None
+        self.temperature_status = None
+        self.humidity_status = None
+        self.dli_status = None
 
-    def _check_min(self, sensor_name, value, params):
-        """If configured, check the value against the defined minimum value."""
-        if "min" in params and params["min"] in self._config:
-            min_value = self._config[params["min"]]
-            if value < min_value:
-                return f"{sensor_name} low"
-
-    def _check_max(self, sensor_name, value, params):
-        """If configured, check the value against the defined maximum value."""
-        if "max" in params and params["max"] in self._config:
-            max_value = self._config[params["max"]]
-            if value > max_value:
-                return f"{sensor_name} high"
+    @property
+    def entity_category(self) -> None:
+        """The plant device itself does not have a category"""
         return None
 
-    async def async_added_to_hass(self):
-        """After being added to hass, load from history."""
-        if PLANTBOOK_TOKEN and self._species:
-            _LOGGER.debug("Getting plantbook-data for {} {}".format(self.name, self._species))
-            self.hass.async_add_job(self._get_plantbook_data)
-
-        if "recorder" in self.hass.config.components:
-            # only use the database if it's configured
-            self.hass.async_add_job(self._load_history_from_db)
-
-        async_track_state_change_event(
-            self.hass, list(self._sensormap), self._state_changed_event
-        )
-
-        for entity_id in self._sensormap:
-            if (state := self.hass.states.get(entity_id)) is not None:
-                self.state_changed(entity_id, state)
-
-    def _load_history_from_db(self):
-        """Load the history of the brightness values from the database.
-
-        This only needs to be done once during startup.
-        """
-
-        start_date = dt_util.utcnow() - timedelta(days=self._conf_check_days)
-        entity_id = self._readingmap.get(READING_BRIGHTNESS)
-        if entity_id is None:
-            _LOGGER.debug(
-                "Not reading the history from the database as "
-                "there is no brightness sensor configured"
-            )
-            return
-        _LOGGER.debug("Initializing values for %s from the database", self._name)
-        lower_entity_id = entity_id.lower()
-        history_list = history.state_changes_during_period(
-            self.hass,
-            start_date,
-            entity_id=lower_entity_id,
-            no_attributes=True,
-        )
-        for state in history_list.get(lower_entity_id, []):
-            # filter out all None, NaN and "unknown" states
-            # only keep real values
-            with suppress(ValueError):
-                self._brightness_history.add_measurement(
-                    int(state.state), state.last_updated
-                )
-        _LOGGER.debug("Initializing from database completed")
-
-    async def _get_plantbook_data(self):
-        """Gets information about the plant from the openplantbook API"""
-        if not PLANTBOOK_TOKEN:
-            _LOGGER.debug("No plantbook token for {}".format(self.name))
-            return
-        url = "https://open.plantbook.io/api/v1/plant/detail/{}/".format(self._species)
-        headers = {"Authorization": "Bearer {}".format(PLANTBOOK_TOKEN)}
-        _LOGGER.debug("Getting URL {}".format(url))
-        try:
-            session = async_get_clientsession(self.hass)
-            async with session.get(url, headers=headers) as result:
-                _LOGGER.debug("Fetched data from {}:".format(url))
-                res = await result.json()
-                _LOGGER.debug(res)
-
-                self._set_conf_value(CONF_NAME, res["display_pid"])
-                self._set_conf_value(CONF_MIN_TEMPERATURE, res["min_temp"])
-                self._set_conf_value(CONF_MAX_TEMPERATURE, res["max_temp"])
-                self._set_conf_value(CONF_MIN_MOISTURE, res["min_soil_moist"])
-                self._set_conf_value(CONF_MAX_MOISTURE, res["max_soil_moist"])
-                self._set_conf_value(CONF_MIN_CONDUCTIVITY, res["min_soil_ec"])
-                self._set_conf_value(CONF_MAX_CONDUCTIVITY, res["max_soil_ec"])
-                self._set_conf_value(CONF_MIN_BRIGHTNESS, res["min_light_lux"])
-                self._set_conf_value(CONF_MAX_BRIGHTNESS, res["max_light_lux"])
-                self._set_conf_value(CONF_IMAGE, res["image_url"])
-                # update state with values from Plantbook
-                self._update_state()
-
-        except Exception as e:
-            _LOGGER.error("Unable to get plant data from plantbook API: {}".format(e))
-
-    def _set_conf_value(self, var, val):
-        """ Ensures that values explicitly set in the config is not overwritten """
-        _LOGGER.debug("Plant: {} Var: {} Config: {} Value: {}".format(self.name, var, self._config.get(var), val))
-        if var.startswith("min_") or var.startswith("max_"):
-            default = globals()[f"DEFAULT_{var.upper()}"]
-            if var not in self._config or self._config[var] == default:
-                self._config[var] = val
-        if var == "name" and self._plant_name is None:
-            self._plant_name = val
-        if var == "image" and self._image == "openplantbook":
-            self._image = val
+    @property
+    def device_class(self):
+        return DOMAIN
 
     @property
-    def should_poll(self):
-        """No polling needed."""
-        return False
+    def device_id(self) -> str:
+        """The device ID used for all the entities"""
+        return self._device_id
 
     @property
-    def name(self):
-        """Return the name of the sensor."""
-        return self._name
-
-    @property
-    def state(self):
-        """Return the state of the entity."""
-        return self._state
-
-    @property
-    def extra_state_attributes(self):
-        """Return the attributes of the entity.
-
-        Provide the individual measurements from the
-        sensor in the attributes of the device.
-        """
-        attrib = {
-            ATTR_PROBLEM: self._problems,
-            ATTR_SENSORS: self._readingmap,
-            ATTR_LIMITS: {},
-            ATTR_DICT_OF_UNITS_OF_MEASUREMENT: self._unit_of_measurement,
-            ATTR_SPECIES: self._config.get(CONF_SPECIES),
-            ATTR_NAME: self._plant_name,
-            ATTR_IMAGE: self._image,
+    def device_info(self) -> dict:
+        """Device info for devices"""
+        return {
+            "identifiers": {(DOMAIN, self.unique_id)},
+            "name": self.name,
+            "config_entries": self._config_entries,
         }
 
-        for reading in self._sensormap.values():
-            attrib[reading] = getattr(self, f"_{reading}")
+    @property
+    def illuminance_trigger(self) -> bool:
+        """Whether we will generate alarms based on illuminance"""
+        return self._config.options.get(FLOW_ILLUMINANCE_TRIGGER, True)
 
-        if self._brightness_history.max is not None:
-            attrib[ATTR_MAX_BRIGHTNESS_HISTORY] = self._brightness_history.max
+    @property
+    def humidity_trigger(self) -> bool:
+        """Whether we will generate alarms based on humidity"""
+        return self._config.options.get(FLOW_HUMIDITY_TRIGGER, True)
 
-        for var in [
-            CONF_MIN_TEMPERATURE,
-            CONF_MAX_TEMPERATURE,
-            CONF_MIN_MOISTURE,
-            CONF_MAX_MOISTURE,
-            CONF_MIN_CONDUCTIVITY,
-            CONF_MAX_CONDUCTIVITY,
-            CONF_MIN_BRIGHTNESS,
-            CONF_MAX_BRIGHTNESS,
-        ]:
-            attrib[ATTR_LIMITS][var] = self._config[var]
+    @property
+    def temperature_trigger(self) -> bool:
+        """Whether we will generate alarms based on temperature"""
+        return self._config.options.get(FLOW_TEMPERATURE_TRIGGER, True)
 
-        return attrib
+    @property
+    def dli_trigger(self) -> bool:
+        """Whether we will generate alarms based on dli"""
+        return self._config.options.get(FLOW_DLI_TRIGGER, True)
 
+    @property
+    def moisture_trigger(self) -> bool:
+        """Whether we will generate alarms based on moisture"""
+        return self._config.options.get(FLOW_MOISTURE_TRIGGER, True)
 
-class DailyHistory:
-    """Stores one measurement per day for a maximum number of days.
+    @property
+    def conductivity_trigger(self) -> bool:
+        """Whether we will generate alarms based on conductivity"""
+        return self._config.options.get(FLOW_CONDUCTIVITY_TRIGGER, True)
 
-    At the moment only the maximum value per day is kept.
-    """
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Return the device specific state attributes."""
+        if not self.plant_complete:
+            # We are not fully set up, so we just return an empty dict for now
+            return {}
+        attributes = {
+            ATTR_SPECIES: self.display_species,
+            f"{ATTR_MOISTURE}_status": self.moisture_status,
+            f"{ATTR_TEMPERATURE}_status": self.temperature_status,
+            f"{ATTR_CONDUCTIVITY}_status": self.conductivity_status,
+            f"{ATTR_ILLUMINANCE}_status": self.illuminance_status,
+            f"{ATTR_HUMIDITY}_status": self.humidity_status,
+            f"{ATTR_LIMITS}_status": self.dli_status,
+            f"{ATTR_SPECIES}_original": self.species,
+        }
+        return attributes
 
-    def __init__(self, max_length):
-        """Create new DailyHistory with a maximum length of the history."""
-        self.max_length = max_length
-        self._days = None
-        self._max_dict = {}
-        self.max = None
+    @property
+    def websocket_info(self) -> dict:
+        """Wesocket response"""
+        if not self.plant_complete:
+            # We are not fully set up, so we just return an empty dict for now
+            return {}
 
-    def add_measurement(self, value, timestamp=None):
-        """Add a new measurement for a certain day."""
-        day = (timestamp or datetime.now()).date()
-        if not isinstance(value, (int, float)):
-            return
-        if self._days is None:
-            self._days = deque()
-            self._add_day(day, value)
-        else:
-            current_day = self._days[-1]
-            if day == current_day:
-                self._max_dict[day] = max(value, self._max_dict[day])
-            elif day > current_day:
-                self._add_day(day, value)
+        response = {
+            ATTR_TEMPERATURE: {
+                ATTR_MAX: self.max_temperature.state,
+                ATTR_MIN: self.min_temperature.state,
+                ATTR_CURRENT: self.sensor_temperature.state or STATE_UNKNOWN,
+                ATTR_ICON: self.sensor_temperature.icon,
+                ATTR_UNIT_OF_MEASUREMENT: self.sensor_temperature.unit_of_measurement,
+                ATTR_SENSOR: self.sensor_temperature.entity_id,
+            },
+            ATTR_ILLUMINANCE: {
+                ATTR_MAX: self.max_illuminance.state,
+                ATTR_MIN: self.min_illuminance.state,
+                ATTR_CURRENT: self.sensor_illuminance.state or STATE_UNKNOWN,
+                ATTR_ICON: self.sensor_illuminance.icon,
+                ATTR_UNIT_OF_MEASUREMENT: self.sensor_illuminance.unit_of_measurement,
+                ATTR_SENSOR: self.sensor_illuminance.entity_id,
+            },
+            ATTR_MOISTURE: {
+                ATTR_MAX: self.max_moisture.state,
+                ATTR_MIN: self.min_moisture.state,
+                ATTR_CURRENT: self.sensor_moisture.state or STATE_UNKNOWN,
+                ATTR_ICON: self.sensor_moisture.icon,
+                ATTR_UNIT_OF_MEASUREMENT: self.sensor_moisture.unit_of_measurement,
+                ATTR_SENSOR: self.sensor_moisture.entity_id,
+            },
+            ATTR_CONDUCTIVITY: {
+                ATTR_MAX: self.max_conductivity.state,
+                ATTR_MIN: self.min_conductivity.state,
+                ATTR_CURRENT: self.sensor_conductivity.state or STATE_UNKNOWN,
+                ATTR_ICON: self.sensor_conductivity.icon,
+                ATTR_UNIT_OF_MEASUREMENT: self.sensor_conductivity.unit_of_measurement,
+                ATTR_SENSOR: self.sensor_conductivity.entity_id,
+            },
+            ATTR_HUMIDITY: {
+                ATTR_MAX: self.max_humidity.state,
+                ATTR_MIN: self.min_humidity.state,
+                ATTR_CURRENT: self.sensor_humidity.state or STATE_UNKNOWN,
+                ATTR_ICON: self.sensor_humidity.icon,
+                ATTR_UNIT_OF_MEASUREMENT: self.sensor_humidity.unit_of_measurement,
+                ATTR_SENSOR: self.sensor_humidity.entity_id,
+            },
+            ATTR_DLI: {
+                ATTR_MAX: self.max_dli.state,
+                ATTR_MIN: self.min_dli.state,
+                ATTR_CURRENT: STATE_UNKNOWN,
+                ATTR_ICON: self.dli.icon,
+                ATTR_UNIT_OF_MEASUREMENT: self.dli.unit_of_measurement,
+                ATTR_SENSOR: self.dli.entity_id,
+            },
+        }
+        if self.dli.state and self.dli.state != STATE_UNKNOWN:
+            response[ATTR_DLI][ATTR_CURRENT] = float(self.dli.state)
+
+        return response
+
+    def add_image(self, image_url: str | None) -> None:
+        """Set new entity_picture"""
+        self._attr_entity_picture = image_url
+        options = self._config.options.copy()
+        options[ATTR_ENTITY_PICTURE] = image_url
+        self._hass.config_entries.async_update_entry(self._config, options=options)
+
+    def add_species(self, species: Entity | None) -> None:
+        """Set new species"""
+        self.species = species
+
+    def add_thresholds(
+        self,
+        max_moisture: Entity | None,
+        min_moisture: Entity | None,
+        max_temperature: Entity | None,
+        min_temperature: Entity | None,
+        max_conductivity: Entity | None,
+        min_conductivity: Entity | None,
+        max_illuminance: Entity | None,
+        min_illuminance: Entity | None,
+        max_humidity: Entity | None,
+        min_humidity: Entity | None,
+        max_dli: Entity | None,
+        min_dli: Entity | None,
+    ) -> None:
+        """Add the threshold entities"""
+        self.max_moisture = max_moisture
+        self.min_moisture = min_moisture
+        self.max_temperature = max_temperature
+        self.min_temperature = min_temperature
+        self.max_conductivity = max_conductivity
+        self.min_conductivity = min_conductivity
+        self.max_illuminance = max_illuminance
+        self.min_illuminance = min_illuminance
+        self.max_humidity = max_humidity
+        self.min_humidity = min_humidity
+        self.max_dli = max_dli
+        self.min_dli = min_dli
+
+    def add_sensors(
+        self,
+        moisture: Entity | None,
+        temperature: Entity | None,
+        conductivity: Entity | None,
+        illuminance: Entity | None,
+        humidity: Entity | None,
+    ) -> None:
+        """Add the sensor entities"""
+        self.sensor_moisture = moisture
+        self.sensor_temperature = temperature
+        self.sensor_conductivity = conductivity
+        self.sensor_illuminance = illuminance
+        self.sensor_humidity = humidity
+
+    def add_dli(
+        self,
+        dli: Entity | None,
+    ) -> None:
+        """Add the DLI-utility sensors"""
+        self.dli = dli
+        self.plant_complete = True
+
+    def update(self) -> None:
+        """Run on every update of the entities"""
+
+        new_state = STATE_OK
+
+        if (
+            self.sensor_moisture is not None
+            and self.sensor_moisture.state != STATE_UNKNOWN
+            and self.sensor_moisture.state != STATE_UNAVAILABLE
+            and self.sensor_moisture.state is not None
+        ):
+            if float(self.sensor_moisture.state) < float(self.min_moisture.state):
+                self.moisture_status = STATE_LOW
+                if self.moisture_trigger:
+                    new_state = STATE_PROBLEM
+            elif float(self.sensor_moisture.state) > float(self.max_moisture.state):
+                self.moisture_status = STATE_HIGH
+                if self.moisture_trigger:
+                    new_state = STATE_PROBLEM
             else:
-                _LOGGER.warning("Received old measurement, not storing it")
+                self.moisture_status = STATE_OK
 
-        self.max = max(self._max_dict.values())
+        if (
+            self.sensor_conductivity is not None
+            and self.sensor_conductivity.state != STATE_UNKNOWN
+            and self.sensor_conductivity.state != STATE_UNAVAILABLE
+            and self.sensor_conductivity.state is not None
+        ):
+            if float(self.sensor_conductivity.state) < float(
+                self.min_conductivity.state
+            ):
+                self.conductivity_status = STATE_LOW
+                if self.conductivity_trigger:
+                    new_state = STATE_PROBLEM
+            elif float(self.sensor_conductivity.state) > float(
+                self.max_conductivity.state
+            ):
+                self.conductivity_status = STATE_HIGH
+                if self.conductivity_trigger:
+                    new_state = STATE_PROBLEM
+            else:
+                self.conductivity_status = STATE_OK
 
-    def _add_day(self, day, value):
-        """Add a new day to the history.
+        if (
+            self.sensor_temperature is not None
+            and self.sensor_temperature.state != STATE_UNKNOWN
+            and self.sensor_temperature.state != STATE_UNAVAILABLE
+            and self.sensor_temperature.state is not None
+        ):
+            if float(self.sensor_temperature.state) < float(self.min_temperature.state):
+                self.temperature_status = STATE_LOW
+                if self.temperature_trigger:
+                    new_state = STATE_PROBLEM
+            elif float(self.sensor_temperature.state) > float(
+                self.max_temperature.state
+            ):
+                self.temperature_status = STATE_HIGH
+                if self.temperature_trigger:
+                    new_state = STATE_PROBLEM
+            else:
+                self.temperature_status = STATE_OK
 
-        Deletes the oldest day, if the queue becomes too long.
-        """
-        if len(self._days) == self.max_length:
-            oldest = self._days.popleft()
-            del self._max_dict[oldest]
-        self._days.append(day)
-        if not isinstance(value, (int, float)):
-            return
-        self._max_dict[day] = value
+        if (
+            self.sensor_humidity is not None
+            and self.sensor_humidity.state != STATE_UNKNOWN
+            and self.sensor_humidity.state != STATE_UNAVAILABLE
+            and self.sensor_humidity.state is not None
+        ):
+            if float(self.sensor_humidity.state) < float(self.min_humidity.state):
+                self.humidity_status = STATE_LOW
+                if self.humidity_trigger:
+                    new_state = STATE_PROBLEM
+            elif float(self.sensor_humidity.state) > float(self.max_humidity.state):
+                self.humidity_status = STATE_HIGH
+                if self.humidity_trigger:
+                    new_state = STATE_PROBLEM
+            else:
+                self.humidity_status = STATE_OK
+
+        # Check the instant values for illuminance against "max"
+        # Ignoring "min" value for illuminance as it would probably trigger every night
+        if (
+            self.sensor_illuminance is not None
+            and self.sensor_illuminance.state != STATE_UNKNOWN
+            and self.sensor_illuminance.state != STATE_UNAVAILABLE
+            and self.sensor_illuminance.state is not None
+        ):
+            if float(self.sensor_illuminance.state) > float(self.max_illuminance.state):
+                self.illuminance_status = STATE_HIGH
+                if self.illuminance_trigger:
+                    new_state = STATE_PROBLEM
+            else:
+                self.illuminance_status = STATE_OK
+
+        # - Checking Low values would create "problem" every night...
+        # Check DLI from the previous day against max/min DLI
+        if (
+            self.dli is not None
+            and self.dli.state != STATE_UNKNOWN
+            and self.dli.state != STATE_UNAVAILABLE
+            and self.dli.state is not None
+        ):
+            if float(self.dli.extra_state_attributes["last_period"]) > 0 and float(
+                self.dli.extra_state_attributes["last_period"]
+            ) < float(self.min_dli.state):
+                self.dli_status = STATE_LOW
+                if self.dli_trigger:
+                    new_state = STATE_PROBLEM
+            elif float(self.dli.extra_state_attributes["last_period"]) > 0 and float(
+                self.dli.extra_state_attributes["last_period"]
+            ) > float(self.max_dli.state):
+                self.dli_status = STATE_HIGH
+                if self.dli_trigger:
+                    new_state = STATE_PROBLEM
+            else:
+                self.dli_status = STATE_OK
+
+        self._attr_state = new_state
+        self.update_registry()
+
+    @property
+    def data_source(self) -> str | None:
+        """Currently unused. For future use"""
+        return None
+
+    def update_registry(self) -> None:
+        """Update registry with correct data"""
+        # Is there a better way to add an entity to the device registry?
+
+        device_registry = dr.async_get(self._hass)
+        device_registry.async_get_or_create(
+            config_entry_id=self._config.entry_id,
+            identifiers={(DOMAIN, self.unique_id)},
+            name=self.name,
+            model=self.display_species,
+            manufacturer=self.data_source,
+        )
+        if self._device_id is None:
+            device = device_registry.async_get_device(
+                identifiers={(DOMAIN, self.unique_id)}
+            )
+            self._device_id = device.id
+
+    async def async_added_to_hass(self) -> None:
+        self.update_registry()
