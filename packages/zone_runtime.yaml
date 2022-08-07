@@ -1,6 +1,6 @@
-# rachio
 sensor:
 
+# rachio
 
   - platform: history_stats
     name: atrium zone daily runtime
@@ -58,67 +58,44 @@ sensor:
     start: "{{ now().replace(hour=0, minute=0, second=0) }}"
     end: "{{ now() }}"
 
-# bhyve 
-template:
+# bhyve
 
-  - trigger:
-      - platform: state
-        entity_id: sensor.atrium_drippers_zone_history
-        to:
-    sensor:
-      - name: atrium drippers zone last runtime
-        state_class: total_increasing
-        device_class: duration
-        unit_of_measurement: hours
-        state: >
-          {{ state_attr('sensor.atrium_drippers_zone_history', 'run_time') | float / 60 }}
+  - platform: history_stats
+    name: atrium drippers zone daily runtime
+    entity_id: switch.atrium_drippers_zone
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
 
-  - trigger:
-      - platform: state
-        entity_id: sensor.fountain_refill_zone_history
-        to:
-    sensor:
-      - name: fountain refill zone last runtime
-        state_class: total_increasing
-        device_class: duration
-        unit_of_measurement: hours
-        state: >
-          {{ state_attr('sensor.fountain_refill_zone_history', 'run_time') | float / 60 }}
+  - platform: history_stats
+    name: fountain refill zone daily runtime
+    entity_id: switch.fountain_refill_zone
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
 
-  - trigger:
-      - platform: state
-        entity_id: sensor.front_yard_drippers_zone_history
-        to:
-    sensor:
-      - name: front yard drippers zone last runtime
-        state_class: total_increasing
-        device_class: duration
-        unit_of_measurement: hours
-        state: >
-          {{ state_attr('sensor.front_yard_drippers_zone_history', 'run_time') | float / 60 }}
+  - platform: history_stats
+    name: front yard drippers zone daily runtime
+    entity_id: switch.front_yard_drippers_zone
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
 
-  - trigger:
-      - platform: state
-        entity_id: sensor.patio_drippers_zone_history
-        to:
-    sensor:
-      - name: patio drippers zone last runtime
-        state_class: total_increasing
-        device_class: duration
-        unit_of_measurement: hours
-        state: >
-          {{ state_attr('sensor.patio_drippers_zone_history', 'run_time') | float / 60 }}
+  - platform: history_stats
+    name: patio drippers zone daily runtime
+    entity_id: switch.patio_drippers_zone
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
 
-
-  - trigger:
-      - platform: state
-        entity_id: sensor.pergola_drippers_zone_history
-        to:
-    sensor:
-      - name: pergola drippers zone last runtime
-        state_class: total_increasing
-        device_class: duration
-        unit_of_measurement: hours
-        state: >
-          {{ state_attr('sensor.pergola_drippers_zone_history', 'run_time') | float / 60 }}
-
+  - platform: history_stats
+    name: patio drippers zone daily runtime
+    entity_id: switch.pergola_drippers_zone
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"

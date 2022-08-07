@@ -504,7 +504,7 @@ views:
         card:
           type: entities
           show_header_toggle: false
-          title: history
+          title: last run
         filter:
           include:
             - integration: bhyve
@@ -526,9 +526,6 @@ views:
             - entity_id: "/.*_zone_daily_runtime$/"
               options:
                 aggregate_func: max
-            - entity_id: "/.*_zone_last_runtime$/"
-              options:
-                aggregate_func: first
 
       - type: custom:auto-entities
         card:
