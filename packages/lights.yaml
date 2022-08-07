@@ -727,7 +727,7 @@ script:
           color_temp: |
             {{ states.light.music_room.attributes.fixed_color_temp | int }}
       - service: light.turn_on
-        entity_id: light.music_room_haiku_light
+        entity_id: light.music_room_fan_light
 
   notify_with_lights:
     mode: queued

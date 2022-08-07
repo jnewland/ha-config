@@ -1,1 +1,0 @@
-vera_controller_url: !env_var VERA_URL

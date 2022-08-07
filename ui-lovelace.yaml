@@ -48,7 +48,7 @@ views:
           type: entities
           show_header_toggle: false
           entities:
-            # - input_boolean.visitor
+            - input_boolean.visitor
             - sensor.visitor_door_code
 
       - type: vertical-stack
@@ -504,11 +504,30 @@ views:
         card:
           type: entities
           show_header_toggle: false
-          title: history
+          title: last run
         filter:
           include:
             - integration: bhyve
               entity_id: "/.*_history$/"
+
+      - type: custom:auto-entities
+        card:
+          type: custom:mini-graph-card
+          name: consumption
+          hours_to_show: 168
+          group_by: date
+          smoothing: false
+          show:
+            fill: false
+            legend: false
+            state: false
+        filter:
+          include:
+            - entity_id: "/.*_zone_history$/"
+              options:
+                aggregate_func: sum
+                attribute: consumption_gallons
+                unit: gallons
 
       - type: custom:auto-entities
         card:
@@ -526,9 +545,7 @@ views:
             - entity_id: "/.*_zone_daily_runtime$/"
               options:
                 aggregate_func: max
-            - entity_id: "/.*_zone_last_runtime$/"
-              options:
-                aggregate_func: first
+                unit: hours
 
       - type: custom:auto-entities
         card:

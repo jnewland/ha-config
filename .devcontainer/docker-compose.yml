@@ -4,7 +4,7 @@ services:
   terminal:
     build: .
     volumes:
-      - ..:/ha-config:cached
+      - ..:/workspace:cached
+      - /var/run/docker.sock:/var/run/docker-host.sock 
     user: vscode
-    command: /ha-config/.devcontainer/entrypoint.sh
     env_file: ../.env

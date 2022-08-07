@@ -2,4 +2,4 @@ name: music room
 entities:
 - light.music_room
 - light.network_closet
-- light.music_room_haiku_light
+- light.music_room_fan_light

@@ -9,13 +9,13 @@ group:
       - switch.great_room_tree
       - switch.treeo
       - switch.quatro
-      - switch.lounge_tree
+      - switch.lounge_tree_left
 
 homeassistant:
   customize:
     switch.great_room_tree:
       icon: mdi:pine-tree
-    switch.lounge_tree:
+    switch.lounge_tree_left:
       icon: mdi:pine-tree
     switch.treeo:
       icon: mdi:pine-tree

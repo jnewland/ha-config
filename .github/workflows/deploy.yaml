@@ -68,41 +68,8 @@ jobs:
     environment: production
     concurrency: production
     steps:
-      - name: "Deploy home-assistant"
-        env:
-          HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
-          HASS_URL: ${{ secrets.HASS_URL }}
-        run: |
-          curl \
-            --silent \
-            --output /dev/null \
-            -H "Authorization: Bearer $HASS_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"sha\": \"${{ github.event.pull_request.head.sha }}\"}" \
-            "$HASS_URL/api/services/script/deploy"
-
-      - name: "Wait for deployment to complete"
-        env:
-          HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
-          HASS_URL: ${{ secrets.HASS_URL }}
-          TIMEOUT: "240"
-        run: |
-          while true; do
-            curl \
-              --silent \
-              --max-time 5 \
-              -H "Authorization: Bearer $HASS_TOKEN" \
-              -H "Content-Type: application/json" \
-              "$HASS_URL/api/states/sensor.config_sha" | jq -r '.state' | tee /tmp/deployed_sha;
-            if [ "$(cat /tmp/deployed_sha)" = "${{ github.event.pull_request.head.sha }}" ]; then
-              exit;
-            elif [ "$SECONDS" -gt "$TIMEOUT" ]; then
-              echo "Couldn't confirm deployment in under $TIMEOUT seconds"
-              exit 1;
-            else
-              sleep 5;
-            fi
-          done
+      - name: deploy
+        run: 'true'
 
   create-deploy-status:
     runs-on: ubuntu-latest
