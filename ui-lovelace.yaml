@@ -523,7 +523,7 @@ views:
             state: false
         filter:
           include:
-            - entity_id: "/.*_zone_daily_runtime$/"
+            - entity_id: "/.*_zone_history$/"
               options:
                 aggregate_func: sum
                 attribute: consumption_gallons
