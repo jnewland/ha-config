@@ -1496,7 +1496,6 @@ views:
           - binary_sensor.updater
           - sensor.config_sha
           - sensor.latest_deployment_sha
-          - script.deploy
       - type: custom:auto-entities
         show_empty: false
         sort:
