@@ -44,6 +44,7 @@ from .const import (
     ATTR_TEMPERATURE,
     DATA_SOURCE,
     DOMAIN,
+    DOMAIN_PLANTBOOK,
     FLOW_CONDUCTIVITY_TRIGGER,
     FLOW_DLI_TRIGGER,
     FLOW_HUMIDITY_TRIGGER,
@@ -111,8 +112,9 @@ async def async_setup(hass: HomeAssistant, config: dict):
         if not config_entry:
             _LOGGER.debug("Old setup - with config: %s", config[DOMAIN])
             for plant in config[DOMAIN]:
-                _LOGGER.warning("Migrating plant: %s", plant)
-                await async_migrate_plant(hass, plant, config[DOMAIN][plant])
+                if plant != DOMAIN_PLANTBOOK:
+                    _LOGGER.warning("Migrating plant: %s", plant)
+                    await async_migrate_plant(hass, plant, config[DOMAIN][plant])
         else:
             _LOGGER.warning(
                 "Config already imported. Please delete all your %s related config from configuration.yaml",
@@ -368,7 +370,6 @@ def ws_get_info(
             return
         plant_entity = hass.data[DOMAIN][key][ATTR_PLANT]
         if plant_entity.entity_id == msg["entity_id"]:
-            _LOGGER.debug("Websocket info: %s", plant_entity.websocket_info)
             connection.send_result(msg["id"], {"result": plant_entity.websocket_info})
             return
     connection.send_error(
@@ -511,7 +512,7 @@ class PlantDevice(Entity):
             f"{ATTR_CONDUCTIVITY}_status": self.conductivity_status,
             f"{ATTR_ILLUMINANCE}_status": self.illuminance_status,
             f"{ATTR_HUMIDITY}_status": self.humidity_status,
-            f"{ATTR_LIMITS}_status": self.dli_status,
+            f"{ATTR_DLI}_status": self.dli_status,
             f"{ATTR_SPECIES}_original": self.species,
         }
         return attributes
