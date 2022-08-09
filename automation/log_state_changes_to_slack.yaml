@@ -15,16 +15,16 @@ trigger:
     - binary_sensor.gate
     - alarm_control_panel.alarm
     - automation.gate_bell
-    - binary_sensor.master_door
+    - binary_sensor.bedroom_door_access_control_window_door_is_open
     - binary_sensor.bathroom_home_security_motion_detection
-    - binary_sensor.stairs_motion
+    - binary_sensor.stairs_home_security_motion_detection
     - binary_sensor.closet_motion_any
     - binary_sensor.guest_bath_home_security_motion_detection
     - binary_sensor.powder_room_home_security_motion_detection
     - binary_sensor.lounge_home_security_motion_detection
     - binary_sensor.upstairs_home_security_motion_detection
     - binary_sensor.guest_hall_home_security_motion_detection
-    - binary_sensor.yoga_room_motion
+    - binary_sensor.binary_sensor.yoga_room_home_security_motion_detection
     - binary_sensor.dining_room_home_security_motion_detection
     - binary_sensor.front_gate_access_control_window_door_is_open
     - sensor.ups_state

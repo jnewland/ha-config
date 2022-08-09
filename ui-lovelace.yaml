@@ -753,7 +753,7 @@ views:
           - light.yoga_room
           - light.marble_lamp
           - light.yoga_closet
-          - binary_sensor.yoga_room_motion
+          - binary_sensor.yoga_room_home_security_motion_detection
           - binary_sensor.yoga_chair_home_security_motion_detection
           - binary_sensor.yoga_room_occupancy
           - cover.yoga_room_shades
@@ -787,7 +787,7 @@ views:
           - light.bedroom_patio
           - light.bedroom_closet
           - binary_sensor.closet_motion_any
-          - binary_sensor.master_door
+          - binary_sensor.bedroom_door_access_control_window_door_is_open
           - cover.bedroom_shades
       - type: entities
         title: bath
@@ -1299,15 +1299,12 @@ views:
             - lock.garage.battery_level
             - switch.front_door.battery_level
             - switch.front_gate.battery_level
-            - switch.master_door.battery_level
             - switch.master_ac_water.battery_level
             - switch.garage_hall_motion.battery_level
             - switch.great_hall_motion.battery_level
             - switch.music_room_motion.battery_level
             - switch.pantry_motion.battery_level
-            - switch.stairs_motion.battery_level
             - switch.wine_room_motion.battery_level
-            - switch.yoga_room_motion.battery_level
             - vacuum.downstairs.battery_level
 
   - title: Car

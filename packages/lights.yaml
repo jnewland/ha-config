@@ -17,7 +17,7 @@ homeassistant:
     # trigger_service_off: service
     # trigger_entity_id_off: entity_id
 
-    binary_sensor.master_door:
+    binary_sensor.bedroom_door_access_control_window_door_is_open:
       haunt: light.bookshelf_right
     binary_sensor.closet_motion_any:
       trigger_entity_id: light.bedroom_closet
