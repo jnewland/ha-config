@@ -4,7 +4,7 @@ template:
         unique_id: vera_entities
         unit_of_measurement: entities
         state: >
-          {{ integration_entities('vera') | count }}
+          0
 
   - sensor:
       - name: ZwaveJS Entities

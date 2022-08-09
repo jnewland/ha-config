@@ -1403,38 +1403,6 @@ views:
           * [Range extender 6](https://help.aeotec.com/support/solutions/articles/6000162370-range-extender-6-user-guide-)
           * [Ecolink PIR](https://usermanual.wiki/Z-Wave/EcolinkPirzwave2Eco.1230161169)
 
-      - type: markdown
-        entity_id:
-          - sensor.vera_entities
-          - sensor.zwavejs_entities
-        content: |
-          # Migrating a node
-
-          > {% set entity = states[integration_entities('vera') | random] %}Why not migrate the {{ entity.name }} {{entity.domain}} (`{{entity.entity_id}}`) right now?
-
-          ### Exclude
-
-            1. Confirm the exclusion process for the nodes you want to exclude.
-            1. [ALTUI]({{ states('input_text.vera_url') }}data_request?id=lr_ALTUI_Handler&command=home) -> More -> Table Controllers -> Exclude
-            1. Watch logs on the [Vera]({{ states('input_text.vera_url').split(':')[0] }}:{{ states('input_text.vera_url').split(':')[1] }}/cmh#devices)
-            1. Exclude the node. Maybe exclude a few more if you want to migrate a whole room
-
-          ### Cleanup
-
-          1. [Integrations]({{ states('input_text.external_url') }}/config/integrations) -> Vera -> Reload
-          1. [Vera Entities]({{ states('input_text.external_url') }}/config/entities?historyBack=1&config_entry=faf56f49096c439cb20075fdc1bb48ee) -> Sort by status -> Remove failed
-
-          ### Include
-
-          1. [Zwavejs2Mqtt]({{ states('input_text.external_url') | replace('//home.','//zwave.k.') }}) -> Manage Nodes -> Include
-          1. Include the node
-
-          ### Migrate config
-
-          1. `make`
-          1. Cleanup [entity IDs]({{ states('input_text.external_url') }}/config/entities?historyBack=1&config_entry=a9f84a8f738383dc934b1198292374dc) as necessary
-          1. Search & Replace in [config](https://github.com/jnewland/ha-config) if entity IDs change
-
       - type: custom:auto-entities
         card:
           type: history-graph
