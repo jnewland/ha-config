@@ -757,10 +757,10 @@ views:
           - binary_sensor.yoga_chair_home_security_motion_detection
           - binary_sensor.yoga_room_occupancy
           - cover.yoga_room_shades
-          - sensor.yoga_room_temp
+          - sensor.yoga_room_air_temperature
         footer:
           type: graph
-          entity: sensor.yoga_room_temp
+          entity: sensor.yoga_room_air_temperature
           hours_to_show: 36
           detail: 2
       - type: custom:mini-media-player
