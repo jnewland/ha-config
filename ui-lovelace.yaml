@@ -777,13 +777,13 @@ views:
       - type: entities
         title: bedroom
         entities:
-          - light.chandelier
-          - light.chandelier_lamp
+          - light.bedroom_chandelier
           - light.bedroom_overhead
           - light.bedroom_nook
           - light.bedroom_windows
           - light.bedside_lamp
           - light.bedside_table
+          - light.chandelier_lamp
           - light.bedroom_patio
           - light.bedroom_closet
           - binary_sensor.closet_motion_any
