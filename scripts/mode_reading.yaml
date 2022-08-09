@@ -18,7 +18,7 @@ sequence:
 - service: light.turn_on
   data:
     entity_id:
-    - light.chandelier
+    - light.bedroom_chandelier
     - light.chandelier_lamp
     - light.bedside_lamp
     - light.bedside_table
