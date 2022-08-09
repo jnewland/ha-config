@@ -677,26 +677,6 @@ script:
       entity_id: script.great_room_lights
 
 
-
-  bathroom_lights:
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.bathroom_toilet
-          brightness: |
-            {{ brightness | default(states('input_number.brightness') | int) }}
-      - condition: template
-        value_template: >
-          {{ states.input_select.mode.state != "Sleeping" }}
-      - service: light.turn_on
-        data:
-          entity_id:
-          - light.bathroom_overhead
-          - light.bathroom_shower
-          - light.bathroom_mirror
-          brightness: |
-            {{ brightness | default(states('input_number.brightness') | int) }}
-
   bathroom_lights:
     sequence:
       - condition: template
@@ -705,7 +685,7 @@ script:
       - service: homeassistant.turn_on
         data:
           entity_id: |
-            {{ "light.bathroom_toilet" if states.input_select.mode.state == "Sleeping" else "group.master" }}
+            {{ "light.bathroom_toilet" if states.input_select.mode.state == "Sleeping" else "group.bathroom" }}
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
 
@@ -717,7 +697,7 @@ script:
       - service: homeassistant.turn_off
         data:
           entity_id: |
-            group.master
+            group.bathroom
 
   music_room:
     sequence:

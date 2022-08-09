@@ -15,7 +15,7 @@ group.downstairs_speakers:
   emulated_hue_hidden: false
 group.outdoor_speakers:
   emulated_hue_hidden: false
-group.master:
+group.bedroom:
   emulated_hue_hidden: false
   emulated_hue_name: "bedroom"
 group.bathroom:
