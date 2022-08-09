@@ -19,9 +19,9 @@ homeassistant:
 
     binary_sensor.master_door:
       haunt: light.bookshelf_right
-    binary_sensor.closet_motion:
-      trigger_entity_id: light.master_closet
-      trigger_entity_id_off: light.master_closet
+    binary_sensor.closet_motion_any:
+      trigger_entity_id: light.bedroom_closet
+      trigger_entity_id_off: light.bedroom_closet
     binary_sensor.guest_bath_home_security_motion_detection:
       trigger_entity_id: group.guest_bath_lights
       trigger_entity_id_off: group.guest_bath
@@ -40,9 +40,9 @@ homeassistant:
       trigger_service: script.music_room
       trigger_entity_id_off: group.music_room
       off_delay_seconds: 1800
-    binary_sensor.master_bath_motion:
-      trigger_service: script.master_bath_lights
-      trigger_entity_id_off: group.master_bath
+    binary_sensor.bathroom_home_security_motion_detection:
+      trigger_service: script.bathroom_lights
+      trigger_entity_id_off: group.bathroom
       off_delay_seconds: 1800
       haunt: light.bookshelf_left
     binary_sensor.wine_room_motion:
@@ -153,21 +153,21 @@ homeassistant:
       notify_action: duck
       fixed_brightness: 20
 
-    light.master_bath_overhead:
+    light.bathroom_overhead:
       notify_action: duck
-    light.master_closet:
+    light.bedroom_closet:
       notify_action: duck
-    light.master_mirror:
+    light.bathroom_mirror:
       notify_action: duck
-    light.master_nook:
+    light.bedroom_nook:
       notify_action: duck
-    light.master_overhead:
+    light.bedroom_overhead:
       notify_action: duck
-    light.master_patio:
+    light.bedroom_patio:
       notify_action: duck
-    light.master_shower:
+    light.bathroom_shower:
       notify_action: duck
-    light.master_toilet:
+    light.bathroom_toilet:
       notify_action: duck
     light.yoga_room:
       notify_action: duck
@@ -678,11 +678,11 @@ script:
 
 
 
-  master_bath_lights:
+  bathroom_lights:
     sequence:
       - service: light.turn_on
         data:
-          entity_id: light.master_toilet
+          entity_id: light.bathroom_toilet
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
       - condition: template
@@ -691,13 +691,13 @@ script:
       - service: light.turn_on
         data:
           entity_id:
-          - light.master_bath_overhead
-          - light.master_shower
-          - light.master_mirror
+          - light.bathroom_overhead
+          - light.bathroom_shower
+          - light.bathroom_mirror
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
 
-  master_lights:
+  bathroom_lights:
     sequence:
       - condition: template
         value_template: >
@@ -705,11 +705,11 @@ script:
       - service: homeassistant.turn_on
         data:
           entity_id: |
-            {{ "light.master_toilet" if states.input_select.mode.state == "Sleeping" else "group.master" }}
+            {{ "light.bathroom_toilet" if states.input_select.mode.state == "Sleeping" else "group.master" }}
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
 
-  master_lights_off:
+  bathroom_lights_off:
     sequence:
       - condition: template
         value_template: >

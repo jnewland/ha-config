@@ -18,6 +18,6 @@ group.outdoor_speakers:
 group.master:
   emulated_hue_hidden: false
   emulated_hue_name: "bedroom"
-group.master_bath:
+group.bathroom:
   emulated_hue_hidden: false
   emulated_hue_name: "bathroom"

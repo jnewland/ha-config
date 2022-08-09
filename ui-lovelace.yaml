@@ -779,30 +779,30 @@ views:
         entities:
           - light.chandelier
           - light.chandelier_lamp
-          - light.master_overhead
-          - light.master_nook
-          - light.master_windows
+          - light.bedroom_overhead
+          - light.bedroom_nook
+          - light.bedroom_windows
           - light.bedside_lamp
           - light.bedside_table
-          - light.master_patio
-          - light.master_closet
-          - binary_sensor.closet_motion
+          - light.bedroom_patio
+          - light.bedroom_closet
+          - binary_sensor.closet_motion_any
           - binary_sensor.master_door
           - cover.bedroom_shades
       - type: entities
         title: bath
         entities:
-          - light.master_bath_overhead
-          - light.master_shower
-          - light.master_mirror
-          - light.master_toilet
-          - switch.master_bath_fan
-          - binary_sensor.master_bath_motion
-          - sensor.master_bath_temp
+          - light.bathroom_overhead
+          - light.bathroom_mirror
+          - light.bathroom_shower
+          - switch.bathroom_fan
+          - light.bathroom_toilet
+          - binary_sensor.bathroom_home_security_motion_detection
+          - sensor.bathroom_air_temperature
           - cover.master_bathroom_shade
         footer:
           type: graph
-          entity: sensor.master_bath_temp
+          entity: sensor.bathroom_air_temperature
           hours_to_show: 36
           detail: 2
       - type: media-control
@@ -898,7 +898,7 @@ views:
         title: patio
         entities:
           - light.patio
-          - light.master_patio
+          - light.bedroom_patio
       - type: entities
         title: pergola
         entities:
@@ -1301,10 +1301,8 @@ views:
             - switch.front_gate.battery_level
             - switch.master_door.battery_level
             - switch.master_ac_water.battery_level
-            - binary_sensor.closet_motion.battery_level
             - switch.garage_hall_motion.battery_level
             - switch.great_hall_motion.battery_level
-            - switch.master_bath_motion.battery_level
             - switch.music_room_motion.battery_level
             - switch.pantry_motion.battery_level
             - switch.stairs_motion.battery_level

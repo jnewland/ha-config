@@ -149,8 +149,8 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{
-            states('binary_sensor.master_bath_motion') == 'on' or
-            states('binary_sensor.closet_motion') == 'on' or
+            states('binary_sensor.bathroom_home_security_motion_detection') == 'on' or
+            states('binary_sensor.closet_motion_any') == 'on' or
             states('binary_sensor.master_door') == 'off'
           }}
         delay_off:
@@ -161,7 +161,7 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{
-            states('binary_sensor.master_bath_motion') == 'on'
+            states('binary_sensor.bathroom_home_security_motion_detection') == 'on'
           }}
         delay_off:
           minutes: 15

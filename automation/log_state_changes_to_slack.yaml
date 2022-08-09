@@ -16,9 +16,9 @@ trigger:
     - alarm_control_panel.alarm
     - automation.gate_bell
     - binary_sensor.master_door
-    - binary_sensor.master_bath_motion
+    - binary_sensor.bathroom_home_security_motion_detection
     - binary_sensor.stairs_motion
-    - binary_sensor.closet_motion
+    - binary_sensor.closet_motion_any
     - binary_sensor.guest_bath_home_security_motion_detection
     - binary_sensor.powder_room_home_security_motion_detection
     - binary_sensor.lounge_home_security_motion_detection
@@ -36,7 +36,7 @@ trigger:
     - device_tracker.jphone_12
     - device_tracker.jesses_ipad
     - device_tracker.jesse_music_room
-    - binary_sensor.master_bath_motion
+    - binary_sensor.bathroom_home_security_motion_detection
     - binary_sensor.master_ac_water
     - cover.garage
     - cover.gate

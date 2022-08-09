@@ -6,7 +6,7 @@ automation:
         entity_id: input_select.mode
         to: Morning
       - platform: state
-        entity_id: binary_sensor.master_bath_motion
+        entity_id: binary_sensor.bathroom_home_security_motion_detection
         from: 'off'
         to: 'on'
       - platform: state

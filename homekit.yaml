@@ -23,7 +23,7 @@ filter:
     - switch.atrium_fountain
     - switch.back_porch
     - switch.back_porch_fountain
-    - switch.master_bath_fan
+    - switch.bathroom_fan
     - script.mode_away
     - script.lounge_lights
     - script.mode_reading

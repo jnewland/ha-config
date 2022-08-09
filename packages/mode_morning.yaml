@@ -3,11 +3,11 @@ automation:
     id: ea8d312a-ccd9-483c-949c-0b103480ec28
     trigger:
       - platform: state
-        entity_id: binary_sensor.closet_motion
+        entity_id: binary_sensor.closet_motion_any
         from: 'off'
         to: 'on'
       - platform: state
-        entity_id: binary_sensor.master_bath_motion
+        entity_id: binary_sensor.bathroom_home_security_motion_detection
         from: 'off'
         to: 'on'
       - platform: state
