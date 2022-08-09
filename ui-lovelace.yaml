@@ -1250,7 +1250,6 @@ views:
         card:
           type: entities
           title: lights on
-          show_header_toggle: false
         filter:
           include:
             - domain: light
