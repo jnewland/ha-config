@@ -55,7 +55,7 @@ homeassistant:
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.yoga
 
-    binary_sensor.garage_hall_motion:
+    binary_sensor.garage_hall_home_security_motion_detection:
       trigger_entity_id: light.garage_hall
       trigger_entity_id_off: light.garage_hall
       haunt: light.drums
@@ -91,7 +91,7 @@ template:
         state: |
           {{
             is_state('binary_sensor.great_room_occupancy', 'on') or
-            is_state('binary_sensor.garage_hall_motion', 'on') or
+            is_state('binary_sensor.garage_hall_home_security_motion_detection', 'on') or
             is_state('binary_sensor.guest_hall_home_security_motion_detection', 'on') or
             is_state('binary_sensor.great_hall_motion', 'on') or
             is_state('binary_sensor.stairs_home_security_motion_detection', 'on')
