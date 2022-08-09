@@ -65,7 +65,7 @@ homeassistant:
       trigger_entity_id_off: light.guest_hall_overhead
       haunt: light.couch
 
-    binary_sensor.great_hall_motion:
+    binary_sensor.great_hall_home_security_motion_detection:
       trigger_entity_id: light.great_hall
       trigger_entity_id_off: light.great_hall
       haunt: light.drums
@@ -93,7 +93,7 @@ template:
             is_state('binary_sensor.great_room_occupancy', 'on') or
             is_state('binary_sensor.garage_hall_home_security_motion_detection', 'on') or
             is_state('binary_sensor.guest_hall_home_security_motion_detection', 'on') or
-            is_state('binary_sensor.great_hall_motion', 'on') or
+            is_state('binary_sensor.great_hall_home_security_motion_detection', 'on') or
             is_state('binary_sensor.stairs_home_security_motion_detection', 'on')
           }}
 

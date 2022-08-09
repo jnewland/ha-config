@@ -4,7 +4,6 @@ mode: parallel
 trigger:
   platform: state
   entity_id:
-    - binary_sensor.living_room_motion
     - binary_sensor.master_patio_door
     - binary_sensor.downstairs_bathroom
     - binary_sensor.downstairs_window

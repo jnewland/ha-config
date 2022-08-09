@@ -664,11 +664,10 @@ views:
           - light.dining_room_table
           - binary_sensor.dining_room_home_security_motion_detection
           - light.pantry
-          - binary_sensor.pantry_motion
+          - binary_sensor.pantry_home_security_motion_detection
           - light.living
           - light.couch_lamp_right
           - light.couch_lamp_left
-          - binary_sensor.living_room_motion
           - binary_sensor.great_room_occupancy
           - sensor.dining_room_air_temperature
         footer:
@@ -1187,14 +1186,14 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.*_temp$/"
+            - entity_id: "/^sensor.*_air_temperature$/"
           exclude:
-            - entity_id: sensor.wine_room_temp
+            - entity_id: sensor.wine_room_air_temperature
 
       - type: history-graph
         hours_to_show: 72
         entities:
-          - sensor.wine_room_temp
+          - sensor.wine_room_air_temperature
 
       - type: custom:auto-entities
         card:
@@ -1288,23 +1287,6 @@ views:
             - entity_id: "/.*battery_level/"
           exclude:
             - state: "off"
-      - type: custom:entity-attributes-card
-        heading_name: Sensor
-        heading_state: Battery level
-        name_attribute: friendly_name
-        filter:
-          include:
-            - lock.front_door.battery_level
-            - lock.back_door.battery_level
-            - lock.garage.battery_level
-            - switch.front_door.battery_level
-            - switch.front_gate.battery_level
-            - switch.master_ac_water.battery_level
-            - switch.great_hall_motion.battery_level
-            - switch.music_room_motion.battery_level
-            - switch.pantry_motion.battery_level
-            - switch.wine_room_motion.battery_level
-            - vacuum.downstairs.battery_level
 
   - title: Car
     icon: mdi:car-estate
@@ -1469,6 +1451,7 @@ views:
           include:
             - entity_id: "/_[0-9]+$/"
           exclude:
+            - integration: mobile_app
             - entity_id: "*_sim_*"
       - type: history-graph
         title: history
