@@ -16,11 +16,6 @@ sensor:
       unit_of_measurement: '°F'
       value_template: |
         {{ state_attr('climate.downstairs', 'current_temperature') }}
-    upstairs_temperature:
-      friendly_name: upstairs
-      unit_of_measurement: '°F'
-      value_template: |
-        {{ state_attr('climate.upstairs', 'current_temperature') }}
 
 automation:
   - alias: upstairs heat
@@ -28,8 +23,7 @@ automation:
     id: 052a2e46-33e4-4964-8da4-42609ca7e683
     trigger:
       platform: numeric_state
-      entity_id: climate.upstairs
-      attribute: current_temperature
+      entity_id: sensor.upstairs_thermostat_air_temperature
       below: 68
       for:
         minutes: 3
@@ -55,18 +49,15 @@ automation:
     id: c66cded8-2a60-4dd4-96cc-677ff080934c
     trigger:
       - platform: numeric_state
-        entity_id: climate.upstairs
-        attribute: current_temperature
+        entity_id: sensor.upstairs_thermostat_air_temperature
         above: 73
         for:
           minutes: 3
       - platform: numeric_state
-        entity_id: climate.upstairs
-        attribute: current_temperature
+        entity_id: sensor.upstairs_thermostat_air_temperature
         above: 74
       - platform: numeric_state
-        entity_id: climate.upstairs
-        attribute: current_temperature
+        entity_id: sensor.upstairs_thermostat_air_temperature
         above: 75
     action:
       - service: cover.close_cover
