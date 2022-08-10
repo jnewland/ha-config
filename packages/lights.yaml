@@ -157,8 +157,6 @@ homeassistant:
       notify_action: duck
     light.bedroom_closet:
       notify_action: duck
-    light.bathroom_mirror:
-      notify_action: duck
     light.bedroom_nook:
       notify_action: duck
     light.bedroom_overhead:
@@ -183,6 +181,15 @@ homeassistant:
 
     light.kitchen_light:
       ignore_brightness: true
+    light.powder_room_mirror:
+      ignore_brightness: true
+      notify_action: duck
+    light.bathroom_mirror:
+      ignore_brightness: true
+      notify_action: duck
+    light.guest_bath_mirror:
+      ignore_brightness: true
+      notify_action: duck
 
 binary_sensor:
   - platform: template
@@ -679,15 +686,26 @@ script:
 
   bathroom_lights:
     sequence:
-      - condition: template
-        value_template: >
-          {{ states.input_select.mode.state not in ["Reading", "Morning"] }}
-      - service: homeassistant.turn_on
+      - service: light.turn_on
         data:
-          entity_id: |
-            {{ "light.bathroom_toilet" if states.input_select.mode.state == "Sleeping" else "group.bathroom" }}
+          entity_id: light.bathroom_toilet
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
+      - condition: template
+        value_template: >
+          {{ states.input_select.mode.state != "Sleeping" }}
+      - service: light.turn_on
+        data:
+          entity_id:
+          - light.master_bath_overhead
+          - light.master_shower
+          brightness: |
+            {{ brightness | default(states('input_number.brightness') | int) }}
+      - service: light.turn_on
+        data:
+          entity_id: light.master_mirror
+
+
 
   bathroom_lights_off:
     sequence:
