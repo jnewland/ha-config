@@ -18,19 +18,19 @@ sequence:
 - service: light.turn_on
   data:
     entity_id:
-    - light.chandelier
+    - light.bedroom_chandelier
     - light.chandelier_lamp
     - light.bedside_lamp
     - light.bedside_table
-    - light.master_nook
-    - light.master_patio
+    - light.bedroom_nook
+    - light.bedroom_patio
     - light.striped_lamp
     brightness: |
       {{ states('input_number.brightness') | int }}
 - service: light.turn_off
   data:
     entity_id:
-    - light.master_overhead
+    - light.bedroom_overhead
     - light.stairs
 - service: script.lock_up
 - condition: template

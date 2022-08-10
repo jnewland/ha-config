@@ -93,7 +93,7 @@ sensor:
     end: "{{ now() }}"
 
   - platform: history_stats
-    name: patio drippers zone daily runtime
+    name: pergola zone daily runtime
     entity_id: switch.pergola_drippers_zone
     state: "on"
     type: time

@@ -664,11 +664,10 @@ views:
           - light.dining_room_table
           - binary_sensor.dining_room_home_security_motion_detection
           - light.pantry
-          - binary_sensor.pantry_motion
+          - binary_sensor.pantry_home_security_motion_detection
           - light.living
           - light.couch_lamp_right
           - light.couch_lamp_left
-          - binary_sensor.living_room_motion
           - binary_sensor.great_room_occupancy
           - sensor.dining_room_air_temperature
         footer:
@@ -753,14 +752,14 @@ views:
           - light.yoga_room
           - light.marble_lamp
           - light.yoga_closet
-          - binary_sensor.yoga_room_motion
+          - binary_sensor.yoga_room_home_security_motion_detection
           - binary_sensor.yoga_chair_home_security_motion_detection
           - binary_sensor.yoga_room_occupancy
           - cover.yoga_room_shades
-          - sensor.yoga_room_temp
+          - sensor.yoga_room_air_temperature
         footer:
           type: graph
-          entity: sensor.yoga_room_temp
+          entity: sensor.yoga_room_air_temperature
           hours_to_show: 36
           detail: 2
       - type: custom:mini-media-player
@@ -777,32 +776,32 @@ views:
       - type: entities
         title: bedroom
         entities:
-          - light.chandelier
-          - light.chandelier_lamp
-          - light.master_overhead
-          - light.master_nook
-          - light.master_windows
+          - light.bedroom_chandelier
+          - light.bedroom_overhead
+          - light.bedroom_nook
+          - light.bedroom_windows
           - light.bedside_lamp
           - light.bedside_table
-          - light.master_patio
-          - light.master_closet
-          - binary_sensor.closet_motion
-          - binary_sensor.master_door
+          - light.chandelier_lamp
+          - light.bedroom_patio
+          - light.bedroom_closet
+          - binary_sensor.closet_motion_any
+          - binary_sensor.bedroom_door_access_control_window_door_is_open
           - cover.bedroom_shades
       - type: entities
         title: bath
         entities:
-          - light.master_bath_overhead
-          - light.master_shower
-          - light.master_mirror
-          - light.master_toilet
-          - switch.master_bath_fan
-          - binary_sensor.master_bath_motion
-          - sensor.master_bath_temp
+          - light.bathroom_overhead
+          - light.bathroom_mirror
+          - light.bathroom_shower
+          - switch.bathroom_fan
+          - light.bathroom_toilet
+          - binary_sensor.bathroom_home_security_motion_detection
+          - sensor.bathroom_air_temperature
           - cover.master_bathroom_shade
         footer:
           type: graph
-          entity: sensor.master_bath_temp
+          entity: sensor.bathroom_air_temperature
           hours_to_show: 36
           detail: 2
       - type: media-control
@@ -898,7 +897,7 @@ views:
         title: patio
         entities:
           - light.patio
-          - light.master_patio
+          - light.bedroom_patio
       - type: entities
         title: pergola
         entities:
@@ -1187,14 +1186,14 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/^sensor.*_temp$/"
+            - entity_id: "/^sensor.*_air_temperature$/"
           exclude:
-            - entity_id: sensor.wine_room_temp
+            - entity_id: sensor.wine_room_air_temperature
 
       - type: history-graph
         hours_to_show: 72
         entities:
-          - sensor.wine_room_temp
+          - sensor.wine_room_air_temperature
 
       - type: custom:auto-entities
         card:
@@ -1251,7 +1250,6 @@ views:
         card:
           type: entities
           title: lights on
-          show_header_toggle: false
         filter:
           include:
             - domain: light
@@ -1288,29 +1286,6 @@ views:
             - entity_id: "/.*battery_level/"
           exclude:
             - state: "off"
-      - type: custom:entity-attributes-card
-        heading_name: Sensor
-        heading_state: Battery level
-        name_attribute: friendly_name
-        filter:
-          include:
-            - lock.front_door.battery_level
-            - lock.back_door.battery_level
-            - lock.garage.battery_level
-            - switch.front_door.battery_level
-            - switch.front_gate.battery_level
-            - switch.master_door.battery_level
-            - switch.master_ac_water.battery_level
-            - binary_sensor.closet_motion.battery_level
-            - switch.garage_hall_motion.battery_level
-            - switch.great_hall_motion.battery_level
-            - switch.master_bath_motion.battery_level
-            - switch.music_room_motion.battery_level
-            - switch.pantry_motion.battery_level
-            - switch.stairs_motion.battery_level
-            - switch.wine_room_motion.battery_level
-            - switch.yoga_room_motion.battery_level
-            - vacuum.downstairs.battery_level
 
   - title: Car
     icon: mdi:car-estate
@@ -1381,15 +1356,9 @@ views:
       - type: picture
         image: https://cctv.austinmobility.io/image/244.jpg
 
-  - title: Zwave Migration
+  - title: Zwave
     icon: mdi:z-wave
     cards:
-      - type: history-graph
-        title: device count
-        hours_to_show: 80
-        entities:
-          - sensor.vera_entities
-          - sensor.zwavejs_entities
       - type: markdown
         content: |
           ## ZWave Device Docs
@@ -1409,37 +1378,17 @@ views:
           * [Range extender 6](https://help.aeotec.com/support/solutions/articles/6000162370-range-extender-6-user-guide-)
           * [Ecolink PIR](https://usermanual.wiki/Z-Wave/EcolinkPirzwave2Eco.1230161169)
 
-      - type: markdown
-        entity_id:
-          - sensor.vera_entities
-          - sensor.zwavejs_entities
-        content: |
-          # Migrating a node
-
-          > {% set entity = states[integration_entities('vera') | random] %}Why not migrate the {{ entity.name }} {{entity.domain}} (`{{entity.entity_id}}`) right now?
-
-          ### Exclude
-
-            1. Confirm the exclusion process for the nodes you want to exclude.
-            1. [ALTUI]({{ states('input_text.vera_url') }}data_request?id=lr_ALTUI_Handler&command=home) -> More -> Table Controllers -> Exclude
-            1. Watch logs on the [Vera]({{ states('input_text.vera_url').split(':')[0] }}:{{ states('input_text.vera_url').split(':')[1] }}/cmh#devices)
-            1. Exclude the node. Maybe exclude a few more if you want to migrate a whole room
-
-          ### Cleanup
-
-          1. [Integrations]({{ states('input_text.external_url') }}/config/integrations) -> Vera -> Reload
-          1. [Vera Entities]({{ states('input_text.external_url') }}/config/entities?historyBack=1&config_entry=faf56f49096c439cb20075fdc1bb48ee) -> Sort by status -> Remove failed
-
-          ### Include
-
-          1. [Zwavejs2Mqtt]({{ states('input_text.external_url') | replace('//home.','//zwave.k.') }}) -> Manage Nodes -> Include
-          1. Include the node
-
-          ### Migrate config
-
-          1. `make`
-          1. Cleanup [entity IDs]({{ states('input_text.external_url') }}/config/entities?historyBack=1&config_entry=a9f84a8f738383dc934b1198292374dc) as necessary
-          1. Search & Replace in [config](https://github.com/jnewland/ha-config) if entity IDs change
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+          title: nodes with abnormal status
+        filter:
+          include:
+            - entity_id: "/^sensor.*_node_status$/"
+          exclude:
+            - state: "alive"
+            - state: "asleep"
 
       - type: custom:auto-entities
         card:
@@ -1449,9 +1398,6 @@ views:
         filter:
           include:
             - entity_id: "/^sensor.*_node_status$/"
-          # exclude:
-          #   - state: "alive"
-          #   - state: "asleep"
 
   - title: Tula
     icon: mdi:triangle-outline
@@ -1493,7 +1439,6 @@ views:
       - type: entities
         entities:
           - sensor.current_version
-          - binary_sensor.updater
           - sensor.config_sha
           - sensor.latest_deployment_sha
       - type: custom:auto-entities
@@ -1507,7 +1452,10 @@ views:
           include:
             - entity_id: "/_[0-9]+$/"
           exclude:
+            - integration: mobile_app
             - entity_id: "*_sim_*"
+            - entity_id: "/volume_[0-9]+$/"
+            - entity_id: "/trip_meter_[0-9]+$/"
       - type: history-graph
         title: history
         hours_to_show: 80
@@ -1531,4 +1479,5 @@ views:
           title: motion
         filter:
           include:
+            - entity_id: "/^binary_sensor.*_motion_detection$/"
             - entity_id: "/^binary_sensor.*_motion$/"

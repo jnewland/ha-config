@@ -46,7 +46,7 @@ homeassistant:
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.pergola
 
-    binary_sensor.yoga_room_motion:
+    binary_sensor.yoga_room_home_security_motion_detection:
       haunt: light.bookshelf_middle
 
     binary_sensor.yoga_room_occupancy:
@@ -55,7 +55,7 @@ homeassistant:
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.yoga
 
-    binary_sensor.garage_hall_motion:
+    binary_sensor.garage_hall_home_security_motion_detection:
       trigger_entity_id: light.garage_hall
       trigger_entity_id_off: light.garage_hall
       haunt: light.drums
@@ -65,7 +65,7 @@ homeassistant:
       trigger_entity_id_off: light.guest_hall_overhead
       haunt: light.couch
 
-    binary_sensor.great_hall_motion:
+    binary_sensor.great_hall_home_security_motion_detection:
       trigger_entity_id: light.great_hall
       trigger_entity_id_off: light.great_hall
       haunt: light.drums
@@ -78,7 +78,7 @@ homeassistant:
       trigger_entity_id: light.stairs
       trigger_entity_id_off: light.stairs
 
-    binary_sensor.stairs_motion:
+    binary_sensor.stairs_home_security_motion_detection:
       haunt: light.bookshelf_right
 
     binary_sensor.upstairs_home_security_motion_detection:
@@ -91,10 +91,10 @@ template:
         state: |
           {{
             is_state('binary_sensor.great_room_occupancy', 'on') or
-            is_state('binary_sensor.garage_hall_motion', 'on') or
+            is_state('binary_sensor.garage_hall_home_security_motion_detection', 'on') or
             is_state('binary_sensor.guest_hall_home_security_motion_detection', 'on') or
-            is_state('binary_sensor.great_hall_motion', 'on') or
-            is_state('binary_sensor.stairs_motion', 'on')
+            is_state('binary_sensor.great_hall_home_security_motion_detection', 'on') or
+            is_state('binary_sensor.stairs_home_security_motion_detection', 'on')
           }}
 
       - name: atrium occupancy
@@ -149,9 +149,9 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{
-            states('binary_sensor.master_bath_motion') == 'on' or
-            states('binary_sensor.closet_motion') == 'on' or
-            states('binary_sensor.master_door') == 'off'
+            states('binary_sensor.bathroom_home_security_motion_detection') == 'on' or
+            states('binary_sensor.closet_motion_any') == 'on' or
+            states('binary_sensor.bedroom_door_access_control_window_door_is_open') == 'off'
           }}
         delay_off:
           minutes: 15
@@ -161,7 +161,7 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{
-            states('binary_sensor.master_bath_motion') == 'on'
+            states('binary_sensor.bathroom_home_security_motion_detection') == 'on'
           }}
         delay_off:
           minutes: 15
@@ -171,7 +171,7 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{
-            states('binary_sensor.yoga_room_motion') == 'on' or
+            states('binary_sensor.yoga_room_home_security_motion_detection') == 'on' or
             states('binary_sensor.yoga_chair_home_security_motion_detection') == 'on'
           }}
         delay_off:
@@ -218,6 +218,6 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{
-            states('binary_sensor.stairs_motion') == 'on' or
+            states('binary_sensor.stairs_home_security_motion_detection') == 'on' or
             states('binary_sensor.upstairs_home_security_motion_detection') == 'on'
           }}

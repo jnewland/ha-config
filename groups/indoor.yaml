@@ -2,7 +2,7 @@
 - group.great_room
 - group.hall
 - group.guest
-- group.master
-- group.master_bath
+- group.bedroom
+- group.bathroom
 - group.lounge
 - group.music_room

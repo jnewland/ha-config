@@ -3,11 +3,11 @@ automation:
     id: ea8d312a-ccd9-483c-949c-0b103480ec28
     trigger:
       - platform: state
-        entity_id: binary_sensor.closet_motion
+        entity_id: binary_sensor.closet_motion_any
         from: 'off'
         to: 'on'
       - platform: state
-        entity_id: binary_sensor.master_bath_motion
+        entity_id: binary_sensor.bathroom_home_security_motion_detection
         from: 'off'
         to: 'on'
       - platform: state
@@ -40,7 +40,7 @@ automation:
       to: Morning
     action:   
     - service: light.turn_off
-      entity_id: group.master
+      entity_id: group.bedroom
     - service: input_number.set_value
       data:
         entity_id: input_number.brightness
