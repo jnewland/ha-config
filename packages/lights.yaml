@@ -289,6 +289,7 @@ automation:
 
   - alias: Turn off lights after sensors have turned off
     mode: parallel
+    max: 50
     id: 9c61fca8-f391-43f0-9766-460006d47777
     trigger:
       platform: event
@@ -437,6 +438,7 @@ automation:
 
   - alias: Set lights to correct brightness when turned on
     mode: parallel
+    max: 50
     id: d6f32aaa-155b-46e7-97c4-0079c373a249
     trigger:
       platform: event
