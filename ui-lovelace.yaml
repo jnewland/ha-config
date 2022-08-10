@@ -1439,7 +1439,6 @@ views:
       - type: entities
         entities:
           - sensor.current_version
-          - binary_sensor.updater
           - sensor.config_sha
           - sensor.latest_deployment_sha
       - type: custom:auto-entities
