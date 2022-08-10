@@ -6,6 +6,21 @@ sensor:
       unit_of_measurement: '°F'
       value_template: |
         {{ state_attr('weather.dark_sky', 'temperature') }}
+    downstairs_humidity:
+      friendly_name: downstairs humidity
+      unit_of_measurement: '%'
+      value_template: |
+        {{ state_attr('climate.downstairs', 'current_humidity') }}
+    downstairs_temperature:
+      friendly_name: downstairs temperature
+      unit_of_measurement: '°F'
+      value_template: |
+        {{ state_attr('climate.downstairs', 'current_temperature') }}
+    upstairs_temperature:
+      friendly_name: upstairs
+      unit_of_measurement: '°F'
+      value_template: |
+        {{ state_attr('climate.upstairs', 'current_temperature') }}
 
 automation:
   - alias: upstairs heat
