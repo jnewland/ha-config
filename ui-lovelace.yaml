@@ -1167,15 +1167,17 @@ views:
       - type: custom:auto-entities
         card:
           type: history-graph
-          hours_to_show: 72
+          hours_to_show: 36
         filter:
           include:
             - entity_id: "/^sensor.*_temperature/"
+          exclude:
+            - entity_id: "/^sensor.*_air_temperature$/"
 
       - type: custom:auto-entities
         card:
           type: history-graph
-          hours_to_show: 72
+          hours_to_show: 36
         filter:
           include:
             - entity_id: "/^sensor.*_humidity/"
@@ -1183,7 +1185,7 @@ views:
       - type: custom:auto-entities
         card:
           type: history-graph
-          hours_to_show: 72
+          hours_to_show: 36
         filter:
           include:
             - entity_id: "/^sensor.*_air_temperature$/"
@@ -1191,14 +1193,14 @@ views:
             - entity_id: sensor.wine_room_air_temperature
 
       - type: history-graph
-        hours_to_show: 72
+        hours_to_show: 36
         entities:
           - sensor.wine_room_air_temperature
 
       - type: custom:auto-entities
         card:
           type: history-graph
-          hours_to_show: 72
+          hours_to_show: 36
         filter:
           include:
             - entity_id: "/^sensor.*_light$/"
