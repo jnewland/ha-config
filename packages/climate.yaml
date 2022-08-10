@@ -110,7 +110,7 @@ automation:
       - service: climate.set_fan_mode
         entity_id:  climate.upstairs
         data:
-          fan_mode: "on"
+          fan_mode: "Low"
 
   - alias: upstairs sleeping
     mode: queued
@@ -123,7 +123,7 @@ automation:
       - service: climate.set_fan_mode
         entity_id: climate.upstairs
         data:
-          fan_mode: "on"
+          fan_mode: "Low"
       - delay:
           seconds: 10
       - service: climate.set_hvac_mode
@@ -154,4 +154,4 @@ automation:
       - service: climate.set_fan_mode
         entity_id:  climate.upstairs
         data:
-          fan_mode: "auto"
+          fan_mode: "Auto low"
