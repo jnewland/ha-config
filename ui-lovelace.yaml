@@ -1455,6 +1455,8 @@ views:
           exclude:
             - integration: mobile_app
             - entity_id: "*_sim_*"
+            - entity_id: "/volume_[0-9]+$/"
+            - entity_id: "/trip_meter_[0-9]+$/"
       - type: history-graph
         title: history
         hours_to_show: 80
@@ -1478,4 +1480,5 @@ views:
           title: motion
         filter:
           include:
+            - entity_id: "/^binary_sensor.*_motion_detection$/"
             - entity_id: "/^binary_sensor.*_motion$/"
