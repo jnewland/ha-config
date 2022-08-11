@@ -86,6 +86,14 @@ homeassistant:
 
 template:
   - binary_sensor:
+      - name: music room occupancy
+        device_class: occupancy
+        state: |
+          {{
+            is_state('binary_sensor.music_room_home_security_motion_detection', 'on') or
+            is_state('binary_sensor.music_room_fan_occupancy', 'on')
+          }}
+
       - name: common area occupancy
         device_class: occupancy
         state: |

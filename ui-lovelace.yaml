@@ -726,6 +726,7 @@ views:
           - light.music_room
           - light.music_room_fan_light
           - fan.music_room
+          - binary_sensor.music_room_occupancy
           - binary_sensor.music_room_fan_occupancy
           - binary_sensor.music_room_home_security_motion_detection
           - binary_sensor.music_room_window
@@ -887,6 +888,8 @@ views:
           - lock.garage
           - cover.garage
           - cover.gate
+          - binary_sensor.atrium_occupancy
+          - binary_sensor.atrium_couch_motion
       - type: entities
         title: front porch
         entities:
@@ -1179,6 +1182,7 @@ views:
             - entity_id: "/^sensor.*_air_temperature$/"
             - entity_id: "/diskstation/"
             - entity_id: "/synology/"
+            - entity_id: "/iComfort/"
 
       - type: custom:auto-entities
         card:
@@ -1188,7 +1192,6 @@ views:
           show:
             fill: false
             state: false
-            legend: false
         filter:
           include:
             - entity_id: "/^sensor.*_humidity/"
@@ -1208,11 +1211,25 @@ views:
             - entity_id: sensor.wine_room_air_temperature
 
       - type: custom:mini-graph-card
-        hours_to_show: 36
         show:
           fill: false
+          extrema: true
+          state: false
         entities:
-          - sensor.wine_room_air_temperature
+          - entity: sensor.wine_room_air_temperature
+            aggregate_func: max
+            name: Max
+            color: #e74c3c
+          - entity: sensor.wine_room_air_temperature
+            aggregate_func: min
+            name: Min
+          - entity: sensor.wine_room_air_temperature
+            aggregate_func: avg
+            name: Avg
+            color: green
+        name: wine room
+        hours_to_show: 168
+        group_by: hour
 
       - type: custom:auto-entities
         card:
