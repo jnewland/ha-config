@@ -1178,6 +1178,7 @@ views:
           exclude:
             - entity_id: "/^sensor.*_air_temperature$/"
             - entity_id: "/diskstation/"
+            - entity_id: "/synology/"
 
       - type: custom:auto-entities
         card:
@@ -1247,6 +1248,7 @@ views:
         filter:
           include:
             - entity_id: "/diskstation/"
+            - entity_id: "/synology/"
       - type: custom:auto-entities
         card:
           type: history-graph
@@ -1254,6 +1256,7 @@ views:
         filter:
           include:
             - entity_id: "/diskstation/"
+            - entity_id: "/synology/"
       - type: custom:auto-entities
         card:
           type: history-graph
