@@ -18,6 +18,21 @@ sensor:
         {{ state_attr('climate.downstairs', 'current_temperature') }}
 
 automation:
+  - alias: poll GoControl GC-TBZ48
+    # I've set param 23 to 8319, which should cause the thing to report
+    # No such luck, so poll it every minute
+    id: 7195ed64-b3c1-4940-96bf-77251ea54b6b
+    trigger:
+    - platform: time_pattern
+      minutes: "*"
+    action:
+    - service: zwave_js.refresh_value
+      data:
+        entity_id: climate.upstairs
+    - service: zwave_js.refresh_value
+      data:
+        entity_id: sensor.upstairs_thermostat_air_temperature
+
   - alias: upstairs heat
     mode: queued
     id: 052a2e46-33e4-4964-8da4-42609ca7e683
