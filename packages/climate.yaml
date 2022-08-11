@@ -29,6 +29,7 @@ automation:
     - service: zwave_js.refresh_value
       data:
         entity_id: climate.upstairs
+        refresh_all_values: true
     - service: zwave_js.refresh_value
       data:
         entity_id: sensor.upstairs_thermostat_air_temperature
@@ -65,12 +66,9 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
-        above: 73
+        above: 74
         for:
           minutes: 3
-      - platform: numeric_state
-        entity_id: sensor.upstairs_thermostat_air_temperature
-        above: 74
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
         above: 75
@@ -87,7 +85,7 @@ automation:
       - service: climate.set_temperature
         data:
           entity_id: "{{ trigger.to_state.entity_id }}"
-          temperature: 73
+          temperature: 74
 
   - alias: upstairs reading
     mode: queued
