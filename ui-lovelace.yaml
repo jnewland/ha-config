@@ -1182,7 +1182,8 @@ views:
             - entity_id: "/^sensor.*_air_temperature$/"
             - entity_id: "/diskstation/"
             - entity_id: "/synology/"
-            - entity_id: "/iComfort/"
+            - entity_id: "/icomfort/"
+            - entity_id: "/fan_temperature/"
 
       - type: custom:auto-entities
         card:
@@ -1207,6 +1208,8 @@ views:
         filter:
           include:
             - entity_id: "/^sensor.*_air_temperature$/"
+            - entity_id: "/^sensor.*_fan_temperature$/"
+            - entity_id: "/^sensor.*_current_temperature$/"
           exclude:
             - entity_id: sensor.wine_room_air_temperature
 
