@@ -1217,19 +1217,8 @@ views:
         show:
           fill: false
           extrema: true
-          state: false
         entities:
           - entity: sensor.wine_room_air_temperature
-            aggregate_func: max
-            name: Max
-            color: #e74c3c
-          - entity: sensor.wine_room_air_temperature
-            aggregate_func: min
-            name: Min
-          - entity: sensor.wine_room_air_temperature
-            aggregate_func: avg
-            name: Avg
-            color: green
         name: wine room
         hours_to_show: 168
         group_by: hour
