@@ -6,18 +6,24 @@ sensor:
       unit_of_measurement: '°F'
       value_template: |
         {{ state_attr('weather.dark_sky', 'temperature') }}
-    downstairs_humidity:
-      friendly_name: downstairs humidity
-      unit_of_measurement: '%'
-      value_template: |
-        {{ state_attr('climate.downstairs', 'current_humidity') }}
-    downstairs_temperature:
-      friendly_name: downstairs temperature
-      unit_of_measurement: '°F'
-      value_template: |
-        {{ state_attr('climate.downstairs', 'current_temperature') }}
 
 automation:
+  - alias: poll GoControl GC-TBZ48
+    # I've set param 23 to 8319, which should cause the thing to report
+    # No such luck, so poll it every minute
+    id: 7195ed64-b3c1-4940-96bf-77251ea54b6b
+    trigger:
+    - platform: time_pattern
+      minutes: "*"
+    action:
+    - service: zwave_js.refresh_value
+      data:
+        entity_id: climate.upstairs
+        refresh_all_values: true
+    - service: zwave_js.refresh_value
+      data:
+        entity_id: sensor.upstairs_thermostat_air_temperature
+
   - alias: upstairs heat
     mode: queued
     id: 052a2e46-33e4-4964-8da4-42609ca7e683
@@ -50,12 +56,9 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
-        above: 73
+        above: 74
         for:
           minutes: 3
-      - platform: numeric_state
-        entity_id: sensor.upstairs_thermostat_air_temperature
-        above: 74
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
         above: 75
@@ -72,7 +75,7 @@ automation:
       - service: climate.set_temperature
         data:
           entity_id: "{{ trigger.to_state.entity_id }}"
-          temperature: 73
+          temperature: 74
 
   - alias: upstairs reading
     mode: queued
