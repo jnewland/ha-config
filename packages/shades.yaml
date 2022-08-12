@@ -64,7 +64,7 @@ automation:
   action:
     - service: cover.open_cover
       data:
-        entity_id: cover.shades
+        entity_id: cover.bedroom_shades
 
 - alias: Close shades in reading and sleeping modes
   id: 806d4e21-9d09-40fd-8f8f-67476d216e7c
