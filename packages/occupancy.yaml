@@ -134,8 +134,14 @@ binary_sensor:
           {{
             states('binary_sensor.living_room_motion') == 'on' or
             states('binary_sensor.dining_room_home_security_motion_detection') == 'on' or
-            states('device_tracker.katie_s_iphone') == 'Kitchen' or
-            states('device_tracker.jphone_12') == 'Kitchen'
+            (
+              states('device_tracker.katie_s_iphone') == 'Kitchen' and
+              states.device_tracker.katie_s_iphone.last_changed > (now() - timedelta(minutes=5))
+            ) or
+            (
+              states('device_tracker.jphone_12') == 'Kitchen' and
+              states.device_tracker.jphone_12.last_changed > (now() - timedelta(minutes=5))
+            )
           }}
         delay_off:
           minutes: 30
@@ -146,8 +152,14 @@ binary_sensor:
         value_template: |
           {{
             states('binary_sensor.lounge_home_security_motion_detection') == 'on' or
-            states('device_tracker.katie_s_iphone') == 'Lounge' or
-            states('device_tracker.jphone_12') == 'Lounge'
+            (
+              states('device_tracker.katie_s_iphone') == 'Lounge' and
+              states.device_tracker.katie_s_iphone.last_changed > (now() - timedelta(minutes=5))
+            ) or
+            (
+              states('device_tracker.jphone_12') == 'Lounge' and
+              states.device_tracker.jphone_12.last_changed > (now() - timedelta(minutes=5))
+            )
           }}
         delay_off:
           minutes: 15
