@@ -170,7 +170,7 @@ binary_sensor:
           {{
             states('binary_sensor.bathroom_home_security_motion_detection') == 'on' or
             states('binary_sensor.closet_motion_any') == 'on' or
-            states('binary_sensor.bedroom_door_access_control_window_door_is_open') == 'off'
+            states('binary_sensor.bedroom_door_access_control_window_door_is_open') == 'off' or
             (
               states('device_tracker.katie_s_iphone') == 'Bedroom' and
               states.device_tracker.katie_s_iphone.last_changed > (now() - timedelta(minutes=5))
