@@ -502,30 +502,6 @@ automation:
       - service: counter.increment
         entity_id: counter.light_automations
 
-  - alias: Turn on lights when devices enter zones
-    mode: parallel
-    id: 7bff781f-10e6-4a38-9701-7dc2638c4515
-    trigger:
-      platform: state
-      entity_id:
-      - device_tracker.jphone_12
-      - device_tracker.katie_s_iphone
-    condition:
-      condition: template
-      value_template: |
-        {{
-          trigger.from_state.state != trigger.to_state.state and
-          trigger.to_state.attributes.trigger_entity_id is defined
-        }}
-    action:
-      service: >
-        {{ trigger.to_state.attributes.trigger_service | default('homeassistant.turn_on') }}
-      data:
-        entity_id: |
-          {{ trigger.to_state.attributes.trigger_entity_id }}
-        brightness: |
-          {{ trigger.to_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
-
   - alias: log light changes to slack
     mode: parallel
     id: 85753078-89dd-4750-840e-13ef98cd4216
