@@ -23,7 +23,7 @@ zone.living:
     major: 10001
     minor: 19643
 
-zone.master:
+zone.bedroom:
   beacon:
     uuid: 74278BDA-B644-4520-8F0C-720EAF059935
     major: 10001

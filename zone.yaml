@@ -31,7 +31,7 @@
   radius: 1
   icon: mdi:account
 
-- name: Master
+- name: Bedroom
   latitude: !env_var MASTER_LAT
   longitude: !env_var MASTER_LONG
   radius: 1

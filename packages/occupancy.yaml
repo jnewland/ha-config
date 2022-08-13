@@ -171,6 +171,14 @@ binary_sensor:
             states('binary_sensor.bathroom_home_security_motion_detection') == 'on' or
             states('binary_sensor.closet_motion_any') == 'on' or
             states('binary_sensor.bedroom_door_access_control_window_door_is_open') == 'off'
+            (
+              states('device_tracker.katie_s_iphone') == 'Bedroom' and
+              states.device_tracker.katie_s_iphone.last_changed > (now() - timedelta(minutes=5))
+            ) or
+            (
+              states('device_tracker.jphone_12') == 'Bedroom' and
+              states.device_tracker.jphone_12.last_changed > (now() - timedelta(minutes=5))
+            )
           }}
         delay_off:
           minutes: 15
