@@ -1,4 +1,4 @@
-name: master bath lights
+name: bathroom lights
 entities:
 - light.bathroom_overhead
 - light.bathroom_shower
