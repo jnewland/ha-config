@@ -6,8 +6,6 @@ import logging
 import voluptuous as vol
 
 from homeassistant.components import websocket_api
-from homeassistant.components.number import SERVICE_SET_VALUE, async_set_value
-from homeassistant.components.number.const import ATTR_VALUE
 from homeassistant.components.utility_meter.const import (
     DATA_TARIFF_SENSORS,
     DATA_UTILITY,
@@ -24,7 +22,11 @@ from homeassistant.const import (
     STATE_UNKNOWN,
 )
 from homeassistant.core import HomeAssistant, ServiceCall, callback
-from homeassistant.helpers import device_registry as dr, entity_registry as er
+from homeassistant.helpers import (
+    config_validation as cv,
+    device_registry as dr,
+    entity_registry as er,
+)
 from homeassistant.helpers.entity import Entity, async_generate_entity_id
 from homeassistant.helpers.entity_component import EntityComponent
 
@@ -261,21 +263,19 @@ def ws_get_info(
     hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict
 ) -> None:
     """Handle the websocket command."""
+    _LOGGER.debug("Got websocket request: %s", msg)
 
     for key in hass.data[DOMAIN]:
         if not ATTR_PLANT in hass.data[DOMAIN][key]:
-            connection.send_error(
-                msg["id"], "domain_not_found", f"Domain {DOMAIN} not found"
-            )
-            return
+            continue
         plant_entity = hass.data[DOMAIN][key][ATTR_PLANT]
         if plant_entity.entity_id == msg["entity_id"]:
+            _LOGGER.debug("Sending websocket response: %s", plant_entity.websocket_info)
             connection.send_result(msg["id"], {"result": plant_entity.websocket_info})
             return
     connection.send_error(
         msg["id"], "entity_not_found", f"Entity {msg['entity_id']} not found"
     )
-
     return
 
 
