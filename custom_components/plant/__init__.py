@@ -127,10 +127,11 @@ async def async_migrate_plant(hass: HomeAssistant, plant_id: str, config: dict) 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Set up Plant from a config entry."""
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN].setdefault(entry.entry_id, {})
-
     if FLOW_PLANT_INFO not in entry.data:
         return True
+
+    hass.data[DOMAIN].setdefault(entry.entry_id, {})
+    _LOGGER.debug("Setting up config entry %s: %s", entry.entry_id, entry)
 
     plant = PlantDevice(hass, entry)
     hass.data[DOMAIN][entry.entry_id][ATTR_PLANT] = plant
@@ -149,9 +150,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     # Add the rest of the entities to device registry together with plant
     device_id = plant.device_id
     await _plant_add_to_device_registry(hass, plant_entities, device_id)
-    await _plant_add_to_device_registry(hass, plant.threshold_entities, device_id)
-    await _plant_add_to_device_registry(hass, plant.meter_entities, device_id)
-    await _plant_add_to_device_registry(hass, plant.integral_entities, device_id)
+    # await _plant_add_to_device_registry(hass, plant.integral_entities, device_id)
+    # await _plant_add_to_device_registry(hass, plant.threshold_entities, device_id)
+    # await _plant_add_to_device_registry(hass, plant.meter_entities, device_id)
 
     #
     # Set up utility sensor
@@ -252,6 +253,22 @@ async def _plant_add_to_device_registry(
         erreg.async_update_entity(entity.registry_entry.entity_id, device_id=device_id)
 
 
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Unload a config entry."""
+    hass.data[DOMAIN].pop(entry.entry_id)
+    hass.data[DATA_UTILITY].pop(entry.entry_id)
+    _LOGGER.info(hass.data[DOMAIN])
+    for entry_id in list(hass.data[DOMAIN].keys()):
+        if len(hass.data[DOMAIN][entry_id]) == 0:
+            _LOGGER.info("Removing entry %s", entry_id)
+            del hass.data[DOMAIN][entry_id]
+    if len(hass.data[DOMAIN]) == 0:
+        _LOGGER.info("Removing domain %s", DOMAIN)
+        hass.services.async_remove(DOMAIN, SERVICE_REPLACE_SENSOR)
+        del hass.data[DOMAIN]
+    return True
+
+
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "plant/get_info",
@@ -263,14 +280,20 @@ def ws_get_info(
     hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict
 ) -> None:
     """Handle the websocket command."""
-    _LOGGER.debug("Got websocket request: %s", msg)
+    # _LOGGER.debug("Got websocket request: %s", msg)
+
+    if DOMAIN not in hass.data:
+        connection.send_error(
+            msg["id"], "domain_not_found", f"Domain {DOMAIN} not found"
+        )
+        return
 
     for key in hass.data[DOMAIN]:
         if not ATTR_PLANT in hass.data[DOMAIN][key]:
             continue
         plant_entity = hass.data[DOMAIN][key][ATTR_PLANT]
         if plant_entity.entity_id == msg["entity_id"]:
-            _LOGGER.debug("Sending websocket response: %s", plant_entity.websocket_info)
+            # _LOGGER.debug("Sending websocket response: %s", plant_entity.websocket_info)
             connection.send_result(msg["id"], {"result": plant_entity.websocket_info})
             return
     connection.send_error(
@@ -369,6 +392,8 @@ class PlantDevice(Entity):
             "identifiers": {(DOMAIN, self.unique_id)},
             "name": self.name,
             "config_entries": self._config_entries,
+            "model": self.display_species,
+            "manufacturer": self.data_source,
         }
 
     @property
