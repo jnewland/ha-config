@@ -115,6 +115,8 @@ def _async_find_matching_config_entry(hass: HomeAssistant) -> ConfigEntry | None
 async def async_migrate_plant(hass: HomeAssistant, plant_id: str, config: dict) -> None:
     """Try to migrate the config from yaml"""
 
+    if ATTR_NAME not in config:
+        config[ATTR_NAME] = plant_id.replace("_", " ").capitalize()
     plant_helper = PlantHelper(hass)
     plant_config = await plant_helper.generate_configentry(config=config)
     hass.async_create_task(
@@ -179,7 +181,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
                 "Refuse to update non-%s entities: %s", DOMAIN, meter_entity
             )
             return False
-        if not new_sensor.startswith("sensor.") and new_sensor != "":
+        if new_sensor and new_sensor != "" and not new_sensor.startswith("sensor."):
             _LOGGER.warning("%s is not a sensor", new_sensor)
             return False
 
@@ -192,7 +194,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
             _LOGGER.error("Meter entity %s not found", meter_entity)
             return False
 
-        if new_sensor != "":
+        if new_sensor and new_sensor != "":
             try:
                 test = hass.states.get(new_sensor)
             except AttributeError:
@@ -255,6 +257,9 @@ async def _plant_add_to_device_registry(
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
+    await hass.config_entries.async_forward_entry_unload(entry, "sensor")
+    await hass.config_entries.async_forward_entry_unload(entry, "number")
+
     hass.data[DOMAIN].pop(entry.entry_id)
     hass.data[DATA_UTILITY].pop(entry.entry_id)
     _LOGGER.info(hass.data[DOMAIN])
