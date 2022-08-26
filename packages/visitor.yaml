@@ -372,11 +372,6 @@ automation:
                 {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
               content-type: jpeg
               hide-thumbnail: false
-      - delay:
-          minutes: 3
-      - service: light.turn_off
-        target:
-          entity_id: light.dining_room_extender
 
   - alias: Turn on away when visitor departs
     id: 0c1978a8-30d2-4fc5-a126-9a5064b2eeda
