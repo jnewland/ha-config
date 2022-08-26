@@ -312,7 +312,7 @@ automation:
                 message: >
                   visitor arrived.
                   alarm is {{ states("alarm_control_panel.alarm") }}.
-                  attempting to disable.
+                  attempting to disarm.
                 data:
                   tag: visitor
                   sound:
@@ -327,7 +327,6 @@ automation:
                       {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
                     content-type: jpeg
                     hide-thumbnail: false
-
             - repeat:
                 until: |
                   {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
@@ -337,23 +336,27 @@ automation:
                   - wait_template: |
                       {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
                     timeout: 5
-            - service: light.turn_on
-              data:
-                rgb_color:
-                  - 0
-                  - 249
-                  - 0
-              target:
-                entity_id: light.dining_room_extender
-        default:
-          - service: light.turn_on
-            data:
-              rgb_color:
-                - 0
-                - 249
-                - 0
-            target:
-              entity_id: light.dining_room_extender
+
+      - service: notify.iphones
+        data:
+          message: >
+            visitor arrived.
+            alarm is {{ states("alarm_control_panel.alarm") }}.
+          data:
+            tag: visitor
+            sound:
+              name: default
+              critical: 1
+              volume: 0.1
+            push:
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+              content-type: jpeg
+              hide-thumbnail: false
+
       - service: notify.iphones
         data:
           message: >
