@@ -198,6 +198,11 @@ automation:
       - condition: template
         value_template: |
           {{ states('input_text.visitor_door_code') == trigger.event.data.message }}
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.alarm
+      - service: lock.unlock
+        target:
+          entity_id: lock.front_door
       - repeat:
           until: |
             {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
