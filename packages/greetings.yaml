@@ -8,13 +8,10 @@ automation:
           node_id: 49
           event_label: "Keypad unlock operation"
     action:
-      - condition: template
-        value_template: |
-          {{ trigger.event.data.parameters.userId | int(default=99) < 3 }}
       - repeat:
           until: |
             {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
           sequence:
             - service: alarm_control_panel.alarm_disarm
               entity_id: alarm_control_panel.alarm
-            - delay: 15
+            - delay: 5
