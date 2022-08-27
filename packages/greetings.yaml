@@ -17,4 +17,4 @@ automation:
           sequence:
             - service: alarm_control_panel.alarm_disarm
               entity_id: alarm_control_panel.alarm
-            - delay: 15
+            - delay: 5
