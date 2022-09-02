@@ -930,7 +930,7 @@ views:
             state: "not_home"
         card:
           type: picture-entity
-          camera_view: live
+          camera_view: auto
           show_name: false
           show_state: false
           entity: camera.great_room
@@ -940,7 +940,7 @@ views:
             state: recording
         card:
           type: picture-entity
-          camera_view: live
+          camera_view: auto
           show_name: false
           show_state: false
           entity: camera.front_yard_left
@@ -950,7 +950,7 @@ views:
             state: recording
         card:
           type: picture-entity
-          camera_view: live
+          camera_view: auto
           show_name: false
           show_state: false
           entity: camera.atrium
@@ -960,7 +960,7 @@ views:
             state: recording
         card:
           type: picture-entity
-          camera_view: live
+          camera_view: auto
           show_name: false
           show_state: false
           entity: camera.gate
@@ -970,7 +970,7 @@ views:
             state: recording
         card:
           type: picture-entity
-          camera_view: live
+          camera_view: auto
           show_name: false
           show_state: false
           entity: camera.garage
@@ -980,7 +980,7 @@ views:
             state: recording
         card:
           type: picture-entity
-          camera_view: live
+          camera_view: auto
           show_name: false
           show_state: false
           entity: camera.back_porch
@@ -990,7 +990,7 @@ views:
             state: recording
         card:
           type: picture-entity
-          camera_view: live
+          camera_view: auto
           show_name: false
           show_state: false
           entity: camera.ac
@@ -1001,7 +1001,7 @@ views:
             state: recording
         card:
           type: picture-entity
-          camera_view: live
+          camera_view: auto
           show_name: false
           show_state: false
           entity: camera.front_door
@@ -1011,7 +1011,7 @@ views:
             state: recording
         card:
           type: picture-entity
-          camera_view: live
+          camera_view: auto
           show_name: false
           show_state: false
           entity: camera.pergola
@@ -1021,7 +1021,7 @@ views:
             state: recording
         card:
           type: picture-entity
-          camera_view: live
+          camera_view: auto
           show_name: false
           show_state: false
           entity: camera.roof_deck
@@ -1031,7 +1031,7 @@ views:
             state: recording
         card:
           type: picture-entity
-          camera_view: live
+          camera_view: auto
           show_name: false
           show_state: false
           entity: camera.peppers
