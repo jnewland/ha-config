@@ -411,16 +411,11 @@ views:
           mediaItem:
             width: '25%'
             mobileWidth: '33%'
-        # styles:
-        #     ha-card:
-        #       background: none
-        #     button-section:
-        #       background: none
-        #       border: none
-        #     media-button:
-        #       border: none
-        #     media-button-title:
-        #       textOverflow: clip
+        styles:
+            button-section:
+              border: none
+            media-button:
+              border: none
       - type: weather-forecast
         entity: weather.dark_sky
       - type: picture

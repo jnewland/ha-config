@@ -31,6 +31,8 @@ template:
                 |rejectattr('entity_id','search','webos_tv')
                 |rejectattr('entity_id','search','book')
                 |rejectattr('entity_id','search','xc60')
+                |rejectattr('entity_id','search','ohno')
+                |rejectattr('entity_id','search','probe_temp')
                 |map(attribute='entity_id')|list }}
             {% endif %}
 
@@ -42,11 +44,7 @@ group:
       - sensor.unavailable_entities # prevent template loop warnings
       - binary_sensor.updater # always unknown after restart
       # occasional-use
-      - sensor.black_probe_temp
       - sensor.flameboss_cook_link
-      - sensor.green_probe_temp
-      - sensor.grill_probe_temp
-      - sensor.red_probe_temp
 
 # OPTIONAL - filter template loop warnings from the Home Assistant log.
 logger:
