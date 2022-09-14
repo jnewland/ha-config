@@ -406,27 +406,21 @@ views:
         mediaTitle: " "
         shuffleFavorites: false
         selectedPlayer: media_player.house
+        singleSectionMode: media browser
         layout:
-          mediaBrowser:
-            width: '100%'
-            mobileWidth: '100%'
           mediaItem:
             width: '25%'
             mobileWidth: '33%'
-        styles:
-            groups:
-              display: none
-            players:
-              display: none
-            ha-card:
-              background: none
-            button-section:
-              background: none
-              border: none
-            media-button:
-              border: none
-            media-button-title:
-              textOverflow: clip
+        # styles:
+        #     ha-card:
+        #       background: none
+        #     button-section:
+        #       background: none
+        #       border: none
+        #     media-button:
+        #       border: none
+        #     media-button-title:
+        #       textOverflow: clip
       - type: weather-forecast
         entity: weather.dark_sky
       - type: picture
