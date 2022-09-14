@@ -1,4 +1,4 @@
-FROM homeassistant/home-assistant:2022.8.7@sha256:b92ca5e7233c1a9de8f97471e355811d7d4c4d1151ccd924b798084973ffeb2d
+FROM homeassistant/home-assistant:2022.9.3@sha256:82b96e6eb23dd6cbc6114e54e068d385f9d3d3f4e28b6dd6c7f9afef91a3085b
 
 ARG ENABLE_NONROOT_DOCKER="true"
 ARG INSTALL_ZSH="true"
