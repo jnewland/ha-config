@@ -30,7 +30,7 @@ automation:
       for:
         minutes: 5
     action:
-      - service: notify.mobile_app_katie_s_iphone
+      - service: notify.mobile_app_katies_iphone
         data:
           message: request_location_update
 
