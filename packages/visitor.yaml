@@ -82,7 +82,7 @@ automation:
       condition: and
       conditions:
       - condition: state
-        entity_id: device_tracker.jphone_12
+        entity_id: device_tracker.jphone_14
         state: "not_home"
       - condition: state
         entity_id: device_tracker.katie_s_iphone
@@ -391,7 +391,7 @@ automation:
         entity_id: alarm_control_panel.alarm
         state: "disarmed"
       - condition: state
-        entity_id: device_tracker.jphone_12
+        entity_id: device_tracker.jphone_14
         state: "not_home"
       - condition: state
         entity_id: device_tracker.katie_s_iphone

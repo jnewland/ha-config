@@ -13,7 +13,7 @@ automation:
       entity_id: binary_sensor.ups_voltage_low
       to: "on"
     action:
-      service: notify.mobile_app_jphone_12
+      service: notify.mobile_app_jphone_14
       data:
         message: |
           Core UPS reports status of {{ states('sensor.ups_status') | default("Unknown") }} with input of {{ float(states('sensor.ups_input_voltage', default=0)) | round }}{{ state_attr('sensor.ups_input_voltage','unit_of_measurement') }}.{{" "-}}
