@@ -7,7 +7,7 @@ automation:
         from: not_home
         to: home
       - platform: state
-        entity_id: device_tracker.jphone_12
+        entity_id: device_tracker.jphone_14
         from: not_home
         to: home
     condition:
@@ -39,12 +39,12 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - device_tracker.jphone_12
+        - device_tracker.jphone_14
       to: not_home
       for:
         minutes: 5
     action:
-      - service: notify.mobile_app_jphone_12
+      - service: notify.mobile_app_jphone_14
         data:
           message: request_location_update
 
@@ -53,14 +53,14 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - device_tracker.jphone_12
+          - device_tracker.jphone_14
           - device_tracker.katie_s_iphone
         to: not_home
         for:
           minutes: 10
       - platform: state
         entity_id:
-          - device_tracker.jphone_12
+          - device_tracker.jphone_14
           - device_tracker.katie_s_iphone
         to: not_home
         for:
@@ -72,7 +72,7 @@ automation:
                         states.input_boolean.visitor.state == "off" and
                         states.input_boolean.guests.state == "off" and
                         states.input_select.mode.state != "Away" and
-                        states.device_tracker.jphone_12.state == "not_home" and
+                        states.device_tracker.jphone_14.state == "not_home" and
                         states.device_tracker.katie_s_iphone.state == "not_home"
                       }}
                       '
@@ -112,7 +112,7 @@ automation:
             new_state.state != old_state.state
           }}
     action:
-      service: notify.mobile_app_jphone_12
+      service: notify.mobile_app_jphone_14
       data:
         message: >
           {% set old_state = trigger.from_state %}

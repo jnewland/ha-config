@@ -20,7 +20,7 @@ views:
             - vacuum.downstairs
       - type: conditional
         conditions:
-          - entity: device_tracker.jphone_12
+          - entity: device_tracker.jphone_14
             state: "not_home"
           - entity: device_tracker.katie_s_iphone
             state: "not_home"
@@ -913,7 +913,7 @@ views:
     cards:
       - type: conditional
         conditions:
-          - entity: device_tracker.jphone_12
+          - entity: device_tracker.jphone_14
             state: "not_home"
           - entity: device_tracker.katie_s_iphone
             state: "not_home"
@@ -1487,8 +1487,8 @@ views:
           - counter.errors
           - input_select.mode
           - binary_sensor.together
-          - device_tracker.jphone_12
-          - sensor.jphone_12_battery_state
+          - device_tracker.jphone_14
+          - sensor.jphone_14_battery_state
           - device_tracker.katie_s_iphone
           - sensor.katie_s_iphone_battery_state
           - sensor.laundry_power

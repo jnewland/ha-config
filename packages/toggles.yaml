@@ -12,7 +12,7 @@ script:
       - service: script.ask_about_turning_on
         data:
           service: >
-            {{ service | default('notify.mobile_app_jphone_12') }}
+            {{ service | default('notify.mobile_app_jphone_14') }}
           tag: alarm_control_panel.alarm
           entity_id: >
             {%- if states.alarm_control_panel.alarm.state == "disarmed" -%}

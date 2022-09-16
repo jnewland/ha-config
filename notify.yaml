@@ -5,5 +5,5 @@
 - platform: group
   name: iphones
   services:
-  - service: mobile_app_jphone_12
+  - service: mobile_app_jphone_14
   - service: mobile_app_katie_s_iphone
