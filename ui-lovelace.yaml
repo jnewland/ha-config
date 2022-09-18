@@ -48,7 +48,6 @@ views:
           type: entities
           show_header_toggle: false
           entities:
-            - input_boolean.visitor
             - sensor.visitor_door_code
 
       - type: vertical-stack
@@ -684,6 +683,11 @@ views:
           entity: sensor.lounge_air_temperature
           hours_to_show: 36
           detail: 2
+      - type: entities
+        title: tv settings
+          - switch.lgwebostv
+          - switch.sonos_lounge_surround_speech_enhancement
+          - switch.sonos_lounge_surround_night_sound
       - type: media-control
         entity: media_player.lg_webos_tv_d510
       - type: media-control
@@ -1458,7 +1462,8 @@ views:
           - input_boolean.guests
           - automation.away_mode
           - input_boolean.christmas
-          - vacuum.downstairs
+          - input_boolean.visitor
+          - switch.hue
       - type: entities
         entities:
           - sensor.current_version
@@ -1479,28 +1484,3 @@ views:
             - entity_id: "*_sim_*"
             - entity_id: "/volume_[0-9]+$/"
             - entity_id: "/trip_meter_[0-9]+$/"
-      - type: history-graph
-        title: history
-        hours_to_show: 80
-        entities:
-          - counter.light_automations
-          - counter.errors
-          - input_select.mode
-          - binary_sensor.together
-          - device_tracker.jphone_14
-          - sensor.jphone_14_battery_state
-          - device_tracker.katie_s_iphone
-          - sensor.katie_s_iphone_battery_state
-          - sensor.laundry_power
-          - binary_sensor.laundry
-          - sun.sun
-          - weather.dark_sky
-      - type: custom:auto-entities
-        card:
-          type: history-graph
-          hours_to_show: 72
-          title: motion
-        filter:
-          include:
-            - entity_id: "/^binary_sensor.*_motion_detection$/"
-            - entity_id: "/^binary_sensor.*_motion$/"
