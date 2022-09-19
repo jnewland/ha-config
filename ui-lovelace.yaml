@@ -685,6 +685,7 @@ views:
           detail: 2
       - type: entities
         title: tv settings
+        entities:
           - switch.lgwebostv
           - switch.sonos_lounge_surround_speech_enhancement
           - switch.sonos_lounge_surround_night_sound
