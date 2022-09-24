@@ -1092,8 +1092,8 @@ views:
           hours_to_show: 72
         filter:
           include:
-            - entity_id: "/sensor..*_person$/"
-            - entity_id: "/sensor..*_dog$/"
+            - entity_id: "/sensor..*_person_count$/"
+            - entity_id: "/sensor..*_dog_count$/"
       - type: custom:auto-entities
         card:
           type: history-graph
