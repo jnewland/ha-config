@@ -809,15 +809,6 @@ views:
   - title: Grill
     icon: mdi:grill
     cards:
-      - type: entities
-        title: pergola
-        entities:
-          - light.pergola_pendants
-          - switch.pergola_overhead
-      - type: markdown
-        content: |
-          [View cook on Flameboss]({{ states('sensor.flameboss_cook_link') }})
-
       - type: custom:mini-graph-card
         hours_to_show: 1
         points_per_hour: 120
@@ -870,6 +861,15 @@ views:
           fill: false
           extrema: true
           state: false
+
+      - type: entities
+        title: pergola
+        entities:
+          - light.pergola_pendants
+          - switch.pergola_overhead
+      - type: markdown
+        content: |
+          [View cook on Flameboss]({{ states('sensor.flameboss_cook_link') }})
 
       - type: entities
         entities:
