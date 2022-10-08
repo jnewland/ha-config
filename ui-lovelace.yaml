@@ -817,22 +817,41 @@ views:
       - type: markdown
         content: |
           [View cook on Flameboss]({{ states('sensor.flameboss_cook_link') }})
-      - type: entities
-        entities:
-          - sensor.grill_probe_temp
-          - sensor.red_probe_temp
-          - sensor.green_probe_temp
-          - sensor.black_probe_temp
+
       - type: custom:mini-graph-card
         hours_to_show: 1
         points_per_hour: 120
         lower_bound: 100
-        name: last hour
+        name: grill last hour
         entities:
-          - sensor.grill_probe_temp
+          - entity: sensor.grill_probe_temp
+        show:
+          fill: false
+          extrema: true
+          state: true
+
+      - type: custom:mini-graph-card
+        hours_to_show: 1
+        points_per_hour: 120
+        lower_bound: 100
+        name: probes last hour
+        entities:
           - sensor.red_probe_temp
           - sensor.green_probe_temp
           - sensor.black_probe_temp
+        show:
+          fill: false
+          extrema: true
+          state: false
+
+
+      - type: custom:mini-graph-card
+        hours_to_show: 3
+        points_per_hour: 120
+        lower_bound: 100
+        name: grill last 3 hours
+        entities:
+          - sensor.grill_probe_temp
         show:
           fill: false
           extrema: true
@@ -842,9 +861,8 @@ views:
         hours_to_show: 3
         points_per_hour: 120
         lower_bound: 100
-        name: last 3 hours
+        name: probes last 3 hours
         entities:
-          - sensor.grill_probe_temp
           - sensor.red_probe_temp
           - sensor.green_probe_temp
           - sensor.black_probe_temp
@@ -852,6 +870,13 @@ views:
           fill: false
           extrema: true
           state: false
+
+      - type: entities
+        entities:
+          - sensor.grill_probe_temp
+          - sensor.red_probe_temp
+          - sensor.green_probe_temp
+          - sensor.black_probe_temp
 
       - type: custom:mini-media-player
         entity: media_player.pergola
