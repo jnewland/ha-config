@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: script-deploy
     steps:
-      - uses: actions/github-script@100527700e8b29ca817ac0e0dfbfc5e8ff38edda # tag=v6.3.2
+      - uses: actions/github-script@d556feaca394842dc55e4734bf3bb9f685482fa0 # tag=v6.3.3
         with:
           script: |
             await github.rest.repos.createCommitStatus({
