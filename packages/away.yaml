@@ -81,7 +81,7 @@ automation:
       data:
         entity_id: script.mode_away
         message: "Looks like everyone is gone. Turn on away?"
-        confirmation_message: turned on away mode
+        confirmation_message: turned on away mode.
 
   - alias: Notify about stuff when we're away
     id: 42bd3505-3443-4c3c-8ab3-75186cc628cf

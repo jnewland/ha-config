@@ -35,9 +35,9 @@ script:
             {%- endif -%}
           confirmation_message: >
             {%- if states.alarm_control_panel.alarm.state == "disarmed" -%}
-            armed the alarm
+            armed the alarm.
             {%- else -%}
-            disarmed the alarm
+            disarmed the alarm.
             {%- endif -%}
   toggle_gate:
     sequence:

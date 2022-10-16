@@ -34,7 +34,7 @@ automation:
         data:
           entity_id: input_boolean.winterized
           message: There's a freeze in the forecast. Is everything winterized?
-          confirmation_message: winterized, cool
+          confirmation_message: winterized, cool.
 
   - alias: Freeze notifications
     id: 23f45074-5827-4756-8f77-f592ac08cb39
@@ -52,4 +52,4 @@ automation:
         data:
           entity_id: input_boolean.winterized
           message: It's now below freezing. Is everything winterized?
-          confirmation_message: winterized, cool
+          confirmation_message: winterized, cool.
