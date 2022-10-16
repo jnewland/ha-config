@@ -7,6 +7,9 @@ script:
           message: |
             {{ message | default("Turn on " + entity_id) }}
           data:
+            push:
+              interruption-level: >
+                {{ interruption_level | default('active') }}
             tag: >
               {{ tag | default(entity_id) }}
             actions:
@@ -73,6 +76,8 @@ automation:
         message: >
           {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}.
         data:
+          push:
+            interruption-level: passive
           tag: >
             {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
     - service: notify.slack
