@@ -1,22 +1,4 @@
 automation:
-  - alias: Keep the back_porch door locked
-    id: 7f90d793-9f25-4690-8a88-92daf481d7d3
-    trigger:
-      platform: state
-      entity_id: binary_sensor.back_porch_occupancy
-      to: 'off'
-      for:
-        minutes: 30
-    condition:
-      condition: state
-      entity_id: lock.back_porch
-      state: unlocked
-    action:
-    - service: script.ask_about_turning_on
-      data:
-        entity_id: script.lock_back_porch
-        message: "The back porch door has been unlocked for a bit. Lock it up?"
-        confirmation_message: locked the back porch door
   - alias: Toggle back porch door lock with tag
     id: 223b7406-420e-4771-9851-ad153002b973
     trigger:
@@ -35,18 +17,6 @@ automation:
           - service: lock.lock
             target:
               entity_id: lock.back_porch
-script:
-  lock_back_porch:
-    sequence:
-      - service: lock.lock
-        data:
-          entity_id: lock.back_porch
-  turn_on_entity_id:
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: >
-            {{ entity_id }}
 
 group:
   back_porch_fan:
