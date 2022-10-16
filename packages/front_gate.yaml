@@ -39,6 +39,29 @@ automation:
         data:
           message: the front gate just opened
 
+  - alias: Gate open warning
+    id: c228fcbc-a5ea-4d1f-8094-a884be31e362
+    trigger:
+      platform: state
+      entity_id: binary_sensor.front_gate_access_control_window_door_is_open
+      to: 'on'
+      for:
+        minutes: 3
+    action:
+      - service: notify.iphones
+        data:
+          message: the front gate has been open for a few minutes
+          data:
+            push:
+              interruption-level: time-sensitive
+              category: camera
+            entity_id: camera.front_door
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ states.camera.front_door.attributes.entity_picture }}
+              content-type: jpeg
+              hide-thumbnail: false
+
   - alias: front gate tag
     id: 3b768555-8dae-416f-8470-9db76f385ec9
     trigger:
