@@ -20,6 +20,8 @@ script:
             action_data:
               tag: >
                 {{ tag | default(entity_id) }}
+              service: |
+                {{ service | default("homeassistant.turn_on") }}
               entity_id: |
                 {{ entity_id }}
               notify_service: >
@@ -62,7 +64,8 @@ automation:
           event_data={{ trigger.event.data }}
         logger: packages.ack
         level: debug
-    - service: homeassistant.turn_on
+    - service: >
+        {{ trigger.event.data.action_data.service | default('homeassistant.turn_on') }}
       data:
         entity_id: '{{ trigger.event.data.action_data.entity_id }}'
     - service: '{{ trigger.event.data.action_data.notify_service }}'
