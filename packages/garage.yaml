@@ -12,7 +12,7 @@ automation:
     action:
     - service: script.ack
       data:
-        service: cover.close
+        service: cover.close_cover
         entity_id: "{{ trigger.entity_id }}"
         message: >
           Close the {{ trigger.to_state.name }}?
