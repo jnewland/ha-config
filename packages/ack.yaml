@@ -74,7 +74,7 @@ automation:
     - service: '{{ trigger.event.data.action_data.notify_service }}'
       data:
         message: >
-          {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}.
+          {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}
         data:
           tag: >
             {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
