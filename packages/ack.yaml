@@ -2,14 +2,11 @@ script:
   ask_about_turning_on:
     sequence:
       - service: >
-          {{ service | default("notify.iphones") }}
+          {{ notify_service | default("notify.iphones") }}
         data:
           message: |
             {{ message | default("Turn on " + entity_id) }}
           data:
-            push:
-              interruption-level: >
-                {{ interruption_level | default('active') }}
             tag: >
               {{ tag | default(entity_id) }}
             actions:
@@ -28,9 +25,12 @@ script:
               entity_id: |
                 {{ entity_id }}
               notify_service: >
-                {{ service | default("notify.iphones") }}
+                {{ notify_service | default("notify.iphones") }}
               confirmation_message: |
                 {{ confirmation_message | default("turned on " + entity_id) }}
+            push:
+              interruption-level: >
+                {{ interruption_level | default('active') }}
       - service: notify.slack
         data:
           title: ':question:'
@@ -76,10 +76,10 @@ automation:
         message: >
           {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}.
         data:
-          push:
-            interruption-level: passive
           tag: >
             {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
+          push:
+            interruption-level: passive
     - service: notify.slack
       data:
         title: ':+1:'
