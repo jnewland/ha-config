@@ -53,7 +53,7 @@ automation:
             - condition: template
               value_template: "{{ not is_state('alarm_control_panel.alarm', 'disarmed') }}"
           sequence:
-            - service: script.ask_about_turning_on
+            - service: script.ack
               data:
                 secure: "true"
                 tag: front_gate_tag
@@ -62,7 +62,7 @@ automation:
                 confirmation_message: unlocked.
 
         default:
-          - service: script.ask_about_turning_on
+          - service: script.ack
             data:
               entity_id: script.mode_away
               tag: front_gate_tag

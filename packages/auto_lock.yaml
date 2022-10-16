@@ -18,11 +18,11 @@ automation:
     - service: system_log.write
       data:
         message: >
-          at=script.ask_about_turning_on
+          at=script.ack
           tag={{ trigger.entity_id }}
         logger: packages.auto_lock
         level: debug
-    - service: script.ask_about_turning_on
+    - service: script.ack
       data:
         service: lock.lock
         entity_id: "{{ trigger.entity_id }}"

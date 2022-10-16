@@ -1,5 +1,5 @@
 script:
-  ask_about_turning_on:
+  ack:
     sequence:
       - service: >
           {{ notify_service | default("notify.iphones") }}

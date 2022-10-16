@@ -77,7 +77,7 @@ automation:
                       }}
                       '
     action:
-    - service: script.ask_about_turning_on
+    - service: script.ack
       data:
         entity_id: script.mode_away
         message: "Looks like everyone is gone. Turn on away?"
