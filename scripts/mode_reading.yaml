@@ -40,5 +40,5 @@ sequence:
   data:
     entity_id: script.arm
     tag: alarm_control_panel.alarm
-    message: "Arm the alarm?"
+    message: "Alarm is disarmed. Arm?"
     confirmation_message: armed the alarm.
