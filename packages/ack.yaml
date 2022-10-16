@@ -47,6 +47,15 @@ automation:
     event_data:
       actionName: ACK_NO
   action:
+    - service: '{{ trigger.event.data.action_data.notify_service }}'
+      data:
+        message: |
+          {{ trigger.event.data.sourceDeviceName }} will handle {{ trigger.event.data.action_data.entity_id }}
+        data:
+          tag: >
+            {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
+          push:
+            interruption-level: time-sensitive
     - service: notify.slack
       data:
         title: ':-1:'
