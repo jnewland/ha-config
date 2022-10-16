@@ -9,9 +9,9 @@ script:
         entity_id: alarm_control_panel.alarm
   ask_about_alarm_toggle:
     sequence:
-      - service: script.ask_about_turning_on
+      - service: script.ack
         data:
-          service: >
+          notify_service: >
             {{ service | default('notify.mobile_app_jphone_14') }}
           tag: alarm_control_panel.alarm
           entity_id: >
@@ -35,9 +35,9 @@ script:
             {%- endif -%}
           confirmation_message: >
             {%- if states.alarm_control_panel.alarm.state == "disarmed" -%}
-            armed the alarm
+            armed the alarm.
             {%- else -%}
-            disarmed the alarm
+            disarmed the alarm.
             {%- endif -%}
   toggle_gate:
     sequence:

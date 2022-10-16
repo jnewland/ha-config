@@ -1,36 +1,40 @@
 automation:
-  - alias: Keep the garage door closed
+  - alias: Keep covers closed
     id: 9b4c10ce-0960-4176-9bd5-e670c75dfc0d
     trigger:
       platform: state
-      entity_id: cover.garage
+      entity_id:
+        - cover.garage
+        - cover.gate
       to: open
       for:
         minutes: 5
     action:
-    - service: script.ask_about_turning_on
+    - service: script.ack
       data:
-        entity_id: script.close_garage
-        message: "The garage has been open for a bit. Close it up?"
-        confirmation_message: closed the garage
-  - alias: Keep the garage door locked
-    id: 85761fbe-a404-4b09-bce0-83acae8ce018
+        service: cover.close_cover
+        entity_id: "{{ trigger.entity_id }}"
+        message: >
+          Close the {{ trigger.to_state.name }}?
+        confirmation_message: >
+          closed the {{ trigger.to_state.name }}.
+  - alias: Cover notification clear
+    id: f883428d-555d-495c-865d-63121af76939
     trigger:
       platform: state
-      entity_id: binary_sensor.garage_occupancy
-      to: 'off'
+      entity_id:
+        - cover.garage
+        - cover.gate
+      to: closed
       for:
-        minutes: 30
-    condition:
-      condition: state
-      entity_id: lock.garage
-      state: unlocked
+        seconds: 5
     action:
-    - service: script.ask_about_turning_on
-      data:
-        entity_id: script.lock_garage
-        message: "The garage door has been unlocked for a bit. Lock it up?"
-        confirmation_message: locked the garage door
+      - service: notify.iphones
+        data:
+          message: "clear_notification"
+          data:
+            tag: "{{ trigger.entity_id }}"
+
   - alias: Unlock garage door lock with tag
     id: 79bc5e96-faf8-4a56-85d4-2a5537134be0
     trigger:
@@ -66,8 +70,3 @@ script:
     sequence:
     - service: python_script.close_if_open
       entity_id: cover.garage
-  lock_garage:
-    sequence:
-      - service: lock.lock
-        data:
-          entity_id: lock.garage

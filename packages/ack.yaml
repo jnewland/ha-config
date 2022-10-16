@@ -1,8 +1,8 @@
 script:
-  ask_about_turning_on:
+  ack:
     sequence:
       - service: >
-          {{ service | default("notify.iphones") }}
+          {{ notify_service | default("notify.iphones") }}
         data:
           message: |
             {{ message | default("Turn on " + entity_id) }}
@@ -20,12 +20,17 @@ script:
             action_data:
               tag: >
                 {{ tag | default(entity_id) }}
+              service: |
+                {{ service | default("homeassistant.turn_on") }}
               entity_id: |
                 {{ entity_id }}
               notify_service: >
-                {{ service | default("notify.iphones") }}
+                {{ notify_service | default("notify.iphones") }}
               confirmation_message: |
                 {{ confirmation_message | default("turned on " + entity_id) }}
+            push:
+              interruption-level: >
+                {{ interruption_level | default('active') }}
       - service: notify.slack
         data:
           title: ':question:'
@@ -42,6 +47,15 @@ automation:
     event_data:
       actionName: ACK_NO
   action:
+    - service: '{{ trigger.event.data.action_data.notify_service }}'
+      data:
+        message: |
+          {{ trigger.event.data.sourceDeviceName }} will handle {{ trigger.event.data.action_data.entity_id }}
+        data:
+          tag: >
+            {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
+          push:
+            interruption-level: time-sensitive
     - service: notify.slack
       data:
         title: ':-1:'
@@ -62,16 +76,19 @@ automation:
           event_data={{ trigger.event.data }}
         logger: packages.ack
         level: debug
-    - service: homeassistant.turn_on
+    - service: >
+        {{ trigger.event.data.action_data.service | default('homeassistant.turn_on') }}
       data:
         entity_id: '{{ trigger.event.data.action_data.entity_id }}'
     - service: '{{ trigger.event.data.action_data.notify_service }}'
       data:
         message: >
-          {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}.
+          {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}
         data:
           tag: >
             {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
+          push:
+            interruption-level: passive
     - service: notify.slack
       data:
         title: ':+1:'

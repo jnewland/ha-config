@@ -1,0 +1,23 @@
+automation:
+  - alias: Disarm alarm notification
+    id: 9caa0dfd-6fdc-49f6-9ef4-f3ab930b4920
+    trigger:
+      platform: state
+      entity_id:
+        - alarm_control_panel.alarm
+      to: armed_home
+      for:
+        seconds: 5
+    condition:
+      condition: template
+      value_template: |
+        {{ states.input_select.mode.state != "Away" }}
+    action:
+      - service: script.ack
+        data:
+          secure: "true"
+          service: alarm_control_panel.alarm_disarm
+          entity_id: alarm_control_panel.alarm
+          message: "Alarm is armed. Disarm?"
+          confirmation_message: disarmed the alarm.
+

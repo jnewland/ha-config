@@ -10,7 +10,7 @@ binary_sensor:
             float(states('sensor.laundry_electric_consumption_w'), default=0) > 10
           }}
         delay_off:
-          minutes: 6
+          minutes: 8
 
       laundry_door:
         friendly_name: Laundry door
@@ -32,12 +32,12 @@ automation:
       from: "on"
       to: "off"
     action:
-      - service: script.ask_about_turning_on
+      - service: script.ack
         data:
           entity_id: script.noop
           tag: laundry
           message: Time to do the laundry thing. You have a second?
-          confirmation_message: is doing the laundry thing, cool
+          confirmation_message: is doing the laundry thing, cool.
   - alias: Clear laundry notifications
     id: e1432f38-834f-417a-b976-2bb627e06046
     trigger:

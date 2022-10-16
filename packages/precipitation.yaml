@@ -16,9 +16,8 @@ automation:
     condition: |
       {{ states('device_tracker.jphone_14') != 'not_home' }}
     action:
-      - service: script.ask_about_turning_on
+      - service: script.ack
         data:
-          service: notify.mobile_app_jphone_14
           notify_service: notify.mobile_app_jphone_14
           entity_id: script.noop
           tag: precipitation
@@ -34,9 +33,8 @@ automation:
     condition: |
       {{ states('device_tracker.jphone_14') != 'not_home' }}
     action:
-      - service: script.ask_about_turning_on
+      - service: script.ack
         data:
-          service: notify.mobile_app_jphone_14
           notify_service: notify.mobile_app_jphone_14
           entity_id: script.noop
           tag: precipitation
