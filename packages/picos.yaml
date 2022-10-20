@@ -15,6 +15,7 @@ media_player:
 
 automation:
   - alias: Log Pico events
+    id: d662322b-f5ea-4cff-a303-3d3d55ab3cdc
     mode: parallel
     trigger:
       - platform: event
@@ -29,7 +30,8 @@ automation:
           level: debug
 
 
-  - alias: Great Room Sonos Pico
+  - alias: Living Room Hall Audio Pico
+    id: 765704e9-860f-4209-b4b8-f37a834faeea
     trigger:
       - platform: event
         event_type: lutron_caseta_button_event
