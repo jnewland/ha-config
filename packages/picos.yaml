@@ -1,3 +1,12 @@
+media_player:
+  - platform: group
+    name: common area speakers
+    entities:
+      - media_player.kitchen_speakers
+      - media_player.living_speakers
+      - media_player.record_cabinet
+      - media_player.sub
+
 automation:
   - alias: Log Pico events
     mode: parallel
@@ -14,7 +23,7 @@ automation:
           level: debug
 
 
-  - alias: Sonos Pico
+  - alias: Great Room Sonos Pico
     trigger:
       - platform: event
         event_type: lutron_caseta_button_event
@@ -37,7 +46,7 @@ automation:
             sequence:
               - service: media_player.volume_up
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.common_area_speakers
 
           - conditions:
               - condition: template
@@ -45,7 +54,7 @@ automation:
             sequence:
               - service: media_player.volume_down
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.common_area_speakers
 
           - conditions:
               - condition: template

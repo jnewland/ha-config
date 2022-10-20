@@ -658,6 +658,11 @@ views:
           - light.couch_lamp_left
           - binary_sensor.great_room_occupancy
           - sensor.dining_room_air_temperature
+          - media_player.common_area_speakers
+          - media_player.kitchen_speakers
+          - media_player.living_speakers
+          - media_player.record_cabinet
+          - media_player.sub
         footer:
           type: graph
           entity: sensor.dining_room_air_temperature
