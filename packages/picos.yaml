@@ -6,6 +6,12 @@ media_player:
       - media_player.living_speakers
       - media_player.record_cabinet
       - media_player.sub
+  - platform: group
+    name: atrium area speakers
+    entities:
+      - media_player.atrium_speakers
+      - media_player.pergola
+      - media_player.rock
 
 automation:
   - alias: Log Pico events

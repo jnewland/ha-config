@@ -658,15 +658,17 @@ views:
           - light.couch_lamp_left
           - binary_sensor.great_room_occupancy
           - sensor.dining_room_air_temperature
-          - media_player.kitchen_speakers
-          - media_player.living_speakers
-          - media_player.record_cabinet
-          - media_player.sub
         footer:
           type: graph
           entity: sensor.dining_room_air_temperature
           hours_to_show: 36
           detail: 2
+      - type: entities
+        entities:
+          - media_player.kitchen_speakers
+          - media_player.living_speakers
+          - media_player.record_cabinet
+          - media_player.sub
 
   - title: Lounge
     icon: mdi:television-classic
@@ -936,6 +938,11 @@ views:
           - binary_sensor.front_gate_access_control_window_door_is_open
           - cover.garage
           - cover.gate
+      - type: entities
+        entities:
+        - media_player.atrium_speakers
+        - media_player.pergola
+        - media_player.rock
       - type: history-graph
         hours_to_show: 3
         entities:
