@@ -30,7 +30,7 @@ automation:
           level: debug
 
   - alias: Living Room Atrium Audio Pico
-    id:
+    id: ecca99cb-157b-48ea-b681-a7e23498e6a0
     trigger:
       - platform: event
         event_type: lutron_caseta_button_event
