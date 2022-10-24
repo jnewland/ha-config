@@ -211,8 +211,9 @@ binary_sensor:
           {{
             states('cover.garage') == 'open' or
             states('lock.garage') == 'unlocked' or
-            float(states('sensor.garage_person_count'), default=0) > 0  or
-            states.sensor.garage_person_count.last_changed > (now() - timedelta(minutes=10))
+            float(states('sensor.garage_person_count'), default=0) > 0 or
+            states.sensor.garage_person_count.last_changed > (now() - timedelta(minutes=10)) or
+            is_state('binary_sensor.garage_apple_device_detected', 'on')
           }}
 
       back_porch_occupancy:
