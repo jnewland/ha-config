@@ -40,7 +40,7 @@ automation:
           message: the front gate just opened
 
   - alias: Gate open warning
-    id: c228fcbc-a5ea-4d1f-8094-a884be31e362
+    id: 3b46434a-487b-40ad-a678-24ac2c1d7d01
     trigger:
       platform: state
       entity_id: binary_sensor.front_gate_access_control_window_door_is_open

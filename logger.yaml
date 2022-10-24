@@ -12,7 +12,7 @@ logs:
   packages.auto_lock: debug
   packages.house_speakers: debug
   packages.image_processing: info
-  packages.picos: info
+  packages.picos: debug
   packages.visitor: debug
   packages.zwave: debug
   pyhap.hap_server: critical

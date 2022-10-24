@@ -1,5 +1,21 @@
+media_player:
+  - platform: group
+    name: common area speakers
+    entities:
+      - media_player.kitchen_speakers
+      - media_player.living_speakers
+      - media_player.record_cabinet
+      - media_player.sub
+  - platform: group
+    name: atrium area speakers
+    entities:
+      - media_player.atrium_speakers
+      - media_player.pergola
+      - media_player.rock
+
 automation:
   - alias: Log Pico events
+    id: d662322b-f5ea-4cff-a303-3d3d55ab3cdc
     mode: parallel
     trigger:
       - platform: event
@@ -13,8 +29,67 @@ automation:
           logger: packages.picos
           level: debug
 
+  - alias: Living Room Atrium Audio Pico
+    id: ecca99cb-157b-48ea-b681-a7e23498e6a0
+    trigger:
+      - platform: event
+        event_type: lutron_caseta_button_event
+        event_data:
+          serial: 82201322
+          action: press
+    action:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.button_number == 2 }}"
+            sequence:
+              - service: media_player.media_play_pause
+                target:
+                  entity_id: media_player.house
 
-  - alias: Sonos Pico
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.button_number == 5 }}"
+            sequence:
+              - service: media_player.volume_up
+                target:
+                  entity_id: media_player.atrium_area_speakers
+
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.button_number == 6 }}"
+            sequence:
+              - service: media_player.volume_down
+                target:
+                  entity_id: media_player.atrium_area_speakers
+
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.button_number == 4 }}"
+            sequence:
+              - service: media_player.media_next_track
+                target:
+                  entity_id: media_player.house
+
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.button_number == 3 }}"
+            sequence:
+              - service: media_player.play_media
+                target:
+                  entity_id: media_player.house
+                data:
+                  media_content_id: >
+                    {{ state_attr("sensor.sonos_favorites", "items") | list | random }}
+                  media_content_type: favorite_item_id
+
+        default: []
+    mode: queued
+    max: 10
+
+
+  - alias: Living Room Hall Audio Pico
+    id: 765704e9-860f-4209-b4b8-f37a834faeea
     trigger:
       - platform: event
         event_type: lutron_caseta_button_event
@@ -37,7 +112,7 @@ automation:
             sequence:
               - service: media_player.volume_up
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.common_area_speakers
 
           - conditions:
               - condition: template
@@ -45,7 +120,7 @@ automation:
             sequence:
               - service: media_player.volume_down
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.common_area_speakers
 
           - conditions:
               - condition: template
@@ -65,7 +140,7 @@ automation:
                 data:
                   media_content_id: >
                     {{ state_attr("sensor.sonos_favorites", "items") | list | random }}
-                  media_content_type: favorite_item_id                
+                  media_content_type: favorite_item_id
 
         default: []
     mode: queued
