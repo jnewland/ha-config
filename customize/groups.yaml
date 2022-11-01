@@ -1,23 +1,3 @@
 group.all_automations:
   friendly_name: Automation
   hidden: false
-group.hall:
-  emulated_hue_hidden: false
-group.lounge:
-  emulated_hue_hidden: false
-group.great_room:
-  emulated_hue_hidden: false
-group.speakers:
-  emulated_hue_hidden: false
-group.upstairs_speakers:
-  emulated_hue_hidden: false
-group.downstairs_speakers:
-  emulated_hue_hidden: false
-group.outdoor_speakers:
-  emulated_hue_hidden: false
-group.bedroom:
-  emulated_hue_hidden: false
-  emulated_hue_name: "bedroom"
-group.bathroom:
-  emulated_hue_hidden: false
-  emulated_hue_name: "bathroom"
