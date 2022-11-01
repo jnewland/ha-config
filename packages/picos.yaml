@@ -12,6 +12,13 @@ media_player:
       - media_player.atrium_speakers
       - media_player.pergola
       - media_player.rock
+  - platform: group
+    name: upstairs speakers
+    entities:
+      - media_player.master_bedroom_speakers
+      - media_player.master_bathroom_speakers
+      - media_player.yoga
+      - media_player.shower
 
 automation:
   - alias: Log Pico events
@@ -87,7 +94,6 @@ automation:
     mode: queued
     max: 10
 
-
   - alias: Living Room Hall Audio Pico
     id: 765704e9-860f-4209-b4b8-f37a834faeea
     trigger:
@@ -146,3 +152,60 @@ automation:
     mode: queued
     max: 10
 
+  - alias: Upstairs Bathroom Audio Pico
+    id: bfd5712b-56f1-430b-824b-f39e6efb4528
+    trigger:
+      - platform: event
+        event_type: lutron_caseta_button_event
+        event_data:
+          serial: 68959968
+          action: press
+    action:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.button_number == 2 }}"
+            sequence:
+              - service: media_player.media_play_pause
+                target:
+                  entity_id: media_player.house
+
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.button_number == 5 }}"
+            sequence:
+              - service: media_player.volume_up
+                target:
+                  entity_id: media_player.upstairs_speakers
+
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.button_number == 6 }}"
+            sequence:
+              - service: media_player.volume_down
+                target:
+                  entity_id: media_player.upstairs_speakers
+
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.button_number == 4 }}"
+            sequence:
+              - service: media_player.media_next_track
+                target:
+                  entity_id: media_player.house
+
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.button_number == 3 }}"
+            sequence:
+              - service: media_player.play_media
+                target:
+                  entity_id: media_player.house
+                data:
+                  media_content_id: >
+                    {{ state_attr("sensor.sonos_favorites", "items") | list | random }}
+                  media_content_type: favorite_item_id
+
+        default: []
+    mode: queued
+    max: 10
