@@ -5,7 +5,6 @@ automation:
       platform: state
       entity_id:
         - cover.garage
-        - cover.gate
       to: open
       for:
         minutes: 5
