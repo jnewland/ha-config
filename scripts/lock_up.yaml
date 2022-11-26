@@ -6,5 +6,3 @@ sequence:
     - lock.garage
   - service: python_script.close_if_open
     entity_id: cover.garage
-  - service: python_script.close_if_open
-    entity_id: cover.gate
