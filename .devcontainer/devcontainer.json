@@ -1,7 +1,12 @@
 {
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "terminal",
-	"workspaceFolder": "/workspace",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+	// Use this environment variable if you need to bind mount your local source code into a new container.
+	"remoteEnv": {
+		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+	},
 	"extensions": [
 		"coenraads.bracket-pair-colorizer-2",
 		"eamodio.gitlens",
