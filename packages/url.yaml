@@ -7,7 +7,3 @@ input_text:
     initial: !env_var FRIGATE_URL
   private_domain:
     initial: !env_var PRIVATE_DOMAIN private.example.com
-  pixlet_host:
-    initial: !env_var PIXLET_SERVICE_HOST pixlet
-  pixlet_port:
-    initial: !env_var PIXLET_SERVICE_PORT 8080
