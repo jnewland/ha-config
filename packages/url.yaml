@@ -5,5 +5,5 @@ input_text:
     initial: !env_var SLACK_URL
   frigate_url:
     initial: !env_var FRIGATE_URL
-  vera_url:
-    initial: !env_var VERA_URL
+  private_domain:
+    initial: !env_var PRIVATE_DOMAIN private.example.com
