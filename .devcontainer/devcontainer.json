@@ -1,7 +1,8 @@
 {
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "terminal",
-    "extensions": [
+	"workspaceFolder": "/workspace",
+	"extensions": [
 		"coenraads.bracket-pair-colorizer-2",
 		"eamodio.gitlens",
 		"github.vscode-pull-request-github",
