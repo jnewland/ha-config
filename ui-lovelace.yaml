@@ -400,7 +400,6 @@ views:
           show_state: false
           entity: camera.pergola_person
 
-
       - type: custom:custom-sonos-card
         mediaTitle: " "
         shuffleFavorites: false
@@ -408,13 +407,13 @@ views:
         singleSectionMode: media browser
         layout:
           mediaItem:
-            width: '25%'
-            mobileWidth: '33%'
+            width: "25%"
+            mobileWidth: "33%"
         styles:
-            button-section:
-              border: none
-            media-button:
-              border: none
+          button-section:
+            border: none
+          media-button:
+            border: none
       - type: weather-forecast
         entity: weather.dark_sky
       - type: picture
@@ -680,6 +679,7 @@ views:
           - light.lounge_chandelier
           - light.tv_left
           - light.tv_right
+          - light.lounge_tv
           - switch.lounge_left
           - switch.lounge_right
           - binary_sensor.lounge_home_security_motion_detection
@@ -772,7 +772,6 @@ views:
           power: true
           shuffle: false
 
-
   - title: Upstairs
     icon: mdi:bed
     cards:
@@ -840,7 +839,6 @@ views:
           fill: false
           extrema: true
           state: false
-
 
       - type: custom:mini-graph-card
         hours_to_show: 3
@@ -940,9 +938,9 @@ views:
           - cover.gate
       - type: entities
         entities:
-        - media_player.atrium_speakers
-        - media_player.pergola
-        - media_player.rock
+          - media_player.atrium_speakers
+          - media_player.pergola
+          - media_player.rock
       - type: history-graph
         hours_to_show: 3
         entities:
