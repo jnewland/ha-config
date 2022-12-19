@@ -1,6 +1,5 @@
 homeassistant:
   customize:
-
     binary_sensor.great_room_occupancy:
       trigger_service: script.great_room_lights
       trigger_entity_id_off: group.great_room
@@ -10,6 +9,9 @@ homeassistant:
       media_player_group_members: media_player.sub
 
     binary_sensor.lounge_occupancy:
+      trigger_service: script.lounge_lights
+      trigger_entity_id_off: group.lounge
+      off_delay_seconds: 1800
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.lounge_surround
 
