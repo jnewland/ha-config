@@ -363,7 +363,6 @@ views:
           entities:
             - input_boolean.winterized
             - binary_sensor.freeze_forecast
-            - weather.dark_sky
             - sensor.atrium_couch_temperature
             - sensor.bamboo_temperature
             - sensor.peppers_temperature
