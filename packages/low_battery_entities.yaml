@@ -16,7 +16,7 @@ template:
             {% set threshold = 30 %}
             {% set result = namespace(entities=[]) %}
             {% for state in states %}
-              {% if 'device_class' in state.attributes and state.attributes.device_class == 'battery' and (state.entity_id not in integration_entities('alarmdotcom')) and (state.entity_id not in integration_entities('mobile_app')) %}
+              {% if 'device_class' in state.attributes and state.attributes.device_class == 'battery' and (state.entity_id not in integration_entities('alarmdotcom')) and (state.entity_id not in integration_entities('mobile_app')) and (is_state('input_boolean.winterized', 'off') or (state.entity_id not in integration_entities('bhyve'))) %}
                 {% if state.state == 'Low' or (0 <= state.state | int(-1) < threshold | int) and not state.entity_id in result.entities %}
                   {% set result.entities = result.entities + [state.entity_id] %}
                 {% endif %}
