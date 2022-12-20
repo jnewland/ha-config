@@ -5,6 +5,8 @@ homeassistant:
   elevation: !env_var ELEVATION
   unit_system: imperial
   time_zone: America/Chicago
+  country: US
+  currency: USD
   customize: !include_dir_merge_named customize
   packages: !include_dir_named packages
   auth_providers: !include auth_providers.yaml

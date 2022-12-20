@@ -32,9 +32,6 @@ homeassistant:
       trigger_entity_id_off: group.powder_room
       haunt: light.drums
     binary_sensor.lounge_home_security_motion_detection:
-      trigger_service: script.lounge_lights
-      trigger_entity_id_off: group.lounge
-      off_delay_seconds: 1800
       haunt: light.couch
     binary_sensor.music_room_occupancy:
       trigger_service: script.music_room
@@ -520,7 +517,7 @@ automation:
     action:
       service: notify.slack
       data:
-        title: ':bulb:'
+        title: ":bulb:"
         message: |
           :bulb: *{{ trigger.event.data.new_state.name | capitalize }}*{{ " " -}}
           {%- if trigger.event.data.new_state.state == "on" -%}
@@ -568,10 +565,10 @@ automation:
     trigger:
       - platform: state
         entity_id: light.cabinets
-        to: 'on'
+        to: "on"
       - platform: state
         entity_id: light.kitchen_cabinets
-        to: 'on'
+        to: "on"
     action:
       - service: light.turn_on
         entity_id: light.cabinets
@@ -583,10 +580,10 @@ automation:
     trigger:
       - platform: state
         entity_id: light.cabinets
-        to: 'off'
+        to: "off"
       - platform: state
         entity_id: light.kitchen_cabinets
-        to: 'off'
+        to: "off"
     action:
       - service: light.turn_off
         entity_id: light.cabinets
@@ -638,29 +635,28 @@ script:
             {{ "5" if states.input_select.mode.state in ["Evening", "Cocktail", "Cooking"] else "0.1" }}
   mode_cocktail:
     sequence:
-    - service: input_select.select_option
-      entity_id: input_select.mode
-      data:
-        option: Cocktail
-    - service: script.turn_on
-      entity_id: script.great_room_lights
+      - service: input_select.select_option
+        entity_id: input_select.mode
+        data:
+          option: Cocktail
+      - service: script.turn_on
+        entity_id: script.great_room_lights
   mode_cooking:
     sequence:
-    - service: input_select.select_option
-      entity_id: input_select.mode
-      data:
-        option: Cooking
-    - service: script.turn_on
-      entity_id: script.great_room_lights
+      - service: input_select.select_option
+        entity_id: input_select.mode
+        data:
+          option: Cooking
+      - service: script.turn_on
+        entity_id: script.great_room_lights
   mode_day:
     sequence:
-    - service: input_select.select_option
-      entity_id: input_select.mode
-      data:
-        option: Day
-    - service: script.turn_on
-      entity_id: script.great_room_lights
-
+      - service: input_select.select_option
+        entity_id: input_select.mode
+        data:
+          option: Day
+      - service: script.turn_on
+        entity_id: script.great_room_lights
 
   bathroom_lights:
     sequence:
@@ -675,15 +671,13 @@ script:
       - service: light.turn_on
         data:
           entity_id:
-          - light.bathroom_overhead
-          - light.bathroom_shower
+            - light.bathroom_overhead
+            - light.bathroom_shower
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
       - service: light.turn_on
         data:
           entity_id: light.bathroom_mirror
-
-
 
   bathroom_lights_off:
     sequence:
@@ -708,69 +702,67 @@ script:
   notify_with_lights:
     mode: queued
     sequence:
-    - condition: template
-      value_template: |
-        {{
-          states.light |
-          selectattr("state", "equalto", "on") |
-          selectattr("attributes.notify_action", "equalto", "duck") |
-          map(attribute="entity_id") |
-          list |
-          length > 0
-        }}
-    - service: script.pulse_light
-      data:
-        entity_id: |
+      - condition: template
+        value_template: |
           {{
             states.light |
             selectattr("state", "equalto", "on") |
             selectattr("attributes.notify_action", "equalto", "duck") |
             map(attribute="entity_id") |
-            join(', ')
+            list |
+            length > 0
           }}
+      - service: script.pulse_light
+        data:
+          entity_id: |
+            {{
+              states.light |
+              selectattr("state", "equalto", "on") |
+              selectattr("attributes.notify_action", "equalto", "duck") |
+              map(attribute="entity_id") |
+              join(', ')
+            }}
 
   lounge_lights:
     sequence:
       - service: light.turn_on
         data:
           entity_id:
-          - light.tv_left
-          - light.tv_right
-          - light.lounge_chandelier
+            - light.tv_left
+            - light.tv_right
+            - light.lounge_chandelier
+            - light.lounge_tv
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
       - service: switch.turn_on
         data:
           entity_id:
-          - switch.lounge_left
-      - service: switch.turn_on
-        data:
-          entity_id:
-          - switch.lounge_right
+            - switch.lounge_left
+            - switch.lounge_right
       - condition: template
         value_template: >
           {{ states.input_select.mode.state != "Evening" }}
       - service: light.turn_on
         data:
           entity_id:
-          - light.lounge_overhead
+            - light.lounge_overhead
           brightness: |
             {{ brightness | default(states('input_number.brightness') | int) }}
 
   pulse_light:
     sequence:
-    - service: python_script.dim_step
-      data:
-        action: down
-        entity_id: |
-          {{ entity_id }}
-    - delay:
-        seconds: 2
-    - service: python_script.dim_step
-      data:
-        action: up
-        entity_id: |
-          {{ entity_id }}
+      - service: python_script.dim_step
+        data:
+          action: down
+          entity_id: |
+            {{ entity_id }}
+      - delay:
+          seconds: 2
+      - service: python_script.dim_step
+        data:
+          action: up
+          entity_id: |
+            {{ entity_id }}
 
   haunt:
     mode: parallel
@@ -833,8 +825,8 @@ script:
 
   maybe_turn_off_wine_room:
     sequence:
-    - condition: template
-      value_template: >
-        {{ expand('group.outdoor_mood') | selectattr('entity_id', '!=', 'light.wine_room') | selectattr('state', '==', 'on') | list == [] }}
-    - service: light.turn_off
-      entity_id: light.wine_room
+      - condition: template
+        value_template: >
+          {{ expand('group.outdoor_mood') | selectattr('entity_id', '!=', 'light.wine_room') | selectattr('state', '==', 'on') | list == [] }}
+      - service: light.turn_off
+        entity_id: light.wine_room
