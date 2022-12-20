@@ -3,7 +3,7 @@
 
 template:
   - sensor:
-      - name: 'Low Battery Entities'
+      - name: "Low Battery Entities"
         unique_id: low_battery_entities
         icon: "{{ 'mdi:battery-10' if states('sensor.low_battery_entities')|int(0) > 0 else 'mdi:battery-80' }}"
         unit_of_measurement: entities
@@ -16,7 +16,7 @@ template:
             {% set threshold = 30 %}
             {% set result = namespace(entities=[]) %}
             {% for state in states %}
-              {% if 'device_class' in state.attributes and state.attributes.device_class == 'battery' %}
+              {% if 'device_class' in state.attributes and state.attributes.device_class == 'battery' and (state.entity_id not in integration_entities('alarmdotcom')) and (state.entity_id not in integration_entities('mobile_app')) %}
                 {% if state.state == 'Low' or (0 <= state.state | int(-1) < threshold | int) and not state.entity_id in result.entities %}
                   {% set result.entities = result.entities + [state.entity_id] %}
                 {% endif %}
@@ -31,8 +31,8 @@ template:
 
 automation:
   - id: low_battery_entities_notification
-    alias: 'Low Battery Entities Notification'
-    description: 'Create persistent notification if there are low battery entities, dismiss if none.'
+    alias: "Low Battery Entities Notification"
+    description: "Create persistent notification if there are low battery entities, dismiss if none."
     mode: restart
     trigger:
       - platform: state
@@ -57,7 +57,7 @@ automation:
         default:
           - service: persistent_notification.create
             data:
-              title: 'Low Battery Entities'
+              title: "Low Battery Entities"
               message: >
                 - {{ expand(state_attr('sensor.low_battery_entities','entity_id'))
                       |map(attribute='entity_id')|join('\n- ') }}
