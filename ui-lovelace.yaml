@@ -362,8 +362,11 @@ views:
           type: entities
           entities:
             - input_boolean.winterized
-            - weather.dark_sky
             - binary_sensor.freeze_forecast
+            - sensor.atrium_couch_temperature
+            - sensor.bamboo_temperature
+            - sensor.peppers_temperature
+            - sensor.pergola_temperature
       - type: conditional
         conditions:
           - entity: input_boolean.christmas
