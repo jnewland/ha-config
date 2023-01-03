@@ -5,15 +5,17 @@ import logging
 from typing import Any
 
 from homeassistant import core
-from homeassistant.components.cover import CoverDeviceClass
-from homeassistant.components.cover import CoverEntity
-from homeassistant.components.cover import CoverEntityFeature
+from homeassistant.components.cover import (
+    CoverDeviceClass,
+    CoverEntity,
+    CoverEntityFeature,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import callback
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.entity_platform import DiscoveryInfoType
+from homeassistant.helpers.entity_platform import AddEntitiesCallback, DiscoveryInfoType
 from pyalarmdotcomajax.devices import BaseDevice as libBaseDevice
 from pyalarmdotcomajax.devices.garage_door import GarageDoor as libGarageDoor
+from pyalarmdotcomajax.devices.gate import Gate as libGate
 
 from .alarmhub import AlarmHub
 from .base_device import HardwareBaseDevice
@@ -37,7 +39,7 @@ async def async_setup_entry(
             alarmhub=alarmhub,
             device=device,
         )
-        for device in alarmhub.system.garage_doors
+        for device in alarmhub.system.garage_doors + alarmhub.system.gates
     )
 
 
@@ -45,7 +47,7 @@ class Cover(HardwareBaseDevice, CoverEntity):  # type: ignore
     """Integration Cover Entity."""
 
     _device_type_name: str = "Garage Door"
-    _device: libGarageDoor
+    _device: libGarageDoor | libGate
 
     def __init__(
         self,
@@ -55,10 +57,19 @@ class Cover(HardwareBaseDevice, CoverEntity):  # type: ignore
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(alarmhub, device, device.partition_id)
 
-        self._attr_device_class: CoverDeviceClass = CoverDeviceClass.GARAGE
-        self._attr_supported_features = (
-            CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE
+        self._attr_device_class: CoverDeviceClass = (
+            CoverDeviceClass.GARAGE
+            if isinstance(device, libGarageDoor)
+            else CoverDeviceClass.GATE
         )
+
+        self._attr_supported_features = CoverEntityFeature.OPEN
+
+        if (
+            hasattr(self._device.attributes, "supports_remote_close")
+            and self._device.attributes.supports_remote_close
+        ):
+            self._attr_supported_features |= CoverEntityFeature.CLOSE
 
     @callback  # type: ignore
     def update_device_data(self) -> None:
@@ -96,19 +107,21 @@ class Cover(HardwareBaseDevice, CoverEntity):  # type: ignore
     # Helpers
     #
 
-    def _determine_is_closed(self, state: libGarageDoor.DeviceState) -> bool | None:
+    def _determine_is_closed(
+        self, state: libGarageDoor.DeviceState | libGate.DeviceState
+    ) -> bool | None:
         """Return if the cover is closed or not."""
 
         if not self._device.malfunction:
 
-            if state == libGarageDoor.DeviceState.OPEN:
+            if state in [libGarageDoor.DeviceState.OPEN, libGate.DeviceState.OPEN]:
                 return False
 
-            if state == libGarageDoor.DeviceState.CLOSED:
+            if state in [libGarageDoor.DeviceState.CLOSED, libGate.DeviceState.CLOSED]:
                 return True
 
             log.error(
-                "Cannot determine light state. Found raw state of %s.",
+                "Cannot determine cover state. Found raw state of %s.",
                 state,
             )
 
