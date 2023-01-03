@@ -8,7 +8,9 @@ on:
     - cron:  '0 */4 * * *'
 jobs:
   renovate:
-    uses: jnewland/.github/.github/workflows/renovate.yaml@main
+    uses: urcomputeringpal/.github/.github/workflows/renovate.yaml@main
+    with:
+      renovate_app_slug: jnewland-renovate
     secrets:
       RENOVATE_APP_ID: ${{ secrets.RENOVATE_APP_ID }}
       RENOVATE_APP_PEM: ${{ secrets.RENOVATE_APP_PEM }}
