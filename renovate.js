@@ -1,5 +1,5 @@
 module.exports = {
-  globalExtends: ['github>urcomputeringpal/.github'],
+  extends: ['github>urcomputeringpal/.github'],
   hostRules: [
     {
       hostType: 'github',
