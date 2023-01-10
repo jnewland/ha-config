@@ -23,7 +23,7 @@ mv $TMPDIR/$$-homeassistant-plant/custom_components/plant custom_components
 sync
 
 # renovate: datasource=github-releases depName=uvjustin/alarmdotcom
-ALARM_DOT_COM_VERSION=v2.0.19
+ALARM_DOT_COM_VERSION=v2.0.21
 git clone --depth 1 --branch $ALARM_DOT_COM_VERSION https://github.com/uvjustin/alarmdotcom $TMPDIR/$$-alarmdotcom
 rm -rf custom_components/alarmdotcom || true
 mv $TMPDIR/$$-alarmdotcom/custom_components/alarmdotcom custom_components
@@ -34,6 +34,13 @@ FRIGATE_VERSION=v3.0.0
 git clone --depth 1 --branch $FRIGATE_VERSION https://github.com/blakeblackshear/frigate-hass-integration $TMPDIR/$$-frigate
 rm -rf custom_components/frigate || true
 mv $TMPDIR/$$-frigate/custom_components/frigate custom_components
+sync
+
+# renovate: datasource=github-releases depName=claytonjn/hass-circadian_lighting
+CIRCADIAN_VERSION=2.1.3
+git clone --depth 1 --branch $CIRCADIAN_VERSION https://github.com/claytonjn/hass-circadian_lighting $TMPDIR/$$-circadian_lighting
+rm -rf custom_components/circadian_lighting || true
+mv $TMPDIR/$$-circadian_lighting/custom_components/circadian_lighting custom_components
 sync
 
 curl -L -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
