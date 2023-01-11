@@ -657,6 +657,8 @@ views:
           - light.pantry
           - binary_sensor.pantry_home_security_motion_detection
           - light.living
+          - light.living_room_mirror
+          - light.living_room_fireplace
           - light.couch_lamp_right
           - light.couch_lamp_left
           - binary_sensor.great_room_occupancy

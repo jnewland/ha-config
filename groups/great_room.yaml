@@ -7,5 +7,7 @@ entities:
 - light.pendants
 - light.couch_lamp_right
 - light.couch_lamp_left
+- light.living_room_mirror
+- light.living_room_fireplace
 - switch.great_room_tree
 - switch.treeo
