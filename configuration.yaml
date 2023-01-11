@@ -22,8 +22,8 @@ aerogarden: !include aerogarden.yaml
 automation: !include_dir_list automation
 binary_sensor: !include_dir_list binary_sensors
 circadian_lighting:
-  min_colortemp: 1900 # candle
-  max_colortemp: 4800 # direct sunlight
+  min_colortemp: 2500
+  max_colortemp: 4800
 
 conversation:
 device_tracker: !include device_tracker.yaml
