@@ -194,7 +194,10 @@ binary_sensor:
 switch:
   - name: hue
     platform: circadian_lighting
-    min_brightness: 10
+    min_colortemp: 1900 # candle
+    max_colortemp: 4800 # direct sunlight
+    min_brightness: 15
+    sleep_brightness: 10
     sleep_entity: input_select.mode
     sleep_state: 'Sleeping'
     lights_ct:
