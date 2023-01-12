@@ -1,44 +1,46 @@
 sequence:
-- service: input_select.select_option
-  entity_id: input_select.mode
-  data:
-    option: Reading
-- service: light.turn_off
-  data:
-    entity_id: |
-      {% if states.input_boolean.guests.state == "on" %}
-      group.downstairs_non_guest
-      {% else %}
-      group.downstairs
-      {% endif %}
-- service: input_number.set_value
-  data:
-    entity_id: input_number.brightness
-    value: 42
-- service: light.turn_on
-  data:
-    entity_id:
-    - light.bedroom_chandelier
-    - light.chandelier_lamp
-    - light.bedside_lamp
-    - light.bedside_table
-    - light.bedroom_nook
-    - light.bedroom_patio
-    - light.striped_lamp
-    brightness: |
-      {{ states('input_number.brightness') | int }}
-- service: light.turn_off
-  data:
-    entity_id:
-    - light.bedroom_overhead
-    - light.stairs
-- service: script.lock_up
-- condition: template
-  value_template: >
-    {{ states.input_boolean.guests.state != "on" }}
-- service: script.ack
-  data:
-    entity_id: script.arm
-    tag: alarm_control_panel.alarm
-    message: "Alarm is disarmed. Arm?"
-    confirmation_message: armed the alarm.
+  - service: input_select.select_option
+    entity_id: input_select.mode
+    data:
+      option: Reading
+  - service: light.turn_off
+    data:
+      entity_id: |
+        {% if states.input_boolean.guests.state == "on" %}
+        group.downstairs_non_guest
+        {% else %}
+        group.downstairs
+        {% endif %}
+  - service: input_number.set_value
+    data:
+      entity_id: input_number.brightness
+      value: 42
+  - service: light.turn_on
+    data:
+      entity_id:
+        - light.bedroom_chandelier
+        - light.chandelier_lamp
+        - light.bedside_lamp
+        - light.bedside_table
+        - light.bedroom_nook
+        - light.bedroom_patio
+        - light.striped_lamp
+      brightness: |
+        {{ states('input_number.brightness') | int }}
+  - service: light.turn_off
+    data:
+      entity_id:
+        - light.bedroom_overhead
+        - light.stairs
+  - service: script.lock_up
+  - service: python_script.close_if_open
+    entity_id: cover.garage
+  - condition: template
+    value_template: >
+      {{ states.input_boolean.guests.state != "on" }}
+  - service: script.ack
+    data:
+      entity_id: script.arm
+      tag: alarm_control_panel.alarm
+      message: "Alarm is disarmed. Arm?"
+      confirmation_message: armed the alarm.

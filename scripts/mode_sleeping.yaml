@@ -1,27 +1,29 @@
 sequence:
-- service: input_select.select_option
-  entity_id: input_select.mode
-  data:
-    option: Sleeping
-- service: homeassistant.turn_off
-  entity_id:
-  - group.upstairs
-- service: homeassistant.turn_off
-  data:
-    entity_id: |
-      {% if states.input_boolean.guests.state == "on" %}
-      group.downstairs_non_guest
-      {% else %}
-      group.downstairs
-      {% endif %}
-- service: script.lock_up
-- service: homeassistant.turn_off
-  entity_id: group.outdoor_mood
-- service: input_number.set_value
-  data:
-    entity_id: input_number.brightness
-    value: 13
-- condition: template
-  value_template: >
-    {{ states.input_boolean.guests.state != "on" }}
-- service: script.arm
+  - service: input_select.select_option
+    entity_id: input_select.mode
+    data:
+      option: Sleeping
+  - service: homeassistant.turn_off
+    entity_id:
+      - group.upstairs
+  - service: homeassistant.turn_off
+    data:
+      entity_id: |
+        {% if states.input_boolean.guests.state == "on" %}
+        group.downstairs_non_guest
+        {% else %}
+        group.downstairs
+        {% endif %}
+  - service: script.lock_up
+  - service: python_script.close_if_open
+    entity_id: cover.garage
+  - service: homeassistant.turn_off
+    entity_id: group.outdoor_mood
+  - service: input_number.set_value
+    data:
+      entity_id: input_number.brightness
+      value: 13
+  - condition: template
+    value_template: >
+      {{ states.input_boolean.guests.state != "on" }}
+  - service: script.arm
