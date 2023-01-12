@@ -36,8 +36,8 @@ homeassistant:
     binary_sensor.garage_occupancy:
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.move
-      trigger_entity_on: switch.garage_overhead
-      trigger_entity_off: switch.garage_overhead
+      trigger_entity_id: switch.garage_overhead
+      trigger_entity_id_off: switch.garage_overhead
 
     binary_sensor.atrium_occupancy:
       trigger_entity_id: switch.atrium_fan
