@@ -209,6 +209,7 @@ switch:
       - light.lounge_tv
       - light.tv_left
       - light.tv_right
+      - light.palm
       - light.living_room_mirror
       - light.living_room_fireplace
       - light.bookcase_left

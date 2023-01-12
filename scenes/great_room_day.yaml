@@ -9,4 +9,7 @@ entities:
   light.couch_lamp_left: "on"
   light.bookcase_left: "on"
   light.bookcase_right: "on"
+  light.living_room_mirror: "on"
+  light.living_room_fireplace: "on"
+  light.palm: "on"
   

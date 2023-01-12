@@ -9,3 +9,6 @@ entities:
   light.couch_lamp_left: "off"
   light.bookcase_left: "off"
   light.bookcase_right: "off"
+  light.living_room_mirror: "off"
+  light.living_room_fireplace: "off"
+  light.palm: "off"
