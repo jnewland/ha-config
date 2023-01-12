@@ -197,7 +197,7 @@ switch:
     min_brightness: 15
     sleep_brightness: 10
     sleep_entity: input_select.mode
-    sleep_state: 'Sleeping'
+    sleep_state: "Sleeping"
     # lights without temperature control that frequently stay on for long durations and thus need to be adjusted gradually
     lights_brightness:
       - lights.living
@@ -211,6 +211,8 @@ switch:
       - light.tv_right
       - light.living_room_mirror
       - light.living_room_fireplace
+      - light.bookcase_left
+      - light.bookcase_right
       - light.cabinets_left
       - light.cabinets_right
       - light.record_cabinet_right

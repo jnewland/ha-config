@@ -7,3 +7,5 @@ entities:
   light.pendants: "on"
   light.couch_lamp_right: "on"
   light.couch_lamp_left: "on"
+  light.bookcase_left: "on"
+  light.bookcase_right: "on"

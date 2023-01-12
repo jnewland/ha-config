@@ -1,13 +1,15 @@
 name: great room
 entities:
-- light.kitchen_cabinets
-- light.dining_room_table
-- light.kitchen
-- light.living
-- light.pendants
-- light.couch_lamp_right
-- light.couch_lamp_left
-- light.living_room_mirror
-- light.living_room_fireplace
-- switch.great_room_tree
-- switch.treeo
+  - light.kitchen_cabinets
+  - light.dining_room_table
+  - light.kitchen
+  - light.living
+  - light.pendants
+  - light.couch_lamp_right
+  - light.couch_lamp_left
+  - light.living_room_mirror
+  - light.living_room_fireplace
+  - light.bookcase_left
+  - light.bookcase_right
+  - switch.great_room_tree
+  - switch.treeo
