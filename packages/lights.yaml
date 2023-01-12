@@ -204,6 +204,7 @@ switch:
       - lights.kitchen
       - lights.dining_room_table
       - lights.pendants
+      - light.yoga_room
     # lights with adjustable temperature
     lights_ct:
       - light.lounge_tv
