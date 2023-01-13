@@ -17,7 +17,7 @@ views:
             - lock.front_door
             - binary_sensor.front_gate_access_control_window_door_is_open
             - input_number.brightness
-            - switch.circadian_lighting_hue
+            - switch.circadian_lighting_brightness
             - vacuum.downstairs
       - type: conditional
         conditions:
