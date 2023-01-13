@@ -12,3 +12,4 @@ entities:
   light.living_room_mirror: "off"
   light.living_room_fireplace: "off"
   light.palm: "off"
+  light.corner: "on"

@@ -662,6 +662,7 @@ views:
           - light.living_room_fireplace
           - light.bookcase_left
           - light.bookcase_right
+          - light.corner
           - light.couch_lamp_right
           - light.couch_lamp_left
           - binary_sensor.great_room_occupancy

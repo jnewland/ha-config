@@ -246,6 +246,7 @@ switch:
       - light.palm
       - light.bookcase_left
       - light.bookcase_right
+      - light.corner
 
   # LEDs that don't dim well
   - name: min_brightness
