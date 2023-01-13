@@ -190,7 +190,9 @@ binary_sensor:
           {{ is_state("media_player.record_cabinet", "playing") }}
 
 switch:
-  # lights without temperature control that frequently stay on for long durations and thus need to be adjusted gradually
+  # lights without temperature control
+  # this switch's brightness value is used when lights are turned on
+  # add lights that frequently stay on for long durations and benefit from adjustments while they're on below
   - name: brightness
     platform: circadian_lighting
     min_brightness: 15
