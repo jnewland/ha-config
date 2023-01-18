@@ -233,21 +233,20 @@ switch:
       - light.couch
       - light.keyboard
       - light.marble_lamp
+      - light.corner
 
-  # color and brightness adjustment, but dimmer
   - name: color_accent
     platform: circadian_lighting
     min_brightness: 1
-    max_brightness: 40
+    max_brightness: 25
     sleep_brightness: 1
     sleep_entity: input_select.mode
     sleep_state: "Sleeping"
     lights_ct:
-      - light.pillar
-      - light.palm
       - light.bookcase_left
       - light.bookcase_right
-      - light.corner
+      - light.pillar
+      - light.palm
 
   # LEDs that don't dim well
   - name: min_brightness
