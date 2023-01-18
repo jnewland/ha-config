@@ -200,10 +200,10 @@ switch:
     sleep_entity: input_select.mode
     sleep_state: "Sleeping"
     lights_brightness:
-      - lights.living
-      - lights.kitchen
-      - lights.dining_room_table
-      - lights.pendants
+      - light.living
+      - light.kitchen
+      - light.dining_room_table
+      - light.pendants
       - light.yoga_room
 
   # color and brightness ajustment
