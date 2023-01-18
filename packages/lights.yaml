@@ -238,11 +238,12 @@ switch:
   - name: color_accent
     platform: circadian_lighting
     min_brightness: 1
-    max_brightness: 50
+    max_brightness: 40
     sleep_brightness: 1
     sleep_entity: input_select.mode
     sleep_state: "Sleeping"
     lights_ct:
+      - light.pillar
       - light.palm
       - light.bookcase_left
       - light.bookcase_right
