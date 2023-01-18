@@ -1351,12 +1351,12 @@ views:
       - type: custom:auto-entities
         card:
           type: custom:mini-graph-card
-          name: consumption
+          name: brightness
           hours_to_show: 168
           show:
             fill: false
-            legend: false
-            state: false
+            legend: true
+            state: true
         filter:
           include:
             - entity_id: "/switch.circadian_lighting_.*/"
@@ -1365,12 +1365,12 @@ views:
       - type: custom:auto-entities
         card:
           type: custom:mini-graph-card
-          name: consumption
+          name: temp
           hours_to_show: 168
           show:
             fill: false
-            legend: false
-            state: false
+            legend: true
+            state: true
         filter:
           include:
             - entity_id: "/sensor.circadian_values.*/"
