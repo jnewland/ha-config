@@ -1352,7 +1352,7 @@ views:
         card:
           type: custom:mini-graph-card
           name: brightness
-          hours_to_show: 168
+          hours_to_show: 36
           show:
             fill: false
             legend: true
@@ -1366,7 +1366,7 @@ views:
         card:
           type: custom:mini-graph-card
           name: temp
-          hours_to_show: 168
+          hours_to_show: 36
           show:
             fill: false
             legend: true
