@@ -257,7 +257,7 @@ switch:
     sleep_entity: input_select.mode
     sleep_state: "Sleeping"
     lights_brightness:
-      - lights.powder_room_mirror
+      - light.powder_room_mirror
       - light.guest_bath_mirror
 
 automation:
