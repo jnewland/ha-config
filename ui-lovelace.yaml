@@ -659,6 +659,7 @@ views:
           - light.living
           - light.living_room_mirror
           - light.palm
+          - light.pillar
           - light.living_room_fireplace
           - light.bookcase_left
           - light.bookcase_right
