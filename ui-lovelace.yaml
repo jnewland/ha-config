@@ -1348,6 +1348,34 @@ views:
                   action: toggle
           exclude:
             - entity_id: "/_[0-9]+$/"
+      - type: custom:auto-entities
+        card:
+          type: custom:mini-graph-card
+          name: consumption
+          hours_to_show: 168
+          show:
+            fill: false
+            legend: false
+            state: false
+        filter:
+          include:
+            - entity_id: "/switch.circadian_lighting_.*/"
+              options:
+                attribute: brightness
+      - type: custom:auto-entities
+        card:
+          type: custom:mini-graph-card
+          name: consumption
+          hours_to_show: 168
+          show:
+            fill: false
+            legend: false
+            state: false
+        filter:
+          include:
+            - entity_id: "/sensor.circadian_values.*/"
+              options:
+                attribute: colortemp
 
   - title: Batteries
     icon: mdi:battery
