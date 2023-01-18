@@ -65,6 +65,7 @@ homeassistant:
     # TODO: min_brightness
     # notify_action: duck
     # duck_step: int | default(127)
+
     light.atrium:
       notify_action: duck
       fixed_brightness: 64
@@ -91,13 +92,6 @@ homeassistant:
       fixed_brightness: 255
     light.kitchen_cabinets:
       notify_action: duck
-
-    light.music_room:
-      fixed_color_temp: 396
-    light.keyboard:
-      fixed_brightness: 50
-    light.striped_lamp:
-      fixed_color_temp: 396
 
     light.pergola_pendants:
       fixed_brightness: 103
@@ -195,6 +189,76 @@ binary_sensor:
         value_template: |
           {{ is_state("media_player.record_cabinet", "playing") }}
 
+switch:
+  # lights without temperature control
+  # this switch's brightness value is used when lights are turned on
+  # add lights that frequently stay on for long durations and benefit from adjustments while they're on below
+  - name: brightness
+    platform: circadian_lighting
+    min_brightness: 15
+    sleep_brightness: 10
+    sleep_entity: input_select.mode
+    sleep_state: "Sleeping"
+    lights_brightness:
+      - light.living
+      - light.kitchen
+      - light.dining_room_table
+      - light.pendants
+      - light.yoga_room
+
+  # color and brightness ajustment
+  - name: color_bright
+    platform: circadian_lighting
+    min_brightness: 15
+    max_brightness: 100
+    sleep_brightness: 10
+    sleep_entity: input_select.mode
+    sleep_state: "Sleeping"
+    lights_ct:
+      - light.lounge_tv
+      - light.tv_left
+      - light.tv_right
+      - light.living_room_mirror
+      - light.living_room_fireplace
+      - light.cabinets_left
+      - light.cabinets_right
+      - light.record_cabinet_right
+      - light.record_cabinet_left
+      # - light.striped_lamp
+      - light.network_closet
+      - light.bookshelf_right
+      - light.bookshelf_middle
+      - light.bookshelf_left
+      - light.drums
+      - light.couch
+      - light.keyboard
+      - light.marble_lamp
+      - light.corner
+
+  - name: color_accent
+    platform: circadian_lighting
+    min_brightness: 1
+    max_brightness: 25
+    sleep_brightness: 1
+    sleep_entity: input_select.mode
+    sleep_state: "Sleeping"
+    lights_ct:
+      - light.bookcase_left
+      - light.bookcase_right
+      - light.pillar
+      - light.palm
+
+  # LEDs that don't dim well
+  - name: min_brightness
+    platform: circadian_lighting
+    min_brightness: 25
+    sleep_brightness: 25
+    sleep_entity: input_select.mode
+    sleep_state: "Sleeping"
+    lights_brightness:
+      - light.powder_room_mirror
+      - light.guest_bath_mirror
+
 automation:
   - alias: Turn on switches when motion is detected
     mode: parallel
@@ -270,7 +334,7 @@ automation:
           entity_id: |
             {{ trigger.event.data.new_state.attributes.trigger_entity_id | default('') }}
           brightness: |
-            {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+            {{ trigger.event.data.new_state.attributes.fixed_brightness | default(state_attr('switch.circadian_lighting_brightness', 'brightness')) | int }}
       - service: system_log.write
         data:
           message: >
@@ -278,7 +342,7 @@ automation:
             entity_id={{ trigger.event.data.entity_id }}
             trigger_service={{ state_attr(trigger.event.data.new_state.entity_id,'trigger_service') }}
             trigger_entity_id={{ state_attr(trigger.event.data.new_state.entity_id,'trigger_entity_id') }}
-            brightness={{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+            brightness={{ trigger.event.data.new_state.attributes.fixed_brightness | default(state_attr('switch.circadian_lighting_brightness', 'brightness')) | int }}
           logger: packages.lights
           level: debug
       - service: counter.increment
@@ -418,6 +482,9 @@ automation:
       platform: state
       entity_id: input_number.brightness
     action:
+      - condition: template
+        value_template: >
+          {{ is_state('switch.circadian_lighting_brightness', 'off') }}
       - service: light.turn_on
         data:
           entity_id: |
@@ -452,19 +519,20 @@ automation:
               trigger.event.data.new_state.state == "on" and
               trigger.event.data.new_state.attributes.is_hue_group is not defined and
               trigger.event.data.new_state.attributes.ignore_brightness is not defined and
-              trigger.event.data.new_state.attributes.fixed_color_temp is not defined
+              trigger.event.data.new_state.attributes.fixed_color_temp is not defined and
+              trigger.event.data.new_state.entity_id not in integration_entities('hue')
             }}
         - condition: template
           value_template: |
             {{ trigger.event.data.new_state.attributes.brightness | default(255) !=
-              trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+              trigger.event.data.new_state.attributes.fixed_brightness | default(state_attr('switch.circadian_lighting_brightness', 'brightness')) | int }}
     action:
       - service: light.turn_on
         data:
           entity_id: |
             {{ trigger.event.data.new_state.entity_id }}
           brightness: |
-            {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+            {{ trigger.event.data.new_state.attributes.fixed_brightness | default(state_attr('switch.circadian_lighting_brightness', 'brightness')) | int }}
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -495,7 +563,7 @@ automation:
           color_temp: |
             {{ trigger.event.data.new_state.attributes.fixed_color_temp }}
           brightness: |
-            {{ trigger.event.data.new_state.attributes.fixed_brightness | default(states('input_number.brightness') | int) }}
+            {{ trigger.event.data.new_state.attributes.fixed_brightness | default(state_attr('switch.circadian_lighting_brightness', 'brightness')) | int }}
       - service: counter.increment
         entity_id: counter.light_automations
 
@@ -664,7 +732,7 @@ script:
         data:
           entity_id: light.bathroom_toilet
           brightness: |
-            {{ brightness | default(states('input_number.brightness') | int) }}
+            {{ brightness | default(state_attr('switch.circadian_lighting_brightness', 'brightness')) | int }}
       - condition: template
         value_template: >
           {{ states.input_select.mode.state != "Sleeping" }}
@@ -674,7 +742,7 @@ script:
             - light.bathroom_overhead
             - light.bathroom_shower
           brightness: |
-            {{ brightness | default(states('input_number.brightness') | int) }}
+            {{ brightness | default(state_attr('switch.circadian_lighting_brightness', 'brightness')) | int }}
       - service: light.turn_on
         data:
           entity_id: light.bathroom_mirror
@@ -694,8 +762,7 @@ script:
       - service: light.turn_on
         entity_id: light.music_room
         data:
-          color_temp: |
-            {{ states.light.music_room.attributes.fixed_color_temp | int }}
+          kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
       - service: light.turn_on
         entity_id: light.music_room_fan_light
 
@@ -733,7 +800,8 @@ script:
             - light.lounge_chandelier
             - light.lounge_tv
           brightness: |
-            {{ brightness | default(states('input_number.brightness') | int) }}
+            {{ brightness | default(state_attr('switch.circadian_lighting_brightness', 'brightness')) | int }}
+          kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
       - service: switch.turn_on
         data:
           entity_id:
@@ -747,7 +815,7 @@ script:
           entity_id:
             - light.lounge_overhead
           brightness: |
-            {{ brightness | default(states('input_number.brightness') | int) }}
+            {{ brightness | default(state_attr('switch.circadian_lighting_brightness', 'brightness')) | int }}
 
   pulse_light:
     sequence:
@@ -772,6 +840,7 @@ script:
           {{ states(entity_id) != "unknown" }}
       - service: light.turn_on
         data:
+          kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
           brightness_step_pct: |
             -{{ step | default("50")}}
           entity_id: |
@@ -781,6 +850,7 @@ script:
             {{ delay | default("1")}}
       - service: light.turn_on
         data:
+          kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
           brightness_step_pct: |
             {{ step | default("50")}}
           entity_id: |
@@ -797,7 +867,7 @@ script:
           seconds: 1
       - service: light.turn_on
         data:
-          color_temp: 396
+          kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
           entity_id:
             - light.record_cabinet_left
             - light.record_cabinet_right

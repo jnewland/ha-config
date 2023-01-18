@@ -9,14 +9,14 @@ automation:
       for:
         minutes: 5
     action:
-    - service: script.ack
-      data:
-        service: cover.close_cover
-        entity_id: "{{ trigger.entity_id }}"
-        message: >
-          Close the {{ trigger.to_state.name }}?
-        confirmation_message: >
-          closed the {{ trigger.to_state.name }}.
+      - service: script.ack
+        data:
+          service: cover.close_cover
+          entity_id: "{{ trigger.entity_id }}"
+          message: >
+            Close the {{ trigger.to_state.name }}?
+          confirmation_message: >
+            closed the {{ trigger.to_state.name }}.
   - alias: Cover notification clear
     id: f883428d-555d-495c-865d-63121af76939
     trigger:
@@ -46,9 +46,9 @@ automation:
       entity_id: lock.garage
       state: locked
     action:
-    - service: lock.unlock
-      data:
-        entity_id: lock.garage
+      - service: lock.unlock
+        data:
+          entity_id: lock.garage
   - alias: Lock garage door lock with tag
     id: 64664fb7-cc21-4dc9-a05f-399e4e6caec4
     trigger:
@@ -61,11 +61,50 @@ automation:
       entity_id: lock.garage
       state: unlocked
     action:
-    - service: lock.lock
-      data:
-        entity_id: lock.garage
+      - service: lock.lock
+        data:
+          entity_id: lock.garage
+
+  - alias: garage scene controller button 1
+    id: dfacdfd1-d6c2-4f13-9f69-bcf4064e5c0b
+    trigger:
+      platform: device
+      device_id: b41e4056a76e9565ba242d1c7524c7e2
+      domain: homekit_controller
+      type: button1
+      subtype: single_press
+    mode: queued
+    action:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ not is_state('alarm_control_panel.alarm', 'disarmed') }}"
+            sequence:
+              - service: script.ack
+                data:
+                  secure: "true"
+                  tag: garage_button_1
+                  entity_id: script.unlock_garage_and_disarm
+                  message: "Unlock garage and disarm?"
+                  confirmation_message: unlocked the garage.
+        default:
+          - service: script.ack
+            data:
+              entity_id: script.mode_away
+              tag: garage_button_1
+              message: "Turn on away?"
+              confirmation_message: turned on away.
+
 script:
-  close_garage:
+  unlock_garage_and_disarm:
     sequence:
-    - service: python_script.close_if_open
-      entity_id: cover.garage
+      - service: lock.unlock
+        data:
+          entity_id: lock.garage
+      - repeat:
+          until: |
+            {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: alarm_control_panel.alarm_disarm
+              entity_id: alarm_control_panel.alarm
+            - delay: 3

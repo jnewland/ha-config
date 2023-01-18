@@ -17,6 +17,7 @@ views:
             - lock.front_door
             - binary_sensor.front_gate_access_control_window_door_is_open
             - input_number.brightness
+            - switch.circadian_lighting_brightness
             - vacuum.downstairs
       - type: conditional
         conditions:
@@ -656,6 +657,13 @@ views:
           - light.pantry
           - binary_sensor.pantry_home_security_motion_detection
           - light.living
+          - light.living_room_mirror
+          - light.palm
+          - light.pillar
+          - light.living_room_fireplace
+          - light.bookcase_left
+          - light.bookcase_right
+          - light.corner
           - light.couch_lamp_right
           - light.couch_lamp_left
           - binary_sensor.great_room_occupancy
@@ -1340,6 +1348,34 @@ views:
                   action: toggle
           exclude:
             - entity_id: "/_[0-9]+$/"
+      - type: custom:auto-entities
+        card:
+          type: custom:mini-graph-card
+          name: brightness
+          hours_to_show: 36
+          show:
+            fill: false
+            legend: true
+            state: true
+        filter:
+          include:
+            - entity_id: "/switch.circadian_lighting_.*/"
+              options:
+                attribute: brightness
+      - type: custom:auto-entities
+        card:
+          type: custom:mini-graph-card
+          name: temp
+          hours_to_show: 36
+          show:
+            fill: false
+            legend: true
+            state: true
+        filter:
+          include:
+            - entity_id: "/sensor.circadian_values.*/"
+              options:
+                attribute: colortemp
 
   - title: Batteries
     icon: mdi:battery
