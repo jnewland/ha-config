@@ -10,7 +10,7 @@ module.exports = {
   ],
   postUpgradeTasks: {
     commands: ['./script/sync-components'],
-    fileFilters: ['custom_components/**/*'],
+    fileFilters: ['**/**'],
     executionMode: 'branch',
   },
   packageRules: [
