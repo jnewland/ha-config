@@ -42,40 +42,60 @@ cover:
       - cover.yoga_top
 
 automation:
-- alias: Open shades on workday mornings at 7am
-  id: 81dbe453-9844-470f-af98-56673e86bdc5
-  trigger:
-    - platform: time
-      at: '07:00:00'
-  condition:
-    condition: and
-    conditions:
-    - condition: state
-      entity_id: binary_sensor.workday_sensor
-      state: "on"
-    - condition: or
+  - alias: Open shades on workday mornings at 7am
+    id: 81dbe453-9844-470f-af98-56673e86bdc5
+    trigger:
+      - platform: time
+        at: "07:00:00"
+    condition:
+      condition: and
       conditions:
-      - condition: zone
-        entity_id: device_tracker.katie_s_iphone
-        zone: zone.home
-      - condition: zone
-        entity_id: device_tracker.jphone_14
-        zone: zone.home
-  action:
-    - service: cover.open_cover
-      data:
-        entity_id: cover.bedroom_shades
+        - condition: state
+          entity_id: binary_sensor.workday_sensor
+          state: "on"
+        - condition: or
+          conditions:
+            - condition: zone
+              entity_id: device_tracker.katie_s_iphone
+              zone: zone.home
+            - condition: zone
+              entity_id: device_tracker.jphone_14
+              zone: zone.home
+    action:
+      - service: cover.open_cover
+        data:
+          entity_id: cover.bedroom_shades
+      - service: cover.open_cover
+        data:
+          entity_id: cover.yoga_room_shades
 
-- alias: Close shades in reading and sleeping modes
-  id: 806d4e21-9d09-40fd-8f8f-67476d216e7c
-  trigger:
-    - platform: state
-      entity_id: input_select.mode
-      to: Reading
-    - platform: state
-      entity_id: input_select.mode
-      to: Sleeping
-  action:
-    - service: cover.close_cover
-      data:
-        entity_id: cover.shades
+  - alias: Close shades in reading and sleeping modes
+    id: 806d4e21-9d09-40fd-8f8f-67476d216e7c
+    trigger:
+      - platform: state
+        entity_id: input_select.mode
+        to: Reading
+      - platform: state
+        entity_id: input_select.mode
+        to: Sleeping
+    action:
+      - service: cover.close_cover
+        data:
+          entity_id: cover.shades
+
+  - alias: Close shades when it gets warm upstairs
+    mode: queued
+    id: bc4654f1-a45e-45f4-9b5d-50f21b446aef
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.upstairs_thermostat_air_temperature
+        above: 74
+        for:
+          minutes: 3
+      - platform: numeric_state
+        entity_id: sensor.upstairs_thermostat_air_temperature
+        above: 75
+    action:
+      - service: cover.close_cover
+        data:
+          entity_id: cover.bedroom_shades

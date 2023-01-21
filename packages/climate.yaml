@@ -1,11 +1,11 @@
 sensor:
-- platform: template
-  sensors:
-    dark_sky_temperature:
-      friendly_name: dark sky
-      unit_of_measurement: '°F'
-      value_template: |
-        {{ state_attr('weather.dark_sky', 'temperature') }}
+  - platform: template
+    sensors:
+      dark_sky_temperature:
+        friendly_name: dark sky
+        unit_of_measurement: "°F"
+        value_template: |
+          {{ state_attr('weather.dark_sky', 'temperature') }}
 
 automation:
   - alias: poll GoControl GC-TBZ48
@@ -13,16 +13,16 @@ automation:
     # No such luck, so poll it every minute
     id: 7195ed64-b3c1-4940-96bf-77251ea54b6b
     trigger:
-    - platform: time_pattern
-      minutes: "*"
+      - platform: time_pattern
+        minutes: "*"
     action:
-    - service: zwave_js.refresh_value
-      data:
-        entity_id: climate.upstairs
-        refresh_all_values: true
-    - service: zwave_js.refresh_value
-      data:
-        entity_id: sensor.upstairs_thermostat_air_temperature
+      - service: zwave_js.refresh_value
+        data:
+          entity_id: climate.upstairs
+          refresh_all_values: true
+      - service: zwave_js.refresh_value
+        data:
+          entity_id: sensor.upstairs_thermostat_air_temperature
 
   - alias: upstairs heat
     mode: queued
@@ -63,9 +63,6 @@ automation:
         entity_id: sensor.upstairs_thermostat_air_temperature
         above: 75
     action:
-      - service: cover.close_cover
-        data:
-          entity_id: cover.bedroom_shades
       - service: climate.set_hvac_mode
         data:
           entity_id: climate.upstairs
@@ -81,9 +78,9 @@ automation:
     mode: queued
     id: f9784a98-1586-4f2f-b9fe-129bee235ac5
     trigger:
-    - platform: state
-      entity_id: input_select.mode
-      to: Reading
+      - platform: state
+        entity_id: input_select.mode
+        to: Reading
     action:
       - service: climate.set_hvac_mode
         data:
@@ -98,7 +95,7 @@ automation:
       - delay:
           seconds: 10
       - service: climate.set_fan_mode
-        entity_id:  climate.upstairs
+        entity_id: climate.upstairs
         data:
           fan_mode: "Low"
 
@@ -106,9 +103,9 @@ automation:
     mode: queued
     id: de717eac-9b51-4f6e-b636-9c8ddcd7e610
     trigger:
-    - platform: state
-      entity_id: input_select.mode
-      to: Sleeping
+      - platform: state
+        entity_id: input_select.mode
+        to: Sleeping
     action:
       - service: climate.set_fan_mode
         entity_id: climate.upstairs
@@ -131,17 +128,17 @@ automation:
     mode: queued
     id: 16456902-c3b2-44ab-8765-454eab93d4b3
     trigger:
-    - platform: state
-      entity_id: input_select.mode
-      to: Morning
+      - platform: state
+        entity_id: input_select.mode
+        to: Morning
     action:
       - service: climate.set_hvac_mode
-        entity_id:  climate.upstairs
+        entity_id: climate.upstairs
         data:
           hvac_mode: "off"
       - delay:
           seconds: 10
       - service: climate.set_fan_mode
-        entity_id:  climate.upstairs
+        entity_id: climate.upstairs
         data:
           fan_mode: "Auto low"
