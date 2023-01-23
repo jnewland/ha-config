@@ -821,6 +821,12 @@ views:
         entity: media_player.bedroom
       - type: media-control
         entity: media_player.bedroom_channels
+      - type: entities
+        title: automation
+        entities:
+          - automation.open_shades_on_workday_mornings_at_7am
+          - automation.close_shades_in_reading_and_sleeping_modes
+          - automation.close_shades_when_it_gets_warm_upstairs
 
   - title: Grill
     icon: mdi:grill
