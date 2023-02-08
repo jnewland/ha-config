@@ -8,6 +8,7 @@ module.exports = {
       token: process.env.RENOVATE_GITHUB_COM_TOKEN,
     },
   ],
+  allowedPostUpgradeCommands: ['./script/sync-components'],
   postUpgradeTasks: {
     commands: ['./script/sync-components'],
     fileFilters: ['**/**'],
