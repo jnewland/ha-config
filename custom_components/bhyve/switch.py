@@ -7,8 +7,8 @@ from typing import Any
 import voluptuous as vol
 
 from homeassistant.components.switch import (
-    DEVICE_CLASS_SWITCH,
     DOMAIN as SWITCH_DOMAIN,
+    SwitchDeviceClass,
     SwitchEntity,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -101,6 +101,7 @@ SERVICE_START_WATERING = "start_watering"
 SERVICE_STOP_WATERING = "stop_watering"
 SERVICE_SET_MANUAL_PRESET_RUNTIME = "set_manual_preset_runtime"
 SERVICE_SET_SMART_WATERING_SOIL_MOISTURE = "set_smart_watering_soil_moisture"
+SERVICE_START_PROGRAM = "start_program"
 
 
 SERVICE_TO_METHOD = {
@@ -124,6 +125,10 @@ SERVICE_TO_METHOD = {
     SERVICE_SET_SMART_WATERING_SOIL_MOISTURE: {
         "method": "set_smart_watering_soil_moisture",
         "schema": SET_SMART_WATERING_SOIL_MOISTURE_SCHEMA,
+    },
+    SERVICE_START_PROGRAM: {
+        "method": "start_program",
+        "schema": SERVICE_BASE_SCHEMA,
     },
 }
 
@@ -221,12 +226,12 @@ class BHyveProgramSwitch(BHyveWebsocketEntity, SwitchEntity):
 
     def __init__(self, hass, bhyve, device, program, icon):
         """Initialize the switch."""
-        device_name = device.get("name")
-        program_name = program.get("name")
+        device_name = device.get("name", "Unknown switch")
+        program_name = program.get("name", "unknown")
 
         name = f"{device_name} {program_name} program"
 
-        super().__init__(hass, bhyve, device, name, icon, DEVICE_CLASS_SWITCH)
+        super().__init__(hass, bhyve, device, name, icon, SwitchDeviceClass.SWITCH)
 
         self._program = program
         self._device_id = program.get("device_id")
@@ -275,6 +280,30 @@ class BHyveProgramSwitch(BHyveWebsocketEntity, SwitchEntity):
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the switch off."""
         await self._set_state(False)
+        
+    async def start_program(self):
+        """Begins running a program."""
+        program_payload = self._program["program"]
+        await self._send_program_message(program_payload)
+
+    async def _send_program_message(self, station_payload):
+        try:
+            now = datetime.datetime.now()
+            iso_time = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+            payload = {
+                "event": EVENT_CHANGE_MODE,
+                "mode": "manual",
+                "device_id": self._device_id,
+                "timestamp": iso_time,
+                "program": station_payload,
+            }
+            _LOGGER.debug(payload)
+            await self._bhyve.send_message(payload)
+
+        except BHyveError as err:
+            _LOGGER.warning("Failed to send to BHyve websocket message %s", err)
+            raise (err)
 
     async def async_added_to_hass(self):
         """Register callbacks."""
@@ -339,7 +368,7 @@ class BHyveZoneSwitch(BHyveDeviceEntity, SwitchEntity):
         name = f"{self._zone_name} zone"
         _LOGGER.info("Creating switch: %s", name)
 
-        super().__init__(hass, bhyve, device, name, icon, DEVICE_CLASS_SWITCH)
+        super().__init__(hass, bhyve, device, name, icon, SwitchDeviceClass.SWITCH)
 
     def _setup(self, device):
         self._is_on = False
@@ -622,7 +651,7 @@ class BHyveZoneSwitch(BHyveDeviceEntity, SwitchEntity):
             _LOGGER.warning(
                 "Switch %s manual preset runtime is 0, watering has defaulted to %s minutes. Set the manual run time on your device or please specify number of minutes using the bhyve.start_watering service",
                 self._device_name,
-                DEFAULT_MANUAL_RUNTIME.minutes,
+                int(DEFAULT_MANUAL_RUNTIME.seconds / 60),
             )
             run_time = 5
 
@@ -644,7 +673,7 @@ class BHyveRainDelaySwitch(BHyveDeviceEntity, SwitchEntity):
         self._update_device_cb = None
         self._is_on = False
 
-        super().__init__(hass, bhyve, device, name, icon, DEVICE_CLASS_SWITCH)
+        super().__init__(hass, bhyve, device, name, icon, SwitchDeviceClass.SWITCH)
 
     def _setup(self, device):
         self._is_on = False
