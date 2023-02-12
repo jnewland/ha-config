@@ -1,7 +1,14 @@
 homeassistant:
   customize:
     climate.volcano:
-      supported_features: 16
+      # TARGET_TEMPERATURE = 1
+      # TARGET_TEMPERATURE_RANGE = 2
+      # TARGET_HUMIDITY = 4
+      # FAN_MODE = 8
+      # PRESET_MODE = 16
+      # SWING_MODE = 32
+      # AUX_HEAT = 64
+      supported_features: 25
 
 automation:
   - id: bcef2f61-2d42-4405-bcdd-ca792b521d2c
