@@ -28,6 +28,8 @@ script:
                 {{ notify_service | default("notify.iphones") }}
               confirmation_message: |
                 {{ confirmation_message | default("turned on " + entity_id) }}
+              skip_confirmation: |
+                {{ skip_confirmation | default(false) }}
             push:
               interruption-level: >
                 {{ interruption_level | default('active') }}
