@@ -1,6 +1,7 @@
-customize:
-  climate.volcano:
-    supported_features: 16
+homeassistant:
+  customize:
+    climate.volcano:
+      supported_features: 16
 
 automation:
   - id: bcef2f61-2d42-4405-bcdd-ca792b521d2c
