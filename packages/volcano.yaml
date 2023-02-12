@@ -8,7 +8,7 @@ homeassistant:
       # PRESET_MODE = 16
       # SWING_MODE = 32
       # AUX_HEAT = 64
-      supported_features: 25
+      supported_features: 9
 
 automation:
   - id: bcef2f61-2d42-4405-bcdd-ca792b521d2c
