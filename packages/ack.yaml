@@ -80,6 +80,8 @@ automation:
         {{ trigger.event.data.action_data.service | default('homeassistant.turn_on') }}
       data:
         entity_id: '{{ trigger.event.data.action_data.entity_id }}'
+    - condition: template
+      value_template: {{ not (trigger.event.data.action_data.skip_confirmation | default(false)) }}
     - service: '{{ trigger.event.data.action_data.notify_service }}'
       data:
         message: >
