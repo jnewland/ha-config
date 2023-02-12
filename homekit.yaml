@@ -24,6 +24,7 @@ filter:
     - switch.back_porch
     - switch.back_porch_fountain
     - switch.bathroom_fan
+    - switch.volcano_fan
     - script.mode_away
     - script.lounge_lights
     - script.mode_reading

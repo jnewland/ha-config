@@ -3,7 +3,7 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - switch.volcano_pump
+          - switch.volcano_fan
         to: "off"
     condition:
       - condition: state
@@ -13,10 +13,10 @@ automation:
       - service: script.ack
         data:
           notify_service: notify.mobile_app_jphone_14
-          entity_id: switch.volcano_pump
+          entity_id: switch.volcano_fan
           tag: volcano
           message: |
-            Volcano is {{ states.sensor.volcano_current_temperature.state_with_unit }}. Turn on pump?
+            Volcano is {{ states.sensor.volcano_current_temperature.state_with_unit }}. Turn on fan?
           interruption_level: time-sensitive
           skip_confirmation: true
 
@@ -24,7 +24,7 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - switch.volcano_pump
+          - switch.volcano_fan
         to: "on"
         for:
           seconds: 5
@@ -34,10 +34,10 @@ automation:
         data:
           notify_service: notify.mobile_app_jphone_14
           service: homeassistant.turn_off
-          entity_id: switch.volcano_pump
+          entity_id: switch.volcano_fan
           tag: volcano
           message: |
-            Volcano pump is on. Turn off?
+            Volcano fan is on. Turn off?
           interruption_level: time-sensitive
           skip_confirmation: true
 
