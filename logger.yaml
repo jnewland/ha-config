@@ -24,3 +24,4 @@ logs:
   requests.packages.urllib3.connectionpool: critical
   roomba.roomba.Roomba: warn
   root: warn
+  aiohue.util: critical
