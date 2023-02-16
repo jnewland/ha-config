@@ -52,7 +52,7 @@ binary_sensor:
       garage_person_with_delay:
         device_class: occupancy
         delay_off:
-          minutes: 10
+          minutes: 3
         value_template: |
           {{
             float(states('sensor.garage_person_count'), default=0) > 0 
