@@ -1,14 +1,22 @@
 homeassistant:
   customize:
     binary_sensor.garage_occupancy:
-      trigger_entity_id: group.garage_occupancy
+      # Groups with mixed types can't handle brightness data
+      trigger_service: script.garage_occupancy
       trigger_entity_id_off: group.garage_occupancy
       media_player_entity_id: media_player.house
       media_player_group_members: media_player.move
 
+script:
+  garage_occupancy:
+    sequence:
+      - service: home_assistant.turn_on
+        entity_id: switch.garage_overhead
+      - service: homeassistant.turn_on
+        entity_id: media_player.garage
+
 group:
   garage_occupancy:
-    all: true
     entities:
       - switch.garage_overhead
       - media_player.garage
