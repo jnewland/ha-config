@@ -20,10 +20,20 @@ binary_sensor:
         device_class: occupancy
         value_template: |
           {{
-            states('cover.garage') == 'open' or
-            states('lock.garage') == 'unlocked' or
-            float(states('sensor.garage_person_count'), default=0) > 0  or
-            states.sensor.garage_person_count.last_changed > (now() - timedelta(minutes=10))
+            is_state('cover.garage', 'open') or
+            is_state('lock.garage', 'unlocked') or
+            is_state('binary_sensor.garage_person_with_delay', 'on')
+          }}
+
+  - platform: template
+    sensors:
+      garage_person_with_delay:
+        device_class: occupancy
+        delay_off:
+          minutes: 10
+        value_template: |
+          {{
+            float(states('sensor.garage_person_count'), default=0) > 0 
           }}
 
 automation:
