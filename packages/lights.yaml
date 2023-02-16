@@ -765,6 +765,8 @@ script:
           kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
       - service: light.turn_on
         entity_id: light.music_room_fan_light
+      - service: homeassistant.turn_on
+        entity_id: media_player.music_room
 
   notify_with_lights:
     mode: queued
