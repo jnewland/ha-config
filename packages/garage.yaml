@@ -138,22 +138,10 @@ automation:
       subtype: single_press
     mode: queued
     action:
-      - choose:
-          - conditions:
-              - condition: template
-                value_template: "{{ not is_state('alarm_control_panel.alarm', 'disarmed') }}"
-            sequence:
-              - service: script.ack
-                data:
-                  secure: "true"
-                  tag: garage_button_1
-                  entity_id: script.unlock_garage_and_disarm
-                  message: "Unlock garage and disarm?"
-                  confirmation_message: unlocked the garage.
-        default:
-          - service: script.ack
-            data:
-              entity_id: script.mode_away
-              tag: garage_button_1
-              message: "Turn on away?"
-              confirmation_message: turned on away.
+      - service: script.ack
+        data:
+          secure: "true"
+          tag: garage_button_1
+          entity_id: script.unlock_garage_and_disarm
+          message: "Unlock garage and disarm?"
+          confirmation_message: unlocked the garage.
