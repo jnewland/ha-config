@@ -8,6 +8,7 @@ homeassistant:
 
 group:
   garage_occupancy:
+    all: true
     entities:
       - switch.garage_overhead
       - media_player.garage
