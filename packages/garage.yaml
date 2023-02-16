@@ -14,6 +14,18 @@ script:
         entity_id: switch.garage_overhead
       - service: homeassistant.turn_on
         entity_id: media_player.garage
+  unlock_garage_and_disarm:
+    sequence:
+      - service: lock.unlock
+        data:
+          entity_id: lock.garage
+      - repeat:
+          until: |
+            {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: alarm_control_panel.alarm_disarm
+              entity_id: alarm_control_panel.alarm
+            - delay: 3
 
 group:
   garage_occupancy:
@@ -144,17 +156,3 @@ automation:
               tag: garage_button_1
               message: "Turn on away?"
               confirmation_message: turned on away.
-
-script:
-  unlock_garage_and_disarm:
-    sequence:
-      - service: lock.unlock
-        data:
-          entity_id: lock.garage
-      - repeat:
-          until: |
-            {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
-          sequence:
-            - service: alarm_control_panel.alarm_disarm
-              entity_id: alarm_control_panel.alarm
-            - delay: 3
