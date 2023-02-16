@@ -10,10 +10,11 @@ homeassistant:
 script:
   garage_occupancy:
     sequence:
-      - service: home_assistant.turn_on
+      - service: homeassistant.turn_on
         entity_id: switch.garage_overhead
       - service: homeassistant.turn_on
         entity_id: media_player.garage
+
   unlock_garage_and_disarm:
     sequence:
       - service: lock.unlock
