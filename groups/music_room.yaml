@@ -3,3 +3,4 @@ entities:
 - light.music_room
 - light.network_closet
 - light.music_room_fan_light
+- media_player.music_room

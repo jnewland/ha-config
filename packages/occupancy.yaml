@@ -33,12 +33,6 @@ homeassistant:
       # trigger_entity_id: group.back_porch_fan
       # trigger_entity_id_off: group.back_porch_fan
 
-    binary_sensor.garage_occupancy:
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.move
-      trigger_entity_id: switch.garage_overhead
-      trigger_entity_id_off: switch.garage_overhead
-
     binary_sensor.atrium_occupancy:
       trigger_entity_id: switch.atrium_fan
       trigger_entity_id_off: switch.atrium_fan
@@ -208,17 +202,6 @@ binary_sensor:
           }}
         delay_off:
           minutes: 30
-
-      garage_occupancy:
-        friendly_name: garage occupied
-        device_class: occupancy
-        value_template: |
-          {{
-            states('cover.garage') == 'open' or
-            states('lock.garage') == 'unlocked' or
-            float(states('sensor.garage_person_count'), default=0) > 0  or
-            states.sensor.garage_person_count.last_changed > (now() - timedelta(minutes=10))
-          }}
 
       back_porch_occupancy:
         friendly_name: back porch occupancy

@@ -1,3 +1,63 @@
+homeassistant:
+  customize:
+    binary_sensor.garage_occupancy:
+      # Groups with mixed types can't handle brightness data
+      trigger_service: script.garage_occupancy
+      trigger_entity_id_off: group.garage_occupancy
+      media_player_entity_id: media_player.house
+      media_player_group_members: media_player.move
+
+script:
+  garage_occupancy:
+    sequence:
+      - service: homeassistant.turn_on
+        entity_id: switch.garage_overhead
+      - service: homeassistant.turn_on
+        entity_id: media_player.garage
+
+  unlock_garage_and_disarm:
+    sequence:
+      - service: lock.unlock
+        data:
+          entity_id: lock.garage
+      - repeat:
+          until: |
+            {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+          sequence:
+            - service: alarm_control_panel.alarm_disarm
+              entity_id: alarm_control_panel.alarm
+            - delay: 3
+
+group:
+  garage_occupancy:
+    entities:
+      - switch.garage_overhead
+      - media_player.garage
+
+binary_sensor:
+  - platform: template
+    sensors:
+      garage_occupancy:
+        friendly_name: garage occupied
+        device_class: occupancy
+        value_template: |
+          {{
+            is_state('cover.garage', 'open') or
+            is_state('lock.garage', 'unlocked') or
+            is_state('binary_sensor.garage_person_with_delay', 'on')
+          }}
+
+  - platform: template
+    sensors:
+      garage_person_with_delay:
+        device_class: occupancy
+        delay_off:
+          minutes: 3
+        value_template: |
+          {{
+            float(states('sensor.garage_person_count'), default=0) > 0 
+          }}
+
 automation:
   - alias: Keep covers closed
     id: 9b4c10ce-0960-4176-9bd5-e670c75dfc0d
@@ -5,6 +65,7 @@ automation:
       platform: state
       entity_id:
         - cover.garage
+        - cover.gate
       to: open
       for:
         minutes: 5
@@ -17,6 +78,7 @@ automation:
             Close the {{ trigger.to_state.name }}?
           confirmation_message: >
             closed the {{ trigger.to_state.name }}.
+
   - alias: Cover notification clear
     id: f883428d-555d-495c-865d-63121af76939
     trigger:
@@ -49,6 +111,7 @@ automation:
       - service: lock.unlock
         data:
           entity_id: lock.garage
+
   - alias: Lock garage door lock with tag
     id: 64664fb7-cc21-4dc9-a05f-399e4e6caec4
     trigger:
@@ -75,36 +138,10 @@ automation:
       subtype: single_press
     mode: queued
     action:
-      - choose:
-          - conditions:
-              - condition: template
-                value_template: "{{ not is_state('alarm_control_panel.alarm', 'disarmed') }}"
-            sequence:
-              - service: script.ack
-                data:
-                  secure: "true"
-                  tag: garage_button_1
-                  entity_id: script.unlock_garage_and_disarm
-                  message: "Unlock garage and disarm?"
-                  confirmation_message: unlocked the garage.
-        default:
-          - service: script.ack
-            data:
-              entity_id: script.mode_away
-              tag: garage_button_1
-              message: "Turn on away?"
-              confirmation_message: turned on away.
-
-script:
-  unlock_garage_and_disarm:
-    sequence:
-      - service: lock.unlock
+      - service: script.ack
         data:
-          entity_id: lock.garage
-      - repeat:
-          until: |
-            {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
-          sequence:
-            - service: alarm_control_panel.alarm_disarm
-              entity_id: alarm_control_panel.alarm
-            - delay: 3
+          secure: "true"
+          tag: garage_button_1
+          entity_id: script.unlock_garage_and_disarm
+          message: "Unlock garage and disarm?"
+          confirmation_message: unlocked the garage.
