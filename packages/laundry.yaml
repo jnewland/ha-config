@@ -1,8 +1,19 @@
 homeassistant:
   customize:
     binary_sensor.laundry_power:
-      trigger_entity_id: group.laundry_room
+      trigger_service: script.laundry_room
       trigger_entity_id_off: group.laundry_room
+
+script:
+  laundry_room:
+    sequence:
+      - service: homeassistant.turn_on
+        entity_id: fan.laundry_room
+      - service: light.turn_on
+        data:
+          entity_id: light.laundry_room
+          brightness: |
+            {{ state_attr('switch.circadian_lighting_brightness', 'brightness') | default 255 | int }}
 
 group:
   laundry_room:
