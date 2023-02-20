@@ -1,16 +1,50 @@
+homeassistant:
+  customize:
+    binary_sensor.laundry_power:
+      trigger_service: script.laundry_room
+      trigger_entity_id_off: group.laundry_room
+
+script:
+  laundry_room:
+    sequence:
+      - service: homeassistant.turn_on
+        entity_id: fan.laundry_room
+      - service: light.turn_on
+        data:
+          entity_id: light.laundry_room
+          brightness: >
+            {{ int(state_attr('switch.circadian_lighting_brightness', 'brightness'), default=255) }}
+
+group:
+  laundry_room:
+    entities:
+      - fan.laundry_room
+      - light.laundry_room
+
 binary_sensor:
   - platform: template
     sensors:
-      laundry:
-        friendly_name: Laundry
-        device_class: power
+      laundry_cycle:
+        friendly_name: Laundry cycle
+        device_class: running
         value_template: |
           {{ 
             states('sensor.laundry_electric_consumption_w') != 'unknown' and 
             float(states('sensor.laundry_electric_consumption_w'), default=0) > 10
           }}
         delay_off:
-          minutes: 8
+          minutes: 10
+
+      laundry_power:
+        friendly_name: Laundry power
+        device_class: power
+        value_template: |
+          {{ 
+            states('sensor.laundry_electric_consumption_w') != 'unknown' and 
+            float(states('sensor.laundry_electric_consumption_w'), default=0) > 0
+          }}
+        delay_off:
+          minutes: 30
 
       laundry_door:
         friendly_name: Laundry door
@@ -27,10 +61,10 @@ automation:
   - alias: Laundry notifications
     id: 25fad7c4-c57e-4c67-904a-69e606682ebd
     trigger:
-    - platform: state
-      entity_id: binary_sensor.laundry
-      from: "on"
-      to: "off"
+      - platform: state
+        entity_id: binary_sensor.laundry_cycle
+        from: "on"
+        to: "off"
     action:
       - service: script.ack
         data:
@@ -38,13 +72,14 @@ automation:
           tag: laundry
           message: Time to do the laundry thing. You have a second?
           confirmation_message: is doing the laundry thing, cool.
+
   - alias: Clear laundry notifications
     id: e1432f38-834f-417a-b976-2bb627e06046
     trigger:
-    - platform: state
-      entity_id: binary_sensor.laundry_door
-      from: "off"
-      to: "on"
+      - platform: state
+        entity_id: binary_sensor.laundry_door
+        from: "off"
+        to: "on"
     action:
       - service: notify.iphones
         data:
