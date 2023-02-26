@@ -17,7 +17,7 @@ automation:
           tag: volcano
           message: |
             Volcano is {{ states.sensor.volcano_current_temperature.state_with_unit }}. Turn on fan?
-          interruption_level: time-sensitive
+          interruption_level: passive
           skip_confirmation: true
 
   - id: 1f1020ce-22d8-4b8f-a045-4b2726c840b6
@@ -38,7 +38,7 @@ automation:
           tag: volcano
           message: |
             Volcano fan is on. Turn off?
-          interruption_level: time-sensitive
+          interruption_level: passive
           skip_confirmation: true
 
   - id: 47e34b79-f8f1-4da3-af5e-8e3f38508405
@@ -49,11 +49,8 @@ automation:
         to: "off"
     condition: []
     action:
-      - service: script.ack
+      - service: notify.mobile_app_jphone_14
         data:
-          notify_service: notify.mobile_app_jphone_14
-          entity_id: climate.volcano
-          tag: volcano
-          message: Volcano is cooling off. Turn on?
-          skip_confirmation: true
-          interruption_level: passive
+          message: "clear_notification"
+          data:
+            tag: volcano
