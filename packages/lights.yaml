@@ -205,6 +205,7 @@ switch:
       - light.dining_room_table
       - light.pendants
       - light.yoga_room
+      - light.music_room_fan
 
   # color and brightness ajustment
   - name: color_bright
@@ -251,13 +252,14 @@ switch:
   # LEDs that don't dim well
   - name: min_brightness
     platform: circadian_lighting
-    min_brightness: 25
-    sleep_brightness: 25
+    min_brightness: 50
+    sleep_brightness: 50
     sleep_entity: input_select.mode
     sleep_state: "Sleeping"
     lights_brightness:
       - light.powder_room_mirror
       - light.guest_bath_mirror
+      - light.laundry_room
 
 automation:
   - alias: Turn on switches when motion is detected
