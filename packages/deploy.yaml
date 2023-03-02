@@ -39,4 +39,4 @@ automation:
     action:
       - service: notify.slack
         data:
-          message: ":octocat: Config loaded from https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}"
+          message: ":octocat: Config loaded from https://github.com/jnewland/ha-config/commit/{{ states('sensor.config_sha') }}"
