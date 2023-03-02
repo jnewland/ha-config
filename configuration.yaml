@@ -18,6 +18,7 @@ homeassistant:
     - !env_var FRIGATE_URL
 
 default_config:
+aerogarden: !include aerogarden.yaml
 automation: !include_dir_list automation
 binary_sensor: !include_dir_list binary_sensors
 circadian_lighting:

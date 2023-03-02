@@ -12,6 +12,11 @@ mv $TMPDIR/$$-bhyve-home-assistant/python_scripts/*.py python_scripts/
 mv $TMPDIR/$$-bhyve-home-assistant/custom_components/bhyve custom_components
 sync
 
+git clone https://github.com/GoPosi/homeassistant-aerogarden $TMPDIR/$$-homeassistant-aerogarden
+rm -rf custom_components/aerogarden || true
+mv $TMPDIR/$$-homeassistant-aerogarden/custom_components/aerogarden custom_components
+sync
+
 git clone https://github.com/Olen/homeassistant-plant $TMPDIR/$$-homeassistant-plant
 rm -rf custom_components/plant || true
 mv $TMPDIR/$$-homeassistant-plant/custom_components/plant custom_components
