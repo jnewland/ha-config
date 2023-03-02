@@ -12,18 +12,6 @@ sensor:
       "https://api.github.com/repos/jnewland/ha-config/deployments?environment=production" |
       jq -r '.[0].sha'
 
-script:
-  deploy:
-    sequence:
-      - service: notify.slack
-        data:
-          title: ":shipit:"
-          message: "https://github.com/jnewland/ha-config/commit/{{ sha }}/checks"
-      - service: shell_command.deploy
-        data:
-          sha: "{{ sha }}"
-      - service: homeassistant.reload_all
-
 shell_command:
   deploy: /bin/bash ./script/deploy {{ sha }}
 
@@ -34,7 +22,21 @@ automation:
       platform: state
       entity_id: sensor.latest_deployment_sha
     action:
-      service: script.deploy
-      data:
-        sha: >
-          {{ states('sensor.latest_deployment_sha') }}
+      - service: notify.slack
+        data:
+          message: ":rocket: Deploying https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}/checks ..."
+      - service: shell_command.deploy
+        data:
+          sha: >
+            {{ states('sensor.latest_deployment_sha') }}
+      - service: homeassistant.reload_all
+
+  - alias: Announce deployment success
+    id: 313a3fa3-a1b1-45fd-b739-71b7f8010c54
+    trigger:
+      platform: state
+      entity_id: sensor.config_sha
+    action:
+      - service: notify.slack
+        data:
+          message: ":octocat: Config loaded from https://github.com/jnewland/ha-config/commit/{{ sha }}"
