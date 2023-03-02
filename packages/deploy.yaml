@@ -15,25 +15,26 @@ sensor:
 script:
   deploy:
     sequence:
-    - service: notify.slack
-      data:
-        title: ':shipit:'
-        message: 'https://github.com/jnewland/ha-config/commit/{{ sha }}/checks'
-    - service: shell_command.deploy
-      data:
+      - service: notify.slack
+        data:
+          title: ":shipit:"
+          message: "https://github.com/jnewland/ha-config/commit/{{ sha }}/checks"
+      - service: shell_command.deploy
+        data:
           sha: "{{ sha }}"
+      - service: homeassistant.reload_all
 
 shell_command:
   deploy: /bin/bash ./script/deploy {{ sha }}
 
 automation:
-- alias: Deploy latest deployment
-  id: ef2019dd-0eda-437e-a8b1-b5860e262a7e
-  trigger:
-    platform: state
-    entity_id: sensor.latest_deployment_sha
-  action:
-    service: script.deploy
-    data:
-      sha: >
-        {{ states('sensor.latest_deployment_sha') }}
+  - alias: Deploy latest deployment
+    id: ef2019dd-0eda-437e-a8b1-b5860e262a7e
+    trigger:
+      platform: state
+      entity_id: sensor.latest_deployment_sha
+    action:
+      service: script.deploy
+      data:
+        sha: >
+          {{ states('sensor.latest_deployment_sha') }}
