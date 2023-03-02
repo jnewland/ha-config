@@ -23,7 +23,6 @@ from pyalarmdotcomajax import (
     AuthResult as libAuthResult,
 )
 from pyalarmdotcomajax.devices import BaseDevice as libBaseDevice
-from pyalarmdotcomajax.devices.partition import Partition as libPartition
 from pyalarmdotcomajax.errors import (
     AuthenticationFailed,
     DataFetchFailed,
@@ -91,7 +90,9 @@ class BasicAlarmHub:
                 "Alarm.com returned data in an unexpected format."
             ) from err
         except AuthenticationFailed as err:
-            raise ConfigEntryAuthFailed("Invalid account credentials.") from err
+            raise ConfigEntryAuthFailed(
+                "Invalid account credentials found while logging in."
+            ) from err
         except (
             asyncio.TimeoutError,
             aiohttp.ClientError,
@@ -115,13 +116,6 @@ class BasicAlarmHub:
         except (DataFetchFailed, AuthenticationFailed):
             log.error("OTP submission failed.")
             raise
-
-    async def async_get_partitions(self) -> list[libPartition]:
-        """Return list of partitions."""
-
-        await self.system.async_update()
-
-        return list(self.system.partitions)
 
 
 class AlarmHub(BasicAlarmHub):
@@ -205,14 +199,6 @@ class AlarmHub(BasicAlarmHub):
 
         return None
 
-    async def async_coordinator_update(self, critical: bool = True) -> None:
-        """Force coordinator refresh after alarm control panel command."""
-
-        if critical:
-            await self.coordinator.async_refresh()
-        else:
-            await self.coordinator.async_request_refresh()
-
     async def async_update(self) -> None:
         """Pull fresh data from Alarm.com for coordinator."""
 
@@ -237,8 +223,8 @@ class AlarmHub(BasicAlarmHub):
         # have 2FA set up.
         except TypeError as err:
             raise ConfigEntryAuthFailed(
-                "Two-factor authentication must be enabled in order to log in with this"
-                " provider."
+                "async_update(): Two-factor authentication must be enabled in order to"
+                " log in with this provider."
             ) from err
 
         except PermissionError as err:
@@ -249,7 +235,9 @@ class AlarmHub(BasicAlarmHub):
         # Typically captured during login. Should only be captured here when
         # updating after migration from configuration.yaml.
         except AuthenticationFailed as err:
-            raise ConfigEntryAuthFailed("Invalid account credentials.") from err
+            raise ConfigEntryAuthFailed(
+                "Invalid account credentials found while updating device states."
+            ) from err
 
         except (asyncio.TimeoutError, aiohttp.ClientError) as err:
             log.error(
