@@ -64,7 +64,7 @@ class BasicAlarmHub:
         username: str,
         password: str,
         twofactorcookie: str,
-        new_websession: bool = False,
+        new_websession: bool = True,
     ) -> libAuthResult:
         """Log into Alarm.com."""
 
@@ -154,9 +154,6 @@ class AlarmHub(BasicAlarmHub):
 
     async def async_setup(self, reload: bool = False) -> None:
         """Set up Alarm.com system instance."""
-
-        if not self.config_entry:
-            raise PartialInitialization
 
         try:
             await self.async_login(
