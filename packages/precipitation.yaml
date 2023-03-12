@@ -54,14 +54,14 @@ binary_sensor:
       precipitation_in_forecast:
         friendly_name: Precipitation in forecast
         value_template: |
-          {% set next_precip = state_attr("weather.dark_sky", "forecast") |
+          {% set next_precip = state_attr("weather.katt_hourly", "forecast") |
                       default([{}]) |
                       rejectattr("precipitation", "none") |
                       rejectattr("precipitation", "undefined") |
                       map(attribute='datetime') |
                       first |
                       default(false) %}
-          {% set next_rainy = state_attr("weather.dark_sky", "forecast") |
+          {% set next_rainy = state_attr("weather.katt_hourly", "forecast") |
                       default([{}]) |
                       selectattr("condition", "==", "rainy") |
                       map(attribute='datetime') |
@@ -80,7 +80,7 @@ sensor:
         unit_of_measurement: 'in'
         value_template: |
           {{
-            state_attr("weather.dark_sky", "forecast") |
+            state_attr("weather.katt_hourly", "forecast") |
             default([{}]) | batch(states("input_number.precipitation_forecast_hours") | default(12)) | first |
             rejectattr("precipitation", "none") |
             rejectattr("precipitation", "undefined") |
@@ -90,14 +90,14 @@ sensor:
         friendly_name: Next precipitation
         unit_of_measurement: timestamp
         value_template: |
-          {% set next_precip = state_attr("weather.dark_sky", "forecast") |
+          {% set next_precip = state_attr("weather.katt_hourly", "forecast") |
                       default([{}]) |
                       rejectattr("precipitation", "none") |
                       rejectattr("precipitation", "undefined") |
                       map(attribute='datetime') |
                       first |
                       default(false) %}
-          {% set next_rainy = state_attr("weather.dark_sky", "forecast") |
+          {% set next_rainy = state_attr("weather.katt_hourly", "forecast") |
                       default([{}]) |
                       selectattr("condition", "==", "rainy") |
                       map(attribute='datetime') |
@@ -109,9 +109,9 @@ sensor:
         unit_of_measurement: 'hours'
         value_template: |
           {% if states('sensor.next_precipitation') == 'unavailable' or states('sensor.next_precipitation') == '' %}
-            {{ state_attr("weather.dark_sky", "forecast") | length }}
+            {{ state_attr("weather.katt_hourly", "forecast") | length }}
           {% else %}
-            {% for item in state_attr("weather.dark_sky", "forecast") |
+            {% for item in state_attr("weather.katt_hourly", "forecast") |
                       default([{}]) %}
               {% if item.datetime == states('sensor.next_precipitation') %}
                 {{ loop.index }}

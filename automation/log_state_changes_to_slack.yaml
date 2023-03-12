@@ -58,7 +58,7 @@ trigger:
     - media_player.house_lounge
     - media_player.patio_speakers
     - media_player.record_cabinet
-    - weather.dark_sky
+    - weather.katt_hourly
     - light.kitchen_light
     - binary_sensor.kitchen_needs_nutrients
     - binary_sensor.kitchen_needs_water

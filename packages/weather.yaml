@@ -1,0 +1,18 @@
+template:
+  - sensor:
+      - name: Min Forecast Temperature
+        unit_of_measurement: "°F"
+        state: >
+         {{ state_attr('weather.katt_hourly', 'forecast') | default([{'temperature':33}]) | map(attribute='temperature') | min }}
+      - name: Max Forecast Temperature
+        unit_of_measurement: "°F"
+        state: >
+         {{ state_attr('weather.katt_hourly', 'forecast') | default([{'temperature':33}]) | map(attribute='temperature') | max }}
+      - name: Average Forecast Temperature
+        unit_of_measurement: "°F"
+        state: >
+         {{ state_attr('weather.katt_hourly', 'forecast') | default([{'temperature':33}]) | map(attribute='temperature') | average }}
+      - name: Forecast duration
+        unit_of_measurement: "Days"
+        state: >
+          {{ ( (as_timestamp(state_attr('weather.katt_hourly', 'forecast') | default([{'datetime':0}]) | map(attribute='datetime') | max) - as_timestamp(now()) ) / 86400 ) | round(default=0) }}

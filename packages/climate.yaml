@@ -1,12 +1,3 @@
-sensor:
-  - platform: template
-    sensors:
-      dark_sky_temperature:
-        friendly_name: dark sky
-        unit_of_measurement: "°F"
-        value_template: |
-          {{ state_attr('weather.dark_sky', 'temperature') }}
-
 automation:
   - alias: poll GoControl GC-TBZ48
     # I've set param 23 to 8319, which should cause the thing to report
@@ -35,7 +26,7 @@ automation:
         minutes: 3
     condition:
       condition: numeric_state
-      entity_id: weather.dark_sky
+      entity_id: weather.katt_hourly
       attribute: temperature
       below: 68
     action:
