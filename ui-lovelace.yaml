@@ -549,7 +549,7 @@ views:
             fill: false
         filter:
           include:
-            - entity_id: "/.*_soil_conductivity$/"
+            - entity_id: "/.*_conductivity$/"
 
       - type: custom:mini-graph-card
         entities:
