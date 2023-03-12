@@ -583,8 +583,8 @@ views:
             name: Avg
             color: green
         name: forecast extrema
-        hours_to_show: 168
-        group_by: date
+        hours_to_show: 24
+        group_by: hour
         show:
           fill: false
           extrema: false
