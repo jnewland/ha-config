@@ -1,9 +1,5 @@
 template:
   - sensor:
-      - name: Temperature
-        unit_of_measurement: "°F"
-        state: >
-          {{ state_attr('weather.katt_hourly', 'temperature') }}
       - name: Min Forecast Temperature
         unit_of_measurement: "°F"
         state: >
@@ -11,7 +7,7 @@ template:
       - name: Max Forecast Temperature
         unit_of_measurement: "°F"
         state: >
-         {{ state_attr('weather.katt_hourly', 'forecast') | default([{'temperature':33}]) | map(attribute='temperature') | min }}
+         {{ state_attr('weather.katt_hourly', 'forecast') | default([{'temperature':33}]) | map(attribute='temperature') | max }}
       - name: Average Forecast Temperature
         unit_of_measurement: "°F"
         state: >

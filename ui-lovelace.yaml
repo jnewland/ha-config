@@ -553,14 +553,14 @@ views:
 
       - type: custom:mini-graph-card
         entities:
-          - entity: sensor.temperature
+          - entity: sensor.katt_temperature
             aggregate_func: max
             name: Max
             color: #e74c3c
-          - entity: sensor.temperature
+          - entity: sensor.katt_temperature
             aggregate_func: min
             name: Min
-          - entity: sensor.temperature
+          - entity: sensor.katt_temperature
             aggregate_func: avg
             name: Avg
             color: green
@@ -594,7 +594,7 @@ views:
         entities:
           - entity: sensor.peppers_illuminance
           - entity: sensor.bamboo_illuminance
-        name: outdoor temperature
+        name: outdoor light
         hours_to_show: 72
         group_by: hour
         show:
@@ -602,7 +602,7 @@ views:
 
       - type: custom:mini-graph-card
         entities:
-          - entity: sensor.temperature
+          - entity: sensor.katt_temperature
           - entity: sensor.peppers_temperature
           - entity: sensor.bamboo_temperature
         name: outdoor temperature
