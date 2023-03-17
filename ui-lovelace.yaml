@@ -466,15 +466,13 @@ views:
           show:
             fill: false
 
-      - type: conditional
-        card:
-          type: custom:mini-graph-card
-          entities:
-            - sensor.forecast_precipitation_probability
-          name: precipitation in forecast
-          hours_to_show: 36
-          show:
-            fill: false
+      - type: custom:mini-graph-card
+        entities:
+          - sensor.forecast_precipitation_probability
+        name: precipitation in forecast
+        hours_to_show: 36
+        show:
+          fill: false
 
       - type: entities
         title: Forecast
