@@ -487,6 +487,7 @@ views:
         entities:
           - sensor.forecast_duration
           - input_number.precipitation_forecast_hours
+          - input_number.precipitation_forecast_probability_threshold
           - binary_sensor.precipitation_in_forecast
           - automation.precipitation_notifications
           - automation.sunshine_notifications
