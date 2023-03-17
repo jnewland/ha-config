@@ -453,6 +453,24 @@ views:
           extrema: true
           state: false
 
+      - type: custom:mini-graph-card
+          entities:
+            - entity: sensor.max_forecast_temperature
+              name: Max
+              color: #e74c3c
+            - entity: sensor.min_forecast_temperature
+              name: Min
+            - entity: sensor.average_forecast_temperature
+              name: Avg
+              color: green
+          name: forecast extrema
+          hours_to_show: 24
+          group_by: hour
+          show:
+            fill: false
+            extrema: false
+            state: false
+
       - type: conditional
         conditions:
           - entity: binary_sensor.precipitation_in_forecast
