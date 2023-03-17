@@ -58,6 +58,8 @@ lovelace:
       type: module
     - url: /local/mini-graph-card-bundle.js?source=https://github.com/kalkih/mini-graph-card/releases/download/v0.11.0/mini-graph-card-bundle.js
       type: module
+    - url: /local/weather-chart-card.js?source=https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
+      type: module
 
 light:
 logger: !include logger.yaml
