@@ -80,5 +80,4 @@ system_log:
   fire_event: true
 tts:
   - platform: google_translate
-volvooncall: !include volvo.yaml
 zone: !include zone.yaml
