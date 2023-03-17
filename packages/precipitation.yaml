@@ -74,7 +74,7 @@ sensor:
     sensors:
       forecast_precipitation_probability:
         friendly_name: Precipitation probability
-        unit_of_measurement: 'in'
+        unit_of_measurement: '%'
         value_template: |
           {{
             (
