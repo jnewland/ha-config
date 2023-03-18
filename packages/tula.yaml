@@ -13,10 +13,6 @@ sensor:
         value_template: >
           {{ state_attr('sensor.tula', 'customer')['fields']['hoursBalance'] }}
         unit_of_measurement: hours
-      tula_hours_saved:
-        value_template: >
-          {{ state_attr('sensor.tula', 'todos') | selectattr("fields.listStatus", "==", "completed") | list | sum(attribute="fields.hoursAgreement") }}
-        unit_of_measurement: hours
       tula_todos_in_progress:
         value_template: >
           {{ state_attr('sensor.tula', 'todos') | selectattr("fields.listStatus", "==", "inProgress") | list | count }}
@@ -54,4 +50,4 @@ automation:
       - service: notify.iphones
         data:
           message: |
-            All Tula TODOs have been completed! {{ states('sensor.tula_hours_saved') }} hours saved so far.
+            All Tula TODOs have been completed!
