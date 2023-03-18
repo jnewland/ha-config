@@ -47,6 +47,12 @@ input_number:
     min: 4
     max: 48
     step: 1
+  precipitation_forecast_probability_threshold:
+    name: Precipitation forecast probability threshold
+    min: 0
+    max: 100
+    step: 5
+
 
 binary_sensor:
   - platform: template
@@ -54,20 +60,11 @@ binary_sensor:
       precipitation_in_forecast:
         friendly_name: Precipitation in forecast
         value_template: |
-          {% set next_precip = state_attr("weather.katt_hourly", "forecast") |
-                      default([{}]) |
-                      rejectattr("precipitation", "none") |
-                      rejectattr("precipitation", "undefined") |
-                      map(attribute='datetime') |
-                      first |
-                      default(false) %}
-          {% set next_rainy = state_attr("weather.katt_hourly", "forecast") |
-                      default([{}]) |
-                      selectattr("condition", "==", "rainy") |
-                      map(attribute='datetime') |
-                      first |
-                      default(false) %}
-          {{ True if next_precip or next_rainy else False }}
+          {{ 
+            states('sensor.forecast_precipitation_probability') | float(default=0) 
+            > 
+            states('input_number.precipitation_forecast_probability_threshold') | float(default=100)
+          }}
         delay_on:
           minutes: 30
         delay_off:
@@ -75,35 +72,36 @@ binary_sensor:
 sensor:
   - platform: template
     sensors:
-      precipitation_in_forecast:
-        friendly_name: Precipitation in forecast
-        unit_of_measurement: 'in'
+      forecast_precipitation_probability:
+        friendly_name: Precipitation probability
+        unit_of_measurement: '%'
         value_template: |
           {{
-            state_attr("weather.katt_hourly", "forecast") |
-            default([{}]) | batch(states("input_number.precipitation_forecast_hours") | default(12)) | first |
-            rejectattr("precipitation", "none") |
-            rejectattr("precipitation", "undefined") |
-            sum(attribute="precipitation")
+            (
+              state_attr("weather.katt_hourly", "forecast") |
+              default([{}]) | batch(
+                states("input_number.precipitation_forecast_hours") | default(12)
+              ) | first |
+              rejectattr("precipitation_probability", "none") |
+              rejectattr("precipitation_probability", "undefined") |
+              max(attribute="precipitation_probability") | default({"precipitation_probability":0})
+            )["precipitation_probability"]
           }}
       next_precipitation:
         friendly_name: Next precipitation
         unit_of_measurement: timestamp
         value_template: |
           {% set next_precip = state_attr("weather.katt_hourly", "forecast") |
-                      default([{}]) |
-                      rejectattr("precipitation", "none") |
-                      rejectattr("precipitation", "undefined") |
-                      map(attribute='datetime') |
-                      first |
-                      default(false) %}
-          {% set next_rainy = state_attr("weather.katt_hourly", "forecast") |
-                      default([{}]) |
-                      selectattr("condition", "==", "rainy") |
-                      map(attribute='datetime') |
-                      first |
-                      default(false) %}
-          {{ next_precip or next_rainy or "" }}
+              default([{}]) | batch(
+                states("input_number.precipitation_forecast_hours") | default(12)
+              ) | first |
+              rejectattr("precipitation_probability", "none") |
+              rejectattr("precipitation_probability", "undefined") |
+              rejectattr("precipitation_probability", "<", states('input_number.precipitation_forecast_probability_threshold') | float(default=100)) | 
+              map(attribute='datetime') |
+              first |
+              default(false) %}
+          {{ next_precip or "" }}
       hours_until_rain:
         friendly_name: Hours until rain
         unit_of_measurement: 'hours'

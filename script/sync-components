@@ -10,39 +10,35 @@ git clone --depth 1 --branch $BHYVE_VERSION https://github.com/sebr/bhyve-home-a
 rm -rf custom_components/bhyve || true
 mv $TMPDIR/$$-bhyve-home-assistant/python_scripts/*.py python_scripts/
 mv $TMPDIR/$$-bhyve-home-assistant/custom_components/bhyve custom_components
-sync
 
 git clone https://github.com/Olen/homeassistant-plant $TMPDIR/$$-homeassistant-plant
 rm -rf custom_components/plant || true
 mv $TMPDIR/$$-homeassistant-plant/custom_components/plant custom_components
-sync
 
 # renovate: datasource=github-releases depName=uvjustin/alarmdotcom
 ALARM_DOT_COM_VERSION=v2.2.2
 git clone --depth 1 --branch $ALARM_DOT_COM_VERSION https://github.com/uvjustin/alarmdotcom $TMPDIR/$$-alarmdotcom
 rm -rf custom_components/alarmdotcom || true
 mv $TMPDIR/$$-alarmdotcom/custom_components/alarmdotcom custom_components
-sync
 
 # renovate: datasource=github-releases depName=blakeblackshear/frigate-hass-integration
 FRIGATE_VERSION=v3.0.1
 git clone --depth 1 --branch $FRIGATE_VERSION https://github.com/blakeblackshear/frigate-hass-integration $TMPDIR/$$-frigate
 rm -rf custom_components/frigate || true
 mv $TMPDIR/$$-frigate/custom_components/frigate custom_components
-sync
 
 # renovate: datasource=github-releases depName=claytonjn/hass-circadian_lighting
 CIRCADIAN_VERSION=2.1.3
 git clone --depth 1 --branch $CIRCADIAN_VERSION https://github.com/claytonjn/hass-circadian_lighting $TMPDIR/$$-circadian_lighting
 rm -rf custom_components/circadian_lighting || true
 mv $TMPDIR/$$-circadian_lighting/custom_components/circadian_lighting custom_components
-sync
 
-curl -L -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
-curl -L -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/1.12.1/auto-entities.js
-curl -L -o www/mini-media-player-bundle.js https://github.com/kalkih/mini-media-player/releases/download/v1.16.5/mini-media-player-bundle.js
-curl -L -o www/custom-sonos-card.js https://github.com/johanfrick/custom-sonos-card/releases/download/v5.20.1/custom-sonos-card.js
-curl -L -o www/mini-graph-card-bundle.js https://github.com/kalkih/mini-graph-card/releases/download/v0.11.0/mini-graph-card-bundle.js
+curl -sL --fail -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
+curl -sL --fail -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/1.12.1/auto-entities.js
+curl -sL --fail -o www/mini-media-player-bundle.js https://github.com/kalkih/mini-media-player/releases/download/v1.16.5/mini-media-player-bundle.js
+curl -sL --fail -o www/custom-sonos-card.js https://github.com/johanfrick/custom-sonos-card/releases/download/v5.20.1/custom-sonos-card.js
+curl -sL --fail -o www/mini-graph-card-bundle.js https://github.com/kalkih/mini-graph-card/releases/download/v0.11.0/mini-graph-card-bundle.js
+curl -sL --fail -o www/weather-chart-card.js https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
 
 git add custom_components
 git add python_scripts

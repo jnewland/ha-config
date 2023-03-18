@@ -420,8 +420,89 @@ views:
             border: none
       - type: weather-forecast
         entity: weather.katt_hourly
-      - type: picture
-        image: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=GRK&brand=wui&num=10&delay=25&type=N0R&frame=0&scale=1&noclutter=0&showstorms=99&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=1&rainsnow=1&lightning=1&smooth=1&rand=24691285&lat=0&lon=0&label=you
+
+  - title: Weather
+    path: weather
+    icon: mdi:weather-cloudy
+    cards:
+      - type: custom:weather-chart-card
+        entity: weather.katt_hourly
+      - type: custom:weather-chart-card
+        show_main: false
+        show_attributes: false
+        entity: weather.katt_daynight
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.katt_temperature
+            aggregate_func: max
+            name: Max
+            color: #e74c3c
+          - entity: sensor.katt_temperature
+            aggregate_func: min
+            name: Min
+          - entity: sensor.katt_temperature
+            aggregate_func: avg
+            name: Avg
+            color: green
+        name: historical temperature range
+        hours_to_show: 168
+        group_by: date
+        show:
+          fill: false
+          extrema: true
+          state: false
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.max_forecast_temperature
+            name: Max
+            color: #e74c3c
+          - entity: sensor.min_forecast_temperature
+            name: Min
+          - entity: sensor.average_forecast_temperature
+            name: Avg
+            color: green
+        name: forecast extrema
+        hours_to_show: 24
+        group_by: hour
+        show:
+          fill: false
+          extrema: false
+          state: false
+
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.precipitation_in_forecast
+            state: "on"
+        card:
+          type: custom:mini-graph-card
+          entities:
+            - sensor.hours_until_rain
+          name: hours until rain
+          hours_to_show: 36
+          show:
+            fill: false
+
+      - type: custom:mini-graph-card
+        entities:
+          - sensor.forecast_precipitation_probability
+        name: forecast precipitation probability
+        hours_to_show: 36
+        show:
+          fill: false
+
+      - type: entities
+        title: Forecast
+        show_header_toggle: false
+        entities:
+          - sensor.forecast_duration
+          - input_number.precipitation_forecast_hours
+          - input_number.precipitation_forecast_probability_threshold
+          - binary_sensor.precipitation_in_forecast
+          - automation.precipitation_notifications
+          - automation.sunshine_notifications
+          - automation.freeze_forecast_notifications
 
   - title: Garden
     path: garden
@@ -553,45 +634,6 @@ views:
 
       - type: custom:mini-graph-card
         entities:
-          - entity: sensor.katt_temperature
-            aggregate_func: max
-            name: Max
-            color: #e74c3c
-          - entity: sensor.katt_temperature
-            aggregate_func: min
-            name: Min
-          - entity: sensor.katt_temperature
-            aggregate_func: avg
-            name: Avg
-            color: green
-        name: outdoor temperature range
-        hours_to_show: 168
-        group_by: date
-        show:
-          fill: false
-          extrema: true
-          state: false
-
-      - type: custom:mini-graph-card
-        entities:
-          - entity: sensor.max_forecast_temperature
-            name: Max
-            color: #e74c3c
-          - entity: sensor.min_forecast_temperature
-            name: Min
-          - entity: sensor.average_forecast_temperature
-            name: Avg
-            color: green
-        name: forecast extrema
-        hours_to_show: 24
-        group_by: hour
-        show:
-          fill: false
-          extrema: false
-          state: false
-
-      - type: custom:mini-graph-card
-        entities:
           - entity: sensor.peppers_illuminance
           - entity: sensor.bamboo_illuminance
         name: outdoor light
@@ -610,43 +652,6 @@ views:
         group_by: hour
         show:
           fill: false
-
-      - type: conditional
-        conditions:
-          - entity: binary_sensor.precipitation_in_forecast
-            state: "on"
-        card:
-          type: custom:mini-graph-card
-          entities:
-            - sensor.hours_until_rain
-          name: hours until rain
-          hours_to_show: 36
-          show:
-            fill: false
-
-      - type: conditional
-        conditions:
-          - entity: binary_sensor.precipitation_in_forecast
-            state: "on"
-        card:
-          type: custom:mini-graph-card
-          entities:
-            - sensor.precipitation_in_forecast
-          name: precipitation in forecast
-          hours_to_show: 36
-          show:
-            fill: false
-
-      - type: entities
-        title: Forecast
-        show_header_toggle: false
-        entities:
-          - sensor.forecast_duration
-          - input_number.precipitation_forecast_hours
-          - binary_sensor.precipitation_in_forecast
-          - automation.precipitation_notifications
-          - automation.sunshine_notifications
-          - automation.freeze_forecast_notifications
 
   - title: Great Room
     icon: mdi:sofa
