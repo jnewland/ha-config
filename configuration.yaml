@@ -18,7 +18,6 @@ homeassistant:
     - !env_var FRIGATE_URL
 
 default_config:
-automation: !include_dir_list automation
 binary_sensor: !include_dir_list binary_sensors
 circadian_lighting:
   min_colortemp: 2500
@@ -36,7 +35,6 @@ http: !include http.yaml
 homekit: !include homekit.yaml
 ifttt: !include ifttt.yaml
 input_boolean: !include input_boolean.yaml
-input_select: !include input_select.yaml
 lovelace:
   mode: yaml
   resources:

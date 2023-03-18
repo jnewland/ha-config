@@ -25,3 +25,4 @@ logs:
   roomba.roomba.Roomba: warn
   root: warn
   aiohue.util: critical
+  roombapy.roomba: error
