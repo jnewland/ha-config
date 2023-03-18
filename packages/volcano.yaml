@@ -40,6 +40,9 @@ automation:
             Volcano fan is on. Turn off?
           interruption_level: passive
           skip_confirmation: true
+      - service: counter.increment
+        target:
+          entity_id: counter.balloons
 
   - id: 47e34b79-f8f1-4da3-af5e-8e3f38508405
     trigger:
@@ -54,3 +57,8 @@ automation:
           message: "clear_notification"
           data:
             tag: volcano
+
+counter:
+  balloons:
+    name: Balloons
+    icon: mdi:airballoon-outline
