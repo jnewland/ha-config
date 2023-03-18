@@ -57,8 +57,3 @@ automation:
           message: "clear_notification"
           data:
             tag: volcano
-
-counter:
-  balloons:
-    name: Balloons
-    icon: mdi:airballoon-outline
