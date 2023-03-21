@@ -180,4 +180,4 @@ automation:
         data:
           file:
             url: |
-              {{ states('input_text.external_url') }}{{ trigger.to_state.attributes.entity_picture }}
+              {{ states('input_text.external_url') }}{{ trigger.to_state.attributes.entity_picture }}#.jpg
