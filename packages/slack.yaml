@@ -150,34 +150,3 @@ automation:
             after being {{ old_state.state | capitalize }}{{ unit_of_measurement }}{{ " " -}}
             for {{ relative_time(old_state.last_changed) }}
           {% endif -%}
-
-  - alias: log media to slack
-    id: 6c040050-a715-4a44-a34f-68f80d9e43fd
-    trigger:
-      platform: state
-      entity_id:
-        - media_player.house
-    condition:
-      condition: template
-      value_template: |
-        {% set old_state = trigger.from_state %}
-        {% set new_state = trigger.to_state %}
-        {{
-          (
-            new_state.state == "playing" and
-            new_state.attributes.media_content_type == "music" and
-            new_state.attributes.entity_picture is defined and
-            new_state.attributes.entity_picture != old_state.attributes.entity_picture
-          )
-        }}
-    action:
-      service: notify.slack
-      data:
-        title: |
-          {{ trigger.to_state.name | capitalize }}
-        message: |
-          {{ trigger.to_state.attributes.media_artist }} - {{ trigger.to_state.attributes.media_album_name | default("") }} - {{ trigger.to_state.attributes.media_title }}
-        data:
-          file:
-            url: |
-              {{ states('input_text.external_url') }}{{ trigger.to_state.attributes.entity_picture }}#.jpg
