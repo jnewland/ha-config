@@ -21,5 +21,9 @@ module.exports = {
       prBodyNotes:
         'Auto-updating [home-assistant](https://github.com/home-assistant/core/releases) /cc @jnewland',
     },
+    {
+      matchPackageNames: ['uvjustin/alarmdotcom'],
+      allowedVersions: '<=2.2.0'
+    }
   ],
 };
