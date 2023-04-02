@@ -11,8 +11,11 @@ entities:
   - light.palm
   - light.pillar
   - light.living_room_fireplace
-  - light.bookcase_left
-  - light.bookcase_right
+  - light.bookcase_middle
   - light.corner
   - switch.great_room_tree
   - switch.treeo
+  - light.cabinets_upper_fridge
+  - light.cabinets_upper_left
+  - light.cabinets_upper_right
+  - light.cabinets_upper_sink

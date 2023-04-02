@@ -244,10 +244,22 @@ switch:
     sleep_entity: input_select.mode
     sleep_state: "Sleeping"
     lights_ct:
-      - light.bookcase_left
-      - light.bookcase_right
+      - light.bookcase_middle
       - light.pillar
       - light.palm
+
+  - name: brighter_accent
+    platform: circadian_lighting
+    min_brightness: 1
+    max_brightness: 50
+    sleep_brightness: 1
+    sleep_entity: input_select.mode
+    sleep_state: "Sleeping"
+    lights_ct:
+      - light.cabinets_upper_fridge
+      - light.cabinets_upper_left
+      - light.cabinets_upper_right
+      - light.cabinets_upper_sink
 
   # LEDs that don't dim well
   - name: min_brightness
