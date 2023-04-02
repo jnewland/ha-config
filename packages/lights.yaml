@@ -244,8 +244,11 @@ switch:
     sleep_entity: input_select.mode
     sleep_state: "Sleeping"
     lights_ct:
-      - light.bookcase_left
-      - light.bookcase_right
+      - light.cabinets_upper_fridge
+      - light.cabinets_upper_left
+      - light.cabinets_upper_right
+      - light.cabinets_upper_sink
+      - light.bookcase_middle
       - light.pillar
       - light.palm
 

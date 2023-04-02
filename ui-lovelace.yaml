@@ -659,8 +659,12 @@ views:
       - type: entities
         title: great room
         entities:
-          - light.kitchen_cabinets
           - light.kitchen
+          - light.kitchen_cabinets
+          - light.cabinets_upper_fridge
+          - light.cabinets_upper_left
+          - light.cabinets_upper_right
+          - light.cabinets_upper_sink
           - light.pendants
           - light.dining_room_table
           - binary_sensor.dining_room_home_security_motion_detection
@@ -671,8 +675,7 @@ views:
           - light.palm
           - light.pillar
           - light.living_room_fireplace
-          - light.bookcase_left
-          - light.bookcase_right
+          - light.bookcase_middle
           - light.corner
           - light.couch_lamp_right
           - light.couch_lamp_left
