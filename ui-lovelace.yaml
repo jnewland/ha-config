@@ -17,8 +17,8 @@ views:
             - lock.front_door
             - binary_sensor.front_gate_access_control_window_door_is_open
             - input_number.brightness
-            - switch.circadian_lighting_brightness
             - vacuum.downstairs
+            - automation.notify_when_person_detected_in_front_yard
       - type: conditional
         conditions:
           - entity: device_tracker.jphone_14

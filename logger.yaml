@@ -8,9 +8,6 @@ logs:
   homeassistant.components.sensor: warn
   homeassistant.components.shell_command: debug
   homeassistant.components.switch: warn
-  custom_components.circadian_lighting: debug
-  custom_components.circadian_lighting.sensor: debug
-  custom_components.circadian_lighting.switch: debug
   packages.ack: debug
   packages.auto_lock: debug
   packages.house_speakers: debug
