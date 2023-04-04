@@ -114,3 +114,29 @@ automation:
             file:
               url: |
                 {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/{{ trigger.payload_json["after"]["camera"] }}/clip.mp4
+
+  - alias: Notify when person detected in front yard
+    mode: single
+    id: 35b6ace2-2cd3-46a1-9477-c044d11336b5
+    trigger:
+      platform: mqtt
+      topic: frigate/events
+    condition:
+      - "{{ trigger.payload_json['after']['label'] == 'person' }}"
+      - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_door', 'pergola'] }}"
+    action:
+      - service: notify.iphones
+        data:
+          message: they're here!
+          data:
+            push:
+              category: camera
+            entity_id: |
+              camera.{{ trigger.payload_json['after']['camera'] }}
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
+              content-type: jpeg
+              hide-thumbnail: false
+      - service: automation.turn_off
+        entity_id: audomation.notify_when_person_detected_in_front_yard
