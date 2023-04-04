@@ -139,4 +139,4 @@ automation:
               content-type: jpeg
               hide-thumbnail: false
       - service: automation.turn_off
-        entity_id: audomation.notify_when_person_detected_in_front_yard
+        entity_id: automation.notify_when_person_detected_in_front_yard
