@@ -17,9 +17,6 @@ homeassistant:
     - !env_var SELF_LINK
     - !env_var FRIGATE_URL
 
-# The configuration required for the UI to work
-automation: !include automations.yaml
-
 default_config:
 binary_sensor: !include_dir_list binary_sensors
 circadian_lighting:
