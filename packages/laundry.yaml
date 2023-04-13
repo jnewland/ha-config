@@ -1,6 +1,6 @@
 homeassistant:
   customize:
-    binary_sensor.laundry_power:
+    binary_sensor.laundry_activity:
       trigger_service: script.laundry_room
       trigger_entity_id_off: group.laundry_room
 
@@ -24,6 +24,13 @@ group:
 binary_sensor:
   - platform: template
     sensors:
+      laundry_activity:
+        friendly_name: Laundry activity
+        value_template: |
+          {{ 
+            is_state('binary_sensor.laundry_power', 'on') or 
+            is_state('binary_sensor.laundry_room_motion_detection', 'on')
+          }}
       laundry_cycle:
         friendly_name: Laundry cycle
         device_class: running
