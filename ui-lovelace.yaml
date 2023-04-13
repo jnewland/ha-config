@@ -612,6 +612,7 @@ views:
             fill: false
             legend: false
             state: false
+            points: hover
         filter:
           include:
             - entity_id: "/.*_zone_daily_runtime$/"
@@ -636,6 +637,7 @@ views:
         entities:
           - entity: sensor.peppers_illuminance
           - entity: sensor.bamboo_illuminance
+          - entity: sensor.vegepod_illuminance
         name: outdoor light
         hours_to_show: 72
         group_by: hour
@@ -647,11 +649,45 @@ views:
           - entity: sensor.katt_temperature
           - entity: sensor.peppers_temperature
           - entity: sensor.bamboo_temperature
+          - entity: sensor.vegepod_temperature
         name: outdoor temperature
         hours_to_show: 72
         group_by: hour
         show:
           fill: false
+
+      - type: conditional
+        conditions:
+          - entity: camera.veggiecam
+            state: recording
+        card:
+          type: picture-entity
+          camera_view: auto
+          show_name: false
+          show_state: false
+          entity: camera.veggiecam
+
+      - type: conditional
+        conditions:
+          - entity: camera.gate
+            state: recording
+        card:
+          type: picture-entity
+          camera_view: auto
+          show_name: false
+          show_state: false
+          entity: camera.gate
+
+      - type: conditional
+        conditions:
+          - entity: camera.gate
+            state: recording
+        card:
+          type: picture-entity
+          camera_view: auto
+          show_name: false
+          show_state: false
+          entity: camera.garage
 
   - title: Great Room
     icon: mdi:sofa
@@ -1094,7 +1130,7 @@ views:
           camera_view: auto
           show_name: false
           show_state: false
-          entity: camera.peppers
+          entity: camera.veggiecam
 
       - type: conditional
         conditions:
@@ -1144,7 +1180,7 @@ views:
             - type: picture-entity
               show_name: false
               show_state: false
-              entity: camera.peppers_person
+              entity: camera.veggiecam_person
 
       - type: custom:auto-entities
         show_header_toggle: false
