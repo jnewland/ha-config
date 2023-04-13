@@ -612,6 +612,7 @@ views:
             fill: false
             legend: false
             state: false
+            points: hover
         filter:
           include:
             - entity_id: "/.*_zone_daily_runtime$/"
@@ -632,26 +633,65 @@ views:
           include:
             - entity_id: "/.*_conductivity$/"
 
-      - type: custom:mini-graph-card
-        entities:
-          - entity: sensor.peppers_illuminance
-          - entity: sensor.bamboo_illuminance
-        name: outdoor light
-        hours_to_show: 72
-        group_by: hour
-        show:
-          fill: false
+      - type: custom:auto-entities
+        card:
+          type: custom:mini-graph-card
+          hours_to_show: 168
+          group_by: hour
+          show:
+            extrema: true
+            state: false
+            fill: false
+        filter:
+          include:
+            - entity_id: "/sensor.peppers_illuminance/"
+            - entity_id: "/sensor.bamboo_illuminance/"
+            - entity_id: "/sensor.vegepod_illuminance/"
 
       - type: custom:mini-graph-card
         entities:
           - entity: sensor.katt_temperature
           - entity: sensor.peppers_temperature
           - entity: sensor.bamboo_temperature
+          - entity: sensor.vegepod_temperature
         name: outdoor temperature
         hours_to_show: 72
         group_by: hour
         show:
           fill: false
+
+      - type: conditional
+        conditions:
+          - entity: camera.veggiecam
+            state: recording
+        card:
+          type: picture-entity
+          camera_view: auto
+          show_name: false
+          show_state: false
+          entity: camera.veggiecam
+
+      - type: conditional
+        conditions:
+          - entity: camera.gate
+            state: recording
+        card:
+          type: picture-entity
+          camera_view: auto
+          show_name: false
+          show_state: false
+          entity: camera.gate
+
+      - type: conditional
+        conditions:
+          - entity: camera.gate
+            state: recording
+        card:
+          type: picture-entity
+          camera_view: auto
+          show_name: false
+          show_state: false
+          entity: camera.garage
 
   - title: Great Room
     icon: mdi:sofa
@@ -1094,7 +1134,7 @@ views:
           camera_view: auto
           show_name: false
           show_state: false
-          entity: camera.peppers
+          entity: camera.veggiecam
 
       - type: conditional
         conditions:
@@ -1144,7 +1184,7 @@ views:
             - type: picture-entity
               show_name: false
               show_state: false
-              entity: camera.peppers_person
+              entity: camera.veggiecam_person
 
       - type: custom:auto-entities
         show_header_toggle: false

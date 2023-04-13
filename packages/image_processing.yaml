@@ -13,7 +13,7 @@ automation:
         - sensor.garage_camera_fps
         - sensor.gate_camera_fps
         # - sensor.great_room_camera_fps
-        - sensor.peppers_camera_fps
+        - sensor.veggiecam_camera_fps
         - sensor.pergola_camera_fps
         - sensor.roof_deck_camera_fps
         below: 1
@@ -40,7 +40,7 @@ automation:
         - sensor.garage_camera_fps
         - sensor.gate_camera_fps
         - sensor.great_room_camera_fps
-        - sensor.peppers_camera_fps
+        - sensor.veggiecam_camera_fps
         - sensor.pergola_camera_fps
         - sensor.roof_deck_camera_fps
         below: 6
