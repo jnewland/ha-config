@@ -644,6 +644,19 @@ views:
             fill: false
         filter:
           include:
+            - entity_id: "/.*_moisture$/"
+
+      - type: custom:auto-entities
+        card:
+          type: custom:mini-graph-card
+          hours_to_show: 168
+          group_by: hour
+          show:
+            extrema: true
+            state: false
+            fill: false
+        filter:
+          include:
             - entity_id: "/sensor.peppers_illuminance/"
             - entity_id: "/sensor.bamboo_illuminance/"
             - entity_id: "/sensor.vegepod_illuminance/"
