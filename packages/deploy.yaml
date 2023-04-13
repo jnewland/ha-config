@@ -21,6 +21,8 @@ automation:
     trigger:
       platform: state
       entity_id: sensor.latest_deployment_sha
+    condition: |
+      {{ has_value('sensor.latest_deployment_sha') }}
     action:
       - service: notify.slack
         data:
@@ -36,6 +38,8 @@ automation:
     trigger:
       platform: state
       entity_id: sensor.config_sha
+    condition: |
+      {{ has_value('sensor.config_sha') }}
     action:
       - service: notify.slack
         data:
