@@ -621,39 +621,45 @@ views:
                 unit: hours
 
       - type: custom:auto-entities
+        sort:
+          method: name
+          reverse: true
         card:
           type: custom:mini-graph-card
           hours_to_show: 168
           group_by: hour
           show:
             extrema: true
-            state: false
             fill: false
         filter:
           include:
             - entity_id: "/.*_conductivity$/"
 
       - type: custom:auto-entities
+        sort:
+          method: name
+          reverse: true
         card:
           type: custom:mini-graph-card
           hours_to_show: 168
           group_by: hour
           show:
             extrema: true
-            state: false
             fill: false
         filter:
           include:
             - entity_id: "/.*_moisture$/"
 
       - type: custom:auto-entities
+        sort:
+          method: name
+          reverse: true
         card:
           type: custom:mini-graph-card
           hours_to_show: 168
           group_by: hour
           show:
             extrema: true
-            state: false
             fill: false
         filter:
           include:
@@ -662,15 +668,19 @@ views:
             - entity_id: "/sensor.vegepod_illuminance/"
 
       - type: custom:mini-graph-card
+        sort:
+          method: name
+          reverse: true
         entities:
           - entity: sensor.katt_temperature
           - entity: sensor.peppers_temperature
           - entity: sensor.bamboo_temperature
           - entity: sensor.vegepod_temperature
         name: outdoor temperature
-        hours_to_show: 72
+        hours_to_show: 168
         group_by: hour
         show:
+          extrema: true
           fill: false
 
       - type: conditional
