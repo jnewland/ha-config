@@ -7,7 +7,7 @@ logs:
   homeassistant.components.media_player: warn
   homeassistant.components.sensor: warn
   homeassistant.components.shell_command: debug
-  homeassistant.components.switch: warn
+  homeassistant.components.switch: info
   packages.ack: debug
   packages.auto_lock: debug
   packages.house_speakers: debug
