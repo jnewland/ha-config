@@ -15,7 +15,7 @@ automation:
         # - sensor.great_room_camera_fps
         - sensor.veggiecam_camera_fps
         - sensor.pergola_camera_fps
-        - sensor.roof_deck_camera_fps
+        - sensor.fountain_camera_fps
         below: 1
         for:
           minutes: 2
@@ -42,7 +42,7 @@ automation:
         - sensor.great_room_camera_fps
         - sensor.veggiecam_camera_fps
         - sensor.pergola_camera_fps
-        - sensor.roof_deck_camera_fps
+        - sensor.fountain_camera_fps
         below: 6
         above: 4
         for:
