@@ -1,8 +1,9 @@
-"""Binary Sensor Entity for Ember Mug."""
+"""Text Entity for Ember Mug."""
 from __future__ import annotations
 
 import logging
 
+from ember_mug.consts import MUG_NAME_PATTERN
 from homeassistant.components.text import TextEntity, TextEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -10,7 +11,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import HassMugData
-from .const import DOMAIN, MUG_NAME_REGEX
+from .const import DOMAIN
 from .coordinator import MugDataUpdateCoordinator
 from .entity import BaseMugValueEntity
 
@@ -21,14 +22,14 @@ TEXT_TYPES = {
         key="name",
         native_min=1,
         native_max=16,
-        pattern=MUG_NAME_REGEX,
+        pattern=MUG_NAME_PATTERN,
         entity_category=EntityCategory.CONFIG,
     ),
 }
 
 
 class MugTextEntity(BaseMugValueEntity, TextEntity):
-    """Configurable TextEntity for text mug attribute."""
+    """Configurable Text Entity for text mug attribute."""
 
     _domain = "text"
 
@@ -51,10 +52,10 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up Binary Sensor Entities."""
+    """Set up Text Entities."""
     assert entry.entry_id is not None
     data: HassMugData = hass.data[DOMAIN][entry.entry_id]
     entities = []
-    if data.mug.data.model.is_cup is False:
+    if not data.mug.is_cup:
         entities = [MugTextEntity(data.coordinator, attr) for attr in TEXT_TYPES]
     async_add_entities(entities)

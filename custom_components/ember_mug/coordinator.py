@@ -32,13 +32,15 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
         device_name: str,
     ) -> None:
         """Initialize global Mug data updater."""
+        device_type = mug.data.model.type
         super().__init__(
             hass=hass,
             logger=logger,
-            name=f"ember-mug-{base_unique_id}",
+            name=f"ember-{device_type.replace('_', '-')}-{base_unique_id}",
             update_interval=timedelta(seconds=15),
         )
         self.device_name = device_name
+        self.device_type = device_type
         self.base_unique_id = base_unique_id
         self.mug = mug
         self.data = self.mug.data
@@ -48,7 +50,7 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
         self._cancel_callback = self.mug.register_callback(
             self._async_handle_callback,
         )
-        _LOGGER.info(f"Ember Mug {self.name} Setup")
+        _LOGGER.info("%s %s Setup", self.mug.model_name, self.name)
 
     async def _async_update_data(self) -> MugData:
         """Poll the device."""
@@ -67,9 +69,15 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
             self._last_refresh_was_full = not self._last_refresh_was_full
             self.available = True
         except Exception as e:
-            _LOGGER.error("An error occurred whilst updating the mug: %s", e)
+            _LOGGER.error(
+                "An error occurred whilst updating the %s: %s",
+                self.mug.model_name,
+                e,
+            )
             self.available = False
-            raise UpdateFailed(f"An error occurred updating mug: {e=}")
+            raise UpdateFailed(
+                f"An error occurred updating {self.mug.model_name}: {e=}",
+            )
 
         _LOGGER.debug(
             "[%s Update] Changed: %s",
@@ -84,7 +92,7 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
         service_info: BluetoothServiceInfoBleak,
     ) -> None:
         """Handle the device going unavailable."""
-        _LOGGER.warning("Mug is unavailable")
+        _LOGGER.warning("%s is unavailable", self.mug.model_name)
         self.available = False
         self.async_update_listeners()
 
