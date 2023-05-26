@@ -34,7 +34,7 @@ rm -rf custom_components/circadian_lighting || true
 mv $TMPDIR/$$-circadian_lighting/custom_components/circadian_lighting custom_components
 
 # renovate: datasource=github-releases depName=sopelj/hass-ember-mug-component
-EMBER_VERSION=0.7.0
+EMBER_VERSION=0.7.1
 git clone --depth 1 --branch $EMBER_VERSION https://github.com/sopelj/hass-ember-mug-component $TMPDIR/$$-ember
 rm -rf custom_components/ember_mug
 mv $TMPDIR/$$-ember/custom_components/ember_mug custom_components
