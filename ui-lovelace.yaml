@@ -1727,6 +1727,7 @@ views:
           - sensor.current_version
           - sensor.config_sha
           - sensor.latest_deployment_sha
+          - automation.deploy_latest_deployment
       - type: custom:auto-entities
         show_empty: false
         sort:
