@@ -451,7 +451,6 @@ views:
         show:
           fill: false
           extrema: true
-          state: false
 
       - type: custom:mini-graph-card
         entities:
@@ -469,7 +468,6 @@ views:
         show:
           fill: false
           extrema: false
-          state: false
 
       - type: conditional
         conditions:
