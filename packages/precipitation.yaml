@@ -72,6 +72,10 @@ binary_sensor:
 sensor:
   - platform: template
     sensors:
+      precipitation:
+        unit_of_measurement: in
+        value_template: |
+          {{ (state_attr("weather.tomorrow_io_home_nowcast", "forecast") | first)["precipitation"] }}
       forecast_precipitation_probability:
         friendly_name: Precipitation probability
         unit_of_measurement: '%'

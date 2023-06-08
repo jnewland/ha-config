@@ -426,32 +426,17 @@ views:
     icon: mdi:weather-cloudy
     cards:
       - type: custom:weather-chart-card
+        entity: weather.tomorrow_io_home_nowcast
+      - type: custom:weather-chart-card
+        show_main: false
+        show_attributes: false
         entity: weather.katt_hourly
+        title: hourly
       - type: custom:weather-chart-card
         show_main: false
         show_attributes: false
         entity: weather.katt_daynight
-
-      - type: custom:mini-graph-card
-        entities:
-          - entity: sensor.katt_temperature
-            aggregate_func: max
-            name: Max
-            color: #e74c3c
-          - entity: sensor.katt_temperature
-            aggregate_func: min
-            name: Min
-          - entity: sensor.katt_temperature
-            aggregate_func: avg
-            name: Avg
-            color: green
-        name: historical temperature range
-        hours_to_show: 168
-        group_by: date
-        show:
-          fill: false
-          extrema: true
-          state: false
+        title: daily
 
       - type: custom:mini-graph-card
         entities:
@@ -469,7 +454,6 @@ views:
         show:
           fill: false
           extrema: false
-          state: false
 
       - type: conditional
         conditions:
@@ -480,15 +464,15 @@ views:
           entities:
             - sensor.hours_until_rain
           name: hours until rain
-          hours_to_show: 36
+          hours_to_show: 24
           show:
             fill: false
 
       - type: custom:mini-graph-card
         entities:
           - sensor.forecast_precipitation_probability
-        name: forecast precipitation probability
-        hours_to_show: 36
+        name: max forecast precipitation probability
+        hours_to_show: 24
         show:
           fill: false
 
@@ -526,21 +510,6 @@ views:
           entities:
             - input_datetime.greenhouse_light_on
             - input_datetime.greenhouse_light_off
-      #   footer:
-      #     type: graph
-      #     entity: sensor.angel_trumpet_light
-      #     hours_to_show: 80
-      #     detail: 2
-      # - type: entities
-      #   title: Kitchen herb garden
-      #   show_header_toggle: false
-      #   entities:
-      #     - light.kitchen_light
-      #     - binary_sensor.kitchen_pump
-      #     - binary_sensor.kitchen_needs_nutrients
-      #     - binary_sensor.kitchen_needs_water
-      #     - sensor.kitchen_nutrients_days
-      #     - sensor.kitchen_planted_days
 
       - type: custom:auto-entities
         card:
@@ -549,8 +518,6 @@ views:
           title: quick run
         filter:
           include:
-            - entity_id: "/.*_sprayers$/"
-            - entity_id: "/.*_drip$/"
             - entity_id: "/.*_zone$/"
             - entity_id: "/.*_schedule$/"
 
@@ -582,24 +549,15 @@ views:
             - integration: bhyve
               entity_id: "/.*_history$/"
 
-      - type: custom:auto-entities
-        card:
-          type: custom:mini-graph-card
-          name: consumption
-          hours_to_show: 168
-          group_by: date
-          smoothing: false
-          show:
-            fill: false
-            legend: false
-            state: false
-        filter:
-          include:
-            - entity_id: "/.*_zone_history$/"
-              options:
-                aggregate_func: sum
-                attribute: consumption_gallons
-                unit: gallons
+      - type: custom:mini-graph-card
+        entities:
+          - sensor.precipitation
+        name: historical precipitation
+        hours_to_show: 168
+        group_by: date
+        show:
+          fill: false
+          extrema: true
 
       - type: custom:auto-entities
         card:
@@ -666,6 +624,26 @@ views:
             - entity_id: "/sensor.peppers_illuminance/"
             - entity_id: "/sensor.bamboo_illuminance/"
             - entity_id: "/sensor.vegepod_illuminance/"
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.katt_temperature
+            aggregate_func: max
+            name: Max
+            color: #e74c3c
+          - entity: sensor.katt_temperature
+            aggregate_func: min
+            name: Min
+          - entity: sensor.katt_temperature
+            aggregate_func: avg
+            name: Avg
+            color: green
+        name: historical temperature range
+        hours_to_show: 168
+        group_by: date
+        show:
+          fill: false
+          extrema: true
 
       - type: custom:mini-graph-card
         sort:
