@@ -436,7 +436,7 @@ views:
         show_main: false
         show_attributes: false
         entity: weather.katt_daynight
-        daily: hourly
+        title: daily
 
       - type: custom:mini-graph-card
         entities:
