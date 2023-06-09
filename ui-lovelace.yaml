@@ -525,19 +525,23 @@ views:
         card:
           type: entities
           show_header_toggle: false
-          title: schedule
+          title: toggle schedules
         filter:
           include:
             - entity_id: "/.*_program$/"
 
-      - type: custom:auto-entities
-        card:
-          type: entities
-          show_header_toggle: false
-          title: rain delay
-        filter:
-          include:
-            - entity_id: "/.*_rain_delay$/"
+      - type: markdown
+        content: |
+          {% for program in states.switch|selectattr('attributes.is_smart_program','defined') %}
+          {%- if program.state == "on" %}
+          * {{ program.name }} runs for {{ program.attributes.run_times | map(attribute='run_time') | join(', ') }} minutes at {{ program.attributes.start_times | join(', ') }} on {{ program.attributes.frequency.days | default([program.attributes.frequency.interval | default(program.attributes.frequency.type)]) | join }} day {{ program.attributes.frequency.type }}
+          {%- endif -%}
+          {%- endfor -%}
+          {% for program in states.switch | selectattr('attributes.Duration', 'defined') %}
+          {%- if program.attributes.Enabled %}
+          * {{ program.name }} runs for {{ program.attributes.Duration }} {{ program.attributes.Summary | lower }}
+          {%- endif -%}
+          {%- endfor -%}
 
       - type: custom:auto-entities
         card:
@@ -548,6 +552,15 @@ views:
           include:
             - integration: bhyve
               entity_id: "/.*_history$/"
+
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: false
+          title: rain delay
+        filter:
+          include:
+            - entity_id: "/.*_rain_delay$/"
 
       - type: custom:mini-graph-card
         entities:
