@@ -544,14 +544,14 @@ views:
           {%- endfor -%}
 
       - type: custom:auto-entities
-          card:
-            type: entities
-            show_header_toggle: false
-            title: last run
-          filter:
-            include:
-              - integration: bhyve
-                entity_id: "/.*_history$/"
+        card:
+          type: entities
+          show_header_toggle: false
+          title: last run
+        filter:
+          include:
+            - integration: bhyve
+              entity_id: "/.*_history$/"
 
       - type: custom:auto-entities
         card:
