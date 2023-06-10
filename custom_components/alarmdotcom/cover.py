@@ -11,17 +11,16 @@ from homeassistant.components.cover import (
     CoverEntityFeature,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback, DiscoveryInfoType
-from pyalarmdotcomajax.devices import BaseDevice as libBaseDevice
 from pyalarmdotcomajax.devices.garage_door import GarageDoor as libGarageDoor
 from pyalarmdotcomajax.devices.gate import Gate as libGate
+from pyalarmdotcomajax.exceptions import NotAuthorized
 
-from .alarmhub import AlarmHub
 from .base_device import HardwareBaseDevice
-from .const import DOMAIN
+from .const import DATA_CONTROLLER, DOMAIN
+from .controller import AlarmIntegrationController
 
-log = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
@@ -32,14 +31,15 @@ async def async_setup_entry(
 ) -> None:
     """Set up the cover platform."""
 
-    alarmhub: AlarmHub = hass.data[DOMAIN][config_entry.entry_id]
+    controller: AlarmIntegrationController = hass.data[DOMAIN][config_entry.entry_id][DATA_CONTROLLER]
 
     async_add_entities(
         Cover(
-            alarmhub=alarmhub,
+            controller=controller,
             device=device,
         )
-        for device in alarmhub.system.garage_doors + alarmhub.system.gates
+        for device in list(controller.api.devices.garage_doors.values())
+        + list(controller.api.devices.gates.values())
     )
 
 
@@ -51,73 +51,70 @@ class Cover(HardwareBaseDevice, CoverEntity):  # type: ignore
 
     def __init__(
         self,
-        alarmhub: AlarmHub,
-        device: libBaseDevice,
+        controller: AlarmIntegrationController,
+        device: libGarageDoor | libGate,
     ) -> None:
         """Pass coordinator to CoordinatorEntity."""
-        super().__init__(alarmhub, device, device.partition_id)
+        super().__init__(controller, device)
 
         self._attr_device_class: CoverDeviceClass = (
-            CoverDeviceClass.GARAGE
-            if isinstance(device, libGarageDoor)
-            else CoverDeviceClass.GATE
+            CoverDeviceClass.GARAGE if isinstance(device, libGarageDoor) else CoverDeviceClass.GATE
         )
 
-        self._attr_supported_features = (
-            CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE
+        self._attr_supported_features = CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE
+
+    @property
+    def is_closing(self) -> bool | None:
+        """Return true if lock is unlocking."""
+
+        return (
+            not self._device.malfunction
+            and self._device.state != self._device.desired_state
+            and self._device.desired_state in [libGarageDoor.DeviceState.CLOSED, libGate.DeviceState.CLOSED]
         )
 
-    @callback  # type: ignore
-    def update_device_data(self) -> None:
-        """Update the entity when coordinator is updated."""
+    @property
+    def is_opening(self) -> bool | None:
+        """Return true if lock is unlocking."""
 
-        self._attr_is_closed = self._determine_is_closed(self._device.state)
-        self._attr_is_closing = False
-        self._attr_is_opening = False
+        return (
+            not self._device.malfunction
+            and self._device.state != self._device.desired_state
+            and self._device.desired_state in [libGarageDoor.DeviceState.OPEN, libGate.DeviceState.OPEN]
+        )
+
+    @property
+    def is_closed(self) -> bool | None:
+        """Return true if lock is locked."""
+
+        LOGGER.info("Processing is_closed %s for %s", self._device.state, self.name or self._device.name)
+
+        if not self._device.malfunction:
+            match self._device.state:
+                case libGarageDoor.DeviceState.OPEN | libGate.DeviceState.OPEN:
+                    return False
+                case libGarageDoor.DeviceState.CLOSED | libGate.DeviceState.CLOSED:
+                    return True
+
+            LOGGER.error(
+                "Cannot determine cover state. Found raw state of %s.",
+                self._device.state,
+            )
+
+        return None
 
     async def async_open_cover(self, **kwargs: Any) -> None:
         """Open the cover."""
 
-        self._attr_is_opening = True
-
         try:
             await self._device.async_open()
-        except PermissionError:
+        except NotAuthorized:
             self._show_permission_error("open")
-
-        await self._alarmhub.coordinator.async_refresh()
 
     async def async_close_cover(self, **kwargs: Any) -> None:
         """Close the cover."""
 
-        self._attr_is_closing = True
-
         try:
             await self._device.async_close()
-        except PermissionError:
+        except NotAuthorized:
             self._show_permission_error("close")
-
-        await self._alarmhub.coordinator.async_refresh()
-
-    #
-    # Helpers
-    #
-
-    def _determine_is_closed(
-        self, state: libGarageDoor.DeviceState | libGate.DeviceState
-    ) -> bool | None:
-        """Return if the cover is closed or not."""
-
-        if not self._device.malfunction:
-            if state in [libGarageDoor.DeviceState.OPEN, libGate.DeviceState.OPEN]:
-                return False
-
-            if state in [libGarageDoor.DeviceState.CLOSED, libGate.DeviceState.CLOSED]:
-                return True
-
-            log.error(
-                "Cannot determine cover state. Found raw state of %s.",
-                state,
-            )
-
-        return None

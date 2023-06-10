@@ -3,26 +3,67 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import cast
+from collections.abc import Callable, Mapping
+from dataclasses import dataclass
+from typing import Any, Final
 
 from homeassistant import core
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
+    BinarySensorEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import callback
+from homeassistant.const import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback, DiscoveryInfoType
-from pyalarmdotcomajax.devices import BaseDevice as libBaseDevice
+from pyalarmdotcomajax.devices.registry import AllDevices_t
 from pyalarmdotcomajax.devices.sensor import Sensor as libSensor
 from pyalarmdotcomajax.devices.water_sensor import WaterSensor as libWaterSensor
 
-from .alarmhub import AlarmHub
-from .base_device import AttributeBaseDevice, AttributeSubdevice, HardwareBaseDevice
-from .const import DOMAIN, SENSOR_SUBTYPE_BLACKLIST
+from .base_device import AttributeBaseDevice, BaseDevice, HardwareBaseDevice
+from .const import DATA_CONTROLLER, DOMAIN, SENSOR_SUBTYPE_BLACKLIST
+from .controller import AlarmIntegrationController
 from .device_type_langs import LANG_DOOR, LANG_WINDOW
 
-log = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
+
+
+@dataclass
+class AlarmdotcomAttributeDescriptionMixin:
+    """Functions for an attribute entity."""
+
+    value_fn: Callable[[BaseDevice], bool | None]
+    filter_fn: Callable[[AllDevices_t], bool]
+    extra_attribs_fn: Callable[[BaseDevice], dict | None]
+
+
+@dataclass
+class AlarmdotcomAttributeDescription(BinarySensorEntityDescription, AlarmdotcomAttributeDescriptionMixin):  # type: ignore
+    """Describes an attribute entity."""
+
+
+ATTRIBUTE_BINARY_SENSORS: Final = [
+    AlarmdotcomAttributeDescription(
+        key="malfunction",
+        name="Malfunction",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        has_entity_name=True,
+        extra_attribs_fn=lambda device: {},
+        value_fn=lambda device: device.malfunction,
+        filter_fn=lambda device: device.malfunction is not None,
+    ),
+    AlarmdotcomAttributeDescription(
+        key="battery",
+        name="Battery",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_class=BinarySensorDeviceClass.BATTERY,
+        has_entity_name=True,
+        extra_attribs_fn=lambda device: {"battery_level": device.battery_level},
+        value_fn=lambda device: device.battery_alert,
+        filter_fn=lambda device: device.battery_critical is not None and device.battery_low is not None,
+    ),
+]
 
 
 async def async_setup_entry(
@@ -34,42 +75,31 @@ async def async_setup_entry(
     """Set up the sensor platform."""
 
     # Create "real" Alarm.com sensors.
-    alarmhub: AlarmHub = hass.data[DOMAIN][config_entry.entry_id]
+    controller: AlarmIntegrationController = hass.data[DOMAIN][config_entry.entry_id][DATA_CONTROLLER]
 
     async_add_entities(
         BinarySensor(
-            alarmhub=alarmhub,
+            controller=controller,
             device=device,
         )
-        for device in alarmhub.system.sensors + alarmhub.system.water_sensors
-        if device.device_subtype not in SENSOR_SUBTYPE_BLACKLIST
+        for device in [*controller.api.devices.sensors.values(), *controller.api.devices.water_sensors.values()]
+        if device.device_subtype not in SENSOR_SUBTYPE_BLACKLIST and device.has_state
     )
 
-    # Create "virtual" low battery sensors.
-    async_add_entities(
-        BatteryAttributeSensor(
-            alarmhub=alarmhub,
-            device=device,
-        )
-        for device in alarmhub.devices
-        if None not in [device.battery_low, device.battery_critical]
-        and not (
-            isinstance(device, libSensor)
-            and device.device_subtype in SENSOR_SUBTYPE_BLACKLIST
-        )
-    )
+    # Create "virtual" low battery and malfunction sensors.
 
-    # Create "virtual" problem sensors for Alarm.com sensors and locks.
     async_add_entities(
-        MalfunctionAttributeSensor(
-            alarmhub=alarmhub,
+        AttributeBinarySensor(
+            controller=controller,
             device=device,
+            description=description,
         )
-        for device in alarmhub.devices
-        if device.malfunction is not None
-        and not (
-            isinstance(device, libSensor)
-            and device.device_subtype in SENSOR_SUBTYPE_BLACKLIST
+        for description in ATTRIBUTE_BINARY_SENSORS
+        for device in controller.api.devices.all.values()
+        if (
+            description.filter_fn(device)
+            and not (isinstance(device, libSensor) and device.device_subtype in SENSOR_SUBTYPE_BLACKLIST)
+            and device.has_state
         )
     )
 
@@ -79,85 +109,19 @@ class BinarySensor(HardwareBaseDevice, BinarySensorEntity):  # type: ignore
 
     _device: libSensor
 
-    def __init__(self, alarmhub: AlarmHub, device: libBaseDevice) -> None:
+    def __init__(self, controller: AlarmIntegrationController, device: AllDevices_t) -> None:
         """Pass coordinator to CoordinatorEntity."""
-        super().__init__(alarmhub, device, device.partition_id)
-
-        self._attr_device_class = self._determine_device_class()
+        super().__init__(controller, device)
 
     @property
     def device_type_name(self) -> str:
         """Return human readable device type name based on device class."""
 
-        device_class: BinarySensorDeviceClass | None = self._device.get("device_class")
+        return str(self.device_class.value.replace("_", " ").title()) if self.device_class else "Sensor"
 
-        try:
-            return (
-                cast(str, BinarySensorDeviceClass[device_class].value)
-                .replace("_", " ")
-                .title()
-            )
-        except AttributeError:
-            return "Sensor"
-
-    def update_device_data(self) -> None:
-        """Update the entity when coordinator is updated."""
-
-        self._attr_is_on = self._determine_is_on(self._device.state)
-        self._attr_icon = self._determine_icon(self._attr_state)
-
-    #
-    # Helpers
-    #
-
-    def _determine_is_on(self, state: libSensor.DeviceState) -> bool | None:
-        log.debug(
-            "Processing state %s for %s",
-            state,
-            self.name or self._device.name,
-        )
-
-        if state in [
-            libSensor.DeviceState.CLOSED,
-            libSensor.DeviceState.IDLE,
-            libSensor.DeviceState.DRY,
-        ]:
-            return False
-
-        if state in [
-            libSensor.DeviceState.OPEN,
-            libSensor.DeviceState.ACTIVE,
-            libSensor.DeviceState.WET,
-        ]:
-            return True
-
-        if state == libSensor.DeviceState.UNKNOWN:
-            return None
-
-        log.error(
-            "Cannot determine binary sensor state. Found raw state of %s.",
-            state,
-        )
-
-        return None
-
-    def _determine_icon(self, state: bool) -> str | None:
-        """Return the icon to use in the frontend, if any."""
-        if self.device_class in [
-            BinarySensorDeviceClass.SMOKE,
-            BinarySensorDeviceClass.CO,
-            BinarySensorDeviceClass.GAS,
-        ]:
-            if not self.available:
-                return "mdi:smoke-detector-variant-off"
-            if state:
-                return "mdi:smoke-detector-variant-alert"
-            return "mdi:smoke-detector-variant"
-
-        return str(super().icon) if isinstance(super().icon, str) else None
-
-    def _determine_device_class(self) -> BinarySensorDeviceClass:
-        """Return type of binary sensor."""
+    @property
+    def device_class(self) -> BinarySensorDeviceClass | None:
+        """Return the class of this sensor, from DEVICE_CLASSES."""
 
         # Contact sensor:
 
@@ -171,7 +135,7 @@ class BinarySensor(HardwareBaseDevice, BinarySensorEntity):  # type: ignore
                 if (
                     re.search(
                         word,
-                        self._device.name,
+                        str(self._device.name),
                         re.IGNORECASE,
                     )
                     is not None
@@ -181,7 +145,7 @@ class BinarySensor(HardwareBaseDevice, BinarySensorEntity):  # type: ignore
                 if (
                     re.search(
                         word,
-                        self._device.name,
+                        str(self._device.name),
                         re.IGNORECASE,
                     )
                     is not None
@@ -222,76 +186,54 @@ class BinarySensor(HardwareBaseDevice, BinarySensorEntity):  # type: ignore
 
         return None
 
+    @property
+    def is_on(self) -> bool | None:
+        """Return true if the binary sensor is on."""
 
-class BatteryAttributeSensor(AttributeBaseDevice, BinarySensorEntity):  # type: ignore
-    """Low battery sensor."""
+        # LOGGER.info(
+        #     "Processing state %s for %s",
+        #     self._device.state,
+        #     self.name or self._device.name,
+        # )
 
-    subdevice_type = AttributeSubdevice.BATTERY
+        match self._device.state:
+            case libSensor.DeviceState.CLOSED | libSensor.DeviceState.IDLE | libWaterSensor.DeviceState.DRY:
+                return False
+            case libSensor.DeviceState.OPEN | libSensor.DeviceState.ACTIVE | libWaterSensor.DeviceState.WET:
+                return True
 
-    BATTERY_NORMAL = "Normal"
-    BATTERY_LOW = "Low"
-    BATTERY_CRITICAL = "Critical"
-
-    def __init__(
-        self,
-        alarmhub: AlarmHub,
-        device: libBaseDevice,
-    ) -> None:
-        """Pass coordinator to CoordinatorEntity."""
-        super().__init__(alarmhub, device, self.subdevice_type)
-
-        self._attr_device_class = BinarySensorDeviceClass.BATTERY
-
-        self._attr_device_info = {
-            "identifiers": {(DOMAIN, device.id_)},
-        }
-
-        self._attr_extra_state_attributes = {
-            "battery_level": self._determine_battery_level()
-        }
-
-    @callback  # type: ignore
-    def update_device_data(self) -> None:
-        """Update the entity when coordinator is updated."""
-
-        self._attr_is_on = (
-            battery_level := self._determine_battery_level()
-        ) != self.BATTERY_NORMAL
-
-        self._attr_extra_state_attributes.update({"battery_level": battery_level})
-
-    def _determine_battery_level(self) -> str:
-        """Determine battery level attribute."""
-
-        if self._device.battery_critical:
-            return self.BATTERY_CRITICAL
-
-        if self._device.battery_low:
-            return self.BATTERY_LOW
-
-        return self.BATTERY_NORMAL
+        LOGGER.error("Cannot determine binary sensor state. Found raw state of %s.", self._device.state)
+        return None
 
 
-class MalfunctionAttributeSensor(AttributeBaseDevice, BinarySensorEntity):  # type: ignore
-    """Malfunction sensor."""
+class AttributeBinarySensor(AttributeBaseDevice, BinarySensorEntity):  # type: ignore
+    """Attribute binary sensor."""
 
-    subdevice_type = AttributeSubdevice.MALFUNCTION
+    entity_description: AlarmdotcomAttributeDescription
 
     def __init__(
         self,
-        alarmhub: AlarmHub,
-        device: libBaseDevice,
+        controller: AlarmIntegrationController,
+        device: AllDevices_t,
+        description: AlarmdotcomAttributeDescription,
     ) -> None:
         """Pass coordinator to CoordinatorEntity."""
-        super().__init__(alarmhub, device, self.subdevice_type)
 
-        self._attr_device_class = BinarySensorDeviceClass.PROBLEM
+        super().__init__(controller, device, description)
 
-        self._attr_device_info = {
-            "identifiers": {(DOMAIN, device.id_)},
-        }
+    @property
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
+        """Return the state attributes of the entity."""
 
-    def update_device_data(self) -> None:
-        """Update the entity when coordinator is updated."""
+        extra_attribs = {}.update(super().extra_state_attributes)
 
-        self._attr_is_on = self._device.malfunction
+        if extra_attribs := self.entity_description.extra_attribs_fn(self):
+            extra_attribs.update(extra_attribs)
+
+        return extra_attribs
+
+    @property
+    def is_on(self) -> bool | None:
+        """Return true if the binary sensor is on."""
+
+        return self.entity_description.value_fn(self)

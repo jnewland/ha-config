@@ -8,16 +8,15 @@ from homeassistant import core
 from homeassistant.components import light
 from homeassistant.components.light import ATTR_BRIGHTNESS, LightEntity
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback, DiscoveryInfoType
-from pyalarmdotcomajax.devices import BaseDevice as libBaseDevice
 from pyalarmdotcomajax.devices.light import Light as libLight
+from pyalarmdotcomajax.exceptions import NotAuthorized
 
-from .alarmhub import AlarmHub
 from .base_device import HardwareBaseDevice
-from .const import DOMAIN
+from .const import DATA_CONTROLLER, DOMAIN
+from .controller import AlarmIntegrationController
 
-log = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
@@ -28,14 +27,14 @@ async def async_setup_entry(
 ) -> None:
     """Set up the light platform."""
 
-    alarmhub: AlarmHub = hass.data[DOMAIN][config_entry.entry_id]
+    controller: AlarmIntegrationController = hass.data[DOMAIN][config_entry.entry_id][DATA_CONTROLLER]
 
     async_add_entities(
         Light(
-            alarmhub=alarmhub,
+            controller=controller,
             device=device,
         )
-        for device in alarmhub.system.lights
+        for device in controller.api.devices.lights.values()
     )
 
 
@@ -47,38 +46,55 @@ class Light(HardwareBaseDevice, LightEntity):  # type: ignore
 
     def __init__(
         self,
-        alarmhub: AlarmHub,
-        device: libBaseDevice,
+        controller: AlarmIntegrationController,
+        device: libLight,
     ) -> None:
         """Pass coordinator to CoordinatorEntity."""
-        super().__init__(alarmhub, device, device.partition_id)
+        super().__init__(controller, device)
 
         self._attr_supported_color_modes = (
-            [light.COLOR_MODE_BRIGHTNESS]
-            if self._device.brightness
-            else [light.COLOR_MODE_ONOFF]
+            [light.COLOR_MODE_BRIGHTNESS] if self._device.brightness else [light.COLOR_MODE_ONOFF]
         )
 
         self._attr_supported_features = light.SUPPORT_BRIGHTNESS
 
-        self._attr_color_mode = (
-            light.COLOR_MODE_BRIGHTNESS
-            if self._device.brightness
-            else light.COLOR_MODE_ONOFF
-        )
+        self._attr_color_mode = light.COLOR_MODE_BRIGHTNESS if self._device.brightness else light.COLOR_MODE_ONOFF
 
         self._attr_assumed_state = self._device.supports_state_tracking is True
 
-    @callback  # type: ignore
-    def update_device_data(self) -> None:
-        """Update the entity when coordinator is updated."""
+    @property
+    def is_on(self) -> bool | None:
+        """Return True if entity is on."""
 
-        self._attr_is_on = self._determine_is_on(self._device.state)
-        self._attr_brightness = (
-            int((raw_bright * 255) / 100)
-            if (raw_bright := self._device.brightness)
-            else None
-        )
+        # LOGGER.info(
+        #     "Processing state %s for %s",
+        #     self._device.state,
+        #     self.name or self._device.name,
+        # )
+
+        if not self._device.malfunction:
+            match self._device.state:
+                case libLight.DeviceState.ON | libLight.DeviceState.LEVELCHANGE:
+                    return True
+
+                case libLight.DeviceState.OFF:
+                    return False
+
+            LOGGER.exception(
+                "Cannot determine light state. Found raw state of %s.",
+                self._device.state,
+            )
+
+        return None
+
+    @property
+    def brightness(self) -> int | None:
+        """Return the brightness of the light."""
+
+        if raw_bright := self._device.brightness:
+            return int((raw_bright * 255) / 100)
+
+        return None
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn on the light or adjust brightness."""
@@ -89,47 +105,13 @@ class Light(HardwareBaseDevice, LightEntity):  # type: ignore
 
         try:
             await self._device.async_turn_on(brightness)
-        except PermissionError:
-            self._show_permission_error("turn on")
-
-        await self._alarmhub.coordinator.async_refresh()
+        except NotAuthorized:
+            self._show_permission_error("turn on or adjust brightness on")
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn off the light."""
 
         try:
             await self._device.async_turn_off()
-        except PermissionError:
+        except NotAuthorized:
             self._show_permission_error("turn off")
-
-        await self._alarmhub.coordinator.async_refresh()
-
-    #
-    # Helpers
-    #
-
-    def _determine_is_on(self, state: libLight.DeviceState) -> bool | None:
-        """Return True if entity is on."""
-
-        log.debug(
-            "Processing state %s for %s",
-            state,
-            self.name or self._device.name,
-        )
-
-        if not self._device.malfunction:
-            if state in [
-                libLight.DeviceState.ON,
-                libLight.DeviceState.LEVELCHANGE,
-            ]:
-                return True
-
-            if state == libLight.DeviceState.OFF:
-                return False
-
-            log.error(
-                "Cannot determine light state. Found raw state of %s.",
-                state,
-            )
-
-        return None
