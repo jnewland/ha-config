@@ -1,84 +1,63 @@
 """Base device."""
 from __future__ import annotations
 
-from enum import Enum
+import contextlib
 import logging
-from typing import NamedTuple
+from collections.abc import Mapping, MutableMapping
+from typing import Any, Final
 
 from homeassistant.components import persistent_notification
-from homeassistant.components.button import ButtonEntity
 from homeassistant.core import callback
-from homeassistant.helpers.entity import EntityCategory
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from pyalarmdotcomajax.devices import BaseDevice as libBaseDevice
+from homeassistant.helpers.entity import DeviceInfo, EntityCategory, EntityDescription
+from homeassistant.helpers.update_coordinator import (
+    CoordinatorEntity,
+)
+from pyalarmdotcomajax.devices.registry import AllDevices_t
 from pyalarmdotcomajax.extensions import ConfigurationOption as libConfigurationOption
 
-from .alarmhub import AlarmHub
-from .const import DOMAIN
+from . import const as c
+from .const import (
+    ATTRIB_BATTERY_CRITICAL,
+    ATTRIB_BATTERY_LOW,
+    ATTRIB_BATTERY_NORMAL,
+    DEVICE_STATIC_ATTRIBUTES,
+    DOMAIN,
+)
+from .controller import AlarmIntegrationController
 
-log = logging.getLogger(__name__)
-
-
-class SubdeviceMetadata(NamedTuple):
-    """Metadata for subdevice types."""
-
-    name: str
-    suffix: str
-
-
-class AttributeSubdevice(Enum):
-    """Attribute-subdevice type enum."""
-
-    DEBUG = SubdeviceMetadata("Debug", "debug")
-    MALFUNCTION = SubdeviceMetadata("Malfunction", "malfunction")
-    BATTERY = SubdeviceMetadata("Battery", "low_battery")
+LOGGER = logging.getLogger(__name__)
 
 
 class BaseDevice(CoordinatorEntity):  # type: ignore
     """Base class for ADC entities."""
 
-    _device_type_name: str = "Device"
+    _device_type_name = "Device"
+    _attr_has_entity_name = True
 
     def __init__(
         self,
-        alarmhub: AlarmHub,
-        device: libBaseDevice,
-        parent_id: str | None = None,
+        controller: AlarmIntegrationController,
+        device: AllDevices_t,
     ) -> None:
         """Initialize class."""
-        super().__init__(alarmhub.coordinator)
+        super().__init__(controller.update_coordinator)
 
-        self._adc_id = device.id_
+        self._adc_id: Final[str] = device.id_
+
         self._device = device
-        self._alarmhub = alarmhub
-        self._attr_has_entity_name = True
 
-        self.parent_id = parent_id
+        self._controller = controller
 
-    @property
-    def available(self) -> bool:
-        """Return whether device is available."""
+        self._attr_extra_state_attributes: MutableMapping[str, Any] = {}
 
-        if not self._device:
-            log.error(
-                "%s: No device data available for %s (%s).",
-                __name__,
-                self.name,
-                self._adc_id,
-            )
-            return False
-
-        if isinstance(self, ButtonEntity):
-            return True
-
-        if hasattr(self, "is_on"):
-            return self.is_on is not None
-        if hasattr(self, "state"):
-            return self.state is not None
-        if hasattr(self, "is_locked"):
-            return self.is_locked is not None
-
-        return True  # Covers switches, numbers, etc.
+        self._attr_device_info = DeviceInfo(
+            {
+                "default_manufacturer": "Alarm.com",
+                "default_name": device.name,
+                "identifiers": {(DOMAIN, self._adc_id)},
+                "via_device": (DOMAIN, self._device.partition_id),
+            }
+        )
 
     @property
     def device_type_name(self) -> str:
@@ -88,36 +67,56 @@ class BaseDevice(CoordinatorEntity):  # type: ignore
 
     async def async_added_to_hass(self) -> None:
         """Register callbacks."""
+
+        self._device.register_external_update_callback(self._update_device_data)
+
+        self._update_device_data()
+
         await super().async_added_to_hass()
 
-        self.update_device_data()
+    async def async_will_remove_from_hass(self) -> None:
+        """Entity being removed from hass."""
 
-    @callback  # type: ignore
+        # This will fail for devices that were removed from ADC during this session.
+        with contextlib.suppress(ValueError):
+            self._device.unregister_external_update_callback(self._update_device_data)
+
+        await super().async_will_remove_from_hass()
+
+    @callback
     def _handle_coordinator_update(self) -> None:
-        """Update the entity with new REST API data."""
+        """Update the entity with new cordinator-fetched data."""
 
-        self._device = self._alarmhub.system.get_device_by_id(self._adc_id)
+        super()._handle_coordinator_update()
 
-        if hasattr(self, "_attr_extra_state_attributes"):
-            self._attr_extra_state_attributes.update(
-                {
-                    "raw_state_text": self._device.raw_state_text,
-                }
-            )
+        self._update_device_data()
 
-        self.update_device_data()
+    def _update_device_data(self) -> None:
+        """Device-type specific update processes to run when new device data is available."""
+
+        self._device = self._controller.api.devices.get(self._adc_id)
+
+        self._legacy_refresh_attributes()
+
         self.async_write_ha_state()
 
-    @callback  # type: ignore
-    def update_device_data(self) -> None:
-        """Update the entity when new data comes from the REST API."""
-        raise NotImplementedError()
+        # LOGGER.debug("************** START DEVICE UPDATE *****************")
+        LOGGER.info(
+            f"Updated {self.device_type_name} {self._friendly_name_internal()} ({self._adc_id}): {self.state}"
+        )
+        # LOGGER.debug(json.dumps(self._device.raw_attributes, indent=4, sort_keys=True))
+        # LOGGER.debug("************** END DEVICE UPDATE *****************")
+
+    def _legacy_refresh_attributes(self) -> None:
+        """Update HA when device is updated. Should be overridden by subclasses."""
 
     def _show_permission_error(self, action: str = "") -> None:
         """Show Home Assistant notification.
 
         Alerts user that they lack permission to perform action.
         """
+
+        # TODO: Convert to Home Assistant Repair item.
 
         error_msg = (
             f"Your Alarm.com user does not have permission to {action} the"
@@ -133,20 +132,51 @@ class BaseDevice(CoordinatorEntity):  # type: ignore
             notification_id="alarmcom_permission_error",
         )
 
+    @property
+    def battery_level(self) -> str | None:
+        """Determine battery level attribute."""
+
+        if self._device.battery_critical is None and self._device.battery_low is None:
+            return None
+
+        if self._device.battery_critical:
+            return ATTRIB_BATTERY_CRITICAL
+
+        if self._device.battery_low:
+            return ATTRIB_BATTERY_LOW
+
+        return ATTRIB_BATTERY_NORMAL
+
+    @property
+    def battery_alert(self) -> bool | None:
+        """Determine battery alert attribute."""
+
+        match self.battery_level:
+            case c.ATTRIB_BATTERY_NORMAL:
+                return False
+            case c.ATTRIB_BATTERY_LOW | c.ATTRIB_BATTERY_CRITICAL:
+                return True
+
+        return None
+
+    @property
+    def malfunction(self) -> bool | None:
+        """Determine malfunction attribute."""
+
+        return bool(self._device.malfunction) if self._device.malfunction is not None else None
+
 
 class HardwareBaseDevice(BaseDevice):
     """Base device for actual hardware: sensors, locks, control panels, etc."""
 
     def __init__(
         self,
-        alarmhub: AlarmHub,
-        device: libBaseDevice,
-        parent_id: str | None = None,
+        controller: AlarmIntegrationController,
+        device: AllDevices_t,
     ) -> None:
         """Initialize class."""
-        super().__init__(alarmhub, device, parent_id)
 
-        log.debug(
+        LOGGER.info(
             "%s: Initializing [%s: %s (%s)].",
             __name__,
             device.__class__.__name__.lower(),
@@ -156,19 +186,15 @@ class HardwareBaseDevice(BaseDevice):
 
         self._attr_unique_id = device.id_
 
-        self._attr_extra_state_attributes = {
-            "raw_state_text": self._device.raw_state_text,
-        }
+        super().__init__(controller, device)
 
-        if mac_address := self._device.mac_address:
-            self._attr_extra_state_attributes["mac_address"] = mac_address
+    @property
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
+        """Return the client state attributes."""
 
-        self._attr_device_info = {
-            "default_manufacturer": "Alarm.com",
-            "name": device.name,
-            "identifiers": {(DOMAIN, self.unique_id)},
-            "via_device": (DOMAIN, self.parent_id),
-        }
+        raw = self._controller.api.devices.get(self._adc_id).raw_attributes
+
+        return {k: raw[k] for k in DEVICE_STATIC_ATTRIBUTES if k in raw}
 
 
 class AttributeBaseDevice(BaseDevice):
@@ -179,31 +205,26 @@ class AttributeBaseDevice(BaseDevice):
 
     def __init__(
         self,
-        alarmhub: AlarmHub,
-        device: libBaseDevice,
-        subdevice_type: AttributeSubdevice,
+        controller: AlarmIntegrationController,
+        device: AllDevices_t,
+        description: EntityDescription,
     ) -> None:
         """Initialize class."""
-        super().__init__(alarmhub, device, device.id_)
 
-        log.debug(
+        LOGGER.info(
             "%s: Initializing [%s: %s (%s)] [Attribute: %s].",
             __name__,
             device.__class__.__name__.title(),
             device.name,
             device.id_,
-            subdevice_type.name.title(),
+            description.key.title(),
         )
 
-        self._attr_entity_category = EntityCategory.DIAGNOSTIC
+        self.entity_description = description
 
-        self._attr_unique_id = f"{device.id_}_{subdevice_type.value.suffix}"
+        self._attr_unique_id = f"{device.id_}_{description.key}"
 
-        self._attr_name = f"{subdevice_type.value.name}"
-
-        self._attr_device_info = {
-            "identifiers": {(DOMAIN, self._device.id_)},
-        }
+        super().__init__(controller, device)
 
 
 class ConfigBaseDevice(BaseDevice):
@@ -211,14 +232,13 @@ class ConfigBaseDevice(BaseDevice):
 
     def __init__(
         self,
-        alarmhub: AlarmHub,
-        device: libBaseDevice,
+        controller: AlarmIntegrationController,
+        device: AllDevices_t,
         config_option: libConfigurationOption,
     ) -> None:
         """Initialize class."""
-        super().__init__(alarmhub, device, device.id_)
 
-        log.debug(
+        LOGGER.info(
             "%s: Initializing [%s: %s (%s)] [Config Option: %s].",
             __name__,
             device.__class__.__name__.title(),
@@ -227,16 +247,12 @@ class ConfigBaseDevice(BaseDevice):
             config_option.name.title(),
         )
 
-        self._attr_entity_category = EntityCategory.CONFIG
-
         self._attr_unique_id = f"{device.id_}_{config_option.slug.replace('-','_')}"
+
+        super().__init__(controller, device)
+
+        self._attr_entity_category = EntityCategory.CONFIG
 
         self._attr_name = f"{config_option.name}"
 
-        self._attr_device_info = {
-            "identifiers": {(DOMAIN, self._device.id_)},
-        }
-
         self._config_option = config_option
-
-        self._device = device
