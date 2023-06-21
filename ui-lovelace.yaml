@@ -1571,7 +1571,7 @@ views:
         filter:
           include:
             - entity_id: "/.*battery_level/"
-            - state: "< 25"
+              state: "< 25"
           exclude:
             - state: "off"
 
