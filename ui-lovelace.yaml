@@ -404,7 +404,7 @@ views:
           show_state: false
           entity: camera.pergola_person
 
-      - type: custom:custom-sonos-card
+      - type: custom:sonos-card
         mediaTitle: " "
         shuffleFavorites: false
         selectedPlayer: media_player.house
