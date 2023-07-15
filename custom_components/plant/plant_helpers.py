@@ -107,7 +107,7 @@ class PlantHelper:
                 service=OPB_SEARCH,
                 service_data={"alias": species},
                 blocking=True,
-                limit=30,
+                # limit=30,  Has been removed in 2023.7  https://developers.home-assistant.io/blog/2023/06/14/service-calls/
             )
         except KeyError:
             _LOGGER.warning("Openplantook does not work")
@@ -142,7 +142,7 @@ class PlantHelper:
             service=OPB_GET,
             service_data={ATTR_SPECIES: species.lower()},
             blocking=True,
-            limit=30,
+            # limit=30,
         )
         if plant_get:
             opb_plant = self.hass.states.get(
