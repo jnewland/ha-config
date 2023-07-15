@@ -39,6 +39,12 @@ git clone --depth 1 --branch $EMBER_VERSION https://github.com/sopelj/hass-ember
 rm -rf custom_components/ember_mug
 mv $TMPDIR/$$-ember/custom_components/ember_mug custom_components
 
+# removate: datasource=github-releases depName=shenxn/ha-dyson-cloud
+DYSON_VERSION=v0.15.0
+git clone --depth 1 --branch $DYSON_VERSION https://github.com/shenxn/ha-dyson-cloud $TMPDIR/$$-dyson
+rm -rf custom_components/dyson_cloud
+mv $TMPDIR/$$-dyson/custom_components/dyson_cloud custom_components
+
 curl -sL --fail -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
 curl -sL --fail -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/1.12.1/auto-entities.js
 curl -sL --fail -o www/mini-media-player-bundle.js https://github.com/kalkih/mini-media-player/releases/download/v1.16.5/mini-media-player-bundle.js
