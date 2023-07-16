@@ -39,7 +39,10 @@ automation:
   trigger:
   - platform: state
     entity_id: sensor.lounge_air_quality_poor_or_room_occupied
-  condition: []
+    to: "on"
+  - platform: state
+    entity_id: sensor.lounge_air_quality_poor_or_room_occupied
+    to: "off"
   action:
   - service: fan.turn_{{ 'on' if trigger.to_state.state else 'off' }}
     data:
