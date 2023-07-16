@@ -771,6 +771,7 @@ views:
         show_header_toggle: false
         entities:
           - fan.lounge
+          - automation.lounge_fan_auto_mode
           - sensor.lounge_pm_2_5
           - sensor.lounge_pm_10
           - sensor.lounge_volatile_organic_compounds_index
