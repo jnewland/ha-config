@@ -19,8 +19,11 @@ automation:
   - alias: Deploy latest deployment
     id: ef2019dd-0eda-437e-a8b1-b5860e262a7e
     trigger:
-      platform: state
-      entity_id: sensor.latest_deployment_sha
+      - platform: state
+        entity_id: sensor.latest_deployment_sha
+      - platform: state
+        entity_id: automation.deploy_latest_deployment
+        to: "on"
     condition: |
       {{ has_value('sensor.latest_deployment_sha') }}
     action:
