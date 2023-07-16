@@ -1746,6 +1746,12 @@ views:
           - sensor.config_sha
           - sensor.latest_deployment_sha
           - automation.deploy_latest_deployment
+          - entity: zone.home
+            icon: 'mdi:restart'
+            name: Restart
+            tap_action:
+              action: call-service
+              service: homeassistant.restart
       - type: custom:auto-entities
         show_empty: false
         sort:
