@@ -39,15 +39,15 @@ git clone --depth 1 --branch $EMBER_VERSION https://github.com/sopelj/hass-ember
 rm -rf custom_components/ember_mug
 mv $TMPDIR/$$-ember/custom_components/ember_mug custom_components
 
-# removate: datasource=github-releases depName=shenxn/ha-dyson
-DYSON_LOCAL_VERSION=v0.16.4-4
-git clone --depth 1 --branch $DYSON_LOCAL_VERSION https://github.com/shenxn/ha-dyson $TMPDIR/$$-dyson-local
+# removate: datasource=github-releases depName=libdyson-wg/ha-dyson
+DYSON_LOCAL_VERSION=v1.0.1
+git clone --depth 1 --branch $DYSON_LOCAL_VERSION https://github.com/libdyson-wg/ha-dyson $TMPDIR/$$-dyson-local
 rm -rf custom_components/dyson_local
 mv $TMPDIR/$$-dyson-local/custom_components/dyson_local custom_components
 
-# removate: datasource=github-releases depName=shenxn/ha-dyson-cloud
-DYSON_CLOUD_VERSION=v0.15.0
-git clone --depth 1 --branch $DYSON_CLOUD_VERSION https://github.com/shenxn/ha-dyson-cloud $TMPDIR/$$-dyson-cloud
+# removate: datasource=github-releases depName=libdyson-wg/ha-dyson-cloud
+DYSON_CLOUD_VERSION=v0.19.2
+git clone --depth 1 --branch $DYSON_CLOUD_VERSION https://github.com/libdyson-wg/ha-dyson-cloud $TMPDIR/$$-dyson-cloud
 rm -rf custom_components/dyson_cloud
 mv $TMPDIR/$$-dyson-cloud/custom_components/dyson_cloud custom_components
 

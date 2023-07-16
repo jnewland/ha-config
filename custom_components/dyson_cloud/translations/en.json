@@ -13,7 +13,7 @@
       },
       "email_otp": {
         "data": {
-          "otp": "Verification code",
+          "otp": "MyDyson verification code (Check your email)",
           "password": "Password"
         }
       },
@@ -24,7 +24,7 @@
       },
       "mobile_otp": {
         "data": {
-          "otp": "Verification code"
+          "otp": "MyDyson verification code (Check your email)"
         }
       }
     },
@@ -33,7 +33,7 @@
       "email_not_registered": "Email not registered",
       "invalid_auth": "Invalid authentication",
       "invalid_otp": "Invalid verification code",
-      "otp_too_frequent": "You're requesting verification code too frequently"
+      "otp_too_frequent": "Too many login attempts, wait a little while and try again later."
     },
     "abort": {
       "already_configured": "Device already configured"
