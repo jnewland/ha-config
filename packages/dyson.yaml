@@ -41,6 +41,6 @@ automation:
     entity_id: sensor.lounge_air_quality_poor_or_room_occupied
   condition: []
   action:
-  - service: fan.turn_{{ trigger.to_state.state }}
+  - service: fan.turn_{{ 'on' if trigger.to_state.state else 'off' }}
     data:
       entity_id: fan.lounge
