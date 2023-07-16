@@ -1,10 +1,10 @@
 command_line:
   - sensor:
-      name: config_sha
+      name: Config SHA
       unique_id: 39e7636e-c767-4787-b497-4ef7adfdf49c
       command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $2'}"
   - sensor:
-      name: latest_deployment_sha
+      name: Latest Deployment SHA
       unique_id: 1f3312ec-3976-43a6-afdc-88720472a96d
       scan_interval: 90
       command: |
