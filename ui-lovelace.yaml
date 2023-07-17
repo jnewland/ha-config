@@ -776,6 +776,7 @@ views:
           - sensor.lounge_pm_10
           - sensor.lounge_volatile_organic_compounds_index
           - sensor.lounge_nitrogen_dioxide_index
+          - binary_sensor.lounge_air_quality_poor
         footer:
           type: graph
           entity: sensor.lounge_pm_2_5
