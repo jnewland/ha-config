@@ -28,7 +28,7 @@ template:
       unique_id: 1ceaa3c3-9f04-420e-b26a-3162ed14b5a4
       state: |
         {{
-          states('sensor.lounge_air_quality_poor') == 'on' or
+          states('binary_sensor.lounge_air_quality_poor') == 'on' or
           states('binary_sensor.lounge_occupancy') == 'on'
         }}
 
