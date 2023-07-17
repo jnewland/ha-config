@@ -1,0 +1,49 @@
+homeassistant:
+  customize:
+    sensor.lounge_pm_2_5:
+      threshold: 35
+      icon: mdi:air-filter
+    sensor.lounge_pm_10:
+      threshold: 50
+      icon: mdi:air-filter
+    sensor.lounge_volatile_organic_compounds_index:
+      threshold: 3
+      icon: mdi:air-filter
+    sensor.lounge_nitrogen_dioxide_index:
+      threshold: 3
+      icon: mdi:air-filter
+
+template:
+  - sensor:
+    - name: Lounge air quality poor
+      unique_id: 9ca56296-2438-43b9-9bed-e62e2ddb04f0
+      state: |
+        {{ 
+          states('sensor.lounge_pm_2_5') | float(default=0) > state_attr('sensor.lounge_pm_2_5', 'threshold') | float(default=0) or
+          states('sensor.lounge_pm_10') | float(default=0) > state_attr('sensor.lounge_pm_10', 'threshold') | float(default=0) or
+          states('sensor.lounge_volatile_organic_compounds_index') | float(default=0) > state_attr('sensor.lounge_volatile_organic_compounds_index', 'threshold') | float(default=0) or
+          states('sensor.lounge_nitrogen_dioxide_index') | float(default=0) > state_attr('sensor.lounge_nitrogen_dioxide_index', 'threshold') | float(default=0)
+        }}
+    - name: Lounge air quality poor or room occupied
+      unique_id: 1ceaa3c3-9f04-420e-b26a-3162ed14b5a3
+      state: |
+        {{
+          states('sensor.lounge_air_quality_poor') == 'on' or
+          states('binary_sensor.lounge_occupancy') == 'on'
+        }}
+
+
+automation:
+- alias: Lounge fan auto mode
+  id: cbfd2b2a-9241-4410-82b5-e020779a4cd8
+  trigger:
+  - platform: state
+    entity_id: sensor.lounge_air_quality_poor_or_room_occupied
+    to: "on"
+  - platform: state
+    entity_id: sensor.lounge_air_quality_poor_or_room_occupied
+    to: "off"
+  action:
+  - service: fan.turn_{{ 'on' if states('sensor.lounge_air_quality_poor_or_room_occupied') else 'off' }}
+    data:
+      entity_id: fan.lounge

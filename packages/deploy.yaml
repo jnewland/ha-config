@@ -1,16 +1,19 @@
-sensor:
-  - name: config_sha
-    platform: command_line
-    command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $2'}"
-  - name: latest_deployment_sha
-    platform: command_line
-    scan_interval: 90
-    command: >
-      curl
-      -s
-      -H "Accept: application/vnd.github.ant-man-preview+json"
-      "https://api.github.com/repos/jnewland/ha-config/deployments?environment=production" |
-      jq -r '.[0].sha'
+command_line:
+  - sensor:
+      name: Config SHA
+      unique_id: 39e7636e-c767-4787-b497-4ef7adfdf49c
+      command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $2'}"
+
+  - sensor:
+      name: Latest Deployment SHA
+      unique_id: 1f3312ec-3976-43a6-afdc-88720472a96d
+      scan_interval: 90
+      command: |
+        curl \
+        -s \
+        -H "Accept: application/vnd.github.ant-man-preview+json" \
+        "https://api.github.com/repos/jnewland/ha-config/deployments?environment=production" | \
+        jq -r '.[0].sha'
 
 shell_command:
   deploy: /bin/bash ./script/deploy {{ sha }}

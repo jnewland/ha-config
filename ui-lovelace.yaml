@@ -768,6 +768,20 @@ views:
           hours_to_show: 36
           detail: 2
       - type: entities
+        show_header_toggle: false
+        entities:
+          - fan.lounge
+          - automation.lounge_fan_auto_mode
+          - sensor.lounge_pm_2_5
+          - sensor.lounge_pm_10
+          - sensor.lounge_volatile_organic_compounds_index
+          - sensor.lounge_nitrogen_dioxide_index
+        footer:
+          type: graph
+          entity: sensor.lounge_pm_2_5
+          hours_to_show: 36
+          detail: 2
+      - type: entities
         title: tv settings
         entities:
           - switch.lgwebostv
@@ -1688,32 +1702,6 @@ views:
           include:
             - entity_id: "/^sensor.*_node_status$/"
 
-  - title: Tula
-    icon: mdi:triangle-outline
-    cards:
-      - type: history-graph
-        title: balance
-        hours_to_show: 80
-        entities:
-          - sensor.tula_hours_balance
-      - type: history-graph
-        title: todos
-        hours_to_show: 80
-        entities:
-          - sensor.tula_todos_in_progress
-          - sensor.tula_todos_pending
-      - type: history-graph
-        title: hours saved
-        hours_to_show: 80
-        entities:
-          - sensor.tula_hours_saved
-      - type: markdown
-        content: |
-          {% set todos = state_attr('sensor.tula', 'todos') | selectattr("fields.listStatus", "==", "inProgress") | sort(attribute="createdTime") | list %}
-          {% for todo in todos -%}
-          * {{ todo.fields.itemNames | first }} assigned to {{ todo.fields.assistantName | first }} (<a href="tel:{{ todo.fields.assistantPhone | first }}">{{ todo.fields.assistantPhone | first }}</a>)
-          {% endfor %}
-
   - title: Settings
     icon: mdi:cog
     cards:
@@ -1732,6 +1720,12 @@ views:
           - sensor.config_sha
           - sensor.latest_deployment_sha
           - automation.deploy_latest_deployment
+          - entity: zone.home
+            icon: 'mdi:restart'
+            name: Restart
+            tap_action:
+              action: call-service
+              service: homeassistant.restart
       - type: custom:auto-entities
         show_empty: false
         sort:
