@@ -42,7 +42,7 @@ automation:
       - choose:
           - alias: fan
             conditions: >
-              {{ states('binary_sensor.lounge_air_quality_poor_or_room_occupied') }}
+              {{ is_state('binary_sensor.lounge_air_quality_poor_or_room_occupied', 'on') }}
             sequence:
               - service: fan.turn_on
                 target:
