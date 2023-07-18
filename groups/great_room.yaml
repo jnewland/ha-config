@@ -3,7 +3,8 @@ entities:
   - light.kitchen_cabinets
   - light.dining_room_table
   - light.kitchen
-  - light.living
+  - light.living_overhead
+  - light.living_chandelier
   - light.pendants
   - light.couch_lamp_right
   - light.couch_lamp_left
