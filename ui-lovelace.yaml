@@ -724,7 +724,8 @@ views:
           - binary_sensor.dining_room_home_security_motion_detection
           - light.pantry
           - binary_sensor.pantry_home_security_motion_detection
-          - light.living
+          - light.living_chandelier
+          - light.living_overhead
           - light.living_room_mirror
           - light.palm
           - light.pillar
@@ -1591,7 +1592,6 @@ views:
           exclude:
             - state: "off"
 
-
   - title: Car
     icon: mdi:car-estate
     path: car
@@ -1723,7 +1723,7 @@ views:
           - sensor.latest_deployment_sha
           - automation.deploy_latest_deployment
           - entity: zone.home
-            icon: 'mdi:restart'
+            icon: "mdi:restart"
             name: Restart
             tap_action:
               action: call-service

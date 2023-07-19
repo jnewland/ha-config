@@ -75,8 +75,7 @@ homeassistant:
       fixed_color_temp: 396
     light.front_porch:
       fixed_brightness: 255
-    light.front_door:
-      fixed_brightness: 255
+
     light.gate:
       notify_action: duck
       fixed_brightness: 127
@@ -134,7 +133,10 @@ homeassistant:
       notify_action: duck
       duck_step: 192
 
-    light.living:
+    light.light.living_chandelier:
+      notify_action: duck
+
+    light.living_overhead:
       notify_action: duck
       duck_step: 192
     light.couch_lamp_right:
@@ -200,14 +202,14 @@ switch:
     sleep_entity: input_select.mode
     sleep_state: "Sleeping"
     lights_brightness:
-      - light.living
+      - light.living_chandelier
       - light.kitchen
       - light.dining_room_table
       - light.pendants
       - light.yoga_room
       - light.music_room_fan
 
-  # color and brightness ajustment
+  # color and brightness adjustment
   - name: color_bright
     platform: circadian_lighting
     min_brightness: 15
