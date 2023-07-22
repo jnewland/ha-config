@@ -298,7 +298,7 @@ automation:
           is_state('input_select.mode', 'Reading')
         }}
     action:
-      service: "switch.turn_{{ sleep_mode }}"
+      service: "switch.turn_{{ 'on' if sleep_mode else 'off' }}"
       entity_id:
         - switch.adaptive_lighting_sleep_mode_cans
         - switch.adaptive_lighting_sleep_mode_chandelier
