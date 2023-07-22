@@ -33,6 +33,12 @@ git clone --depth 1 --branch $CIRCADIAN_VERSION https://github.com/claytonjn/has
 rm -rf custom_components/circadian_lighting || true
 mv $TMPDIR/$$-circadian_lighting/custom_components/circadian_lighting custom_components
 
+# renovate: datasource=github-releases depname=basnijholt/adaptive-lighting
+ADAPTIVE_LIGHTING_VERSION=1.16.2
+git clone --depth 1 --branch $ADAPTIVE_LIGHTING_VERSION https://github.com/basnijholt/adaptive-lighting $TMPDIR/$$-adaptive-lighting
+rm -rf custom_components/adaptive_lighting || true
+mv $TMPDIR/$$-adaptive-lighting/custom_components/adaptive_lighting custom_components
+
 # renovate: datasource=github-releases depName=sopelj/hass-ember-mug-component
 EMBER_VERSION=0.7.1
 git clone --depth 1 --branch $EMBER_VERSION https://github.com/sopelj/hass-ember-mug-component $TMPDIR/$$-ember
