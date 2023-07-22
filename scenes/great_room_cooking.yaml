@@ -2,7 +2,7 @@ name: Great Room Cooking
 entities:
   light.kitchen_cabinets: "on"
   light.dining_room_table: "off"
-  light.kitchen: "on"
+  light.kitchen: "off"
   light.living_chandelier: "on"
   light.living_overhead: "off"
   light.pendants: "on"

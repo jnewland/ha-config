@@ -202,8 +202,6 @@ switch:
     sleep_entity: input_select.mode
     sleep_state: "Sleeping"
     lights_brightness:
-      - light.kitchen
-      - light.dining_room_table
       - light.pendants
       - light.yoga_room
       - light.music_room_fan
@@ -275,6 +273,36 @@ switch:
       - light.laundry_room
 
 automation:
+  - alias: Turn off color adjustment on some adapative lighting configurations
+    id: ba8728b7-6384-43ef-a4c9-948b804e207b
+    trigger:
+      - platform: homeassistant
+        event: start
+    action:
+      service: switch.turn_off
+      entity_id:
+        - switch.adaptive_lighting_adapt_color_chandelier
+        - switch.adaptive_lighting_adapt_color_cans
+
+  - alias: Toggle sleep mode on adapative lighting switches
+    id: 8ae90c8f-bdb9-4f84-95d0-3f3fd22cdad7
+    trigger:
+      - platform: state
+        entity_id: input_select.mode
+      - platform: homeassistant
+        event: start
+    variables:
+      sleep_mode: |
+        {{
+          is_state('input_select.mode', 'Sleeping') or
+          is_state('input_select.mode', 'Reading')
+        }}
+    action:
+      service: "switch.turn_{{ sleep_mode }}"
+      entity_id:
+        - switch.adaptive_lighting_sleep_mode_cans
+        - switch.adaptive_lighting_sleep_mode_chandelier
+
   - alias: Turn on switches when motion is detected
     mode: parallel
     id: aa04b3bc-1f47-4ea7-81f5-3d3d41da2ab7
