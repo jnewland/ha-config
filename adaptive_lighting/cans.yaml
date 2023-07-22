@@ -2,6 +2,7 @@ name: cans
 lights:
   # - light.living_overhead
   # - light.kitchen
+  - light.dining_room_table
   - light.pantry
 
   - light.stairs
