@@ -133,7 +133,7 @@ homeassistant:
       notify_action: duck
       duck_step: 192
 
-    light.light.living_chandelier:
+    light.living_chandelier:
       notify_action: duck
 
     light.living_overhead:
