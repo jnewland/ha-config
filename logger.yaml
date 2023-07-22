@@ -1,5 +1,8 @@
 default: info
 logs:
+  aiohue.util: critical
+  custom_components.adaptive_lighting: debug
+  custom_components.ember_mug.coordinator: critical
   homeassistant.components.binary_sensor: warn
   homeassistant.components.cover.myq: debug
   homeassistant.components.http: warn
@@ -20,6 +23,7 @@ logs:
   pyvera.subscribe: warn
   requests.packages.urllib3.connectionpool: critical
   roomba.roomba.Roomba: warn
-  root: warn
-  aiohue.util: critical
+  roombapy.remote_client: critical
   roombapy.roomba: error
+  root: warn
+  stream_worker: critical
