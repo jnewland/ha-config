@@ -17,6 +17,7 @@ homeassistant:
     - !env_var SELF_LINK
     - !env_var FRIGATE_URL
 
+adaptive_lighting: !include_dir_list adaptive_lighting
 default_config:
 binary_sensor: !include_dir_list binary_sensors
 circadian_lighting:

@@ -202,7 +202,6 @@ switch:
     sleep_entity: input_select.mode
     sleep_state: "Sleeping"
     lights_brightness:
-      - light.living_chandelier
       - light.kitchen
       - light.dining_room_table
       - light.pendants
