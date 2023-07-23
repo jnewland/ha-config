@@ -29,3 +29,4 @@ min_brightness: 20
 max_brightness: 100
 sleep_brightness: 5
 transition_until_sleep: true
+take_over_control: false

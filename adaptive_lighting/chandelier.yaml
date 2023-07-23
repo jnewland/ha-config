@@ -10,3 +10,4 @@ max_brightness: 50
 sleep_brightness: 5
 transition_until_sleep: true
 adapt_delay: 1
+take_over_control: false
