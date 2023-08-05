@@ -1,0 +1,32 @@
+name: cans
+lights:
+  # - light.living_overhead
+  # - light.kitchen
+  - light.dining_room_table
+  - light.pantry
+
+  - light.stairs
+  - light.powder_room
+  - light.great_hall
+  - light.garage_hall
+  - light.guest_hall_overhead
+  - light.guest_shower
+  - light.lounge_overhead
+
+  - light.bedroom_closet
+  - light.bedroom_nook
+  - light.bedroom_overhead
+  - light.bedroom_windows
+
+  - light.bathroom_overhead
+  - light.bathroom_shower
+  - light.bathroom_toilet
+prefer_rgb_color: false
+transition: 5
+initial_transition: 5
+interval: 90
+min_brightness: 20
+max_brightness: 100
+sleep_brightness: 5
+transition_until_sleep: true
+take_over_control: false
