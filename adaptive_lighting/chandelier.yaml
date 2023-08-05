@@ -1,0 +1,13 @@
+name: chandelier
+lights:
+  - light.living_chandelier
+prefer_rgb_color: false
+transition: 0
+initial_transition: 0
+interval: 90
+min_brightness: 5
+max_brightness: 50
+sleep_brightness: 5
+transition_until_sleep: true
+adapt_delay: 1
+take_over_control: false
