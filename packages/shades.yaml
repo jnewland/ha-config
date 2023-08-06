@@ -112,7 +112,7 @@ automation:
         entity_id: sensor.upstairs_thermostat_air_temperature
         below: 75
         for:
-          minutes: 10
+          minutes: 30
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
         below: 74
