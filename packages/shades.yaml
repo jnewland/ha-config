@@ -30,6 +30,16 @@ cover:
       - cover.master_bedroom_wall_top
 
   - platform: group
+    name: AC shades
+    entities:
+      - cover.master_bedroom_closet
+      - cover.master_bedroom_door
+      - cover.master_bedroom_wall_bottom
+      - cover.master_bedroom_wall_left
+      - cover.master_bedroom_wall_right
+      - cover.master_bedroom_wall_top
+
+  - platform: group
     name: Yoga room shades
     entities:
       - cover.yoga_bottom
@@ -91,5 +101,26 @@ automation:
         above: 75
     action:
       - service: cover.close_cover
+        data:
+          entity_id: cover.ac_shades
+
+  - alias: Open shades when its cool enough and the door is open
+    mode: queued
+    id: bc4654f1-a45e-45f4-9b5d-50f21b446ae0
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.upstairs_thermostat_air_temperature
+        below: 75
+        for:
+          minutes: 30
+      - platform: numeric_state
+        entity_id: sensor.upstairs_thermostat_air_temperature
+        below: 74
+    condition:
+      condition: state
+      entity_id: binary_sensor.bedroom_door_access_control_window_door_is_open
+      state: "on"    
+    action:
+      - service: cover.open_cover
         data:
           entity_id: cover.bedroom_shades
