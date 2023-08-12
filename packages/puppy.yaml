@@ -5,7 +5,7 @@ automation:
       platform: state
       entity_id:
         - binary_sensor.front_door_puppy_tampering_product_cover_removed
-      to: on
+      to: "on"
     condition:
       condition: state
       entity_id: lock.front_door
