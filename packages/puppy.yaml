@@ -15,5 +15,5 @@ automation:
         data:
           entity_id: script.noop
           tag: front_door_puppy
-          message: 🐶 is at the front door
-          confirmation_message: is letting 🐶 out, cool.
+          message: 🐶🌼 is at the front door
+          confirmation_message: is letting 🐶🌼 out, cool.
