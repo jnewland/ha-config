@@ -3,14 +3,17 @@ automation:
       id: 050335c4-2f3d-4dbc-ac00-cf1f69759db7
       trigger:
           platform: state
-          entity_id:
-              - binary_sensor.front_door_puppy_tampering_product_cover_removed
+          entity_id: binary_sensor.front_door_puppy_tampering_product_cover_removed
           to: "on"
       condition:
           condition: state
           entity_id: lock.front_door
           state: locked
       action:
+          - delay: 2
+          - condition: state
+            entity_id: lock.front_door
+            state: locked
           - service: script.ack
             data:
                 entity_id: script.noop
@@ -18,3 +21,16 @@ automation:
                 message: 🐶🌼 is at the front door
                 confirmation_message: is letting 🐶🌼 out, cool
                 decline_message: can't handle 🐶🌼 rn, can you?
+
+    - alias: Puppy bell dismiss
+      id: 050335c4-2f3d-4dbc-ac00-cf1f69759db8
+      trigger:
+          platform: state
+          entity_id: lock.front_door
+          to: unlocked
+      action:
+        - service: notify.iphones
+          data:
+            message: clear_notification
+            data:
+              tag: front_door_puppy
