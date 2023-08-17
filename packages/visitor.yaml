@@ -44,7 +44,8 @@ automation:
                         {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
                       content-type: jpeg
                       hide-thumbnail: false
-              - wait_template: {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
+              - wait_template: >
+                  {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
               - service: notify.iphones
                 data:
                   message: >
