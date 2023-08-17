@@ -26,10 +26,10 @@ switch:
         value_template: '{{ states("switch.front_door_lock_state") }}'
         friendly_name: Front door lock
         turn_on:
-          - service: lock.lock
+          - service: lock.unlock
             entity_id: lock.front_door_schlage
         turn_off:
-          - service: lock.unlock
+          - service: lock.lock
             entity_id: lock.front_door_schlage
 
 automation:
