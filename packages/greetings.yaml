@@ -1,16 +1,24 @@
 automation:
-  - alias: Disable alarm when we unlock the front door
+  - alias: Disable alarm when we unlock various doors
     id: c44abe39-a4ca-4bcf-8092-fd9d81330585
     trigger:
-      - platform: event
-        event_type: zwave_js_notification
-        event_data:
-          node_id: 49
-          event_label: "Keypad unlock operation"
+      - platform: state
+        entity_id: lock.front_door
+        to: "unlocked"
+      - platform: state
+        entity_id: lock.garage
+        to: "unlocked"
+
+    condition:
+      condition: or
+      conditions:
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: armed_away
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: armed_home
     action:
-      - condition: template
-        value_template: |
-          {{ trigger.event.data.parameters.userId | int(default=99) < 3 }}
       - repeat:
           until: |
             {{ is_state('alarm_control_panel.alarm', 'disarmed') }}

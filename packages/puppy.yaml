@@ -7,13 +7,13 @@ automation:
       to: "on"
     condition:
       condition: state
-      entity_id: input_boolean.front_door_lock_homekit_state
-      state: "on"
+      entity_id: lock.front_door
+      state: locked
     action:
       - delay: 2
       - condition: state
-        entity_id: input_boolean.front_door_lock_homekit_state
-        state: "on"
+        entity_id: lock.front_door
+        state: locked
       - service: script.ack
         data:
           entity_id: script.noop
@@ -26,8 +26,8 @@ automation:
     id: 050335c4-2f3d-4dbc-ac00-cf1f69759db8
     trigger:
       platform: state
-      entity_id: input_boolean.front_door_lock_homekit_state
-      to: "off"
+      entity_id: lock.front_door
+      to: unlocked
     action:
       - service: notify.iphones
         data:

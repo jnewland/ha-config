@@ -41,16 +41,6 @@ views:
           entities:
             - input_boolean.visitor
 
-      - type: conditional
-        conditions:
-          - entity: input_boolean.visitor
-            state: "on"
-        card:
-          type: entities
-          show_header_toggle: false
-          entities:
-            - sensor.visitor_door_code
-
       - type: vertical-stack
         cards:
           - type: custom:mini-media-player
