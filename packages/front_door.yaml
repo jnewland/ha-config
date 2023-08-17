@@ -1,17 +1,47 @@
-# This value is automated with a Homekit Automation
-input_boolean:
-  front_door_lock_homekit_state:
-    name: Front Door Lock State
-
 switch:
   - platform: template
     switches:
+      # This switch is exposed to Homekit and automated with an automation to
+      # mirror the state of the lock in Homekit. The state of the lock is in
+      # Homekit so that Home Keys can be used to lock and unlock the door.
       front_door_lock_state:
-        value_template: '{{ states("input_boolean.front_door_lock_homekit_state") }}'
         friendly_name: Front door lock state
         turn_on:
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.front_door_lock_homekit_state
+          - service: system_log.write
+            data:
+              message: Front door lock state changed to locked
+              logger: packages.front_door
+              level: debug
         turn_off:
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.front_door_lock_homekit_state
+          - service: system_log.write
+            data:
+              message: Front door lock state changed to unlocked
+              logger: packages.front_door
+              level: debug
+
+      # This switch is turned into lock.front_door and presented as the Home
+      # Assistant interface. It reads state from HomeKit and performs actions
+      # over the Schlage API.
+      front_door_lock:
+        value_template: '{{ states("switch.front_door_lock_state") }}'
+        friendly_name: Front door lock
+        turn_on:
+          - service: lock.lock
+            entity_id: lock.front_door_schlage
+        turn_off:
+          - service: lock.unlock
+            entity_id: lock.front_door_schlage
+
+automation:
+  - alias: Front door lock logs
+    mode: parallel
+    id: 7212bf3a-c65a-4871-a9eb-6c3e4769d301
+    trigger:
+      platform: state
+      entity_id: lock.front_door_schlage
+    action:
+      - service: system_log.write
+        data:
+          message: Front door lock state changed by {{ state_attr("lock.front_door_schlage", "changed_by") }}
+          logger: packages.front_door
+          level: debug
