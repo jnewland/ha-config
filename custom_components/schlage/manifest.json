@@ -1,0 +1,16 @@
+{
+  "domain": "schlage",
+  "name": "Schlage Encode",
+  "codeowners": [
+    "@dknowles2",
+    "@mcnutter1"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/dknowles2/ha-schlage",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/dknowles2/ha-schlage/issues",
+  "requirements": [
+    "pyschlage==2023.7.0"
+  ],
+  "version": "2023.7.0"
+}

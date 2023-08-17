@@ -45,17 +45,23 @@ git clone --depth 1 --branch $EMBER_VERSION https://github.com/sopelj/hass-ember
 rm -rf custom_components/ember_mug
 mv $TMPDIR/$$-ember/custom_components/ember_mug custom_components
 
-# removate: datasource=github-releases depName=libdyson-wg/ha-dyson
+# renovate: datasource=github-releases depName=libdyson-wg/ha-dyson
 DYSON_LOCAL_VERSION=v1.0.1
 git clone --depth 1 --branch $DYSON_LOCAL_VERSION https://github.com/libdyson-wg/ha-dyson $TMPDIR/$$-dyson-local
 rm -rf custom_components/dyson_local
 mv $TMPDIR/$$-dyson-local/custom_components/dyson_local custom_components
 
-# removate: datasource=github-releases depName=libdyson-wg/ha-dyson-cloud
+# renovate: datasource=github-releases depName=libdyson-wg/ha-dyson-cloud
 DYSON_CLOUD_VERSION=v0.19.2
 git clone --depth 1 --branch $DYSON_CLOUD_VERSION https://github.com/libdyson-wg/ha-dyson-cloud $TMPDIR/$$-dyson-cloud
 rm -rf custom_components/dyson_cloud
 mv $TMPDIR/$$-dyson-cloud/custom_components/dyson_cloud custom_components
+
+# renovate: datasource=github-releases depname=dknowles2/ha-schlage
+SCHLAGE_VERSION=2023.7.0
+git clone --depth 1 --branch $SCHLAGE_VERSION https://github.com/dknowles2/ha-schlage $TMPDIR/$$-schlage
+rm -rf custom_components/schlage
+mv $TMPDIR/$$-schlage/custom_components/schlage custom_components
 
 curl -sL --fail -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
 curl -sL --fail -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/1.12.1/auto-entities.js

@@ -1,0 +1,17 @@
+# This value is automated with a Homekit Automation
+input_boolean:
+  front_door_lock_homekit_state:
+    name: Front Door Lock State
+
+switch:
+  - platform: template
+    switches:
+      front_door_lock_state:
+        value_template: '{{ states("input_boolean.front_door_lock_homekit_state") }}'
+        friendly_name: Front door lock state
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.front_door_lock_homekit_state
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.front_door_lock_homekit_state
