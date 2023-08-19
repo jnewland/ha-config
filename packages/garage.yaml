@@ -17,18 +17,11 @@ script:
       - service: homeassistant.turn_on
         entity_id: fan.garage
 
-  unlock_garage_and_disarm:
+  unlock_garage:
     sequence:
       - service: lock.unlock
         data:
           entity_id: lock.garage
-      - repeat:
-          until: |
-            {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
-          sequence:
-            - service: alarm_control_panel.alarm_disarm
-              entity_id: alarm_control_panel.alarm
-            - delay: 3
 
 group:
   garage_occupancy:
@@ -145,6 +138,6 @@ automation:
         data:
           secure: "true"
           tag: garage_button_1
-          entity_id: script.unlock_garage_and_disarm
+          entity_id: script.unlock_garage
           message: "Unlock garage and disarm?"
           confirmation_message: unlocked the garage.
