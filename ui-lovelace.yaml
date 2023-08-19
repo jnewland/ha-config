@@ -6,11 +6,11 @@ views:
     cards:
       - type: conditional
         conditions:
-          - entity: camera.pergola
+          - entity: camera.front_yard_right
             state: recording
         card:
           type: picture-glance
-          camera_image: camera.pergola
+          camera_image: camera.front_yard_right
           entities:
             - input_select.mode
             - alarm_control_panel.alarm
