@@ -5,6 +5,7 @@ mqtt:
       name: "Great Room Audio dBFS"
   - sensor:
       state_topic: "frigate/great_room/audio/rms"
+      unit_of_measurement: V
       name: "Great Room Audio RMS"
   - binary_sensor:
       state_topic: "home-assistant/great_room/audio/whimper_dog"
@@ -47,6 +48,7 @@ binary_sensor:
   - platform: template
     sensors:
       great_room_audio_detected:
+        friendly_name: Great Room Audio Detected
         device_class: sound
         value_template: >
           {{ states('binary_sensor.great_room_audio_whimper_dog') == 'on' or
@@ -67,6 +69,7 @@ sensor:
   - platform: template
     sensors:
       great_room_audio_reason:
+        friendly_name: Great Room Audio Reason
         value_template: >
           {% if is_state('binary_sensor.great_room_audio_whimper_dog', 'on') %}
             whimper dog
