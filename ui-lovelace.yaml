@@ -1050,11 +1050,20 @@ views:
           - entity: device_tracker.katie_s_iphone
             state: "not_home"
         card:
-          type: picture-entity
-          camera_view: auto
-          show_name: false
-          show_state: false
-          entity: camera.great_room
+      - type: vertical-stack
+        cards:
+          - type: picture-entity
+            camera_view: auto
+            show_name: false
+            show_state: false
+            entity: camera.great_room
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - sensor.great_room_audio_reason
+              - sensor.great_room_audio_dbfs
+              - sensor.great_room_audio_rms
+
       - type: conditional
         conditions:
           - entity: camera.pergola
