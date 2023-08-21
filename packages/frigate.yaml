@@ -63,7 +63,7 @@ binary_sensor:
              states('binary_sensor.great_room_audio_doorbell') == 'on'
           }}
 
-sensors:
+sensor:
   - platform: template
     sensors:
       great_room_audio_reason:
