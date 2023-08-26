@@ -64,7 +64,7 @@ rm -rf custom_components/schlage
 mv $TMPDIR/$$-schlage/custom_components/schlage custom_components
 
 curl -sL --fail -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
-curl -sL --fail -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/1.12.1/auto-entities.js
+curl -sL --fail -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/16/auto-entities.js
 curl -sL --fail -o www/mini-media-player-bundle.js https://github.com/kalkih/mini-media-player/releases/download/v1.16.5/mini-media-player-bundle.js
 curl -sL --fail -o www/custom-sonos-card.js https://github.com/johanfrick/custom-sonos-card/releases/download/v5.20.1/custom-sonos-card.js
 curl -sL --fail -o www/mini-graph-card-bundle.js https://github.com/kalkih/mini-graph-card/releases/download/v0.11.0/mini-graph-card-bundle.js
