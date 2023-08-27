@@ -173,7 +173,7 @@ automation:
       conditions:
         - platform: template
           value_template: "{{ state_attr('climate.downstairs', 'current_temperature') > state_attr('climate.downstairs', 'temperature') }}"
-        - condition: template
+        - platform: template
           value_template: "{{ state_attr('climate.upstairs', 'hvac_action') == 'cooling' }}"
     action:
       - service: notify.iphones
