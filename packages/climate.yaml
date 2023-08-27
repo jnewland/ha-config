@@ -145,3 +145,40 @@ automation:
       - service: notify.iphones
         data:
           message: leak sensor detected a leak
+
+  - alias: notify us when the downstairs climate current_temperature goes above setpoint in cool mode
+    id: 1b2b0b5e-5b0a-4b0e-8b0a-2b0b5e5b0a4b
+    trigger:
+      platform: template
+      value_template: "{{ state_attr('climate.downstairs', 'current_temperature') > state_attr('climate.downstairs', 'temperature') }}"
+    condition:
+      condition: template
+      value_template: "{{ state_attr('climate.downstairs', 'hvac_action') == 'cooling' }}"
+    action:
+      - service: notify.iphones
+        data:
+          message: >
+            downstairs AC isn't keeping up.
+            Current temp is {{ state_attr('climate.downstairs', 'current_temperature') }}
+            and target temp is {{ state_attr('climate.downstairs', 'temperature') }}.
+
+  - alias: notify us when downstairs climate is idle
+    id: 59b0a151-122a-46dc-81bd-fd099fba0018
+    trigger:
+      platform: state
+      entity_id: climate.downstairs
+      to: "idle"
+    condition:
+      condition: and
+      conditions:
+        - platform: template
+          value_template: "{{ state_attr('climate.downstairs', 'current_temperature') > state_attr('climate.downstairs', 'temperature') }}"
+        - condition: template
+          value_template: "{{ state_attr('climate.upstairs', 'hvac_action') == 'cooling' }}"
+    action:
+      - service: notify.iphones
+        data:
+          message: >
+            downstairs AC has given up.
+            Current temp is {{ state_attr('climate.downstairs', 'current_temperature') }}
+            and target temp is {{ state_attr('climate.downstairs', 'temperature') }}.
