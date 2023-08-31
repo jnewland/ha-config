@@ -6,6 +6,7 @@ homeassistant:
 
 script:
   laundry_room:
+    mode: parallel
     sequence:
       - service: homeassistant.turn_on
         entity_id: fan.laundry_room
