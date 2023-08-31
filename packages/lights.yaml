@@ -737,6 +737,7 @@ input_number:
 
 script:
   great_room_lights:
+    mode: parallel
     sequence:
       - service: scene.turn_on
         data:
@@ -745,6 +746,7 @@ script:
           transition: >
             {{ "5" if states.input_select.mode.state in ["Evening", "Cocktail", "Cooking"] else "0.1" }}
   mode_cocktail:
+    mode: parallel
     sequence:
       - service: input_select.select_option
         entity_id: input_select.mode
@@ -753,6 +755,7 @@ script:
       - service: script.turn_on
         entity_id: script.great_room_lights
   mode_cooking:
+    mode: parallel
     sequence:
       - service: input_select.select_option
         entity_id: input_select.mode
@@ -761,6 +764,7 @@ script:
       - service: script.turn_on
         entity_id: script.great_room_lights
   mode_day:
+    mode: parallel
     sequence:
       - service: input_select.select_option
         entity_id: input_select.mode
@@ -770,6 +774,7 @@ script:
         entity_id: script.great_room_lights
 
   bathroom_lights:
+    mode: parallel
     sequence:
       - service: light.turn_on
         data:
@@ -791,6 +796,7 @@ script:
           entity_id: light.bathroom_mirror
 
   bathroom_lights_off:
+    mode: parallel
     sequence:
       - condition: template
         value_template: >
@@ -801,6 +807,7 @@ script:
             group.bathroom
 
   music_room:
+    mode: parallel
     sequence:
       - service: light.turn_on
         entity_id: light.music_room
@@ -836,6 +843,7 @@ script:
             }}
 
   lounge_lights:
+    mode: parallel
     sequence:
       - service: light.turn_on
         data:
@@ -863,6 +871,7 @@ script:
             {{ brightness | default(int(state_attr('switch.circadian_lighting_brightnesss', 'brightness'), default=255)) }}
 
   pulse_light:
+    mode: parallel
     sequence:
       - service: python_script.dim_step
         data:
@@ -939,6 +948,7 @@ script:
             - light.record_cabinet_right
 
   maybe_turn_off_wine_room:
+    mode: parallel
     sequence:
       - condition: template
         value_template: >
