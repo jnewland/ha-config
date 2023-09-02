@@ -43,6 +43,15 @@ mqtt:
     - binary_sensor:
           state_topic: "frigate/great_room/audio/doorbell"
           name: "Great Room Audio Doorbell"
+    - binary_sensor:
+          state_topic: "frigate/front_door/audio/smoke_detector"
+          name: "Front Door Audio Smoke Detector"
+    - binary_sensor:
+          state_topic: "frigate/front_door/audio/fire_alarm"
+          name: "Front Door Audio Fire Alarm"
+    - binary_sensor:
+          state_topic: "frigate/front_door/audio/doorbell"
+          name: "Front Door Audio Doorbell"
 
 binary_sensor:
     - platform: template
