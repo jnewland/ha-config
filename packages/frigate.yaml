@@ -43,6 +43,17 @@ mqtt:
     - binary_sensor:
           state_topic: "frigate/great_room/audio/doorbell"
           name: "Great Room Audio Doorbell"
+
+
+    - sensor:
+          state_topic: "frigate/front_door/audio/dBFS"
+          unit_of_measurement: dB
+          name: "Front Door Audio dBFS"
+    - sensor:
+          state_topic: "frigate/front_door/audio/rms"
+          unit_of_measurement: V
+          name: "Front Door Audio RMS"
+
     - binary_sensor:
           state_topic: "frigate/front_door/audio/smoke_detector"
           name: "Front Door Audio Smoke Detector"
