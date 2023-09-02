@@ -7,33 +7,13 @@ mqtt:
           state_topic: "frigate/great_room/audio/rms"
           unit_of_measurement: V
           name: "Great Room Audio RMS"
-    - binary_sensor:
-          state_topic: "frigate/great_room/audio/whimper_dog"
-          name: "Great Room Audio Whimper Dog"
-    - binary_sensor:
-          state_topic: "frigate/great_room/audio/growling"
-          name: "Great Room Audio Growling"
-    - binary_sensor:
-          state_topic: "frigate/great_room/audio/bow-wow"
-          name: "Great Room Audio Bow Wow"
-    - binary_sensor:
-          state_topic: "frigate/great_room/audio/howl"
-          name: "Great Room Audio Howl"
-    - binary_sensor:
-          state_topic: "frigate/great_room/audio/yip"
-          name: "Great Room Audio Yip"
+
     - binary_sensor:
           state_topic: "frigate/great_room/audio/bark"
           name: "Great Room Audio Bark"
     - binary_sensor:
-          state_topic: "frigate/great_room/audio/dog"
-          name: "Great Room Audio Dog"
-    - binary_sensor:
-          state_topic: "frigate/great_room/audio/pets"
-          name: "Great Room Audio Pets"
-    - binary_sensor:
-          state_topic: "frigate/great_room/audio/animal"
-          name: "Great Room Audio Animal"
+          state_topic: "frigate/great_room/audio/speech"
+          name: "Great Room Audio Speech"
     - binary_sensor:
           state_topic: "frigate/great_room/audio/smoke_detector"
           name: "Great Room Audio Smoke Detector"
@@ -43,7 +23,6 @@ mqtt:
     - binary_sensor:
           state_topic: "frigate/great_room/audio/doorbell"
           name: "Great Room Audio Doorbell"
-
 
     - sensor:
           state_topic: "frigate/front_door/audio/dBFS"
@@ -55,6 +34,12 @@ mqtt:
           name: "Front Door Audio RMS"
 
     - binary_sensor:
+          state_topic: "frigate/front_door/audio/bark"
+          name: "Front Door Audio Bark"
+    - binary_sensor:
+          state_topic: "frigate/front_door/audio/speech"
+          name: "Front Door Audio Speech"
+    - binary_sensor:
           state_topic: "frigate/front_door/audio/smoke_detector"
           name: "Front Door Audio Smoke Detector"
     - binary_sensor:
@@ -63,61 +48,6 @@ mqtt:
     - binary_sensor:
           state_topic: "frigate/front_door/audio/doorbell"
           name: "Front Door Audio Doorbell"
-
-binary_sensor:
-    - platform: template
-      sensors:
-          great_room_audio_detected:
-              friendly_name: Great Room Audio Detected
-              device_class: sound
-              value_template: >
-                  {{ states('binary_sensor.great_room_audio_whimper_dog') == 'on' or
-                     states('binary_sensor.great_room_audio_growling') == 'on' or
-                     states('binary_sensor.great_room_audio_bow_wow') == 'on' or
-                     states('binary_sensor.great_room_audio_howl') == 'on' or
-                     states('binary_sensor.great_room_audio_yip') == 'on' or
-                     states('binary_sensor.great_room_audio_bark') == 'on' or
-                     states('binary_sensor.great_room_audio_dog') == 'on' or
-                     states('binary_sensor.great_room_audio_pets') == 'on' or
-                     states('binary_sensor.great_room_audio_animal') == 'on' or
-                     states('binary_sensor.great_room_audio_smoke_detector') == 'on' or
-                     states('binary_sensor.great_room_audio_fire_alarm') == 'on' or
-                     states('binary_sensor.great_room_audio_doorbell') == 'on'
-                  }}
-
-sensor:
-    - platform: template
-      sensors:
-          great_room_audio_reason:
-              friendly_name: Great Room Audio Reason
-              value_template: >
-                  {% if is_state('binary_sensor.great_room_audio_whimper_dog', 'on') %}
-                    whimper dog
-                  {% elif is_state('binary_sensor.great_room_audio_growling', 'on') %}
-                    growling
-                  {% elif is_state('binary_sensor.great_room_audio_bow_wow', 'on') %}
-                    bow wow
-                  {% elif is_state('binary_sensor.great_room_audio_howl', 'on') %}
-                    howl
-                  {% elif is_state('binary_sensor.great_room_audio_yip', 'on') %}
-                    yip
-                  {% elif is_state('binary_sensor.great_room_audio_bark', 'on') %}
-                    bark
-                  {% elif is_state('binary_sensor.great_room_audio_dog', 'on') %}
-                    dog
-                  {% elif is_state('binary_sensor.great_room_audio_pets', 'on') %}
-                    pets
-                  {% elif is_state('binary_sensor.great_room_audio_animal', 'on') %}
-                    animal
-                  {% elif is_state('binary_sensor.great_room_audio_smoke_detector', 'on') %}
-                    smoke detector
-                  {% elif is_state('binary_sensor.great_room_audio_fire_alarm', 'on') %}
-                    fire alarm
-                  {% elif is_state('binary_sensor.great_room_audio_doorbell', 'on') %}
-                    doorbell
-                  {% else %}
-                    unknown
-                  {% endif %}
 
 automation:
     - alias: Notify about camera failures

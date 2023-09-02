@@ -1060,9 +1060,9 @@ views:
                     - type: entities
                       show_header_toggle: false
                       entities:
-                          - sensor.great_room_audio_reason
                           - sensor.great_room_audio_dbfs
                           - sensor.great_room_audio_rms
+                          - binary_sensor.great_room_audio_bark
 
           - type: conditional
             conditions:
