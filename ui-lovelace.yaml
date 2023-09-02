@@ -1339,7 +1339,7 @@ views:
           - type: custom:auto-entities
             card:
                 type: history-graph
-                hours_to_show: 80
+                hours_to_show: 1
                 title: audio
             filter:
                 include:
