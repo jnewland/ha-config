@@ -1365,7 +1365,7 @@ views:
           upper_bound: 1000
         filter:
           include:
-            - entity_id: "/rms$"
+            - entity_id: "/rms$/"
 
       - type: custom:auto-entities
         show_header_toggle: false
