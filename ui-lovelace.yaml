@@ -1343,7 +1343,8 @@ views:
                 title: audio
             filter:
                 include:
-                    - entity_id: "/binary_sensor.*audio.*/"
+                    - entity_id: "/binary_sensor.*front_door_audio.*/"
+                    - entity_id: "/binary_sensor.*great_room_audio.*/"
           - type: custom:auto-entities
             card:
                 type: history-graph
@@ -1351,7 +1352,7 @@ views:
                 title: audio levels
             filter:
                 include:
-                    - entity_id: "/dbfs$/"
+                    - entity_id: "/rms$/"
 
           - type: custom:auto-entities
             show_header_toggle: false
