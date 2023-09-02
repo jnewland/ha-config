@@ -1352,6 +1352,15 @@ views:
           hours_to_show: 1
           show:
             fill: false
+          color_thresholds:
+            - value: 0
+              color: "#0000ff"
+            - color: "#00ffff"
+            - value: 200
+              color: "#00ff00"
+            - color: "#ffa500"
+            - color: "#ff00"
+          upper_bound: 1000
         filter:
           include:
             - entity_id: "/rms$"
