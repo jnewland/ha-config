@@ -1359,7 +1359,9 @@ views:
             - value: 200
               color: "#00ff00"
             - color: "#ffa500"
-            - color: "#ff00"
+            - value: 1000
+              color: "#ff0000"
+
           upper_bound: 1000
         filter:
           include:
