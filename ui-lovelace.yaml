@@ -1361,11 +1361,10 @@ views:
             - color: "#ffa500"
             - value: 1000
               color: "#ff0000"
-
           upper_bound: 1000
         filter:
           include:
-            - entity_id: "/rms$/"
+            - entity_id: "/.*rms$/"
 
       - type: custom:auto-entities
         show_header_toggle: false
