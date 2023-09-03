@@ -1345,27 +1345,24 @@ views:
             - entity_id: "/binary_sensor.*front_door_audio.*/"
             - entity_id: "/binary_sensor.*great_room_audio.*/"
 
-      - type: custom:auto-entities
-        card:
-          type: custom:mini-graph-card
-          name: rms
-          hours_to_show: 1
-          show:
-            fill: false
-          color_thresholds:
-            - value: 0
-              color: "#0000ff"
-            - color: "#00ffff"
-            - value: 200
-              color: "#00ff00"
-            - color: "#ffa500"
-            - value: 1000
-              color: "#ff0000"
-          upper_bound: 1000
-        filter:
-          include:
-            - entity_id: "/.*rms$/"
-
+      - type: custom:mini-graph-card
+        name: rms
+        hours_to_show: 1
+        show:
+          fill: false
+        color_thresholds:
+          - value: 0
+            color: "#0000ff"
+          - color: "#00ffff"
+          - value: 200
+            color: "#00ff00"
+          - color: "#ffa500"
+          - value: 1000
+            color: "#ff0000"
+        upper_bound: 1000
+        entities:
+          - sensor.great_room_audio_rms
+          - sensor.front_door_audio_rms
       - type: custom:auto-entities
         show_header_toggle: false
         show_empty: false
