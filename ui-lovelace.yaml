@@ -1359,7 +1359,9 @@ views:
           - color: "#ffa500"
           - value: 1000
             color: "#ff0000"
+        lower_bound: 0
         upper_bound: 1000
+        logarithmic: true
         entities:
           - sensor.great_room_audio_rms
           - sensor.front_door_audio_rms
