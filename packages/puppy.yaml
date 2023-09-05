@@ -1,10 +1,25 @@
 automation:
+  - alias: Puppy bark
+    id: 6fc7d655-2e09-4049-9392-9ac6820f70d5
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door_audio_bark
+        to: "on"
+    action:
+      - service: script.ack
+        data:
+          entity_id: script.noop
+          tag: binary_sensor.front_door_audio_bark
+          message: ❗️📢🐶
+          confirmation_message: is handling ❗️📢🐶, cool
+          decline_message: can't handle ❗️📢🐶 rn, can you?
+
   - alias: Puppy bell
     id: 050335c4-2f3d-4dbc-ac00-cf1f69759db7
     trigger:
-      platform: state
-      entity_id: binary_sensor.front_door_puppy_tampering_product_cover_removed
-      to: "on"
+      - platform: state
+        entity_id: binary_sensor.front_door_puppy_tampering_product_cover_removed
+        to: "on"
     condition:
       condition: state
       entity_id: lock.front_door
