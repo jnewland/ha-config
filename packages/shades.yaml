@@ -30,7 +30,17 @@ cover:
       - cover.master_bedroom_wall_top
 
   - platform: group
-    name: AC shades
+    name: Bedroom shades reading
+    entities:
+      - cover.master_bedroom_closet
+      - cover.master_bedroom_wall_bottom
+      - cover.master_bedroom_wall_left
+      - cover.master_bedroom_wall_right
+      - cover.master_bedroom_wall_top
+      - cover.master_bathroom_shade
+
+  - platform: group
+    name: AC shades sunny
     entities:
       - cover.master_bedroom_closet
       - cover.master_bedroom_door
@@ -73,12 +83,20 @@ automation:
         data:
           entity_id: cover.yoga_room_shades
 
-  - alias: Close shades in reading and sleeping modes
+  - alias: Close some shades in reading mode
     id: 806d4e21-9d09-40fd-8f8f-67476d216e7c
     trigger:
       - platform: state
         entity_id: input_select.mode
         to: Reading
+    action:
+      - service: cover.close_cover
+        data:
+          entity_id: cover.bedroom_shades_reading
+
+  - alias: Close shades in sleeping modes
+    id: 806d4e21-9d09-40fd-8f8f-67476d216e7d
+    trigger:
       - platform: state
         entity_id: input_select.mode
         to: Sleeping
@@ -87,7 +105,7 @@ automation:
         data:
           entity_id: cover.shades
 
-  - alias: Close shades when it gets warm upstairs
+  - alias: Close shades when it gets warm upstairs while sunny
     mode: queued
     id: bc4654f1-a45e-45f4-9b5d-50f21b446aef
     trigger:
@@ -99,10 +117,16 @@ automation:
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
         above: 75
+    condition:
+      - condition: template
+        value_template: '{{ state_attr("sun.sun", "elevation") > 28 }}'
+      - condition: state
+        entity_id: weather.tomorrow_io_home_nowcast
+        state: sunny
     action:
       - service: cover.close_cover
         data:
-          entity_id: cover.ac_shades
+          entity_id: cover.ac_shades_sunny
 
   - alias: Open shades when its cool enough and the door is open
     mode: queued
@@ -116,10 +140,17 @@ automation:
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
         below: 74
+      - platform: template
+        value_template: '{{ state_attr("sun.sun", "elevation") < 28 }}'
     condition:
-      condition: state
-      entity_id: binary_sensor.bedroom_door_access_control_window_door_is_open
-      state: "on"    
+      - condition: state
+        entity_id: binary_sensor.bedroom_door_access_control_window_door_is_open
+        state: "on"
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: input_select.mode
+            state: Sleeping
     action:
       - service: cover.open_cover
         data:
