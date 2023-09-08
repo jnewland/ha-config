@@ -901,7 +901,17 @@ views:
           - automation.open_shades_on_workday_mornings_at_7am
           - automation.close_shades_in_reading_and_sleeping_modes
           - automation.close_shades_when_it_gets_warm_upstairs
-
+      - type: custom:auto-entities
+        card:
+          type: entities
+          show_header_toggle: true
+          title: shades
+        filter:
+          include:
+            - entity_id: "/cover.*bedroom.*/"
+              integration: lutron_caseta
+            - entity_id: "/cover.*bathroom.*/"
+              integration: lutron_caseta
   - title: Grill
     icon: mdi:grill
     cards:
