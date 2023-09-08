@@ -131,7 +131,7 @@ binary_sensor:
         value_template: |
           {{
             states('binary_sensor.living_room_motion') == 'on' or
-            states('binary_sensor.dining_room_home_security_motion_detection') == 'on' or
+            states('binary_sensor.dining_room_motion_detection') == 'on' or
             (
               states('device_tracker.katie_s_iphone') == 'Kitchen' and
               states.device_tracker.katie_s_iphone.last_changed > (now() - timedelta(minutes=5))
