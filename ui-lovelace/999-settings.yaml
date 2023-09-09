@@ -1,0 +1,59 @@
+title: Settings
+icon: mdi:cog
+cards:
+  - type: entities
+    title: settings
+    show_header_toggle: false
+    entities:
+      - input_boolean.guests
+      - automation.away_mode
+      - input_boolean.christmas
+      - input_boolean.visitor
+      - switch.hue
+  - type: entities
+    entities:
+      - sensor.current_version
+      - sensor.config_sha
+      - sensor.latest_deployment_sha
+      - automation.deploy_latest_deployment
+      - entity: zone.home
+        icon: "mdi:restart"
+        name: Restart
+        tap_action:
+          action: call-service
+          service: homeassistant.restart
+  - type: custom:auto-entities
+    card:
+      type: entities
+      title: automations
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "/^automation.*/"
+    sort:
+      method: last_changed
+      reverse: true
+  - type: custom:auto-entities
+    card:
+      type: entities
+      title: disabled automations
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "/^automation.*/"
+          state: "off"
+  - type: custom:auto-entities
+    show_empty: false
+    sort:
+      method: id
+    card:
+      type: glance
+      title: unconfigured
+    filter:
+      include:
+        - entity_id: "/_[0-9]+$/"
+      exclude:
+        - integration: mobile_app
+        - entity_id: "*_sim_*"
+        - entity_id: "/volume_[0-9]+$/"
+        - entity_id: "/trip_meter_[0-9]+$/"

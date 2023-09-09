@@ -1,0 +1,55 @@
+title: Upstairs
+icon: mdi:bed
+cards:
+  - type: entities
+    title: bedroom
+    entities:
+      - light.bedroom_chandelier
+      - light.bedroom_overhead
+      - light.bedroom_nook
+      - light.bedroom_windows
+      - light.bedside_lamp
+      - light.bedside_table
+      - light.chandelier_lamp
+      - light.bedroom_patio
+      - light.bedroom_closet
+      - binary_sensor.closet_motion_any
+      - binary_sensor.bedroom_door_access_control_window_door_is_open
+      - cover.bedroom_shades
+  - type: entities
+    title: bath
+    entities:
+      - light.bathroom_overhead
+      - light.bathroom_mirror
+      - light.bathroom_shower
+      - switch.bathroom_fan
+      - light.bathroom_toilet
+      - binary_sensor.bathroom_home_security_motion_detection
+      - sensor.bathroom_air_temperature
+      - cover.master_bathroom_shade
+    footer:
+      type: graph
+      entity: sensor.bathroom_air_temperature
+      hours_to_show: 36
+      detail: 2
+  - type: media-control
+    entity: media_player.bedroom
+  - type: media-control
+    entity: media_player.bedroom_channels
+  - type: entities
+    title: automation
+    entities:
+      - automation.open_shades_on_workday_mornings_at_7am
+      - automation.close_shades_in_reading_and_sleeping_modes
+      - automation.close_shades_when_it_gets_warm_upstairs
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: true
+      title: shades
+    filter:
+      include:
+        - entity_id: "/cover.*bedroom.*/"
+          integration: lutron_caseta
+        - entity_id: "/cover.*bathroom.*/"
+          integration: lutron_caseta

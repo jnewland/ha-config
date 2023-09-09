@@ -1,0 +1,204 @@
+title: Garden
+path: garden
+icon: mdi:sprout
+cards:
+  - type: entities
+    show_header_toggle: false
+    title: Greenhouse
+    entities:
+      - automation.greenhouse_light_automation
+      - switch.greenhouse_light
+      # - switch.greenhouse_right
+  - type: conditional
+    conditions:
+      - entity: automation.greenhouse_light_automation
+        state: "on"
+    card:
+      type: entities
+      title: Greenhouse light automation
+      show_header_toggle: false
+      entities:
+        - input_datetime.greenhouse_light_on
+        - input_datetime.greenhouse_light_off
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: quick run
+    filter:
+      include:
+        - entity_id: "/.*_zone$/"
+        - entity_id: "/.*_schedule$/"
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: toggle schedules
+    filter:
+      include:
+        - entity_id: "/.*_program$/"
+  - type: markdown
+    content: |
+      {% for program in states.switch|selectattr('attributes.is_smart_program','defined') %}
+      {%- if program.state == "on" %}
+      * {{ program.name }} runs for {{ program.attributes.run_times | map(attribute='run_time') | join(', ') }} minutes at {{ program.attributes.start_times | join(', ') }} on {{ program.attributes.frequency.days | default([program.attributes.frequency.interval | default(program.attributes.frequency.type)]) | join }} day {{ program.attributes.frequency.type }}
+      {%- endif -%}
+      {%- endfor -%}
+      {% for program in states.switch | selectattr('attributes.Duration', 'defined') %}
+      {%- if program.attributes.Enabled %}
+      * {{ program.name }} runs for {{ program.attributes.Duration }} {{ program.attributes.Summary | lower }}
+      {%- endif -%}
+      {%- endfor -%}
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: last run
+    filter:
+      include:
+        - integration: bhyve
+          entity_id: "/.*_history$/"
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: rain delay
+    filter:
+      include:
+        - entity_id: "/.*_rain_delay$/"
+  - type: custom:mini-graph-card
+    entities:
+      - sensor.precipitation
+    name: historical precipitation
+    hours_to_show: 168
+    group_by: date
+    show:
+      fill: false
+      extrema: true
+  - type: custom:auto-entities
+    card:
+      type: custom:mini-graph-card
+      name: irrigation zone runtime
+      hours_to_show: 168
+      group_by: date
+      smoothing: false
+      show:
+        fill: false
+        legend: false
+        state: false
+        points: hover
+    filter:
+      include:
+        - entity_id: "/.*_zone_daily_runtime$/"
+          options:
+            aggregate_func: max
+            unit: hours
+  - type: custom:auto-entities
+    sort:
+      method: name
+      reverse: true
+    card:
+      type: custom:mini-graph-card
+      hours_to_show: 168
+      group_by: hour
+      show:
+        extrema: true
+        fill: false
+    filter:
+      include:
+        - entity_id: "/.*_conductivity$/"
+  - type: custom:auto-entities
+    sort:
+      method: name
+      reverse: true
+    card:
+      type: custom:mini-graph-card
+      hours_to_show: 168
+      group_by: hour
+      show:
+        extrema: true
+        fill: false
+    filter:
+      include:
+        - entity_id: "/.*_moisture$/"
+  - type: custom:auto-entities
+    sort:
+      method: name
+      reverse: true
+    card:
+      type: custom:mini-graph-card
+      hours_to_show: 168
+      group_by: hour
+      show:
+        extrema: true
+        fill: false
+    filter:
+      include:
+        - entity_id: "/sensor.peppers_illuminance/"
+        - entity_id: "/sensor.bamboo_illuminance/"
+        - entity_id: "/sensor.vegepod_illuminance/"
+  - type: custom:mini-graph-card
+    entities:
+      - entity: sensor.katt_temperature
+        aggregate_func: max
+        name: Max
+        color: #e74c3c
+      - entity: sensor.katt_temperature
+        aggregate_func: min
+        name: Min
+      - entity: sensor.katt_temperature
+        aggregate_func: avg
+        name: Avg
+        color: green
+    name: historical temperature range
+    hours_to_show: 168
+    group_by: date
+    show:
+      fill: false
+      extrema: true
+  - type: custom:mini-graph-card
+    sort:
+      method: name
+      reverse: true
+    entities:
+      - entity: sensor.katt_temperature
+      - entity: sensor.peppers_temperature
+      - entity: sensor.bamboo_temperature
+      - entity: sensor.vegepod_temperature
+    name: outdoor temperature
+    hours_to_show: 168
+    group_by: hour
+    show:
+      extrema: true
+      fill: false
+  - type: conditional
+    conditions:
+      - entity: camera.veggiecam
+        state: recording
+    card:
+      type: picture-entity
+      camera_view: auto
+      show_name: false
+      show_state: false
+      entity: camera.veggiecam
+  - type: conditional
+    conditions:
+      - entity: camera.gate
+        state: recording
+    card:
+      type: picture-entity
+      camera_view: auto
+      show_name: false
+      show_state: false
+      entity: camera.gate
+  - type: conditional
+    conditions:
+      - entity: camera.gate
+        state: recording
+    card:
+      type: picture-entity
+      camera_view: auto
+      show_name: false
+      show_state: false
+      entity: camera.garage
+---

@@ -1,0 +1,64 @@
+title: Lounge
+icon: mdi:television-classic
+cards:
+  - type: entities
+    title: lounge
+    entities:
+      - light.lounge_overhead
+      - light.lounge_chandelier
+      - light.tv_left
+      - light.tv_right
+      - light.lounge_tv
+      - switch.lounge_left
+      - switch.lounge_right
+      - binary_sensor.lounge_home_security_motion_detection
+      - sensor.lounge_air_temperature
+    footer:
+      type: graph
+      entity: sensor.lounge_air_temperature
+      hours_to_show: 36
+      detail: 2
+  - type: entities
+    show_header_toggle: false
+    entities:
+      - fan.lounge
+      - automation.lounge_fan_auto_mode
+      - sensor.lounge_pm_2_5
+      - sensor.lounge_pm_10
+      - sensor.lounge_volatile_organic_compounds_index
+      - sensor.lounge_nitrogen_dioxide_index
+      - binary_sensor.lounge_air_quality_poor
+      - sensor.lounge_temperature
+    footer:
+      type: graph
+      entity: sensor.lounge_pm_2_5
+      hours_to_show: 36
+      detail: 2
+  - type: entities
+    title: sound settings
+    entities:
+      - switch.lounge_surround_speech_enhancement
+      - switch.lounge_surround_night_sound
+  - type: media-control
+    entity: media_player.lg_webos_tv_d510
+  - type: media-control
+    entity: media_player.lounge
+  - type: media-control
+    entity: media_player.lounge_surround
+  - type: media-control
+    entity: media_player.lounge_channels
+  - type: entities
+    title: guest
+    entities:
+      - light.guest_hall_overhead
+      - light.guest_bath_mirror
+      - light.guest_shower
+      - binary_sensor.guest_bath_home_security_motion_detection
+      - binary_sensor.guest_hall_home_security_motion_detection
+      - sensor.guest_bath_air_temperature
+      - switch.guest_bath_fan
+    footer:
+      type: graph
+      entity: sensor.guest_bath_air_temperature
+      hours_to_show: 36
+      detail: 2

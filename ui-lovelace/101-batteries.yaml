@@ -1,0 +1,23 @@
+title: Batteries
+icon: mdi:battery
+cards:
+  - type: custom:auto-entities
+    card:
+      type: history-graph
+      hours_to_show: 80
+    filter:
+      include:
+        - entity_id: "/.*battery_level/"
+      exclude:
+        - state: "off"
+  - type: custom:auto-entities
+    card:
+      type: history-graph
+      hours_to_show: 80
+      title: low
+    filter:
+      include:
+        - entity_id: "/.*battery_level/"
+          state: "< 25"
+      exclude:
+        - state: "off"
