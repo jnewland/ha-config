@@ -8,6 +8,7 @@ logs:
   homeassistant.components.http: warn
   homeassistant.components.light: warn
   homeassistant.components.media_player: warn
+  homeassistant.components.myq: debug
   homeassistant.components.sensor: warn
   homeassistant.components.shell_command: debug
   homeassistant.components.stream.stream: critical
@@ -21,6 +22,7 @@ logs:
   packages.visitor: debug
   packages.zwave: debug
   pyhap.hap_server: critical
+  pymq: debug
   pyvera: critical
   pyvera.subscribe: warn
   requests.packages.urllib3.connectionpool: critical
