@@ -1,33 +1,33 @@
 homeassistant:
-    name: Home
-    latitude: !env_var LAT
-    longitude: !env_var LONG
-    elevation: !env_var ELEVATION
-    unit_system: imperial
-    time_zone: America/Chicago
-    country: US
-    currency: USD
-    customize: !include_dir_merge_named customize
-    packages: !include_dir_named packages
-    auth_providers: !include auth_providers.yaml
-    external_url: !env_var SELF_LINK
-    allowlist_external_dirs:
-        - /tmp
-    allowlist_external_urls:
-        - !env_var SELF_LINK
-        - !env_var FRIGATE_URL
+  name: Home
+  latitude: !env_var LAT
+  longitude: !env_var LONG
+  elevation: !env_var ELEVATION
+  unit_system: imperial
+  time_zone: America/Chicago
+  country: US
+  currency: USD
+  customize: !include_dir_merge_named customize
+  packages: !include_dir_named packages
+  auth_providers: !include auth_providers.yaml
+  external_url: !env_var SELF_LINK
+  allowlist_external_dirs:
+    - /tmp
+  allowlist_external_urls:
+    - !env_var SELF_LINK
+    - !env_var FRIGATE_URL
 
 adaptive_lighting: !include_dir_list adaptive_lighting
 default_config:
 binary_sensor: !include_dir_list binary_sensors
 circadian_lighting:
-    min_colortemp: 2500
-    max_colortemp: 3500
+  min_colortemp: 2500
+  max_colortemp: 3500
 
 conversation:
 device_tracker: !include device_tracker.yaml
 emulated_hue:
-    expose_by_default: false
+  expose_by_default: false
 frontend: !include frontend.yaml
 group: !include_dir_named groups
 history:
@@ -36,35 +36,34 @@ homekit: !include homekit.yaml
 ifttt: !include ifttt.yaml
 input_boolean: !include input_boolean.yaml
 lovelace:
-    mode: yaml
-    resources:
-        - url: /local/monster-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
-          type: js
-        - url: /local/entity-attributes-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
-          type: js
-        - url: /local/auto-entities.js?source=https://github.com/thomasloven/lovelace-auto-entities/raw/1.11.0/auto-entities.js
-          type: module
-        - url: /local/card-tools.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
-          type: module
-        - url: /local/flower-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
-          type: module
-        - url: /local/group-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
-          type: js
-        - url: /local/mini-media-player-bundle.js?source=https://github.com/kalkih/mini-media-player/releases/download/v1.16.5/mini-media-player-bundle.js&v=2
-          type: module
-        - url: /local/custom-sonos-card.js?source=https://github.com/johanfrick/custom-sonos-card/releases/download/v5.20.1/custom-sonos-card.js&v=3
-          type: module
-        - url: /local/mini-graph-card-bundle.js?source=https://github.com/kalkih/mini-graph-card/releases/download/v0.11.0/mini-graph-card-bundle.js
-          type: module
-        - url: /local/weather-chart-card.js?source=https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
-          type: module
+  mode: yaml
+  resources:
+    - url: /local/monster-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
+      type: js
+    - url: /local/entity-attributes-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
+      type: js
+    - url: /local/auto-entities.js?source=https://github.com/thomasloven/lovelace-auto-entities/raw/1.11.0/auto-entities.js
+      type: module
+    - url: /local/card-tools.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
+      type: module
+    - url: /local/flower-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
+      type: module
+    - url: /local/group-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
+      type: js
+    - url: /local/mini-media-player-bundle.js?source=https://github.com/kalkih/mini-media-player/releases/download/v1.16.5/mini-media-player-bundle.js&v=2
+      type: module
+    - url: /local/custom-sonos-card.js?source=https://github.com/johanfrick/custom-sonos-card/releases/download/v5.20.1/custom-sonos-card.js&v=3
+      type: module
+    - url: /local/mini-graph-card-bundle.js?source=https://github.com/kalkih/mini-graph-card/releases/download/v0.11.0/mini-graph-card-bundle.js
+      type: module
+    - url: /local/weather-chart-card.js?source=https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
+      type: module
 
 light:
 logger: !include logger.yaml
 map:
 media_player: !include media_player.yaml
 notify: !include notify.yaml
-prometheus: !include prometheus.yaml
 proximity: !include proximity.yaml
 python_script:
 recorder: !include recorder.yaml
@@ -75,7 +74,7 @@ sun:
 switch: !include_dir_list switches
 system_health:
 system_log:
-    fire_event: true
+  fire_event: true
 tts:
-    - platform: google_translate
+  - platform: google_translate
 zone: !include zone.yaml
