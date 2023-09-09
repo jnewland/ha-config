@@ -5,7 +5,7 @@ automation:
     id: 7195ed64-b3c1-4940-96bf-77251ea54b6b
     trigger:
       - platform: time_pattern
-        minutes: "*/5"
+        minutes: "/5"
     action:
       - service: zwave_js.refresh_value
         data:
