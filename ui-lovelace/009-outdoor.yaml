@@ -1,0 +1,59 @@
+title: Outdoor
+icon: mdi:tree
+cards:
+  - type: entities
+    title: back porch
+    entities:
+      - switch.back_porch
+      - group.back_porch_fan
+      - switch.back_porch_fountain
+      - light.ac
+      - lock.back_porch
+  - type: entities
+    title: atrium
+    entities:
+      - switch.atrium_fan
+      - light.bamboo
+      - light.atrium
+      - light.atrium_door
+      - light.garage_door
+      - light.gate
+      - switch.atrium_fountain
+      - lock.garage
+      - cover.garage
+      - cover.gate
+      - binary_sensor.atrium_occupancy
+      - binary_sensor.atrium_couch_motion
+  - type: entities
+    title: front porch
+    entities:
+      - light.front_porch
+      - light.front_door
+      - binary_sensor.front_gate_access_control_window_door_is_open
+  - type: entities
+    title: patio
+    entities:
+      - light.patio
+      - light.bedroom_patio
+  - type: entities
+    title: pergola
+    entities:
+      - light.pergola_pendants
+      - switch.pergola_overhead
+  - type: entities
+    entities:
+      - binary_sensor.front_gate_access_control_window_door_is_open
+      - cover.garage
+      - cover.gate
+  - type: entities
+    entities:
+      - media_player.atrium_speakers
+      - media_player.pergola
+      - media_player.rock
+  - type: history-graph
+    hours_to_show: 3
+    entities:
+      - binary_sensor.atrium_occupancy
+      - binary_sensor.pergola_occupancy
+      - binary_sensor.back_porch_occupancy
+      - binary_sensor.front_porch_occupancy

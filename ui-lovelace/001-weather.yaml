@@ -1,0 +1,62 @@
+title: Weather
+path: weather
+icon: mdi:weather-cloudy
+cards:
+  - type: custom:weather-chart-card
+    entity: weather.tomorrow_io_home_nowcast
+  - type: custom:weather-chart-card
+    show_main: false
+    show_attributes: false
+    entity: weather.katt_hourly
+    title: hourly
+  - type: custom:weather-chart-card
+    show_main: false
+    show_attributes: false
+    entity: weather.katt_daynight
+    title: daily
+  - type: custom:mini-graph-card
+    entities:
+      - entity: sensor.max_forecast_temperature
+        name: Max
+        color: #e74c3c
+      - entity: sensor.min_forecast_temperature
+        name: Min
+      - entity: sensor.average_forecast_temperature
+        name: Avg
+        color: green
+    name: forecast extrema
+    hours_to_show: 24
+    group_by: hour
+    show:
+      fill: false
+      extrema: false
+  - type: conditional
+    conditions:
+      - entity: binary_sensor.precipitation_in_forecast
+        state: "on"
+    card:
+      type: custom:mini-graph-card
+      entities:
+        - sensor.hours_until_rain
+      name: hours until rain
+      hours_to_show: 24
+      show:
+        fill: false
+  - type: custom:mini-graph-card
+    entities:
+      - sensor.forecast_precipitation_probability
+    name: max forecast precipitation probability
+    hours_to_show: 24
+    show:
+      fill: false
+  - type: entities
+    title: Forecast
+    show_header_toggle: false
+    entities:
+      - sensor.forecast_duration
+      - input_number.precipitation_forecast_hours
+      - input_number.precipitation_forecast_probability_threshold
+      - binary_sensor.precipitation_in_forecast
+      - automation.precipitation_notifications
+      - automation.sunshine_notifications
+      - automation.freeze_forecast_notifications

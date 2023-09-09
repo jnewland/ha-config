@@ -1,0 +1,403 @@
+title: Home
+icon: mdi:home
+theme: dark-mode
+cards:
+  - type: conditional
+    conditions:
+      - entity: camera.front_yard_left
+        state: recording
+    card:
+      type: picture-glance
+      camera_image: camera.front_yard_left
+      entities:
+        - input_select.mode
+        - alarm_control_panel.alarm
+        - lock.front_door
+        - binary_sensor.front_gate_access_control_window_door_is_open
+        - input_number.brightness
+        - vacuum.downstairs
+        - automation.notify_when_person_detected_in_front_yard
+  - type: conditional
+    conditions:
+      - entity: device_tracker.jphone_14
+        state: "not_home"
+      - entity: device_tracker.katie_s_iphone
+        state: "not_home"
+    card:
+      type: picture-entity
+      show_name: false
+      show_state: false
+      entity: camera.great_room
+  - type: conditional
+    conditions:
+      - entity: input_boolean.visitor
+        state: "off"
+    card:
+      type: entities
+      show_header_toggle: false
+      entities:
+        - input_boolean.visitor
+  - type: vertical-stack
+    cards:
+      - type: custom:mini-media-player
+        entity: media_player.house
+        artwork: cover
+        hide:
+          power: true
+          shuffle: false
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.house
+              name: house
+            - entity_id: media_player.sub
+              name: sub
+            - entity_id: media_player.record_cabinet
+              name: record cabinet
+            - entity_id: media_player.lounge_surround
+              name: lounge surround
+            - entity_id: media_player.move
+              name: move
+            - entity_id: media_player.yoga
+              name: yoga
+            - entity_id: media_player.shower
+              name: shower
+            - entity_id: media_player.master_patio
+              name: master patio
+            - entity_id: media_player.back_porch
+              name: back porch
+            - entity_id: media_player.front_porch
+              name: front porch
+            - entity_id: media_player.pergola
+              name: pergola
+            - entity_id: media_player.rock
+              name: rock
+      - type: conditional
+        conditions:
+          - entity: media_player.house
+            state: playing
+        card:
+          type: entities
+          show_header_toggle: false
+          entities:
+            - type: custom:mini-media-player
+              entity: media_player.atrium_speakers
+              group: true
+              source: icon
+              info: short
+              hide:
+                controls: true
+                source: true
+            - type: custom:mini-media-player
+              entity: media_player.kitchen_speakers
+              group: true
+              source: icon
+              info: short
+              hide:
+                controls: true
+                source: true
+            - type: custom:mini-media-player
+              entity: media_player.living_speakers
+              group: true
+              source: icon
+              info: short
+              hide:
+                controls: true
+                source: true
+            - type: custom:mini-media-player
+              entity: media_player.master_bathroom_speakers
+              group: true
+              source: icon
+              info: short
+              hide:
+                controls: true
+                source: true
+            - type: custom:mini-media-player
+              entity: media_player.master_bedroom_speakers
+              group: true
+              source: icon
+              info: short
+              hide:
+                controls: true
+                source: true
+            - type: custom:mini-media-player
+              entity: media_player.patio_speakers
+              group: true
+              source: icon
+              info: short
+              hide:
+                controls: true
+                source: true
+            - type: conditional
+              conditions:
+                - entity: media_player.back_porch
+                  state_not: "idle"
+                - entity: media_player.back_porch
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.back_porch
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+            - type: conditional
+              conditions:
+                - entity: media_player.front_porch
+                  state_not: "idle"
+                - entity: media_player.front_porch
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.front_porch
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+            - type: conditional
+              conditions:
+                - entity: media_player.yoga
+                  state_not: "idle"
+                - entity: media_player.yoga
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.yoga
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+            - type: conditional
+              conditions:
+                - entity: media_player.lounge_surround
+                  state_not: "idle"
+                - entity: media_player.lounge_surround
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.lounge_surround
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+            - type: conditional
+              conditions:
+                - entity: media_player.master_patio
+                  state_not: "idle"
+                - entity: media_player.master_patio
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.master_patio
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+            - type: conditional
+              conditions:
+                - entity: media_player.move
+                  state_not: "idle"
+                - entity: media_player.move
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.move
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+            - type: conditional
+              conditions:
+                - entity: media_player.rock
+                  state_not: "idle"
+                - entity: media_player.rock
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.rock
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+            - type: conditional
+              conditions:
+                - entity: media_player.pergola
+                  state_not: "idle"
+                - entity: media_player.pergola
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.pergola
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+            - type: conditional
+              conditions:
+                - entity: media_player.record_cabinet
+                  state_not: "idle"
+                - entity: media_player.record_cabinet
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.record_cabinet
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+            - type: conditional
+              conditions:
+                - entity: media_player.sub
+                  state_not: "idle"
+                - entity: media_player.sub
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.sub
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+            - type: conditional
+              conditions:
+                - entity: media_player.shower
+                  state_not: "idle"
+                - entity: media_player.shower
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.shower
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+  - type: custom:auto-entities
+    show_empty: false
+    sort:
+      method: name
+    card:
+      type: entities
+      show_header_toggle: false
+    filter:
+      include:
+        - attributes:
+            supported_features: 450487
+        - entity_id: "/media_player.*_channels$/"
+        - entity_id: "/media_player.*_tv.*/"
+        - entity_id: "/media_player.*_surround$/"
+      exclude:
+        - state: "problem"
+        - state: "ok"
+        - state: "off"
+        - state: "unavailable"
+        - state: "idle"
+        - state: "paused"
+        - state: "unknown"
+        - state: "standby"
+  - type: conditional
+    conditions:
+      - entity: input_boolean.winterized
+        state: "on"
+    card:
+      type: entities
+      entities:
+        - input_boolean.winterized
+        - binary_sensor.freeze_forecast
+        - sensor.atrium_couch_temperature
+        - sensor.bamboo_temperature
+        - sensor.peppers_temperature
+        - sensor.pergola_temperature
+  - type: conditional
+    conditions:
+      - entity: input_boolean.christmas
+        state: "on"
+    card:
+      type: custom:group-card
+      card:
+        type: entities
+      group: group.trees
+  - type: entities
+    show_header_toggle: false
+    entities:
+      - cover.garage
+      - cover.gate
+      - lock.garage
+  - type: conditional
+    conditions:
+      - entity: camera.front_door_person
+        state: active
+    card:
+      type: picture-entity
+      show_name: false
+      show_state: false
+      entity: camera.front_door_person
+  - type: conditional
+    conditions:
+      - entity: camera.pergola_person
+        state: active
+    card:
+      type: picture-entity
+      show_name: false
+      show_state: false
+      entity: camera.pergola_person
+  - type: custom:custom-sonos-card
+    mediaTitle: " "
+    shuffleFavorites: false
+    selectedPlayer: media_player.house
+    singleSectionMode: media browser
+    layout:
+      mediaItem:
+        width: "25%"
+        mobileWidth: "33%"
+    styles:
+      button-section:
+        border: none
+      media-button:
+        border: none
+  - type: weather-forecast
+    entity: weather.katt_hourly

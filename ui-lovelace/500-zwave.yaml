@@ -1,0 +1,48 @@
+title: Zwave
+icon: mdi:z-wave
+cards:
+  - type: markdown
+    content: |
+      ## ZWave Device Docs
+
+      * [Multisensor](https://www.smarthome.com.au/media/manuals/aeotec-z-wave-multisensor-6_manual.pdf)
+        * PIR sensitivity sometimes resets to 0 when pairing. Should be 5.
+      * [Appliance module / energy sensor](https://doc.eedomus.com/files/Aeon_Labs_Smart_Energy_Switch_MANUAL_US.pdf)
+      * [Two outlet wall wart](https://minoston.com/wp-content/uploads/2020/08/MP20Z-Manual.pdf)
+      * [Crescent-shaped dimming wart](http://z-wave-assets.s3-us-west-2.amazonaws.com/docs/390/remotec_ZDS-110_user-manual.pdf?1494455193)
+      * [GE ZWave in-wall switch](https://byjasco.com/mwdownloads/download/link/id/2038/)
+      * [Fibrao flood sensor](https://manuals.fibaro.com/content/manuals/en/FGFS-101/FGFS-101-EN-T-v2.1.pdf)
+      * [Aeotec water sensor](https://help.aeotec.com/support/solutions/articles/6000171886-water-sensor-6-user-guide-)
+      * [Recessed door sensor](https://help.aeotec.com/support/solutions/articles/6000226848-recessed-door-sensor-7-user-guide-)
+      * [Light strip controller](https://enerwaveautomation.com/wp-content/uploads/products/zwnrsm1s/ZWN-RSM1-Plus-0208160043-02.pdf)
+      * [GE outdoor smart switch](https://byjasco.com/mwdownloads/download/link/id/1960/)
+      * [GoControl Zwave bulb](https://www.gocontrol.com/manuals/LB60Z-1-Install.pdf)
+      * [Range extender 6](https://help.aeotec.com/support/solutions/articles/6000162370-range-extender-6-user-guide-)
+      * [Ecolink PIR](https://usermanual.wiki/Z-Wave/EcolinkPirzwave2Eco.1230161169)
+  - type: custom:auto-entities
+    card:
+      type: history-graph
+      hours_to_show: 72
+      title: nodes with abnormal status
+    filter:
+      include:
+        - entity_id: "/^sensor.*_node_status$/"
+      exclude:
+        - state: "alive"
+        - state: "asleep"
+  - type: custom:auto-entities
+    card:
+      type: history-graph
+      hours_to_show: 72
+      title: node status
+    filter:
+      include:
+        - entity_id: "/^sensor.*_node_status$/"
+  - type: custom:auto-entities
+    card:
+      type: history-graph
+      hours_to_show: 12
+      title: device status count
+    filter:
+      include:
+        - entity_id: "/^sensor.*zwave_devices$/"
