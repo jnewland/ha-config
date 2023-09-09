@@ -21,8 +21,6 @@ logs:
   packages.visitor: debug
   packages.zwave: debug
   pyhap.hap_server: critical
-  pyvera: critical
-  pyvera.subscribe: warn
   requests.packages.urllib3.connectionpool: critical
   roomba.roomba.Roomba: warn
   roombapy.remote_client: critical
