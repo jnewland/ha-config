@@ -1768,7 +1768,8 @@ views:
               service: homeassistant.restart
       - type: custom:auto-entities
         card:
-          type: automations
+          type: entities
+          title: automations
           show_header_toggle: false
         filter:
           include:
@@ -1778,7 +1779,8 @@ views:
           reverse: true
       - type: custom:auto-entities
         card:
-          type: disabled automations
+          type: entities
+          title: disabled automations
           show_header_toggle: false
         filter:
           include:
