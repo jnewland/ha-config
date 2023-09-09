@@ -1742,6 +1742,15 @@ views:
           include:
             - entity_id: "/^sensor.*_node_status$/"
 
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 72
+          title: device status count
+        filter:
+          include:
+            - entity_id: "/^sensor.*zwave_devices$/"
+
   - title: Settings
     icon: mdi:cog
     cards:
