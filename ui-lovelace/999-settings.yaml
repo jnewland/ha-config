@@ -9,7 +9,6 @@ cards:
       - automation.away_mode
       - input_boolean.christmas
       - input_boolean.visitor
-      - switch.hue
   - type: entities
     entities:
       - sensor.current_version
