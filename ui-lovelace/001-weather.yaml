@@ -60,4 +60,3 @@ cards:
       - automation.precipitation_notifications
       - automation.sunshine_notifications
       - automation.freeze_forecast_notifications
----
