@@ -1773,6 +1773,17 @@ views:
         filter:
           include:
             - entity_id: "/^automation.*/"
+        sort:
+          method: last_changed
+          reverse: true
+      - type: custom:auto-entities
+        card:
+          type: disabled automations
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: "/^automation.*/"
+              state: "off"
       - type: custom:auto-entities
         show_empty: false
         sort:
