@@ -31,7 +31,7 @@ class MyQRequest:  # pylint: disable=too-many-instance-attributes
 
     def __init__(self, websession: ClientSession = None) -> None:
         self._websession = websession or ClientSession()
-        self._useragent = None
+        self._useragent = str("a customer interested in purchasing a HomeKit compatible bridge")
         self._last_useragent_update = None
 
     async def _get_useragent(self) -> None:
