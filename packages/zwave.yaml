@@ -3,8 +3,8 @@ automation:
     mode: parallel
     id: 2a4654c0-122c-4166-ad30-c8bde5156ddf
     trigger:
-    - platform: event
-      event_type: zwave_js_notification
+      - platform: event
+        event_type: zwave_js_notification
     action:
       - service: system_log.write
         data:
@@ -13,3 +13,137 @@ automation:
             event={{ trigger.event }}
           logger: packages.zwave
           level: debug
+
+template:
+  - sensor:
+      - name: "Dead ZWave Devices"
+        unique_id: dead_zwave_devices
+        unit_of_measurement: entities
+        state: >
+          {% if state_attr('sensor.dead_zwave_devices','entity_id') != none %}
+            {{ state_attr('sensor.dead_zwave_devices','entity_id') | count }}
+          {% else %}
+            {{ 0 }}
+          {% endif %}
+        attributes:
+          entity_id: >
+            {% set exclude_filter = [] %}
+            {{
+              expand(integration_entities('Z-Wave JS') )
+              | rejectattr("entity_id", "in", exclude_filter)
+              | selectattr("entity_id", "search", "node_status")
+              | selectattr('state', 'in', 'dead')
+              | map(attribute="object_id")
+              | map('regex_replace', find='(.*)_node_status', replace='button.\\1_ping', ignorecase=False)
+              | list
+            }}
+  - sensor:
+      - name: "Unavailable ZWave Devices"
+        unique_id: unavailable_zwave_devices
+        unit_of_measurement: entities
+        state: >
+          {% if state_attr('sensor.unavailable_zwave_devices','entity_id') != none %}
+            {{ state_attr('sensor.unavailable_zwave_devices','entity_id') | count }}
+          {% else %}
+            {{ 0 }}
+          {% endif %}
+        attributes:
+          entity_id: >
+            {% set exclude_filter = [] %}
+            {{
+              expand(integration_entities('Z-Wave JS') )
+              | rejectattr("entity_id", "in", exclude_filter)
+              | selectattr("entity_id", "search", "node_status")
+              | selectattr('state', 'in', 'unavailable')
+              | map(attribute="object_id")
+              | map('regex_replace', find='(.*)_node_status', replace='button.\\1_ping', ignorecase=False)
+              | list
+            }}
+  - sensor:
+      - name: "Unknown ZWave Devices"
+        unique_id: unknown_zwave_devices
+        unit_of_measurement: entities
+        state: >
+          {% if state_attr('sensor.unknown_zwave_devices','entity_id') != none %}
+            {{ state_attr('sensor.unknown_zwave_devices','entity_id') | count }}
+          {% else %}
+            {{ 0 }}
+          {% endif %}
+        attributes:
+          entity_id: >
+            {% set exclude_filter = [] %}
+            {{
+              expand(integration_entities('Z-Wave JS') )
+              | rejectattr("entity_id", "in", exclude_filter)
+              | selectattr("entity_id", "search", "node_status")
+              | selectattr('state', 'in', 'unknown')
+              | map(attribute="object_id")
+              | map('regex_replace', find='(.*)_node_status', replace='button.\\1_ping', ignorecase=False)
+              | list
+            }}
+  - sensor:
+      - name: "Alive ZWave Devices"
+        unique_id: alive_zwave_devices
+        unit_of_measurement: entities
+        state: >
+          {% if state_attr('sensor.alive_zwave_devices','entity_id') != none %}
+            {{ state_attr('sensor.alive_zwave_devices','entity_id') | count }}
+          {% else %}
+            {{ 0 }}
+          {% endif %}
+        attributes:
+          entity_id: >
+            {% set exclude_filter = [] %}
+            {{
+              expand(integration_entities('Z-Wave JS') )
+              | rejectattr("entity_id", "in", exclude_filter)
+              | selectattr("entity_id", "search", "node_status")
+              | selectattr('state', 'in', 'alive')
+              | map(attribute="object_id")
+              | map('regex_replace', find='(.*)_node_status', replace='button.\\1_ping', ignorecase=False)
+              | list
+            }}
+  - sensor:
+      - name: "Awake ZWave Devices"
+        unique_id: awake_zwave_devices
+        unit_of_measurement: entities
+        state: >
+          {% if state_attr('sensor.awake_zwave_devices','entity_id') != none %}
+            {{ state_attr('sensor.awake_zwave_devices','entity_id') | count }}
+          {% else %}
+            {{ 0 }}
+          {% endif %}
+        attributes:
+          entity_id: >
+            {% set exclude_filter = [] %}
+            {{
+              expand(integration_entities('Z-Wave JS') )
+              | rejectattr("entity_id", "in", exclude_filter)
+              | selectattr("entity_id", "search", "node_status")
+              | selectattr('state', 'in', 'awake')
+              | map(attribute="object_id")
+              | map('regex_replace', find='(.*)_node_status', replace='button.\\1_ping', ignorecase=False)
+              | list
+            }}
+  - sensor:
+      - name: "Asleep ZWave Devices"
+        unique_id: asleep_zwave_devices
+        unit_of_measurement: entities
+        state: >
+          {% if state_attr('sensor.asleep_zwave_devices','entity_id') != none %}
+            {{ state_attr('sensor.asleep_zwave_devices','entity_id') | count }}
+          {% else %}
+            {{ 0 }}
+          {% endif %}
+        attributes:
+          entity_id: >
+            {% set exclude_filter = [] %}
+            {{
+              expand(integration_entities('Z-Wave JS') )
+              | rejectattr("entity_id", "in", exclude_filter)
+              | selectattr("entity_id", "search", "node_status")
+              | selectattr('state', 'in', 'asleep')
+              | map(attribute="object_id")
+              | map('regex_replace', find='(.*)_node_status', replace='button.\\1_ping', ignorecase=False)
+              | list
+            }}

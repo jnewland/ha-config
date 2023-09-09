@@ -1,11 +1,11 @@
 automation:
   - alias: poll GoControl GC-TBZ48
     # I've set param 23 to 8319, which should cause the thing to report
-    # No such luck, so poll it every minute
+    # No such luck, so poll it every 5 minutes
     id: 7195ed64-b3c1-4940-96bf-77251ea54b6b
     trigger:
       - platform: time_pattern
-        minutes: "*"
+        minutes: "/5"
     action:
       - service: zwave_js.refresh_value
         data:

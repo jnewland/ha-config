@@ -1742,6 +1742,15 @@ views:
           include:
             - entity_id: "/^sensor.*_node_status$/"
 
+      - type: custom:auto-entities
+        card:
+          type: history-graph
+          hours_to_show: 12
+          title: device status count
+        filter:
+          include:
+            - entity_id: "/^sensor.*zwave_devices$/"
+
   - title: Settings
     icon: mdi:cog
     cards:
@@ -1766,6 +1775,26 @@ views:
             tap_action:
               action: call-service
               service: homeassistant.restart
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: automations
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: "/^automation.*/"
+        sort:
+          method: last_changed
+          reverse: true
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: disabled automations
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: "/^automation.*/"
+              state: "off"
       - type: custom:auto-entities
         show_empty: false
         sort:

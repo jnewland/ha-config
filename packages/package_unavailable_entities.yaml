@@ -16,6 +16,8 @@ template:
         state: >
           {% if state_attr('sensor.unavailable_entities','entity_id') != none %}
             {{ state_attr('sensor.unavailable_entities','entity_id')|count }}
+          {% else %}
+            {{ 0 }}
           {% endif %}
         attributes:
           entity_id: >

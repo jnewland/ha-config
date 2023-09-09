@@ -104,24 +104,6 @@ automation:
           notification_id: >
             {{ trigger.entity_id }}_low
 
-  - alias: Reboot unreliable great room camera automatically
-    id: f14e2300-ca01-4f4e-91cd-b3611c90634b
-    mode: parallel
-    trigger:
-      - platform: numeric_state
-        entity_id:
-          - sensor.great_room_camera_fps
-        below: 5
-        for:
-          minutes: 3
-    action:
-      - service: switch.turn_off
-        entity_id: switch.great_room_camera
-      - delay:
-          seconds: 10
-      - service: switch.turn_on
-        entity_id: switch.great_room_camera
-
   - alias: Post frigate images during events
     mode: parallel
     id: e4d0a9e9-b403-48dc-80d3-e3c750ad0cb8
