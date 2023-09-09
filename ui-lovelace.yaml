@@ -1767,6 +1767,13 @@ views:
               action: call-service
               service: homeassistant.restart
       - type: custom:auto-entities
+        card:
+          type: automations
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: "/^automation.*/"
+      - type: custom:auto-entities
         show_empty: false
         sort:
           method: id
