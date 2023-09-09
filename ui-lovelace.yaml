@@ -1745,7 +1745,7 @@ views:
       - type: custom:auto-entities
         card:
           type: history-graph
-          hours_to_show: 3
+          hours_to_show: 12
           title: device status count
         filter:
           include:
