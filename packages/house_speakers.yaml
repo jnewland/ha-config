@@ -12,10 +12,8 @@ template:
         state: >
           {% if is_state('media_player.lounge', 'playing') %}
             media_player.lounge_surround
-          {% elif is_state('media_player.house', 'playing') %}
-            media_player.house
           {% else %}
-            undefined
+            media_player.house
           {% endif %}
 
 automation:
@@ -74,7 +72,6 @@ automation:
           is_state(trigger.event.data.new_state.entity_id, "on") and
           trigger.event.data.new_state.attributes.media_player_group_member is defined and
           states('sensor.house_speaker_source') is defined and
-          not is_state('sensor.house_speaker_source', 'undefined') and
           not is_state('sensor.house_speaker_source', trigger.event.data.new_state.attributes.media_player_group_member) and
           trigger.event.data.new_state.attributes.media_player_group_member not in state_attr(states('sensor.house_speaker_source'), 'group_members') and
           ( is_state(trigger.event.data.new_state.attributes.media_player_group_member, 'idle') or
