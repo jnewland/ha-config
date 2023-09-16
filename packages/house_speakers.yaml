@@ -97,15 +97,33 @@ automation:
           trigger.event.data.new_state.attributes.media_player_entity_id is defined
         }}
     action:
-    - service: media_player.unjoin
-      data: {}
-      target:
-        entity_id: |
-          {{ trigger.event.data.new_state.attributes.media_player_group_members }}
-    - service: system_log.write
-      data:
-        message: >
-          at=media_player.unjoin
-          entity_id={{ trigger.event.data.new_state.attributes.media_player_group_members }}
-        logger: packages.house_speakers
-        level: debug
+      - service: media_player.unjoin
+        data: {}
+        target:
+          entity_id: |
+            {{ trigger.event.data.new_state.attributes.media_player_group_members }}
+      - service: system_log.write
+        data:
+          message: >
+            at=media_player.unjoin
+            entity_id={{ trigger.event.data.new_state.attributes.media_player_group_members }}
+          logger: packages.house_speakers
+          level: debug
+  - alias: Pause house speakers when tvs are playing
+    mode: parallel
+    id: b6ba810d-20a9-4d2e-8252-f6afefd9824e
+    trigger:
+      - platform: state
+        entity_id: media_player.lounge
+        to: playing
+      - platform: state
+        entity_id: media_player.bedroom
+        to: playing
+    condition:
+      - condition: state
+        entity_id: media_player.house
+        state: playing
+    action:
+      - service: media_player.media_pause
+        target:
+          entity_id: media_player.house
