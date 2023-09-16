@@ -73,10 +73,10 @@ automation:
           trigger.event.data.new_state.domain == "binary_sensor" and
           is_state(trigger.event.data.new_state.entity_id, "on") and
           trigger.event.data.new_state.attributes.media_player_group_member is defined and
-          states.sensor.house_speaker_source_entity_id is defined and
-          states.sensor.house_speaker_source_entity_id.state != "undefined" and
-          states.sensor.house_speaker_source_entity_id.state != trigger.event.data.new_state.attributes.media_player_group_member and
-          trigger.event.data.new_state.attributes.media_player_group_member not in state_attr(states.sensor.house_speaker_source_entity_id.state, 'group_members') and
+          states('sensor.house_speaker_source_entity_id') is defined and
+          not is_state('sensor.house_speaker_source_entity_id', 'undefined') and
+          not is_state('sensor.house_speaker_source_entity_id', trigger.event.data.new_state.attributes.media_player_group_member) and
+          trigger.event.data.new_state.attributes.media_player_group_member not in state_attr(states('sensor.house_speaker_source_entity_id'), 'group_members') and
           ( is_state(trigger.event.data.new_state.attributes.media_player_group_member, 'idle') or
             is_state(trigger.event.data.new_state.attributes.media_player_group_member, 'paused') )
         }}
@@ -86,13 +86,13 @@ automation:
           group_members: |
             {{ trigger.event.data.new_state.attributes.media_player_group_member }}
           entity_id: |
-            {{ states.sensor.house_speaker_source_entity_id.state }}
+            {{ states('sensor.house_speaker_source_entity_id') }}
       - service: system_log.write
         data:
           message: >
             at=media_player.join
             group_members={{ trigger.event.data.new_state.attributes.media_player_group_member }}
-            entity_id={{ states.sensor.house_speaker_source_entity_id.state }}
+            entity_id={{ states('sensor.house_speaker_source_entity_id') }}
           logger: packages.house_speakers
           level: debug
   - alias: Ungroup sonos speakers
@@ -141,8 +141,11 @@ automation:
       - service: media_player.media_pause
         target:
           entity_id: media_player.house
+      - condition: template
+        value_template: |
+          {{ not is_state('sensor.house_speaker_source_entity_id', 'undefined') }}
       - service: media_player.join
         data:
           group_members: media_player.house
           entity_id: |
-            {{ states.sensor.house_speaker_source_entity_id.state }}
+            {{ states('sensor.house_speaker_source_entity_id') }}
