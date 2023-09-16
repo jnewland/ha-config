@@ -10,10 +10,10 @@ template:
       - name: House speaker source
         unique_id: house_speaker_source_entity_id
         state: >
-          {% if is_state('media_player.house', 'playing') %}
-            media_player.house
-          {% elif is_state('media_player.lounge', 'playing') %}
+          {% if is_state('media_player.lounge', 'playing') %}
             media_player.lounge_surround
+          {% elif is_state('media_player.house', 'playing') %}
+            media_player.house
           {% else %}
             undefined
           {% endif %}
