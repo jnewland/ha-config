@@ -4,8 +4,7 @@ homeassistant:
       # Groups with mixed types can't handle brightness data
       trigger_service: script.garage_occupancy
       trigger_entity_id_off: group.garage_occupancy
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.move
+      media_player_group_member: media_player.move
 
 script:
   garage_occupancy:
