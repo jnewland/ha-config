@@ -115,7 +115,7 @@ cards:
 
       - type: conditional
         conditions:
-          - entity: sensor.house_speaker_source_entity_id
+          - entity: sensor.house_speaker_source
             state_not: undefined
         card:
           type: entities
