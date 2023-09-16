@@ -141,9 +141,15 @@ automation:
       - service: media_player.media_pause
         target:
           entity_id: media_player.house
-      - condition: template
-        value_template: |
-          {{ not is_state('sensor.house_speaker_source', 'undefined') }}
+  - alias: Group house speakers when Sonos paired tvs are playing
+    mode: parallel
+    id: 08f9e8e3-436e-4228-b507-e83e0e36f033
+    trigger:
+      - platform: state
+        entity_id: media_player.lounge
+        to: playing
+    action:
+      - delay: 3
       - service: media_player.join
         data:
           group_members: media_player.house
