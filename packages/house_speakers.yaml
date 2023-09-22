@@ -5,6 +5,17 @@ group:
       - media_player.living_speakers
       - media_player.kitchen_speakers
 
+template:
+  - sensor:
+      - name: House speaker source
+        unique_id: house_speaker_source_entity_id
+        state: >
+          {% if is_state('media_player.lounge', 'playing') %}
+            media_player.lounge_surround
+          {% else %}
+            media_player.house
+          {% endif %}
+
 automation:
   - alias: Turn on related speakers
     mode: parallel
@@ -59,25 +70,26 @@ automation:
           trigger.event.data.old_state != None and
           trigger.event.data.new_state.domain == "binary_sensor" and
           is_state(trigger.event.data.new_state.entity_id, "on") and
-          trigger.event.data.new_state.attributes.media_player_group_members is defined and
-          trigger.event.data.new_state.attributes.media_player_entity_id is defined and
-          trigger.event.data.new_state.attributes.media_player_group_members not in state_attr(trigger.event.data.new_state.attributes.media_player_entity_id, 'group_members') and
-          ( is_state(trigger.event.data.new_state.attributes.media_player_group_members, 'idle') or
-            is_state(trigger.event.data.new_state.attributes.media_player_group_members, 'paused') )
+          trigger.event.data.new_state.attributes.media_player_group_member is defined and
+          states('sensor.house_speaker_source') is defined and
+          not is_state('sensor.house_speaker_source', trigger.event.data.new_state.attributes.media_player_group_member) and
+          trigger.event.data.new_state.attributes.media_player_group_member not in state_attr(states('sensor.house_speaker_source'), 'group_members') and
+          ( is_state(trigger.event.data.new_state.attributes.media_player_group_member, 'idle') or
+            is_state(trigger.event.data.new_state.attributes.media_player_group_member, 'paused') )
         }}
     action:
       - service: media_player.join
         data:
           group_members: |
-            {{ trigger.event.data.new_state.attributes.media_player_group_members }}
+            {{ trigger.event.data.new_state.attributes.media_player_group_member }}
           entity_id: |
-            {{ trigger.event.data.new_state.attributes.media_player_entity_id }}
+            {{ states('sensor.house_speaker_source') }}
       - service: system_log.write
         data:
           message: >
             at=media_player.join
-            group_members={{ trigger.event.data.new_state.attributes.media_player_group_members }}
-            entity_id={{ trigger.event.data.new_state.attributes.media_player_entity_id }}
+            group_members={{ trigger.event.data.new_state.attributes.media_player_group_member }}
+            entity_id={{ states('sensor.house_speaker_source') }}
           logger: packages.house_speakers
           level: debug
   - alias: Ungroup sonos speakers
@@ -93,19 +105,50 @@ automation:
           trigger.event.data.old_state != None and
           trigger.event.data.new_state.domain == "binary_sensor" and
           is_state(trigger.event.data.new_state.entity_id, "off") and
-          trigger.event.data.new_state.attributes.media_player_group_members is defined and
-          trigger.event.data.new_state.attributes.media_player_entity_id is defined
+          trigger.event.data.new_state.attributes.media_player_group_member is defined
         }}
     action:
-    - service: media_player.unjoin
-      data: {}
-      target:
-        entity_id: |
-          {{ trigger.event.data.new_state.attributes.media_player_group_members }}
-    - service: system_log.write
-      data:
-        message: >
-          at=media_player.unjoin
-          entity_id={{ trigger.event.data.new_state.attributes.media_player_group_members }}
-        logger: packages.house_speakers
-        level: debug
+      - service: media_player.unjoin
+        data: {}
+        target:
+          entity_id: |
+            {{ trigger.event.data.new_state.attributes.media_player_group_member }}
+      - service: system_log.write
+        data:
+          message: >
+            at=media_player.unjoin
+            entity_id={{ trigger.event.data.new_state.attributes.media_player_group_member }}
+          logger: packages.house_speakers
+          level: debug
+  - alias: Pause house speakers when tvs are playing
+    mode: parallel
+    id: b6ba810d-20a9-4d2e-8252-f6afefd9824e
+    trigger:
+      - platform: state
+        entity_id: media_player.lounge
+        to: playing
+      - platform: state
+        entity_id: media_player.bedroom
+        to: playing
+    condition:
+      - condition: state
+        entity_id: media_player.house
+        state: playing
+    action:
+      - service: media_player.media_pause
+        target:
+          entity_id: media_player.house
+  - alias: Group house speakers when Sonos paired tvs are playing
+    mode: parallel
+    id: 08f9e8e3-436e-4228-b507-e83e0e36f033
+    trigger:
+      - platform: state
+        entity_id: media_player.lounge
+        to: playing
+    action:
+      - delay: 3
+      - service: media_player.join
+        data:
+          group_members: media_player.house
+          entity_id: |
+            {{ states('sensor.house_speaker_source') }}

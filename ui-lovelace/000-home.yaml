@@ -75,8 +75,48 @@ cards:
               name: rock
       - type: conditional
         conditions:
-          - entity: media_player.house
+          - entity: media_player.lounge
             state: playing
+        card:
+          type: custom:mini-media-player
+          entity: media_player.lounge_surround
+          artwork: cover
+          hide:
+            power: true
+            shuffle: false
+          speaker_group:
+            platform: sonos
+            show_group_count: true
+            entities:
+              - entity_id: media_player.house
+                name: house
+              - entity_id: media_player.sub
+                name: sub
+              - entity_id: media_player.record_cabinet
+                name: record cabinet
+              - entity_id: media_player.lounge_surround
+                name: lounge surround
+              - entity_id: media_player.move
+                name: move
+              - entity_id: media_player.yoga
+                name: yoga
+              - entity_id: media_player.shower
+                name: shower
+              - entity_id: media_player.master_patio
+                name: master patio
+              - entity_id: media_player.back_porch
+                name: back porch
+              - entity_id: media_player.front_porch
+                name: front porch
+              - entity_id: media_player.pergola
+                name: pergola
+              - entity_id: media_player.rock
+                name: rock
+
+      - type: conditional
+        conditions:
+          - entity: sensor.house_speaker_source
+            state_not: undefined
         card:
           type: entities
           show_header_toggle: false

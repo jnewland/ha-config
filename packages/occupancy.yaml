@@ -5,31 +5,26 @@ homeassistant:
       trigger_entity_id_off: group.great_room
       haunt: light.bookshelf_right
       speaker_entity: group.great_room_speakers
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.sub
+      media_player_group_member: media_player.sub
 
     binary_sensor.lounge_occupancy:
       trigger_service: script.lounge_lights
       trigger_entity_id_off: group.lounge
       off_delay_seconds: 1800
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.lounge_surround
+      media_player_group_member: media_player.lounge_surround
 
     binary_sensor.bedroom_occupancy:
       speaker_entity: media_player.master_bedroom_speakers
 
     binary_sensor.bathroom_occupancy:
       speaker_entity: media_player.master_bathroom_speakers
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.shower
+      media_player_group_member: media_player.shower
 
     binary_sensor.front_porch_occupancy:
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.front_porch
+      media_player_group_member: media_player.front_porch
 
     binary_sensor.back_porch_occupancy:
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.back_porch
+      media_player_group_member: media_player.back_porch
       # trigger_entity_id: group.back_porch_fan
       # trigger_entity_id_off: group.back_porch_fan
 
@@ -37,12 +32,10 @@ homeassistant:
       trigger_entity_id: switch.atrium_fan
       trigger_entity_id_off: switch.atrium_fan
       speaker_entity: media_player.atrium_speakers
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.rock
+      media_player_group_member: media_player.rock
 
     binary_sensor.pergola_occupancy:
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.pergola
+      media_player_group_member: media_player.pergola
 
     binary_sensor.yoga_room_home_security_motion_detection:
       haunt: light.bookshelf_middle
@@ -50,8 +43,7 @@ homeassistant:
     binary_sensor.yoga_room_occupancy:
       trigger_entity_id: group.yoga_room
       trigger_entity_id_off: group.yoga_room
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.yoga
+      media_player_group_member: media_player.yoga
 
     binary_sensor.garage_hall_home_security_motion_detection:
       trigger_entity_id: light.garage_hall
@@ -69,8 +61,7 @@ homeassistant:
       haunt: light.drums
 
     binary_sensor.common_area_occupancy:
-      media_player_entity_id: media_player.house
-      media_player_group_members: media_player.record_cabinet
+      media_player_group_member: media_player.record_cabinet
 
     binary_sensor.stairs_occupancy:
       trigger_entity_id: light.stairs
