@@ -3,7 +3,7 @@ icon: mdi:video
 cards:
   - type: conditional
     conditions:
-      - entity: device_tracker.jphone_14
+      - entity: device_tracker.jphone
         state: "not_home"
       - entity: device_tracker.katie_s_iphone
         state: "not_home"

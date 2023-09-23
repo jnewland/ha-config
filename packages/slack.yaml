@@ -55,12 +55,12 @@ automation:
         - binary_sensor.dining_room_motion_detection
         - binary_sensor.front_gate_access_control_window_door_is_open
         - sensor.ups_state
-        - sensor.jphone_14_battery_state
+        - sensor.jphone_battery_state
         - sensor.katie_s_iphone_battery_state
         - sensor.katie_s_iphone_activity
-        - sensor.jphone_14_activity
+        - sensor.jphone_activity
         - device_tracker.katie_s_iphone
-        - device_tracker.jphone_14
+        - device_tracker.jphone
         - device_tracker.jesses_ipad
         - device_tracker.jesse_music_room
         - binary_sensor.bathroom_home_security_motion_detection
@@ -122,7 +122,7 @@ automation:
             "weather":             ":cloud:"
           } %}
           {% set entity_emoji = {
-            "sensor.jphone_14_battery_state":      ":iphone:",
+            "sensor.jphone_battery_state":      ":iphone:",
             "sensor.katie_s_iphone_battery_state": ":iphone:",
             "binary_sensor.master_ac_water_13":   ":droplet:",
             "binary_sensor.front_gate_access_control_window_door_is_open":       ":house_with_garden:"

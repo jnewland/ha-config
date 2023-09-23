@@ -128,8 +128,8 @@ binary_sensor:
               states.device_tracker.katie_s_iphone.last_changed > (now() - timedelta(minutes=5))
             ) or
             (
-              states('device_tracker.jphone_14') == 'Kitchen' and
-              states.device_tracker.jphone_14.last_changed > (now() - timedelta(minutes=5))
+              states('device_tracker.jphone') == 'Kitchen' and
+              states.device_tracker.jphone.last_changed > (now() - timedelta(minutes=5))
             )
           }}
         delay_off:
@@ -146,8 +146,8 @@ binary_sensor:
               states.device_tracker.katie_s_iphone.last_changed > (now() - timedelta(minutes=5))
             ) or
             (
-              states('device_tracker.jphone_14') == 'Lounge' and
-              states.device_tracker.jphone_14.last_changed > (now() - timedelta(minutes=5))
+              states('device_tracker.jphone') == 'Lounge' and
+              states.device_tracker.jphone.last_changed > (now() - timedelta(minutes=5))
             )
           }}
         delay_off:
@@ -166,8 +166,8 @@ binary_sensor:
               states.device_tracker.katie_s_iphone.last_changed > (now() - timedelta(minutes=5))
             ) or
             (
-              states('device_tracker.jphone_14') == 'Bedroom' and
-              states.device_tracker.jphone_14.last_changed > (now() - timedelta(minutes=5))
+              states('device_tracker.jphone') == 'Bedroom' and
+              states.device_tracker.jphone.last_changed > (now() - timedelta(minutes=5))
             )
           }}
         delay_off:

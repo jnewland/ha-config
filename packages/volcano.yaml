@@ -12,7 +12,7 @@ automation:
     action:
       - service: script.ack
         data:
-          notify_service: notify.mobile_app_jphone_14
+          notify_service: notify.mobile_app_jphone
           entity_id: switch.volcano_fan
           tag: volcano
           message: |
@@ -32,7 +32,7 @@ automation:
     action:
       - service: script.ack
         data:
-          notify_service: notify.mobile_app_jphone_14
+          notify_service: notify.mobile_app_jphone
           service: homeassistant.turn_off
           entity_id: switch.volcano_fan
           tag: volcano
@@ -49,7 +49,7 @@ automation:
         to: "off"
     condition: []
     action:
-      - service: notify.mobile_app_jphone_14
+      - service: notify.mobile_app_jphone
         data:
           message: "clear_notification"
           data:
