@@ -9,16 +9,16 @@ automation:
   - alias: Precipitation notifications
     id: adeaa17d-9184-4cd4-9086-47dcc8817b71
     trigger:
-    - platform: state
-      entity_id: binary_sensor.precipitation_in_forecast
-      from: "on"
-      to: "off"
+      - platform: state
+        entity_id: binary_sensor.precipitation_in_forecast
+        from: "on"
+        to: "off"
     condition: |
-      {{ states('device_tracker.jphone_14') != 'not_home' }}
+      {{ states('device_tracker.jphone') != 'not_home' }}
     action:
       - service: script.ack
         data:
-          notify_service: notify.mobile_app_jphone_14
+          notify_service: notify.mobile_app_jphone
           entity_id: script.noop
           tag: precipitation
           message: Rain is forecasted soon. Prep for rain?
@@ -26,16 +26,16 @@ automation:
   - alias: Sunshine notifications
     id: ad844a6c-87f8-4e72-9839-9af40bd4c500
     trigger:
-    - platform: state
-      entity_id: binary_sensor.precipitation_in_forecast
-      from: "off"
-      to: "on"
+      - platform: state
+        entity_id: binary_sensor.precipitation_in_forecast
+        from: "off"
+        to: "on"
     condition: |
-      {{ states('device_tracker.jphone_14') != 'not_home' }}
+      {{ states('device_tracker.jphone') != 'not_home' }}
     action:
       - service: script.ack
         data:
-          notify_service: notify.mobile_app_jphone_14
+          notify_service: notify.mobile_app_jphone
           entity_id: script.noop
           tag: precipitation
           message: No rain in the forecast. Prep for sunshine?
@@ -52,7 +52,6 @@ input_number:
     min: 0
     max: 100
     step: 5
-
 
 binary_sensor:
   - platform: template
@@ -78,7 +77,7 @@ sensor:
           {{ (state_attr("weather.tomorrow_io_home_nowcast", "forecast") | first)["precipitation"] }}
       forecast_precipitation_probability:
         friendly_name: Precipitation probability
-        unit_of_measurement: '%'
+        unit_of_measurement: "%"
         value_template: |
           {{
             (
@@ -108,7 +107,7 @@ sensor:
           {{ next_precip or "" }}
       hours_until_rain:
         friendly_name: Hours until rain
-        unit_of_measurement: 'hours'
+        unit_of_measurement: "hours"
         value_template: |
           {% if states('sensor.next_precipitation') == 'unavailable' or states('sensor.next_precipitation') == '' %}
             {{ state_attr("weather.katt_hourly", "forecast") | length }}

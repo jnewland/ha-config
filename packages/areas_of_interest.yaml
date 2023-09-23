@@ -1,17 +1,17 @@
 sensor:
   - platform: template
     sensors:
-      jphone_14_areas_of_interest:
-        friendly_name: jPhone 12 areas of interest
+      jphone_areas_of_interest:
+        friendly_name: jPhone areas of interest
         value_template: |
-          {{ state_attr('sensor.jphone_14_geocoded_location', 'Areas Of Interest') | join(' ,') }}
+          {{ state_attr('sensor.jphone_geocoded_location', 'Areas Of Interest') | join(' ,') }}
 
 automation:
   - alias: log area of interest changes to slack
     trigger:
       platform: state
       entity_id:
-        - sensor.jphone_14_areas_of_interest
+        - sensor.jphone_areas_of_interest
     condition:
       condition: template
       value_template: |
@@ -36,4 +36,3 @@ automation:
           after being {{ old_state.state | capitalize }}{{ " " -}}
           for {{ relative_time(old_state.last_changed) }}
         target: "#general"
-
