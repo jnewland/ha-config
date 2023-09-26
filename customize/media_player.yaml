@@ -10,9 +10,6 @@ media_player.living_speakers:
 media_player.master_bathroom_speakers:
   emulated_hue_hidden: false
   friendly_name: "master bathroom"
-media_player.master_bedroom_speakers:
-  emulated_hue_hidden: false
-  friendly_name: "master bedroom"
 media_player.patio_speakers:
   emulated_hue_hidden: false
   friendly_name: "patio"
