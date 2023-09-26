@@ -154,14 +154,6 @@ cards:
                 controls: true
                 source: true
             - type: custom:mini-media-player
-              entity: media_player.master_bedroom_speakers
-              group: true
-              source: icon
-              info: short
-              hide:
-                controls: true
-                source: true
-            - type: custom:mini-media-player
               entity: media_player.patio_speakers
               group: true
               source: icon
@@ -331,6 +323,23 @@ cards:
               row:
                 type: custom:mini-media-player
                 entity: media_player.sub
+                group: true
+                source: icon
+                info: short
+                hide:
+                  controls: true
+                  source: true
+                  power: true
+                  progress: true
+            - type: conditional
+              conditions:
+                - entity: media_player.bedroom
+                  state_not: "idle"
+                - entity: media_player.bedroom
+                  state_not: "paused"
+              row:
+                type: custom:mini-media-player
+                entity: media_player.bedroom
                 group: true
                 source: icon
                 info: short

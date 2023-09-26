@@ -14,7 +14,7 @@ homeassistant:
       media_player_group_member: media_player.lounge_surround
 
     binary_sensor.bedroom_occupancy:
-      speaker_entity: media_player.master_bedroom_speakers
+      media_player_group_member: media_player.bedroom
 
     binary_sensor.bathroom_occupancy:
       speaker_entity: media_player.master_bathroom_speakers

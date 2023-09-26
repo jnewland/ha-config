@@ -15,7 +15,7 @@ media_player:
   - platform: group
     name: upstairs speakers
     entities:
-      - media_player.master_bedroom_speakers
+      - media_player.bedroom
       - media_player.master_bathroom_speakers
       - media_player.yoga
       - media_player.shower
