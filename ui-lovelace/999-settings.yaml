@@ -15,6 +15,7 @@ cards:
       - sensor.config_sha
       - sensor.latest_deployment_sha
       - automation.deploy_latest_deployment
+      - sensor.database_size
       - entity: zone.home
         icon: "mdi:restart"
         name: Restart
