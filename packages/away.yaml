@@ -1,24 +1,4 @@
 automation:
-  - alias: Turn off indoor cams when we come home
-    id: 2dae0bc7-1bb7-43c2-a283-e6b5def2f72c
-    trigger:
-      - platform: state
-        entity_id: device_tracker.katie_s_iphone
-        from: not_home
-        to: home
-      - platform: state
-        entity_id: device_tracker.jphone
-        from: not_home
-        to: home
-    condition:
-      condition: template
-      value_template: |
-        {{ is_state('group.indoor_cams', 'on') }}
-    action:
-      - service: homeassistant.turn_off
-        entity_id:
-          - group.indoor_cams
-
   - alias: Double check location katie
     id: 5dee9e89-cac9-437e-a1a2-a4a8cc52133c
     trigger:
