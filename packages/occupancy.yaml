@@ -79,7 +79,6 @@ template:
         device_class: occupancy
         state: |
           {{
-            is_state('binary_sensor.music_room_dev_apple_device_detected', 'on') or
             is_state('binary_sensor.music_room_home_security_motion_detection', 'on')
           }}
 

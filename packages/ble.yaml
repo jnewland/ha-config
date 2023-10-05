@@ -1,0 +1,13 @@
+template:
+  - sensor:
+      - name: Private BLE Device 524e60 Source
+        unique_id: private_ble_device_524e60_source
+        state: >
+          {% set source = state_attr('device_tracker.private_ble_device_524e60','source') %}
+          {% set adapters = {
+          } %}
+          {{ adapters.get(source, source) }}
+        icon: >
+          mdi:bluetooth-{{'connect' if is_state('device_tracker.private_ble_device_9dfc84','home') else 'off'}}
+        attributes:
+          device: device_tracker.private_ble_device_524e60
