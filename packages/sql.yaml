@@ -1,9 +1,14 @@
-sensor:
-  - platform: sql
-    scan_interval: 600
-    queries:
+sql:
+  - name: db_bytes
+    db_url: !env_var DB_URL
+    query: >
+      SELECT ROUND(page_count * page_size, 1) as size FROM pragma_page_count(), pragma_page_size();
+    column: "size"
+    unit_of_measurement: bytes
+
+template:
+  - sensor:
       - name: Database size
-        db_url: !env_var DB_URL
-        query: >
-          SELECT ROUND(page_count * page_size / 1024 / 1024, 1) as size FROM pragma_page_count(), pragma_page_size();
-        column: "size"
+        unique_id: database_size
+        state: >
+          {{ (state_attr('sensor.database','db_bytes') | default(0) | filesizeformat(binary=false)) }}
