@@ -149,9 +149,6 @@ script:
       - service: homeassistant.turn_off
         entity_id:
           - group.indoor
-      - service: homeassistant.turn_on
-        entity_id:
-          - group.indoor_cams
       - service: script.lock_up
       - service: input_select.select_option
         data:
