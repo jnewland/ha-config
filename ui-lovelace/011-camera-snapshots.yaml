@@ -1,5 +1,5 @@
 title: Cameras Snapshots
-icon: mdi:camera-retake
+icon: mdi:video-image
 cards:
   - type: conditional
     conditions:

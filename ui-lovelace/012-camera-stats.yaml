@@ -1,5 +1,5 @@
 title: Cameras Stats
-icon: mdi:camera-wireless
+icon: mdi:video-check
 cards:
   - type: custom:auto-entities
     show_header_toggle: false
