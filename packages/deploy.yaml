@@ -37,7 +37,7 @@ automation:
         data:
           sha: >
             {{ states('sensor.latest_deployment_sha') }}
-      - service: homeassistant.reload_all
+      - service: homeassistant.restart
 
   - alias: Announce deployment success
     id: 313a3fa3-a1b1-45fd-b739-71b7f8010c54
