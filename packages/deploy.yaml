@@ -49,7 +49,7 @@ automation:
     action:
       - service: notify.slack
         data:
-          message: ":octocat: Config loaded from https://github.com/jnewland/ha-config/commit/{{ states('sensor.config_sha') }}"
+          message: "@jnewland :octocat: Config loaded from https://github.com/jnewland/ha-config/commit/{{ states('sensor.config_sha') }}"
 
   - alias: shutdown
     id: 2783965d-f361-41da-99eb-02a4241fdaf5
