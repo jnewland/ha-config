@@ -4,6 +4,13 @@ cards:
   - type: custom:auto-entities
     card:
       type: history-graph
+      hours_to_show: 80
+    filter:
+      include:
+        - entity_id: "/tmhi/"
+  - type: custom:auto-entities
+    card:
+      type: history-graph
       hours_to_show: 12
     filter:
       include:
@@ -34,3 +41,4 @@ cards:
     filter:
       include:
         - entity_id: "/dcp_l2540dw/"
+        - entity_id: "/hl_l3290cdw/"
