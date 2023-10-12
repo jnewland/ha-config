@@ -12,8 +12,6 @@ logs:
   homeassistant.components.shell_command: debug
   homeassistant.components.stream.stream: critical
   homeassistant.components.switch: warn
-  homeassistant.components.homekit_controller: debug
-  aiohomekit: debug
   packages.ack: debug
   packages.auto_lock: debug
   packages.front_door: debug
