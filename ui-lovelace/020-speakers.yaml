@@ -1,4 +1,5 @@
 title: Speakers
+path: speakers
 cards:
   - type: custom:auto-entities
     card:
