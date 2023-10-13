@@ -45,6 +45,7 @@ cards:
         hide:
           power: true
           shuffle: false
+          volume: true
         speaker_group:
           platform: sonos
           show_group_count: true
