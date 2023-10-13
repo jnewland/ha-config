@@ -18,3 +18,4 @@
 /pythonenv*
 .nfs*
 home-assistant.log.*
+automations.yaml
