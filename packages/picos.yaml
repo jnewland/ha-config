@@ -2,21 +2,21 @@ media_player:
   - platform: group
     name: common area speakers
     entities:
-      - media_player.kitchen_speakers
-      - media_player.living_speakers
+      - media_player.kitchen
+      - media_player.living
       - media_player.record_cabinet
       - media_player.sub
   - platform: group
     name: atrium area speakers
     entities:
-      - media_player.atrium_speakers
+      - media_player.atrium
       - media_player.pergola
       - media_player.rock
   - platform: group
     name: upstairs speakers
     entities:
       - media_player.bedroom
-      - media_player.master_bathroom_speakers
+      - media_player.bathroom
       - media_player.yoga
       - media_player.shower
 
