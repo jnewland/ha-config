@@ -384,6 +384,7 @@ cards:
         - state: "ok"
         - state: "off"
         - state: "unavailable"
+        - state: "Unavailable"
         - state: "idle"
         - state: "paused"
         - state: "unknown"
