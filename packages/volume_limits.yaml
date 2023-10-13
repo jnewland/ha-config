@@ -34,10 +34,17 @@ media_player:
       - media_player.atrium_speakers
     commands:
       volume_set:
-        service: media_player.volume_set
-        data_template:
-          entity_id: media_player.atrium_speakers
-          volume_level: "{{ (volume_level | float(0)) * ( states('input_number.max_volume_atrium_speakers') | float(0) ) | round(2) }}"
+        service: system_log.write
+        data:
+          message: >
+            at=atrium.volume_set
+            volume_level={{ volume_level }}
+          level: info
+
+        # service: media_player.volume_set
+        # data_template:
+        #   entity_id: media_player.atrium_speakers
+        #   volume_level: "{{ (volume_level | float(0)) * ( states('input_number.max_volume_atrium_speakers') | float(0) ) | round(2) }}"
 
   - platform: universal
     device_class: speaker
