@@ -37,10 +37,10 @@ cards:
     card:
       type: entities
       show_header_toggle: false
-      title: monoprice
+      title: monoprice zones
     filter:
       include:
-        - integration: monoprice
+        - integration: universal
           domain: media_player
   - type: custom:auto-entities
     card:
@@ -50,6 +50,15 @@ cards:
     filter:
       include:
         - entity_id: "/max_volume_/"
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: monoprice actual volume
+    filter:
+      include:
+        - integration: monoprice
+          domain: media_player
   - type: custom:auto-entities
     card:
       type: entities

@@ -27,6 +27,7 @@ input_number:
 
 media_player:
   - platform: universal
+    device_class: speaker
     unique_id: atrium_speakers_limited_volume
     name: atrium
     children:
@@ -39,6 +40,7 @@ media_player:
           volume_level: "{{ [volume_level, states('input_number.max_volume_atrium_speakers')|float] | min }}"
 
   - platform: universal
+    device_class: speaker
     unique_id: kitchen_speakers_limited_volume
     name: kitchen
     children:
@@ -51,6 +53,7 @@ media_player:
           volume_level: "{{ [volume_level, states('input_number.max_volume_kitchen_speakers')|float] | min }}"
 
   - platform: universal
+    device_class: speaker
     unique_id: living_speakers_limited_volume
     name: living
     children:
@@ -63,6 +66,7 @@ media_player:
           volume_level: "{{ [volume_level, states('input_number.max_volume_living_speakers')|float] | min }}"
 
   - platform: universal
+    device_class: speaker
     unique_id: master_bathroom_speakers_limited_volume
     name: bathroom
     children:
@@ -75,6 +79,7 @@ media_player:
           volume_level: "{{ [volume_level, states('input_number.max_volume_master_bathroom_speakers')|float] | min }}"
 
   - platform: universal
+    device_class: speaker
     unique_id: patio_speakers_limited_volume
     name: patio
     children:
