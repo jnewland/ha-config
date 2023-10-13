@@ -153,6 +153,7 @@ automation:
       - platform: state
         entity_id: media_player.lounge
         to: playing
+    condition:
       - condition: state
         entity_id: input_boolean.auto_group_tv_audio
         state: "on"
