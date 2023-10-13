@@ -56,10 +56,15 @@ media_player:
     children:
       - media_player.atrium_speakers
     attributes:
+      state: media_player.atrium_speakers
       volume_level: sensor.atrium_speakers_scaled_volume
     commands:
       turn_on:
         service: media_player.turn_on
+        data:
+          entity_id: media_player.atrium_speakers
+      turn_off:
+        service: media_player.turn_off
         data:
           entity_id: media_player.atrium_speakers
       volume_set:
@@ -75,10 +80,15 @@ media_player:
     children:
       - media_player.kitchen_speakers
     attributes:
+      state: media_player.kitchen_speakers
       volume_level: sensor.kitchen_speakers_scaled_volume
     commands:
       turn_on:
         service: media_player.turn_on
+        data:
+          entity_id: media_player.kitchen_speakers
+      turn_off:
+        service: media_player.turn_off
         data:
           entity_id: media_player.kitchen_speakers
       volume_set:
@@ -94,10 +104,15 @@ media_player:
     children:
       - media_player.living_speakers
     attributes:
+      state: media_player.living_speakers
       volume_level: sensor.living_speakers_scaled_volume
     commands:
       turn_on:
         service: media_player.turn_on
+        data:
+          entity_id: media_player.living_speakers
+      turn_off:
+        service: media_player.turn_off
         data:
           entity_id: media_player.living_speakers
       volume_set:
@@ -113,10 +128,15 @@ media_player:
     children:
       - media_player.master_bathroom_speakers
     attributes:
+      state: media_player.master_bathroom_speakers
       volume_level: sensor.bathroom_speakers_scaled_volume
     commands:
       turn_on:
         service: media_player.turn_on
+        data:
+          entity_id: media_player.master_bathroom_speakers
+      turn_off:
+        service: media_player.turn_off
         data:
           entity_id: media_player.master_bathroom_speakers
       volume_set:
@@ -132,10 +152,15 @@ media_player:
     children:
       - media_player.patio_speakers
     attributes:
+      state: media_player.patio_speakers
       volume_level: sensor.patio_speakers_scaled_volume
     commands:
       turn_on:
         service: media_player.turn_on
+        data:
+          entity_id: media_player.patio_speakers
+      turn_off:
+        service: media_player.turn_off
         data:
           entity_id: media_player.patio_speakers
       volume_set:
