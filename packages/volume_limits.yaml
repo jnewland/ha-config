@@ -39,8 +39,8 @@ media_player:
           message: >
             at=atrium.volume_set
             volume_level={{ volume_level }}
-          level: info
-
+          level: debug
+          logger: packages.volume_limits
         # service: media_player.volume_set
         # data_template:
         #   entity_id: media_player.atrium_speakers
