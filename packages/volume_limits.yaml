@@ -37,7 +37,7 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.atrium_speakers
-          volume_level: "{{ [volume_level, states('input_number.max_volume_atrium_speakers')|float] | min }}"
+          volume_level: "{{ volume_level * states('input_number.max_volume_atrium_speakers') }}"
 
   - platform: universal
     device_class: speaker
@@ -50,7 +50,7 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.kitchen_speakers
-          volume_level: "{{ [volume_level, states('input_number.max_volume_kitchen_speakers')|float] | min }}"
+          volume_level: "{{ volume_level * states('input_number.max_volume_kitchen_speakers') }}"
 
   - platform: universal
     device_class: speaker
@@ -63,7 +63,7 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.living_speakers
-          volume_level: "{{ [volume_level, states('input_number.max_volume_living_speakers')|float] | min }}"
+          volume_level: "{{ volume_level * states('input_number.max_volume_living_speakers') }}"
 
   - platform: universal
     device_class: speaker
@@ -76,7 +76,7 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.master_bathroom_speakers
-          volume_level: "{{ [volume_level, states('input_number.max_volume_master_bathroom_speakers')|float] | min }}"
+          volume_level: "{{ volume_level * states('input_number.max_volume_master_bathroom_speakers') }}"
 
   - platform: universal
     device_class: speaker
@@ -89,4 +89,4 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.patio_speakers
-          volume_level: "{{ [volume_level, states('input_number.max_volume_patio_speakers')|float] | min }}"
+          volume_level: "{{ volume_level * states('input_number.max_volume_patio_speakers') }}"
