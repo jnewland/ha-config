@@ -34,17 +34,17 @@ media_player:
       - media_player.atrium_speakers
     commands:
       volume_set:
-        service: system_log.write
-        data:
-          message: >
-            at=atrium.volume_set
-            volume_level={{ volume_level }}
-          level: debug
-          logger: packages.volume_limits
-        # service: media_player.volume_set
-        # data_template:
-        #   entity_id: media_player.atrium_speakers
-        #   volume_level: "{{ (volume_level | float(0)) * ( states('input_number.max_volume_atrium_speakers') | float(0) ) | round(2) }}"
+        # service: system_log.write
+        # data:
+        #   message: >
+        #     at=atrium.volume_set
+        #     volume_level={{ volume_level }}
+        #   level: debug
+        #   logger: packages.volume_limits
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.atrium_speakers
+          volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_atrium_speakers') | float(0) ) ) | round(2) }}"
 
   - platform: universal
     device_class: speaker
@@ -57,7 +57,7 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.kitchen_speakers
-          volume_level: "{{ (volume_level | float(0)) * ( states('input_number.max_volume_kitchen_speakers') | float(0) ) | round(2) }}"
+          volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_kitchen_speakers') | float(0) ) ) | round(2) }}"
 
   - platform: universal
     device_class: speaker
@@ -70,7 +70,7 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.living_speakers
-          volume_level: "{{ (volume_level | float(0)) * ( states('input_number.max_volume_living_speakers') | float(0) ) | round(2) }}"
+          volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_living_speakers') | float(0) ) ) | round(2) }}"
 
   - platform: universal
     device_class: speaker
@@ -83,7 +83,7 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.master_bathroom_speakers
-          volume_level: "{{ (volume_level | float(0)) * ( states('input_number.max_volume_master_bathroom_speakers') | float(0) ) | round(2) }}"
+          volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_master_bathroom_speakers') | float(0) ) ) | round(2) }}"
 
   - platform: universal
     device_class: speaker
@@ -96,4 +96,4 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.patio_speakers
-          volume_level: "{{ (volume_level | float(0)) * ( states('input_number.max_volume_patio_speakers') | float(0) ) | round(2) }}"
+          volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_patio_speakers') | float(0) ) ) | round(2) }}"
