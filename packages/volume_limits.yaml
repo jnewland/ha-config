@@ -50,7 +50,7 @@ template:
 
 media_player:
   - platform: universal
-    device_class: speaker
+    device_class: receiver
     unique_id: atrium_speakers_limited_volume
     name: atrium
     children:
@@ -65,7 +65,7 @@ media_player:
           volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_atrium_speakers') | float(0) ) ) | round(2) }}"
 
   - platform: universal
-    device_class: speaker
+    device_class: receiver
     unique_id: kitchen_speakers_limited_volume
     name: kitchen
     children:
@@ -80,7 +80,7 @@ media_player:
           volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_kitchen_speakers') | float(0) ) ) | round(2) }}"
 
   - platform: universal
-    device_class: speaker
+    device_class: receiver
     unique_id: living_speakers_limited_volume
     name: living
     children:
@@ -95,7 +95,7 @@ media_player:
           volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_living_speakers') | float(0) ) ) | round(2) }}"
 
   - platform: universal
-    device_class: speaker
+    device_class: receiver
     unique_id: bathroom_speakers_limited_volume
     name: bathroom
     children:
@@ -110,7 +110,7 @@ media_player:
           volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_bathroom_speakers') | float(0) ) ) | round(2) }}"
 
   - platform: universal
-    device_class: speaker
+    device_class: receiver
     unique_id: patio_speakers_limited_volume
     name: patio
     children:
