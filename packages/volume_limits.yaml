@@ -1,0 +1,87 @@
+input_number:
+  max_volume_atrium_speakers:
+    name: "Atrium Speakers Max Volume"
+    min: 0
+    max: 1
+    step: 0.01
+  max_volume_kitchen_speakers:
+    name: "Kitchen Speakers Max Volume"
+    min: 0
+    max: 1
+    step: 0.01
+  max_volume_living_speakers:
+    name: "Living Speakers Max Volume"
+    min: 0
+    max: 1
+    step: 0.01
+  max_volume_master_bathroom_speakers:
+    name: "Master Bathroom Speakers Max Volume"
+    min: 0
+    max: 1
+    step: 0.01
+  max_volume_patio_speakers:
+    name: "Patio Speakers Max Volume"
+    min: 0
+    max: 1
+    step: 0.01
+
+media_player:
+  - platform: universal
+    unique_id: atrium_speakers_limited_volume
+    name: atrium
+    children:
+      - media_player.atrium_speakers
+    commands:
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.atrium_speakers
+          volume_level: "{{ [volume_level, states('input_number.max_volume_atrium_speakers')|float] | min }}"
+
+  - platform: universal
+    unique_id: kitchen_speakers_limited_volume
+    name: kitchen
+    children:
+      - media_player.kitchen_speakers
+    commands:
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.kitchen_speakers
+          volume_level: "{{ [volume_level, states('input_number.max_volume_kitchen_speakers')|float] | min }}"
+
+  - platform: universal
+    unique_id: living_speakers_limited_volume
+    name: living
+    children:
+      - media_player.living_speakers
+    commands:
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.living_speakers
+          volume_level: "{{ [volume_level, states('input_number.max_volume_living_speakers')|float] | min }}"
+
+  - platform: universal
+    unique_id: master_bathroom_speakers_limited_volume
+    name: bathroom
+    children:
+      - media_player.master_bathroom_speakers
+    commands:
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.master_bathroom_speakers
+          volume_level: "{{ [volume_level, states('input_number.max_volume_master_bathroom_speakers')|float] | min }}"
+
+  - platform: universal
+    unique_id: patio_speakers_limited_volume
+    name: patio
+    children:
+      - media_player.patio_speakers
+    commands:
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.patio_speakers
+          volume_level: "{{ [volume_level, states('input_number.max_volume_patio_speakers')|float] | min }}"

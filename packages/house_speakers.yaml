@@ -5,12 +5,17 @@ group:
       - media_player.living_speakers
       - media_player.kitchen_speakers
 
+input_boolean:
+  auto_group_tv_audio:
+    name: auto-group Lounge TV audio
+    icon: mdi:television-speaker
+
 template:
   - sensor:
-      - name: House speaker source
+      - name: house speaker source
         unique_id: house_speaker_source_entity_id
         state: >
-          {% if is_state('media_player.lounge', 'playing') %}
+          {% if is_state('media_player.lounge', 'playing') and is_state('input_boolean.auto_group_tv_audio', 'on') %}
             media_player.lounge_surround
           {% else %}
             media_player.house
@@ -134,6 +139,9 @@ automation:
       - condition: state
         entity_id: media_player.house
         state: playing
+      - condition: state
+        entity_id: input_boolean.auto_group_tv_audio
+        state: "on"
     action:
       - service: media_player.media_pause
         target:
@@ -145,6 +153,9 @@ automation:
       - platform: state
         entity_id: media_player.lounge
         to: playing
+      - condition: state
+        entity_id: input_boolean.auto_group_tv_audio
+        state: "on"
     action:
       - delay: 3
       - service: media_player.join
