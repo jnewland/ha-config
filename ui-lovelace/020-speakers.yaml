@@ -49,7 +49,7 @@ cards:
       title: monoprice volume limits
     filter:
       include:
-        entity_id: "/max_volume_/"
+        - entity_id: "/max_volume_/"
   - type: custom:auto-entities
     card:
       type: entities
