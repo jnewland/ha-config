@@ -78,4 +78,5 @@ system_log:
 tts:
   - platform: google_translate
 zone: !include zone.yaml
-# automation ui: !include automations.yaml
+
+automation ui: !include automations.yaml
