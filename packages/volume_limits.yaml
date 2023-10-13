@@ -30,23 +30,23 @@ template:
       - name: Atrium Speakers Scaled Volume
         unique_id: atrium_speakers_scaled_volume
         state: >
-          {{ ( ( state_attr('media_player.atrium_speakers', 'volume_level') | float(0) ) / ( states('input_number.max_volume_atrium_speakers') | float(0) ) ) | round(2) }}
+          {{ ( ( state_attr('media_player.atrium_speakers', 'volume_level') | float ) / ( states('input_number.max_volume_atrium_speakers') | float ) ) | round(2) }}
       - name: Kitchen Speakers Scaled Volume
         unique_id: kitchen_speakers_scaled_volume
         state: >
-          {{ ( ( state_attr('media_player.kitchen_speakers', 'volume_level') | float(0) ) / ( states('input_number.max_volume_kitchen_speakers') | float(0) ) ) | round(2) }}
+          {{ ( ( state_attr('media_player.kitchen_speakers', 'volume_level') | float ) / ( states('input_number.max_volume_kitchen_speakers') | float ) ) | round(2) }}
       - name: Living Speakers Scaled Volume
         unique_id: living_speakers_scaled_volume
         state: >
-          {{ ( ( state_attr('media_player.living_speakers', 'volume_level') | float(0) ) / ( states('input_number.max_volume_living_speakers') | float(0) ) ) | round(2) }}
+          {{ ( ( state_attr('media_player.living_speakers', 'volume_level') | float ) / ( states('input_number.max_volume_living_speakers') | float ) ) | round(2) }}
       - name: Bathroom Speakers Scaled Volume
         unique_id: bathroom_speakers_scaled_volume
         state: >
-          {{ ( ( state_attr('media_player.master_bathroom_speakers', 'volume_level') | float(0) ) / ( states('input_number.max_volume_bathroom_speakers') | float(0) ) ) | round(2) }}
+          {{ ( ( state_attr('media_player.master_bathroom_speakers', 'volume_level') | float ) / ( states('input_number.max_volume_bathroom_speakers') | float ) ) | round(2) }}
       - name: Patio Speakers Scaled Volume
         unique_id: patio_speakers_scaled_volume
         state: >
-          {{ ( ( state_attr('media_player.patio_speakers', 'volume_level') | float(0) ) / ( states('input_number.max_volume_patio_speakers') | float(0) ) ) | round(2) }}
+          {{ ( ( state_attr('media_player.patio_speakers', 'volume_level') | float ) / ( states('input_number.max_volume_patio_speakers') | float ) ) | round(2) }}
 
 media_player:
   - platform: universal
@@ -71,7 +71,7 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.atrium_speakers
-          volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_atrium_speakers') | float(0) ) ) | round(2) }}"
+          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_atrium_speakers') | float ) ) | round(2) }}"
 
   - platform: universal
     device_class: speaker
@@ -95,7 +95,7 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.kitchen_speakers
-          volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_kitchen_speakers') | float(0) ) ) | round(2) }}"
+          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_kitchen_speakers') | float ) ) | round(2) }}"
 
   - platform: universal
     device_class: speaker
@@ -119,7 +119,7 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.living_speakers
-          volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_living_speakers') | float(0) ) ) | round(2) }}"
+          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_living_speakers') | float ) ) | round(2) }}"
 
   - platform: universal
     device_class: speaker
@@ -143,7 +143,7 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.master_bathroom_speakers
-          volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_bathroom_speakers') | float(0) ) ) | round(2) }}"
+          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_bathroom_speakers') | float ) ) | round(2) }}"
 
   - platform: universal
     device_class: speaker
@@ -167,4 +167,4 @@ media_player:
         service: media_player.volume_set
         data_template:
           entity_id: media_player.patio_speakers
-          volume_level: "{{ ( (volume_level | float(0)) * ( states('input_number.max_volume_patio_speakers') | float(0) ) ) | round(2) }}"
+          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_patio_speakers') | float ) ) | round(2) }}"
