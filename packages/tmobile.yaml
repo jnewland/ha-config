@@ -9,7 +9,7 @@ sensor:
       - signal
       - device
       - time
-    value_template: "{{ value_json.device.enabled }}"
+    value_template: "{{ value_json.device.isEnabled }}"
 
   - platform: template
     sensors:

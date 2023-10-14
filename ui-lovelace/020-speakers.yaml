@@ -1,0 +1,74 @@
+title: Speakers
+path: speakers
+icon: mdi:speaker
+cards:
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+    filter:
+      template: >
+        {{ [states('sensor.house_speaker_source')]  }}
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      name: automation settings
+    filter:
+      template: |
+        {{ 
+          is_state('input_boolean.auto_group_tv_audio', 'on') and
+          [
+            'input_boolean.auto_group_tv_audio',
+            'automation.pause_house_speakers_when_tvs_are_playing'
+          ] or
+          ['input_boolean.auto_group_tv_audio']
+        }}
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: sonos
+    filter:
+      include:
+        - integration: sonos
+          domain: media_player
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: monoprice zones
+    filter:
+      include:
+        - integration: universal
+          domain: media_player
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: monoprice volume limits
+    filter:
+      include:
+        - entity_id: "/max_volume_/"
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: monoprice actual volume
+    filter:
+      include:
+        - integration: monoprice
+          domain: media_player
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: sonos settings
+    sort:
+      method: name
+    filter:
+      include:
+        - integration: sonos
+          domain: number
+        - integration: sonos
+          domain: switch

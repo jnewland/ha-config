@@ -19,6 +19,7 @@ logs:
   packages.image_processing: info
   packages.picos: debug
   packages.visitor: debug
+  packages.volume_limits: debug
   packages.zwave: debug
   pyhap.hap_server: critical
   requests.packages.urllib3.connectionpool: critical

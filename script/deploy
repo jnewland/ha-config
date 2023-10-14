@@ -6,4 +6,5 @@ if [ -n "$ref" ]; then
     git fetch origin
     git reset --hard $ref
     git clean -d -f -e lost+found
+    touch automations.yaml
 fi

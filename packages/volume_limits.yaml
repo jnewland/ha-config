@@ -1,0 +1,170 @@
+input_number:
+  max_volume_atrium_speakers:
+    name: "Atrium Speakers Max Volume"
+    min: 0
+    max: 1
+    step: 0.01
+  max_volume_kitchen_speakers:
+    name: "Kitchen Speakers Max Volume"
+    min: 0
+    max: 1
+    step: 0.01
+  max_volume_living_speakers:
+    name: "Living Speakers Max Volume"
+    min: 0
+    max: 1
+    step: 0.01
+  max_volume_bathroom_speakers:
+    name: "Bathroom Speakers Max Volume"
+    min: 0
+    max: 1
+    step: 0.01
+  max_volume_patio_speakers:
+    name: "Patio Speakers Max Volume"
+    min: 0
+    max: 1
+    step: 0.01
+
+template:
+  - sensor:
+      - name: Atrium Speakers Scaled Volume
+        unique_id: atrium_speakers_scaled_volume
+        state: >
+          {{ ( ( state_attr('media_player.atrium_speakers', 'volume_level') | float ) / ( states('input_number.max_volume_atrium_speakers') | float ) ) | round(2) }}
+      - name: Kitchen Speakers Scaled Volume
+        unique_id: kitchen_speakers_scaled_volume
+        state: >
+          {{ ( ( state_attr('media_player.kitchen_speakers', 'volume_level') | float ) / ( states('input_number.max_volume_kitchen_speakers') | float ) ) | round(2) }}
+      - name: Living Speakers Scaled Volume
+        unique_id: living_speakers_scaled_volume
+        state: >
+          {{ ( ( state_attr('media_player.living_speakers', 'volume_level') | float ) / ( states('input_number.max_volume_living_speakers') | float ) ) | round(2) }}
+      - name: Bathroom Speakers Scaled Volume
+        unique_id: bathroom_speakers_scaled_volume
+        state: >
+          {{ ( ( state_attr('media_player.master_bathroom_speakers', 'volume_level') | float ) / ( states('input_number.max_volume_bathroom_speakers') | float ) ) | round(2) }}
+      - name: Patio Speakers Scaled Volume
+        unique_id: patio_speakers_scaled_volume
+        state: >
+          {{ ( ( state_attr('media_player.patio_speakers', 'volume_level') | float ) / ( states('input_number.max_volume_patio_speakers') | float ) ) | round(2) }}
+
+media_player:
+  - platform: universal
+    device_class: speaker
+    unique_id: atrium_speakers_limited_volume
+    name: atrium
+    children:
+      - media_player.atrium_speakers
+    attributes:
+      state: media_player.atrium_speakers
+      volume_level: sensor.atrium_speakers_scaled_volume
+    commands:
+      turn_on:
+        service: media_player.turn_on
+        data:
+          entity_id: media_player.atrium_speakers
+      turn_off:
+        service: media_player.turn_off
+        data:
+          entity_id: media_player.atrium_speakers
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.atrium_speakers
+          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_atrium_speakers') | float ) ) | round(2) }}"
+
+  - platform: universal
+    device_class: speaker
+    unique_id: kitchen_speakers_limited_volume
+    name: kitchen
+    children:
+      - media_player.kitchen_speakers
+    attributes:
+      state: media_player.kitchen_speakers
+      volume_level: sensor.kitchen_speakers_scaled_volume
+    commands:
+      turn_on:
+        service: media_player.turn_on
+        data:
+          entity_id: media_player.kitchen_speakers
+      turn_off:
+        service: media_player.turn_off
+        data:
+          entity_id: media_player.kitchen_speakers
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.kitchen_speakers
+          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_kitchen_speakers') | float ) ) | round(2) }}"
+
+  - platform: universal
+    device_class: speaker
+    unique_id: living_speakers_limited_volume
+    name: living
+    children:
+      - media_player.living_speakers
+    attributes:
+      state: media_player.living_speakers
+      volume_level: sensor.living_speakers_scaled_volume
+    commands:
+      turn_on:
+        service: media_player.turn_on
+        data:
+          entity_id: media_player.living_speakers
+      turn_off:
+        service: media_player.turn_off
+        data:
+          entity_id: media_player.living_speakers
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.living_speakers
+          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_living_speakers') | float ) ) | round(2) }}"
+
+  - platform: universal
+    device_class: speaker
+    unique_id: bathroom_speakers_limited_volume
+    name: bathroom
+    children:
+      - media_player.master_bathroom_speakers
+    attributes:
+      state: media_player.master_bathroom_speakers
+      volume_level: sensor.bathroom_speakers_scaled_volume
+    commands:
+      turn_on:
+        service: media_player.turn_on
+        data:
+          entity_id: media_player.master_bathroom_speakers
+      turn_off:
+        service: media_player.turn_off
+        data:
+          entity_id: media_player.master_bathroom_speakers
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.master_bathroom_speakers
+          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_bathroom_speakers') | float ) ) | round(2) }}"
+
+  - platform: universal
+    device_class: speaker
+    unique_id: patio_speakers_limited_volume
+    name: patio
+    children:
+      - media_player.patio_speakers
+    attributes:
+      state: media_player.patio_speakers
+      volume_level: sensor.patio_speakers_scaled_volume
+    commands:
+      turn_on:
+        service: media_player.turn_on
+        data:
+          entity_id: media_player.patio_speakers
+      turn_off:
+        service: media_player.turn_off
+        data:
+          entity_id: media_player.patio_speakers
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.patio_speakers
+          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_patio_speakers') | float ) ) | round(2) }}"
