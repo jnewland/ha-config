@@ -46,15 +46,10 @@ cards:
           - entity: sensor.house_speaker_source
             state_not: undefined
         card:
-          type: picture-elements
-          image: "/local/overlay.svg"
-          elements:
-            - entity: media_player.house
-              type: state-icon
-              icon: mdi:speaker
-              style:
-                left: 22%
-                top: 19%
+          type: markdown
+          content: |
+            ![]({{ states.media_player.house.attributes.entity_picture }})
+
       - type: custom:mini-media-player
         entity: media_player.house
         artwork: cover
