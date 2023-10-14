@@ -39,6 +39,13 @@ cards:
         - input_boolean.visitor
   - type: vertical-stack
     cards:
+      - type: conditional
+        conditions:
+          - entity: media_player.house
+            state: playing
+        card:
+          type: picture
+          entity: media_player.house
       - type: custom:mini-media-player
         entity: media_player.house
         artwork: cover
