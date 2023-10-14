@@ -41,11 +41,20 @@ cards:
     cards:
       - type: conditional
         conditions:
-          - entity: media_player.house
-            state: playing
+          # - entity: media_player.house
+          #   state: playing
+          - entity: sensor.house_speaker_source
+            state_not: undefined
         card:
-          type: picture
-          entity: media_player.house
+          type: picture-elements
+          image: "/local/overlay.svg"
+          elements:
+            - entity: media_player.house
+              type: state-icon
+              icon: mdi:speaker
+              style:
+                left: 22%
+                top: 19%
       - type: custom:mini-media-player
         entity: media_player.house
         artwork: cover
