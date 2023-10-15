@@ -41,14 +41,17 @@ cards:
     cards:
       - type: conditional
         conditions:
-          # - entity: media_player.house
-          #   state: playing
-          - entity: sensor.house_speaker_source
-            state_not: undefined
+          - entity: media_player.house
+            state: playing
         card:
           type: markdown
           content: |
             ![]({{ states.media_player.house.attributes.entity_picture }})
+
+            ### {{ state_attr('media_player.house', 'media_playlist') == None and ''  or state_attr('media_player.house', 'media_playlist') }}
+            ## {{ state_attr('media_player.house', 'media_title') == None and ''  or state_attr('media_player.house', 'media_title') }}
+            ### {{ state_attr('media_player.house', 'media_artist') == None and ''  or state_attr('media_player.house', 'media_artist') }}
+            #### {{ state_attr('media_player.house', 'media_album_name') == None and ''  or state_attr('media_player.house', 'media_album_name') }}
 
       - type: custom:mini-media-player
         entity: media_player.house
