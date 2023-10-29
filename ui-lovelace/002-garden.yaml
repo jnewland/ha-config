@@ -2,13 +2,16 @@ title: Garden
 path: garden
 icon: mdi:sprout
 cards:
-  - type: entities
-    show_header_toggle: false
-    title: Greenhouse
-    entities:
-      - automation.greenhouse_light_automation
-      - switch.greenhouse_light
-      # - switch.greenhouse_right
+
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: Greenhouse
+    filter:
+      include:
+        - entity_id: automation.greenhouse_light_automation
+        - device: /greenhouse/
   - type: conditional
     conditions:
       - entity: automation.greenhouse_light_automation
