@@ -2,7 +2,6 @@ title: Garden
 path: garden
 icon: mdi:sprout
 cards:
-
   - type: custom:auto-entities
     card:
       type: entities
@@ -10,19 +9,20 @@ cards:
       title: Greenhouse
     filter:
       include:
-        - entity_id: automation.greenhouse_light_automation
-        - device: /greenhouse/
+        - entity_id: automation.greenhouse_led_automation
+        - domain: light
+          device: /greenhouse/
   - type: conditional
     conditions:
-      - entity: automation.greenhouse_light_automation
+      - entity: automation.greenhouse_led_automation
         state: "on"
     card:
       type: entities
-      title: Greenhouse light automation
+      title: Greenhouse LED automation
       show_header_toggle: false
       entities:
-        - input_datetime.greenhouse_light_on
-        - input_datetime.greenhouse_light_off
+        - input_datetime.greenhouse_led_on
+        - input_datetime.greenhouse_led_off
   - type: custom:auto-entities
     card:
       type: entities
