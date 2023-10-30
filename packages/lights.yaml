@@ -28,8 +28,8 @@ homeassistant:
       off_delay_seconds: 1800
       haunt: light.couch
     binary_sensor.powder_room_home_security_motion_detection:
-      trigger_entity_id: light.powder_room_mirror
-      trigger_entity_id_off: group.powder_room
+      trigger_service: script.powder_room_bright
+      trigger_service_off: script.powder_room_dim
       haunt: light.drums
     binary_sensor.lounge_home_security_motion_detection:
       haunt: light.couch
@@ -268,7 +268,6 @@ switch:
     sleep_entity: input_select.mode
     sleep_state: "Sleeping"
     lights_brightness:
-      - light.powder_room_mirror
       - light.guest_bath_mirror
       - light.laundry_room
 
@@ -955,3 +954,21 @@ script:
           {{ expand('group.outdoor_mood') | selectattr('entity_id', '!=', 'light.wine_room') | selectattr('state', '==', 'on') | list == [] }}
       - service: light.turn_off
         entity_id: light.wine_room
+
+  powder_room_bright:
+    mode: parallel
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id:
+            - light.powder_room_mirror
+          brightness: 255
+
+  powder_room_dim:
+    mode: parallel
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id:
+            - light.powder_room_mirror
+          brightness: 103

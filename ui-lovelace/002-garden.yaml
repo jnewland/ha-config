@@ -2,24 +2,37 @@ title: Garden
 path: garden
 icon: mdi:sprout
 cards:
-  - type: entities
-    show_header_toggle: false
-    title: Greenhouse
-    entities:
-      - automation.greenhouse_light_automation
-      - switch.greenhouse_light
-      # - switch.greenhouse_right
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: Greenhouse
+    filter:
+      include:
+        - entity_id: automation.greenhouse_led_automation
+        - domain: light
+          device: /greenhouse/
   - type: conditional
     conditions:
-      - entity: automation.greenhouse_light_automation
+      - entity: automation.greenhouse_led_automation
         state: "on"
     card:
       type: entities
-      title: Greenhouse light automation
+      title: Greenhouse LED automation
       show_header_toggle: false
       entities:
-        - input_datetime.greenhouse_light_on
-        - input_datetime.greenhouse_light_off
+        - input_datetime.greenhouse_led_on
+        - input_datetime.greenhouse_led_off
+  - type: conditional
+    conditions:
+      - entity: camera.garage
+        state: recording
+    card:
+      type: picture-entity
+      camera_view: auto
+      show_name: false
+      show_state: false
+      entity: camera.garage
   - type: custom:auto-entities
     card:
       type: entities
@@ -191,13 +204,3 @@ cards:
       show_name: false
       show_state: false
       entity: camera.gate
-  - type: conditional
-    conditions:
-      - entity: camera.gate
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.garage
