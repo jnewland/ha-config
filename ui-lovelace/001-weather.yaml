@@ -13,19 +13,23 @@ cards:
     show_main: false
     show_attributes: false
     entity: weather.katt_daynight
-    title: daily
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.max_forecast_temperature
         name: Max
         color: #e74c3c
+    name: forecast max
+    hours_to_show: 72
+    group_by: hour
+    show:
+      fill: false
+      extrema: true
+  - type: custom:mini-graph-card
+    entities:
       - entity: sensor.min_forecast_temperature
         name: Min
-      - entity: sensor.average_forecast_temperature
-        name: Avg
-        color: green
-    name: forecast extrema
-    hours_to_show: 24
+    name: forecast min
+    hours_to_show: 72
     group_by: hour
     show:
       fill: false
@@ -38,15 +42,15 @@ cards:
       type: custom:mini-graph-card
       entities:
         - sensor.hours_until_rain
-      name: hours until rain
-      hours_to_show: 24
+      name: forecast hours until rain
+      hours_to_show: 72
       show:
         fill: false
   - type: custom:mini-graph-card
     entities:
       - sensor.forecast_precipitation_probability
     name: max forecast precipitation probability
-    hours_to_show: 24
+    hours_to_show: 72
     show:
       fill: false
   - type: entities
