@@ -1,57 +1,56 @@
 automation:
-- alias: Auto lock
-  id: 1a9f390d-888f-43af-ba51-6c13d9cb5931
-  trigger:
-    platform: state
-    entity_id:
-      - lock.front_door
-      - lock.back_porch
-      - lock.garage
-    to: unlocked
-    for:
-      minutes: 5
-  condition:
-    condition: state
-    entity_id: input_boolean.visitor
-    state: "off"
-  action:
-    - service: system_log.write
-      data:
-        message: >
-          at=script.ack
-          tag={{ trigger.entity_id }}
-        logger: packages.auto_lock
-        level: debug
-    - service: script.ack
-      data:
-        service: lock.lock
-        entity_id: "{{ trigger.entity_id }}"
-        tag: "{{ trigger.entity_id }}"
-        message: >
-          Lock the {{ trigger.to_state.name }}?
-        confirmation_message: >
-          locked the {{ trigger.to_state.name }}.
-- alias: Auto lock notification clear
-  id: 91626f5d-db86-4845-948a-96fe990d71cb
-  trigger:
-    platform: state
-    entity_id:
-      - lock.front_door
-      - lock.back_porch
-      - lock.garage
-    to: locked
-    for:
-      seconds: 5
-  action:
-    - service: system_log.write
-      data:
-        message: >
-          at=clear_notification
-          tag={{ trigger.entity_id }}
-        logger: packages.auto_lock
-        level: debug
-    - service: notify.iphones
-      data:
-        message: "clear_notification"
+  - alias: Auto lock
+    id: 1a9f390d-888f-43af-ba51-6c13d9cb5931
+    trigger:
+      platform: state
+      entity_id:
+        - lock.front_door
+        - lock.back_porch
+      to: unlocked
+      for:
+        minutes: 5
+    condition:
+      condition: state
+      entity_id: input_boolean.visitor
+      state: "off"
+    action:
+      - service: system_log.write
         data:
+          message: >
+            at=script.ack
+            tag={{ trigger.entity_id }}
+          logger: packages.auto_lock
+          level: debug
+      - service: script.ack
+        data:
+          service: lock.lock
+          entity_id: "{{ trigger.entity_id }}"
           tag: "{{ trigger.entity_id }}"
+          message: >
+            Lock the {{ trigger.to_state.name }}?
+          confirmation_message: >
+            locked the {{ trigger.to_state.name }}.
+  - alias: Auto lock notification clear
+    id: 91626f5d-db86-4845-948a-96fe990d71cb
+    trigger:
+      platform: state
+      entity_id:
+        - lock.front_door
+        - lock.back_porch
+        - lock.garage
+      to: locked
+      for:
+        seconds: 5
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=clear_notification
+            tag={{ trigger.entity_id }}
+          logger: packages.auto_lock
+          level: debug
+      - service: notify.iphones
+        data:
+          message: "clear_notification"
+          data:
+            tag: "{{ trigger.entity_id }}"
