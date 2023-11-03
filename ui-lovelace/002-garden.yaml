@@ -12,6 +12,7 @@ cards:
         - entity_id: automation.greenhouse_led_automation
         - domain: light
           device: /greenhouse/
+        - entity_id: /light.mother/
   - type: conditional
     conditions:
       - entity: automation.greenhouse_led_automation
