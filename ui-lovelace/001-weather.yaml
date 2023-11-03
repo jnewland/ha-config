@@ -29,7 +29,7 @@ cards:
     group_by: hour
     show:
       fill: false
-      extrema: false
+      extrema: true
   - type: conditional
     conditions:
       - entity: binary_sensor.precipitation_in_forecast
