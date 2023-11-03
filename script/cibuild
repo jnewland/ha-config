@@ -4,4 +4,4 @@ export $(cat .env | xargs)
 touch automations.yaml
 hass -c . --script check_config -i all -f | tee /tmp/log
 set -x
-test "$(grep -c ^ERROR /tmp/log | grep -v "Unknown device")" -eq 0
+test "$(grep -v "Unknown device" /tmp/log | grep -c ^ERROR)" -eq 0
