@@ -46,7 +46,7 @@ rm -rf custom_components/ember_mug
 mv $TMPDIR/$$-ember/custom_components/ember_mug custom_components
 
 # renovate: datasource=github-releases depName=libdyson-wg/ha-dyson
-DYSON_LOCAL_VERSION=v1.0.1
+DYSON_LOCAL_VERSION=v1.3.2
 git clone --depth 1 --branch $DYSON_LOCAL_VERSION https://github.com/libdyson-wg/ha-dyson $TMPDIR/$$-dyson-local
 rm -rf custom_components/dyson_local
 mv $TMPDIR/$$-dyson-local/custom_components/dyson_local custom_components
