@@ -82,7 +82,7 @@ cards:
         - entity_id: "/.*_rain_delay$/"
   - type: custom:mini-graph-card
     entities:
-      - entity_id: sensor.precipitation
+      - entity: sensor.precipitation
         options:
           aggregate_func: sum
     name: hourly precipitation
@@ -94,7 +94,7 @@ cards:
 
   - type: custom:mini-graph-card
     entities:
-      - entity_id: sensor.precipitation
+      - entity: sensor.precipitation
         options:
           aggregate_func: sum
     name: daily precipitation
