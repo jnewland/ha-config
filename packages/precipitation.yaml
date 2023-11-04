@@ -57,7 +57,8 @@ template:
   - trigger:
       - platform: state
         entity_id: weather.tomorrow_io_home_nowcast
-        attribute: forecast
+        value_template: |
+          {{ (state.attributes.forecast | first)["datetime"] }}
     sensor:
       - name: precipitation
         state: |
