@@ -83,9 +83,8 @@ cards:
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.precipitation
-        options:
-          aggregate_func: sum
     name: hourly precipitation
+    aggregate_func: sum
     hours_to_show: 168
     group_by: hour
     show:
@@ -95,9 +94,8 @@ cards:
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.precipitation
-        options:
-          aggregate_func: sum
     name: daily precipitation
+    aggregate_func: sum
     hours_to_show: 168
     group_by: date
     show:
