@@ -81,11 +81,10 @@ cards:
       include:
         - entity_id: "/.*_rain_delay$/"
   - type: custom:mini-graph-card
-    filter:
-      include:
-        - entity_id: sensor.precipitation
-          options:
-            aggregate_func: sum
+    entities:
+      - entity_id: sensor.precipitation
+        options:
+          aggregate_func: sum
     name: hourly precipitation
     hours_to_show: 168
     group_by: hour
@@ -116,11 +115,12 @@ cards:
         legend: false
         state: false
         points: hover
-    entities:
-      - entity_id: "/.*_zone_daily_runtime$/"
-        options:
-          aggregate_func: max
-          unit: hours
+    filter:
+      include:
+        - entity_id: "/.*_zone_daily_runtime$/"
+          options:
+            aggregate_func: max
+            unit: hours
   - type: custom:auto-entities
     sort:
       method: name
