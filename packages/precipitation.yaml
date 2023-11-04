@@ -54,11 +54,14 @@ input_number:
     step: 5
 
 template:
+  - sensor:
+      - name: first_forecast_datetime
+        state: |
+          {{ (state_attr("weather.tomorrow_io_home_nowcast", "forecast") | first)["datetime"] }}
+        device_class: timestamp
   - trigger:
       - platform: state
-        entity_id: weather.tomorrow_io_home_nowcast
-        value_template: |
-          {{ (state.attributes.forecast | first)["datetime"] }}
+        entity_id: sensor.first_forecast_datetime
     sensor:
       - name: precipitation
         state: |
