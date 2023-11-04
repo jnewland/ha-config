@@ -94,11 +94,10 @@ cards:
       extrema: true
 
   - type: custom:mini-graph-card
-    filter:
-      include:
-        - entity_id: sensor.precipitation
-          options:
-            aggregate_func: sum
+    entities:
+      - entity_id: sensor.precipitation
+        options:
+          aggregate_func: sum
     name: daily precipitation
     hours_to_show: 168
     group_by: date
@@ -117,12 +116,11 @@ cards:
         legend: false
         state: false
         points: hover
-    filter:
-      include:
-        - entity_id: "/.*_zone_daily_runtime$/"
-          options:
-            aggregate_func: max
-            unit: hours
+    entities:
+      - entity_id: "/.*_zone_daily_runtime$/"
+        options:
+          aggregate_func: max
+          unit: hours
   - type: custom:auto-entities
     sort:
       method: name

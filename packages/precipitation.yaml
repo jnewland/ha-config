@@ -53,6 +53,17 @@ input_number:
     max: 100
     step: 5
 
+template:
+  - trigger:
+      - platform: state
+        entity_id: weather.tomorrow_io_home_nowcast
+        attribute: forecast
+    sensor:
+      - name: precipitation
+        state: |
+          {{ (state_attr("weather.tomorrow_io_home_nowcast", "forecast") | first)["precipitation"] }}
+        unit_of_measurement: in
+
 binary_sensor:
   - platform: template
     sensors:
@@ -71,10 +82,6 @@ binary_sensor:
 sensor:
   - platform: template
     sensors:
-      precipitation:
-        unit_of_measurement: in
-        value_template: |
-          {{ (state_attr("weather.tomorrow_io_home_nowcast", "forecast") | first)["precipitation"] }}
       forecast_precipitation_probability:
         friendly_name: Precipitation probability
         unit_of_measurement: "%"
