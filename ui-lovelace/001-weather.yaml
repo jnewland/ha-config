@@ -1,24 +1,26 @@
 title: Weather
 path: weather
-icon: mdi:weather-cloudy
+icon: mdi:weather-cloudy-arrow-right
 cards:
   - type: custom:weather-chart-card
     entity: weather.tomorrow_io_home_nowcast
+    title: now
   - type: custom:weather-chart-card
     show_main: false
     show_attributes: false
-    entity: weather.katt_hourly
+    entity: weather.tomorrow_io_home_hourly
     title: hourly
   - type: custom:weather-chart-card
     show_main: false
     show_attributes: false
-    entity: weather.katt_daynight
+    entity: weather.tomorrow_io_home_daily
+    title: daily
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.max_forecast_temperature
         name: Max
         color: #e74c3c
-    name: forecast max
+    name: forecast max temp
     hours_to_show: 72
     group_by: hour
     show:
@@ -28,7 +30,7 @@ cards:
     entities:
       - entity: sensor.min_forecast_temperature
         name: Min
-    name: forecast min
+    name: forecast min temp
     hours_to_show: 72
     group_by: hour
     show:
@@ -54,13 +56,13 @@ cards:
     show:
       fill: false
   - type: entities
-    title: Forecast
+    title: weather notifications
     show_header_toggle: false
     entities:
-      - sensor.forecast_duration
-      - input_number.precipitation_forecast_hours
-      - input_number.precipitation_forecast_probability_threshold
-      - binary_sensor.precipitation_in_forecast
-      - automation.precipitation_notifications
       - automation.sunshine_notifications
       - automation.freeze_forecast_notifications
+      - automation.precipitation_notifications
+      - binary_sensor.precipitation_in_forecast
+      - input_number.precipitation_forecast_hours
+      - input_number.precipitation_forecast_probability_threshold
+      - sensor.forecast_duration
