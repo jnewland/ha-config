@@ -81,9 +81,25 @@ cards:
       include:
         - entity_id: "/.*_rain_delay$/"
   - type: custom:mini-graph-card
-    entities:
-      - sensor.precipitation
-    name: historical precipitation
+    filter:
+      include:
+        - entity_id: sensor.precipitation
+          options:
+            aggregate_func: sum
+    name: hourly precipitation
+    hours_to_show: 168
+    group_by: hour
+    show:
+      fill: false
+      extrema: true
+
+  - type: custom:mini-graph-card
+    filter:
+      include:
+        - entity_id: sensor.precipitation
+          options:
+            aggregate_func: sum
+    name: daily precipitation
     hours_to_show: 168
     group_by: date
     show:
