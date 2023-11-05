@@ -143,7 +143,7 @@ automation:
   - alias: Sync zone runtime to input_number
     id: 73557890-f7b8-440d-be70-b7f59b7b1f65
     trigger:
-      - platform: numeric_state
+      - platform: state
         entity_id:
           - switch.vegepod_sprayers_zone
           - switch.pergola_drippers_zone
