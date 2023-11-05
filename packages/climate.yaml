@@ -150,7 +150,11 @@ automation:
     id: 1b2b0b5e-5b0a-4b0e-8b0a-2b0b5e5b0a4b
     trigger:
       platform: template
-      value_template: "{{ state_attr('climate.downstairs', 'current_temperature') > state_attr('climate.downstairs', 'temperature') }}"
+      value_template: |
+        {{
+          state_attr('climate.downstairs', 'hvac_action') == 'cooling' and
+          state_attr('climate.downstairs', 'current_temperature') > state_attr('climate.downstairs', 'temperature')
+        }}
     condition:
       condition: template
       value_template: "{{ state_attr('climate.downstairs', 'hvac_action') == 'cooling' }}"
