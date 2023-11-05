@@ -39,13 +39,23 @@ cards:
       type: entities
       show_header_toggle: false
       title: quick run
-    sort:
-      method: name
     filter:
       include:
         - entity_id: "/.*_zone$/"
+        - entity_id: "/.*_schedule$/"
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: runtime
+    filter:
+      include:
         - entity_id: "/.*_zone_runtime$/"
         - entity_id: "/.*_schedule$/"
+          options:
+            type: attribute
+            attribute: Duration
+
   - type: custom:auto-entities
     card:
       type: entities

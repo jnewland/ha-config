@@ -17,7 +17,6 @@ logs:
   packages.front_door: debug
   packages.house_speakers: debug
   packages.image_processing: info
-  packages.irrigation: debug
   packages.picos: debug
   packages.visitor: debug
   packages.volume_limits: debug

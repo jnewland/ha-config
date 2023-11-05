@@ -111,7 +111,7 @@ input_number:
   vegepod_sprayers_zone_runtime:
     name: vegepod sprayers zone runtime
     min: 0
-    max: 120
+    max: 20
     step: 1
   pergola_drippers_zone_runtime:
     name: pergola drippers zone runtime
@@ -136,7 +136,7 @@ input_number:
   fountain_refill_zone_runtime:
     name: fountain refill zone runtime
     min: 0
-    max: 120
+    max: 30
     step: 1
 
 automation:
