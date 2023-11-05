@@ -153,6 +153,14 @@ automation:
           - switch.fountain_refill_zone
         attribute: manual_preset_runtime
     action:
+      - service: system_log.write
+        message: >
+          at=input_number.set_value
+          runtime={{ trigger.to_state.attributes.manual_preset_runtime }}
+          entity_id={{ trigger.entity_id }}
+          target_entity_id=input_number.{{ trigger.entity_id.split('.')[1] }}_runtime
+        logger: packages.irrigation
+        level: debug
       - service: input_number.set_value
         target:
           entity_id: "input_number.{{ trigger.entity_id.split('.')[1] }}_runtime"
@@ -170,6 +178,14 @@ automation:
           - input_number.atrium_drippers_zone_runtime
           - input_number.fountain_refill_zone_runtime
     action:
+      - service: system_log.write
+        message: >
+          at=bhyve.set_manual_preset_runtime
+          minutes={{ trigger.to_state.state }}
+          entity_id={{ trigger.entity_id }}
+          target_entity_id={{ trigger.entity_id.split('.')[1].replace('_runtime', '') }}
+        logger: packages.irrigation
+        level: debug
       - service: bhyve.set_manual_preset_runtime
         target:
           entity_id: "switch.{{ trigger.entity_id.split('.')[1].replace('_runtime', '') }}"
