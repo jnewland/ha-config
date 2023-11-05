@@ -157,7 +157,7 @@ automation:
         target:
           entity_id: "input_number.{{ trigger.entity_id.split('.')[1] }}_runtime"
         data:
-          value: "{{ trigger.to_state.attributes.manual_preset_runtime }}"
+          value: "{{ trigger.to_state.attributes.manual_preset_runtime / 60 }}"
   - alias: Save changed zone's value
     id: d1cbf37d-d177-45d1-95a9-08ea9b4e7e60
     trigger:
