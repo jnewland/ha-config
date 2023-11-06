@@ -12,6 +12,7 @@ cards:
         - entity_id: automation.greenhouse_led_automation
         - domain: light
           device: /greenhouse/
+        - entity_id: /light.mother/
   - type: conditional
     conditions:
       - entity: automation.greenhouse_led_automation
@@ -42,6 +43,19 @@ cards:
       include:
         - entity_id: "/.*_zone$/"
         - entity_id: "/.*_schedule$/"
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: runtime
+    filter:
+      include:
+        - entity_id: "/.*_zone_runtime$/"
+        - entity_id: "/.*_schedule$/"
+          options:
+            type: attribute
+            attribute: Duration
+
   - type: custom:auto-entities
     card:
       type: entities
@@ -81,8 +95,20 @@ cards:
         - entity_id: "/.*_rain_delay$/"
   - type: custom:mini-graph-card
     entities:
-      - sensor.precipitation
-    name: historical precipitation
+      - entity: sensor.precipitation
+    name: hourly precipitation
+    aggregate_func: sum
+    hours_to_show: 168
+    group_by: hour
+    show:
+      fill: false
+      extrema: true
+
+  - type: custom:mini-graph-card
+    entities:
+      - entity: sensor.precipitation
+    name: daily precipitation
+    aggregate_func: sum
     hours_to_show: 168
     group_by: date
     show:

@@ -34,27 +34,73 @@ binary_sensor:
   - platform: template
     sensors:
       garage_occupancy:
-        friendly_name: garage occupied
-        device_class: occupancy
-        value_template: |
-          {{
-            is_state('cover.garage', 'open') or
-            is_state('lock.garage', 'unlocked') or
-            is_state('binary_sensor.garage_person_with_delay', 'on')
-          }}
-
-  - platform: template
-    sensors:
-      garage_person_with_delay:
+        friendly_name: garage occupied or locked
         device_class: occupancy
         delay_off:
           minutes: 3
         value_template: |
           {{
+            is_state('binary_sensor.garage_occupancy_non_lock', 'on') or
+            is_state('lock.garage', 'unlocked')
+          }}
+  - platform: template
+    sensors:
+      garage_occupancy_non_lock:
+        friendly_name: garage occupancy non lock
+        device_class: occupancy
+        delay_off:
+          minutes: 3
+        value_template: |
+          {{
+            is_state('cover.garage', 'open') or
+            is_state('light.ratgdo_garage_light', 'on') or
             float(states('sensor.garage_person_count'), default=0) > 0 
           }}
 
 automation:
+  - alias: Auto lock garage when not occupied
+    id: 5f01d890-5bbb-402b-a924-48148773363a
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.garage_occupancy_non_lock
+        to: "off"
+        for:
+          minutes: 5
+      - platform: state
+        entity_id:
+          - lock.garage
+        to: "unlocked"
+        for:
+          minutes: 5
+
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: lock.garage
+          state: unlocked
+        - condition: state
+          entity_id: binary_sensor.garage_occupancy_non_lock
+          state: "off"
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=script.ack
+            tag={{ trigger.entity_id }}
+          logger: packages.auto_lock
+          level: debug
+      - service: script.ack
+        data:
+          service: lock.lock
+          entity_id: "{{ trigger.entity_id }}"
+          tag: "{{ trigger.entity_id }}"
+          message: >
+            Lock the {{ trigger.to_state.name }}?
+          confirmation_message: >
+            locked the {{ trigger.to_state.name }}.
+
   - alias: Keep covers closed
     id: 9b4c10ce-0960-4176-9bd5-e670c75dfc0d
     trigger:

@@ -1,6 +1,5 @@
 sensor:
-
-# rachio
+  # rachio
 
   - platform: history_stats
     name: atrium zone daily runtime
@@ -58,7 +57,7 @@ sensor:
     start: "{{ now().replace(hour=0, minute=0, second=0) }}"
     end: "{{ now() }}"
 
-# bhyve
+  # bhyve
 
   - platform: history_stats
     name: atrium drippers zone daily runtime
@@ -107,3 +106,90 @@ sensor:
     type: time
     start: "{{ now().replace(hour=0, minute=0, second=0) }}"
     end: "{{ now() }}"
+
+input_number:
+  vegepod_sprayers_zone_runtime:
+    name: vegepod sprayers zone runtime
+    min: 0
+    max: 20
+    step: 1
+  pergola_drippers_zone_runtime:
+    name: pergola drippers zone runtime
+    min: 0
+    max: 120
+    step: 1
+  patio_drippers_zone_runtime:
+    name: patio drippers zone runtime
+    min: 0
+    max: 120
+    step: 1
+  front_yard_drippers_zone_runtime:
+    name: front yard drippers zone runtime
+    min: 0
+    max: 120
+    step: 1
+  atrium_drippers_zone_runtime:
+    name: atrium drippers zone runtime
+    min: 0
+    max: 120
+    step: 1
+  fountain_refill_zone_runtime:
+    name: fountain refill zone runtime
+    min: 0
+    max: 30
+    step: 1
+
+automation:
+  - alias: Sync zone runtime to input_number
+    id: 73557890-f7b8-440d-be70-b7f59b7b1f65
+    trigger:
+      - platform: state
+        entity_id:
+          - switch.vegepod_sprayers_zone
+          - switch.pergola_drippers_zone
+          - switch.patio_drippers_zone
+          - switch.front_yard_drippers_zone
+          - switch.atrium_drippers_zone
+          - switch.fountain_refill_zone
+        attribute: manual_preset_runtime
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=input_number.set_value
+            runtime={{ trigger.to_state.attributes.manual_preset_runtime }}
+            entity_id={{ trigger.entity_id }}
+            target_entity_id=input_number.{{ trigger.entity_id.split('.')[1] }}_runtime
+          logger: packages.irrigation
+          level: debug
+      - service: input_number.set_value
+        target:
+          entity_id: "input_number.{{ trigger.entity_id.split('.')[1] }}_runtime"
+        data:
+          value: "{{ trigger.to_state.attributes.manual_preset_runtime / 60 }}"
+  - alias: Save changed zone's value
+    id: d1cbf37d-d177-45d1-95a9-08ea9b4e7e60
+    trigger:
+      - platform: state
+        entity_id:
+          - input_number.vegepod_sprayers_zone_runtime
+          - input_number.pergola_drippers_zone_runtime
+          - input_number.patio_drippers_zone_runtime
+          - input_number.front_yard_drippers_zone_runtime
+          - input_number.atrium_drippers_zone_runtime
+          - input_number.fountain_refill_zone_runtime
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=bhyve.set_manual_preset_runtime
+            minutes={{ trigger.to_state.state }}
+            entity_id={{ trigger.entity_id }}
+            target_entity_id={{ trigger.entity_id.split('.')[1].replace('_runtime', '') }}
+          logger: packages.irrigation
+          level: debug
+      - service: bhyve.set_manual_preset_runtime
+        target:
+          entity_id: "switch.{{ trigger.entity_id.split('.')[1].replace('_runtime', '') }}"
+        data:
+          minutes: "{{ trigger.to_state.state }}"
