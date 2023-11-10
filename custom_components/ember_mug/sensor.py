@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from functools import cached_property
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -10,11 +10,8 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_BATTERY_CHARGING, PERCENTAGE, UnitOfTemperature
-from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import (
     ATTR_BATTERY_VOLTAGE,
@@ -27,9 +24,16 @@ from .const import (
     LIQUID_STATE_TEMP_ICONS,
     LiquidStateValue,
 )
-from .coordinator import MugDataUpdateCoordinator
 from .entity import BaseMugValueEntity
-from .models import HassMugData
+
+if TYPE_CHECKING:
+    from homeassistant.config_entries import ConfigEntry
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
+    from . import HassMugData
+    from .coordinator import MugDataUpdateCoordinator
+
 
 SENSOR_TYPES = {
     "liquid_state": SensorEntityDescription(
@@ -40,7 +44,6 @@ SENSOR_TYPES = {
     "liquid_level": SensorEntityDescription(
         key="liquid_level",
         icon="mdi:cup-water",
-        translation_key="liquid_level",
         suggested_display_precision=0,
         native_unit_of_measurement=PERCENTAGE,
     ),
@@ -80,8 +83,6 @@ class EmberMugSensor(BaseMugValueEntity, SensorEntity):
 class EmberMugStateSensor(EmberMugSensor):
     """Base Mug State Sensor."""
 
-    _attr_name = None
-
     @property
     def icon(self) -> str:
         """Change icon based on state."""
@@ -95,8 +96,7 @@ class EmberMugStateSensor(EmberMugSensor):
     @property
     def native_value(self) -> str | None:
         """Return liquid state key."""
-        state = super().native_value
-        if state:
+        if state := super().native_value:
             return LIQUID_STATE_MAPPING[state].value
         return None
 
@@ -178,9 +178,7 @@ class EmberMugBatterySensor(EmberMugSensor):
         """Return device specific state attributes."""
         data = self.coordinator.data
         attrs = {
-            ATTR_BATTERY_CHARGING: data.battery.on_charging_base
-            if data.battery
-            else None,
+            ATTR_BATTERY_CHARGING: data.battery.on_charging_base if data.battery else None,
         }
         if ATTR_BATTERY_VOLTAGE in data.model.attribute_labels:
             attrs[ATTR_BATTERY_VOLTAGE] = data.battery_voltage
@@ -194,8 +192,8 @@ async def async_setup_entry(
 ) -> None:
     """Set up Entities."""
     data: HassMugData = hass.data[DOMAIN][entry.entry_id]
-    entry_id = entry.entry_id
-    assert entry_id is not None
+    if entry.entry_id is None:
+        raise ValueError("Missing config entry ID")
     entities: list[EmberMugSensor] = [
         EmberMugStateSensor(data.coordinator, "liquid_state"),
         EmberMugLiquidLevelSensor(data.coordinator, "liquid_level"),
