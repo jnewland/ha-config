@@ -24,7 +24,7 @@ lights:
 prefer_rgb_color: false
 transition: 5
 initial_transition: 5
-interval: 90
+interval: 30
 min_brightness: 20
 max_brightness: 100
 sleep_brightness: 5
