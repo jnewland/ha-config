@@ -1,0 +1,10 @@
+script:
+  toggle_gate:
+    alias: Toggle gate
+    sequence:
+    - repeat:
+        count: '01'
+        sequence:
+          - service: cover.open_cover
+            target:
+              entity_id: cover.gate_ratgdo
