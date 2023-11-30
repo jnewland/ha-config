@@ -9,7 +9,7 @@ group:
     all: true
     entities:
       - switch.great_room_tree
-      - switch.treeo
+      # - switch.treeo
       - switch.quatro
       - switch.lounge_tree_left
 
