@@ -34,3 +34,14 @@ automation:
     action:
       service: homeassistant.turn_on
       entity_id: group.trees
+
+  - alias: Trees in the Morning
+    mode: queued
+    id: 8ab0b9c7-2f91-4bff-b6bc-bf6a2afa6feb
+    trigger:
+      - platform: state
+        entity_id: input_select.mode
+        to: Morning
+    action:
+      service: homeassistant.turn_on
+      entity_id: group.trees
