@@ -37,7 +37,6 @@ cards:
         card:
           type: markdown
           content: |
-            ![]({{ states.media_player.house.attributes.entity_picture }})
 
             ### {{ state_attr('media_player.house', 'media_playlist') == None and ''  or state_attr('media_player.house', 'media_playlist') }}
             ## {{ state_attr('media_player.house', 'media_title') == None and ''  or state_attr('media_player.house', 'media_title') }}
