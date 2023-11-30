@@ -4,7 +4,9 @@ input_boolean:
 
 group:
   trees:
+    name: All Trees
     icon: mdi:pine-tree
+    all: true
     entities:
       - switch.great_room_tree
       - switch.treeo
