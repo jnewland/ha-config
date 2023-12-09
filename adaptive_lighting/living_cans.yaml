@@ -1,0 +1,13 @@
+name: living cans
+lights:
+  - light.living_overhead
+  - light.kitchen
+prefer_rgb_color: false
+transition: 5
+initial_transition: 5
+interval: 30
+min_brightness: 20
+max_brightness: 50
+sleep_brightness: 5
+transition_until_sleep: true
+take_over_control: false

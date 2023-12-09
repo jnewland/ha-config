@@ -14,8 +14,6 @@ entities:
   - light.living_room_fireplace
   - light.bookcase_middle
   - light.corner
-  - switch.great_room_tree
-  - switch.treeo
   - light.cabinets_upper_fridge
   - light.cabinets_upper_left
   - light.cabinets_upper_right
