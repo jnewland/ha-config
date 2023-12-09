@@ -4,7 +4,6 @@ exclude:
   domains:
     - updater
     - vacuum
-    - counter
     - sun
     - weather
   event_types:
