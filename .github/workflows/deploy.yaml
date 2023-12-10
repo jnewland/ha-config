@@ -56,7 +56,7 @@ jobs:
         run: |
           openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
       - name: Test config
-        uses: docker://homeassistant/home-assistant:2023.11.2@sha256:400f20c77f52ac31334c1e73a2f19b2d6e5820757d1d476f01960b1efed31949
+        uses: docker://homeassistant/home-assistant:2023.12.1@sha256:93b9ebc8a464475f42113ccf121bb3c495ce2b4adc0a6fe2c7c3946a5912e850
         with:
           entrypoint: ./script/cibuild
   script-deploy:
@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: script-deploy
     steps:
-      - uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
             await github.rest.repos.createCommitStatus({

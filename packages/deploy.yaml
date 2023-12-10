@@ -28,11 +28,15 @@ automation:
         entity_id: automation.deploy_latest_deployment
         to: "on"
     condition: |
-      {{ has_value('sensor.latest_deployment_sha') }}
+      {{ 
+        has_value('sensor.latest_deployment_sha') and 
+        has_value('sensor.config_sha') and 
+        states('sensor.config_sha') != states('sensor.latest_deployment_sha') 
+      }}
     action:
       - service: notify.slack
         data:
-          message: ":rocket: Deploying https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}/checks ..."
+          message: "@jnewland :rocket: Deploying https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}/checks ..."
       - service: shell_command.deploy
         data:
           sha: >

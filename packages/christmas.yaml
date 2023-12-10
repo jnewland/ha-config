@@ -4,10 +4,12 @@ input_boolean:
 
 group:
   trees:
+    name: All Trees
     icon: mdi:pine-tree
+    all: true
     entities:
       - switch.great_room_tree
-      - switch.treeo
+      # - switch.treeo
       - switch.quatro
       - switch.lounge_tree_left
 
@@ -29,6 +31,17 @@ automation:
     trigger:
       platform: sun
       event: sunset
+    action:
+      service: homeassistant.turn_on
+      entity_id: group.trees
+
+  - alias: Trees in the Morning
+    mode: queued
+    id: 8ab0b9c7-2f91-4bff-b6bc-bf6a2afa6feb
+    trigger:
+      - platform: state
+        entity_id: input_select.mode
+        to: Morning
     action:
       service: homeassistant.turn_on
       entity_id: group.trees

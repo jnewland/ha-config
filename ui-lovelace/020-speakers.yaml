@@ -72,3 +72,11 @@ cards:
           domain: number
         - integration: sonos
           domain: switch
+  - type: conditional
+    conditions:
+      - entity: media_player.house
+        state: playing
+    card:
+      type: markdown
+      content: |
+        ![]({{ states.media_player.house.attributes.entity_picture }})

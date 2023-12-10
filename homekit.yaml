@@ -26,6 +26,7 @@ filter:
     - switch.bathroom_fan
     - switch.volcano_fan
     - switch.front_door_lock_state
+    - script.toggle_gate
     - script.mode_away
     - script.lounge_lights
     - script.mode_reading
