@@ -62,7 +62,6 @@ automation:
         - device_tracker.katie_s_iphone
         - device_tracker.jphone
         - device_tracker.jesses_ipad
-        - device_tracker.jesse_music_room
         - binary_sensor.bathroom_home_security_motion_detection
         - binary_sensor.master_ac_water
         - cover.garage
