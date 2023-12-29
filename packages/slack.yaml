@@ -85,7 +85,7 @@ automation:
         - media_player.house_lounge
         - media_player.patio_speakers
         - media_player.record_cabinet
-        - weather.katt_hourly
+        - weather.tomorrow_io_home_nowcast
         - light.kitchen_light
         - binary_sensor.kitchen_needs_nutrients
         - binary_sensor.kitchen_needs_water
