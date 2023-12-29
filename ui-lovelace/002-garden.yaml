@@ -178,14 +178,14 @@ cards:
         - entity_id: "/sensor.vegepod_illuminance/"
   - type: custom:mini-graph-card
     entities:
-      - entity: sensor.katt_temperature
+      - entity: sensor.tomorrow_io_home_feels_like
         aggregate_func: max
         name: Max
         color: #e74c3c
-      - entity: sensor.katt_temperature
+      - entity: sensor.tomorrow_io_home_feels_like
         aggregate_func: min
         name: Min
-      - entity: sensor.katt_temperature
+      - entity: sensor.tomorrow_io_home_feels_like
         aggregate_func: avg
         name: Avg
         color: green
@@ -200,7 +200,7 @@ cards:
       method: name
       reverse: true
     entities:
-      - entity: sensor.katt_temperature
+      - entity: sensor.tomorrow_io_home_feels_like
       - entity: sensor.peppers_temperature
       - entity: sensor.bamboo_temperature
       - entity: sensor.vegepod_temperature

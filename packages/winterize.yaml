@@ -10,7 +10,7 @@ binary_sensor:
         friendly_name: Freeze in forecast
         device_class: cold
         value_template: |
-          {{ state_attr('weather.katt_hourly', 'forecast') | default([{'temperature':33}]) | map(attribute='temperature') | min < 33 }}
+          {{ state_attr('weather.tomorrow_io_home_daily', 'forecast') | default([{'temperature':33}]) | map(attribute='temperature') | min < 33 }}
       freeze:
         friendly_name: Freeze
         device_class: cold
