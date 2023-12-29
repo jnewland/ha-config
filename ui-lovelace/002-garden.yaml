@@ -145,7 +145,8 @@ cards:
         fill: false
     filter:
       include:
-        - entity_id: "/.*_conductivity$/"
+        - integration: xiaomi_ble
+          entity_id: "/.*_conductivity$/"
   - type: custom:auto-entities
     sort:
       method: name
@@ -159,7 +160,8 @@ cards:
         fill: false
     filter:
       include:
-        - entity_id: "/.*_moisture$/"
+        - integration: xiaomi_ble
+          entity_id: "/.*_moisture$/"
   - type: custom:auto-entities
     sort:
       method: name
@@ -173,9 +175,24 @@ cards:
         fill: false
     filter:
       include:
-        - entity_id: "/sensor.peppers_illuminance/"
-        - entity_id: "/sensor.bamboo_illuminance/"
-        - entity_id: "/sensor.vegepod_illuminance/"
+        - integration: xiaomi_ble
+          entity_id: "/.*_illuminance$/"
+  - type: custom:auto-entities
+    sort:
+      method: name
+      reverse: true
+    card:
+      type: custom:mini-graph-card
+      hours_to_show: 168
+      group_by: hour
+      show:
+        extrema: true
+        fill: false
+    filter:
+      include:
+        - integration: xiaomi_ble
+          entity_id: "/.*_temperature$/"
+
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.tomorrow_io_home_feels_like
@@ -195,21 +212,6 @@ cards:
     show:
       fill: false
       extrema: true
-  - type: custom:mini-graph-card
-    sort:
-      method: name
-      reverse: true
-    entities:
-      - entity: sensor.tomorrow_io_home_feels_like
-      - entity: sensor.peppers_temperature
-      - entity: sensor.bamboo_temperature
-      - entity: sensor.vegepod_temperature
-    name: outdoor temperature
-    hours_to_show: 168
-    group_by: hour
-    show:
-      extrema: true
-      fill: false
   - type: conditional
     conditions:
       - entity: camera.veggiecam
