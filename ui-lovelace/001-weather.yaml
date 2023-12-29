@@ -22,7 +22,7 @@ cards:
         color: #e74c3c
       - entity: sensor.min_forecast_temperature
         name: Min
-    name: forecast temps temp
+    name: forecast temps
     hours_to_show: 72
     group_by: hour
     show:
