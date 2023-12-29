@@ -3,15 +3,11 @@ template:
       - name: Min Forecast Temperature
         unit_of_measurement: "°F"
         state: >
-          {{ state_attr('weather.tomorrow_io_home_daily', 'forecast') | default([{'temperature':33}]) | map(attribute='temperature') | min }}
+          {{ state_attr('weather.tomorrow_io_home_daily', 'forecast') | default([{'templow':33}]) | map(attribute='templow') | min }}
       - name: Max Forecast Temperature
         unit_of_measurement: "°F"
         state: >
           {{ state_attr('weather.tomorrow_io_home_daily', 'forecast') | default([{'temperature':33}]) | map(attribute='temperature') | max }}
-      - name: Average Forecast Temperature
-        unit_of_measurement: "°F"
-        state: >
-          {{ state_attr('weather.tomorrow_io_home_daily', 'forecast') | default([{'temperature':33}]) | map(attribute='temperature') | average }}
       - name: Forecast duration
         unit_of_measurement: "Days"
         state: >
