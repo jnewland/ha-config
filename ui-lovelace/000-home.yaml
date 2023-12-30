@@ -455,4 +455,4 @@ cards:
       media-button:
         border: none
   - type: weather-forecast
-    entity: weather.katt_hourly
+    entity: weather.tomorrow_io_home_nowcast
