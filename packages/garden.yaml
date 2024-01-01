@@ -68,6 +68,7 @@ automation:
       target:
         entity_id:
           - light.greenhouse_led
+          - light.greenhouse_led_black
           - light.mother16
           - light.mother32
 
