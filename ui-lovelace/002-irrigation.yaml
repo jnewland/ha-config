@@ -92,8 +92,7 @@ cards:
       smoothing: false
       show:
         fill: false
-        legend: false
-        state: false
+        extrema: true
         points: hover
     filter:
       include:

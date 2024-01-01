@@ -69,24 +69,7 @@ cards:
     show:
       fill: false
       extrema: true
-  - type: custom:auto-entities
-    card:
-      type: custom:mini-graph-card
-      name: irrigation zone runtime
-      hours_to_show: 168
-      group_by: date
-      smoothing: false
-      show:
-        fill: false
-        legend: false
-        state: false
-        points: hover
-    filter:
-      include:
-        - entity_id: "/.*_zone_daily_runtime$/"
-          options:
-            aggregate_func: max
-            unit: hours
+
   - type: custom:auto-entities
     sort:
       method: name
