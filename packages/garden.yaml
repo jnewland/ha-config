@@ -56,6 +56,14 @@ input_datetime:
     name: Greenhouse LED Off
     has_date: false
     has_time: true
+  indoor_grow_led_on:
+    name: Indoor Grow LED On
+    has_date: false
+    has_time: true
+  indoor_grow_led_off:
+    name: Indoor Grow LED Off
+    has_date: false
+    has_time: true
 
 automation:
   - alias: Greenhouse LED Automation
@@ -69,8 +77,6 @@ automation:
         entity_id:
           - light.greenhouse_led
           - light.greenhouse_led_black
-          - light.mother16
-          - light.mother32
 
   - alias: Greenhouse LED Off
     id: 43d25dc4-d53b-4c8d-9207-1783ed6800e7
@@ -82,5 +88,28 @@ automation:
       target:
         entity_id:
           - light.greenhouse_led
-          - light.mother16
+          - light.greenhouse_led_black
+
+  - alias: Indoor Grow LED Automation
+    id: efb4e167-4d5b-4bb4-a73b-137a60996673
+    trigger:
+      platform: time
+      at: input_datetime.indoor_grow_led_on
+    action:
+      service: light.turn_on
+      target:
+        entity_id:
+          - light.grow_monstera_lounge
+          - light.mother32
+
+  - alias: Indoor Grow LED Off
+    id: 7f25360b-ed89-464b-be4b-e2f30931a5d9
+    trigger:
+      platform: time
+      at: input_datetime.indoor_grow_led_off
+    action:
+      service: light.turn_off
+      target:
+        entity_id:
+          - light.grow_monstera_lounge
           - light.mother32
