@@ -10,9 +10,11 @@ cards:
     filter:
       include:
         - entity_id: automation.greenhouse_led_automation
+        - entity_id: automation.indoor_grow_led_automation
         - domain: light
           device: /greenhouse/
         - entity_id: /light.mother/
+        - entity_id: /light.grow/
   - type: conditional
     conditions:
       - entity: automation.greenhouse_led_automation
@@ -26,6 +28,18 @@ cards:
         - input_datetime.greenhouse_led_off
   - type: conditional
     conditions:
+      - entity: automation.indoor_grow_led_automation
+        state: "on"
+    card:
+      type: entities
+      title: Indoor Grow LED automation
+      show_header_toggle: false
+      entities:
+        - input_datetime.indoor_grow_led_on
+        - input_datetime.indoor_grow_led_off
+
+  - type: conditional
+    conditions:
       - entity: camera.garage
         state: recording
     card:
@@ -34,65 +48,6 @@ cards:
       show_name: false
       show_state: false
       entity: camera.garage
-  - type: custom:auto-entities
-    card:
-      type: entities
-      show_header_toggle: false
-      title: quick run
-    filter:
-      include:
-        - entity_id: "/.*_zone$/"
-        - entity_id: "/.*_schedule$/"
-  - type: custom:auto-entities
-    card:
-      type: entities
-      show_header_toggle: false
-      title: runtime
-    filter:
-      include:
-        - entity_id: "/.*_zone_runtime$/"
-        - entity_id: "/.*_schedule$/"
-          options:
-            type: attribute
-            attribute: Duration
-
-  - type: custom:auto-entities
-    card:
-      type: entities
-      show_header_toggle: false
-      title: toggle schedules
-    filter:
-      include:
-        - entity_id: "/.*_program$/"
-  - type: markdown
-    content: |
-      {% for program in states.switch|selectattr('attributes.is_smart_program','defined') %}
-      {%- if program.state == "on" %}
-      * {{ program.name }} runs for {{ program.attributes.run_times | map(attribute='run_time') | join(', ') }} minutes at {{ program.attributes.start_times | join(', ') }} on {{ program.attributes.frequency.days | default([program.attributes.frequency.interval | default(program.attributes.frequency.type)]) | join }} day {{ program.attributes.frequency.type }}
-      {%- endif -%}
-      {%- endfor -%}
-      {% for program in states.switch | selectattr('attributes.Duration', 'defined') %}
-      {%- if program.attributes.Enabled %}
-      * {{ program.name }} runs for {{ program.attributes.Duration }} {{ program.attributes.Summary | lower }}
-      {%- endif -%}
-      {%- endfor -%}
-  - type: custom:auto-entities
-    card:
-      type: entities
-      show_header_toggle: false
-      title: last run
-    filter:
-      include:
-        - integration: bhyve
-          entity_id: "/.*_history$/"
-  - type: custom:auto-entities
-    card:
-      type: entities
-      show_header_toggle: false
-      title: rain delay
-    filter:
-      include:
-        - entity_id: "/.*_rain_delay$/"
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.precipitation
@@ -114,24 +69,7 @@ cards:
     show:
       fill: false
       extrema: true
-  - type: custom:auto-entities
-    card:
-      type: custom:mini-graph-card
-      name: irrigation zone runtime
-      hours_to_show: 168
-      group_by: date
-      smoothing: false
-      show:
-        fill: false
-        legend: false
-        state: false
-        points: hover
-    filter:
-      include:
-        - entity_id: "/.*_zone_daily_runtime$/"
-          options:
-            aggregate_func: max
-            unit: hours
+
   - type: custom:auto-entities
     sort:
       method: name
@@ -212,6 +150,7 @@ cards:
     show:
       fill: false
       extrema: true
+
   - type: conditional
     conditions:
       - entity: camera.veggiecam
@@ -222,6 +161,7 @@ cards:
       show_name: false
       show_state: false
       entity: camera.veggiecam
+
   - type: conditional
     conditions:
       - entity: camera.gate
