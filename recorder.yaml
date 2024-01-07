@@ -3,7 +3,6 @@ db_url: !env_var DB_URL
 exclude:
   domains:
     - updater
-    - vacuum
     - sun
     - weather
   event_types:
