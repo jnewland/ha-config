@@ -45,7 +45,7 @@ input_number:
   precipitation_forecast_hours:
     name: Precipitation forecast hours
     min: 4
-    max: 48
+    max: 24
     step: 1
   precipitation_forecast_probability_threshold:
     name: Precipitation forecast probability threshold
@@ -92,7 +92,7 @@ sensor:
         value_template: |
           {{
             (
-              state_attr("weather.katt_hourly", "forecast") |
+              state_attr("weather.tomorrow_io_home_hourly", "forecast") |
               default([{}]) | batch(
                 states("input_number.precipitation_forecast_hours") | default(12)
               ) | first |
@@ -105,7 +105,7 @@ sensor:
         friendly_name: Next precipitation
         unit_of_measurement: timestamp
         value_template: |
-          {% set next_precip = state_attr("weather.katt_hourly", "forecast") |
+          {% set next_precip = state_attr("weather.tomorrow_io_home_hourly", "forecast") |
               default([{}]) | batch(
                 states("input_number.precipitation_forecast_hours") | default(12)
               ) | first |
@@ -116,17 +116,17 @@ sensor:
               first |
               default(false) %}
           {{ next_precip or "" }}
-      hours_until_rain:
-        friendly_name: Hours until rain
-        unit_of_measurement: "hours"
+      days_until_rain:
+        friendly_name: Days until rain
+        unit_of_measurement: "days"
         value_template: |
-          {% if states('sensor.next_precipitation') == 'unavailable' or states('sensor.next_precipitation') == '' %}
-            {{ state_attr("weather.katt_hourly", "forecast") | length }}
-          {% else %}
-            {% for item in state_attr("weather.katt_hourly", "forecast") |
-                      default([{}]) %}
-              {% if item.datetime == states('sensor.next_precipitation') %}
-                {{ loop.index }}
-              {% endif %}
-            {% endfor %}
-          {% endif %}
+          {%- if states('sensor.next_precipitation') == 'unavailable' or states('sensor.next_precipitation') == '' -%}
+            {{ state_attr("weather.tomorrow_io_home_daily", "forecast") | length }}
+          {%- else -%}
+            {%- for item in state_attr("weather.tomorrow_io_home_daily", "forecast") |
+                      default([{}]) -%}
+              {%- if item.precipitation_probability > states('input_number.precipitation_forecast_probability_threshold') | float(default=100) -%}
+                {{- loop.index -}}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
