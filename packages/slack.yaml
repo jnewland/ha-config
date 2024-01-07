@@ -62,7 +62,6 @@ automation:
         - device_tracker.katie_s_iphone
         - device_tracker.jphone
         - device_tracker.jesses_ipad
-        - device_tracker.jesse_music_room
         - binary_sensor.bathroom_home_security_motion_detection
         - binary_sensor.master_ac_water
         - cover.garage
@@ -85,7 +84,7 @@ automation:
         - media_player.house_lounge
         - media_player.patio_speakers
         - media_player.record_cabinet
-        - weather.katt_hourly
+        - weather.tomorrow_io_home_nowcast
         - light.kitchen_light
         - binary_sensor.kitchen_needs_nutrients
         - binary_sensor.kitchen_needs_water
