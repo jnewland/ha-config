@@ -26,7 +26,7 @@ automation:
         minutes: 3
     condition:
       condition: numeric_state
-      entity_id: weather.katt_hourly
+      entity_id: weather.tomorrow_io_home_nowcast
       attribute: temperature
       below: 68
     action:

@@ -25,7 +25,6 @@ circadian_lighting:
   max_colortemp: 3500
 
 conversation:
-device_tracker: !include device_tracker.yaml
 emulated_hue:
   expose_by_default: false
 frontend: !include frontend.yaml

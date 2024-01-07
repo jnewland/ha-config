@@ -1,4 +1,0 @@
-- platform: ping
-  consider_home: 15
-  hosts:
-    jesse_music_room: !env_var JESSE_MUSIC_ROOM_IP
