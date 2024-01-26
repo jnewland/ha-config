@@ -30,346 +30,79 @@ cards:
       entity: camera.great_room
   - type: vertical-stack
     cards:
-      - type: conditional
-        conditions:
-          - entity: media_player.house
-            state: playing
-        card:
-          type: markdown
-          content: |
-
-            ### {{ state_attr('media_player.house', 'media_playlist') == None and ''  or state_attr('media_player.house', 'media_playlist') }}
-            ## {{ state_attr('media_player.house', 'media_title') == None and ''  or state_attr('media_player.house', 'media_title') }}
-            ### {{ state_attr('media_player.house', 'media_artist') == None and ''  or state_attr('media_player.house', 'media_artist') }}
-            #### {{ state_attr('media_player.house', 'media_album_name') == None and ''  or state_attr('media_player.house', 'media_album_name') }}
-
-      - type: custom:mini-media-player
-        entity: media_player.house
-        artwork: cover
-        hide:
-          power: true
-          shuffle: false
-          volume: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity_id: media_player.house
-              name: house
-            - entity_id: media_player.sub
-              name: sub
-            - entity_id: media_player.record_cabinet
-              name: record cabinet
-            - entity_id: media_player.lounge_surround
-              name: lounge surround
-            - entity_id: media_player.move
-              name: move
-            - entity_id: media_player.yoga
-              name: yoga
-            - entity_id: media_player.shower
-              name: shower
-            - entity_id: media_player.master_patio
-              name: master patio
-            - entity_id: media_player.back_porch
-              name: back porch
-            - entity_id: media_player.front_porch
-              name: front porch
-            - entity_id: media_player.pergola
-              name: pergola
-            - entity_id: media_player.rock
-              name: rock
-      - type: conditional
-        conditions:
-          - entity: media_player.lounge
-            state: playing
-        card:
-          type: custom:mini-media-player
-          entity: media_player.lounge_surround
-          artwork: cover
-          hide:
-            power: true
-            shuffle: false
-          speaker_group:
-            platform: sonos
-            show_group_count: true
-            entities:
-              - entity_id: media_player.house
-                name: house
-              - entity_id: media_player.sub
-                name: sub
-              - entity_id: media_player.record_cabinet
-                name: record cabinet
-              - entity_id: media_player.lounge_surround
-                name: lounge surround
-              - entity_id: media_player.move
-                name: move
-              - entity_id: media_player.yoga
-                name: yoga
-              - entity_id: media_player.shower
-                name: shower
-              - entity_id: media_player.master_patio
-                name: master patio
-              - entity_id: media_player.back_porch
-                name: back porch
-              - entity_id: media_player.front_porch
-                name: front porch
-              - entity_id: media_player.pergola
-                name: pergola
-              - entity_id: media_player.rock
-                name: rock
-
-      - type: conditional
-        conditions:
-          - entity: sensor.house_speaker_source
-            state_not: undefined
+      - type: custom:auto-entities
+        show_empty: false
         card:
           type: entities
-          show_header_toggle: false
-          entities:
-            - type: custom:mini-media-player
-              entity: media_player.atrium
-              group: true
-              source: icon
-              info: short
-              hide:
-                controls: true
-                source: true
-            - type: custom:mini-media-player
-              entity: media_player.kitchen
-              group: true
-              source: icon
-              info: short
-              hide:
-                controls: true
-                source: true
-            - type: custom:mini-media-player
-              entity: media_player.living
-              group: true
-              source: icon
-              info: short
-              hide:
-                controls: true
-                source: true
-            - type: custom:mini-media-player
-              entity: media_player.bathroom
-              group: true
-              source: icon
-              info: short
-              hide:
-                controls: true
-                source: true
-            - type: custom:mini-media-player
-              entity: media_player.patio
-              group: true
-              source: icon
-              info: short
-              hide:
-                controls: true
-                source: true
-            - type: conditional
-              conditions:
-                - entity: media_player.back_porch
-                  state_not: "idle"
-                - entity: media_player.back_porch
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.back_porch
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
-            - type: conditional
-              conditions:
-                - entity: media_player.front_porch
-                  state_not: "idle"
-                - entity: media_player.front_porch
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.front_porch
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
-            - type: conditional
-              conditions:
-                - entity: media_player.yoga
-                  state_not: "idle"
-                - entity: media_player.yoga
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.yoga
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
-            - type: conditional
-              conditions:
-                - entity: media_player.lounge_surround
-                  state_not: "idle"
-                - entity: media_player.lounge_surround
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.lounge_surround
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
-            - type: conditional
-              conditions:
-                - entity: media_player.master_patio
-                  state_not: "idle"
-                - entity: media_player.master_patio
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.master_patio
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
-            - type: conditional
-              conditions:
-                - entity: media_player.move
-                  state_not: "idle"
-                - entity: media_player.move
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.move
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
-            - type: conditional
-              conditions:
-                - entity: media_player.rock
-                  state_not: "idle"
-                - entity: media_player.rock
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.rock
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
-            - type: conditional
-              conditions:
-                - entity: media_player.pergola
-                  state_not: "idle"
-                - entity: media_player.pergola
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.pergola
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
-            - type: conditional
-              conditions:
-                - entity: media_player.record_cabinet
-                  state_not: "idle"
-                - entity: media_player.record_cabinet
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.record_cabinet
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
-            - type: conditional
-              conditions:
-                - entity: media_player.sub
-                  state_not: "idle"
-                - entity: media_player.sub
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.sub
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
-            - type: conditional
-              conditions:
-                - entity: media_player.bedroom
-                  state_not: "idle"
-                - entity: media_player.bedroom
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.bedroom
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
-            - type: conditional
-              conditions:
-                - entity: media_player.shower
-                  state_not: "idle"
-                - entity: media_player.shower
-                  state_not: "paused"
-              row:
-                type: custom:mini-media-player
-                entity: media_player.shower
-                group: true
-                source: icon
-                info: short
-                hide:
-                  controls: true
-                  source: true
-                  power: true
-                  progress: true
+        filter:
+          template: |-
+            {%- for player in states.media_player
+                | selectattr('attributes.group_members', 'defined')
+                if player.attributes.group_members[0] == player.entity_id and
+                   states(player.entity_id) == 'playing' or
+                   player.entity_id == "media_player.house" -%}
+                {% set ns = namespace(entities=[]) %}
+                {%- for entity in integration_entities('sonos') |
+                        select('contains', 'media_player') |
+                        sort if player.entity_id != entity -%}
+                  {%- set ns.entities = ns.entities + [{
+                        'entity_id': entity,
+                        'name': state_attr(entity, 'friendly_name')
+                      }] -%}
+                {%- endfor -%}
+                {{-
+                    {
+                      'type': 'custom:mini-media-player',
+                      'entity' : player.entity_id,
+                      'artwork' : 'full-cover',
+                      'hide': {
+                        'power': true,
+                        'icon': true,
+                        'shuffle': player.entity_id == 'media_player.lounge_surround',
+                        'volume': player.entity_id == 'media_player.house'
+                      },
+                      'speaker_group': {
+                        'platform': 'sonos',
+                        'show_group_count': true,
+                        'entities': ns.entities
+                      }
+                    }
+                -}},
+            {%- endfor -%}
+
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+        filter:
+          template: |-
+            {%- for player in states.media_player | sort(attribute='entity_id')
+                if (
+                     (
+                       player.attributes.group_members is defined and
+                       player.attributes.group_members[0] != player.entity_id
+                     ) or
+                     player.attributes.device_class == "speaker"
+                   )and
+                   states(player.entity_id) not in ['playing', 'idle', 'unavailable'] and
+                   player.entity_id != "media_player.house" -%}
+                {{-
+                    {
+                      'type': 'custom:mini-media-player',
+                      'entity' : player.entity_id,
+                'group': true,
+                'source': 'icon',
+                'info': 'short',
+                'hide': {
+                  'controls': true,
+                  'source': true,
+                  'power': true,
+                  'progress': true
+                 }
+                    }
+                -}},
+            {%- endfor -%}
+
   - type: custom:auto-entities
     show_empty: false
     sort:
