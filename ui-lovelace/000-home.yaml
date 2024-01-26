@@ -118,21 +118,21 @@ cards:
                 player.attributes.device_class not in ["speaker","receiver"] and
                 player.attributes.entity_id is not list and
                 state_attr(player.entity_id, 'supported_features') | int | bitwise_and(2048) > 0 and
-                states(player.entity_id) not in ['idlee', 'unavailable', 'unknown', 'standby', 'on']
+                states(player.entity_id) not in ['unavailable', 'unknown', 'standby']
         -%}
             {{-
                 {
                   'type': 'custom:mini-media-player',
                   'entity' : player.entity_id,
-            'group': true,
-            'info': 'short',
-            'artwork' : 'full-cover',
-            'hide': {
-              'controls': false,
-              'source': false,
-              'power': false,
-              'progress': true
-              }
+                  'group': true,
+                  'info': 'short',
+                  'artwork' : 'full-cover',
+                  'hide': {
+                    'controls': false,
+                    'source': false,
+                    'power': false,
+                    'progress': true
+                  }
                 }
             -}},
         {%- endfor -%}
