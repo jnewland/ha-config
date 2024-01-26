@@ -53,6 +53,7 @@ cards:
                 {{-
                     {
                       'type': 'custom:mini-media-player',
+                      'group': true,
                       'entity' : player.entity_id,
                       'artwork' : 'full-cover',
                       'hide': {
@@ -90,15 +91,15 @@ cards:
                     {
                       'type': 'custom:mini-media-player',
                       'entity' : player.entity_id,
-                'group': true,
-                'source': 'icon',
-                'info': 'short',
-                'hide': {
-                  'controls': true,
-                  'source': true,
-                  'power': true,
-                  'progress': true
-                 }
+                      'group': true,
+                      'source': 'icon',
+                      'info': 'short',
+                      'hide': {
+                        'controls': true,
+                        'source': true,
+                        'power': true,
+                        'progress': true
+                      }
                     }
                 -}},
             {%- endfor -%}
