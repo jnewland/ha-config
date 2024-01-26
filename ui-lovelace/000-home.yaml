@@ -55,7 +55,7 @@ cards:
                       'type': 'custom:mini-media-player',
                       'group': true,
                       'entity' : player.entity_id,
-                      'artwork' : 'full-cover',
+                      'artwork' : 'material',
                       'hide': {
                         'power': true,
                         'icon': true,
@@ -93,8 +93,8 @@ cards:
                       'entity' : player.entity_id,
                       'group': true,
                       'source': 'icon',
-                      'info': 'short',
                       'hide': {
+                        'info': true,
                         'controls': true,
                         'source': true,
                         'power': player.attributes.device_class != "speaker",
