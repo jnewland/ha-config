@@ -132,7 +132,8 @@ cards:
                     'controls': false,
                     'source': false,
                     'power': false,
-                    'progress': true
+                    'progress': true,
+                    'volume': true,
                   }
                 }
             -}},
