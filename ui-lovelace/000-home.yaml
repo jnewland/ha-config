@@ -28,8 +28,8 @@ cards:
       show_name: false
       show_state: false
       entity: camera.great_room
-  - type: entities
-    entities:
+  - type: vertical-stack
+    cards:
       - type: custom:auto-entities
         show_empty: false
         card:
@@ -53,7 +53,7 @@ cards:
                 {{-
                     {
                       'type': 'custom:mini-media-player',
-                      'group': false,
+                      'group': true,
                       'entity' : player.entity_id,
                       'artwork' : 'full-cover',
                       'hide': {
