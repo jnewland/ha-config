@@ -32,11 +32,21 @@ cards:
       entity: sensor.lounge_pm_2_5
       hours_to_show: 36
       detail: 2
-  - type: entities
-    title: sound settings
-    entities:
-      - switch.lounge_surround_speech_enhancement
-      - switch.lounge_surround_night_sound
+  - type: custom:auto-entities
+    card:
+      type: entities
+      show_header_toggle: false
+      title: surround settings
+    sort:
+      method: name
+    filter:
+      include:
+        - integration: sonos
+          domain: number
+          device: /lounge/
+        - integration: sonos
+          domain: switch
+          device: /lounge/
   - type: media-control
     entity: media_player.lg_webos_tv_d510
   - type: media-control
