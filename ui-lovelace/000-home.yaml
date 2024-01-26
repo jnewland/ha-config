@@ -92,7 +92,7 @@ cards:
                       'type': 'custom:mini-media-player',
                       'entity' : player.entity_id,
                       'group': true,
-                      'source': 'icon',
+                      'info': 'short',
                       'hide': {
                         'info': true,
                         'controls': true,
@@ -112,21 +112,30 @@ cards:
       type: entities
       show_header_toggle: false
     filter:
-      include:
-        - attributes:
-            supported_features: 450487
-        - entity_id: "/media_player.*_channels$/"
-        - entity_id: "/media_player.*_tv.*/"
-        - entity_id: "/media_player.*_surround$/"
-      exclude:
-        - state: "problem"
-        - state: "ok"
-        - state: "off"
-        - state: "unavailable"
-        - state: "Unavailable"
-        - state: "idle"
-        - state: "unknown"
-        - state: "standby"
+      template: |-
+        {%- for player in states.media_player | sort(attribute='entity_id')
+            if player.attributes.group_members is not defined and
+                player.attributes.device_class not in ["speaker","receiver"] and
+                player.attributes.entity_id is not list and
+                state_attr(player.entity_id, 'supported_features') | int | bitwise_and(2048) > 0 and
+                states(player.entity_id) not in ['idlee', 'unavailable', 'unknown', 'standby', 'on']
+        -%}
+            {{-
+                {
+                  'type': 'custom:mini-media-player',
+                  'entity' : player.entity_id,
+            'group': true,
+            'info': 'short',
+            'artwork' : 'full-cover',
+            'hide': {
+              'controls': false,
+              'source': false,
+              'power': false,
+              'progress': true
+              }
+                }
+            -}},
+        {%- endfor -%}
   - type: conditional
     conditions:
       - entity: input_boolean.winterized
