@@ -97,7 +97,7 @@ cards:
                       'hide': {
                         'controls': true,
                         'source': true,
-                        'power': true,
+                        'power': player.attributes.device_class != "speaker",
                         'progress': true
                       }
                     }
