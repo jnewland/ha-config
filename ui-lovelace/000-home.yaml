@@ -55,7 +55,7 @@ cards:
                       'type': 'custom:mini-media-player',
                       'group': true,
                       'entity' : player.entity_id,
-                      'artwork' : 'material',
+                      'artwork' : 'full-cover',
                       'hide': {
                         'power': true,
                         'icon': true,
