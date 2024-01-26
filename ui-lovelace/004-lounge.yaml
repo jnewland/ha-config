@@ -16,9 +16,9 @@ cards:
       entity: sensor.lounge_air_temperature
       hours_to_show: 36
       detail: 2
-  - type: entities
-    show_header_toggle: false
   - type: custom:auto-entities
+    entities:
+      - automation.lounge_fan_auto_mode
     card:
       type: entities
       show_header_toggle: false
@@ -28,6 +28,8 @@ cards:
         entity: sensor.lounge_pm_2_5
         hours_to_show: 36
         detail: 2
+    sort:
+      method: domain
     filter:
       template: |-
         {%- for state in device_entities(device_id('fan.lounge')) -%}
@@ -44,7 +46,7 @@ cards:
       show_header_toggle: false
       title: surround settings
     sort:
-      method: name
+      method: domain
     filter:
       template: |-
         {%- for state in integration_entities('sonos')
