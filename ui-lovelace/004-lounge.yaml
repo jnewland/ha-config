@@ -9,8 +9,6 @@ cards:
       - light.tv_left
       - light.tv_right
       - light.lounge_tv
-      - switch.lounge_left
-      - switch.lounge_right
       - binary_sensor.lounge_home_security_motion_detection
       - sensor.lounge_air_temperature
     footer:
@@ -48,7 +46,7 @@ cards:
   - type: media-control
     entity: media_player.lounge_channels
   - type: entities
-    title: guest
+    title: bath
     entities:
       - light.guest_hall_overhead
       - light.guest_bath_mirror
