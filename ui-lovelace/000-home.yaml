@@ -57,6 +57,7 @@ cards:
                       'entity' : player.entity_id,
                       'artwork' : 'full-cover',
                       'hide': {
+                        'info': player.entity_id == 'media_player.lounge_surround',
                         'power': true,
                         'icon': true,
                         'shuffle': player.entity_id == 'media_player.lounge_surround',
