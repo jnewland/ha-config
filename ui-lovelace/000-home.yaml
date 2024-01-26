@@ -125,7 +125,6 @@ cards:
         - state: "unavailable"
         - state: "Unavailable"
         - state: "idle"
-        - state: "paused"
         - state: "unknown"
         - state: "standby"
   - type: conditional
