@@ -98,7 +98,7 @@ cards:
                         'info': true,
                         'controls': true,
                         'source': true,
-                        'power': player.attributes.device_class != "speaker",
+                        'power': player.attributes.device_class != 'speaker',
                         'progress': true
                       }
                     }
