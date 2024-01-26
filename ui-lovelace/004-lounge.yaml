@@ -24,13 +24,14 @@ cards:
       show_header_toggle: false
       title: fan
     filter:
-      template: |
-        {% for state in device_entities(device_id('fan.lounge')) -%}
-          {{ {
+      template: |-
+        {%- for state in device_entities(device_id('fan.lounge')) -%}
+          {{- {
                 'entity': state,
                 'name': state_attr(state, 'friendly_name') |
                         regex_replace(find=device_attr(device_id(state), 'name')+' ', replace='', ignorecase=True)
-              } }},
+              }
+          -}},
         {%- endfor -%}
     footer:
       type: graph
@@ -45,14 +46,15 @@ cards:
     sort:
       method: name
     filter:
-      template: |
-        {% for state in integration_entities('sonos') | sort
+      template: |-
+        {%- for state in integration_entities('sonos')
           if state | regex_match("(switch|sensor|number)\.lounge.*") -%}
-          {{ {
+          {{- {
                 'entity': state,
                 'name': state_attr(state, 'friendly_name') |
                         regex_replace(find=device_attr(device_id(state), 'name')+' ', replace='', ignorecase=True)
-              } }},
+              }
+          -}},
         {%- endfor -%}
 
   - type: media-control
