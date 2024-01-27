@@ -49,7 +49,7 @@ lovelace:
       type: module
     - url: /local/group-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: js
-    - url: /local/mini-media-player-bundle.js?source=https://github.com/kalkih/mini-media-player/releases/download/v1.16.8/mini-media-player-bundle.js&v=2
+    - url: /local/mini-media-player-bundle.js?source=https://github.com/kalkih/mini-media-player/releases/download/v1.16.9/mini-media-player-bundle.js&v=2
       type: module
     - url: /local/custom-sonos-card.js?source=https://github.com/johanfrick/custom-sonos-card/releases/download/v5.20.1/custom-sonos-card.js&v=3
       type: module
