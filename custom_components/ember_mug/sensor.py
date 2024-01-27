@@ -1,9 +1,9 @@
 """Sensor Entity for Ember Mug."""
 from __future__ import annotations
 
-from functools import cached_property
 from typing import TYPE_CHECKING, Any
 
+from ember_mug.consts import DeviceType
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
@@ -73,11 +73,11 @@ class EmberMugSensor(BaseMugValueEntity, SensorEntity):
     def __init__(
         self,
         coordinator: MugDataUpdateCoordinator,
-        mug_attr: str,
+        device_attr: str,
     ) -> None:
         """Initialize the Mug sensor."""
-        self.entity_description = SENSOR_TYPES[mug_attr]
-        super().__init__(coordinator, mug_attr)
+        self.entity_description = SENSOR_TYPES[device_attr]
+        super().__init__(coordinator, device_attr)
 
 
 class EmberMugStateSensor(EmberMugSensor):
@@ -104,11 +104,13 @@ class EmberMugStateSensor(EmberMugSensor):
     def extra_state_attributes(self) -> dict[str, Any]:
         """Return device specific state attributes."""
         data = self.coordinator.data
+        colour = data.model_info.colour
         attrs = {
             "firmware_info": data.firmware,
             "raw_state": data.liquid_state,
+            "colour": colour.value.lower().replace(" ", "-") if colour else "unknown",
         }
-        if data.model.include_extra:
+        if data.debug:
             attrs |= {
                 "date_time_zone": data.date_time_zone,
                 "udsk": data.udsk,
@@ -120,10 +122,10 @@ class EmberMugStateSensor(EmberMugSensor):
 class EmberMugLiquidLevelSensor(EmberMugSensor):
     """Liquid Level Sensor."""
 
-    @cached_property
+    @property
     def max_level(self) -> int:
         """Max level is different for travel mug."""
-        if self.coordinator.mug.is_travel_mug:
+        if self.coordinator.mug.data.model_info.device_type == DeviceType.TRAVEL_MUG:
             return 100
         return 30
 
@@ -132,7 +134,7 @@ class EmberMugLiquidLevelSensor(EmberMugSensor):
         """Return information about the liquid level."""
         liquid_level: float | None = super().native_value
         if liquid_level:
-            # 30 -> Full
+            # 30 -> Full (100 for Travel Mug)
             # 5, 6 -> Low
             # 0 -> Empty
             return liquid_level / self.max_level * 100
@@ -143,6 +145,7 @@ class EmberMugLiquidLevelSensor(EmberMugSensor):
         """Return device specific state attributes."""
         return {
             "raw_liquid_level": self.coordinator.data.liquid_level,
+            "capacity": self.coordinator.data.model_info.capacity,
             **super().extra_state_attributes,
         }
 
@@ -153,7 +156,7 @@ class EmberMugTemperatureSensor(EmberMugSensor):
     @property
     def icon(self) -> str | None:
         """Set icon based on temperature."""
-        if self._mug_attr != "current_temp":
+        if self._device_attr != "current_temp":
             return "mdi:thermometer"
         icon = LIQUID_STATE_TEMP_ICONS.get(
             self.coordinator.data.liquid_state,
@@ -180,7 +183,7 @@ class EmberMugBatterySensor(EmberMugSensor):
         attrs = {
             ATTR_BATTERY_CHARGING: data.battery.on_charging_base if data.battery else None,
         }
-        if ATTR_BATTERY_VOLTAGE in data.model.attribute_labels:
+        if self.coordinator.mug.has_attribute("battery_voltage"):
             attrs[ATTR_BATTERY_VOLTAGE] = data.battery_voltage
         return attrs | super().extra_state_attributes
 

@@ -49,11 +49,11 @@ class MugNumberEntity(BaseMugValueEntity, NumberEntity):
     def __init__(
         self,
         coordinator: MugDataUpdateCoordinator,
-        mug_attr: str,
+        device_attr: str,
     ) -> None:
         """Initialize the Mug Number."""
-        self.entity_description = NUMBER_TYPES[mug_attr]
-        super().__init__(coordinator, mug_attr)
+        self.entity_description = NUMBER_TYPES[device_attr]
+        super().__init__(coordinator, device_attr)
 
 
 class MugTargetTempNumberEntity(MugNumberEntity):
@@ -61,6 +61,7 @@ class MugTargetTempNumberEntity(MugNumberEntity):
 
     async def async_set_native_value(self, value: float) -> None:
         """Set the mug target temp."""
+        self.coordinator.ensure_writable()
         await self.coordinator.mug.set_target_temp(value)
 
 

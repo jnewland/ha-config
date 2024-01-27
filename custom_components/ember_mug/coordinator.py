@@ -8,13 +8,13 @@ from typing import TYPE_CHECKING, Any
 
 from bleak import BleakError
 from bleak_retry_connector import close_stale_connections
-from ember_mug.data import MugData
+from ember_mug.data import Change, MugData
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import CONNECTION_BLUETOOTH
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import MANUFACTURER
+from .const import MANUFACTURER, SUGGESTED_AREA
 
 if TYPE_CHECKING:
     from ember_mug import EmberMug
@@ -37,7 +37,7 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
         device_name: str,
     ) -> None:
         """Initialize global Mug data updater."""
-        device_type = mug.data.model.type
+        device_type = mug.data.model_info.device_type.value
         super().__init__(
             hass=hass,
             logger=logger,
@@ -61,8 +61,8 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
         """Poll the device."""
         _LOGGER.debug("Updating")
         full_update = not self._last_refresh_was_full
+        changed: list[Change] | None = []
         try:
-            changed = []
             if self._initial_update is True:
                 changed = await self.mug.update_initial()
                 self._initial_update = False
@@ -74,6 +74,8 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
             self._last_refresh_was_full = not self._last_refresh_was_full
             self.available = True
         except (asyncio.TimeoutError, BleakError) as e:
+            if isinstance(e, BleakError):
+                _LOGGER.debug("An error occurred trying to update the mug: %s", e)
             if self.available is True:
                 _LOGGER.debug("%s is not available: %s", e)
                 self.available = False
@@ -81,9 +83,10 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
                 raise UpdateFailed(
                     f"An error occurred updating {self.mug.model_name}: {e=}",
                 ) from e
+            changed = None
         except Exception as e:
             _LOGGER.error(
-                "An error occurred whilst updating the %s: %s",
+                "An unexpected error occurred whilst updating the %s: %s",
                 self.mug.model_name,
                 e,
             )
@@ -98,6 +101,13 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
             changed,
         )
         return self.mug.data
+
+    def ensure_writable(self) -> None:
+        """Writable check for service methods."""
+        if self.mug.can_write is False:
+            raise ValueError(
+                f"Unable to write to {self.mug.data.model_info.device_type.value}",
+            )
 
     @callback
     def handle_unavailable(
@@ -121,7 +131,7 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
             service_info,
             change,
         )
-        self.mug.set_device(service_info.device)
+        self.mug.ble_event_callback(service_info.device, service_info.advertisement)
         # Register or update callback
         self._cancel_callback = self.mug.register_callback(
             self._async_handle_callback,
@@ -134,10 +144,10 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
         _LOGGER.debug("Callback called in Home Assistant")
         self.async_set_updated_data(mug_data)
 
-    def get_mug_attr(self, mug_attr: str) -> Any:
-        """Get a mug attribute by name (recursively) or return None."""
+    def get_device_attr(self, device_attr: str) -> Any:
+        """Get a device attribute by name (recursively) or return None."""
         value = self.data
-        for attr in mug_attr.split("."):
+        for attr in device_attr.split("."):
             try:
                 value = getattr(value, attr)
             except AttributeError:
@@ -150,9 +160,10 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
         firmware = self.data.firmware
         return DeviceInfo(
             connections={(CONNECTION_BLUETOOTH, self.mug.device.address)},
-            name=name if (name := self.data.name) and name != "EMBER" else self.device_name,
-            model=self.data.model.name,
-            suggested_area="Kitchen",
+            name=name if (name := self.data.name) and name != "Ember Device" else self.device_name,
+            model=self.data.model_info.name,
+            serial_number=self.data.meta.serial_number if self.data.meta else None,
+            suggested_area=SUGGESTED_AREA,
             hw_version=str(firmware.hardware) if firmware else None,
             sw_version=str(firmware.version) if firmware else None,
             manufacturer=MANUFACTURER,
