@@ -58,13 +58,13 @@
       "state": {
         "name": "Stan",
         "state": {
-          "unknown": "Nieznany",
           "empty": "Pussty",
           "filling": "Napełniając",
           "cold_no_control":  "Zimno (bez kontroli)",
           "cooling": "Chłodzić",
           "heating": "Ogrzać",
           "perfect": "Idealny",
+          "standby": "Czuwania",
           "warm_no_control": "Ciepło (bez kontroli)"
         },
         "state_attributes": {
