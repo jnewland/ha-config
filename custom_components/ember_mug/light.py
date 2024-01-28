@@ -56,8 +56,15 @@ class MugLightEntity(BaseMugEntity, LightEntity):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Change the LED colour if defined."""
         _LOGGER.debug(f"Received turn on with {kwargs}")
-        rgb, brightness = self.coordinator.mug.data.led_colour[:3], 255
-        if (rgb := kwargs.get(ATTR_RGB_COLOR)) or (brightness := kwargs.get(ATTR_BRIGHTNESS)):
+        self.coordinator.ensure_writable()
+        current_colour = self.coordinator.mug.data.led_colour
+        rgb: tuple[int, int, int]
+        rgb, brightness = current_colour[:3], current_colour[3]
+        if (rgb := kwargs.get(ATTR_RGB_COLOR, rgb)) or (brightness := kwargs.get(ATTR_BRIGHTNESS)):
+            if brightness is None:
+                brightness = current_colour[3]
+            if not rgb:
+                rgb = current_colour[:3]
             await self.coordinator.mug.set_led_colour(Colour(*rgb, brightness))
             self._attr_rgb_color = tuple(rgb)
             self._attr_brightness = brightness
@@ -81,6 +88,6 @@ async def async_setup_entry(
         raise ValueError("Missing config entry ID")
     data: HassMugData = hass.data[DOMAIN][entry.entry_id]
     entities = []
-    if data.mug.is_travel_mug is False:
+    if data.mug.has_attribute("led_colour"):
         entities = [MugLightEntity(data.coordinator, "led_colour")]
     async_add_entities(entities)

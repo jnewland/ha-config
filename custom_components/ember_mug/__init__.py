@@ -3,11 +3,12 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from sys import version_info
 from typing import TYPE_CHECKING
 
 from bleak import BleakError
 from ember_mug import EmberMug
+from ember_mug.consts import EMBER_BLE_SIG
+from ember_mug.utils import get_model_info_from_advertiser_data
 from homeassistant.components import bluetooth
 from homeassistant.components.bluetooth import (
     BluetoothCallbackMatcher,
@@ -28,13 +29,8 @@ from .const import CONF_DEBUG, CONF_INCLUDE_EXTRA, DOMAIN
 from .coordinator import MugDataUpdateCoordinator
 from .models import HassMugData
 
-if version_info.minor < 12:
-    # library required before Python 3.12
-    import async_timeout
-else:
-    async_timeout = asyncio
-
 if TYPE_CHECKING:
+    from home_assistant_bluetooth import BluetoothServiceInfoBleak
     from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import Event, HomeAssistant
 
@@ -56,15 +52,38 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN] = {}
 
     address: str = entry.data[CONF_ADDRESS].upper()
-    ble_device = bluetooth.async_ble_device_from_address(hass, address)
-    if not ble_device:
+    service_info = bluetooth.async_last_service_info(hass, address, connectable=True)
+
+    if service_info and not service_info.manufacturer_data:
+        _LOGGER.debug("Manufacturer data missing from latest advertisement, looking again.")
+        try:
+            service_info = await bluetooth.async_process_advertisements(
+                hass,
+                _process_more_advertisements,
+                {"address": address, "connectable": True},
+                BluetoothScanningMode.ACTIVE,
+                30,
+            )
+        except TimeoutError as e:
+            raise ConfigEntryNotReady(
+                f"Could not find device with manufacturer data and address {address}. "
+                "If you have issues connecting, try putting the device in pairing mode.",
+            ) from e
+
+    if not service_info:
         raise ConfigEntryNotReady(
-            f"Could not find Ember Mug with address {entry.data[CONF_ADDRESS]}",
+            f"Could not find Ember device with address {entry.data[CONF_ADDRESS]}",
         )
 
+    _LOGGER.debug(
+        "Integration setup. Last service info: Device: %s, Manufacturer Data: %s",
+        service_info.device,
+        service_info.manufacturer_data,
+    )
+
     ember_mug = EmberMug(
-        ble_device,
-        include_extra=entry.data.get(CONF_INCLUDE_EXTRA, False),
+        service_info.device,
+        model_info=get_model_info_from_advertiser_data(service_info.advertisement),
         debug=entry.data.get(CONF_DEBUG, False),
     )
     mug_coordinator = MugDataUpdateCoordinator(
@@ -84,7 +103,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         bluetooth.async_register_callback(
             hass,
             mug_coordinator.handle_bluetooth_event,
-            BluetoothCallbackMatcher(address=address, connectable=True),
+            BluetoothCallbackMatcher(
+                address=address,
+                connectable=True,
+                manufacturer_id=EMBER_BLE_SIG,
+            ),
             BluetoothScanningMode.ACTIVE,
         ),
     )
@@ -96,7 +119,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         raise
 
     try:
-        async with async_timeout.timeout(60):
+        async with asyncio.timeout(60):
             await startup_event.wait()
     except TimeoutError as ex:
         raise ConfigEntryNotReady(
@@ -134,6 +157,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
+def _process_more_advertisements(
+    service_info: BluetoothServiceInfoBleak,
+) -> bool:
+    """Wait for an advertisement with Ember SIG in the manufacturer_data."""
+    return EMBER_BLE_SIG in service_info.manufacturer_data
+
+
 async def set_temperature_unit(
     mug_coordinator: MugDataUpdateCoordinator,
     unit: UnitOfTemperature,
@@ -143,7 +173,7 @@ async def set_temperature_unit(
         # No need
         return
     try:
-        async with async_timeout.timeout(10):
+        async with asyncio.timeout(10):
             await mug_coordinator.mug.set_temperature_unit(unit)
     except (BleakError, TimeoutError, EOFError) as e:
         _LOGGER.warning("Unable to set temperature unit to %s: %s.", unit, e)
