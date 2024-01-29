@@ -1,6 +1,7 @@
 """Sensor Entity for Ember Mug."""
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 from ember_mug.consts import DeviceType
@@ -96,8 +97,11 @@ class EmberMugStateSensor(EmberMugSensor):
     @property
     def native_value(self) -> str | None:
         """Return liquid state key."""
-        if state := super().native_value:
-            return LIQUID_STATE_MAPPING[state].value
+        raw_value = super().native_value
+        if raw_value in LIQUID_STATE_MAPPING:
+            return LIQUID_STATE_MAPPING[raw_value].value
+        if raw_value is not None:
+            logging.debug('Value "%s" was not  found in mapping: %s', raw_value, LIQUID_STATE_MAPPING)
         return None
 
     @property
