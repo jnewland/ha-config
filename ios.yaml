@@ -1,0 +1,11 @@
+actions:
+  - name: Open sesame
+    background_color: "#666666"
+    label:
+      text: "Open sesame"
+      color: "#cccccc"
+    icon:
+      icon: home_import_outline
+      color: "#ffffff"
+    show_in_carplay: true
+    show_in_watch: true

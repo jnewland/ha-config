@@ -1,0 +1,112 @@
+automation:
+  - alias: Open sesame
+    initial_state: true
+    id: 4eda2e7b-392e-44d1-b8fe-1ea87f4bf623
+    trigger:
+      - platform: event
+        event_type: ios.action_fired
+        event_data:
+          actionName: Open sesame
+    variables:
+      phone: >
+        {% if trigger.event.data.sourceDeviceID == 'jphone' %}
+          jphone
+        {% else %}
+          katies_iphone
+        {% endif %}
+      name: >
+        {% if trigger.event.data.sourceDeviceID == 'jphone' %}
+          Jesse
+        {% else %}
+          Katie
+        {% endif %}
+      device_tracker: "device_tracker.{{ phone }}"
+      notify: "notify.mobile_app_{{ phone }}"
+
+      other_person: >
+        {% if trigger.event.data.sourceDeviceID == 'jphone' %}
+          Katie
+        {% else %}
+          Jesse
+        {% endif %}
+      other_phone: "{% if phone == 'jphone' %}katies_iphone{% else %}jphone{% endif %}"
+      other_person_device_tracker: "device_tracker.{{ other_phone }}"
+      other_person_notify: "notify.mobile_app_{{ other_phone }}"
+    action:
+      - choose:
+          # if the other person is away
+          - conditions:
+              - condition: template
+                value_template: >
+                  {{ distance(other_person_device_tracker, 'zone.home') > 0.5 }}
+            sequence:
+              - service: script.open_sesame
+
+        default:
+          - service: script.ack
+            data:
+              notify_service: >-
+                {{ notify }}
+              secure: "true"
+              tag: >-
+                {{ phone }}-home
+              entity_id: script.open_sesame_{{ other_phone }}
+              message: "Notified {{ other_person }}. Long press to open up with out confirmation."
+              confirmation_message: opened up.
+              interruption_level: timeSensitive
+
+          - service: script.ack
+            data:
+              notify_service: >-
+                {{ other_person_notify }}
+              secure: "true"
+              tag: >-
+                {{ phone }}-home
+              entity_id: script.open_sesame_{{ phone }}
+              message: "{{ name }} is home. Open gate / garage and unlock?"
+              confirmation_message: let {{ name }} in. They've been notified.
+              interruption_level: critical
+
+script:
+  open_sesame:
+    mode: parallel
+    sequence:
+      - service: script.toggle_gate
+      - service: cover.open_cover
+        data:
+          entity_id: cover.garage
+      - service: lock.unlock
+        data:
+          entity_id: lock.garage
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.alarm
+
+  open_sesame_jphone:
+    mode: parallel
+    sequence:
+      - service: script.open_sesame
+      - condition: template
+        value_template: >
+          {{ distance('device_tracker.jphone', 'zone.home') < 0.5 }}
+      - service: notify.mobile_app_jphone
+        data:
+          message: "Opening gate / garage and unlocking."
+          data:
+            tag: jphone-home
+            push:
+              interruption-level: critical
+
+  open_sesame_katies_iphone:
+    mode: parallel
+    sequence:
+      - service: script.open_sesame
+      - condition: template
+        value_template: >
+          {{ distance('device_tracker.katies_iphone', 'zone.home') < 0.5 }}
+      - service: notify.mobile_app_katies_iphone
+        data:
+          message: "Opening gate / garage and unlocking."
+          data:
+            tag: katies_iphone-home
+            push:
+              interruption-level: timeSensitive

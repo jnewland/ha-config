@@ -79,3 +79,4 @@ tts:
 zone: !include zone.yaml
 
 automation ui: !include automations.yaml
+ios: !include ios.yaml
