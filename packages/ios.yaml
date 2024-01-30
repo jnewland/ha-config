@@ -8,26 +8,6 @@ automation:
         event_data:
           actionName: Debug Carplay Push
     action:
-      - service: notify.mobile_app_jphone
-        data:
-          message: "Regular notification"
-          data:
-            push:
-              interruption-level: critical
-      - delay: 00:00:05
-      - service: notify.mobile_app_jphone
-        data:
-          message: "Time sensitive notification"
-          data:
-            push:
-              interruption-level: timeSensitive
-      - delay: 00:00:05
-      - service: notify.mobile_app_jphone
-        data:
-          message: "Critical notification"
-          data:
-            push:
-              interruption-level: critical
       - delay: 00:00:05
       - service: script.ack
         data:
@@ -44,7 +24,7 @@ automation:
           tag: ack-timeSensitive-test
           message: Test timeSensitive ack notification
           confirmation_message: acked the thing, cool.
-          interruption_level: timeSensitive
+          interruption_level: time-sensitive
       - delay: 00:00:05
       - service: script.ack
         data:
