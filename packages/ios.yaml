@@ -1,4 +1,60 @@
 automation:
+  - alias: Debug Carplay Push
+    initial_state: true
+    id: 09905fae-ba90-4c5b-84ca-20a96e3e662d
+    trigger:
+      - platform: event
+        event_type: ios.action_fired
+        event_data:
+          actionName: Debug Carplay Push
+    action:
+      - service: notify.mobile_app_jphone
+        data:
+          message: "Regular notification"
+          data:
+            push:
+              interruption-level: critical
+      - delay: 00:00:05
+      - service: notify.mobile_app_jphone
+        data:
+          message: "Time sensitive notification"
+          data:
+            push:
+              interruption-level: timeSensitive
+      - delay: 00:00:05
+      - service: notify.mobile_app_jphone
+        data:
+          message: "Critical notification"
+          data:
+            push:
+              interruption-level: critical
+      - delay: 00:00:05
+      - service: script.ack
+        data:
+          notify_service: notify.mobile_app_jphone
+          entity_id: script.noop
+          tag: ack-test
+          message: Test ack notification
+          confirmation_message: acked the thing, cool.
+      - delay: 00:00:05
+      - service: script.ack
+        data:
+          notify_service: notify.mobile_app_jphone
+          entity_id: script.noop
+          tag: ack-timeSensitive-test
+          message: Test timeSensitive ack notification
+          confirmation_message: acked the thing, cool.
+          interruption_level: timeSensitive
+      - delay: 00:00:05
+      - service: script.ack
+        data:
+          notify_service: notify.mobile_app_jphone
+          entity_id: script.noop
+          tag: ack-critical-test
+          message: Test critical ack notification
+          confirmation_message: acked the thing, cool.
+          interruption_level: critical
+
   - alias: Open sesame
     initial_state: true
     id: 4eda2e7b-392e-44d1-b8fe-1ea87f4bf623
