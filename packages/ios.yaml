@@ -1,49 +1,25 @@
 automation:
-  - alias: Debug Carplay Push
+  - alias: Open sesame
     initial_state: true
-    id: 09905fae-ba90-4c5b-84ca-20a96e3e662d
+    id: 086976e9-1b04-4072-ab20-efc0bdbc4c08
     trigger:
       - platform: event
         event_type: ios.action_fired
         event_data:
-          actionName: Debug Carplay Push
+          actionName: Open sesame
     action:
-      - delay: 00:00:05
-      - service: script.ack
-        data:
-          notify_service: notify.mobile_app_jphone
-          entity_id: script.noop
-          tag: ack-test
-          message: Test ack notification
-          confirmation_message: acked the thing, cool.
-      - delay: 00:00:05
-      - service: script.ack
-        data:
-          notify_service: notify.mobile_app_jphone
-          entity_id: script.noop
-          tag: ack-timeSensitive-test
-          message: Test timeSensitive ack notification
-          confirmation_message: acked the thing, cool.
-          interruption_level: time-sensitive
-      - delay: 00:00:05
-      - service: script.ack
-        data:
-          notify_service: notify.mobile_app_jphone
-          entity_id: script.noop
-          tag: ack-critical-test
-          message: Test critical ack notification
-          confirmation_message: acked the thing, cool.
-          interruption_level: critical
+      - service: script.open_sesame
 
-  - alias: Open sesame
+  - alias: Ask to open sesame
     initial_state: true
     id: 4eda2e7b-392e-44d1-b8fe-1ea87f4bf623
     trigger:
       - platform: event
         event_type: ios.action_fired
         event_data:
-          actionName: Open sesame
+          actionName: Ask to open sesame
     variables:
+      triggerSource: "{{ trigger.event.data.triggerSource }}"
       phone: >
         {% if trigger.event.data.sourceDeviceID == 'jphone' %}
           jphone
@@ -81,18 +57,7 @@ automation:
         default:
           - service: script.ack
             data:
-              notify_service: >-
-                {{ notify }}
-              secure: "true"
-              tag: >-
-                {{ phone }}-home
-              entity_id: script.open_sesame_{{ other_phone }}
-              message: "Notified {{ other_person }}. Long press to open up with out confirmation."
-              confirmation_message: opened up.
-              interruption_level: timeSensitive
-
-          - service: script.ack
-            data:
+              camera: camera.gate
               notify_service: >-
                 {{ other_person_notify }}
               secure: "true"
@@ -102,6 +67,16 @@ automation:
               message: "{{ name }} is home. Open gate / garage and unlock?"
               confirmation_message: let {{ name }} in. They've been notified.
               interruption_level: critical
+
+          - service: >-
+              {{ notify }}
+            data:
+              message: Asked {{ other_person }} to open up.
+              data:
+                tag: >-
+                  {{ phone }}-home
+                push:
+                  interruption-level: critical
 
 script:
   open_sesame:
@@ -130,7 +105,7 @@ script:
           data:
             tag: jphone-home
             push:
-              interruption-level: critical
+              interruption-level: time-sensitive
 
   open_sesame_katies_iphone:
     mode: parallel
@@ -145,4 +120,4 @@ script:
           data:
             tag: katies_iphone-home
             push:
-              interruption-level: timeSensitive
+              interruption-level: time-sensitive

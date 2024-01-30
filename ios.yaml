@@ -1,4 +1,12 @@
 actions:
+  - name: Ask to open sesame
+    background_color: "#666666"
+    label:
+      text: "Open sesame"
+      color: "#cccccc"
+    icon:
+      icon: home-account
+      color: "#ffffff"
   - name: Open sesame
     background_color: "#666666"
     label:
@@ -7,15 +15,3 @@ actions:
     icon:
       icon: home_import_outline
       color: "#ffffff"
-    # show_in_carplay: true
-    # show_in_watch: true
-  - name: Debug Carplay Push
-    background_color: "#666666"
-    label:
-      text: "Debug Carplay Push"
-      color: "#cccccc"
-    icon:
-      icon: bug
-      color: "#ffffff"
-    # show_in_carplay: true
-    # show_in_watch: true
