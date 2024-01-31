@@ -64,8 +64,8 @@ curl -sL --fail -o www/custom-sonos-card.js https://github.com/johanfrick/custom
 curl -sL --fail -o www/mini-graph-card-bundle.js https://github.com/kalkih/mini-graph-card/releases/download/v0.12.0/mini-graph-card-bundle.js
 curl -sL --fail -o www/weather-chart-card.js https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
 
-git add custom_components
-git add python_scripts
-git add www
+git add -A custom_components
+git add -A python_scripts
+git add -A www
 
 rm -rf $TMPDIR/$$-*
