@@ -1,150 +1,20 @@
 title: Cameras Snapshots
 icon: mdi:video-image
 cards:
-  - type: conditional
-    conditions:
-      - entity: camera.front_yard_left
-        state: recording
+  - type: custom:auto-entities
     card:
       type: grid
-      square: false
-      columns: 2
-      cards:
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.front_door_person
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.pergola_person
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.front_yard_left_person
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.atrium_person
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.back_porch_person
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.gate_person
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.garage_person
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.ac_person
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.fountain_person
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.veggiecam_person
-  - type: conditional
-    conditions:
-      - entity: camera.front_yard_left
-        state: recording
-    card:
-      type: grid
-      square: false
-      columns: 2
-      cards:
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.front_door_dog
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.pergola_dog
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.front_yard_left_dog
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.atrium_dog
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.back_porch_dog
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.gate_dog
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.garage_dog
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.ac_dog
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.fountain_dog
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.veggiecam_dog
-  - type: conditional
-    conditions:
-      - entity: camera.front_yard_left
-        state: recording
-    card:
-      type: grid
-      square: false
-      columns: 2
-      cards:
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.front_door_cat
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.pergola_cat
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.front_yard_left_cat
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.atrium_cat
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.back_porch_cat
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.gate_cat
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.garage_cat
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.ac_cat
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.fountain_cat
-        - type: picture-entity
-          show_name: false
-          show_state: false
-          entity: camera.veggiecam_cat
+    card_param: cards
+    sort:
+      method: last_changed
+      reverse: true
+    filter:
+      exclude:
+        - state: unknown
+      include:
+        - domain: image
+          integration: frigate
+          options:
+            type: picture-entity
+            show_name: false
+            show_state: true
