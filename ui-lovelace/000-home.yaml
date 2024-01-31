@@ -86,7 +86,7 @@ cards:
                      ) or
                      player.attributes.device_class == "speaker"
                    )and
-                   states(player.entity_id) not in ['playing', 'idle', 'unavailable'] and
+                   states(player.entity_id) not in ['idle', 'unavailable'] and
                    player.entity_id != "media_player.house" -%}
                 {{-
                     {
