@@ -9,6 +9,7 @@ cards:
     card_param: cards
     sort:
       method: last_changed
+      reverse: true
     filter:
       exclude:
         - state: unknown
