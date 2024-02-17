@@ -1,0 +1,17 @@
+actions:
+  - name: Ask to open sesame
+    background_color: "#666666"
+    label:
+      text: "Open sesame"
+      color: "#cccccc"
+    icon:
+      icon: home-account
+      color: "#ffffff"
+  - name: Open sesame
+    background_color: "#666666"
+    label:
+      text: "Open sesame"
+      color: "#cccccc"
+    icon:
+      icon: home_import_outline
+      color: "#ffffff"
