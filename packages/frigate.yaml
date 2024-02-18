@@ -61,9 +61,10 @@ automation:
           - sensor.back_porch_camera_fps
           - sensor.front_door_camera_fps
           - sensor.front_yard_left_camera_fps
+          - sensor.front_yard_right_camera_fps
           - sensor.garage_camera_fps
           - sensor.gate_camera_fps
-          # - sensor.great_room_camera_fps
+          - sensor.great_room_camera_fps
           - sensor.veggiecam_camera_fps
           - sensor.pergola_camera_fps
           - sensor.fountain_camera_fps
@@ -88,6 +89,7 @@ automation:
           - sensor.back_porch_camera_fps
           - sensor.front_door_camera_fps
           - sensor.front_yard_left_camera_fps
+          - sensor.front_yard_right_camera_fps
           - sensor.garage_camera_fps
           - sensor.gate_camera_fps
           - sensor.great_room_camera_fps
@@ -155,20 +157,23 @@ automation:
       topic: frigate/events
     condition:
       - "{{ trigger.payload_json['after']['label'] == 'person' }}"
-      - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_door', 'pergola'] }}"
+      - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_yard_right', 'front_door', 'pergola'] }}"
+      - condition: or
+        conditions:
+          - "{{ trigger.payload_json['type'] == 'new' }}"
+          - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
+          - "{{ trigger.payload_json['after']['end_time'] is not none }}"
     action:
-      - service: notify.iphones
+      - service: script.ack
         data:
-          message: they're here!
-          data:
-            push:
-              category: camera
-            entity_id: |
-              camera.{{ trigger.payload_json['after']['camera'] }}
-            attachment:
-              url: |
-                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
-              content-type: jpeg
-              hide-thumbnail: false
-      - service: automation.turn_off
-        entity_id: automation.notify_when_person_detected_in_front_yard
+          service: homeassistant.turn_off
+          entity_id: automation.notify_when_person_detected_in_front_yard
+          message: >-
+            {{ trigger.payload_json['after']['label'] }}
+            {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
+            on {{ trigger.payload_json['after']['camera'] }}.
+            Disable {{ trigger.payload_json['after']['label'] }} notifications?
+          tag: >-
+            {{ trigger.payload_json['after']['label'] }}-{{ trigger.payload_json['after']['camera'] }}
+          confirmation_message: >-
+            disabled {{ trigger.payload_json['after']['label'] }} notifications.
