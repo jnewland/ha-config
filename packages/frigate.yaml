@@ -172,6 +172,8 @@ automation:
         data:
           service: homeassistant.turn_off
           entity_id: automation.notify_when_person_detected_in_front_yard
+          camera: >-
+            camera.{{ trigger.payload_json['after']['camera'] }}
           message: >-
             {{ trigger.payload_json['after']['label'] }}
             {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
