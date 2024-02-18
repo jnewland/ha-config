@@ -242,3 +242,32 @@ automation:
           entity_id:
             - switch.garage_detect
 
+
+  - alias: Toggle person notification automation
+    id: 3d11fb82-16e2-4d1d-a0fc-7f418a626e73
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.alarm
+    action:
+      - service: >-
+          switch.{{ 'turn_on' if trigger.to_state.state in ['armed_home'] else 'turn_off' }}
+        data:
+          entity_id:
+            - automation.notify_when_person_detected_in_front_yard
+
+  - alias: Toggle dog notification automation
+    id: 2e1597c7-a06a-4611-9643-2849caafa486
+    trigger:
+      - platform: state
+        entity_id: group.door_locks
+      - platform: state
+        entity_id: input_select.mode
+    action:
+      - service: >-
+          {{ 'switch.turn_on' if (
+              states('input_select.mode') not in ['Away'] and
+              trigger.to_state.state in ['unlocked'] )
+            else 'switch.turn_off' }}
+        data:
+          entity_id:
+            - automation.notify_when_dog_detected_in_yard
