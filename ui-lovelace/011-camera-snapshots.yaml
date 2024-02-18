@@ -1,5 +1,6 @@
-title: Cameras Snapshots
+title: Camera Snapshots
 icon: mdi:video-image
+path: camera-snapshots
 cards:
   - type: custom:auto-entities
     card:
