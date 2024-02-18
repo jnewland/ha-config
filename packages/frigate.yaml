@@ -240,7 +240,5 @@ automation:
           switch.{{ 'turn_on' if trigger.to_state.state in ['armed_home'] else 'turn_off' }}
         data:
           entity_id:
-            - switch.garage_snapshots
             - switch.garage_detect
-            - switch.great_room_snapshots
-            - switch.great_room_detect
+
