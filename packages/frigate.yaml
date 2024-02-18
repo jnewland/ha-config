@@ -159,7 +159,7 @@ automation:
     trigger:
       platform: mqtt
       topic: frigate/events
-      value_template: "{{ trigger.payload_json['after']['label'] }}"
+      value_template: "{{ value_json['after']['label'] }}"
       payload: person
     condition:
       - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_yard_right', 'front_door', 'pergola'] }}"
@@ -197,7 +197,7 @@ automation:
     trigger:
       platform: mqtt
       topic: frigate/events
-      value_template: "{{ trigger.payload_json['after']['label'] }}"
+      value_template: "{{ value_json['after']['label'] }}"
       payload: dog
     condition:
       - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_yard_right', 'front_door', 'pergola', 'gate', 'atrium', 'ac', 'back_porch'] }}"
