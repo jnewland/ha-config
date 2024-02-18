@@ -181,7 +181,7 @@ automation:
             {{ trigger.payload_json['after']['label'] }}
             {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
             on {{ trigger.payload_json['after']['camera'] }}.
-            long press to view stream / disable
+            long press to view / disable
           tag: >-
             {{ trigger.payload_json['after']['label'] }}-{{ trigger.payload_json['after']['camera'] }}
           confirmation_message: >-
@@ -190,6 +190,9 @@ automation:
             automation.notify_when_person_detected_in_front_yard
           clear_tags: >-
             person-front_yard_left,person-front_yard_right,person-front_door,person-pergola
+          ack_yes_title: >-
+            Disable notifications
+
 
   - alias: Notify when dog detected in yard
     mode: parallel
@@ -219,11 +222,13 @@ automation:
             {{ trigger.payload_json['after']['label'] }}
             {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
             on {{ trigger.payload_json['after']['camera'] }}.
-            long press to view stream / disable
+            long press to view / disable
           tag: >-
             {{ trigger.payload_json['after']['label'] }}
           confirmation_message: >-
             disabled {{ trigger.payload_json['after']['label'] }} notifications.
+          ack_yes_title: >-
+            Disable notifications
 
   - alias: Toggle indoor cams
     id: e6589f9c-dd59-41e8-b52b-7c00300ec4c9
