@@ -128,7 +128,7 @@ automation:
           data:
             file:
               url: |
-                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
+                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/snapshot.jpg
 
   - alias: Post frigate clips at end of events
     mode: parallel
@@ -176,7 +176,7 @@ automation:
           camera: >-
             camera.{{ trigger.payload_json['after']['camera'] }}
           camera_thumbnail: >
-            {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/thumbnail.jpg
+            {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
             {{ trigger.payload_json['after']['label'] }}
             {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
@@ -214,7 +214,7 @@ automation:
           camera: >-
             camera.{{ trigger.payload_json['after']['camera'] }}
           camera_thumbnail: >
-            {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/thumbnail.jpg
+            {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
             {{ trigger.payload_json['after']['label'] }}
             {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
