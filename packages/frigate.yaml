@@ -250,7 +250,7 @@ automation:
       entity_id: alarm_control_panel.alarm
     action:
       - service: >-
-          switch.{{ 'turn_on' if trigger.to_state.state in ['armed_home'] else 'turn_off' }}
+          homeassistant.{{ 'turn_on' if trigger.to_state.state in ['armed_home'] else 'turn_off' }}
         data:
           entity_id:
             - automation.notify_when_person_detected_in_front_yard
@@ -264,10 +264,10 @@ automation:
         entity_id: input_select.mode
     action:
       - service: >-
-          {{ 'switch.turn_on' if (
+          homeassistant.{{ 'turn_on' if (
               states('input_select.mode') not in ['Away'] and
               trigger.to_state.state in ['unlocked'] )
-            else 'switch.turn_off' }}
+            else 'turn_off' }}
         data:
           entity_id:
             - automation.notify_when_dog_detected_in_yard
