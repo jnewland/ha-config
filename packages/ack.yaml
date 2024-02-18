@@ -1,4 +1,11 @@
 script:
+  noop:
+    sequence:
+      - service: system_log.write
+        data:
+          message: noop
+          logger: packages.ack
+          level: debug
   ack:
     sequence:
       - choose:
