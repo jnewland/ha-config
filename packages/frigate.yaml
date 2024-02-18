@@ -154,13 +154,14 @@ automation:
                 {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/{{ trigger.payload_json["after"]["camera"] }}/clip.mp4
 
   - alias: Notify when person detected in front yard
-    mode: single
+    mode: parallel
     id: 35b6ace2-2cd3-46a1-9477-c044d11336b5
     trigger:
       platform: mqtt
       topic: frigate/events
+      value_template: "{{ trigger.payload_json['after']['label'] }}"
+      payload: person
     condition:
-      - "{{ trigger.payload_json['after']['label'] == 'person' }}"
       - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_yard_right', 'front_door', 'pergola'] }}"
       - condition: or
         conditions:
@@ -187,3 +188,39 @@ automation:
             disabled {{ trigger.payload_json['after']['label'] }} notifications.
           confirmation_tag: >-
             automation.notify_when_person_detected_in_front_yard
+          clear_tags: >-
+            person-front_yard_left,person-front_yard_right,person-front_door,person-pergola
+
+  - alias: Notify when dog detected in yard
+    mode: parallel
+    id: 86b77bcd-d3c2-4000-8b5a-4e5c97489a8b
+    trigger:
+      platform: mqtt
+      topic: frigate/events
+      value_template: "{{ trigger.payload_json['after']['label'] }}"
+      payload: dog
+    condition:
+      - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_yard_right', 'front_door', 'pergola', 'gate', 'atrium', 'ac', 'back_porch'] }}"
+      - condition: or
+        conditions:
+          - "{{ trigger.payload_json['type'] == 'new' }}"
+          - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
+          - "{{ trigger.payload_json['after']['end_time'] is not none }}"
+    action:
+      - service: script.ack
+        data:
+          service: homeassistant.turn_off
+          entity_id: automation.notify_when_dog_detected_in_yard
+          camera: >-
+            camera.{{ trigger.payload_json['after']['camera'] }}
+          camera_thumbnail: >
+            {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/thumbnail.jpg
+          message: >-
+            {{ trigger.payload_json['after']['label'] }}
+            {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
+            on {{ trigger.payload_json['after']['camera'] }}.
+            long press to view stream / disable
+          tag: >-
+            {{ trigger.payload_json['after']['label'] }}
+          confirmation_message: >-
+            disabled {{ trigger.payload_json['after']['label'] }} notifications.

@@ -2,3 +2,5 @@ automation.gate_bell:
   icon: mdi:bell
 automation.notify_when_person_detected_in_front_yard:
   icon: mdi:face-recognition
+automation.notify_when_dog_detected_in_yard:
+  icon: mdi:dog-service

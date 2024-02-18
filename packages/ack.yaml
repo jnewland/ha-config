@@ -139,6 +139,23 @@ automation:
               {{ trigger.event.data.action_data.confirmation_tag | default(trigger.event.data.action_data.tag) | default(trigger.event.data.action_data.entity_id) }}
             push:
               interruption-level: passive
+      - choose:
+          - conditions: >
+              {{ trigger.event.data.action_data.clear_tags | default('') != '' }}
+            sequence:
+              - repeat:
+                  for_each: "{{ trigger.event.data.action_data.clear_tags.split(',') }}"
+                  sequence:
+                    - service: notify.iphones
+                      data:
+                        message: "clear_notification"
+                        data:
+                          tag: "{{ repeat.item }}"
+          - conditions: >
+              {{ trigger.event.data.action_data.clear_tags | default('') == '' }}
+            sequence:
+              - service: script.noop
+
       - service: notify.slack
         data:
           title: ":+1:"
