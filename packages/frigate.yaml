@@ -224,3 +224,18 @@ automation:
             {{ trigger.payload_json['after']['label'] }}
           confirmation_message: >-
             disabled {{ trigger.payload_json['after']['label'] }} notifications.
+
+  - alias: Toggle indoor cams
+    id: e6589f9c-dd59-41e8-b52b-7c00300ec4c9
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.alarm
+    action:
+      - service: >-
+          switch.{{ 'turn_on' if trigger.to_state.state in ['armed_home'] else 'turn_off' }}
+        data:
+          entity_id:
+            - switch.garage_snapshots
+            - switch.garage_detect
+            - switch.great_room_snapshots
+            - switch.great_room_detect
