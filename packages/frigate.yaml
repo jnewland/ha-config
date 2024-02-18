@@ -113,7 +113,11 @@ automation:
       platform: mqtt
       topic: frigate/events
     condition:
-      - "{{ trigger.payload_json['after']['end_time'] is none }}"
+      - condition: or
+        conditions:
+          - "{{ trigger.payload_json['type'] == 'new' }}"
+          - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
+          - "{{ trigger.payload_json['after']['end_time'] is not none }}"
     action:
       - service: notify.slack
         data:
