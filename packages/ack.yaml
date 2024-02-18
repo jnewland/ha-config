@@ -2,7 +2,7 @@ script:
   ack:
     sequence:
       - choose:
-          - alias: with camera
+          - alias: with camera and camera_thumbnail
             conditions: >
               {{ camera | default('') != '' }}
             sequence:
@@ -14,6 +14,11 @@ script:
                   data:
                     entity_id: >-
                       {{ camera }}
+                    attachment:
+                      url: >-
+                        {{ camera_thumbnail }}
+                      content-type: jpeg
+                      hide-thumbnail: false
                     tag: >
                       {{ tag | default(entity_id) }}
                     actions:
@@ -131,7 +136,7 @@ automation:
             {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}
           data:
             tag: >
-              {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
+              {{ trigger.event.data.action_data.confirmation_tag | default(trigger.event.data.action_data.tag) | default(trigger.event.data.action_data.entity_id) }}
             push:
               interruption-level: passive
       - service: notify.slack

@@ -174,12 +174,16 @@ automation:
           entity_id: automation.notify_when_person_detected_in_front_yard
           camera: >-
             camera.{{ trigger.payload_json['after']['camera'] }}
+          camera_thumbnail: >
+            {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/thumbnail.jpg
           message: >-
             {{ trigger.payload_json['after']['label'] }}
             {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
             on {{ trigger.payload_json['after']['camera'] }}.
-            Disable {{ trigger.payload_json['after']['label'] }} notifications?
+            long press to view stream / disable
           tag: >-
             {{ trigger.payload_json['after']['label'] }}-{{ trigger.payload_json['after']['camera'] }}
           confirmation_message: >-
             disabled {{ trigger.payload_json['after']['label'] }} notifications.
+          confirmation_tag: >-
+            automation.notify_when_person_detected_in_front_yard
