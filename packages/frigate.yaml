@@ -61,9 +61,10 @@ automation:
           - sensor.back_porch_camera_fps
           - sensor.front_door_camera_fps
           - sensor.front_yard_left_camera_fps
+          - sensor.front_yard_right_camera_fps
           - sensor.garage_camera_fps
           - sensor.gate_camera_fps
-          # - sensor.great_room_camera_fps
+          - sensor.great_room_camera_fps
           - sensor.veggiecam_camera_fps
           - sensor.pergola_camera_fps
           - sensor.fountain_camera_fps
@@ -88,6 +89,7 @@ automation:
           - sensor.back_porch_camera_fps
           - sensor.front_door_camera_fps
           - sensor.front_yard_left_camera_fps
+          - sensor.front_yard_right_camera_fps
           - sensor.garage_camera_fps
           - sensor.gate_camera_fps
           - sensor.great_room_camera_fps
@@ -111,7 +113,11 @@ automation:
       platform: mqtt
       topic: frigate/events
     condition:
-      - "{{ trigger.payload_json['after']['end_time'] is none }}"
+      - condition: or
+        conditions:
+          - "{{ trigger.payload_json['type'] == 'new' }}"
+          - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
+          - "{{ trigger.payload_json['after']['end_time'] is not none }}"
     action:
       - service: notify.slack
         data:
@@ -122,7 +128,7 @@ automation:
           data:
             file:
               url: |
-                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
+                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/snapshot.jpg
 
   - alias: Post frigate clips at end of events
     mode: parallel
@@ -148,27 +154,120 @@ automation:
                 {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/{{ trigger.payload_json["after"]["camera"] }}/clip.mp4
 
   - alias: Notify when person detected in front yard
-    mode: single
+    mode: parallel
     id: 35b6ace2-2cd3-46a1-9477-c044d11336b5
     trigger:
       platform: mqtt
       topic: frigate/events
+      value_template: "{{ value_json['after']['label'] }}"
+      payload: person
     condition:
-      - "{{ trigger.payload_json['after']['label'] == 'person' }}"
-      - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_door', 'pergola'] }}"
+      - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_yard_right', 'front_door', 'pergola'] }}"
+      - condition: or
+        conditions:
+          - "{{ trigger.payload_json['type'] == 'new' }}"
+          - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
+          - "{{ trigger.payload_json['after']['end_time'] is not none }}"
     action:
-      - service: notify.iphones
+      - service: script.ack
         data:
-          message: they're here!
-          data:
-            push:
-              category: camera
-            entity_id: |
-              camera.{{ trigger.payload_json['after']['camera'] }}
-            attachment:
-              url: |
-                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
-              content-type: jpeg
-              hide-thumbnail: false
-      - service: automation.turn_off
-        entity_id: automation.notify_when_person_detected_in_front_yard
+          service: homeassistant.turn_off
+          entity_id: automation.notify_when_person_detected_in_front_yard
+          camera: >-
+            camera.{{ trigger.payload_json['after']['camera'] }}
+          camera_thumbnail: >
+            {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
+          message: >-
+            {{ trigger.payload_json['after']['label'] }}
+            {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
+            on {{ trigger.payload_json['after']['camera'] }}.
+            long press to view / disable
+          tag: >-
+            {{ trigger.payload_json['after']['label'] }}-{{ trigger.payload_json['after']['camera'] }}
+          confirmation_message: >-
+            disabled {{ trigger.payload_json['after']['label'] }} notifications.
+          confirmation_tag: >-
+            automation.notify_when_person_detected_in_front_yard
+          clear_tags: >-
+            person-front_yard_left,person-front_yard_right,person-front_door,person-pergola
+          ack_yes_title: >-
+            Disable notifications
+
+
+  - alias: Notify when dog detected in yard
+    mode: parallel
+    id: 86b77bcd-d3c2-4000-8b5a-4e5c97489a8b
+    trigger:
+      platform: mqtt
+      topic: frigate/events
+      value_template: "{{ value_json['after']['label'] }}"
+      payload: dog
+    condition:
+      - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_yard_right', 'front_door', 'pergola', 'gate', 'atrium', 'ac', 'back_porch'] }}"
+      - condition: or
+        conditions:
+          - "{{ trigger.payload_json['type'] == 'new' }}"
+          - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
+          - "{{ trigger.payload_json['after']['end_time'] is not none }}"
+    action:
+      - service: script.ack
+        data:
+          service: homeassistant.turn_off
+          entity_id: automation.notify_when_dog_detected_in_yard
+          camera: >-
+            camera.{{ trigger.payload_json['after']['camera'] }}
+          camera_thumbnail: >
+            {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
+          message: >-
+            {{ trigger.payload_json['after']['label'] }}
+            {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
+            on {{ trigger.payload_json['after']['camera'] }}.
+            long press to view / disable
+          tag: >-
+            {{ trigger.payload_json['after']['label'] }}
+          confirmation_message: >-
+            disabled {{ trigger.payload_json['after']['label'] }} notifications.
+          ack_yes_title: >-
+            Disable notifications
+
+  - alias: Toggle indoor cams
+    id: e6589f9c-dd59-41e8-b52b-7c00300ec4c9
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.alarm
+    action:
+      - service: >-
+          switch.{{ 'turn_on' if trigger.to_state.state in ['armed_home'] else 'turn_off' }}
+        data:
+          entity_id:
+            - switch.garage_detect
+
+
+  - alias: Toggle person notification automation
+    id: 3d11fb82-16e2-4d1d-a0fc-7f418a626e73
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.alarm
+    action:
+      - service: >-
+          homeassistant.{{ 'turn_on' if trigger.to_state.state in ['armed_home'] else 'turn_off' }}
+        data:
+          entity_id:
+            - automation.notify_when_person_detected_in_front_yard
+
+  - alias: Toggle dog notification automation
+    id: 2e1597c7-a06a-4611-9643-2849caafa486
+    trigger:
+      - platform: state
+        entity_id: group.door_locks
+      - platform: state
+        entity_id: input_select.mode
+    action:
+      - service: >-
+          homeassistant.{{ 'turn_on' if (
+              states('input_select.mode') not in ['Away'] and
+              trigger.to_state.state in ['unlocked'] )
+            else 'turn_off' }}
+        data:
+          entity_id:
+            - automation.notify_when_dog_detected_in_yard
