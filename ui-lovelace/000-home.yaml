@@ -165,7 +165,7 @@ cards:
     show_header_toggle: false
     entities:
       - cover.garage
-      - script.toggle_gate
+      - cover.gate
       - lock.garage
   - type: conditional
     conditions:

@@ -39,11 +39,3 @@ script:
             {%- else -%}
             disarmed the alarm.
             {%- endif -%}
-  toggle_gate:
-    sequence:
-      - service: cover.toggle
-        entity_id: cover.gate
-  toggle_garage:
-    sequence:
-      - service: cover.toggle
-        entity_id: cover.garage
