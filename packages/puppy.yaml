@@ -3,13 +3,16 @@ automation:
     id: 6fc7d655-2e09-4049-9392-9ac6820f70d5
     trigger:
       - platform: state
-        entity_id: binary_sensor.front_door_audio_bark
+        entity_id: binary_sensor.crate_bark_sound
+        to: "on"
+      - platform: state
+        entity_id: binary_sensor.front_door_bark_sound
         to: "on"
     action:
       - service: script.ack
         data:
           entity_id: script.noop
-          tag: binary_sensor.front_door_audio_bark
+          tag: bark
           message: ❗️📢🐶
           confirmation_message: is handling ❗️📢🐶, cool
           decline_message: can't handle ❗️📢🐶 rn, can you?

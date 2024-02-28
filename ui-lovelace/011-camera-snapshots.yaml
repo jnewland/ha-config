@@ -20,4 +20,4 @@ cards:
           options:
             type: picture-entity
             show_name: false
-            show_state: true
+            show_state: false
