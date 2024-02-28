@@ -6,9 +6,7 @@
         "data": {
           "address": "Device (MAC Address)",
           "name": "Name",
-          "temperature_unit": "Temperature Unit",
-          "include_extra": "Include extra attributes for development",
-          "debug": "Log services and characteristics for development upon connection"
+          "temperature_unit": "Temperature Unit"
         }
       }
     },
@@ -16,6 +14,18 @@
       "unknown": "Unknown error occurred",
       "cannot_connect": "Unable to connect to the device.",
       "no_new_devices": "No new Ember devices were found. Please ensure it is in pairing mode."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Manage Options",
+        "data": {
+          "debug": "Enable debug mode to log extra attributes and values for debugging.",
+          "presets": "A key/value mapping of preset names to target temperatures (in above unit)",
+          "presets_unit": "Temperature unit used for the below presets (!important: if you change this you need to update the numbers in the presets accordingly)"
+        }
+      }
     }
   },
   "entity": {
@@ -30,6 +40,16 @@
       "target_temp": { "name": "Target temperature" }
     },
     "select": {
+      "temperature_preset": {
+        "name": "Temperature preset",
+        "state": {
+          "latte": "Latte",
+          "cappuccino": "Cappuccino",
+          "coffee": "Coffee",
+          "black-tea": "Black Tea",
+          "green-tea": "Green Tea"
+        }
+      },
       "temperature_unit": { "name": "Temperature unit" },
       "volume_level": {
         "name": "Volume Level",
@@ -92,6 +112,9 @@
           "udsk": { "name": "UDSK" }
         }
       }
+    },
+    "switch": {
+      "temperature_control": {"name":  "Temperature Control"}
     },
     "text": {
       "name": { "name": "Name" }

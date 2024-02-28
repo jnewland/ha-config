@@ -9,8 +9,9 @@ from ember_mug.consts import VolumeLevel
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.const import UnitOfTemperature
 from homeassistant.helpers.entity import EntityCategory
+from homeassistant.util.unit_conversion import TemperatureConverter
 
-from .const import DOMAIN
+from .const import CONF_PRESETS, CONF_PRESETS_UNIT, DEFAULT_PRESETS, DOMAIN
 from .entity import BaseMugEntity
 
 if TYPE_CHECKING:
@@ -30,6 +31,10 @@ SELECT_TYPES = {
     "temperature_unit": SelectEntityDescription(
         key="temperature_unit",
         options=TEMPERATURE_UNITS,
+        entity_category=EntityCategory.CONFIG,
+    ),
+    "temperature_preset": SelectEntityDescription(
+        key="temperature_preset",
         entity_category=EntityCategory.CONFIG,
     ),
     "volume_level": SelectEntityDescription(
@@ -78,6 +83,7 @@ class MugTempUnitSelectEntity(MugSelectEntity):
     ) -> None:
         """Change the selected option."""
         await self.coordinator.mug.set_temperature_unit(option)
+        self.coordinator.refresh_from_mug()
 
 
 class MugVolumeLevelSelectEntity(MugSelectEntity):
@@ -99,6 +105,47 @@ class MugVolumeLevelSelectEntity(MugSelectEntity):
         if isinstance(option, str):
             option = VolumeLevel(option)
         await self.coordinator.mug.set_volume_level(option)
+        self.coordinator.refresh_from_mug()
+
+
+class MugTemperaturePresetSelectEntity(MugSelectEntity):
+    """Configurable SelectEntity to set the mug temperature from a list of presets."""
+
+    _attr_icon = "mdi:format-list-bulleted"
+
+    def __init__(
+        self,
+        presets: dict[str, float],
+        presets_unit: UnitOfTemperature,
+        coordinator: MugDataUpdateCoordinator,
+        device_attr: str,
+    ) -> None:
+        """Set temperature presets and select options base on configs."""
+        super().__init__(coordinator, device_attr)
+        if presets_unit != UnitOfTemperature.CELSIUS and coordinator.mug.data.use_metric:
+            presets = {
+                label: TemperatureConverter.convert(
+                    temp,
+                    presets_unit,
+                    UnitOfTemperature.CELSIUS,
+                )
+                for label, temp in presets.items()
+            }
+        self._presets = presets
+        self._temp_to_labels: dict[float, str] = {v: k for k, v in presets.items()}
+        self._attr_options = list(presets)
+
+    @property
+    def current_option(self) -> str | None:
+        """Return selected option if found current temp is one of the presets."""
+        return self._temp_to_labels.get(self.coordinator.target_temp, None)
+
+    async def async_select_option(self, option: str) -> None:
+        """Change the target temp of the mug based on preset."""
+        if not (target_temp := self._presets.get(option)):
+            raise ValueError("Invalid Option")
+        await self.coordinator.mug.set_target_temp(target_temp)
+        self.coordinator.refresh_from_mug()
 
 
 async def async_setup_entry(
@@ -110,7 +157,10 @@ async def async_setup_entry(
     if entry.entry_id is None:
         raise ValueError("Missing config entry ID")
     data: HassMugData = hass.data[DOMAIN][entry.entry_id]
+    preset_unit = entry.options.get(CONF_PRESETS_UNIT, UnitOfTemperature.CELSIUS)
+    temp_presets = entry.options.get(CONF_PRESETS, DEFAULT_PRESETS)
     entities = [
+        MugTemperaturePresetSelectEntity(temp_presets, preset_unit, data.coordinator, "temperature_preset"),
         MugTempUnitSelectEntity(data.coordinator, "temperature_unit"),
     ]
     if data.mug.has_attribute("volume_level"):
