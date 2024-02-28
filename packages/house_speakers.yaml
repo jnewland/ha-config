@@ -31,7 +31,7 @@ script:
           media_content_id: >
             {{ state_attr("sensor.sonos_favorites", "items") | list | random }}
           media_content_type: favorite_item_id
-          enqueue: >
+          enqueue: >-
             {{ is_state('media_player.house', 'playing') }}
 
 automation:
