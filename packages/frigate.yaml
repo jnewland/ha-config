@@ -173,8 +173,12 @@ automation:
             {{ trigger.payload_json['after']['label'] }}
           confirmation_message: >-
             disabled {{ trigger.payload_json['after']['label'] }} notifications.
+          interruption_level: passive
           ack_yes_title: >-
             Disable notifications
+          ack_no_title: I need help with the dog
+          decline_message: >-
+            needs help with the dog.
 
   - alias: Toggle indoor cams
     id: e6589f9c-dd59-41e8-b52b-7c00300ec4c9

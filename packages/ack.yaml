@@ -84,6 +84,8 @@ script:
                     {{ confirmation_message | default("turned on " + entity_id) }}
                   skip_confirmation: |
                     {{ skip_confirmation | default(false) }}
+                  decline_message: |
+                    {{ decline_message | default("👎 to " + entity_id) }}
                 push:
                   interruption-level: >
                     {{ interruption_level | default('active') }}
