@@ -17,8 +17,7 @@ cards:
         - type: entities
           show_header_toggle: false
           entities:
-            - sensor.crate_audio_rms
-            - binary_sensor.crate_audio_bark
+            - binary_sensor.crate_bark_sound
   - type: conditional
     conditions:
       - entity: camera.front_yard_left
@@ -109,13 +108,4 @@ cards:
       show_name: false
       show_state: false
       entity: camera.pergola
-  - type: conditional
-    conditions:
-      - entity: camera.fountain
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.fountain
+

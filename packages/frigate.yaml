@@ -1,53 +1,3 @@
-mqtt:
-  - sensor:
-      state_topic: "frigate/great_room/audio/dBFS"
-      unit_of_measurement: dB
-      name: "Great Room Audio dBFS"
-  - sensor:
-      state_topic: "frigate/great_room/audio/rms"
-      unit_of_measurement: V
-      name: "Great Room Audio RMS"
-
-  - binary_sensor:
-      state_topic: "frigate/great_room/audio/bark"
-      name: "Great Room Audio Bark"
-  - binary_sensor:
-      state_topic: "frigate/great_room/audio/speech"
-      name: "Great Room Audio Speech"
-  - binary_sensor:
-      state_topic: "frigate/great_room/audio/smoke_detector"
-      name: "Great Room Audio Smoke Detector"
-  - binary_sensor:
-      state_topic: "frigate/great_room/audio/fire_alarm"
-      name: "Great Room Audio Fire Alarm"
-  - binary_sensor:
-      state_topic: "frigate/great_room/audio/doorbell"
-      name: "Great Room Audio Doorbell"
-
-  - sensor:
-      state_topic: "frigate/front_door/audio/dBFS"
-      unit_of_measurement: dB
-      name: "Front Door Audio dBFS"
-  - sensor:
-      state_topic: "frigate/front_door/audio/rms"
-      unit_of_measurement: V
-      name: "Front Door Audio RMS"
-
-  - binary_sensor:
-      state_topic: "frigate/front_door/audio/bark"
-      name: "Front Door Audio Bark"
-  - binary_sensor:
-      state_topic: "frigate/front_door/audio/speech"
-      name: "Front Door Audio Speech"
-  - binary_sensor:
-      state_topic: "frigate/front_door/audio/smoke_detector"
-      name: "Front Door Audio Smoke Detector"
-  - binary_sensor:
-      state_topic: "frigate/front_door/audio/fire_alarm"
-      name: "Front Door Audio Fire Alarm"
-  - binary_sensor:
-      state_topic: "frigate/front_door/audio/doorbell"
-      name: "Front Door Audio Doorbell"
 
 automation:
   - alias: Notify about camera failures
@@ -64,10 +14,8 @@ automation:
           - sensor.front_yard_right_camera_fps
           - sensor.garage_camera_fps
           - sensor.gate_camera_fps
-          - sensor.great_room_camera_fps
-          - sensor.veggiecam_camera_fps
+          - sensor.crate_camera_fps
           - sensor.pergola_camera_fps
-          - sensor.fountain_camera_fps
         below: 1
         for:
           minutes: 2
@@ -92,10 +40,8 @@ automation:
           - sensor.front_yard_right_camera_fps
           - sensor.garage_camera_fps
           - sensor.gate_camera_fps
-          - sensor.great_room_camera_fps
-          - sensor.veggiecam_camera_fps
+          - sensor.crate_camera_fps
           - sensor.pergola_camera_fps
-          - sensor.fountain_camera_fps
         below: 6
         above: 4
         for:
