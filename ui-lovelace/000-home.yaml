@@ -57,6 +57,7 @@ cards:
                       'group': true,
                       'entity' : player.entity_id,
                       'artwork' : 'full-cover',
+                      'info': 'scroll',
                       'hide': {
                         'info': player.entity_id == 'media_player.lounge_surround',
                         'power': true,
@@ -94,10 +95,11 @@ cards:
                       'type': 'custom:mini-media-player',
                       'entity' : player.entity_id,
                       'group': true,
+                      'source': 'icon',
                       'hide': {
                         'info': true,
                         'controls': true,
-                        'source': true,
+                        'source': (player.attributes.group_members is not defined),
                         'icon': true,
                         'power': (player.attributes.group_members is defined),
                         'power_state': false,
