@@ -94,12 +94,13 @@ cards:
                       'type': 'custom:mini-media-player',
                       'entity' : player.entity_id,
                       'group': true,
-                      'info': 'short',
                       'hide': {
                         'info': true,
                         'controls': true,
                         'source': true,
-                        'power': player.attributes.device_class != 'speaker',
+                        'icon': true,
+                        'power': (player.attributes.group_members is defined),
+                        'power_state': false,
                         'progress': true
                       }
                     }
