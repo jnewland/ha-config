@@ -63,6 +63,7 @@ cards:
                         'power': true,
                         'icon': true,
                         'shuffle': player.entity_id == 'media_player.lounge_surround',
+                        'repeat': player.entity_id == 'media_player.lounge_surround',
                         'volume': player.entity_id == 'media_player.house'
                       },
                       'speaker_group': {
