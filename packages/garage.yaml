@@ -107,8 +107,8 @@ automation:
       entity_id:
         - cover.garage
         - cover.gate
-      from: closed
       not_to:
+        - closed
         - unknown
         - unavailable
     action:
@@ -129,8 +129,8 @@ automation:
       entity_id:
         - cover.garage
         - cover.gate
-      from: closed
       not_to:
+        - closed
         - unknown
         - unavailable
       for:
