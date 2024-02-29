@@ -151,7 +151,7 @@ automation:
           message: >-
             {{ trigger.to_state.name }} is {{ trigger.to_state.state }}. Close it?
           confirmation_message: >-
-            closed the {{ trigger.to_state.name }}.
+            closed the {{ trigger.to_state.name }}
 
   - alias: Cover notification clear
     id: f883428d-555d-495c-865d-63121af76939

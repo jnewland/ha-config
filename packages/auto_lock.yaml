@@ -40,7 +40,7 @@ automation:
           message: >
             Lock the {{ trigger.to_state.name }}?
           confirmation_message: >
-            locked the {{ trigger.to_state.name }}.
+            locked the {{ trigger.to_state.name }}
 
   - alias: Auto lock notification clear
     id: 91626f5d-db86-4845-948a-96fe990d71cb
