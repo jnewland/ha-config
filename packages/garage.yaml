@@ -54,7 +54,7 @@ binary_sensor:
           {{
             is_state('cover.garage', 'open') or
             is_state('light.ratgdo_garage_light', 'on') or
-            float(states('sensor.garage_person_count'), default=0) > 0 
+            float(states('sensor.garage_person_count'), default=0) > 0
           }}
 
 automation:
@@ -94,12 +94,33 @@ automation:
       - service: script.ack
         data:
           service: lock.lock
-          entity_id: "{{ trigger.entity_id }}"
-          tag: "{{ trigger.entity_id }}"
+          entity_id: lock.garage
           message: >
-            Lock the {{ trigger.to_state.name }}?
+            Lock the garage?
           confirmation_message: >
-            locked the {{ trigger.to_state.name }}.
+            locked the garage.
+
+  - alias: Passive cover controls
+    id: dcd52372-8ad0-4293-a078-78dd257c5994
+    trigger:
+      platform: state
+      entity_id:
+        - cover.garage
+        - cover.gate
+      from: closed
+      not_to:
+        - unknown
+        - unavailable
+    action:
+      - service: script.ack
+        data:
+          service: cover.close_cover
+          entity_id: "{{ trigger.entity_id }}"
+          interruption_level: passive
+          message: >
+            {{ trigger.to_state.name }} is {{ trigger.to_state.state }}. Close it?
+          confirmation_message: >
+            closed the {{ trigger.to_state.name }}.
 
   - alias: Keep covers closed
     id: 9b4c10ce-0960-4176-9bd5-e670c75dfc0d
@@ -108,7 +129,10 @@ automation:
       entity_id:
         - cover.garage
         - cover.gate
-      to: open
+      from: closed
+      not_to:
+        - unknown
+        - unavailable
       for:
         minutes: 5
     action:
@@ -117,7 +141,7 @@ automation:
           service: cover.close_cover
           entity_id: "{{ trigger.entity_id }}"
           message: >
-            Close the {{ trigger.to_state.name }}?
+            {{ trigger.to_state.name }} is {{ trigger.to_state.state }}. Close it?
           confirmation_message: >
             closed the {{ trigger.to_state.name }}.
 
@@ -129,8 +153,6 @@ automation:
         - cover.garage
         - cover.gate
       to: closed
-      for:
-        seconds: 5
     action:
       - service: notify.iphones
         data:
