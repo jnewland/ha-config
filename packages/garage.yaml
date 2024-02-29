@@ -61,13 +61,25 @@ automation:
   - alias: Auto lock garage when not occupied
     id: 5f01d890-5bbb-402b-a924-48148773363a
     trigger:
-      - platform: state
+      - id: active_sensor
+        platform: state
         entity_id:
           - binary_sensor.garage_occupancy_non_lock
         to: "off"
         for:
           minutes: 5
-      - platform: state
+      - id: passive_sensor
+        platform: state
+        entity_id:
+          - binary_sensor.garage_occupancy_non_lock
+        to: "off"
+      - id: passive
+        platform: state
+        entity_id:
+          - lock.garage
+        to: "unlocked"
+      - id: active
+        platform: state
         entity_id:
           - lock.garage
         to: "unlocked"
@@ -95,6 +107,9 @@ automation:
         data:
           service: lock.lock
           entity_id: lock.garage
+          interruption_level: >-
+            {{ trigger.id | replace("_sensor", "") }}
+          camera: camera.garage
           message: >
             Lock the garage?
           confirmation_message: >
@@ -131,6 +146,8 @@ automation:
             {{ trigger.entity_id }}
           interruption_level: >-
             {{ trigger.id }}
+          camera: >-
+            {{ trigger.entity_id | replace("cover.", "camera.") }}
           message: >-
             {{ trigger.to_state.name }} is {{ trigger.to_state.state }}. Close it?
           confirmation_message: >-
