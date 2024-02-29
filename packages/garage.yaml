@@ -145,7 +145,7 @@ automation:
           entity_id: >-
             {{ trigger.entity_id }}
           interruption_level: >-
-            {{ trigger.id }}
+            {{ trigger.id if trigger.entity_id != "cover.gate" else "time-sensitive" }}
           camera: >-
             {{ trigger.entity_id | replace("cover.", "camera.") }}
           message: >-

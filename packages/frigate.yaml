@@ -134,6 +134,7 @@ automation:
             disabled {{ trigger.payload_json['after']['label'] }} notifications.
           confirmation_tag: >-
             automation.notify_when_person_detected_in_front_yard
+          interruption_level: time-sensitive
           clear_tags: >-
             person-front_yard_left,person-front_yard_right,person-front_door,person-pergola
           ack_yes_title: >-
