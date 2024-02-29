@@ -100,49 +100,40 @@ automation:
           confirmation_message: >
             locked the garage.
 
-  - alias: Passive cover controls
-    id: dcd52372-8ad0-4293-a078-78dd257c5994
-    trigger:
-      platform: state
-      entity_id:
-        - cover.garage
-        - cover.gate
-      not_to:
-        - closed
-        - unknown
-        - unavailable
-    action:
-      - service: script.ack
-        data:
-          service: cover.close_cover
-          entity_id: "{{ trigger.entity_id }}"
-          interruption_level: passive
-          message: >
-            {{ trigger.to_state.name }} is {{ trigger.to_state.state }}. Close it?
-          confirmation_message: >
-            closed the {{ trigger.to_state.name }}.
-
   - alias: Keep covers closed
     id: 9b4c10ce-0960-4176-9bd5-e670c75dfc0d
     trigger:
-      platform: state
-      entity_id:
-        - cover.garage
-        - cover.gate
-      not_to:
-        - closed
-        - unknown
-        - unavailable
-      for:
-        minutes: 5
+      - id: passive
+        platform: state
+        entity_id:
+          - cover.garage
+          - cover.gate
+        not_to:
+          - closed
+          - unknown
+          - unavailable
+      - id: active
+        platform: state
+        entity_id:
+          - cover.garage
+          - cover.gate
+        not_to:
+          - closed
+          - unknown
+          - unavailable
+        for:
+          minutes: 5
     action:
       - service: script.ack
         data:
           service: cover.close_cover
-          entity_id: "{{ trigger.entity_id }}"
-          message: >
+          entity_id: >-
+            {{ trigger.entity_id }}
+          interruption_level: >-
+            {{ trigger.id }}
+          message: >-
             {{ trigger.to_state.name }} is {{ trigger.to_state.state }}. Close it?
-          confirmation_message: >
+          confirmation_message: >-
             closed the {{ trigger.to_state.name }}.
 
   - alias: Cover notification clear
