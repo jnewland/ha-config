@@ -1,5 +1,6 @@
 script:
   noop:
+    mode: parallel
     sequence:
       - service: system_log.write
         data:
@@ -7,6 +8,7 @@ script:
           logger: packages.ack
           level: debug
   ack:
+    mode: parallel
     sequence:
       - choose:
           - alias: with camera and camera_thumbnail
