@@ -109,7 +109,11 @@ automation:
           entity_id: lock.garage
           interruption_level: >-
             {{ trigger.id | replace("_sensor", "") }}
-          camera: camera.garage
+          camera: >
+            camera.garage
+          camera_thumbnail: >-
+            {{ states('input_text.external_url') }}
+            {{ state_attr('camera.garage', 'entity_picture') }}
           message: >
             Lock the garage?
           confirmation_message: >
@@ -150,6 +154,9 @@ automation:
             {{ trigger.id if trigger.entity_id != "cover.gate" else "time-sensitive" }}
           camera: >-
             {{ trigger.entity_id | replace("cover.", "camera.") }}
+          camera_thumbnail: >-
+            {{ states('input_text.external_url') }}
+            {{ state_attr(trigger.entity_id | replace("lock.", "camera."), 'entity_picture') }}
           message: >-
             {{ trigger.to_state.name }} is {{ trigger.to_state.state }}. Close it?
           confirmation_message: >-

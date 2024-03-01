@@ -35,6 +35,9 @@ automation:
           tag: "{{ trigger.entity_id }}"
           camera: >-
             {{ trigger.entity_id | replace("lock.", "camera.") }}
+          camera_thumbnail: >-
+            {{ states('input_text.external_url') }}
+            {{ state_attr(trigger.entity_id | replace("lock.", "camera."), 'entity_picture') }}
           interruption_level: >-
             {{ trigger.id }}
           message: >

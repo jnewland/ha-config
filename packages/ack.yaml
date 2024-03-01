@@ -57,46 +57,6 @@ script:
                     push:
                       interruption-level: >
                         {{ interruption_level | default('active') }}
-          - alias: with camera
-            conditions: >
-              {{ camera | default('') != '' }}
-            sequence:
-              - service: >
-                  {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
-                data:
-                  message: |
-                    {{ message | default("Turn on " + entity_id) }}
-                  data:
-                    entity_id: >-
-                      {{ camera }}
-                    tag: >
-                      {{ tag | default(entity_id) }}
-                    actions:
-                      - action: ACK_TURN_ON
-                        title: >-
-                          {{ ack_yes_title | default("Hell yeah") }}
-                        destructive: true
-                        authenticationRequired: |
-                          {{ secure | default("false") != "false" }}
-                      - action: ACK_NO
-                        title: >-
-                          {{ ack_no_title | default("Nah") }}
-                    action_data:
-                      tag: >
-                        {{ tag | default(entity_id) }}
-                      service: |
-                        {{ service | default("homeassistant.turn_on") }}
-                      entity_id: |
-                        {{ entity_id }}
-                      notify_service: >
-                        {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
-                      confirmation_message: |
-                        {{ confirmation_message | default("turned on " + entity_id) }}
-                      skip_confirmation: |
-                        {{ skip_confirmation | default(false) }}
-                    push:
-                      interruption-level: >
-                        {{ interruption_level | default('active') }}
         default:
           - service: >
               {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
