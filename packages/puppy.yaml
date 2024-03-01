@@ -36,7 +36,8 @@ automation:
         data:
           entity_id: script.noop
           tag: front_door_puppy
-          message: 🐶🌼 is at the front door
+          message: 🐶🌼 is at the door
+          interruption_level: time-sensitive
           confirmation_message: is letting 🐶🌼 out, cool
           decline_message: can't handle 🐶🌼 rn, can you?
 
