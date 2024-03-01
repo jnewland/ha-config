@@ -189,7 +189,7 @@ automation:
       condition: template
       value_template: |
         {{
-          state('media_player.house') == 'playing' and
+          states('media_player.house') == 'playing' and
           state_attr('media_player.house', 'queue_position') | default(0) > 1 and
           state_attr('media_player.house', 'queue_size') == state_attr('media_player.house', 'queue_position')
         }}
