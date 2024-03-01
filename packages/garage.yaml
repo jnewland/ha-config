@@ -144,6 +144,8 @@ automation:
           service: cover.close_cover
           entity_id: >-
             {{ trigger.entity_id }}
+          notify_service: >
+            {{ "notify.iphones" if trigger.entity_id == "cover.gate" else states('sensor.notify_group') | default("notify.iphones") }}
           interruption_level: >-
             {{ trigger.id if trigger.entity_id != "cover.gate" else "time-sensitive" }}
           camera: >-
@@ -162,7 +164,8 @@ automation:
         - cover.gate
       to: closed
     action:
-      - service: notify.iphones
+      - service: >
+          {{ states('sensor.notify_group') | default("notify.iphones") }}
         data:
           message: "clear_notification"
           data:

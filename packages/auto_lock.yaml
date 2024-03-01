@@ -59,7 +59,8 @@ automation:
             tag={{ trigger.entity_id }}
           logger: packages.auto_lock
           level: debug
-      - service: notify.iphones
+      - service: >
+         {{ states('sensor.notify_group') | default("notify.iphones") }}
         data:
           message: "clear_notification"
           data:

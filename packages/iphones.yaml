@@ -1,0 +1,40 @@
+notify:
+  - platform: group
+    name: iphones
+    services:
+      - service: mobile_app_jphone
+      - service: mobile_app_katies_iphone
+template:
+  - binary_sensor:
+      - name: Jesse Home
+        unique_id: jesse_home
+        state: >
+          {{ distance(states.device_tracker.jphone) < (state_attr('zone.home', 'radius')/1000) }}
+        icon: >
+          {% if is_state('binary_sensor.jesse_home', 'on') %}
+            mdi:home
+          {% else %}
+            mdi:home-outline
+          {% endif %}
+      - name: Katie Home
+        unique_id: katie_home
+        state: >
+          {{ distance(states.device_tracker.katies_iphone) < (state_attr('zone.home', 'radius')/1000) }}
+        icon: >
+          {% if is_state('binary_sensor.katie_home', 'on') %}
+            mdi:home
+          {% else %}
+            mdi:home-outline
+          {% endif %}
+  - sensor:
+      - name: Notify group
+        unique_id: notify_group
+        state: >-
+          {% if is_state('binary_sensor.jesse_home') and is_state('binary_sensor.katie_home') %}
+            notify.iphones
+          {% elif is_state('binary_sensor.jesse_home') %}
+            notify.mobile_app_jphone
+          {% elif is_state('binary_sensor.katie_home') %}
+            notify.mobile_app_katies_iphone
+          {% endif %}
+

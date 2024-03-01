@@ -17,7 +17,7 @@ script:
               }}
             sequence:
               - service: >
-                  {{ notify_service | default("notify.iphones") }}
+                  {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
                 data:
                   message: |
                     {{ message | default("Turn on " + entity_id) }}
@@ -49,7 +49,7 @@ script:
                       entity_id: |
                         {{ entity_id }}
                       notify_service: >
-                        {{ notify_service | default("notify.iphones") }}
+                        {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
                       confirmation_message: |
                         {{ confirmation_message | default("turned on " + entity_id) }}
                       skip_confirmation: |
@@ -62,7 +62,7 @@ script:
               {{ camera | default('') != '' }}
             sequence:
               - service: >
-                  {{ notify_service | default("notify.iphones") }}
+                  {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
                 data:
                   message: |
                     {{ message | default("Turn on " + entity_id) }}
@@ -89,7 +89,7 @@ script:
                       entity_id: |
                         {{ entity_id }}
                       notify_service: >
-                        {{ notify_service | default("notify.iphones") }}
+                        {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
                       confirmation_message: |
                         {{ confirmation_message | default("turned on " + entity_id) }}
                       skip_confirmation: |
@@ -99,7 +99,7 @@ script:
                         {{ interruption_level | default('active') }}
         default:
           - service: >
-              {{ notify_service | default("notify.iphones") }}
+              {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
             data:
               message: |
                 {{ message | default("Turn on " + entity_id) }}
@@ -122,7 +122,7 @@ script:
                   entity_id: |
                     {{ entity_id }}
                   notify_service: >
-                    {{ notify_service | default("notify.iphones") }}
+                    {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
                   confirmation_message: |
                     {{ confirmation_message | default("turned on " + entity_id) }}
                   skip_confirmation: |
@@ -200,7 +200,8 @@ automation:
               - repeat:
                   for_each: "{{ trigger.event.data.action_data.clear_tags.split(',') }}"
                   sequence:
-                    - service: notify.iphones
+                    - service: >
+                        {{ trigger.event.data.action_data.notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
                       data:
                         message: "clear_notification"
                         data:
