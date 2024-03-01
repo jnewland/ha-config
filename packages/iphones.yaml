@@ -30,11 +30,11 @@ template:
       - name: Notify group
         unique_id: notify_group
         state: >-
-          {% if is_state('binary_sensor.jesse_home') and is_state('binary_sensor.katie_home') %}
+          {% if is_state('binary_sensor.jesse_home', 'on') and is_state('binary_sensor.katie_home', 'on') %}
             notify.iphones
-          {% elif is_state('binary_sensor.jesse_home') %}
+          {% elif is_state('binary_sensor.jesse_home', 'on') %}
             notify.mobile_app_jphone
-          {% elif is_state('binary_sensor.katie_home') %}
+          {% elif is_state('binary_sensor.katie_home', 'on') %}
             notify.mobile_app_katies_iphone
           {% endif %}
 
