@@ -53,7 +53,7 @@ lovelace:
       type: module
     - url: /local/custom-sonos-card.js?source=https://github.com/johanfrick/custom-sonos-card/releases/download/v5.20.1/custom-sonos-card.js&v=3
       type: module
-    - url: /local/mini-graph-card-bundle.js?source=https://github.com/kalkih/mini-graph-card/releases/download/v0.12.0/mini-graph-card-bundle.js
+    - url: /local/mini-graph-card-bundle.js?source=https://github.com/kalkih/mini-graph-card/releases/download/v0.12.1/mini-graph-card-bundle.js
       type: module
     - url: /local/weather-chart-card.js?source=https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
       type: module
