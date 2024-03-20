@@ -1,4 +1,4 @@
-FROM homeassistant/home-assistant:2024.2.5@sha256:02304f6c5cdb817185e3a6f6db50aad97cf7206027c2a45fbf72da2d00588f4c
+FROM homeassistant/home-assistant:2024.3.1@sha256:9dade9391001b769a791a03faf9f193a9c801e711922f0469d27a3d923b9dfe0
 
 ARG ENABLE_NONROOT_DOCKER="true"
 ARG INSTALL_ZSH="true"
