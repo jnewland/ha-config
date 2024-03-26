@@ -1,0 +1,4 @@
+alias: Crack garage door
+sequence:
+  - service: python_script.crack
+    entity_id: cover.garage

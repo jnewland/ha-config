@@ -1,9 +1,0 @@
-- platform: slack
-  name: slack
-  api_key: !env_var SLACK_API_KEY
-  default_channel: "#general"
-- platform: group
-  name: iphones
-  services:
-    - service: mobile_app_jphone
-    - service: mobile_app_katies_iphone

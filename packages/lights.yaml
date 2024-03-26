@@ -962,7 +962,7 @@ script:
         data:
           entity_id:
             - light.powder_room_mirror
-          brightness: 255
+          brightness: 128
 
   powder_room_dim:
     mode: parallel
@@ -971,4 +971,4 @@ script:
         data:
           entity_id:
             - light.powder_room_mirror
-          brightness: 103
+          brightness: 64

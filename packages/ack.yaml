@@ -1,5 +1,6 @@
 script:
   noop:
+    mode: parallel
     sequence:
       - service: system_log.write
         data:
@@ -7,14 +8,18 @@ script:
           logger: packages.ack
           level: debug
   ack:
+    mode: parallel
     sequence:
       - choose:
           - alias: with camera and camera_thumbnail
-            conditions: >
-              {{ camera | default('') != '' }}
+            conditions: |
+              {{
+                camera | default('') != '' and
+                camera_thumbnail | default('') != ''
+              }}
             sequence:
               - service: >
-                  {{ notify_service | default("notify.iphones") }}
+                  {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
                 data:
                   message: |
                     {{ message | default("Turn on " + entity_id) }}
@@ -46,7 +51,7 @@ script:
                       entity_id: |
                         {{ entity_id }}
                       notify_service: >
-                        {{ notify_service | default("notify.iphones") }}
+                        {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
                       confirmation_message: |
                         {{ confirmation_message | default("turned on " + entity_id) }}
                       skip_confirmation: |
@@ -56,7 +61,7 @@ script:
                         {{ interruption_level | default('active') }}
         default:
           - service: >
-              {{ notify_service | default("notify.iphones") }}
+              {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
             data:
               message: |
                 {{ message | default("Turn on " + entity_id) }}
@@ -79,11 +84,13 @@ script:
                   entity_id: |
                     {{ entity_id }}
                   notify_service: >
-                    {{ notify_service | default("notify.iphones") }}
+                    {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
                   confirmation_message: |
                     {{ confirmation_message | default("turned on " + entity_id) }}
                   skip_confirmation: |
                     {{ skip_confirmation | default(false) }}
+                  decline_message: |
+                    {{ decline_message | default("👎 to " + entity_id) }}
                 push:
                   interruption-level: >
                     {{ interruption_level | default('active') }}
@@ -155,7 +162,8 @@ automation:
               - repeat:
                   for_each: "{{ trigger.event.data.action_data.clear_tags.split(',') }}"
                   sequence:
-                    - service: notify.iphones
+                    - service: >
+                        {{ trigger.event.data.action_data.notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
                       data:
                         message: "clear_notification"
                         data:

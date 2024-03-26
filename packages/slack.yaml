@@ -1,3 +1,8 @@
+notify:
+  - platform: slack
+    name: slack
+    api_key: !env_var SLACK_API_KEY
+    default_channel: "#general"
 automation:
   - alias: log climate changes to slack
     id: 10f39381-28b1-427e-aec4-fb46bbf630a0

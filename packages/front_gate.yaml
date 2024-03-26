@@ -17,10 +17,10 @@ automation:
           data:
             push:
               category: camera
-            entity_id: camera.front_door
+            entity_id: camera.front_door_medium
             attachment:
               url: |
-                {{ states('input_text.external_url') }}{{ states.camera.front_door.attributes.entity_picture }}
+                {{ states('input_text.external_url') }}{{ states.camera.front_door_medium.attributes.entity_picture }}
               content-type: jpeg
               hide-thumbnail: false
       - service: script.notify_with_lights
@@ -55,9 +55,9 @@ automation:
             push:
               interruption-level: time-sensitive
               category: camera
-            entity_id: camera.front_door
+            entity_id: camera.front_door_medium
             attachment:
               url: |
-                {{ states('input_text.external_url') }}{{ states.camera.front_door.attributes.entity_picture }}
+                {{ states('input_text.external_url') }}{{ states.camera.front_door_medium.attributes.entity_picture }}
               content-type: jpeg
               hide-thumbnail: false
