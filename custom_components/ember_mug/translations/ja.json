@@ -6,9 +6,7 @@
         "data": {
           "address": "デバイス（MACアドレス）",
           "name": "名",
-          "temperature_unit": "温度単位",
-          "include_extra": "開発用に追加の属性を含めます",
-          "debug": "開発のためのログサービスと特徴"
+          "temperature_unit": "温度単位"
         }
       }
     },
@@ -16,6 +14,18 @@
       "unknown": "未知数エラーが発生した。",
       "cannot_connect": "デバイスに接続できません。",
       "no_new_devices": "新しいEmberデバイスは見つかりませんでした。ペアリングモードにしてください。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "オプションの管理",
+        "data": {
+          "debug": "開発のためのログサービスと特徴",
+          "presets": "プリセット名のターゲット温度へのマッピング (上記のユニット内)",
+          "presets_unit": "次のプリセットに使用される温度単位 (!重要: これを変更した場合は、それに応じてプリセット内の数値を更新する必要があります)"
+        }
+      }
     }
   },
   "entity": {
@@ -30,6 +40,16 @@
       "target_temp": { "name": "目標温度" }
     },
     "select": {
+      "temperature_preset": {
+        "name": "温度プリセット",
+        "state": {
+          "latte": "ラテ",
+          "cappuccino": "カプチーノ",
+          "coffee": "コーヒー",
+          "black-tea": "紅茶",
+          "green-tea": "緑茶"
+        }
+      },
       "temperature_unit": { "name": "温度単位" },
       "volume_level": {
         "name": "音量",
@@ -92,6 +112,9 @@
           "udsk": { "name": "UDSK" }
         }
       }
+    },
+    "switch": {
+      "temperature_control": {"name":  "温度管理"}
     },
     "text": {
       "name": { "name": "名" }
