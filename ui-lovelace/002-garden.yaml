@@ -40,14 +40,14 @@ cards:
 
   - type: conditional
     conditions:
-      - entity: camera.garage
+      - entity: camera.garage_medium
         state: recording
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.garage
+      entity: camera.garage_medium
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.precipitation
@@ -190,11 +190,11 @@ cards:
 
   - type: conditional
     conditions:
-      - entity: camera.gate
+      - entity: camera.gate_medium
         state: recording
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.gate
+      entity: camera.gate_medium

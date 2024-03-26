@@ -126,21 +126,21 @@ automation:
             category: camera
           entity_id: >
             {%- if trigger.to_state.entity_id == "binary_sensor.gate" -%}
-            camera.gate
+            camera.gate_medium
             {%- elif trigger.to_state.entity_id == "binary_sensor.garage" -%}
-            camera.garage
+            camera.garage_medium
             {%- else -%}
-            camera.front_door
+            camera.front_door_medium
             {%- endif -%}
           attachment:
             url: >
               {{ states('input_text.external_url') }}
               {%- if trigger.to_state.entity_id == "binary_sensor.gate" -%}
-              {{ states.camera.gate.attributes.entity_picture }}
+              {{ states.camera.gate_medium.attributes.entity_picture }}
               {%- elif trigger.to_state.entity_id == "binary_sensor.garage" -%}
-              {{ states.camera.garage.attributes.entity_picture }}
+              {{ states.camera.garage_medium.attributes.entity_picture }}
               {%- else -%}
-              {{ states.camera.front_door.attributes.entity_picture }}
+              {{ states.camera.front_door_medium.attributes.entity_picture }}
               {%- endif -%}
             content-type: jpeg
             hide-thumbnail: false

@@ -4,11 +4,11 @@ theme: dark-mode
 cards:
   - type: conditional
     conditions:
-      - entity: camera.front_yard_left
+      - entity: camera.front_yard_left_medium
         state: recording
     card:
       type: picture-glance
-      camera_image: camera.front_yard_left
+      camera_image: camera.front_yard_left_medium
       entities:
         - input_select.mode
         - alarm_control_panel.alarm
@@ -28,7 +28,7 @@ cards:
       type: picture-entity
       show_name: false
       show_state: false
-      entity: camera.crate
+      entity: camera.crate_medium
   - type: vertical-stack
     cards:
       - type: custom:auto-entities
@@ -173,22 +173,22 @@ cards:
       - lock.garage
   - type: conditional
     conditions:
-      - entity: camera.front_door_person
+      - entity: camera.front_door_person_medium
         state: active
     card:
       type: picture-entity
       show_name: false
       show_state: false
-      entity: camera.front_door_person
+      entity: camera.front_door_person_medium
   - type: conditional
     conditions:
-      - entity: camera.pergola_person
+      - entity: camera.pergola_person_medium
         state: active
     card:
       type: picture-entity
       show_name: false
       show_state: false
-      entity: camera.pergola_person
+      entity: camera.pergola_person_medium
   - type: custom:custom-sonos-card
     mediaTitle: " "
     shuffleFavorites: false

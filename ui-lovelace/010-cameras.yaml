@@ -4,7 +4,7 @@ path: cameras
 cards:
   - type: conditional
     conditions:
-      - entity: camera.crate
+      - entity: camera.crate_medium
         state: recording
     card:
       type: vertical-stack
@@ -13,99 +13,99 @@ cards:
           camera_view: auto
           show_name: false
           show_state: false
-          entity: camera.crate
+          entity: camera.crate_medium
         - type: entities
           show_header_toggle: false
           entities:
             - binary_sensor.crate_bark_sound
   - type: conditional
     conditions:
-      - entity: camera.front_yard_left
+      - entity: camera.front_yard_left_medium
         state: recording
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.front_yard_left
+      entity: camera.front_yard_left_medium
   - type: conditional
     conditions:
-      - entity: camera.front_yard_right
+      - entity: camera.front_yard_right_medium
         state: recording
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.front_yard_right
+      entity: camera.front_yard_right_medium
   - type: conditional
     conditions:
-      - entity: camera.atrium
+      - entity: camera.atrium_medium
         state: recording
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.atrium
+      entity: camera.atrium_medium
   - type: conditional
     conditions:
-      - entity: camera.gate
+      - entity: camera.gate_medium
         state: recording
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.gate
+      entity: camera.gate_medium
   - type: conditional
     conditions:
-      - entity: camera.garage
+      - entity: camera.garage_medium
         state: recording
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.garage
+      entity: camera.garage_medium
   - type: conditional
     conditions:
-      - entity: camera.back_porch
+      - entity: camera.back_porch_medium
         state: recording
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.back_porch
+      entity: camera.back_porch_medium
   - type: conditional
     conditions:
-      - entity: camera.ac
+      - entity: camera.ac_medium
         state: recording
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.ac
+      entity: camera.ac_medium
   - type: conditional
     conditions:
-      - entity: camera.front_door
+      - entity: camera.front_door_medium
         state: recording
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.front_door
+      entity: camera.front_door_medium
   - type: conditional
     conditions:
-      - entity: camera.pergola
+      - entity: camera.pergola_medium
         state: recording
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.pergola
+      entity: camera.pergola_medium
 

@@ -110,10 +110,10 @@ automation:
           interruption_level: >-
             {{ trigger.id | replace("_sensor", "") }}
           camera: >
-            camera.garage
+            camera.garage_medium
           camera_thumbnail: >-
             {{ states('input_text.external_url') }}
-            {{ state_attr('camera.garage', 'entity_picture') }}
+            {{ state_attr('camera.garage_medium', 'entity_picture') }}
           message: >
             Lock the garage?
           confirmation_message: >
