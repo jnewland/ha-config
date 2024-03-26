@@ -53,7 +53,8 @@ automation:
             {{ trigger.entity_id }}_low
 
   - alias: Post frigate images during events
-    mode: parallel
+    # once every 30s
+    mode: single
     id: e4d0a9e9-b403-48dc-80d3-e3c750ad0cb8
     trigger:
       platform: mqtt
@@ -75,6 +76,8 @@ automation:
             file:
               url: |
                 {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/snapshot.jpg
+      - delay:
+          seconds: 30
 
   - alias: Post frigate clips at end of events
     mode: parallel
@@ -100,7 +103,8 @@ automation:
                 {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/{{ trigger.payload_json["after"]["camera"] }}/clip.mp4
 
   - alias: Notify when person detected in front yard
-    mode: parallel
+    # once every 30s
+    mode: single
     id: 35b6ace2-2cd3-46a1-9477-c044d11336b5
     trigger:
       platform: mqtt
@@ -139,10 +143,13 @@ automation:
             person-front_yard_left,person-front_yard_right,person-front_door,person-pergola
           ack_yes_title: >-
             Disable notifications
+      - delay:
+          seconds: 30
 
 
   - alias: Notify when dog detected in yard
-    mode: parallel
+    # once every 30s
+    mode: single
     id: 86b77bcd-d3c2-4000-8b5a-4e5c97489a8b
     trigger:
       platform: mqtt
@@ -180,6 +187,8 @@ automation:
           ack_no_title: I need help with the dog
           decline_message: >-
             needs help with the dog.
+      - delay:
+          seconds: 30
 
   - alias: Toggle indoor cams
     id: e6589f9c-dd59-41e8-b52b-7c00300ec4c9
