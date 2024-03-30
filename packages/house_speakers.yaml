@@ -233,3 +233,18 @@ automation:
             Play more tunes?
           confirmation_message: >
             played more tunes
+
+  - alias: Crank up the volume when the source switches to Airplay
+    mode: single
+    id: 6947f697-ff72-4135-a06d-10f854525bd2
+    trigger:
+      platform: state
+      entity_id: media_player.house
+      attribute: source
+      to: Airplay
+    action:
+      - service: media_player.volume_set
+        data:
+          volume_level: 0.85
+        target:
+          entity_id: media_player.house
