@@ -153,7 +153,7 @@ automation:
           interruption_level: >-
             {{ trigger.id if trigger.entity_id != "cover.gate" else "time-sensitive" }}
           camera: >-
-            {{ trigger.entity_id | replace("cover.", "camera.") }}
+            {{ trigger.entity_id | replace("cover.", "camera.") }}_medium
           camera_thumbnail: >-
             {{ states('input_text.external_url') }}
             {{ state_attr(trigger.entity_id | replace("lock.", "camera."), 'entity_picture') }}

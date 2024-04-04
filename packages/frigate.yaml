@@ -124,7 +124,7 @@ automation:
           service: homeassistant.turn_off
           entity_id: automation.notify_when_person_detected_in_front_yard
           camera: >-
-            camera.{{ trigger.payload_json['after']['camera'] }}
+            camera.{{ trigger.payload_json['after']['camera'] }}_medium
           camera_thumbnail: >
             {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
@@ -169,7 +169,7 @@ automation:
           service: homeassistant.turn_off
           entity_id: automation.notify_when_dog_detected_in_yard
           camera: >-
-            camera.{{ trigger.payload_json['after']['camera'] }}
+            camera.{{ trigger.payload_json['after']['camera'] }}_medium
           camera_thumbnail: >
             {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
