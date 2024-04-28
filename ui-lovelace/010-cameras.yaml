@@ -60,6 +60,8 @@ cards:
     entity: camera.pergola_medium
   - type: vertical-stack
     cards:
+      - type: markdown
+        content: " "
       - type: horizontal-stack
         cards:
           - type: picture-entity
@@ -72,8 +74,6 @@ cards:
                 ha-card {
                   transform: rotate(90deg);
                 }
-      - type: horizontal-stack
-        cards:
           - type: picture-entity
             camera_view: auto
             show_name: false
