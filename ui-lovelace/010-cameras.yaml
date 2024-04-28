@@ -81,3 +81,4 @@ cards:
             ha-card {
               transform: rotate(90deg);
             }
+ 

@@ -2,6 +2,31 @@ themes:
   gray:
     primary-color: gray
     paper-item-icon-color: darkgrey
+    # https://github.com/thomasloven/lovelace-card-mod/wiki/Card-mod-Themes
+    card-mod-theme: gray
+    card-mod-more-info-yaml: |
+      $: |
+        {% if config.entity in ["camera.veggies_medium", "camera.peppers_medium"] %}
+        .mdc-dialog .mdc-dialog__container .mdc-dialog__surface {
+          transform: rotate(90deg);  # Rotating the dialog surface by 90 degrees
+        }
+        {% endif %}
+    card-mod-row-yaml: |
+      "*:first-child$": |
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(359deg);
+          }
+        }
+        state-badge {
+          {% if config.entity.startswith('fan.') and is_state(config.entity, 'on') %}
+          animation: spin 5s infinite linear;
+          {% endif %}
+        }
+
   black:
     primary-color: black
     paper-item-icon-color: darkgrey
