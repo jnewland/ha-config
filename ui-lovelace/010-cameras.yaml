@@ -65,8 +65,10 @@ cards:
     entity: camera.peppers_medium
     card_mod:
       style: |
-        :host {
+        ha-card {
           writing-mode: vertical-rl;
+        }
+        :host {
           transform: rotate(90deg);
         }
   - type: picture-entity
@@ -76,7 +78,9 @@ cards:
     entity: camera.veggies_medium
     card_mod:
       style: |
-        :host {
+        ha-card {
           writing-mode: vertical-rl;
+        }
+        :host {
           transform: rotate(90deg);
         }
