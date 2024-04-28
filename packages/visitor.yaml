@@ -16,7 +16,7 @@ automation:
     action:
       - condition: template
         value_template: |
-          {{ 
+          {{
             trigger.to_state.attributes.changed_by | default("") == "keypad - Visitor" or
             is_state("input_boolean.visitor", "on")
            }}
@@ -38,10 +38,10 @@ automation:
                       volume: 0.1
                     push:
                       category: camera
-                    entity_id: camera.front_door
+                    entity_id: camera.front_door_medium
                     attachment:
                       url: |
-                        {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+                        {{ states('input_text.external_url') }}{{ state_attr("camera.front_door_medium","entity_picture") }}
                       content-type: jpeg
                       hide-thumbnail: false
               - wait_template: >
@@ -55,10 +55,10 @@ automation:
                     tag: visitor
                     push:
                       category: camera
-                    entity_id: camera.front_door
+                    entity_id: camera.front_door_medium
                     attachment:
                       url: |
-                        {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+                        {{ states('input_text.external_url') }}{{ state_attr("camera.front_door_medium","entity_picture") }}
                       content-type: jpeg
                       hide-thumbnail: false
         default:
@@ -71,10 +71,10 @@ automation:
                 tag: visitor
                 push:
                   category: camera
-                entity_id: camera.front_door
+                entity_id: camera.front_door_medium
                 attachment:
                   url: |
-                    {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+                    {{ states('input_text.external_url') }}{{ state_attr("camera.front_door_medium","entity_picture") }}
                   content-type: jpeg
                   hide-thumbnail: false
 
@@ -116,9 +116,9 @@ automation:
             tag: visitor
             push:
               category: camera
-            entity_id: camera.front_door
+            entity_id: camera.front_door_medium
             attachment:
               url: |
-                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door","entity_picture") }}
+                {{ states('input_text.external_url') }}{{ state_attr("camera.front_door_medium","entity_picture") }}
               content-type: jpeg
               hide-thumbnail: false

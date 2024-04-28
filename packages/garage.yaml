@@ -54,20 +54,32 @@ binary_sensor:
           {{
             is_state('cover.garage', 'open') or
             is_state('light.ratgdo_garage_light', 'on') or
-            float(states('sensor.garage_person_count'), default=0) > 0 
+            float(states('sensor.garage_person_count'), default=0) > 0
           }}
 
 automation:
   - alias: Auto lock garage when not occupied
     id: 5f01d890-5bbb-402b-a924-48148773363a
     trigger:
-      - platform: state
+      - id: active_sensor
+        platform: state
         entity_id:
           - binary_sensor.garage_occupancy_non_lock
         to: "off"
         for:
           minutes: 5
-      - platform: state
+      - id: passive_sensor
+        platform: state
+        entity_id:
+          - binary_sensor.garage_occupancy_non_lock
+        to: "off"
+      - id: passive
+        platform: state
+        entity_id:
+          - lock.garage
+        to: "unlocked"
+      - id: active
+        platform: state
         entity_id:
           - lock.garage
         to: "unlocked"
@@ -94,32 +106,61 @@ automation:
       - service: script.ack
         data:
           service: lock.lock
-          entity_id: "{{ trigger.entity_id }}"
-          tag: "{{ trigger.entity_id }}"
+          entity_id: lock.garage
+          interruption_level: >-
+            {{ trigger.id | replace("_sensor", "") }}
+          camera: >
+            camera.garage_medium
+          camera_thumbnail: >-
+            {{ states('input_text.external_url') }}
+            {{ state_attr('camera.garage_medium', 'entity_picture') }}
           message: >
-            Lock the {{ trigger.to_state.name }}?
+            Lock the garage?
           confirmation_message: >
-            locked the {{ trigger.to_state.name }}.
+            locked the garage.
 
   - alias: Keep covers closed
     id: 9b4c10ce-0960-4176-9bd5-e670c75dfc0d
     trigger:
-      platform: state
-      entity_id:
-        - cover.garage
-        - cover.gate
-      to: open
-      for:
-        minutes: 5
+      - id: passive
+        platform: state
+        entity_id:
+          - cover.garage
+          - cover.gate
+        not_to:
+          - closed
+          - unknown
+          - unavailable
+      - id: active
+        platform: state
+        entity_id:
+          - cover.garage
+          - cover.gate
+        not_to:
+          - closed
+          - unknown
+          - unavailable
+        for:
+          minutes: 5
     action:
       - service: script.ack
         data:
           service: cover.close_cover
-          entity_id: "{{ trigger.entity_id }}"
-          message: >
-            Close the {{ trigger.to_state.name }}?
-          confirmation_message: >
-            closed the {{ trigger.to_state.name }}.
+          entity_id: >-
+            {{ trigger.entity_id }}
+          notify_service: >
+            {{ "notify.iphones" if trigger.entity_id == "cover.gate" else states('sensor.notify_group') | default("notify.iphones") }}
+          interruption_level: >-
+            {{ trigger.id if trigger.entity_id != "cover.gate" else "time-sensitive" }}
+          camera: >-
+            {{ trigger.entity_id | replace("cover.", "camera.") }}_medium
+          camera_thumbnail: >-
+            {{ states('input_text.external_url') }}
+            {{ state_attr(trigger.entity_id | replace("lock.", "camera."), 'entity_picture') }}
+          message: >-
+            {{ trigger.to_state.name }} is {{ trigger.to_state.state }}. Close it?
+          confirmation_message: >-
+            closed the {{ trigger.to_state.name }}
 
   - alias: Cover notification clear
     id: f883428d-555d-495c-865d-63121af76939
@@ -129,10 +170,9 @@ automation:
         - cover.garage
         - cover.gate
       to: closed
-      for:
-        seconds: 5
     action:
-      - service: notify.iphones
+      - service: >
+          {{ states('sensor.notify_group') | default("notify.iphones") }}
         data:
           message: "clear_notification"
           data:

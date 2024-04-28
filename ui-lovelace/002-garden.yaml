@@ -38,16 +38,11 @@ cards:
         - input_datetime.indoor_grow_led_on
         - input_datetime.indoor_grow_led_off
 
-  - type: conditional
-    conditions:
-      - entity: camera.garage
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.garage
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.garage_medium
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.precipitation
@@ -188,13 +183,8 @@ cards:
       fill: false
       extrema: true
 
-  - type: conditional
-    conditions:
-      - entity: camera.gate
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.gate
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.gate_medium

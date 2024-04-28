@@ -6,7 +6,6 @@ lights:
   - light.pantry
 
   - light.stairs
-  - light.powder_room
   - light.great_hall
   - light.garage_hall
   - light.guest_hall_overhead

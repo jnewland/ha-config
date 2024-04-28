@@ -101,6 +101,7 @@ automation:
         entity_id:
           - light.grow_monstera_lounge
           - light.mother32
+          - light.mother16
 
   - alias: Indoor Grow LED Off
     id: 7f25360b-ed89-464b-be4b-e2f30931a5d9
@@ -113,3 +114,4 @@ automation:
         entity_id:
           - light.grow_monstera_lounge
           - light.mother32
+          - light.mother16
