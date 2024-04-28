@@ -66,6 +66,7 @@ cards:
     card_mod:
       style: |
         ha-card {
+          writing-mode: vertical-rl;
           transform: rotate(90deg);
         }
   - type: picture-entity
@@ -76,5 +77,6 @@ cards:
     card_mod:
       style: |
         ha-card {
+          writing-mode: vertical-rl;
           transform: rotate(90deg);
         }
