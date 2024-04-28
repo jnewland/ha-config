@@ -60,23 +60,35 @@ cards:
     entity: camera.pergola_medium
   - type: horizontal-stack
     cards:
-      - type: picture-entity
-        camera_view: auto
-        show_name: false
-        show_state: false
-        entity: camera.peppers_medium
-        card_mod:
-          style: |
-            ha-card {
-              transform: rotate(90deg);
-            }
-      - type: picture-entity
-        camera_view: auto
-        show_name: false
-        show_state: false
-        entity: camera.veggies_medium
-        card_mod:
-          style: |
-            ha-card {
-              transform: rotate(90deg);
-            }
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            content: " "
+          - type: picture-entity
+            camera_view: auto
+            show_name: false
+            show_state: false
+            entity: camera.peppers_medium
+            card_mod:
+              style: |
+                ha-card {
+                  transform: rotate(90deg);
+                }
+          - type: markdown
+            content: " "
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            content: " "
+          - type: picture-entity
+            camera_view: auto
+            show_name: false
+            show_state: false
+            entity: camera.veggies_medium
+            card_mod:
+              style: |
+                ha-card {
+                  transform: rotate(90deg);
+                }
+          - type: markdown
+            content: " "
