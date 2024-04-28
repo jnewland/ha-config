@@ -2,22 +2,17 @@ title: Home
 icon: mdi:home
 theme: dark-mode
 cards:
-  - type: conditional
-    conditions:
-      - entity: camera.front_yard_left
-        state: recording
-    card:
-      type: picture-glance
-      camera_image: camera.front_yard_left
-      entities:
-        - input_select.mode
-        - alarm_control_panel.alarm
-        - lock.front_door
-        # - binary_sensor.front_gate_access_control_window_door_is_open
-        - input_number.brightness
-        - vacuum.downstairs
-        - automation.notify_when_person_detected_in_front_yard
-        - automation.notify_when_dog_detected_in_yard
+  - type: picture-glance
+    camera_image: camera.front_yard_left_medium
+    entities:
+      - input_select.mode
+      - alarm_control_panel.alarm
+      - lock.front_door
+      # - binary_sensor.front_gate_access_control_window_door_is_open
+      - input_number.brightness
+      - vacuum.downstairs
+      - automation.notify_when_person_detected_in_front_yard
+      - automation.notify_when_dog_detected_in_yard
   - type: conditional
     conditions:
       - entity: device_tracker.jphone
@@ -28,7 +23,7 @@ cards:
       type: picture-entity
       show_name: false
       show_state: false
-      entity: camera.crate
+      entity: camera.crate_medium
   - type: vertical-stack
     cards:
       - type: custom:auto-entities
@@ -57,11 +52,13 @@ cards:
                       'group': true,
                       'entity' : player.entity_id,
                       'artwork' : 'full-cover',
+                      'info': 'scroll',
                       'hide': {
                         'info': player.entity_id == 'media_player.lounge_surround',
                         'power': true,
                         'icon': true,
                         'shuffle': player.entity_id == 'media_player.lounge_surround',
+                        'repeat': player.entity_id == 'media_player.lounge_surround',
                         'volume': player.entity_id == 'media_player.house'
                       },
                       'speaker_group': {
@@ -94,12 +91,14 @@ cards:
                       'type': 'custom:mini-media-player',
                       'entity' : player.entity_id,
                       'group': true,
-                      'info': 'short',
+                      'source': 'icon',
                       'hide': {
                         'info': true,
                         'controls': true,
-                        'source': true,
-                        'power': player.attributes.device_class != 'speaker',
+                        'source': (player.attributes.group_members is not defined),
+                        'icon': true,
+                        'power': (player.attributes.group_members is defined),
+                        'power_state': false,
                         'progress': true
                       }
                     }
@@ -169,22 +168,22 @@ cards:
       - lock.garage
   - type: conditional
     conditions:
-      - entity: camera.front_door_person
+      - entity: camera.front_door_person_medium
         state: active
     card:
       type: picture-entity
       show_name: false
       show_state: false
-      entity: camera.front_door_person
+      entity: camera.front_door_person_medium
   - type: conditional
     conditions:
-      - entity: camera.pergola_person
+      - entity: camera.pergola_person_medium
         state: active
     card:
       type: picture-entity
       show_name: false
       show_state: false
-      entity: camera.pergola_person
+      entity: camera.pergola_person_medium
   - type: custom:custom-sonos-card
     mediaTitle: " "
     shuffleFavorites: false
