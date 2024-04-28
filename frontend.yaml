@@ -7,7 +7,7 @@ themes:
     card-mod-more-info-yaml: |
       $: |
         {% if config.entity in ["camera.veggies_medium", "camera.peppers_medium"] %}
-        .mdc-dialog .mdc-dialog__container .mdc-dialog__surface {
+        .mdc-dialog .mdc-dialog__container .mdc-dialog__surface .target {
           transform: rotate(90deg);  # Rotating the dialog surface by 90 degrees
         }
         {% endif %}
