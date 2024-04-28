@@ -21,6 +21,19 @@ template:
             media_player.house
           {% endif %}
 
+script:
+  play_or_queue_random_favorite:
+    sequence:
+      - service: media_player.play_media
+        target:
+          entity_id: media_player.house
+        data:
+          media_content_id: >
+            {{ state_attr("sensor.sonos_favorites", "items") | list | random }}
+          media_content_type: favorite_item_id
+          enqueue: >-
+            {{ is_state('media_player.house', 'playing') }}
+
 automation:
   - alias: Turn on related speakers
     mode: parallel
@@ -164,3 +177,74 @@ automation:
           group_members: media_player.house
           entity_id: |
             {{ states('sensor.house_speaker_source') }}
+
+  - alias: Notify me when the house's queue is almost empty
+    mode: single
+    id: cec1df2d-51f7-41a3-8074-bde1411fa88c
+    trigger:
+      platform: state
+      entity_id: media_player.house
+      attribute: queue_position
+    condition:
+      condition: template
+      value_template: |
+        {{
+          states('media_player.house') == 'playing' and
+          state_attr('media_player.house', 'queue_position') | default(0) > 1 and
+          state_attr('media_player.house', 'queue_size') == state_attr('media_player.house', 'queue_position')
+        }}
+
+    action:
+      - service: script.ack
+        data:
+          service: script.play_or_queue_random_favorite
+          entity_id: media_player.house
+          message: >-
+            Nearing the end of
+            {{ state_attr('media_player.house', 'media_playlist') | default(state_attr('media_player.house', 'media_album_name')) | default(state_attr('media_player.house', 'media_title')) }}.
+            Queue up more tunes?
+          confirmation_message: >
+            queued up more tunes
+
+  - alias: Notify me when the house's queue is empty
+    mode: single
+    id: d026c8e0-ba8f-46a2-86eb-8649191d8018
+    trigger:
+      platform: state
+      entity_id: media_player.house
+      attribute: queue_position
+      to: 1
+      not_from:
+        - "unknown"
+        - "unavailable"
+        - null
+    condition:
+      condition: state
+      entity_id: media_player.house
+      state: paused
+    action:
+      - service: script.ack
+        data:
+          service: script.play_or_queue_random_favorite
+          entity_id: media_player.house
+          message: >-
+            {{ state_attr('media_player.house', 'media_playlist') | default(state_attr('media_player.house', 'media_album_name')) | default(state_attr('media_player.house', 'media_title')) | default('Music') }}
+            has ended.
+            Play more tunes?
+          confirmation_message: >
+            played more tunes
+
+  - alias: Crank up the volume when the source switches to Airplay
+    mode: single
+    id: 6947f697-ff72-4135-a06d-10f854525bd2
+    trigger:
+      platform: state
+      entity_id: media_player.house
+      attribute: source
+      to: Airplay
+    action:
+      - service: media_player.volume_set
+        data:
+          volume_level: 0.85
+        target:
+          entity_id: media_player.house
