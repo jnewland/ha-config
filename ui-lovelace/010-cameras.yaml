@@ -58,10 +58,9 @@ cards:
     show_name: false
     show_state: false
     entity: camera.pergola_medium
-  - type: vertical-stack
+  - type: grid
+    columns: 2
     cards:
-      - type: markdown
-        content: " "
       - type: horizontal-stack
         cards:
           - type: picture-entity
