@@ -60,6 +60,7 @@ cards:
     entity: camera.pergola_medium
   - type: grid
     columns: 2
+    square: false
     cards:
       - type: picture-entity
         camera_view: auto
@@ -81,4 +82,3 @@ cards:
             ha-card {
               transform: rotate(90deg);
             }
- 
