@@ -70,6 +70,8 @@ scene: !include_dir_list scenes
 script: !include_dir_named scripts
 sensor: !include_dir_list sensors
 sun:
+stream:
+  ll_hls: true
 switch: !include_dir_list switches
 system_health:
 system_log:
