@@ -62,7 +62,6 @@ lovelace:
 
 light:
 logger: !include logger.yaml
-map:
 media_player: !include media_player.yaml
 python_script:
 recorder: !include recorder.yaml
