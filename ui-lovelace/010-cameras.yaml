@@ -2,17 +2,23 @@ title: Cameras
 icon: mdi:video
 path: cameras
 cards:
-  - type: vertical-stack
-    cards:
-      - type: picture-entity
-        camera_view: auto
-        show_name: false
-        show_state: false
+  - type: conditional
+    conditions:
+      - condition: state
         entity: camera.crate_medium
-      - type: entities
-        show_header_toggle: false
-        entities:
-          - binary_sensor.crate_bark_sound
+        state_not: unavailable
+    card:
+      type: vertical-stack
+      cards:
+        - type: picture-entity
+          camera_view: auto
+          show_name: false
+          show_state: false
+          entity: camera.crate_medium
+        - type: entities
+          show_header_toggle: false
+          entities:
+            - binary_sensor.crate_bark_sound
   - type: picture-entity
     camera_view: auto
     show_name: false
@@ -48,36 +54,48 @@ cards:
     show_name: false
     show_state: false
     entity: camera.ac_medium
-  - type: picture-entity
-    camera_view: auto
-    show_name: false
-    show_state: false
-    entity: camera.front_door_medium
+  - type: conditional
+    conditions:
+      - condition: state
+        entity: camera.front_door_medium
+        state_not: unavailable
+    card:
+      type: picture-entity
+      camera_view: auto
+      show_name: false
+      show_state: false
+      entity: camera.front_door_medium
   - type: picture-entity
     camera_view: auto
     show_name: false
     show_state: false
     entity: camera.pergola_medium
-  - type: grid
-    columns: 2
-    cards:
-      - type: picture-entity
-        camera_view: auto
-        show_name: false
-        show_state: false
+  - type: conditional
+    conditions:
+      - condition: state
         entity: camera.peppers_medium
-        card_mod:
-          style: |
-            ha-card {
-              transform: rotate(90deg);
-            }
-      - type: picture-entity
-        camera_view: auto
-        show_name: false
-        show_state: false
-        entity: camera.veggies_medium
-        card_mod:
-          style: |
-            ha-card {
-              transform: rotate(90deg);
-            }
+        state_not: unavailable
+    card:
+      type: grid
+      columns: 2
+      cards:
+        - type: picture-entity
+          camera_view: auto
+          show_name: false
+          show_state: false
+          entity: camera.peppers_medium
+          card_mod:
+            style: |
+              ha-card {
+                transform: rotate(90deg);
+              }
+        - type: picture-entity
+          camera_view: auto
+          show_name: false
+          show_state: false
+          entity: camera.veggies_medium
+          card_mod:
+            style: |
+              ha-card {
+                transform: rotate(90deg);
+              }
