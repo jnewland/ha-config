@@ -94,11 +94,6 @@ script:
                 push:
                   interruption-level: >
                     {{ interruption_level | default('active') }}
-      - service: notify.slack
-        data:
-          title: ":question:"
-          message: |
-            Asked {{ message | default("about turning on " + entity_id) }}
 
 automation:
   - alias: Ack no
@@ -119,10 +114,6 @@ automation:
               {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
             push:
               interruption-level: time-sensitive
-      - service: notify.slack
-        data:
-          title: ":-1:"
-          message: nope to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}
   - alias: Ack
     id: 097d52cd-442e-40ab-9d25-bbee32bc1fe4
     mode: parallel
@@ -172,8 +163,3 @@ automation:
               {{ trigger.event.data.action_data.clear_tags | default('') == '' }}
             sequence:
               - service: script.noop
-
-      - service: notify.slack
-        data:
-          title: ":+1:"
-          message: yep to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}

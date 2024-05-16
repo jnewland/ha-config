@@ -52,55 +52,6 @@ automation:
           notification_id: >
             {{ trigger.entity_id }}_low
 
-  - alias: Post frigate images during events
-    # once every 30s
-    mode: single
-    id: e4d0a9e9-b403-48dc-80d3-e3c750ad0cb8
-    trigger:
-      platform: mqtt
-      topic: frigate/events
-    condition:
-      - condition: or
-        conditions:
-          - "{{ trigger.payload_json['type'] == 'new' }}"
-          - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
-          - "{{ trigger.payload_json['after']['end_time'] is not none }}"
-    action:
-      - service: notify.slack
-        data:
-          title: |
-            {{ trigger.payload_json["after"]["camera"] }}
-          message: |
-            {{ trigger.payload_json["after"]["label"] }}
-          data:
-            file:
-              url: |
-                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/snapshot.jpg
-      - delay:
-          seconds: 30
-
-  - alias: Post frigate clips at end of events
-    mode: parallel
-    id: fe6ff468-bf79-4dfe-8231-ab3f349a9b33
-    trigger:
-      platform: mqtt
-      topic: frigate/events
-    condition:
-      - "{{ trigger.payload_json['after']['end_time'] is not none }}"
-    action:
-      - delay:
-          # clip contains 5s after event end, needs to process a bit. give it some time
-          seconds: 30
-      - service: notify.slack
-        data:
-          title: |
-            {{ trigger.payload_json["after"]["camera"] }}
-          message: |
-            {{ trigger.payload_json["after"]["label"] }} event has ended
-          data:
-            file:
-              url: |
-                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/{{ trigger.payload_json["after"]["camera"] }}/clip.mp4
 
   - alias: Notify when person detected in front yard
     # once every 30s

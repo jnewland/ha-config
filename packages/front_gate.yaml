@@ -27,14 +27,6 @@ automation:
       - service: notify.tidbyt_once
         data:
           message: The front gate just opened!
-      - service: notify.slack
-        data:
-          title: ":camera_with_flash:"
-          message: The front gate just opened!
-          data:
-            file:
-              url: |
-                {{ states('input_text.frigate_url') }}/api/front_door/latest.jpg
       - service: script.notify_all_channels
         data:
           message: the front gate just opened

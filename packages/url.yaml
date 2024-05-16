@@ -1,8 +1,6 @@
 input_text:
   external_url:
     initial: !env_var SELF_LINK
-  slack_url:
-    initial: !env_var SLACK_URL
   frigate_url:
     initial: !env_var FRIGATE_URL
   private_domain:
