@@ -33,19 +33,11 @@ script:
     sequence:
       - service: light.turn_off
         entity_id: group.security
-      - service: notify.slack
-        data:
-          title: sun
-          message: ":city_sunrise:"
   sunset:
     mode: parallel
     sequence:
       - service: light.turn_on
         entity_id: group.security
-      - service: notify.slack
-        data:
-          title: sun
-          message: ":city_sunset:"
       - condition: template
         value_template: |
           {{ states.input_select.mode.state != "Away" }}

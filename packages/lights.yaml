@@ -609,40 +609,6 @@ automation:
       - service: counter.increment
         entity_id: counter.light_automations
 
-  - alias: log light changes to slack
-    mode: parallel
-    id: 85753078-89dd-4750-840e-13ef98cd4216
-    trigger:
-      platform: event
-      event_type: state_changed
-    condition:
-      condition: template
-      value_template: |
-        {{
-          trigger.event.data.new_state.domain == "light" and
-          trigger.event.data.old_state != None and
-          ( trigger.event.data.new_state.state != trigger.event.data.old_state.state or
-            trigger.event.data.new_state.attributes.brightness != trigger.event.data.old_state.attributes.brightness )
-        }}
-    action:
-      service: notify.slack
-      data:
-        title: ":bulb:"
-        message: |
-          :bulb: *{{ trigger.event.data.new_state.name | capitalize }}*{{ " " -}}
-          {%- if trigger.event.data.new_state.state == "on" -%}
-          *_{{ '%0.0f' % ( ( trigger.event.data.new_state.attributes.brightness / 255 | round ) * 100 ) }}%_*
-          {%- else -%}
-          *_Off_*
-          {%- endif -%}{{ " " -}}
-          after being{{ " " -}}
-          {%- if trigger.event.data.old_state.state == "on" -%}
-          {{ '%0.0f' % ( ( trigger.event.data.old_state.attributes.brightness / 255 | round ) * 100 ) }}%
-          {%- else -%}
-          Off
-          {%- endif -%}{{ " " -}}
-          for {{ relative_time(trigger.event.data.old_state.last_changed) }}
-
   - alias: Haunt lights
     mode: parallel
     id: 633ab695-cce9-4f15-a8dc-d21b2a303419
