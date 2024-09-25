@@ -100,8 +100,7 @@ automation:
           camera_thumbnail: >
             {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
-            {{ gemini['text'] }}
-            long press to view / disable
+            {{ gemini['text'] }} long press to view / disable
           tag: >-
             {{ trigger.payload_json['after']['label'] }}-{{ trigger.payload_json['after']['camera'] }}
           confirmation_message: >-
@@ -165,8 +164,7 @@ automation:
           camera_thumbnail: >
             {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
-            {{ gemini['text'] }}
-            long press to view / disable
+            {{ gemini['text'] }} long press to view / disable
           tag: >-
             {{ trigger.payload_json['after']['label'] }}
           confirmation_message: >-
