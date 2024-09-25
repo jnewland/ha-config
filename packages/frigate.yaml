@@ -84,13 +84,13 @@ automation:
             In general, you obey the following guidelines:
 
             - Don't describe stationary objects like cars, trees, or buildings.
-            - Do describe people, animals, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
+            - Do describe people, animals, activities, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
             - Focus on things that might be out of place or unusual compared to the idle state of a yard in its regular state.
             - Make sure to call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
             - Make sure to call out things like open gates or garages that might be a security risk or allow pets to escape.
 
-            Describe the people, animals, or activities that you see in the image in one or two sentences, suitable for a text message or notification.
-            The name of this camera is {{ trigger.payload_json['after']['camera'] }} - use that when describing the location.
+            A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use this information to describe the location.
+            Describe the people, animals, and/pr activities that you see in the image in one or two sentences, suitable for an iOS notification.
       - service: script.ack
         data:
           service: homeassistant.turn_off
@@ -151,13 +151,13 @@ automation:
             In general, you obey the following guidelines:
 
             - Don't describe stationary objects like cars, trees, or buildings.
-            - Do describe people, animals, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
+            - Do describe people, animals, activities, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
             - Focus on things that might be out of place or unusual compared to the idle state of a yard in its regular state.
             - Make sure to call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
             - Make sure to call out things like open gates or garages that might be a security risk or allow pets to escape.
 
-            Describe the people, animals, or activities that you see in the image in one or two sentences, suitable for a text message or notification.
-            The name of this camera is {{ trigger.payload_json['after']['camera'] }} - use that when describing the location.
+            A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use this information to describe the location.
+            Describe the people, animals, and/pr activities that you see in the image in one or two sentences, suitable for an iOS notification.
       - service: script.ack
         data:
           service: homeassistant.turn_off
