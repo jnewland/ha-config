@@ -89,8 +89,12 @@ automation:
             - Call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
             - Call out things like open gates or garages that might be a security risk or allow pets to escape.
 
-            A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use this information to describe the location.
-            Describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
+            A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
+            Here's the full JSON from the camera event:
+
+            {{ trigger.payload_json }}
+
+            With that context in mind, describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
       - service: script.ack
         data:
           service: homeassistant.turn_off
@@ -153,8 +157,12 @@ automation:
             - Make sure to call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
             - Make sure to call out things like open gates or garages that might be a security risk or allow pets to escape.
 
-            A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use this information to describe the location.
-            Describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
+            A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
+            Here's the full JSON from the camera event:
+
+            {{ trigger.payload_json }}
+
+            With that context in mind, describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
       - service: script.ack
         data:
           service: homeassistant.turn_off
