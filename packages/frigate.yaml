@@ -86,11 +86,11 @@ automation:
             - Don't describe stationary objects like cars, trees, or buildings.
             - Do describe people, animals, activities, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
             - Focus on things that might be out of place or unusual compared to the idle state of a yard in its regular state.
-            - Make sure to call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
-            - Make sure to call out things like open gates or garages that might be a security risk or allow pets to escape.
+            - Call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
+            - Call out things like open gates or garages that might be a security risk or allow pets to escape.
 
             A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use this information to describe the location.
-            Describe the people, animals, and/pr activities that you see in the image in one or two sentences, suitable for an iOS notification.
+            Describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
       - service: script.ack
         data:
           service: homeassistant.turn_off
@@ -100,8 +100,6 @@ automation:
           camera_thumbnail: >
             {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
-            {{ trigger.payload_json['after']['label'] }}
-            {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}:
             {{ gemini['text'] }}
             long press to view / disable
           tag: >-
@@ -157,7 +155,7 @@ automation:
             - Make sure to call out things like open gates or garages that might be a security risk or allow pets to escape.
 
             A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use this information to describe the location.
-            Describe the people, animals, and/pr activities that you see in the image in one or two sentences, suitable for an iOS notification.
+            Describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
       - service: script.ack
         data:
           service: homeassistant.turn_off
@@ -167,8 +165,6 @@ automation:
           camera_thumbnail: >
             {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
-            {{ trigger.payload_json['after']['label'] }}
-            {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}:
             {{ gemini['text'] }}
             long press to view / disable
           tag: >-
