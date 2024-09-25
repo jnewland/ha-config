@@ -1,4 +1,3 @@
-
 automation:
   - alias: Notify about camera failures
     id: c39da746-6928-4ff9-9fe0-0c09e5e67fae
@@ -52,7 +51,6 @@ automation:
           notification_id: >
             {{ trigger.entity_id }}_low
 
-
   - alias: Notify when person detected in front yard
     # once every 30s
     mode: single
@@ -70,6 +68,29 @@ automation:
           - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
           - "{{ trigger.payload_json['after']['end_time'] is not none }}"
     action:
+      - action: camera.snapshot
+        data:
+          filename: /tmp/person_{{ trigger.payload_json['after']['camera'] }}.jpg
+        target:
+          entity_id: camera.{{ trigger.payload_json['after']['camera'] }}_medium
+      - action: google_generative_ai_conversation.generate_content
+        response_variable: gemini
+        data:
+          image_filename:
+            - /tmp/person_{{ trigger.payload_json['after']['camera'] }}.jpg
+          prompt: >-
+            You are an AI agent designed to help busy homeowners stay aware of their surroundings by observing their security cameras.
+
+            In general, you obey the following guidelines:
+
+            - Don't describe stationary objects like cars, trees, or buildings.
+            - Do describe people, animals, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
+            - Focus on things that might be out of place or unusual compared to the idle state of a yard in its regular state.
+            - Make sure to call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
+            - Make sure to call out things like open gates or garages that might be a security risk or allow pets to escape.
+
+            Describe the people, animals, or activities that you see in the image in one or two sentences, suitable for a text message or notification.
+            The name of this camera is {{ trigger.payload_json['after']['camera'] }} - use that when describing the location.
       - service: script.ack
         data:
           service: homeassistant.turn_off
@@ -80,8 +101,8 @@ automation:
             {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
             {{ trigger.payload_json['after']['label'] }}
-            {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
-            on {{ trigger.payload_json['after']['camera'] }}.
+            {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}:
+            {{ gemini }}
             long press to view / disable
           tag: >-
             {{ trigger.payload_json['after']['label'] }}-{{ trigger.payload_json['after']['camera'] }}
@@ -96,7 +117,6 @@ automation:
             Disable notifications
       - delay:
           seconds: 30
-
 
   - alias: Notify when dog detected in yard
     # once every 30s
@@ -115,6 +135,29 @@ automation:
           - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
           - "{{ trigger.payload_json['after']['end_time'] is not none }}"
     action:
+      - action: camera.snapshot
+        data:
+          filename: /tmp/dog_{{ trigger.payload_json['after']['camera'] }}.jpg
+        target:
+          entity_id: camera.{{ trigger.payload_json['after']['camera'] }}_medium
+      - action: google_generative_ai_conversation.generate_content
+        response_variable: gemini
+        data:
+          image_filename:
+            - /tmp/dog_{{ trigger.payload_json['after']['camera'] }}.jpg
+          prompt: >-
+            You are an AI agent designed to help busy homeowners stay aware of their surroundings by observing their security cameras.
+
+            In general, you obey the following guidelines:
+
+            - Don't describe stationary objects like cars, trees, or buildings.
+            - Do describe people, animals, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
+            - Focus on things that might be out of place or unusual compared to the idle state of a yard in its regular state.
+            - Make sure to call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
+            - Make sure to call out things like open gates or garages that might be a security risk or allow pets to escape.
+
+            Describe the people, animals, or activities that you see in the image in one or two sentences, suitable for a text message or notification.
+            The name of this camera is {{ trigger.payload_json['after']['camera'] }} - use that when describing the location.
       - service: script.ack
         data:
           service: homeassistant.turn_off
@@ -125,8 +168,8 @@ automation:
             {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
             {{ trigger.payload_json['after']['label'] }}
-            {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}
-            on {{ trigger.payload_json['after']['camera'] }}.
+            {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}:
+            {{ gemini }}
             long press to view / disable
           tag: >-
             {{ trigger.payload_json['after']['label'] }}
@@ -152,7 +195,6 @@ automation:
         data:
           entity_id:
             - switch.garage_detect
-
 
   - alias: Toggle person notification automation
     id: 3d11fb82-16e2-4d1d-a0fc-7f418a626e73
