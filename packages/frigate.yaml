@@ -102,7 +102,7 @@ automation:
           message: >-
             {{ trigger.payload_json['after']['label'] }}
             {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}:
-            {{ gemini }}
+            {{ gemini['text'] }}
             long press to view / disable
           tag: >-
             {{ trigger.payload_json['after']['label'] }}-{{ trigger.payload_json['after']['camera'] }}
@@ -169,7 +169,7 @@ automation:
           message: >-
             {{ trigger.payload_json['after']['label'] }}
             {{ 'event ended' if trigger.payload_json['after']['end_time'] is not none else 'detected' }}:
-            {{ gemini }}
+            {{ gemini['text'] }}
             long press to view / disable
           tag: >-
             {{ trigger.payload_json['after']['label'] }}
