@@ -38,6 +38,7 @@ from .const import (
     ATTR_CLIENT,
     ATTR_CONFIG,
     ATTR_COORDINATOR,
+    ATTR_WS_EVENT_PROXY,
     ATTRIBUTE_LABELS,
     CONF_CAMERA_STATIC_IMAGE_HEIGHT,
     DOMAIN,
@@ -52,6 +53,7 @@ from .const import (
 )
 from .views import async_setup as views_async_setup
 from .ws_api import async_setup as ws_api_async_setup
+from .ws_event_proxy import WSEventProxy
 
 SCAN_INTERVAL = timedelta(seconds=5)
 
@@ -164,6 +166,11 @@ def get_zones(config: dict[str, Any]) -> set[str]:
     return cameras_zones
 
 
+def decode_if_necessary(data: str | bytes) -> str:
+    """Decode a string if necessary."""
+    return data.decode("utf-8") if isinstance(data, bytes) else data
+
+
 async def async_setup(hass: HomeAssistant, config: Config) -> bool:
     """Set up this integration using YAML is not supported."""
     integration = await async_get_integration(hass, DOMAIN)
@@ -210,11 +217,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     model = f"{(await async_get_integration(hass, DOMAIN)).version}/{server_version}"
 
+    ws_event_proxy = WSEventProxy(config["mqtt"]["topic_prefix"])
+    entry.async_on_unload(lambda: ws_event_proxy.unsubscribe_all(hass))
+
     hass.data[DOMAIN][entry.entry_id] = {
         ATTR_COORDINATOR: coordinator,
         ATTR_CLIENT: client,
         ATTR_CONFIG: config,
         ATTR_MODEL: model,
+        ATTR_WS_EVENT_PROXY: ws_event_proxy,
     }
 
     # Remove old devices associated with cameras that have since been removed
@@ -474,5 +485,5 @@ class FrigateMQTTEntity(FrigateEntity):
     @callback  # type: ignore[misc]
     def _availability_message_received(self, msg: ReceiveMessage) -> None:
         """Handle a new received MQTT availability message."""
-        self._available = msg.payload == "online"
+        self._available = decode_if_necessary(msg.payload) == "online"
         self.async_write_ha_state()
