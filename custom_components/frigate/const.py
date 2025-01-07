@@ -1,8 +1,9 @@
 """Constants for frigate."""
+
 # Base component constants
 NAME = "Frigate"
 DOMAIN = "frigate"
-FRIGATE_VERSION_ERROR_CUTOFF = "0.12.1"
+FRIGATE_VERSION_ERROR_CUTOFF = "0.12.0"
 FRIGATE_RELEASES_URL = "https://github.com/blakeblackshear/frigate/releases"
 FRIGATE_RELEASE_TAG_URL = f"{FRIGATE_RELEASES_URL}/tag"
 
@@ -24,6 +25,7 @@ DEVICE_CLASS_CAMERA = "camera"
 # Unit of measurement
 FPS = "fps"
 MS = "ms"
+S = "s"
 
 # Attributes
 ATTR_CLIENT = "client"
@@ -38,6 +40,7 @@ ATTR_PLAYBACK_FACTOR = "playback_factor"
 ATTR_PTZ_ACTION = "action"
 ATTR_PTZ_ARGUMENT = "argument"
 ATTR_START_TIME = "start_time"
+ATTR_WS_EVENT_PROXY = "ws_event_proxy"
 
 # Frigate Attribute Labels
 # These are labels that are not individually tracked as they are
@@ -45,15 +48,18 @@ ATTR_START_TIME = "start_time"
 ATTRIBUTE_LABELS = ["amazon", "face", "fedex", "license_plate", "ups"]
 
 # Configuration and options
-CONF_CAMERA_STATIC_IMAGE_HEIGHT = "camera_image_height"
 CONF_MEDIA_BROWSER_ENABLE = "media_browser_enable"
 CONF_NOTIFICATION_PROXY_ENABLE = "notification_proxy_enable"
+CONF_NOTIFICATION_PROXY_EXPIRE_AFTER_SECONDS = "notification_proxy_expire_after_seconds"
+CONF_USERNAME = "username"
 CONF_PASSWORD = "password"
 CONF_PATH = "path"
-CONF_RTMP_URL_TEMPLATE = "rtmp_url_template"
 CONF_RTSP_URL_TEMPLATE = "rtsp_url_template"
+
+# Removed options
+CONF_CAMERA_STATIC_IMAGE_HEIGHT = "camera_image_height"
 CONF_ENABLE_WEBRTC = "enable_webrtc"
-CONF_NOTIFICATION_PROXY_EXPIRE_AFTER_SECONDS = "notification_proxy_expire_after_seconds"
+CONF_RTMP_URL_TEMPLATE = "rtmp_url_template"
 
 # Defaults
 DEFAULT_NAME = DOMAIN
