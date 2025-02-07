@@ -1,7 +1,4 @@
 name: bathroom
 entities:
-- light.bathroom_overhead
-- light.bathroom_shower
-- light.bathroom_mirror
-- light.bathroom_toilet
-- switch.bathroom_fan
+  - light.bathroom
+  - switch.bathroom_fan

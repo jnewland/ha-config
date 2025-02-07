@@ -34,6 +34,7 @@ http: !include http.yaml
 homekit: !include homekit.yaml
 ifttt: !include ifttt.yaml
 input_boolean: !include input_boolean.yaml
+light: !include_dir_list lights
 lovelace:
   mode: yaml
   resources:
