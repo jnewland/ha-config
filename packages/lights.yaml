@@ -602,7 +602,7 @@ automation:
         data:
           entity_id: |
             {{ trigger.event.data.new_state.entity_id }}
-          color_temp: |
+          color_temp_kelvin: |
             {{ trigger.event.data.new_state.attributes.fixed_color_temp }}
           brightness: |
             {{ trigger.event.data.new_state.attributes.fixed_brightness | default(int(state_attr('switch.circadian_lighting_brightnesss', 'brightness'), default=255)) }}
