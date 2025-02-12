@@ -1,4 +1,0 @@
-name: bathroom
-entities:
-  - light.bathroom
-  - switch.bathroom_fan
