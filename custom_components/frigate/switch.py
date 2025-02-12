@@ -1,4 +1,5 @@
 """Sensor platform for frigate."""
+
 from __future__ import annotations
 
 import logging
@@ -15,6 +16,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from . import (
     FrigateMQTTEntity,
     ReceiveMessage,
+    decode_if_necessary,
     get_friendly_name,
     get_frigate_device_identifier,
     get_frigate_entity_unique_id,
@@ -74,7 +76,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):  # type: ignore[misc]
+class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):
     """Frigate Switch class."""
 
     _attr_entity_category = EntityCategory.CONFIG
@@ -116,10 +118,10 @@ class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):  # type: ignore[misc]
             },
         )
 
-    @callback  # type: ignore[misc]
+    @callback
     def _state_message_received(self, msg: ReceiveMessage) -> None:
         """Handle a new received MQTT state message."""
-        self._is_on = msg.payload == "ON"
+        self._is_on = decode_if_necessary(msg.payload) == "ON"
         self.async_write_ha_state()
 
     @property
