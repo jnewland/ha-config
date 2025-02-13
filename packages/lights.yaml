@@ -59,7 +59,7 @@ homeassistant:
       trigger_service_off: script.reset_record_cabinet_lights
 
     counter.light_automations:
-      unit_of_measurement: occurances
+      unit_of_measurement: occurrences
 
     # fixed_brightness: int
     # TODO: min_brightness
@@ -127,8 +127,6 @@ homeassistant:
     light.dining_room_table:
       notify_action: duck
       duck_step: 192
-    light.exersize_bike:
-      notify_action: duck
     light.kitchen:
       notify_action: duck
       duck_step: 192
@@ -584,7 +582,16 @@ automation:
       platform: event
       event_type: light_brightness_adjustment
     action:
-      - "{{ is_state(trigger.event.data.entity_id, 'on') }}"
+      - condition: template
+        value_template: "{{ is_state(trigger.event.data.entity_id, 'on') }}"
+      - event: LOGBOOK_ENTRY
+        event_data:
+          name: Adjusting brightness of {{ trigger.event.data.entity_id }}
+          message: |
+            Old: {{ state_attr(trigger.event.data.entity_id, 'brightness') }}
+            New: {{ trigger.event.data.brightness }}
+          entity_id: { { trigger.event.data.entity_id } }
+          domain: light
       - action: light.turn_on
         data:
           entity_id: |
