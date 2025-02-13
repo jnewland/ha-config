@@ -590,7 +590,7 @@ automation:
           message: |
             Old: {{ state_attr(trigger.event.data.entity_id, 'brightness') }}
             New: {{ trigger.event.data.brightness }}
-          entity_id: { { trigger.event.data.entity_id } }
+          entity_id: "{{ trigger.event.data.entity_id }}"
           domain: light
       - action: light.turn_on
         data:
