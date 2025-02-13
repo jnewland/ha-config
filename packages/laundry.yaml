@@ -14,7 +14,7 @@ script:
         data:
           entity_id: light.laundry_room
           brightness: >
-            {{ int(state_attr('switch.circadian_lighting_brightness', 'brightness'), default=255) }}
+            {{ int((int(state_attr('switch.circadian_lighting_brightness', 'brightness'), default=100)/100)*255) }}
 
 group:
   laundry_room:
