@@ -557,6 +557,7 @@ automation:
               trigger.event.data.new_state.domain == "light" and
               trigger.event.data.old_state.state == "off" and
               trigger.event.data.new_state.state == "on" and
+              trigger.event.data.new_state.brightness != None and
               trigger.event.data.new_state.attributes.is_hue_group is not defined and
               trigger.event.data.new_state.attributes.ignore_brightness is not defined and
               trigger.event.data.new_state.attributes.fixed_color_temp is not defined and
