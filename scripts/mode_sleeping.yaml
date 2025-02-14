@@ -24,7 +24,7 @@ sequence:
   - service: python_script.close_if_open
     entity_id: cover.garage
   - service: homeassistant.turn_off
-    entity_id: group.outdoor_mood
+    entity_id: light.outdoor_mood
   - service: input_number.set_value
     data:
       entity_id: input_number.brightness
