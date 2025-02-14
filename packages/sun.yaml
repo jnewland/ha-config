@@ -25,7 +25,7 @@ automation:
       at: "01:00:00"
     action:
       service: homeassistant.turn_off
-      entity_id: group.outdoor_mood
+      entity_id: light.outdoor_mood
 
 script:
   sunrise:
@@ -42,4 +42,4 @@ script:
         value_template: |
           {{ states.input_select.mode.state != "Away" }}
       - service: light.turn_on
-        entity_id: group.outdoor_mood
+        entity_id: light.outdoor_mood

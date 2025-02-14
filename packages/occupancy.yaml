@@ -41,8 +41,8 @@ homeassistant:
       haunt: light.bookshelf_middle
 
     binary_sensor.yoga_room_occupancy:
-      trigger_entity_id: group.yoga_room
-      trigger_entity_id_off: group.yoga_room
+      trigger_entity_id: light.yoga_room
+      trigger_entity_id_off: light.yoga_room
       media_player_group_member: media_player.yoga
 
     binary_sensor.garage_hall_home_security_motion_detection:

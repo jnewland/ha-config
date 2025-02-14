@@ -1,4 +1,17 @@
 {
-    "github-actions.workflows.pinned.workflows": [".github/workflows/deploy.yaml"],
-    "github-actions.workflows.pinned.refresh.enabled": true,
+  "github-actions.workflows.pinned.workflows": [
+    ".github/workflows/deploy.yaml"
+  ],
+  "github-actions.workflows.pinned.refresh.enabled": true,
+  "cSpell.words": [
+    "adapative",
+    "Automations",
+    "colorloop",
+    "colortemp",
+    "endfor",
+    "equalto",
+    "homeassistant",
+    "selectattr",
+    "utcnow"
+  ]
 }

@@ -14,7 +14,6 @@
 /ip_bans.yaml
 /*.pickle
 /custom_components/*/__pycache__
-/.vscode
 /pythonenv*
 .nfs*
 home-assistant.log.*

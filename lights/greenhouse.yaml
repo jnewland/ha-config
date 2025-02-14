@@ -1,0 +1,5 @@
+platform: group
+name: greenhouse
+entities:
+  - light.greenhouse_led
+  - light.greenhouse_led_black

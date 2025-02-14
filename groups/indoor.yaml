@@ -1,8 +1,9 @@
 ---
 - group.great_room
-- group.hall
+- light.hall
+- group.powder_room
 - group.guest
-- group.bedroom
+- light.bedroom
 - group.bathroom
 - group.lounge
 - group.music_room

@@ -1,0 +1,6 @@
+platform: group
+name: houseplants
+entities:
+  - light.grow_monstera_lounge
+  - light.mother32
+  - light.mother16

@@ -28,7 +28,7 @@ jobs:
   #             var statuses = await github.rest.repos.listDeploymentStatuses({
   #               ...context.repo,
   #               deployment_id: deployment.id,
-  #             }) 
+  #             })
   #             for (const status of statuses.data) {
   #               console.log(`deployment ${deployment.id} status ${status.state}`);
   #               if (status.state == 'success' || status.state == 'in_progress' || status.state == 'pending' || status.state == 'queued') {
@@ -69,7 +69,7 @@ jobs:
     concurrency: production
     steps:
       - name: deploy
-        run: 'true'
+        run: "true"
 
   create-deploy-status:
     runs-on: ubuntu-latest
@@ -86,4 +86,3 @@ jobs:
               description: 'PR was deployed with GitHub Actions',
               target_url:  'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
             });
-

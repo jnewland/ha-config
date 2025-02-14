@@ -167,6 +167,8 @@ script:
     sequence:
       - service: alarm_control_panel.alarm_arm_home
         entity_id: alarm_control_panel.alarm
+        data:
+          code: " "
       - service: homeassistant.turn_off
         entity_id:
           - group.indoor
