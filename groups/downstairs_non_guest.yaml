@@ -1,5 +1,6 @@
 ---
 - group.great_room
-- group.hall
+- light.hall
+- group.powder_room
 - group.lounge
 - light.ac

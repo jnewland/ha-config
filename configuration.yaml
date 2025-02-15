@@ -34,6 +34,8 @@ http: !include http.yaml
 homekit: !include homekit.yaml
 ifttt: !include ifttt.yaml
 input_boolean: !include input_boolean.yaml
+light:
+light yaml: !include_dir_list lights
 lovelace:
   mode: yaml
   resources:
@@ -60,7 +62,6 @@ lovelace:
     - url: /local/weather-chart-card.js?source=https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
       type: module
 
-light:
 logger: !include logger.yaml
 media_player: !include media_player.yaml
 python_script:

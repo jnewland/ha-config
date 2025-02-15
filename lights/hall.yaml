@@ -1,0 +1,10 @@
+platform: group
+name: hall
+entities:
+  - light.great_hall
+  - light.stairs
+  - light.garage_hall
+  - light.wine_room
+  - light.pantry
+  - light.record_cabinet_left
+  - light.record_cabinet_right
