@@ -224,3 +224,26 @@ automation:
         data:
           entity_id:
             - automation.notify_when_dog_detected_in_yard
+
+  - alias: Describe the birdseye camera and update Tidbyts
+    id: fdc23abd-81e7-4396-9e45-a3ddb129a83f
+    trigger:
+      - trigger: time_pattern
+        minutes: 1
+    action:
+      - service: camera.snapshot
+        data:
+          filename: /tmp/birdseye.jpg
+        target:
+          entity_id: camera.birdseye_medium
+      - service: google_generative_ai_conversation.generate_content
+        data:
+          image_filename:
+            - /tmp/birdseye.jpg
+          prompt: >-
+            {{ states('input_text.camera_prompt') }}
+
+      - service: notify.tidbyt_kitchen_background
+        data:
+          message: >-
+            {{ gemini['text'] }}
