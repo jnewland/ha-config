@@ -256,7 +256,7 @@ automation:
         data:
           filename: /tmp/birdseye.jpg
         target:
-          entity_id: camera.birdseye_medium
+          entity_id: camera.birdseye
       - service: google_generative_ai_conversation.generate_content
         response_variable: gemini
         data:
