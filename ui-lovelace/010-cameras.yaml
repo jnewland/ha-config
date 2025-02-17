@@ -15,6 +15,9 @@ cards:
           show_name: false
           show_state: false
           entity: camera.crate_medium
+        - type: markdown
+          content: >
+            {{ states('input_text.crate_summary') }}
         - type: entities
           show_header_toggle: false
           entities:
