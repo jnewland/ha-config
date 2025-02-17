@@ -1,29 +1,3 @@
-input_text:
-  # Each of these have to be less than 255c
-  camera_context:
-    initial: >-
-      You are an AI agent designed to help busy homeowners stay aware of their
-      surroundings by observing their security cameras for things that are
-      unusual or out of place.
-
-  camera_prompt:
-    initial: >-
-      Describe the people, animals, and/or activities in the image that a
-      homeowner might want to know about in one or two short sentences, suitable
-      for an iOS notification.
-
-  camera_focus:
-    initial: >-
-      Focus out things that might be security risks, dangers, or threats to the
-      homeowner, their pets, or property. Call out conditions that may allow
-      pets to escape like open doors, gates, or garages.
-
-  camera_response_guidelines:
-    initial: >-
-      Don't talk about the security system or the presence of any recordings,
-      just what you see on the images. Don't describe stationary objects like
-      cars, trees, or buildings.
-
 automation:
   - alias: Notify about camera failures
     id: c39da746-6928-4ff9-9fe0-0c09e5e67fae
@@ -105,10 +79,21 @@ automation:
           image_filename:
             - /tmp/person_{{ trigger.payload_json['after']['camera'] }}.jpg
           prompt: >-
-            {{ states('input_text.camera_context') }}
-            {{ states('input_text.camera_prompt') }}
-            {{ states('input_text.camera_focus') }}
-            {{ states('input_text.camera_response_guidelines') }}
+            You are an AI agent designed to help busy homeowners stay aware of their
+            surroundings by observing their security cameras for things that are
+            unusual or out of place.
+
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one or two short sentences, suitable
+            for an iOS notification.
+
+            Focus out things that might be security risks, dangers, or threats to the
+            homeowner, their pets, or property. Call out conditions that may allow
+            pets to escape like open doors, gates, or garages.
+
+            Don't talk about the security system or the presence of any recordings,
+            just what you see on the images. Don't describe stationary objects like
+            cars, trees, or buildings.
 
             A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
             Also consider the full JSON from the camera event:
@@ -167,10 +152,21 @@ automation:
           image_filename:
             - /tmp/dog_{{ trigger.payload_json['after']['camera'] }}.jpg
           prompt: >-
-            {{ states('input_text.camera_context') }}
-            {{ states('input_text.camera_prompt') }}
-            {{ states('input_text.camera_focus') }}
-            {{ states('input_text.camera_response_guidelines') }}
+            You are an AI agent designed to help busy homeowners stay aware of their
+            surroundings by observing their security cameras for things that are
+            unusual or out of place.
+
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one or two short sentences, suitable
+            for an iOS notification.
+
+            Focus out things that might be security risks, dangers, or threats to the
+            homeowner, their pets, or property. Call out conditions that may allow
+            pets to escape like open doors, gates, or garages.
+
+            Don't talk about the security system or the presence of any recordings,
+            just what you see on the images. Don't describe stationary objects like
+            cars, trees, or buildings.
 
             A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
             Also consider the full JSON from the camera event:
@@ -266,10 +262,21 @@ automation:
           image_filename:
             - /tmp/birdseye.jpg
           prompt: >-
-            {{ states('input_text.camera_context') }}
-            {{ states('input_text.camera_prompt') }}
-            {{ states('input_text.camera_focus') }}
-            {{ states('input_text.camera_response_guidelines') }}
+            You are an AI agent designed to help busy homeowners stay aware of their
+            surroundings by observing their security cameras for things that are
+            unusual or out of place.
+
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one or two short sentences, suitable
+            for an iOS notification.
+
+            Focus out things that might be security risks, dangers, or threats to the
+            homeowner, their pets, or property. Call out conditions that may allow
+            pets to escape like open doors, gates, or garages.
+
+            Don't talk about the security system or the presence of any recordings,
+            just what you see on the images. Don't describe stationary objects like
+            cars, trees, or buildings.
 
       - service: notify.tidbyt_kitchen_background
         data:
@@ -301,10 +308,21 @@ automation:
           image_filename:
             - /tmp/crate_medium.jpg
           prompt: >-
-            {{ states('input_text.camera_context') }}
-            {{ states('input_text.camera_prompt') }}
-            {{ states('input_text.camera_focus') }}
-            {{ states('input_text.camera_response_guidelines') }}
+            You are an AI agent designed to help busy homeowners stay aware of their
+            surroundings by observing their security cameras for things that are
+            unusual or out of place.
+
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one or two short sentences, suitable
+            for an iOS notification.
+
+            Focus out things that might be security risks, dangers, or threats to the
+            homeowner, their pets, or property. Call out conditions that may allow
+            pets to escape like open doors, gates, or garages.
+
+            Don't talk about the security system or the presence of any recordings,
+            just what you see on the images. Don't describe stationary objects like
+            cars, trees, or buildings.
 
             This camera should in show a dog named Marigold in a crate where she
             generally sleeps soundly with one of her favorite toys while her
