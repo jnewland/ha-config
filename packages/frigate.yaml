@@ -231,9 +231,11 @@ automation:
       - trigger: time_pattern
         minutes: "/1"
     condition:
-      - condition: state
-        entity_id: input_select.mode
-        not: "Away"
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: input_select.mode
+            state: Away
     action:
       - service: camera.snapshot
         data:
