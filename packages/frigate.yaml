@@ -339,8 +339,9 @@ automation:
           entity_id: counter.pets
           camera: >-
             camera.crate_medium
-          camera_thumbnail: >
-            {{ states('input_text.external_url') }}/api/frigate/notifications/crate_medium/snapshot.jpg
+          camera_thumbnail: >-
+            {{ states('input_text.external_url') }}
+            {{ state_attr('camera.crate_medium', 'entity_picture') }}
           message: >-
             {{ gemini['text'] }}
           tag: >-
