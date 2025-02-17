@@ -258,6 +258,7 @@ automation:
         target:
           entity_id: camera.birdseye_medium
       - service: google_generative_ai_conversation.generate_content
+        response_variable: gemini
         data:
           image_filename:
             - /tmp/birdseye.jpg
@@ -304,6 +305,7 @@ automation:
         target:
           entity_id: camera.crate_medium
       - service: google_generative_ai_conversation.generate_content
+        response_variable: gemini
         data:
           image_filename:
             - /tmp/crate_medium.jpg
