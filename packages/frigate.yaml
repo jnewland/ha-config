@@ -247,3 +247,59 @@ automation:
         data:
           message: >-
             {{ gemini['text'] }}
+
+  - alias: Pet the good girl?
+    id: 8f376d0f-1ea7-4616-a2e8-2d0ab788976f
+    trigger:
+      - platform: state
+        entity_id: camera.crate_medium
+        from: "unavailable"
+        to: "idle"
+      - platform: state
+        entity_id: counter.pets
+    action:
+      - condition: state
+        entity_id: camera.crate_medium
+        state: idle
+      - service: camera.snapshot
+        data:
+          filename: /tmp/crate_medium.jpg
+        target:
+          entity_id: camera.crate_medium
+      - service: google_generative_ai_conversation.generate_content
+        data:
+          image_filename:
+            - /tmp/crate_medium.jpg
+          prompt: >-
+            {{ states('input_text.camera_prompt') }}
+
+            This camera should in show a dog named Marigold in a crate where she
+            generally sleeps soundly with a snuggle puppy toy. Please describe
+            the dog and the scene in a way that would be suitable for an
+            easily-glanced-at iOS notification. Be sure to call her a good girl
+            if the she is sleeping or looking reasonably content.
+
+      - service: script.ack
+        data:
+          service: counter.increment
+          entity_id: counter.pets
+          camera: >-
+            camera.crate_medium
+          camera_thumbnail: >
+            {{ states('input_text.external_url') }}/api/frigate/notifications/crate_medium/snapshot.jpg
+          message: >-
+            {{ gemini['text'] }}
+          tag: >-
+            crate_medium
+          confirmation_message: >-
+            pet the good girl. {{ states('counter.pets') }} pets so far.
+          interruption_level: passive
+          ack_yes_title: >-
+            Pet the good girl
+          ack_no_title: I need help with the dog
+          decline_message: >-
+            needs help with the dog.
+
+counter:
+  pets:
+    name: Pets
