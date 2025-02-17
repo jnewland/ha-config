@@ -241,7 +241,7 @@ automation:
     id: fdc23abd-81e7-4396-9e45-a3ddb129a83f
     trigger:
       - trigger: time_pattern
-        minutes: "/1"
+        minutes: "/5"
     condition:
       - condition: not
         conditions:
@@ -283,7 +283,7 @@ automation:
             just what you see on the images. Don't describe stationary objects like
             cars, trees, or buildings.
 
-      - service: notify.tidbyt_kitchen_background
+      - service: notify.tidbyt_background
         data:
           message: >-
             {{ gemini['text'] }}
