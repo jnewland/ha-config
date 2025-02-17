@@ -1,3 +1,9 @@
+input_text:
+  birdseye_summary:
+    initial: Not yet described.
+  crate_summary:
+    initial: Not yet described.
+
 automation:
   - alias: Notify about camera failures
     id: c39da746-6928-4ff9-9fe0-0c09e5e67fae
@@ -237,20 +243,11 @@ automation:
           entity_id:
             - automation.notify_when_dog_detected_in_yard
 
-  - alias: Describe the birdseye camera and update Tidbyts
+  - alias: Describe the birdseye camera
     id: fdc23abd-81e7-4396-9e45-a3ddb129a83f
     trigger:
       - trigger: time_pattern
         minutes: "/5"
-    condition:
-      - condition: not
-        conditions:
-          - condition: state
-            entity_id: input_select.mode
-            state: Away
-          - condition: state
-            entity_id: input_select.mode
-            state: Sleeping
     action:
       - service: camera.snapshot
         data:
@@ -282,10 +279,46 @@ automation:
             just what you see on the images. Don't describe stationary objects like
             cars, trees, or buildings.
 
-      - service: notify.tidbyt_background
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.birdseye_summary
         data:
-          message: >-
+          value: >-
             {{ gemini['text'] }}
+
+  - alias: Notify about the birdseye camera
+    id: fe059b0f-5a42-454d-88d9-a073c9f5cd29
+    trigger:
+      - platform: state
+        entity_id: input_text.birdseye_summary
+    action:
+      - choose:
+          - conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: input_select.mode
+                    state: Away
+                  - condition: state
+                    entity_id: input_select.mode
+                    state: Reading
+                  - condition: state
+                    entity_id: input_select.mode
+                    state: Sleeping
+            sequence:
+              - service: script.ack
+                data:
+                  service: script.noop
+                  entity_id: input_text.birdseye_summary
+                  message: >-
+                    {{ trigger.to_state.state }}
+                  interruption_level: passive
+
+        default:
+          - service: notify.tidbyt_background
+            data:
+              message: >
+                {{ trigger.to_state.state }}
 
   - alias: Pet the good girl?
     id: 8f376d0f-1ea7-4616-a2e8-2d0ab788976f
@@ -337,6 +370,13 @@ automation:
             or looking reasonably content, and to mention if you don't see a dog
             or if the crate door is open.
 
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.crate_summary
+        data:
+          value: >-
+            {{ gemini['text'] }}
+
       - service: script.ack
         data:
           service: counter.increment
@@ -347,7 +387,7 @@ automation:
             {{ states('input_text.external_url') }}
             {{ state_attr('camera.crate_medium', 'entity_picture') }}
           message: >-
-            {{ gemini['text'] }}
+            {{ states('input_text.crate_summary') }}
           tag: >-
             crate_medium
           confirmation_message: >-
