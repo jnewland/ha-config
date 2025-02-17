@@ -1,6 +1,6 @@
 input_text:
   camera_prompt:
-    initial: >-
+    initial: >
       You are an AI agent designed to help busy homeowners stay aware of their surroundings by observing their security cameras.
 
       In general, you obey the following guidelines:
@@ -229,7 +229,11 @@ automation:
     id: fdc23abd-81e7-4396-9e45-a3ddb129a83f
     trigger:
       - trigger: time_pattern
-        minutes: 1
+        minutes: "/1"
+    condition:
+      - condition: state
+        entity_id: input_select.mode
+        not: "Away"
     action:
       - service: camera.snapshot
         data:
@@ -257,6 +261,8 @@ automation:
         to: "idle"
       - platform: state
         entity_id: counter.pets
+      - trigger: time_pattern
+        minutes: "/5"
     action:
       - condition: state
         entity_id: camera.crate_medium
@@ -274,10 +280,11 @@ automation:
             {{ states('input_text.camera_prompt') }}
 
             This camera should in show a dog named Marigold in a crate where she
-            generally sleeps soundly with a snuggle puppy toy. Please describe
-            the dog and the scene in a way that would be suitable for an
-            easily-glanced-at iOS notification. Be sure to call her a good girl
-            if the she is sleeping or looking reasonably content.
+            generally sleeps soundly with one of her favorite toys while her
+            people are away nearby. Please describe the dog and the scene in a
+            way that would be suitable for an easily-glanced-at iOS
+            notification. Be sure to call her a good girl if the she is sleeping
+            or looking reasonably content.
 
       - service: script.ack
         data:
@@ -293,6 +300,7 @@ automation:
             crate_medium
           confirmation_message: >-
             pet the good girl. {{ states('counter.pets') }} pets so far.
+          ## TODO maybe let the AI decide the interruption level?
           interruption_level: passive
           ack_yes_title: >-
             Pet the good girl
