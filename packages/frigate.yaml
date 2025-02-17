@@ -331,7 +331,8 @@ automation:
             people are away nearby. Please describe the dog and the scene in a
             way that would be suitable for an easily-glanced-at iOS
             notification. Be sure to call her a good girl if the she is sleeping
-            or looking reasonably content.
+            or looking reasonably content, and to mention if you don't see a dog
+            or if the crate door is open.
 
       - service: script.ack
         data:
