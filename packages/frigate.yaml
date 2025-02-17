@@ -1,18 +1,28 @@
 input_text:
+  # Each of these have to be less than 255c
+  camera_context:
+    initial: >-
+      You are an AI agent designed to help busy homeowners stay aware of their
+      surroundings by observing their security cameras for things that are
+      unusual or out of place.
+
   camera_prompt:
-    initial: >
-      You are an AI agent designed to help busy homeowners stay aware of their surroundings by observing their security cameras.
+    initial: >-
+      Describe the people, animals, and/or activities in the image that a
+      homeowner might want to know about in one or two short sentences, suitable
+      for an iOS notification.
 
-      In general, you obey the following guidelines:
+  camera_focus:
+    initial: >-
+      Focus out things that might be security risks, dangers, or threats to the
+      homeowner, their pets, or property. Call out conditions that may allow
+      pets to escape like open doors, gates, or garages.
 
-      - Don't talk about the presence of a recording or any security system, just what you see on the images.
-      - Don't describe stationary objects like cars, trees, or buildings.
-      - Do describe people, animals, activities, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
-      - Focus on things that might be out of place or unusual compared to the idle state of a yard in its regular state.
-      - Call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
-      - Call out things like open gates or garages that might be a security risk or allow pets to escape.
-
-      Describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
+  camera_response_guidelines:
+    initial: >-
+      Don't talk about the security system or the presence of any recordings,
+      just what you see on the images. Don't describe stationary objects like
+      cars, trees, or buildings.
 
 automation:
   - alias: Notify about camera failures
@@ -95,7 +105,10 @@ automation:
           image_filename:
             - /tmp/person_{{ trigger.payload_json['after']['camera'] }}.jpg
           prompt: >-
+            {{ states('input_text.camera_context') }}
             {{ states('input_text.camera_prompt') }}
+            {{ states('input_text.camera_focus') }}
+            {{ states('input_text.camera_response_guidelines') }}
 
             A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
             Also consider the full JSON from the camera event:
@@ -154,7 +167,10 @@ automation:
           image_filename:
             - /tmp/dog_{{ trigger.payload_json['after']['camera'] }}.jpg
           prompt: >-
+            {{ states('input_text.camera_context') }}
             {{ states('input_text.camera_prompt') }}
+            {{ states('input_text.camera_focus') }}
+            {{ states('input_text.camera_response_guidelines') }}
 
             A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
             Also consider the full JSON from the camera event:
@@ -236,6 +252,9 @@ automation:
           - condition: state
             entity_id: input_select.mode
             state: Away
+          - condition: state
+            entity_id: input_select.mode
+            state: Sleeping
     action:
       - service: camera.snapshot
         data:
@@ -247,7 +266,10 @@ automation:
           image_filename:
             - /tmp/birdseye.jpg
           prompt: >-
+            {{ states('input_text.camera_context') }}
             {{ states('input_text.camera_prompt') }}
+            {{ states('input_text.camera_focus') }}
+            {{ states('input_text.camera_response_guidelines') }}
 
       - service: notify.tidbyt_kitchen_background
         data:
@@ -279,7 +301,10 @@ automation:
           image_filename:
             - /tmp/crate_medium.jpg
           prompt: >-
+            {{ states('input_text.camera_context') }}
             {{ states('input_text.camera_prompt') }}
+            {{ states('input_text.camera_focus') }}
+            {{ states('input_text.camera_response_guidelines') }}
 
             This camera should in show a dog named Marigold in a crate where she
             generally sleeps soundly with one of her favorite toys while her
