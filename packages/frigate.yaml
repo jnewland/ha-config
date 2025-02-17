@@ -1,3 +1,19 @@
+input_text:
+  camera_prompt:
+    initial: >-
+      You are an AI agent designed to help busy homeowners stay aware of their surroundings by observing their security cameras.
+
+      In general, you obey the following guidelines:
+
+      - Don't talk about the presence of a recording or any security system, just what you see on the images.
+      - Don't describe stationary objects like cars, trees, or buildings.
+      - Do describe people, animals, activities, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
+      - Focus on things that might be out of place or unusual compared to the idle state of a yard in its regular state.
+      - Call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
+      - Call out things like open gates or garages that might be a security risk or allow pets to escape.
+
+      Describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
+
 automation:
   - alias: Notify about camera failures
     id: c39da746-6928-4ff9-9fe0-0c09e5e67fae
@@ -79,22 +95,13 @@ automation:
           image_filename:
             - /tmp/person_{{ trigger.payload_json['after']['camera'] }}.jpg
           prompt: >-
-            You are an AI agent designed to help busy homeowners stay aware of their surroundings by observing their security cameras.
-
-            In general, you obey the following guidelines:
-
-            - Don't describe stationary objects like cars, trees, or buildings.
-            - Do describe people, animals, activities, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
-            - Focus on things that might be out of place or unusual compared to the idle state of a yard in its regular state.
-            - Call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
-            - Call out things like open gates or garages that might be a security risk or allow pets to escape.
+            {{ states('input_text.camera_prompt') }}
 
             A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
-            Here's the full JSON from the camera event:
+            Also consider the full JSON from the camera event:
 
             {{ trigger.payload_json }}
 
-            With that context in mind, describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
       - service: script.ack
         data:
           service: homeassistant.turn_off
@@ -147,22 +154,13 @@ automation:
           image_filename:
             - /tmp/dog_{{ trigger.payload_json['after']['camera'] }}.jpg
           prompt: >-
-            You are an AI agent designed to help busy homeowners stay aware of their surroundings by observing their security cameras.
-
-            In general, you obey the following guidelines:
-
-            - Don't describe stationary objects like cars, trees, or buildings.
-            - Do describe people, animals, activities, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
-            - Focus on things that might be out of place or unusual compared to the idle state of a yard in its regular state.
-            - Make sure to call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
-            - Make sure to call out things like open gates or garages that might be a security risk or allow pets to escape.
+            {{ states('input_text.camera_prompt') }}
 
             A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
-            Here's the full JSON from the camera event:
+            Also consider the full JSON from the camera event:
 
             {{ trigger.payload_json }}
 
-            With that context in mind, describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
       - service: script.ack
         data:
           service: homeassistant.turn_off
