@@ -276,10 +276,14 @@ automation:
             on the images. Don't describe stationary objects like trees, or
             buildings.
 
-            Specifically mention if the swinging "fence gate" at the end of the
-            front walk is open or if the "metal gate" at the end of the driveway is
-            open, or if any doors to the home are open. There is no "back gate"
-            or "side gate".
+            Integrity of the fence is important, as it is the primary barrier
+            between the dog and the outside world. There is a swinging gate
+            in the fence at the end of the front walk. Mention that "front gate"
+            is open if the gate is in any other position than closed and latched.
+
+            There is a sliding metal gate at the end of the driveway. Mention that
+            the "driveway gate" is open if the gate is in any other position than
+            fully closed across the driveway.
 
             If you mention a person, describe their height, clothing, their
             location, and what they're doing in relation to the home. Double
@@ -299,6 +303,7 @@ automation:
         data:
           value: >-
             {{ gemini['text'] }}
+            {{ as_timestamp(now()) | timestamp_custom('%-I:%M') }}
 
   - alias: Notify about the birdseye camera
     id: fe059b0f-5a42-454d-88d9-a073c9f5cd29
