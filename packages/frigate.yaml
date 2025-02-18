@@ -260,25 +260,31 @@ automation:
           image_filename:
             - /tmp/birdseye.jpg
           prompt: >-
-            You are an AI agent designed to help busy homeowners stay aware of their
-            surroundings by observing their security cameras for things that are
-            unusual or out of place.
+            You are an AI agent designed to help busy homeowners stay aware of
+            their surroundings by observing their security cameras for things
+            that are unusual or out of place.
 
             Focus that might be security risks, dangers, or threats to the
-            homeowner, their pets, or property. Call out conditions that may allow
-            pets to escape like open doors, fence gates, or driveway gates.
+            homeowner, their pets, or property. Focus on things inside the
+            wooden fenced area, which is used to contain the dog.
 
-            Ignore the visible debris and car in the neighbor's yard. Focus on things
-            inside the fenced area.
+            Ignore the visible debris and car in the neighbor's yard on the
+            other side of the wooden fence. Don't talk about yourself, the
+            security system or the presence of any recordings, just what you see
+            on the images. Don't describe stationary objects like trees, or
+            buildings.
 
-            Don't talk about yourself, the security system or the presence of any recordings,
-            just what you see on the images. Don't describe stationary objects like
-            trees, or buildings. Focus on any pets, people, or unusual activities instead.
-            If you mention a person, attempt to describe what they're doing.
+            Specifically mention if the pedestrian gate at the end of the
+            walkway is open or if the metal gate at the end of the driveway is
+            open, or if any doors to the home are open.
+
+            If you mention a person, describe their height and clothing and what
+            they're doing in relation to the home.
 
             Describe the people, animals, and/or activities in the image that a
-            homeowner might want to know about in one or two short sentences, suitable
-            for an iOS notification.
+            homeowner might want to know about in one to three short sentences,
+            suitable for an iOS notification. Be sure to mention anything that
+            seems out of the ordinary or unusual.
 
       - action: input_text.set_value
         target:
