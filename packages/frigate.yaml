@@ -279,12 +279,13 @@ automation:
             Integrity of the fence is important, as it is the primary barrier
             between the dog and the outside world. There is a swinging gate
             in the fence at the end of the front walk. Mention that "front gate"
-            is open if the gate has been swung open in a manner that would allow
-            the dog to escape.
+            is open if the gate is in any other position other than in-line with
+            the fence. If the gate and the fence appear to be in a straight line,
+            it is closed.
 
             There is a sliding metal gate at the end of the driveway. Mention that
             the "driveway gate" is open if the gate is in any other position than
-            fully closed across the driveway.
+            fully closed across the driveway. Don't mention the gate if it is closed.
 
             If you mention a person, describe their height, clothing, their
             location, and what they're doing in relation to the home. Double
