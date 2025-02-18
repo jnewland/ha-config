@@ -296,7 +296,6 @@ automation:
         data:
           value: >-
             {{ gemini['text'] }}
-            {{ as_timestamp(now()) | timestamp_custom('%-I:%M', True) }}
 
   - alias: Notify about the birdseye camera
     id: fe059b0f-5a42-454d-88d9-a073c9f5cd29
