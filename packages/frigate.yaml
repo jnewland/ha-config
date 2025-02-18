@@ -279,7 +279,8 @@ automation:
             Integrity of the fence is important, as it is the primary barrier
             between the dog and the outside world. There is a swinging gate
             in the fence at the end of the front walk. Mention that "front gate"
-            is open if the gate is in any other position than closed and latched.
+            is open if the gate has been swung open in a manner that would allow
+            the dog to escape.
 
             There is a sliding metal gate at the end of the driveway. Mention that
             the "driveway gate" is open if the gate is in any other position than
@@ -288,7 +289,8 @@ automation:
             If you mention a person, describe their height, clothing, their
             location, and what they're doing in relation to the home. Double
             check that you actually see a person before mentioning it; make sure
-            its not a false positive.
+            its not a false positive, like an air conditioning unit, a gate opener,
+            or a tree.
 
             Describe the people, animals, and/or activities in the image that a
             homeowner might want to know about in one to three short sentences,
@@ -372,10 +374,6 @@ automation:
             Describe the people, animals, and/or activities in the image that a
             homeowner might want to know about in one or two short sentences, suitable
             for an iOS notification.
-
-            Focus out things that might be security risks, dangers, or threats to the
-            homeowner, their pets, or property. Call out conditions that may allow
-            pets to escape like open doors, gates, or garages.
 
             Don't talk about the security system or the presence of any recordings,
             just what you see on the images. Don't describe stationary objects like
