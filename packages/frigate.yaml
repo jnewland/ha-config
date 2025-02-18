@@ -274,14 +274,15 @@ automation:
             on the images. Don't describe stationary objects like trees, or
             buildings.
 
-            Specifically mention if the "walkway gate" at the end of the
+            Specifically mention if the swinging "fence gate" at the end of the
             front walk is open or if the "metal gate" at the end of the driveway is
             open, or if any doors to the home are open. There is no "back gate"
             or "side gate".
 
             If you mention a person, describe their height, clothing, their
             location, and what they're doing in relation to the home. Double
-            check that this is actually a person before mentioning it.
+            check that you actually see a person before mentioning it; make sure
+            its not a false positive.
 
             Describe the people, animals, and/or activities in the image that a
             homeowner might want to know about in one to three short sentences,
