@@ -1,8 +1,10 @@
 input_text:
   birdseye_summary:
     initial: Not yet described.
+    max: 255
   crate_summary:
     initial: Not yet described.
+    max: 255
 
 automation:
   - alias: Notify about camera failures
