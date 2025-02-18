@@ -279,14 +279,16 @@ automation:
             open, or if any doors to the home are open. There is no "back gate"
             or "side gate".
 
-            If you mention a person, describe their height and clothing and what
-            they're doing in relation to the home. Double check that this is actually
-            a person before mentioning it.
+            If you mention a person, describe their height, clothing, their
+            location, and what they're doing in relation to the home. Double
+            check that this is actually a person before mentioning it.
 
             Describe the people, animals, and/or activities in the image that a
             homeowner might want to know about in one to three short sentences,
             suitable for an iOS notification. Be sure to mention anything that
-            seems out of the ordinary or unusual.
+            seems out of the ordinary or unusual. Include enough information
+            about what you see such that false positives can be ruled out with
+            updates to the prompt.
 
       - action: input_text.set_value
         target:
