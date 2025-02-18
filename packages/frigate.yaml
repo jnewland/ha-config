@@ -264,20 +264,21 @@ automation:
             surroundings by observing their security cameras for things that are
             unusual or out of place.
 
-            Describe the people, animals, and/or activities in the image that a
-            homeowner might want to know about in one or two short sentences, suitable
-            for an iOS notification.
-
-            Focus out things that might be security risks, dangers, or threats to the
+            Focus that might be security risks, dangers, or threats to the
             homeowner, their pets, or property. Call out conditions that may allow
-            pets to escape like open doors or gates.
+            pets to escape like open doors, fence gates, or driveway gates.
 
             Ignore the visible debris and car in the neighbor's yard. Focus on things
             inside the fenced area.
 
-            Don't talk about the security system or the presence of any recordings,
+            Don't talk about yourself, the security system or the presence of any recordings,
             just what you see on the images. Don't describe stationary objects like
-            cars, trees, or buildings.
+            trees, or buildings. Focus on any pets, people, or unusual activities instead.
+            If you mention a person, attempt to describe what they're doing.
+
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one or two short sentences, suitable
+            for an iOS notification.
 
       - action: input_text.set_value
         target:
@@ -285,6 +286,7 @@ automation:
         data:
           value: >-
             {{ gemini['text'] }}
+            {{ as_timestamp(now()) | timestamp_custom('%-I:%M', True) }}
 
   - alias: Notify about the birdseye camera
     id: fe059b0f-5a42-454d-88d9-a073c9f5cd29
