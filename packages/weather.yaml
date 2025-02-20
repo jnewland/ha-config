@@ -86,7 +86,7 @@ template:
               map(attribute='datetime') |
               first |
               default(false) %}
-          {{ next_precip or "" }}
+          {{ next_precip or (now() + timedelta(days=30)) }}
       - name: Days until rain
         unit_of_measurement: Days
         state: >-
