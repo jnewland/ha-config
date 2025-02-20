@@ -105,7 +105,7 @@ template:
         unit_of_measurement: Days
         state: >-
           {%- if states('sensor.next_precipitation') == 'unavailable' or states('sensor.next_precipitation') == '' -%}
-            {{ states('sensor.forecast_length') }}
+            {{ states('sensor.forecast_duration') }}
           {%- else -%}
             {%- for item in daily['weather.tomorrow_io_home_daily'].forecast |
                       default([{}]) -%}
