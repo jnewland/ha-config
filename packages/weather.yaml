@@ -18,7 +18,7 @@ template:
         state: >-
           {{
             (
-              hourly['weather.tomorrow_io_home_nowcast'].forecast |
+              hourly['weather.tomorrow_io_home_hourly'].forecast |
               default([{}]) | batch(
                 states("input_number.precipitation_forecast_hours") | default(12)
               ) | first |
@@ -33,7 +33,7 @@ template:
         state: >-
           {{
             (
-              hourly['weather.tomorrow_io_home_nowcast'].forecast |
+              hourly['weather.tomorrow_io_home_hourly'].forecast |
               default([{}]) | batch(
                 states("input_number.precipitation_forecast_hours") | default(12)
               ) | first |
