@@ -1,42 +1,56 @@
 notify:
-
   - platform: group
     name: tidbyt_once
     services:
-      - service: tidbyt_jesse_once
+      - service: tidbyt_kitchen_once
+      - service: tidbyt_garage_once
       - service: tidbyt_katie_once
       - service: tidbyt_music_room_once
+  - platform: group
+    name: tidbyt_background
+    services:
+      - service: tidbyt_kitchen_background
+      - service: tidbyt_garage_background
+      - service: tidbyt_katie_background
+      - service: tidbyt_music_room_background
+  - platform: group
+    name: tidbyt_banner
+    services:
+      - service: tidbyt_kitchen_banner
+      - service: tidbyt_garage_banner
+      - service: tidbyt_katie_banner
+      - service: tidbyt_music_room_banner
 
-  - name: tidbyt_jesse_background
+  - name: tidbyt_garage_background
     platform: rest
     resource: http://pixlet:8080/api/v1/push
     method: POST_JSON
     message_param_name: msg
     data:
       installationID: push
-      deviceID: surgically-vaulting-mutual-angelfish-704
-      apiToken: !env_var TIDBYT_JESSE_API_TOKEN
+      deviceID: icily-haloed-upright-thrasher-6dc
+      apiToken: !env_var TIDBYT_GARAGE_API_TOKEN
       background: "true"
 
-  - name: tidbyt_jesse_banner
+  - name: tidbyt_garage_banner
     platform: rest
     resource: http://pixlet:8080/api/v1/push
     method: POST_JSON
     message_param_name: msg
     data:
       installationID: push
-      deviceID: surgically-vaulting-mutual-angelfish-704
-      apiToken: !env_var TIDBYT_JESSE_API_TOKEN
+      deviceID: icily-haloed-upright-thrasher-6dc
+      apiToken: !env_var TIDBYT_GARAGE_API_TOKEN
       background: "false"
 
-  - name: tidbyt_jesse_once
+  - name: tidbyt_garage_once
     platform: rest
     resource: http://pixlet:8080/api/v1/push
     method: POST_JSON
     message_param_name: msg
     data:
-      deviceID: surgically-vaulting-mutual-angelfish-704
-      apiToken: !env_var TIDBYT_JESSE_API_TOKEN
+      deviceID: icily-haloed-upright-thrasher-6dc
+      apiToken: !env_var TIDBYT_GARAGE_API_TOKEN
       background: "false"
 
   - name: tidbyt_katie_background
@@ -78,7 +92,7 @@ notify:
     message_param_name: msg
     data:
       installationID: push
-      deviceID: critically-tonic-artful-okapi-423
+      deviceID: lucidly-sufficient-versed-louse-f0e
       apiToken: !env_var TIDBYT_MUSIC_ROOM_API_TOKEN
       background: "true"
 
@@ -89,7 +103,7 @@ notify:
     message_param_name: msg
     data:
       installationID: push
-      deviceID: critically-tonic-artful-okapi-423
+      deviceID: lucidly-sufficient-versed-louse-f0e
       apiToken: !env_var TIDBYT_MUSIC_ROOM_API_TOKEN
       background: "false"
 
@@ -99,30 +113,38 @@ notify:
     method: POST_JSON
     message_param_name: msg
     data:
-      deviceID: critically-tonic-artful-okapi-423
+      deviceID: lucidly-sufficient-versed-louse-f0e
       apiToken: !env_var TIDBYT_MUSIC_ROOM_API_TOKEN
       background: "false"
 
-  - name: tidbyt_music_room_date_progress
+  - name: tidbyt_kitchen_once
     platform: rest
-    resource: http://date-progress:8081/api/v1/push
+    resource: http://pixlet:8080/api/v1/push
     method: POST_JSON
-    message_param_name: value_prefix
+    message_param_name: msg
     data:
-      deviceID: critically-tonic-artful-okapi-423
-      apiToken: !env_var TIDBYT_MUSIC_ROOM_API_TOKEN
-      background: "true"
-      installationID: date-progress
-      value_multiplier: "200"
+      deviceID: internally-apt-kind-guinea-484
+      apiToken: !env_var TIDBYT_KITCHEN_API_TOKEN
+      background: "false"
 
-# automation:
-#   - alias: Music Room Date Progress
-#     mode: parallel
-#     id: 2567b3d9-6cfa-423f-888e-9c5b6c09fbfb
-#     trigger:
-#       - platform: time_pattern
-#         minutes: "/5"
-#     action:
-#       service: notify.tidbyt_music_room_date_progress
-#       data:
-#         message: "$"
+  - name: tidbyt_kitchen_background
+    platform: rest
+    resource: http://pixlet:8080/api/v1/push
+    method: POST_JSON
+    message_param_name: msg
+    data:
+      installationID: push
+      deviceID: internally-apt-kind-guinea-484
+      apiToken: !env_var TIDBYT_KITCHEN_API_TOKEN
+      background: "true"
+
+  - name: tidbyt_kitchen_banner
+    platform: rest
+    resource: http://pixlet:8080/api/v1/push
+    method: POST_JSON
+    message_param_name: msg
+    data:
+      installationID: push
+      deviceID: internally-apt-kind-guinea-484
+      apiToken: !env_var TIDBYT_KITCHEN_API_TOKEN
+      background: "false"

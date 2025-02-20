@@ -799,7 +799,7 @@ script:
       - service: light.turn_on
         entity_id: light.music_room
         data:
-          kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
+          color_temp_kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
       - service: light.turn_on
         entity_id: light.music_room_fan_light
       - service: homeassistant.turn_on
@@ -841,7 +841,7 @@ script:
             - light.lounge_tv
           brightness: |
             {{ brightness | default(int((int(state_attr('switch.circadian_lighting_brightness', 'brightness'), default=100)/100)*255)) }}
-          kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
+          color_temp_kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
       - service: switch.turn_on
         data:
           entity_id:
@@ -881,7 +881,7 @@ script:
           {{ states(entity_id) != "unknown" }}
       - service: light.turn_on
         data:
-          kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
+          color_temp_kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
           brightness_step_pct: |
             -{{ step | default("50")}}
           entity_id: |
@@ -891,7 +891,7 @@ script:
             {{ delay | default("1")}}
       - service: light.turn_on
         data:
-          kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
+          color_temp_kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
           brightness_step_pct: |
             {{ step | default("50")}}
           entity_id: |
@@ -908,7 +908,7 @@ script:
           seconds: 1
       - service: light.turn_on
         data:
-          kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
+          color_temp_kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
           entity_id:
             - light.record_cabinet_left
             - light.record_cabinet_right

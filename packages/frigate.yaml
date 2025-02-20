@@ -1,3 +1,11 @@
+input_text:
+  birdseye_summary:
+    initial: Not yet described.
+    max: 255
+  crate_summary:
+    initial: Not yet described.
+    max: 255
+
 automation:
   - alias: Notify about camera failures
     id: c39da746-6928-4ff9-9fe0-0c09e5e67fae
@@ -79,22 +87,27 @@ automation:
           image_filename:
             - /tmp/person_{{ trigger.payload_json['after']['camera'] }}.jpg
           prompt: >-
-            You are an AI agent designed to help busy homeowners stay aware of their surroundings by observing their security cameras.
+            You are an AI agent designed to help busy homeowners stay aware of their
+            surroundings by observing their security cameras for things that are
+            unusual or out of place.
 
-            In general, you obey the following guidelines:
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one or two short sentences, suitable
+            for an iOS notification.
 
-            - Don't describe stationary objects like cars, trees, or buildings.
-            - Do describe people, animals, activities, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
-            - Focus on things that might be out of place or unusual compared to the idle state of a yard in its regular state.
-            - Call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
-            - Call out things like open gates or garages that might be a security risk or allow pets to escape.
+            Focus out things that might be security risks, dangers, or threats to the
+            homeowner, their pets, or property. Call out conditions that may allow
+            pets to escape like open doors, gates, or garages.
+
+            Don't talk about the security system or the presence of any recordings,
+            just what you see on the images. Don't describe stationary objects like
+            cars, trees, or buildings.
 
             A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
-            Here's the full JSON from the camera event:
+            Also consider the full JSON from the camera event:
 
             {{ trigger.payload_json }}
 
-            With that context in mind, describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
       - service: script.ack
         data:
           service: homeassistant.turn_off
@@ -147,22 +160,27 @@ automation:
           image_filename:
             - /tmp/dog_{{ trigger.payload_json['after']['camera'] }}.jpg
           prompt: >-
-            You are an AI agent designed to help busy homeowners stay aware of their surroundings by observing their security cameras.
+            You are an AI agent designed to help busy homeowners stay aware of their
+            surroundings by observing their security cameras for things that are
+            unusual or out of place.
 
-            In general, you obey the following guidelines:
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one or two short sentences, suitable
+            for an iOS notification.
 
-            - Don't describe stationary objects like cars, trees, or buildings.
-            - Do describe people, animals, activities, or vehicles that look like they might be related to an event or incident that the homeowner would want to know about.
-            - Focus on things that might be out of place or unusual compared to the idle state of a yard in its regular state.
-            - Make sure to call out things that might be dangerous or threatening to the homeowner, their pets, or their property.
-            - Make sure to call out things like open gates or garages that might be a security risk or allow pets to escape.
+            Focus out things that might be security risks, dangers, or threats to the
+            homeowner, their pets, or property. Call out conditions that may allow
+            pets to escape like open doors, gates, or garages.
+
+            Don't talk about the security system or the presence of any recordings,
+            just what you see on the images. Don't describe stationary objects like
+            cars, trees, or buildings.
 
             A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
-            Here's the full JSON from the camera event:
+            Also consider the full JSON from the camera event:
 
             {{ trigger.payload_json }}
 
-            With that context in mind, describe the people, animals, and/or activities that you see in the image in one or two short sentences, suitable for an iOS notification.
       - service: script.ack
         data:
           service: homeassistant.turn_off
@@ -226,3 +244,186 @@ automation:
         data:
           entity_id:
             - automation.notify_when_dog_detected_in_yard
+
+  - alias: Describe the birdseye camera
+    id: fdc23abd-81e7-4396-9e45-a3ddb129a83f
+    trigger:
+      - trigger: time_pattern
+        minutes: "/5"
+    action:
+      - service: camera.snapshot
+        data:
+          filename: /tmp/birdseye.jpg
+        target:
+          entity_id: camera.birdseye
+      - service: google_generative_ai_conversation.generate_content
+        response_variable: gemini
+        data:
+          image_filename:
+            - /tmp/birdseye.jpg
+          prompt: >-
+            You are an AI agent designed to help busy homeowners stay aware of
+            their surroundings by observing their security cameras for things
+            that are unusual or out of place.
+
+            Focus that might be security risks, dangers, or threats to the
+            homeowner, their pets, or property. Focus on things inside the
+            wooden fenced area, which is used to contain the dog.
+
+            Ignore the visible debris and car in the neighbor's yard on the
+            other side of the wooden fence. Don't talk about yourself, the
+            security system or the presence of any recordings, just what you see
+            on the images. Don't describe stationary objects like trees, or
+            buildings.
+
+            Integrity of the fence is important, as it is the primary barrier
+            between the dog and the outside world. There is a swinging gate in
+            the fence at the end of the front walk. Mention that "front gate" is
+            open if the gate has swung on its hinges in any other position other
+            than in-line with the fence. If you mention this, describe what
+            makes you think that the gate is open so we can rule out false
+            positives, like the angle you perceive it to be open. If the gate
+            and the fence appear to be in a straight line, it is closed.
+
+            There is a sliding metal gate at the end of the driveway. Mention
+            that the "driveway gate" is open if the gate is in any other
+            position than fully closed across the driveway. Don't mention the
+            gate if it is closed.
+
+            If you mention a person, describe their height, clothing, their
+            location, and what they're doing in relation to the home. Double
+            check that you actually see a person before mentioning it; make sure
+            its not a false positive, like an air conditioning unit, a gate
+            opener, or a tree. If you're not entirely sure its a person, don't
+            mention it. If you do mention it, include enough information about
+            the person such that false positives can be ruled out with updates
+            to the prompt.
+
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one to three short sentences,
+            suitable for an iOS notification. Be sure to mention anything that
+            seems out of the ordinary or unusual. Include enough information
+            about what you see such that false positives can be ruled out with
+            updates to the prompt.
+
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.birdseye_summary
+        data:
+          value: >-
+            {{ gemini['text'] }}
+            {{ as_timestamp(now()) | timestamp_custom('%-I:%M') }}
+
+  - alias: Notify about the birdseye camera
+    id: fe059b0f-5a42-454d-88d9-a073c9f5cd29
+    trigger:
+      - platform: state
+        entity_id: input_text.birdseye_summary
+    action:
+      - choose:
+          - conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: input_select.mode
+                    state: Away
+                  - condition: state
+                    entity_id: input_select.mode
+                    state: Reading
+                  - condition: state
+                    entity_id: input_select.mode
+                    state: Sleeping
+            sequence:
+              - service: script.ack
+                data:
+                  service: script.noop
+                  entity_id: input_text.birdseye_summary
+                  message: >-
+                    {{ trigger.to_state.state }}
+                  interruption_level: passive
+
+        default:
+          - service: notify.tidbyt_background
+            data:
+              message: >
+                {{ trigger.to_state.state }}
+
+  - alias: Pet the good girl?
+    id: 8f376d0f-1ea7-4616-a2e8-2d0ab788976f
+    trigger:
+      - platform: state
+        entity_id: camera.crate_medium
+        from: "unavailable"
+        to: "idle"
+      - platform: state
+        entity_id: counter.pets
+      - trigger: time_pattern
+        minutes: "/5"
+    action:
+      - condition: state
+        entity_id: camera.crate_medium
+        state: idle
+      - service: camera.snapshot
+        data:
+          filename: /tmp/crate_medium.jpg
+        target:
+          entity_id: camera.crate_medium
+      - service: google_generative_ai_conversation.generate_content
+        response_variable: gemini
+        data:
+          image_filename:
+            - /tmp/crate_medium.jpg
+          prompt: >-
+            You are an AI agent designed to help busy homeowners stay aware of their
+            surroundings by observing their security cameras for things that are
+            unusual or out of place.
+
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one or two short sentences, suitable
+            for an iOS notification.
+
+            Don't talk about the security system or the presence of any recordings,
+            just what you see on the images. Don't describe stationary objects like
+            cars, trees, or buildings.
+
+            This camera should in show a dog named Marigold in a crate where she
+            generally sleeps soundly with one of her favorite toys while her
+            people are away nearby. Please describe the dog and the scene in a
+            way that would be suitable for an easily-glanced-at iOS
+            notification. Be sure to call her a good girl if the she is sleeping
+            or looking reasonably content, and to mention if you don't see a dog
+            or if the crate door is open.
+
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.crate_summary
+        data:
+          value: >-
+            {{ gemini['text'] }}
+
+      - service: script.ack
+        data:
+          service: counter.increment
+          entity_id: counter.pets
+          camera: >-
+            camera.crate_medium
+          camera_thumbnail: >-
+            {{ states('input_text.external_url') }}
+            {{ state_attr('camera.crate_medium', 'entity_picture') }}
+          message: >-
+            {{ states('input_text.crate_summary') }}
+          tag: >-
+            crate_medium
+          confirmation_message: >-
+            pet the good girl. {{ states('counter.pets') }} pets so far.
+          ## TODO maybe let the AI decide the interruption level?
+          interruption_level: passive
+          ack_yes_title: >-
+            Pet the good girl
+          ack_no_title: I need help with the dog
+          decline_message: >-
+            needs help with the dog.
+
+counter:
+  pets:
+    name: Pets
