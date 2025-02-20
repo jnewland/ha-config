@@ -1,4 +1,5 @@
 """Frigate HTTP views."""
+
 from __future__ import annotations
 
 import logging
@@ -6,7 +7,12 @@ import logging
 import voluptuous as vol
 
 from custom_components.frigate.api import FrigateApiClient, FrigateApiClientError
-from custom_components.frigate.views import get_client_for_frigate_instance_id
+from custom_components.frigate.const import ATTR_WS_EVENT_PROXY, DOMAIN
+from custom_components.frigate.views import (
+    get_client_for_frigate_instance_id,
+    get_config_entry_for_frigate_instance_id,
+)
+from custom_components.frigate.ws_event_proxy import WSEventProxy
 from homeassistant.components import websocket_api
 from homeassistant.core import HomeAssistant
 
@@ -21,6 +27,8 @@ def async_setup(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_get_events)
     websocket_api.async_register_command(hass, ws_get_events_summary)
     websocket_api.async_register_command(hass, ws_get_ptz_info)
+    websocket_api.async_register_command(hass, ws_subscribe_events)
+    websocket_api.async_register_command(hass, ws_unsubscribe_events)
 
 
 def _get_client_or_send_error(
@@ -48,8 +56,8 @@ def _get_client_or_send_error(
         vol.Required("event_id"): str,
         vol.Required("retain"): bool,
     }
-)  # type: ignore[misc]
-@websocket_api.async_response  # type: ignore[misc]
+)
+@websocket_api.async_response
 async def ws_retain_event(
     hass: HomeAssistant,
     connection: websocket_api.ActiveConnection,
@@ -83,8 +91,8 @@ async def ws_retain_event(
         vol.Optional("after"): int,
         vol.Optional("before"): int,
     }
-)  # type: ignore[misc]
-@websocket_api.async_response  # type: ignore[misc]
+)
+@websocket_api.async_response
 async def ws_get_recordings(
     hass: HomeAssistant,
     connection: websocket_api.ActiveConnection,
@@ -117,8 +125,8 @@ async def ws_get_recordings(
         vol.Required("camera"): str,
         vol.Optional("timezone"): str,
     }
-)  # type: ignore[misc]
-@websocket_api.async_response  # type: ignore[misc]
+)
+@websocket_api.async_response
 async def ws_get_recordings_summary(
     hass: HomeAssistant,
     connection: websocket_api.ActiveConnection,
@@ -157,11 +165,10 @@ async def ws_get_recordings_summary(
         vol.Optional("limit"): int,
         vol.Optional("has_clip"): bool,
         vol.Optional("has_snapshot"): bool,
-        vol.Optional("has_snapshot"): bool,
         vol.Optional("favorites"): bool,
     }
-)  # type: ignore[misc]
-@websocket_api.async_response  # type: ignore[misc]
+)
+@websocket_api.async_response
 async def ws_get_events(
     hass: HomeAssistant,
     connection: websocket_api.ActiveConnection,
@@ -206,8 +213,8 @@ async def ws_get_events(
         vol.Optional("has_snapshot"): bool,
         vol.Optional("timezone"): str,
     }
-)  # type: ignore[misc]
-@websocket_api.async_response  # type: ignore[misc]
+)
+@websocket_api.async_response
 async def ws_get_events_summary(
     hass: HomeAssistant,
     connection: websocket_api.ActiveConnection,
@@ -239,12 +246,76 @@ async def ws_get_events_summary(
 
 @websocket_api.websocket_command(
     {
+        vol.Required("type"): "frigate/events/subscribe",
+        vol.Required("instance_id"): str,
+    }
+)
+@websocket_api.async_response
+async def ws_subscribe_events(
+    hass: HomeAssistant,
+    connection: websocket_api.ActiveConnection,
+    msg: dict,
+) -> None:
+    """Subscribe to events."""
+
+    entry = get_config_entry_for_frigate_instance_id(hass, msg["instance_id"])
+    if not entry:
+        connection.send_error(
+            msg["id"],
+            "not_found",
+            f"API error whilst subscribing to events for unknown Frigate instance "
+            f"{msg['instance_id']}",
+        )
+        return
+
+    event_proxy: WSEventProxy = hass.data[DOMAIN][entry.entry_id][ATTR_WS_EVENT_PROXY]
+    connection.send_result(
+        msg["id"], await event_proxy.subscribe(hass, msg["id"], connection)
+    )
+
+
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "frigate/events/unsubscribe",
+        vol.Required("instance_id"): str,
+        vol.Required("subscription_id"): int,
+    }
+)
+@websocket_api.async_response
+async def ws_unsubscribe_events(
+    hass: HomeAssistant,
+    connection: websocket_api.ActiveConnection,
+    msg: dict,
+) -> None:
+    """Unsubscribe from events."""
+
+    entry = get_config_entry_for_frigate_instance_id(hass, msg["instance_id"])
+    if not entry:
+        connection.send_error(
+            msg["id"],
+            "not_found",
+            f"API error whilst unsubscribing to events for unknown Frigate instance "
+            f"{msg['instance_id']}",
+        )
+        return
+
+    event_proxy: WSEventProxy = hass.data[DOMAIN][entry.entry_id][ATTR_WS_EVENT_PROXY]
+    if event_proxy.unsubscribe(hass, msg["subscription_id"]):
+        connection.send_result(msg["id"])
+    else:
+        connection.send_error(
+            msg["id"], websocket_api.const.ERR_NOT_FOUND, "Subscription not found."
+        )
+
+
+@websocket_api.websocket_command(
+    {
         vol.Required("type"): "frigate/ptz/info",
         vol.Required("instance_id"): str,
         vol.Required("camera"): str,
     }
-)  # type: ignore[misc]
-@websocket_api.async_response  # type: ignore[misc]
+)
+@websocket_api.async_response
 async def ws_get_ptz_info(
     hass: HomeAssistant,
     connection: websocket_api.ActiveConnection,
