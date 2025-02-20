@@ -11,6 +11,13 @@ template:
         target:
           entity_id: weather.tomorrow_io_home_hourly
         response_variable: hourly
+      - service: system_log.write
+        data:
+          message: >
+            at=hourly
+            hourly={{ hourly }}
+          logger: packages.weather
+          level: debug
     sensor:
       - name: Precipitation
         unique_id: forecast_precipitation
@@ -54,6 +61,13 @@ template:
         target:
           entity_id: weather.tomorrow_io_home_daily
         response_variable: daily
+      - service: system_log.write
+        data:
+          message: >
+            at=daily
+            daily={{ daily }}
+          logger: packages.weather
+          level: debug
     binary_sensor:
       - unique_id: freeze_forecast
         name: Freeze in forecast
