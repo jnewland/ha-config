@@ -130,7 +130,7 @@ template:
               map(attribute='datetime') |
               first |
               default(false) %}
-          {{ next_precip or null }}
+          {{ next_precip or now() + timedelta(days=states('sensor.forecast_duration') | int(default=1)) }}
       - name: Days until rain
         unit_of_measurement: Days
         state: >-
