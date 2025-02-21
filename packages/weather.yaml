@@ -126,7 +126,7 @@ template:
               ) | first |
               rejectattr("precipitation_probability", "none") |
               rejectattr("precipitation_probability", "undefined") |
-              rejectattr("precipitation_probability", "<", states('input_number.precipitation_forecast_probability_threshold') | float(default=100)) | 
+              rejectattr("precipitation_probability", "<", states('input_number.precipitation_forecast_probability_threshold') | float(default=100)) |
               map(attribute='datetime') |
               first |
               default(false) %}
@@ -134,13 +134,23 @@ template:
       - name: Days until rain
         unit_of_measurement: Days
         state: >-
-          {%- if states('sensor.next_precipitation') == 'unavailable' or states('sensor.next_precipitation') == '' -%}
-            {{ states('sensor.forecast_duration') }}
-          {%- else -%}
+          {% set next_precip = daily['weather.tomorrow_io_home_daily'].forecast |
+              default([{}]) | batch(
+                states("input_number.precipitation_forecast_hours") | default(12)
+              ) | first |
+              rejectattr("precipitation_probability", "none") |
+              rejectattr("precipitation_probability", "undefined") |
+              rejectattr("precipitation_probability", "<", states('input_number.precipitation_forecast_probability_threshold') | float(default=100)) |
+              map(attribute='datetime') |
+              first |
+              default(false) %}
+          {%- if next_precip -%}
             {%- for item in daily['weather.tomorrow_io_home_daily'].forecast |
                       default([{}]) -%}
               {%- if item.precipitation_probability > states('input_number.precipitation_forecast_probability_threshold') | float(default=100) -%}
                 {{- loop.index -}}
               {%- endif -%}
             {%- endfor -%}
+          {%- else -%}
+            {{ states('sensor.forecast_duration') }}
           {%- endif -%}
