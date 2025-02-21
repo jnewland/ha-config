@@ -5,13 +5,6 @@ cards:
   - show_current: true
     show_forecast: true
     type: weather-forecast
-    entity: weather.tomorrow_io_home_nowcast
-    forecast_type: hourly
-    title: now
-
-  - show_current: true
-    show_forecast: true
-    type: weather-forecast
     entity: weather.tomorrow_io_home_hourly
     forecast_type: hourly
     title: hourly
