@@ -2,19 +2,27 @@ title: Weather
 path: weather
 icon: mdi:weather-cloudy-arrow-right
 cards:
-  - type: custom:weather-chart-card
+  - show_current: true
+    show_forecast: true
+    type: weather-forecast
     entity: weather.tomorrow_io_home_nowcast
+    forecast_type: hourly
     title: now
-  - type: custom:weather-chart-card
-    show_main: false
-    show_attributes: false
+
+  - show_current: true
+    show_forecast: true
+    type: weather-forecast
     entity: weather.tomorrow_io_home_hourly
+    forecast_type: hourly
     title: hourly
-  - type: custom:weather-chart-card
-    show_main: false
-    show_attributes: false
+
+  - show_current: true
+    show_forecast: true
+    type: weather-forecast
     entity: weather.tomorrow_io_home_daily
+    forecast_type: daily
     title: daily
+
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.min_forecast_temperature
@@ -45,7 +53,7 @@ cards:
       fill: false
   - type: custom:mini-graph-card
     entities:
-      - sensor.forecast_precipitation_probability
+      - sensor.precipitation_probability
     name: max daily forecast precipitation probability
     hours_to_show: 72
     show:
