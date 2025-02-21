@@ -1,7 +1,4 @@
 input_text:
-  birdseye_summary:
-    initial: Not yet described.
-    max: 255
   crate_summary:
     initial: Not yet described.
     max: 255
@@ -245,109 +242,6 @@ automation:
           entity_id:
             - automation.notify_when_dog_detected_in_yard
 
-  - alias: Describe the birdseye camera
-    id: fdc23abd-81e7-4396-9e45-a3ddb129a83f
-    trigger:
-      - trigger: time_pattern
-        minutes: "/5"
-    action:
-      - service: camera.snapshot
-        data:
-          filename: /tmp/birdseye.jpg
-        target:
-          entity_id: camera.birdseye
-      - service: google_generative_ai_conversation.generate_content
-        response_variable: gemini
-        data:
-          image_filename:
-            - /tmp/birdseye.jpg
-          prompt: >-
-            You are an AI agent designed to help busy homeowners stay aware of
-            their surroundings by observing their security cameras for things
-            that are unusual or out of place.
-
-            Focus that might be security risks, dangers, or threats to the
-            homeowner, their pets, or property. Focus on things inside the
-            wooden fenced area, which is used to contain the dog.
-
-            Ignore the visible debris and car in the neighbor's yard on the
-            other side of the wooden fence. Don't talk about yourself, the
-            security system or the presence of any recordings, just what you see
-            on the images. Don't describe stationary objects like trees, or
-            buildings.
-
-            Integrity of the fence is important, as it is the primary barrier
-            between the dog and the outside world. There is a swinging gate in
-            the fence at the end of the front walk. Mention that "front gate" is
-            open if the gate has swung on its hinges in any other position other
-            than in-line with the fence. If you mention this, describe what
-            makes you think that the gate is open so we can rule out false
-            positives, like the angle you perceive it to be open. If the gate
-            and the fence appear to be in a straight line, it is closed.
-
-            There is a sliding metal gate at the end of the driveway. Mention
-            that the "driveway gate" is open if the gate is in any other
-            position than fully closed across the driveway. Don't mention the
-            gate if it is closed.
-
-            If you mention a person, describe their height, clothing, their
-            location, and what they're doing in relation to the home. Double
-            check that you actually see a person before mentioning it; make sure
-            its not a false positive, like an air conditioning unit, a gate
-            opener, or a tree. If you're not entirely sure its a person, don't
-            mention it. If you do mention it, include enough information about
-            the person such that false positives can be ruled out with updates
-            to the prompt.
-
-            Describe the people, animals, and/or activities in the image that a
-            homeowner might want to know about in one to three short sentences,
-            suitable for an iOS notification. Be sure to mention anything that
-            seems out of the ordinary or unusual. Include enough information
-            about what you see such that false positives can be ruled out with
-            updates to the prompt.
-
-      - action: input_text.set_value
-        target:
-          entity_id: input_text.birdseye_summary
-        data:
-          value: >-
-            {{ gemini['text'] }}
-            {{ as_timestamp(now()) | timestamp_custom('%-I:%M') }}
-
-  - alias: Notify about the birdseye camera
-    id: fe059b0f-5a42-454d-88d9-a073c9f5cd29
-    trigger:
-      - platform: state
-        entity_id: input_text.birdseye_summary
-    action:
-      - choose:
-          - conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity_id: input_select.mode
-                    state: Away
-                  - condition: state
-                    entity_id: input_select.mode
-                    state: Reading
-                  - condition: state
-                    entity_id: input_select.mode
-                    state: Sleeping
-            sequence:
-              - service: script.ack
-                data:
-                  service: script.noop
-                  entity_id: input_text.birdseye_summary
-                  message: >-
-                    {{ trigger.to_state.state }}
-                  interruption_level: passive
-
-        default:
-          - service: notify.tidbyt_background
-            data:
-              message: >
-                {{ trigger.to_state.state }}
-
   - alias: Pet the good girl?
     id: 8f376d0f-1ea7-4616-a2e8-2d0ab788976f
     trigger:
@@ -412,8 +306,7 @@ automation:
             {{ state_attr('camera.crate_medium', 'entity_picture') }}
           message: >-
             {{ states('input_text.crate_summary') }}
-          tag: >-
-            crate_medium
+          tag: counter.pets
           confirmation_message: >-
             pet the good girl. {{ states('counter.pets') }} pets so far.
           ## TODO maybe let the AI decide the interruption level?
