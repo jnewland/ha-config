@@ -1,9 +1,35 @@
 template:
+  - trigger:
+      - trigger: time_pattern
+        hours: /1
+      - platform: homeassistant
+        event: start
+    action:
+      - action: nws.get_forecasts_extra
+        target:
+          entity_id: weather.katt_daynight
+        data:
+          type: twice_daily
+        response_variable: extra
+      - service: system_log.write
+        data:
+          message: >
+            at=extra
+            extra={{ extra }}
+          logger: packages.weather
+          level: debug
+      - service: notify.tidbyt_background
+        data:
+          message: >
+            Now: {{ extra['weather.katt_daynight'].forecast[0]["detailed_description"] }}
+            {{ "Tomorrow" if extra['weather.katt_daynight'].forecast[1].is_daytime else "Tonight" }}: {{ extra['weather.katt_daynight'].forecast[1]["detailed_description"] }}
+
   # Hourly forecast sensors
   - trigger:
       - trigger: time_pattern
-        minutes: "/5"
-        # hours: /1
+        hours: /1
+      - platform: homeassistant
+        event: start
     action:
       - action: weather.get_forecasts
         data:
@@ -52,8 +78,9 @@ template:
   # Daily forecast sensors
   - trigger:
       - trigger: time_pattern
-        minutes: "/5"
-        # hours: /1
+        hours: /1
+      - platform: homeassistant
+        event: start
     action:
       - action: weather.get_forecasts
         data:
@@ -73,7 +100,7 @@ template:
         name: Freeze in forecast
         device_class: cold
         state: >
-          {{ daily['weather.tomorrow_io_home_daily'].forecast | default([{'temperature':33}]) | map(attribute='temperature') | min < 33 }}
+          {{ daily['weather.tomorrow_io_home_daily'].forecast | default([{'templow':33}]) | map(attribute='templow') | min < 33 }}
     sensor:
       - name: Min Forecast Temperature
         unit_of_measurement: "°F"
@@ -88,7 +115,7 @@ template:
         state: >-
           {{ ( (as_timestamp(daily['weather.tomorrow_io_home_daily'].forecast | default([{'datetime':0}]) | map(attribute='datetime') | max) - as_timestamp(now()) ) / 86400 ) | round(0) }}
       - name: Next precipitation
-        unit_of_measurement: timestamp
+        unit_of_measurement: date
         state: >-
           {% set next_precip = daily['weather.tomorrow_io_home_daily'].forecast |
               default([{}]) | batch(
@@ -100,7 +127,7 @@ template:
               map(attribute='datetime') |
               first |
               default(false) %}
-          {{ next_precip or as_timestamp(now() + timedelta(days=30)) }}
+          {{ next_precip or null }}
       - name: Days until rain
         unit_of_measurement: Days
         state: >-
