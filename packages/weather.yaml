@@ -1,5 +1,7 @@
-template:
-  - trigger:
+automation:
+  - alias: Weather forecast Tidbyt
+    id: 3ae43e14-e469-4d30-a959-d9ecd82f595c
+    trigger:
       - trigger: time_pattern
         hours: /1
       - platform: homeassistant
@@ -24,6 +26,7 @@ template:
             Now: {{ extra['weather.katt_daynight'].forecast[0]["detailed_description"] }}
             {{ "Tomorrow" if extra['weather.katt_daynight'].forecast[1].is_daytime else "Tonight" }}: {{ extra['weather.katt_daynight'].forecast[1]["detailed_description"] }}
 
+template:
   # Hourly forecast sensors
   - trigger:
       - trigger: time_pattern
