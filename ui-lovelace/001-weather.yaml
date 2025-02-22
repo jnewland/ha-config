@@ -20,7 +20,7 @@ cards:
     show_forecast: true
     type: weather-forecast
     entity: weather.katt_daynight
-    forecast_type: hourly
+    forecast_type: twice_daily
     title: nws
 
   - type: custom:mini-graph-card
