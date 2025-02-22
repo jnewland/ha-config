@@ -33,6 +33,8 @@ template:
         hours: /1
       - platform: homeassistant
         event: start
+      - platform: state
+        entity_id: input_number.precipitation_forecast_hours
     action:
       - action: weather.get_forecasts
         data:
@@ -83,6 +85,10 @@ template:
         hours: /1
       - platform: homeassistant
         event: start
+      - platform: state
+        entity_id: input_number.precipitation_forecast_probability_threshold
+      - platform: state
+        entity_id: input_number.precipitation_forecast_hours
     action:
       - action: weather.get_forecasts
         data:
