@@ -66,6 +66,7 @@ template:
             )["precipitation"]
           }}
       - name: Precipitation probability
+        unique_id: precipitation_probability
         unit_of_measurement: "%"
         state: >-
           {{
