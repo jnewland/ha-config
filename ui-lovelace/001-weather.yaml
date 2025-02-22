@@ -51,6 +51,15 @@ cards:
     hours_to_show: 72
     show:
       fill: false
+  - type: custom:mini-graph-card
+    entities:
+      - sensor.dragon_wing_dew_point
+      - sensor.dragon_wing_temperature
+    name: temp and dew point
+    hours_to_show: 72
+    show:
+      fill: false
+
   - type: entities
     title: weather notifications
     show_header_toggle: false
@@ -62,12 +71,5 @@ cards:
       - input_number.precipitation_forecast_hours
       - input_number.precipitation_forecast_probability_threshold
       - sensor.forecast_duration
-  - type: statistics-graph
-    days_to_show: 3
-    hide_legend: true
-    title: Precipitation
-    stat_types:
-      - min
-      - max
-    entities:
-      - sensor.precipitation
+      - sensor.dragon_wing_dew_point
+      - sensor.dragon_wing_temperature
