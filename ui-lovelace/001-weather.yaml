@@ -16,6 +16,13 @@ cards:
     forecast_type: daily
     title: daily
 
+  - show_current: true
+    show_forecast: true
+    type: weather-forecast
+    entity: weather.katt_daynight
+    forecast_type: hourly
+    title: nws
+
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.min_forecast_temperature
@@ -51,11 +58,29 @@ cards:
     hours_to_show: 72
     show:
       fill: false
+
   - type: custom:mini-graph-card
     entities:
       - sensor.dragon_wing_dew_point
       - sensor.dragon_wing_temperature
     name: temp and dew point
+    hours_to_show: 72
+    show:
+      fill: false
+
+  - type: custom:mini-graph-card
+    entities:
+      - sensor.tomorrow_io_home_cloud_cover
+    name: cloud cover
+    hours_to_show: 72
+    show:
+      fill: false
+
+  - type: custom:mini-graph-card
+    entities:
+      - sensor.tomorrow_io_home_cloud_base
+      - sensor.tomorrow_io_home_cloud_ceiling
+    name: clouds
     hours_to_show: 72
     show:
       fill: false
@@ -71,5 +96,3 @@ cards:
       - input_number.precipitation_forecast_hours
       - input_number.precipitation_forecast_probability_threshold
       - sensor.forecast_duration
-      - sensor.dragon_wing_dew_point
-      - sensor.dragon_wing_temperature
