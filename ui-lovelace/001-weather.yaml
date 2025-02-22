@@ -62,3 +62,12 @@ cards:
       - input_number.precipitation_forecast_hours
       - input_number.precipitation_forecast_probability_threshold
       - sensor.forecast_duration
+  - type: statistics-graph
+    days_to_show: 3
+    hide_legend: true
+    title: Precipitation
+    stat_types:
+      - min
+      - max
+    entities:
+      - sensor.precipitation
