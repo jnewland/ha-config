@@ -1,9 +1,40 @@
+automation:
+  - alias: Weather forecast Tidbyt
+    id: 3ae43e14-e469-4d30-a959-d9ecd82f595c
+    trigger:
+      - trigger: time_pattern
+        hours: /1
+      - platform: homeassistant
+        event: start
+    action:
+      - action: nws.get_forecasts_extra
+        target:
+          entity_id: weather.katt_daynight
+        data:
+          type: twice_daily
+        response_variable: extra
+      - service: system_log.write
+        data:
+          message: >
+            at=extra
+            extra={{ extra }}
+          logger: packages.weather
+          level: debug
+      - service: notify.tidbyt_background
+        data:
+          message: >
+            Now: {{ extra['weather.katt_daynight'].forecast[0]["detailed_description"] }}
+            {{ "Tomorrow" if extra['weather.katt_daynight'].forecast[1].is_daytime else "Tonight" }}: {{ extra['weather.katt_daynight'].forecast[1]["detailed_description"] }}
+
 template:
   # Hourly forecast sensors
   - trigger:
       - trigger: time_pattern
-        minutes: "/5"
-        # hours: /1
+        hours: /1
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: input_number.precipitation_forecast_hours
     action:
       - action: weather.get_forecasts
         data:
@@ -11,6 +42,13 @@ template:
         target:
           entity_id: weather.tomorrow_io_home_hourly
         response_variable: hourly
+      - service: system_log.write
+        data:
+          message: >
+            at=hourly
+            hourly={{ hourly }}
+          logger: packages.weather
+          level: debug
     sensor:
       - name: Precipitation
         unique_id: forecast_precipitation
@@ -18,7 +56,7 @@ template:
         state: >-
           {{
             (
-              hourly['weather.tomorrow_io_home_nowcast'].forecast |
+              hourly['weather.tomorrow_io_home_hourly'].forecast |
               default([{}]) | batch(
                 states("input_number.precipitation_forecast_hours") | default(12)
               ) | first |
@@ -28,12 +66,12 @@ template:
             )["precipitation"]
           }}
       - name: Precipitation probability
-        unique_id: forecast_precipitation_probability
+        unique_id: precipitation_probability
         unit_of_measurement: "%"
         state: >-
           {{
             (
-              hourly['weather.tomorrow_io_home_nowcast'].forecast |
+              hourly['weather.tomorrow_io_home_hourly'].forecast |
               default([{}]) | batch(
                 states("input_number.precipitation_forecast_hours") | default(12)
               ) | first |
@@ -45,8 +83,13 @@ template:
   # Daily forecast sensors
   - trigger:
       - trigger: time_pattern
-        minutes: "/5"
-        # hours: /1
+        hours: /1
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: input_number.precipitation_forecast_probability_threshold
+      - platform: state
+        entity_id: input_number.precipitation_forecast_hours
     action:
       - action: weather.get_forecasts
         data:
@@ -54,12 +97,19 @@ template:
         target:
           entity_id: weather.tomorrow_io_home_daily
         response_variable: daily
+      - service: system_log.write
+        data:
+          message: >
+            at=daily
+            daily={{ daily }}
+          logger: packages.weather
+          level: debug
     binary_sensor:
       - unique_id: freeze_forecast
         name: Freeze in forecast
         device_class: cold
         state: >
-          {{ daily['weather.tomorrow_io_home_daily'].forecast | default([{'temperature':33}]) | map(attribute='temperature') | min < 33 }}
+          {{ daily['weather.tomorrow_io_home_daily'].forecast | default([{'templow':33}]) | map(attribute='templow') | min < 33 }}
     sensor:
       - name: Min Forecast Temperature
         unit_of_measurement: "°F"
@@ -73,9 +123,8 @@ template:
         unit_of_measurement: "Days"
         state: >-
           {{ ( (as_timestamp(daily['weather.tomorrow_io_home_daily'].forecast | default([{'datetime':0}]) | map(attribute='datetime') | max) - as_timestamp(now()) ) / 86400 ) | round(0) }}
-          {{ daily['weather.tomorrow_io_home_daily'].forecast | default([{'duration':0}]) | map(attribute='duration') | max }}
       - name: Next precipitation
-        unit_of_measurement: timestamp
+        unit_of_measurement: date
         state: >-
           {% set next_precip = daily['weather.tomorrow_io_home_daily'].forecast |
               default([{}]) | batch(
@@ -83,21 +132,31 @@ template:
               ) | first |
               rejectattr("precipitation_probability", "none") |
               rejectattr("precipitation_probability", "undefined") |
-              rejectattr("precipitation_probability", "<", states('input_number.precipitation_forecast_probability_threshold') | float(default=100)) | 
+              rejectattr("precipitation_probability", "<", states('input_number.precipitation_forecast_probability_threshold') | float(default=100)) |
               map(attribute='datetime') |
               first |
               default(false) %}
-          {{ next_precip or "" }}
+          {{ next_precip or now() + timedelta(days=states('sensor.forecast_duration') | int(default=1)) }}
       - name: Days until rain
         unit_of_measurement: Days
         state: >-
-          {%- if states('sensor.next_precipitation') == 'unavailable' or states('sensor.next_precipitation') == '' -%}
-            {{ states('sensor.forecast_length') }}
-          {%- else -%}
+          {% set next_precip = daily['weather.tomorrow_io_home_daily'].forecast |
+              default([{}]) | batch(
+                states("input_number.precipitation_forecast_hours") | default(12)
+              ) | first |
+              rejectattr("precipitation_probability", "none") |
+              rejectattr("precipitation_probability", "undefined") |
+              rejectattr("precipitation_probability", "<", states('input_number.precipitation_forecast_probability_threshold') | float(default=100)) |
+              map(attribute='datetime') |
+              first |
+              default(false) %}
+          {%- if next_precip -%}
             {%- for item in daily['weather.tomorrow_io_home_daily'].forecast |
                       default([{}]) -%}
               {%- if item.precipitation_probability > states('input_number.precipitation_forecast_probability_threshold') | float(default=100) -%}
                 {{- loop.index -}}
               {%- endif -%}
             {%- endfor -%}
+          {%- else -%}
+            {{ states('sensor.forecast_duration') }}
           {%- endif -%}

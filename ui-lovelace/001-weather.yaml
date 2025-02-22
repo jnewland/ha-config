@@ -1,0 +1,98 @@
+title: Weather
+path: weather
+icon: mdi:weather-cloudy-arrow-right
+cards:
+  - show_current: true
+    show_forecast: true
+    type: weather-forecast
+    entity: weather.tomorrow_io_home_hourly
+    forecast_type: hourly
+    title: hourly
+
+  - show_current: true
+    show_forecast: true
+    type: weather-forecast
+    entity: weather.tomorrow_io_home_daily
+    forecast_type: daily
+    title: daily
+
+  - show_current: true
+    show_forecast: true
+    type: weather-forecast
+    entity: weather.katt_daynight
+    forecast_type: twice_daily
+    title: nws
+
+  - type: custom:mini-graph-card
+    entities:
+      - entity: sensor.min_forecast_temperature
+    name: forecast min
+    hours_to_show: 72
+    group_by: hour
+    show:
+      fill: false
+      extrema: true
+      legend: false
+  - type: custom:mini-graph-card
+    entities:
+      - entity: sensor.max_forecast_temperature
+        color: #e74c3c
+    name: forecast max
+    hours_to_show: 72
+    group_by: hour
+    show:
+      fill: false
+      extrema: true
+      legend: false
+  - type: custom:mini-graph-card
+    entities:
+      - sensor.days_until_rain
+    name: forecast days until rain
+    hours_to_show: 72
+    show:
+      fill: false
+  - type: custom:mini-graph-card
+    entities:
+      - sensor.precipitation_probability
+    name: max daily forecast precipitation probability
+    hours_to_show: 72
+    show:
+      fill: false
+
+  - type: custom:mini-graph-card
+    entities:
+      - sensor.dragon_wing_dew_point
+      - sensor.dragon_wing_temperature
+    name: temp and dew point
+    hours_to_show: 72
+    show:
+      fill: false
+
+  - type: custom:mini-graph-card
+    entities:
+      - sensor.tomorrow_io_home_cloud_cover
+    name: cloud cover
+    hours_to_show: 72
+    show:
+      fill: false
+
+  - type: custom:mini-graph-card
+    entities:
+      - sensor.tomorrow_io_home_cloud_base
+      - sensor.tomorrow_io_home_cloud_ceiling
+    name: clouds
+    hours_to_show: 72
+    show:
+      fill: false
+
+  - type: entities
+    title: weather notifications
+    show_header_toggle: false
+    entities:
+      - automation.sunshine_notifications
+      - automation.freeze_forecast_notifications
+      - automation.precipitation_notifications
+      - binary_sensor.precipitation_in_forecast
+      - input_number.precipitation_forecast_hours
+      - input_number.precipitation_forecast_probability_threshold
+      - sensor.forecast_duration
