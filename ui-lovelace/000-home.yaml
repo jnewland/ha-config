@@ -184,19 +184,13 @@ cards:
       show_name: false
       show_state: false
       entity: camera.pergola_person_medium
-  - type: custom:custom-sonos-card
-    mediaTitle: " "
-    shuffleFavorites: false
-    selectedPlayer: media_player.house
-    singleSectionMode: media browser
-    layout:
-      mediaItem:
-        width: "25%"
-        mobileWidth: "33%"
-    styles:
-      button-section:
-        border: none
-      media-button:
-        border: none
+  - type: custom:sonos-card
+    sections:
+      - grouping
+      - media browser
+    entities:
+      - media_player.house
+    replaceHttpWithHttpsForThumbnails: true
+    mediaBrowserTitle: " "
   - type: weather-forecast
     entity: weather.tomorrow_io_home_nowcast
