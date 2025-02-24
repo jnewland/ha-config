@@ -186,7 +186,6 @@ cards:
       entity: camera.pergola_person_medium
   - type: custom:sonos-card
     sections:
-      - grouping
       - media browser
     entities:
       - media_player.house
