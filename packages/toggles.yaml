@@ -3,6 +3,8 @@ script:
     sequence:
       - service: alarm_control_panel.alarm_arm_home
         entity_id: alarm_control_panel.alarm
+        data:
+          code: " "
   disarm:
     sequence:
       - service: alarm_control_panel.alarm_disarm
@@ -39,11 +41,3 @@ script:
             {%- else -%}
             disarmed the alarm.
             {%- endif -%}
-  toggle_gate:
-    sequence:
-      - service: cover.toggle
-        entity_id: cover.gate
-  toggle_garage:
-    sequence:
-      - service: cover.toggle
-        entity_id: cover.garage

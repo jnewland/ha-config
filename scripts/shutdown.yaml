@@ -1,5 +1,0 @@
-sequence:
-  - service: notify.slack
-    data:
-      title: ':house:'
-      message: Shutting down...

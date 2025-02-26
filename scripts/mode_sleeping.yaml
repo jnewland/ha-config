@@ -3,9 +3,15 @@ sequence:
     entity_id: input_select.mode
     data:
       option: Sleeping
+  - service: light.turn_off
+    entity_id:
+      - light.bedroom
+      - light.bathroom
+      - light.yoga_room
+      - light.hall
   - service: homeassistant.turn_off
     entity_id:
-      - group.upstairs
+      - group.upstairs_fans
   - service: homeassistant.turn_off
     data:
       entity_id: |
@@ -18,7 +24,7 @@ sequence:
   - service: python_script.close_if_open
     entity_id: cover.garage
   - service: homeassistant.turn_off
-    entity_id: group.outdoor_mood
+    entity_id: light.outdoor_mood
   - service: input_number.set_value
     data:
       entity_id: input_number.brightness

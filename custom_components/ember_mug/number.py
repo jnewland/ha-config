@@ -1,4 +1,5 @@
 """Binary Sensor Entity for Ember Mug."""
+
 from __future__ import annotations
 
 import logging
@@ -13,16 +14,15 @@ from homeassistant.components.number import (
 from homeassistant.const import UnitOfTemperature
 from homeassistant.helpers.entity import EntityCategory
 
-from .const import DOMAIN
+from .const import MAX_TEMP_CELSIUS, MIN_TEMP_CELSIUS
 from .entity import BaseMugValueEntity
 
 if TYPE_CHECKING:
-    from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
+    from . import EmberMugConfigEntry
     from .coordinator import MugDataUpdateCoordinator
-    from .models import HassMugData
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -30,9 +30,9 @@ _LOGGER = logging.getLogger(__name__)
 NUMBER_TYPES = {
     "target_temp": NumberEntityDescription(
         key="target_temp",
-        native_max_value=100,
-        native_min_value=0,
-        native_step=1,
+        native_min_value=MIN_TEMP_CELSIUS,
+        native_max_value=MAX_TEMP_CELSIUS,
+        native_step=0.1,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=NumberDeviceClass.TEMPERATURE,
         entity_category=EntityCategory.CONFIG,
@@ -59,23 +59,29 @@ class MugNumberEntity(BaseMugValueEntity, NumberEntity):
 class MugTargetTempNumberEntity(MugNumberEntity):
     """Configurable NumerEntity for the Mug's target temp."""
 
+    @property
+    def native_value(self) -> float | None:
+        """Return a mug attribute as the state for the sensor."""
+        return self.coordinator.target_temp
+
     async def async_set_native_value(self, value: float) -> None:
         """Set the mug target temp."""
         self.coordinator.ensure_writable()
         await self.coordinator.mug.set_target_temp(value)
+        self.coordinator.refresh_from_mug()
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
+    entry: EmberMugConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Number Entities."""
     if entry.entry_id is None:
         raise ValueError("Missing config entry ID")
-    data: HassMugData = hass.data[DOMAIN][entry.entry_id]
+    coordinator = entry.runtime_data
     async_add_entities(
         [
-            MugTargetTempNumberEntity(data.coordinator, "target_temp"),
+            MugTargetTempNumberEntity(coordinator, "target_temp"),
         ],
     )

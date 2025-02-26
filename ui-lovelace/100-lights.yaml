@@ -7,7 +7,7 @@ cards:
       method: name
     card:
       type: entities
-      title: lights on
+      title: "on"
     filter:
       include:
         - domain: light
@@ -21,7 +21,7 @@ cards:
     show_empty: false
     card:
       type: entities
-      title: lights off
+      title: "off"
     filter:
       include:
         - domain: light
@@ -31,6 +31,17 @@ cards:
               action: toggle
       exclude:
         - entity_id: "/_[0-9]+$/"
+  - type: custom:auto-entities
+    show_empty: false
+    sort:
+      method: name
+    card:
+      type: entities
+      title: groups
+    filter:
+      include:
+        - domain: light
+          integration: group
   - type: custom:auto-entities
     card:
       type: custom:mini-graph-card
@@ -59,3 +70,4 @@ cards:
         - entity_id: "/sensor.circadian_values.*/"
           options:
             attribute: colortemp
+            unit: "K"

@@ -66,16 +66,37 @@ automation:
     id: 42bd3505-3443-4c3c-8ab3-75186cc628cf
     mode: parallel
     trigger:
-      platform: state
-      entity_id:
-        - lock.front_door
-        - lock.back_porch
-        - lock.garage
-        - alarm_control_panel.alarm
-        - binary_sensor.entry_door
-        - binary_sensor.garage
-        - binary_sensor.gate
-        - binary_sensor.master_patio_door
+      - platform: state
+        entity_id:
+          - lock.front_door
+          - lock.back_porch
+          - lock.garage
+          - alarm_control_panel.alarm
+          - binary_sensor.entry_door
+          - binary_sensor.garage
+          - binary_sensor.gate
+          - binary_sensor.master_patio_door
+        not_to:
+          - unknown
+          - unavailable
+        not_from:
+          - unknown
+          - unavailable
+      - platform: state
+        entity_id:
+          - lock.front_door
+          - lock.back_porch
+          - lock.garage
+          - alarm_control_panel.alarm
+          - binary_sensor.entry_door
+          - binary_sensor.garage
+          - binary_sensor.gate
+          - binary_sensor.master_patio_door
+        to:
+          - unknown
+          - unavailable
+        for:
+          minutes: 1
     condition:
       condition: and
       conditions:
@@ -91,7 +112,7 @@ automation:
               new_state.state != old_state.state
             }}
     action:
-      service: notify.mobile_app_jphone
+      service: notify.iphones
       data:
         message: >
           {% set old_state = trigger.from_state %}
@@ -105,21 +126,21 @@ automation:
             category: camera
           entity_id: >
             {%- if trigger.to_state.entity_id == "binary_sensor.gate" -%}
-            camera.gate
+            camera.gate_medium
             {%- elif trigger.to_state.entity_id == "binary_sensor.garage" -%}
-            camera.garage
+            camera.garage_medium
             {%- else -%}
-            camera.front_door
+            camera.front_door_medium
             {%- endif -%}
           attachment:
             url: >
               {{ states('input_text.external_url') }}
               {%- if trigger.to_state.entity_id == "binary_sensor.gate" -%}
-              {{ states.camera.gate.attributes.entity_picture }}
+              {{ states.camera.gate_medium.attributes.entity_picture }}
               {%- elif trigger.to_state.entity_id == "binary_sensor.garage" -%}
-              {{ states.camera.garage.attributes.entity_picture }}
+              {{ states.camera.garage_medium.attributes.entity_picture }}
               {%- else -%}
-              {{ states.camera.front_door.attributes.entity_picture }}
+              {{ states.camera.front_door_medium.attributes.entity_picture }}
               {%- endif -%}
             content-type: jpeg
             hide-thumbnail: false
@@ -146,6 +167,8 @@ script:
     sequence:
       - service: alarm_control_panel.alarm_arm_home
         entity_id: alarm_control_panel.alarm
+        data:
+          code: " "
       - service: homeassistant.turn_off
         entity_id:
           - group.indoor

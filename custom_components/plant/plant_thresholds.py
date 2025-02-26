@@ -1,4 +1,5 @@
 """Max/Min threshold classes for the plant device"""
+
 from __future__ import annotations
 
 import logging
@@ -326,8 +327,8 @@ class PlantMinTemperature(PlantMinMax):
         self._attr_unique_id = f"{config.entry_id}-min-temperature"
         super().__init__(hass, config, plantdevice)
         self._attr_native_unit_of_measurement = self._hass.config.units.temperature_unit
-        self._attr_native_max_value = 100
-        self._attr_native_min_value = 0
+        self._attr_native_max_value = 50
+        self._attr_native_min_value = -50
         self._attr_native_step = 1
 
     @property
@@ -448,7 +449,7 @@ class PlantMinIlluminance(PlantMinMax):
 
     @property
     def device_class(self):
-        return SensorDeviceClass.ILLUMINANCE
+        return f"{SensorDeviceClass.ILLUMINANCE} threshold"
 
 
 class PlantMaxDli(PlantMinMax):

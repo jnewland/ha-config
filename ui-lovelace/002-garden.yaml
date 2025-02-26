@@ -38,16 +38,11 @@ cards:
         - input_datetime.indoor_grow_led_on
         - input_datetime.indoor_grow_led_off
 
-  - type: conditional
-    conditions:
-      - entity: camera.garage
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.garage
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.garage_medium
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.precipitation
@@ -69,6 +64,15 @@ cards:
     show:
       fill: false
       extrema: true
+
+  - type: entities
+    title: precipitation
+    show_header_toggle: false
+    entities:
+      - sensor.dragon_wing_hourly_rain
+      - sensor.dragon_wing_daily_rain
+      - sensor.dragon_wing_weekly_rain
+      - sensor.dragon_wing_monthly_rain
 
   - type: custom:auto-entities
     sort:
@@ -188,24 +192,8 @@ cards:
       fill: false
       extrema: true
 
-  - type: conditional
-    conditions:
-      - entity: camera.veggiecam
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.veggiecam
-
-  - type: conditional
-    conditions:
-      - entity: camera.gate
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.gate
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.gate_medium

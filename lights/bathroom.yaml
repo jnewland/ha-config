@@ -1,0 +1,7 @@
+platform: group
+name: bathroom
+entities:
+  - light.bathroom_overhead
+  - light.bathroom_shower
+  - light.bathroom_mirror
+  - light.bathroom_toilet

@@ -1,5 +1,8 @@
 """Support for monitoring plants."""
+
 from __future__ import annotations
+
+from . import group
 
 import logging
 
@@ -12,6 +15,7 @@ from homeassistant.components.utility_meter.const import (
 )
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import (
+    Platform,
     ATTR_ENTITY_PICTURE,
     ATTR_ICON,
     ATTR_NAME,
@@ -71,7 +75,7 @@ from .const import (
 from .plant_helpers import PlantHelper
 
 _LOGGER = logging.getLogger(__name__)
-
+PLATFORMS = [Platform.NUMBER, Platform.SENSOR]
 
 # Use this during testing to generate some dummy-sensors
 # to provide random readings for temperature, moisture etc.
@@ -79,29 +83,31 @@ _LOGGER = logging.getLogger(__name__)
 SETUP_DUMMY_SENSORS = False
 USE_DUMMY_SENSORS = False
 
-
-async def async_setup(hass: HomeAssistant, config: dict):
-    """
-    Set up the plant component
-
-    Configuration.yaml is no longer used.
-    This function only tries to migrate the legacy config.
-    """
-    if config.get(DOMAIN):
-        # Only import if we haven't before.
-        config_entry = _async_find_matching_config_entry(hass)
-        if not config_entry:
-            _LOGGER.debug("Old setup - with config: %s", config[DOMAIN])
-            for plant in config[DOMAIN]:
-                if plant != DOMAIN_PLANTBOOK:
-                    _LOGGER.info("Migrating plant: %s", plant)
-                    await async_migrate_plant(hass, plant, config[DOMAIN][plant])
-        else:
-            _LOGGER.warning(
-                "Config already imported. Please delete all your %s related config from configuration.yaml",
-                DOMAIN,
-            )
-    return True
+# Removed.
+# Have not been used for a long time
+#
+# async def async_setup(hass: HomeAssistant, config: dict):
+#     """
+#     Set up the plant component
+#
+#     Configuration.yaml is no longer used.
+#     This function only tries to migrate the legacy config.
+#     """
+#     if config.get(DOMAIN):
+#         # Only import if we haven't before.
+#         config_entry = _async_find_matching_config_entry(hass)
+#         if not config_entry:
+#             _LOGGER.debug("Old setup - with config: %s", config[DOMAIN])
+#             for plant in config[DOMAIN]:
+#                 if plant != DOMAIN_PLANTBOOK:
+#                     _LOGGER.info("Migrating plant: %s", plant)
+#                     await async_migrate_plant(hass, plant, config[DOMAIN][plant])
+#         else:
+#             _LOGGER.warning(
+#                 "Config already imported. Please delete all your %s related config from configuration.yaml",
+#                 DOMAIN,
+#             )
+#     return True
 
 
 @callback
@@ -138,8 +144,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     plant = PlantDevice(hass, entry)
     hass.data[DOMAIN][entry.entry_id][ATTR_PLANT] = plant
 
-    await hass.config_entries.async_forward_entry_setups(entry, ["number"])
-    await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     plant_entities = [
         plant,
@@ -220,7 +225,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
         return
 
     hass.services.async_register(DOMAIN, SERVICE_REPLACE_SENSOR, replace_sensor)
-    hass.components.websocket_api.async_register_command(ws_get_info)
+    websocket_api.async_register_command(hass, ws_get_info)
     plant.async_schedule_update_ha_state(True)
 
     # Lets add the dummy sensors automatically if we are testing stuff
@@ -257,21 +262,21 @@ async def _plant_add_to_device_registry(
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    await hass.config_entries.async_forward_entry_unload(entry, "sensor")
-    await hass.config_entries.async_forward_entry_unload(entry, "number")
+    unload_ok = await hass.config_entries.async_forward_entry_unload(entry, PLATFORMS)
 
-    hass.data[DOMAIN].pop(entry.entry_id)
-    hass.data[DATA_UTILITY].pop(entry.entry_id)
-    _LOGGER.info(hass.data[DOMAIN])
-    for entry_id in list(hass.data[DOMAIN].keys()):
-        if len(hass.data[DOMAIN][entry_id]) == 0:
-            _LOGGER.info("Removing entry %s", entry_id)
-            del hass.data[DOMAIN][entry_id]
-    if len(hass.data[DOMAIN]) == 0:
-        _LOGGER.info("Removing domain %s", DOMAIN)
-        hass.services.async_remove(DOMAIN, SERVICE_REPLACE_SENSOR)
-        del hass.data[DOMAIN]
-    return True
+    if unload_ok:
+        hass.data[DOMAIN].pop(entry.entry_id)
+        hass.data[DATA_UTILITY].pop(entry.entry_id)
+        _LOGGER.info(hass.data[DOMAIN])
+        for entry_id in list(hass.data[DOMAIN].keys()):
+            if len(hass.data[DOMAIN][entry_id]) == 0:
+                _LOGGER.info("Removing entry %s", entry_id)
+                del hass.data[DOMAIN][entry_id]
+        if len(hass.data[DOMAIN]) == 0:
+            _LOGGER.info("Removing domain %s", DOMAIN)
+            hass.services.async_remove(DOMAIN, SERVICE_REPLACE_SENSOR)
+            del hass.data[DOMAIN]
+    return unload_ok
 
 
 @websocket_api.websocket_command(
@@ -629,7 +634,9 @@ class PlantDevice(Entity):
         known_state = False
 
         if self.sensor_moisture is not None:
-            moisture = self._hass.states.get(self.sensor_moisture.entity_id).state
+            moisture = getattr(
+                self._hass.states.get(self.sensor_moisture.entity_id), "state", None
+            )
             if (
                 moisture is not None
                 and moisture != STATE_UNKNOWN
@@ -648,9 +655,9 @@ class PlantDevice(Entity):
                     self.moisture_status = STATE_OK
 
         if self.sensor_conductivity is not None:
-            conductivity = self._hass.states.get(
-                self.sensor_conductivity.entity_id
-            ).state
+            conductivity = getattr(
+                self._hass.states.get(self.sensor_conductivity.entity_id), "state", None
+            )
             if (
                 conductivity is not None
                 and conductivity != STATE_UNKNOWN
@@ -669,7 +676,9 @@ class PlantDevice(Entity):
                     self.conductivity_status = STATE_OK
 
         if self.sensor_temperature is not None:
-            temperature = self._hass.states.get(self.sensor_temperature.entity_id).state
+            temperature = getattr(
+                self._hass.states.get(self.sensor_temperature.entity_id), "state", None
+            )
             if (
                 temperature is not None
                 and temperature != STATE_UNKNOWN
@@ -688,7 +697,9 @@ class PlantDevice(Entity):
                     self.temperature_status = STATE_OK
 
         if self.sensor_humidity is not None:
-            humidity = self._hass.states.get(self.sensor_humidity.entity_id).state
+            humidity = getattr(
+                self._hass.states.get(self.sensor_humidity.entity_id), "state", None
+            )
             if (
                 humidity is not None
                 and humidity != STATE_UNKNOWN
@@ -709,7 +720,9 @@ class PlantDevice(Entity):
         # Check the instant values for illuminance against "max"
         # Ignoring "min" value for illuminance as it would probably trigger every night
         if self.sensor_illuminance is not None:
-            illuminance = self._hass.states.get(self.sensor_illuminance.entity_id).state
+            illuminance = getattr(
+                self._hass.states.get(self.sensor_illuminance.entity_id), "state", None
+            )
             if (
                 illuminance is not None
                 and illuminance != STATE_UNKNOWN

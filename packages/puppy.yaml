@@ -3,13 +3,16 @@ automation:
     id: 6fc7d655-2e09-4049-9392-9ac6820f70d5
     trigger:
       - platform: state
-        entity_id: binary_sensor.front_door_audio_bark
+        entity_id: binary_sensor.crate_bark_sound
+        to: "on"
+      - platform: state
+        entity_id: binary_sensor.front_door_bark_sound
         to: "on"
     action:
       - service: script.ack
         data:
           entity_id: script.noop
-          tag: binary_sensor.front_door_audio_bark
+          tag: bark
           message: ❗️📢🐶
           confirmation_message: is handling ❗️📢🐶, cool
           decline_message: can't handle ❗️📢🐶 rn, can you?
@@ -18,7 +21,7 @@ automation:
     id: 050335c4-2f3d-4dbc-ac00-cf1f69759db7
     trigger:
       - platform: state
-        entity_id: binary_sensor.front_door_puppy_tampering_product_cover_removed
+        entity_id: binary_sensor.front_door_puppy_motion_detection
         to: "on"
     condition:
       condition: state
@@ -33,7 +36,8 @@ automation:
         data:
           entity_id: script.noop
           tag: front_door_puppy
-          message: 🐶🌼 is at the front door
+          message: 🐶🌼 is at the door
+          interruption_level: time-sensitive
           confirmation_message: is letting 🐶🌼 out, cool
           decline_message: can't handle 🐶🌼 rn, can you?
 

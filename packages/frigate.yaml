@@ -1,53 +1,7 @@
-mqtt:
-  - sensor:
-      state_topic: "frigate/great_room/audio/dBFS"
-      unit_of_measurement: dB
-      name: "Great Room Audio dBFS"
-  - sensor:
-      state_topic: "frigate/great_room/audio/rms"
-      unit_of_measurement: V
-      name: "Great Room Audio RMS"
-
-  - binary_sensor:
-      state_topic: "frigate/great_room/audio/bark"
-      name: "Great Room Audio Bark"
-  - binary_sensor:
-      state_topic: "frigate/great_room/audio/speech"
-      name: "Great Room Audio Speech"
-  - binary_sensor:
-      state_topic: "frigate/great_room/audio/smoke_detector"
-      name: "Great Room Audio Smoke Detector"
-  - binary_sensor:
-      state_topic: "frigate/great_room/audio/fire_alarm"
-      name: "Great Room Audio Fire Alarm"
-  - binary_sensor:
-      state_topic: "frigate/great_room/audio/doorbell"
-      name: "Great Room Audio Doorbell"
-
-  - sensor:
-      state_topic: "frigate/front_door/audio/dBFS"
-      unit_of_measurement: dB
-      name: "Front Door Audio dBFS"
-  - sensor:
-      state_topic: "frigate/front_door/audio/rms"
-      unit_of_measurement: V
-      name: "Front Door Audio RMS"
-
-  - binary_sensor:
-      state_topic: "frigate/front_door/audio/bark"
-      name: "Front Door Audio Bark"
-  - binary_sensor:
-      state_topic: "frigate/front_door/audio/speech"
-      name: "Front Door Audio Speech"
-  - binary_sensor:
-      state_topic: "frigate/front_door/audio/smoke_detector"
-      name: "Front Door Audio Smoke Detector"
-  - binary_sensor:
-      state_topic: "frigate/front_door/audio/fire_alarm"
-      name: "Front Door Audio Fire Alarm"
-  - binary_sensor:
-      state_topic: "frigate/front_door/audio/doorbell"
-      name: "Front Door Audio Doorbell"
+input_text:
+  crate_summary:
+    initial: Not yet described.
+    max: 255
 
 automation:
   - alias: Notify about camera failures
@@ -61,12 +15,11 @@ automation:
           - sensor.back_porch_camera_fps
           - sensor.front_door_camera_fps
           - sensor.front_yard_left_camera_fps
+          - sensor.front_yard_right_camera_fps
           - sensor.garage_camera_fps
           - sensor.gate_camera_fps
-          # - sensor.great_room_camera_fps
-          - sensor.veggiecam_camera_fps
+          - sensor.crate_camera_fps
           - sensor.pergola_camera_fps
-          - sensor.fountain_camera_fps
         below: 1
         for:
           minutes: 2
@@ -88,12 +41,11 @@ automation:
           - sensor.back_porch_camera_fps
           - sensor.front_door_camera_fps
           - sensor.front_yard_left_camera_fps
+          - sensor.front_yard_right_camera_fps
           - sensor.garage_camera_fps
           - sensor.gate_camera_fps
-          - sensor.great_room_camera_fps
-          - sensor.veggiecam_camera_fps
+          - sensor.crate_camera_fps
           - sensor.pergola_camera_fps
-          - sensor.fountain_camera_fps
         below: 6
         above: 4
         for:
@@ -104,71 +56,267 @@ automation:
           notification_id: >
             {{ trigger.entity_id }}_low
 
-  - alias: Post frigate images during events
-    mode: parallel
-    id: e4d0a9e9-b403-48dc-80d3-e3c750ad0cb8
-    trigger:
-      platform: mqtt
-      topic: frigate/events
-    condition:
-      - "{{ trigger.payload_json['after']['end_time'] is none }}"
-    action:
-      - service: notify.slack
-        data:
-          title: |
-            {{ trigger.payload_json["after"]["camera"] }}
-          message: |
-            {{ trigger.payload_json["after"]["label"] }}
-          data:
-            file:
-              url: |
-                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
-
-  - alias: Post frigate clips at end of events
-    mode: parallel
-    id: fe6ff468-bf79-4dfe-8231-ab3f349a9b33
-    trigger:
-      platform: mqtt
-      topic: frigate/events
-    condition:
-      - "{{ trigger.payload_json['after']['end_time'] is not none }}"
-    action:
-      - delay:
-          # clip contains 5s after event end, needs to process a bit. give it some time
-          seconds: 30
-      - service: notify.slack
-        data:
-          title: |
-            {{ trigger.payload_json["after"]["camera"] }}
-          message: |
-            {{ trigger.payload_json["after"]["label"] }} event has ended
-          data:
-            file:
-              url: |
-                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/{{ trigger.payload_json["after"]["camera"] }}/clip.mp4
-
   - alias: Notify when person detected in front yard
+    # once every 30s
     mode: single
     id: 35b6ace2-2cd3-46a1-9477-c044d11336b5
     trigger:
       platform: mqtt
       topic: frigate/events
+      value_template: "{{ value_json['after']['label'] }}"
+      payload: person
     condition:
-      - "{{ trigger.payload_json['after']['label'] == 'person' }}"
-      - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_door', 'pergola'] }}"
+      - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_yard_right', 'front_door', 'pergola'] }}"
+      - condition: or
+        conditions:
+          - "{{ trigger.payload_json['type'] == 'new' }}"
+          - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
+          - "{{ trigger.payload_json['after']['end_time'] is not none }}"
     action:
-      - service: notify.iphones
+      - action: camera.snapshot
         data:
-          message: they're here!
-          data:
-            push:
-              category: camera
-            entity_id: |
-              camera.{{ trigger.payload_json['after']['camera'] }}
-            attachment:
-              url: |
-                {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json["after"]["id"] }}/thumbnail.jpg
-              content-type: jpeg
-              hide-thumbnail: false
-      - service: automation.turn_off
-        entity_id: automation.notify_when_person_detected_in_front_yard
+          filename: /tmp/person_{{ trigger.payload_json['after']['camera'] }}.jpg
+        target:
+          entity_id: camera.{{ trigger.payload_json['after']['camera'] }}_medium
+      - action: google_generative_ai_conversation.generate_content
+        response_variable: gemini
+        data:
+          image_filename:
+            - /tmp/person_{{ trigger.payload_json['after']['camera'] }}.jpg
+          prompt: >-
+            You are an AI agent designed to help busy homeowners stay aware of their
+            surroundings by observing their security cameras for things that are
+            unusual or out of place.
+
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one or two short sentences, suitable
+            for an iOS notification.
+
+            Focus out things that might be security risks, dangers, or threats to the
+            homeowner, their pets, or property. Call out conditions that may allow
+            pets to escape like open doors, gates, or garages.
+
+            Don't talk about the security system or the presence of any recordings,
+            just what you see on the images. Don't describe stationary objects like
+            cars, trees, or buildings.
+
+            A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
+            Also consider the full JSON from the camera event:
+
+            {{ trigger.payload_json }}
+
+      - service: script.ack
+        data:
+          service: homeassistant.turn_off
+          entity_id: automation.notify_when_person_detected_in_front_yard
+          camera: >-
+            camera.{{ trigger.payload_json['after']['camera'] }}_medium
+          camera_thumbnail: >
+            {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
+          message: >-
+            {{ gemini['text'] }}
+          tag: >-
+            {{ trigger.payload_json['after']['label'] }}-{{ trigger.payload_json['after']['camera'] }}
+          confirmation_message: >-
+            disabled {{ trigger.payload_json['after']['label'] }} notifications.
+          confirmation_tag: >-
+            automation.notify_when_person_detected_in_front_yard
+          interruption_level: time-sensitive
+          clear_tags: >-
+            person-front_yard_left,person-front_yard_right,person-front_door,person-pergola
+          ack_yes_title: >-
+            Disable notifications
+      - delay:
+          seconds: 30
+
+  - alias: Notify when dog detected in yard
+    # once every 30s
+    mode: single
+    id: 86b77bcd-d3c2-4000-8b5a-4e5c97489a8b
+    trigger:
+      platform: mqtt
+      topic: frigate/events
+      value_template: "{{ value_json['after']['label'] }}"
+      payload: dog
+    condition:
+      - "{{ trigger.payload_json['after']['camera'] in ['front_yard_left', 'front_yard_right', 'front_door', 'pergola', 'gate', 'atrium', 'ac', 'back_porch'] }}"
+      - condition: or
+        conditions:
+          - "{{ trigger.payload_json['type'] == 'new' }}"
+          - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
+          - "{{ trigger.payload_json['after']['end_time'] is not none }}"
+    action:
+      - action: camera.snapshot
+        data:
+          filename: /tmp/dog_{{ trigger.payload_json['after']['camera'] }}.jpg
+        target:
+          entity_id: camera.{{ trigger.payload_json['after']['camera'] }}_medium
+      - action: google_generative_ai_conversation.generate_content
+        response_variable: gemini
+        data:
+          image_filename:
+            - /tmp/dog_{{ trigger.payload_json['after']['camera'] }}.jpg
+          prompt: >-
+            You are an AI agent designed to help busy homeowners stay aware of their
+            surroundings by observing their security cameras for things that are
+            unusual or out of place.
+
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one or two short sentences, suitable
+            for an iOS notification.
+
+            Focus out things that might be security risks, dangers, or threats to the
+            homeowner, their pets, or property. Call out conditions that may allow
+            pets to escape like open doors, gates, or garages.
+
+            Don't talk about the security system or the presence of any recordings,
+            just what you see on the images. Don't describe stationary objects like
+            cars, trees, or buildings.
+
+            A {{ trigger.payload_json['after']['label'] }} was detected on the {{ trigger.payload_json['after']['camera'] }} camera. Use that name when describing the location of the activity.
+            Also consider the full JSON from the camera event:
+
+            {{ trigger.payload_json }}
+
+      - service: script.ack
+        data:
+          service: homeassistant.turn_off
+          entity_id: automation.notify_when_dog_detected_in_yard
+          camera: >-
+            camera.{{ trigger.payload_json['after']['camera'] }}_medium
+          camera_thumbnail: >
+            {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
+          message: >-
+            {{ gemini['text'] }}
+          tag: >-
+            {{ trigger.payload_json['after']['label'] }}
+          confirmation_message: >-
+            disabled {{ trigger.payload_json['after']['label'] }} notifications.
+          interruption_level: passive
+          ack_yes_title: >-
+            Disable notifications
+          ack_no_title: I need help with the dog
+          decline_message: >-
+            needs help with the dog.
+      - delay:
+          seconds: 30
+
+  - alias: Toggle indoor cams
+    id: e6589f9c-dd59-41e8-b52b-7c00300ec4c9
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.alarm
+    action:
+      - service: >-
+          switch.{{ 'turn_on' if trigger.to_state.state in ['armed_home'] else 'turn_off' }}
+        data:
+          entity_id:
+            - switch.garage_detect
+
+  - alias: Toggle person notification automation
+    id: 3d11fb82-16e2-4d1d-a0fc-7f418a626e73
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.alarm
+    action:
+      - service: >-
+          homeassistant.{{ 'turn_on' if trigger.to_state.state in ['armed_home'] else 'turn_off' }}
+        data:
+          entity_id:
+            - automation.notify_when_person_detected_in_front_yard
+
+  - alias: Toggle dog notification automation
+    id: 2e1597c7-a06a-4611-9643-2849caafa486
+    trigger:
+      - platform: state
+        entity_id: group.door_locks
+      - platform: state
+        entity_id: input_select.mode
+    action:
+      - service: >-
+          homeassistant.{{ 'turn_on' if (
+              states('input_select.mode') not in ['Away'] and
+              trigger.to_state.state in ['unlocked'] )
+            else 'turn_off' }}
+        data:
+          entity_id:
+            - automation.notify_when_dog_detected_in_yard
+
+  - alias: Pet the good girl?
+    id: 8f376d0f-1ea7-4616-a2e8-2d0ab788976f
+    trigger:
+      - platform: state
+        entity_id: camera.crate_medium
+        from: "unavailable"
+        to: "idle"
+      - platform: state
+        entity_id: counter.pets
+      - trigger: time_pattern
+        minutes: "/5"
+    action:
+      - condition: state
+        entity_id: camera.crate_medium
+        state: idle
+      - service: camera.snapshot
+        data:
+          filename: /tmp/crate_medium.jpg
+        target:
+          entity_id: camera.crate_medium
+      - service: google_generative_ai_conversation.generate_content
+        response_variable: gemini
+        data:
+          image_filename:
+            - /tmp/crate_medium.jpg
+          prompt: >-
+            You are an AI agent designed to help busy homeowners stay aware of their
+            surroundings by observing their security cameras for things that are
+            unusual or out of place.
+
+            Describe the people, animals, and/or activities in the image that a
+            homeowner might want to know about in one or two short sentences, suitable
+            for an iOS notification.
+
+            Don't talk about the security system or the presence of any recordings,
+            just what you see on the images. Don't describe stationary objects like
+            cars, trees, or buildings.
+
+            This camera should in show a dog named Marigold in a crate where she
+            generally sleeps soundly with one of her favorite toys while her
+            people are away nearby. Please describe the dog and the scene in a
+            way that would be suitable for an easily-glanced-at iOS
+            notification. Be sure to call her a good girl if the she is sleeping
+            or looking reasonably content, and to mention if you don't see a dog
+            or if the crate door is open.
+
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.crate_summary
+        data:
+          value: >-
+            {{ gemini['text'] }}
+
+      - service: script.ack
+        data:
+          service: counter.increment
+          entity_id: counter.pets
+          camera: >-
+            camera.crate_medium
+          camera_thumbnail: >-
+            {{ states('input_text.external_url') }}
+            {{ state_attr('camera.crate_medium', 'entity_picture') }}
+          message: >-
+            {{ states('input_text.crate_summary') }}
+          tag: counter.pets
+          confirmation_message: >-
+            pet the good girl. {{ states('counter.pets') }} pets so far.
+          ## TODO maybe let the AI decide the interruption level?
+          interruption_level: passive
+          ack_yes_title: >-
+            Pet the good girl
+          ack_no_title: I need help with the dog
+          decline_message: >-
+            needs help with the dog.
+
+counter:
+  pets:
+    name: Pets

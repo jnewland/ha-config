@@ -2,6 +2,26 @@ themes:
   gray:
     primary-color: gray
     paper-item-icon-color: darkgrey
+    # https://github.com/thomasloven/lovelace-card-mod/wiki/Card-mod-Themes
+    card-mod-theme: gray
+    card-mod-row-yaml: |
+      "*:first-child$": |
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(359deg);
+          }
+        }
+        state-badge {
+          {% if config.entity.startswith('fan.') and is_state(config.entity, 'on') %}
+          animation: spin 5s infinite linear;
+          {% endif %}
+        }
+
   black:
     primary-color: black
     paper-item-icon-color: darkgrey
+extra_module_url:
+  - /local/card-mod.js?source=https://raw.githubusercontent.com/thomasloven/lovelace-card-mod/v3.4.4/card-mod.js

@@ -61,6 +61,7 @@ cards:
     filter:
       include:
         - entity_id: "/.*_rain_delay$/"
+
   - type: custom:mini-graph-card
     entities:
       - entity: sensor.precipitation
@@ -82,6 +83,15 @@ cards:
     show:
       fill: false
       extrema: true
+
+  - type: entities
+    title: precipitation
+    show_header_toggle: false
+    entities:
+      - sensor.dragon_wing_hourly_rain
+      - sensor.dragon_wing_daily_rain
+      - sensor.dragon_wing_weekly_rain
+      - sensor.dragon_wing_monthly_rain
 
   - type: custom:auto-entities
     card:

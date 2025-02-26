@@ -1,10 +1,12 @@
 title: Cameras
 icon: mdi:video
+path: cameras
 cards:
   - type: conditional
     conditions:
-      - entity: camera.great_room
-        state: recording
+      - condition: state
+        entity: camera.crate_medium
+        state_not: unavailable
     card:
       type: vertical-stack
       cards:
@@ -12,99 +14,92 @@ cards:
           camera_view: auto
           show_name: false
           show_state: false
-          entity: camera.great_room
+          entity: camera.crate_medium
+        - type: markdown
+          content: >
+            {{ states('input_text.crate_summary') }}
         - type: entities
           show_header_toggle: false
           entities:
-            - sensor.great_room_audio_rms
-            - binary_sensor.great_room_audio_bark
+            - binary_sensor.crate_bark_sound
+            - automation.pet_the_good_girl
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.front_yard_left_medium
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.front_yard_right_medium
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.atrium_medium
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.gate_medium
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.garage_medium
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.back_porch_medium
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.ac_medium
   - type: conditional
     conditions:
-      - entity: camera.front_yard_left
-        state: recording
+      - condition: state
+        entity: camera.front_door_medium
+        state_not: unavailable
     card:
       type: picture-entity
       camera_view: auto
       show_name: false
       show_state: false
-      entity: camera.front_yard_left
+      entity: camera.front_door_medium
+  - type: picture-entity
+    camera_view: auto
+    show_name: false
+    show_state: false
+    entity: camera.pergola_medium
   - type: conditional
     conditions:
-      - entity: camera.atrium
-        state: recording
+      - condition: state
+        entity: camera.peppers_medium
+        state_not: unavailable
     card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.atrium
-  - type: conditional
-    conditions:
-      - entity: camera.gate
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.gate
-  - type: conditional
-    conditions:
-      - entity: camera.garage
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.garage
-  - type: conditional
-    conditions:
-      - entity: camera.back_porch
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.back_porch
-  - type: conditional
-    conditions:
-      - entity: camera.ac
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.ac
-  - type: conditional
-    conditions:
-      - entity: camera.front_door
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.front_door
-  - type: conditional
-    conditions:
-      - entity: camera.pergola
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.pergola
-  - type: conditional
-    conditions:
-      - entity: camera.fountain
-        state: recording
-    card:
-      type: picture-entity
-      camera_view: auto
-      show_name: false
-      show_state: false
-      entity: camera.fountain
+      type: grid
+      columns: 2
+      cards:
+        - type: picture-entity
+          camera_view: auto
+          show_name: false
+          show_state: false
+          entity: camera.peppers_medium
+          card_mod:
+            style: |
+              ha-card {
+                transform: rotate(90deg);
+              }
+        - type: picture-entity
+          camera_view: auto
+          show_name: false
+          show_state: false
+          entity: camera.veggies_medium
+          card_mod:
+            style: |
+              ha-card {
+                transform: rotate(90deg);
+              }

@@ -14,7 +14,7 @@ script:
         data:
           entity_id: light.laundry_room
           brightness: >
-            {{ int(state_attr('switch.circadian_lighting_brightness', 'brightness'), default=255) }}
+            {{ int((int(state_attr('switch.circadian_lighting_brightness', 'brightness'), default=100)/100)*255) }}
 
 group:
   laundry_room:
@@ -28,16 +28,16 @@ binary_sensor:
       laundry_activity:
         friendly_name: Laundry activity
         value_template: |
-          {{ 
-            is_state('binary_sensor.laundry_power', 'on') or 
+          {{
+            is_state('binary_sensor.laundry_power', 'on') or
             is_state('binary_sensor.laundry_room_motion_detection', 'on')
           }}
       laundry_cycle:
         friendly_name: Laundry cycle
         device_class: running
         value_template: |
-          {{ 
-            states('sensor.laundry_electric_consumption_w') != 'unknown' and 
+          {{
+            states('sensor.laundry_electric_consumption_w') != 'unknown' and
             float(states('sensor.laundry_electric_consumption_w'), default=0) > 10
           }}
         delay_off:
@@ -47,8 +47,8 @@ binary_sensor:
         friendly_name: Laundry power
         device_class: power
         value_template: |
-          {{ 
-            states('sensor.laundry_electric_consumption_w') != 'unknown' and 
+          {{
+            states('sensor.laundry_electric_consumption_w') != 'unknown' and
             float(states('sensor.laundry_electric_consumption_w'), default=0) > 0
           }}
         delay_off:
@@ -58,11 +58,11 @@ binary_sensor:
         friendly_name: Laundry door
         device_class: door
         value_template: |
-          {{ 
-            states('sensor.laundry_electric_consumption_w') != 'unknown' and 
-            is_state('binary_sensor.laundry', 'off') and 
+          {{
+            states('sensor.laundry_electric_consumption_w') != 'unknown' and
+            is_state('binary_sensor.laundry', 'off') and
             float(states('sensor.laundry_electric_consumption_w'), default=0) > 0 and
-            float(states('sensor.laundry_electric_consumption_w'), default=0) < 10 
+            float(states('sensor.laundry_electric_consumption_w'), default=0) < 10
           }}
 
 automation:
@@ -89,7 +89,8 @@ automation:
         from: "off"
         to: "on"
     action:
-      - service: notify.iphones
+      - service: >-
+          {{ states('sensor.notify_group') | default("notify.iphones") }}
         data:
           message: "clear_notification"
           data:

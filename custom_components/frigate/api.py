@@ -1,7 +1,9 @@
 """Frigate API client."""
+
 from __future__ import annotations
 
 import asyncio
+import datetime
 import logging
 import socket
 from typing import Any, cast
@@ -9,6 +11,8 @@ from typing import Any, cast
 import aiohttp
 import async_timeout
 from yarl import URL
+
+from homeassistant.auth import jwt_wrapper
 
 TIMEOUT = 10
 
@@ -30,10 +34,19 @@ class FrigateApiClientError(Exception):
 class FrigateApiClient:
     """Frigate API client."""
 
-    def __init__(self, host: str, session: aiohttp.ClientSession) -> None:
+    def __init__(
+        self,
+        host: str,
+        session: aiohttp.ClientSession,
+        username: str | None = None,
+        password: str | None = None,
+    ) -> None:
         """Construct API Client."""
         self._host = host
         self._session = session
+        self._username = username
+        self._password = password
+        self._token_data: dict[str, Any] = {}
 
     async def async_get_version(self) -> str:
         """Get data from the API."""
@@ -127,6 +140,18 @@ class FrigateApiClient:
             await self.api_wrapper("get", str(URL(self._host) / "api/config")),
         )
 
+    async def async_get_ptz_info(
+        self,
+        camera: str,
+        decode_json: bool = True,
+    ) -> Any:
+        """Get PTZ info."""
+        return await self.api_wrapper(
+            "get",
+            str(URL(self._host) / "api" / camera / "ptz/info"),
+            decode_json=decode_json,
+        )
+
     async def async_get_path(self, path: str) -> Any:
         """Get data from the API."""
         return await self.api_wrapper("get", str(URL(self._host) / f"{path}/"))
@@ -138,6 +163,26 @@ class FrigateApiClient:
         result = await self.api_wrapper(
             "post" if retain else "delete",
             str(URL(self._host) / f"api/events/{event_id}/retain"),
+            decode_json=decode_json,
+        )
+        return cast(dict[str, Any], result) if decode_json else result
+
+    async def async_export_recording(
+        self,
+        camera: str,
+        playback_factor: str,
+        start_time: float,
+        end_time: float,
+        decode_json: bool = True,
+    ) -> dict[str, Any] | str:
+        """Export recording."""
+        result = await self.api_wrapper(
+            "post",
+            str(
+                URL(self._host)
+                / f"api/export/{camera}/start/{start_time}/end/{end_time}"
+            ),
+            data={"playback": playback_factor},
             decode_json=decode_json,
         )
         return cast(dict[str, Any], result) if decode_json else result
@@ -183,6 +228,102 @@ class FrigateApiClient:
         )
         return cast(dict[str, Any], result) if decode_json else result
 
+    async def async_create_event(
+        self,
+        camera: str,
+        label: str,
+        sub_label: str = "",
+        duration: int | None = 30,
+        include_recording: bool = True,
+    ) -> dict[str, Any]:
+        """Create an event."""
+        return cast(
+            dict[str, Any],
+            await self.api_wrapper(
+                "post",
+                str(URL(self._host) / f"api/events/{camera}/{label}/create"),
+                data={
+                    "sub_label": sub_label,
+                    "duration": duration,
+                    "include_recording": include_recording,
+                },
+            ),
+        )
+
+    async def async_end_event(self, event_id: str) -> dict[str, Any]:
+        """End an event."""
+        return cast(
+            dict[str, Any],
+            await self.api_wrapper(
+                "put",
+                str(URL(self._host) / f"api/events/{event_id}/end"),
+            ),
+        )
+
+    async def _get_token(self) -> None:
+        """
+        Obtain a new JWT token using the provided username and password.
+        Sends a POST request to the login endpoint and extracts the token
+        and expiration date from the response headers.
+        """
+        response = await self.api_wrapper(
+            method="post",
+            url=str(URL(self._host) / "api/login"),
+            data={"user": self._username, "password": self._password},
+            decode_json=False,
+            is_login_request=True,
+        )
+
+        set_cookie_header = response.headers.get("Set-Cookie", "")
+        if not set_cookie_header:
+            raise KeyError("Missing Set-Cookie header in response")
+
+        for cookie_prop in set_cookie_header.split(";"):
+            cookie_prop = cookie_prop.strip()
+            if cookie_prop.startswith("frigate_token="):
+                jwt_token = cookie_prop.split("=", 1)[1]
+                self._token_data["token"] = jwt_token
+                try:
+                    decoded_token = jwt_wrapper.unverified_hs256_token_decode(jwt_token)
+                except Exception as e:
+                    raise ValueError(f"Failed to decode JWT token: {e}")
+                exp_timestamp = decoded_token.get("exp")
+                if not exp_timestamp:
+                    raise KeyError("JWT is missing 'exp' claim")
+                self._token_data["expires"] = datetime.datetime.fromtimestamp(
+                    exp_timestamp, datetime.UTC
+                )
+                break
+        else:
+            raise KeyError("Missing 'frigate_token' in Set-Cookie header")
+
+    async def _refresh_token_if_needed(self) -> None:
+        """
+        Refresh the JWT token if it is expired or about to expire.
+        """
+        if "expires" not in self._token_data:
+            await self._get_token()
+            return
+
+        current_time = datetime.datetime.now(datetime.UTC)
+        if current_time >= self._token_data["expires"]:  # Compare UTC-aware datetimes
+            await self._get_token()
+
+    async def _get_auth_headers(self) -> dict[str, str]:
+        """
+        Get headers for API requests, including the JWT token if available.
+        Ensures that the token is refreshed if needed.
+        """
+        headers = {}
+
+        if self._username and self._password:
+            await self._refresh_token_if_needed()
+
+            if "token" in self._token_data:
+                headers["Authorization"] = f"Bearer {self._token_data['token']}"
+
+        return headers
+
     async def api_wrapper(
         self,
         method: str,
@@ -190,12 +331,16 @@ class FrigateApiClient:
         data: dict | None = None,
         headers: dict | None = None,
         decode_json: bool = True,
+        is_login_request: bool = False,
     ) -> Any:
         """Get information from the API."""
         if data is None:
             data = {}
         if headers is None:
             headers = {}
+
+        if not is_login_request:
+            headers.update(await self._get_auth_headers())
 
         try:
             async with async_timeout.timeout(TIMEOUT):
@@ -204,6 +349,9 @@ class FrigateApiClient:
                     response = await func(
                         url, headers=headers, raise_for_status=True, json=data
                     )
+                    response.raise_for_status()
+                    if is_login_request:
+                        return response
                     if decode_json:
                         return await response.json()
                     return await response.text()
@@ -216,6 +364,27 @@ class FrigateApiClient:
             )
             raise FrigateApiClientError from exc
 
+        except aiohttp.ClientResponseError as exc:
+            if exc.status == 401:
+                _LOGGER.error(
+                    "Unauthorized (401) error for URL %s: %s", url, exc.message
+                )
+                raise FrigateApiClientError(
+                    "Unauthorized access - check credentials."
+                ) from exc
+            elif exc.status == 403:
+                _LOGGER.error("Forbidden (403) error for URL %s: %s", url, exc.message)
+                raise FrigateApiClientError(
+                    "Forbidden - insufficient permissions."
+                ) from exc
+            else:
+                _LOGGER.error(
+                    "Client response error (%d) for URL %s: %s",
+                    exc.status,
+                    url,
+                    exc.message,
+                )
+                raise FrigateApiClientError from exc
         except (KeyError, TypeError) as exc:
             _LOGGER.error(
                 "Error parsing information from %s: %s",

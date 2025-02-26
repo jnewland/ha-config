@@ -5,7 +5,7 @@ set -ex
 : ${TMPDIR:=$(mktemp -d)}
 
 # renovate: datasource=github-releases depName=sebr/bhyve-home-assistant
-BHYVE_VERSION=3.2.2
+BHYVE_VERSION=3.2.5
 git clone --depth 1 --branch $BHYVE_VERSION https://github.com/sebr/bhyve-home-assistant $TMPDIR/$$-bhyve-home-assistant
 rm -rf custom_components/bhyve || true
 mv $TMPDIR/$$-bhyve-home-assistant/python_scripts/*.py python_scripts/
@@ -16,20 +16,25 @@ rm -rf custom_components/plant || true
 mv $TMPDIR/$$-homeassistant-plant/custom_components/plant custom_components
 
 # renovate: datasource=github-releases depName=uvjustin/alarmdotcom
-ALARM_DOT_COM_VERSION=v3.0.12
+ALARM_DOT_COM_VERSION=v3.0.13
 git clone --depth 1 --branch $ALARM_DOT_COM_VERSION https://github.com/uvjustin/alarmdotcom $TMPDIR/$$-alarmdotcom
 rm -rf custom_components/alarmdotcom || true
 mv $TMPDIR/$$-alarmdotcom/custom_components/alarmdotcom custom_components
 
 # renovate: datasource=github-releases depName=blakeblackshear/frigate-hass-integration
-FRIGATE_VERSION=v4.0.1
+FRIGATE_VERSION=v5.8.0
 git clone --depth 1 --branch $FRIGATE_VERSION https://github.com/blakeblackshear/frigate-hass-integration $TMPDIR/$$-frigate
 rm -rf custom_components/frigate || true
 mv $TMPDIR/$$-frigate/custom_components/frigate custom_components
 
 # renovate: datasource=github-releases depName=claytonjn/hass-circadian_lighting
 CIRCADIAN_VERSION=2.1.4
-git clone --depth 1 --branch $CIRCADIAN_VERSION https://github.com/claytonjn/hass-circadian_lighting $TMPDIR/$$-circadian_lighting
+
+# a good fork, without a version
+git clone --depth 1 https://github.com/obi11235/hass-circadian_lighting $TMPDIR/$$-circadian_lighting
+cd $TMPDIR/$$-circadian_lighting
+git checkout 844710be2753e409c27a59d5f64d1c5b025e915e
+cd -
 rm -rf custom_components/circadian_lighting || true
 mv $TMPDIR/$$-circadian_lighting/custom_components/circadian_lighting custom_components
 
@@ -40,13 +45,13 @@ rm -rf custom_components/adaptive_lighting || true
 mv $TMPDIR/$$-adaptive-lighting/custom_components/adaptive_lighting custom_components
 
 # renovate: datasource=github-releases depName=sopelj/hass-ember-mug-component
-EMBER_VERSION=0.9.0
+EMBER_VERSION=1.2.1
 git clone --depth 1 --branch $EMBER_VERSION https://github.com/sopelj/hass-ember-mug-component $TMPDIR/$$-ember
 rm -rf custom_components/ember_mug
 mv $TMPDIR/$$-ember/custom_components/ember_mug custom_components
 
 # renovate: datasource=github-releases depName=libdyson-wg/ha-dyson
-DYSON_LOCAL_VERSION=v1.3.10
+DYSON_LOCAL_VERSION=v1.5.0
 git clone --depth 1 --branch $DYSON_LOCAL_VERSION https://github.com/libdyson-wg/ha-dyson $TMPDIR/$$-dyson-local
 rm -rf custom_components/dyson_local
 mv $TMPDIR/$$-dyson-local/custom_components/dyson_local custom_components
@@ -62,14 +67,14 @@ rm -rf custom_components/uber_eats
 mv $TMPDIR/$$-uber-eats/custom_components/uber_eats custom_components
 
 curl -sL --fail -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
-curl -sL --fail -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/1.12.1/auto-entities.js
+curl -sL --fail -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/v1.13.0/auto-entities.js
+curl -sL --fail -o www/card-mod.js https://raw.githubusercontent.com/thomasloven/lovelace-card-mod/v3.4.4/card-mod.js
 curl -sL --fail -o www/mini-media-player-bundle.js https://github.com/kalkih/mini-media-player/releases/download/v1.16.9/mini-media-player-bundle.js
-curl -sL --fail -o www/custom-sonos-card.js https://github.com/johanfrick/custom-sonos-card/releases/download/v5.20.1/custom-sonos-card.js
-curl -sL --fail -o www/mini-graph-card-bundle.js https://github.com/kalkih/mini-graph-card/releases/download/v0.12.0/mini-graph-card-bundle.js
-curl -sL --fail -o www/weather-chart-card.js https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
+curl -sL --fail -o www/custom-sonos-card.js https://github.com/johanfrick/custom-sonos-card/releases/download/v8.6.0/custom-sonos-card.js
+curl -sL --fail -o www/mini-graph-card-bundle.js https://github.com/kalkih/mini-graph-card/releases/download/v0.12.1/mini-graph-card-bundle.js
 
-git add custom_components
-git add python_scripts
-git add www
+git add -A custom_components
+git add -A python_scripts
+git add -A www
 
 rm -rf $TMPDIR/$$-*

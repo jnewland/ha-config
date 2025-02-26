@@ -1,6 +1,8 @@
 """Sensor Entity for Ember Mug."""
+
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 from ember_mug.consts import DeviceType
@@ -15,7 +17,6 @@ from homeassistant.helpers.entity import EntityCategory
 
 from .const import (
     ATTR_BATTERY_VOLTAGE,
-    DOMAIN,
     ICON_DEFAULT,
     ICON_EMPTY,
     ICON_UNAVAILABLE,
@@ -31,7 +32,6 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from . import HassMugData
     from .coordinator import MugDataUpdateCoordinator
 
 
@@ -96,8 +96,11 @@ class EmberMugStateSensor(EmberMugSensor):
     @property
     def native_value(self) -> str | None:
         """Return liquid state key."""
-        if state := super().native_value:
-            return LIQUID_STATE_MAPPING[state].value
+        raw_value = super().native_value
+        if raw_value in LIQUID_STATE_MAPPING:
+            return LIQUID_STATE_MAPPING[raw_value].value
+        if raw_value is not None:
+            logging.debug('Value "%s" was not  found in mapping: %s', raw_value, LIQUID_STATE_MAPPING)
         return None
 
     @property
@@ -194,13 +197,13 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Entities."""
-    data: HassMugData = hass.data[DOMAIN][entry.entry_id]
     if entry.entry_id is None:
         raise ValueError("Missing config entry ID")
+    coordinator = entry.runtime_data
     entities: list[EmberMugSensor] = [
-        EmberMugStateSensor(data.coordinator, "liquid_state"),
-        EmberMugLiquidLevelSensor(data.coordinator, "liquid_level"),
-        EmberMugTemperatureSensor(data.coordinator, "current_temp"),
-        EmberMugBatterySensor(data.coordinator, "battery.percent"),
+        EmberMugStateSensor(coordinator, "liquid_state"),
+        EmberMugLiquidLevelSensor(coordinator, "liquid_level"),
+        EmberMugTemperatureSensor(coordinator, "current_temp"),
+        EmberMugBatterySensor(coordinator, "battery.percent"),
     ]
     async_add_entities(entities)

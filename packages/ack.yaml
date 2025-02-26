@@ -1,100 +1,165 @@
 script:
-    ack:
-        sequence:
-            - service: >
-                  {{ notify_service | default("notify.iphones") }}
-              data:
+  noop:
+    mode: parallel
+    sequence:
+      - service: system_log.write
+        data:
+          message: noop
+          logger: packages.ack
+          level: debug
+  ack:
+    mode: parallel
+    sequence:
+      - choose:
+          - alias: with camera and camera_thumbnail
+            conditions: |
+              {{
+                camera | default('') != '' and
+                camera_thumbnail | default('') != ''
+              }}
+            sequence:
+              - service: >
+                  {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
+                data:
                   message: |
-                      {{ message | default("Turn on " + entity_id) }}
+                    {{ message | default("Turn on " + entity_id) }}
                   data:
+                    entity_id: >-
+                      {{ camera }}
+                    attachment:
+                      url: >-
+                        {{ camera_thumbnail }}
+                      content-type: jpeg
+                      hide-thumbnail: false
+                    tag: >
+                      {{ tag | default(entity_id) }}
+                    actions:
+                      - action: ACK_TURN_ON
+                        title: >-
+                          {{ ack_yes_title | default("Hell yeah") }}
+                        destructive: true
+                        authenticationRequired: |
+                          {{ secure | default("false") != "false" }}
+                      - action: ACK_NO
+                        title: >-
+                          {{ ack_no_title | default("Nah") }}
+                    action_data:
                       tag: >
-                          {{ tag | default(entity_id) }}
-                      actions:
-                          - action: ACK_TURN_ON
-                            title: Hell yeah
-                            destructive: true
-                            authenticationRequired: |
-                                {{ secure | default("false") != "false" }}
-                          - action: ACK_NO
-                            title: Nah
-                      action_data:
-                          tag: >
-                              {{ tag | default(entity_id) }}
-                          service: |
-                              {{ service | default("homeassistant.turn_on") }}
-                          entity_id: |
-                              {{ entity_id }}
-                          notify_service: >
-                              {{ notify_service | default("notify.iphones") }}
-                          confirmation_message: |
-                              {{ confirmation_message | default("turned on " + entity_id) }}
-                          skip_confirmation: |
-                              {{ skip_confirmation | default(false) }}
-                      push:
-                          interruption-level: >
-                              {{ interruption_level | default('active') }}
-            - service: notify.slack
+                        {{ tag | default(entity_id) }}
+                      service: |
+                        {{ service | default("homeassistant.turn_on") }}
+                      entity_id: |
+                        {{ entity_id }}
+                      notify_service: >
+                        {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
+                      confirmation_message: |
+                        {{ confirmation_message | default("turned on " + entity_id) }}
+                      skip_confirmation: |
+                        {{ skip_confirmation | default(false) }}
+                    push:
+                      interruption-level: >
+                        {{ interruption_level | default('active') }}
+        default:
+          - service: >
+              {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
+            data:
+              message: |
+                {{ message | default("Turn on " + entity_id) }}
               data:
-                  title: ":question:"
-                  message: |
-                      Asked {{ message | default("about turning on " + entity_id) }}
+                tag: >
+                  {{ tag | default(entity_id) }}
+                actions:
+                  - action: ACK_TURN_ON
+                    title: Hell yeah
+                    destructive: true
+                    authenticationRequired: |
+                      {{ secure | default("false") != "false" }}
+                  - action: ACK_NO
+                    title: Nah
+                action_data:
+                  tag: >
+                    {{ tag | default(entity_id) }}
+                  service: |
+                    {{ service | default("homeassistant.turn_on") }}
+                  entity_id: |
+                    {{ entity_id }}
+                  notify_service: >
+                    {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
+                  confirmation_message: |
+                    {{ confirmation_message | default("turned on " + entity_id) }}
+                  skip_confirmation: |
+                    {{ skip_confirmation | default(false) }}
+                  decline_message: |
+                    {{ decline_message | default("👎 to " + entity_id) }}
+                push:
+                  interruption-level: >
+                    {{ interruption_level | default('active') }}
 
 automation:
-    - alias: Ack no
-      mode: parallel
-      id: 7326c4e1-2f25-4619-be0b-07025456e3c7
-      trigger:
-          platform: event
-          event_type: ios.notification_action_fired
-          event_data:
-              actionName: ACK_NO
-      action:
-          - service: "{{ trigger.event.data.action_data.notify_service }}"
-            data:
-                message: |
-                    {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.decline_message | default("👎 to " + trigger.event.data.action_data.entity_id) }}
-                data:
-                    tag: >
-                        {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
-                    push:
-                        interruption-level: time-sensitive
-          - service: notify.slack
-            data:
-                title: ":-1:"
-                message: nope to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}
-    - alias: Ack
-      id: 097d52cd-442e-40ab-9d25-bbee32bc1fe4
-      mode: parallel
-      trigger:
-          platform: event
-          event_type: ios.notification_action_fired
-          event_data:
-              actionName: ACK_TURN_ON
-      action:
-          - service: system_log.write
-            data:
-                message: >
-                    at=ack
-                    event_data={{ trigger.event.data }}
-                logger: packages.ack
-                level: debug
-          - service: >
-                {{ trigger.event.data.action_data.service | default('homeassistant.turn_on') }}
-            data:
-                entity_id: "{{ trigger.event.data.action_data.entity_id }}"
-          - condition: template
-            value_template: |
-                {{ not (trigger.event.data.action_data.skip_confirmation | default(false)) }}
-          - service: "{{ trigger.event.data.action_data.notify_service }}"
-            data:
-                message: >
-                    {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}
-                data:
-                    tag: >
-                        {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
-                    push:
-                        interruption-level: passive
-          - service: notify.slack
-            data:
-                title: ":+1:"
-                message: yep to {{ trigger.event.data.action_data.entity_id }} from {{ trigger.event.data.sourceDeviceName }}
+  - alias: Ack no
+    mode: parallel
+    id: 7326c4e1-2f25-4619-be0b-07025456e3c7
+    trigger:
+      platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: ACK_NO
+    action:
+      - service: "{{ trigger.event.data.action_data.notify_service }}"
+        data:
+          message: |
+            {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.decline_message | default("👎 to " + trigger.event.data.action_data.entity_id) }}
+          data:
+            tag: >
+              {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
+            push:
+              interruption-level: time-sensitive
+  - alias: Ack
+    id: 097d52cd-442e-40ab-9d25-bbee32bc1fe4
+    mode: parallel
+    trigger:
+      platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: ACK_TURN_ON
+    action:
+      - service: system_log.write
+        data:
+          message: >
+            at=ack
+            event_data={{ trigger.event.data }}
+          logger: packages.ack
+          level: debug
+      - service: >
+          {{ trigger.event.data.action_data.service | default('homeassistant.turn_on') }}
+        data:
+          entity_id: "{{ trigger.event.data.action_data.entity_id }}"
+      - condition: template
+        value_template: |
+          {{ not (trigger.event.data.action_data.skip_confirmation | default(false)) }}
+      - service: "{{ trigger.event.data.action_data.notify_service }}"
+        data:
+          message: >
+            {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}
+          data:
+            tag: >
+              {{ trigger.event.data.action_data.confirmation_tag | default(trigger.event.data.action_data.tag) | default(trigger.event.data.action_data.entity_id) }}
+            push:
+              interruption-level: passive
+      - choose:
+          - conditions: >
+              {{ trigger.event.data.action_data.clear_tags | default('') != '' }}
+            sequence:
+              - repeat:
+                  for_each: "{{ trigger.event.data.action_data.clear_tags.split(',') }}"
+                  sequence:
+                    - service: >
+                        {{ trigger.event.data.action_data.notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
+                      data:
+                        message: "clear_notification"
+                        data:
+                          tag: "{{ repeat.item }}"
+          - conditions: >
+              {{ trigger.event.data.action_data.clear_tags | default('') == '' }}
+            sequence:
+              - service: script.noop

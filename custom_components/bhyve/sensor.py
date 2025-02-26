@@ -1,15 +1,15 @@
 """Support for Orbit BHyve sensors."""
-import logging
-from datetime import timedelta
 
+from datetime import timedelta
+import logging
+
+from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import ATTR_BATTERY_LEVEL
+from homeassistant.const import ATTR_BATTERY_LEVEL, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.icon import icon_for_battery_level
-
-from homeassistant.components.sensor import SensorDeviceClass
 
 from . import BHyveDeviceEntity
 from .const import (
@@ -53,8 +53,17 @@ async def async_setup_entry(
     for device in devices:
         if device.get("type") == DEVICE_SPRINKLER:
             sensors.append(BHyveStateSensor(hass, bhyve, device))
-            for zone in device.get("zones"):
-                sensors.append(BHyveZoneHistorySensor(hass, bhyve, device, zone))
+            all_zones = device.get("zones")
+            for zone in all_zones:
+                # if the zone doesn't have a name, set it to the device's name if there is only one (eg a hose timer)
+                zone_name = zone.get("name", None)
+                if zone_name is None:
+                    zone_name = (
+                        device.get("name") if len(all_zones) == 1 else "Unnamed Zone"
+                    )
+                sensors.append(
+                    BHyveZoneHistorySensor(hass, bhyve, device, zone, zone_name)
+                )
 
             if device.get("battery", None) is not None:
                 sensors.append(BHyveBatterySensor(hass, bhyve, device))
@@ -145,7 +154,7 @@ class BHyveBatterySensor(BHyveDeviceEntity):
         #
         event = data.get("event")
         if event in (EVENT_BATTERY_STATUS):
-            battery_level = self.parse_battery_level(event)
+            battery_level = self.parse_battery_level(data)
 
             self._state = battery_level
             self._attrs[ATTR_BATTERY_LEVEL] = battery_level
@@ -164,7 +173,7 @@ class BHyveBatterySensor(BHyveDeviceEntity):
         Otherwise, if the 'mv' attribute is present, the battery level is calculated as a percentage
         based on the millivolts, assuming that 2x1.5V AA batteries are used. Note that AA batteries can
         range from 1.2V to 1.7V depending on their chemistry, so the calculation may not be accurate
-        for all types of batteries. YMMV ¯\_(ツ)_/¯
+        for all types of batteries. YMMV
 
         Args:
         battery_data (dict): A dictionary containing the battery data.
@@ -172,8 +181,13 @@ class BHyveBatterySensor(BHyveDeviceEntity):
         Returns:
         float: The battery level as a percentage.
         """
+
+        if not isinstance(battery_data, dict):
+            _LOGGER.warning("Unexpected battery data, returning 0: %s", battery_data)
+            return 0
+
         battery_level = battery_data.get("percent", 0)
-        if "mv" in battery_data:
+        if "mv" in battery_data and "percent" not in battery_data:
             battery_level = min(battery_data.get("mv", 0) / 3000 * 100, 100)
         return battery_level
 
@@ -181,13 +195,13 @@ class BHyveBatterySensor(BHyveDeviceEntity):
 class BHyveZoneHistorySensor(BHyveDeviceEntity):
     """Define a BHyve sensor."""
 
-    def __init__(self, hass, bhyve, device, zone):
+    def __init__(self, hass, bhyve, device, zone, zone_name):
         """Initialize the sensor."""
         self._history = None
         self._zone = zone
         self._zone_id = zone.get("station")
 
-        name = "{} zone history".format(zone.get("name", "Unknown"))
+        name = "{} zone history".format(zone_name)
         _LOGGER.info("Creating history sensor: %s", name)
 
         super().__init__(
@@ -329,9 +343,11 @@ class BHyveTemperatureSensor(BHyveDeviceEntity):
         )
 
     def _setup(self, device):
-        self._state = device.get("status", {}).get("temp_f")
         self._available = device.get("is_connected", False)
-        self._unit = "°F"
+        self._native_value = device.get("status", {}).get("temp_f")
+        self._native_unit_of_measurement = UnitOfTemperature.FAHRENHEIT
+        self._state_class = SensorStateClass.MEASUREMENT
+
         self._attrs = {
             "location": device.get("location_name"),
             "rssi": device.get("status", {}).get("rssi"),

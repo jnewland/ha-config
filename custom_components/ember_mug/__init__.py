@@ -1,11 +1,10 @@
 """Ember Mug Custom Integration."""
+
 from __future__ import annotations
 
-import asyncio
 import logging
 from typing import TYPE_CHECKING
 
-from bleak import BleakError
 from ember_mug import EmberMug
 from ember_mug.consts import EMBER_BLE_SIG
 from ember_mug.utils import get_model_info_from_advertiser_data
@@ -18,21 +17,21 @@ from homeassistant.const import (
     CONF_ADDRESS,
     CONF_MAC,
     CONF_NAME,
-    CONF_TEMPERATURE_UNIT,
     EVENT_HOMEASSISTANT_STOP,
     Platform,
-    UnitOfTemperature,
 )
 from homeassistant.exceptions import ConfigEntryNotReady
 
-from .const import CONF_DEBUG, CONF_INCLUDE_EXTRA, DOMAIN
+from .const import CONF_DEBUG, CONFIG_VERSION, DOMAIN
 from .coordinator import MugDataUpdateCoordinator
-from .models import HassMugData
 
 if TYPE_CHECKING:
     from home_assistant_bluetooth import BluetoothServiceInfoBleak
     from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import Event, HomeAssistant
+
+
+type EmberMugConfigEntry = ConfigEntry[MugDataUpdateCoordinator]
 
 
 PLATFORMS = [
@@ -41,6 +40,7 @@ PLATFORMS = [
     Platform.NUMBER,
     Platform.SELECT,
     Platform.SENSOR,
+    Platform.SWITCH,
     Platform.TEXT,
 ]
 _LOGGER = logging.getLogger(__name__)
@@ -48,9 +48,6 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Mug Platform."""
-    if DOMAIN not in hass.data:
-        hass.data[DOMAIN] = {}
-
     address: str = entry.data[CONF_ADDRESS].upper()
     service_info = bluetooth.async_last_service_info(hass, address, connectable=True)
 
@@ -84,7 +81,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     ember_mug = EmberMug(
         service_info.device,
         model_info=get_model_info_from_advertiser_data(service_info.advertisement),
-        debug=entry.data.get(CONF_DEBUG, False),
+        debug=entry.options.get(CONF_DEBUG, False),
     )
     mug_coordinator = MugDataUpdateCoordinator(
         hass,
@@ -93,12 +90,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         entry.unique_id,
         entry.data.get(CONF_NAME, entry.title),
     )
-
-    startup_event = asyncio.Event()
-    cancel_first_update = mug_coordinator.mug.register_callback(
-        lambda *_: startup_event.set(),
-    )
-
     entry.async_on_unload(
         bluetooth.async_register_callback(
             hass,
@@ -112,22 +103,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         ),
     )
 
-    try:
-        await mug_coordinator.async_config_entry_first_refresh()
-    except ConfigEntryNotReady:
-        cancel_first_update()
-        raise
-
-    try:
-        async with asyncio.timeout(60):
-            await startup_event.wait()
-    except TimeoutError as ex:
-        raise ConfigEntryNotReady(
-            "Unable to communicate with the device; "
-            f"Try moving the Bluetooth adapter closer to {mug_coordinator.data.name}",
-        ) from ex
-    finally:
-        cancel_first_update()
+    await mug_coordinator.async_config_entry_first_refresh()
 
     entry.async_on_unload(
         bluetooth.async_track_unavailable(
@@ -137,12 +113,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         ),
     )
 
-    hass.data.setdefault(DOMAIN, {})[entry.entry_id] = HassMugData(
-        ember_mug,
-        mug_coordinator,
-    )
-
-    await set_temperature_unit(mug_coordinator, entry.data[CONF_TEMPERATURE_UNIT])
+    entry.runtime_data = mug_coordinator
     entry.async_on_unload(entry.add_update_listener(async_update_listener))
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
@@ -164,56 +135,44 @@ def _process_more_advertisements(
     return EMBER_BLE_SIG in service_info.manufacturer_data
 
 
-async def set_temperature_unit(
-    mug_coordinator: MugDataUpdateCoordinator,
-    unit: UnitOfTemperature,
-) -> None:
-    """Try to set Mug Unit if different from current one."""
-    if mug_coordinator.data.temperature_unit == unit:
-        # No need
-        return
-    try:
-        async with asyncio.timeout(10):
-            await mug_coordinator.mug.set_temperature_unit(unit)
-    except (BleakError, TimeoutError, EOFError) as e:
-        _LOGGER.warning("Unable to set temperature unit to %s: %s.", unit, e)
-
-
 async def async_update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Handle options update."""
     await hass.config_entries.async_reload(entry.entry_id)
 
 
-async def async_migrate_entry(hass, config_entry: ConfigEntry):
+async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry):
     """Migrate old entry."""
     _LOGGER.debug("Migrating from version %s", config_entry.version)
 
-    if config_entry.version == 1:
-        config_entry.version = 2
-        old_data = {**config_entry.data}
-        unit = old_data.get(CONF_TEMPERATURE_UNIT, "°C")
-        hass.config_entries.async_update_entry(
-            config_entry,
-            data={
-                CONF_ADDRESS: old_data[CONF_MAC],
-                CONF_NAME: old_data[CONF_NAME],
-                CONF_TEMPERATURE_UNIT: UnitOfTemperature.FAHRENHEIT if unit == "°F" else UnitOfTemperature.CELSIUS,
-                CONF_INCLUDE_EXTRA: False,
-                CONF_DEBUG: False,
-            },
-        )
+    if config_entry.version >= CONFIG_VERSION:
+        # No migrations to run
+        return False
 
+    old_data = {**config_entry.data}
+    if config_entry.version == 1:
+        old_data[CONF_ADDRESS] = old_data[CONF_MAC]
+
+    hass.config_entries.async_update_entry(
+        config_entry,
+        data={
+            CONF_ADDRESS: old_data[CONF_ADDRESS],
+            CONF_NAME: old_data[CONF_NAME],
+        },
+        options={
+            CONF_DEBUG: old_data.get(CONF_DEBUG, False),
+        },
+        version=3,
+    )
     _LOGGER.info("Migration to version %s successful", config_entry.version)
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: EmberMugConfigEntry) -> bool:
     """Unload a config entry."""
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
-        hass_mug_data: HassMugData = hass.data[DOMAIN].pop(entry.entry_id)
-        await hass_mug_data.coordinator.mug.disconnect()
-
+        mug_coordinator = entry.runtime_data
+        await mug_coordinator.mug.disconnect()
         if not hass.config_entries.async_entries(DOMAIN):
             hass.data.pop(DOMAIN)
 
