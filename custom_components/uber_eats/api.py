@@ -10,8 +10,8 @@ _LOGGER = logging.getLogger(__name__)
 class UberEatsApi:
     def __init__(self, token):
         self._sid = token
-        self._locale_code = 'NZ'
-        self._timezone = 'Pacific/Auckland'
+        self._locale_code = 'en-US'
+        self._timezone = 'America/Chicago'
         self._url_base = 'https://www.ubereats.com/api/getActiveOrdersV1?localeCode=' + self._locale_code
         
     def get_deliveries(self):
