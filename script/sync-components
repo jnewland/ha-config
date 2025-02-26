@@ -62,9 +62,9 @@ git clone --depth 1 --branch $DYSON_CLOUD_VERSION https://github.com/libdyson-wg
 rm -rf custom_components/dyson_cloud
 mv $TMPDIR/$$-dyson-cloud/custom_components/dyson_cloud custom_components
 
-git clone --depth 1 --branch main https://github.com/codyc1515/ha-uber-eats $TMPDIR/$$-uber-eats
-rm -rf custom_components/uber_eats
-mv $TMPDIR/$$-uber-eats/custom_components/uber_eats custom_components
+# git clone --depth 1 --branch main https://github.com/codyc1515/ha-uber-eats $TMPDIR/$$-uber-eats
+# rm -rf custom_components/uber_eats
+# mv $TMPDIR/$$-uber-eats/custom_components/uber_eats custom_components
 
 curl -sL --fail -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
 curl -sL --fail -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/v1.13.0/auto-entities.js
