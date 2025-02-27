@@ -5,38 +5,14 @@ cards:
   - type: custom:advanced-camera-card
     cameras:
       # Frigate cameras trigger events automatically
-      - camera_entity: camera.front_door_medium
-        dependencies:
-          cameras:
-            - camera.front_door
-      - camera_entity: camera.front_yard_left_medium
-        dependencies:
-          cameras:
-            - camera.front_yard_left
-      - camera_entity: camera.front_yard_right_medium
-        dependencies:
-          cameras:
-            - camera.front_yard_right
-      - camera_entity: camera.atrium_medium
-        dependencies:
-          cameras:
-            - camera.atrium
-      - camera_entity: camera.gate_medium
-        dependencies:
-          cameras:
-            - camera.gate
-      - camera_entity: camera.garage_medium
-        dependencies:
-          cameras:
-            - camera.garage
-      - camera_entity: camera.back_porch_medium
-        dependencies:
-          cameras:
-            - camera.back_porch
-      - camera_entity: camera.ac_medium
-        dependencies:
-          cameras:
-            - camera.ac
+      - camera_entity: camera.front_door
+      - camera_entity: camera.front_yard_left
+      - camera_entity: camera.front_yard_right
+      - camera_entity: camera.atrium
+      - camera_entity: camera.gate
+      - camera_entity: camera.garage
+      - camera_entity: camera.back_porch
+      - camera_entity: camera.ac
 
       # non-Frigate cameras can be triggered
       # by motion entity changes or a door being opened.
