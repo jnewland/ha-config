@@ -23,8 +23,6 @@ cards:
       #     entities:
       #       - binary_sensor.kitchen_door_opened
       #     events: []
-    display:
-      mode: grid
     view:
       triggers:
         show_trigger_status: true
@@ -32,3 +30,19 @@ cards:
         actions:
           trigger: live
           untrigger: default
+    live:
+      display:
+        mode: grid
+      controls:
+        builtin: false
+    media_viewer:
+      controls:
+        builtin: false
+      display:
+        mode: grid
+    menu:
+      buttons:
+        play:
+          enabled: true
+        mute:
+          enabled: true
