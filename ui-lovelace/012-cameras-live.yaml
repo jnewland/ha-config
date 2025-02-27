@@ -1,0 +1,34 @@
+title: Cameras Live
+icon: mdi:video-high-definition
+path: cameras-live
+cards:
+  - type: custom:advanced-camera-card
+    cameras:
+      # Frigate cameras trigger events automatically
+      - camera_entity: camera.front_door
+      - camera_entity: camera.front_yard_left
+      - camera_entity: camera.front_yard_right
+      - camera_entity: camera.atrium
+      - camera_entity: camera.gate
+      - camera_entity: camera.garage
+      - camera_entity: camera.back_porch
+      - camera_entity: camera.ac
+
+      # non-Frigate cameras can be triggered
+      # by motion entity changes or a door being opened.
+      # - camera_entity: camera.kitchen
+      #   triggers:
+      #     occupancy: false
+      #     motion: true
+      #     entities:
+      #       - binary_sensor.kitchen_door_opened
+      #     events: []
+    display:
+      mode: grid
+    view:
+      triggers:
+        show_trigger_status: true
+        filter_selected_camera: false
+        actions:
+          trigger: live
+          untrigger: default
