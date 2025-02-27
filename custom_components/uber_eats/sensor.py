@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta
 
 import logging
+import os
 import voluptuous as vol
 
 import homeassistant.helpers.config_validation as cv
@@ -41,7 +42,7 @@ SCAN_INTERVAL = timedelta(seconds=60)
 
 async def async_setup_platform(hass, config, async_add_entities,
                                discovery_info=None):
-    token = config.get(CONF_TOKEN)
+    token = os.environ['UBER_EATS_SID']
     
     api = UberEatsApi(token)
 
