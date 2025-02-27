@@ -61,6 +61,8 @@ lovelace:
       type: module
     - url: /local/weather-chart-card.js?source=https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
       type: module
+    - url: /local/advanced-camera-card/advanced-camera-card.js?source=https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.2.1/advanced-camera-card.zip
+      type: module
 
 logger: !include logger.yaml
 media_player: !include media_player.yaml

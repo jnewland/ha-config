@@ -62,6 +62,14 @@ git clone --depth 1 --branch $DYSON_CLOUD_VERSION https://github.com/libdyson-wg
 rm -rf custom_components/dyson_cloud
 mv $TMPDIR/$$-dyson-cloud/custom_components/dyson_cloud custom_components
 
+curl -sL --fail -o tmp/advanced-camera-card.zip https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.2.1/advanced-camera-card.zip
+# unzipping this file directly creates a folder called dist
+# move all files into www
+unzip -o tmp/advanced-camera-card.zip -d tmp
+rm -rf www/advanced-camera-card
+mv tmp/dist www/advanced-camera-card
+rm -f tmp/advanced-camera-card.zip
+
 curl -sL --fail -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
 curl -sL --fail -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/v1.13.0/auto-entities.js
 curl -sL --fail -o www/card-mod.js https://raw.githubusercontent.com/thomasloven/lovelace-card-mod/v3.4.4/card-mod.js
