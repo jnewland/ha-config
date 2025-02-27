@@ -51,7 +51,7 @@ rm -rf custom_components/ember_mug
 mv $TMPDIR/$$-ember/custom_components/ember_mug custom_components
 
 # renovate: datasource=github-releases depName=libdyson-wg/ha-dyson
-DYSON_LOCAL_VERSION=v1.5.0
+DYSON_LOCAL_VERSION=v1.5.1
 git clone --depth 1 --branch $DYSON_LOCAL_VERSION https://github.com/libdyson-wg/ha-dyson $TMPDIR/$$-dyson-local
 rm -rf custom_components/dyson_local
 mv $TMPDIR/$$-dyson-local/custom_components/dyson_local custom_components
@@ -65,6 +65,14 @@ mv $TMPDIR/$$-dyson-cloud/custom_components/dyson_cloud custom_components
 # git clone --depth 1 --branch main https://github.com/codyc1515/ha-uber-eats $TMPDIR/$$-uber-eats
 # rm -rf custom_components/uber_eats
 # mv $TMPDIR/$$-uber-eats/custom_components/uber_eats custom_components
+
+curl -sL --fail -o tmp/advanced-camera-card.zip https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.2.1/advanced-camera-card.zip
+# unzipping this file directly creates a folder called dist
+# move all files into www
+unzip -o tmp/advanced-camera-card.zip -d tmp
+rm -rf www/advanced-camera-card
+mv tmp/dist www/advanced-camera-card
+rm -f tmp/advanced-camera-card.zip
 
 curl -sL --fail -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
 curl -sL --fail -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/v1.13.0/auto-entities.js
