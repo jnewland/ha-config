@@ -83,3 +83,4 @@ tts:
 zone: !include zone.yaml
 
 automation ui: !include automations.yaml
+uber_eats: !include uber_eats.yaml
