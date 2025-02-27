@@ -103,7 +103,7 @@ class UberEatsDeliveriesSensor(Entity):
                     if order['feedCards'][0]['status']['currentProgress'] == 1:
                         self._state = "Preparing your order"
                     elif order['feedCards'][0]['status']['currentProgress'] == 2:
-                        self._state = "Preparing your order"
+                        self._state = "Picking up your order"
                     elif order['feedCards'][0]['status']['currentProgress'] == 3:
                         self._state = "Heading your way"
                     elif order['feedCards'][0]['status']['currentProgress'] == 4:
@@ -113,12 +113,12 @@ class UberEatsDeliveriesSensor(Entity):
                     
                     #self._state_attributes['Order Id'] = order['uuid']
                     self._state_attributes['ETA'] = order['feedCards'][0]['status']['title']
-                    self._state_attributes['Order Status Description'] = order['feedCards'][0]['status']['timelineSummary']
                     self._state_attributes['Order Status'] = order['feedCards'][0]['status']['currentProgress']
                     self._state_attributes['Restaurant Name'] = order['activeOrderOverview']['title']
                         ## if we have a contact
                     if order['contacts'] and len(order['contacts']) > 0:
                         self._state_attributes['Courier Name'] = order['contacts'][0]['title']
+                        self._state_attributes['Courier Phone Number'] = order['contacts'][0]['phoneNumber']
                     
                     if len(order['feedCards']) > 1 and order['feedCards'][1]['mapEntity']:
                         if order['feedCards'][1]['mapEntity'][0]:
