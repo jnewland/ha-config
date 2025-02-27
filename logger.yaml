@@ -3,6 +3,7 @@ logs:
   aiohue.util: critical
   custom_components.adaptive_lighting: info
   custom_components.ember_mug.coordinator: critical
+  custom_components.uber_eats: debug
   homeassistant.components.binary_sensor: warn
   homeassistant.components.cover.myq: debug
   homeassistant.components.http: warn
@@ -12,7 +13,6 @@ logs:
   homeassistant.components.shell_command: debug
   homeassistant.components.stream.stream: critical
   homeassistant.components.switch: warn
-  homeassistant.components.uber_eats: debug
   packages.ack: debug
   packages.auto_lock: debug
   packages.front_door: debug
