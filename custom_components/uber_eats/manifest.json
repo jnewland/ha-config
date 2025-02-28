@@ -1,0 +1,11 @@
+{
+  "domain": "uber_eats",
+  "name": "Uber Eats",
+  "version": "1.0.0",
+  "documentation": "https://github.com/codyc1515/hacs_uber_eats",
+  "issue_tracker": "https://github.com/codyc15/hacs_uber_eats/issues",
+  "codeowners": ["@codyc1515"],
+  "requirements": [],
+  "iot_class": "cloud_polling",
+  "dependencies": []
+}

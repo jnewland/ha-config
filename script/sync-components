@@ -62,6 +62,10 @@ git clone --depth 1 --branch $DYSON_CLOUD_VERSION https://github.com/libdyson-wg
 rm -rf custom_components/dyson_cloud
 mv $TMPDIR/$$-dyson-cloud/custom_components/dyson_cloud custom_components
 
+# git clone --depth 1 --branch main https://github.com/codyc1515/ha-uber-eats $TMPDIR/$$-uber-eats
+# rm -rf custom_components/uber_eats
+# mv $TMPDIR/$$-uber-eats/custom_components/uber_eats custom_components
+
 curl -sL --fail -o tmp/advanced-camera-card.zip https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.2.1/advanced-camera-card.zip
 # unzipping this file directly creates a folder called dist
 # move all files into www

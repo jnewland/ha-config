@@ -1,0 +1,3 @@
+sensor:
+  - platform: uber_eats
+    token: !env_var UBER_EATS_SID
