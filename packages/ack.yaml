@@ -19,7 +19,12 @@ script:
               }}
             sequence:
               - service: >
-                  {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
+                  {% set service = notify_service | default(states('sensor.notify_group')) | default("notify.iphones") %}
+                  {% if service and service != "unknown" and service != "unavailable" %}
+                    {{ service }}
+                  {% else %}
+                    notify.iphones
+                  {% endif %}
                 data:
                   message: |
                     {{ message | default("Turn on " + entity_id) }}
