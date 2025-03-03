@@ -1,0 +1,1258 @@
+{
+    "common": {
+        "api_timestamp": "API Zeitstempel",
+        "car_error": "Fahrzeugfehler",
+        "completed": "Abgeschlossen",
+        "connection_failure": "Verbindungsfehler",
+        "delivered": "Geliefert",
+        "door_open": "Tür offen",
+        "error": "Fehler",
+        "high_pressure": "Hoher Reifendruck",
+        "last_refresh": "Zuletzt aktualisiert",
+        "last_result": "Letztes Ergebnis",
+        "low_pressure": "Niedriger Reifendruck",
+        "not_allowed_privacy_enabled": "Nicht erlaubt, Datenschutz aktiviert",
+        "ok": "OK",
+        "pressure": "Reifendruck",
+        "rejected": "Abgelehnt",
+        "running": "Läuft",
+        "time_frame_passed": "Zeitfenster abgelaufen",
+        "timeout": "Zeitüberschreitung",
+        "unknown": "Unbekannt",
+        "vcc_api_key": "Volvo-Developers-API-Schlüssel",
+        "vehicle_in_sleep": "Fahrzeug im Schlafmodus",
+        "very_low_pressure": "Sehr niedriger Reifendruck",
+        "waiting": "Warten",
+        "wrong_usage": "Falscher Nutzungsmodus"
+    },
+    "config": {
+        "abort": {
+            "already_configured": "Das Fahrzeug ist bereits konfiguriert",
+            "reauth_successful": "Zugangsdaten erfolgreich aktualisiert"
+        },
+        "error": {
+            "invalid_auth": "Authentifizierung fehlgeschlagen",
+            "invalid_vin": "Fahrzeug-Identifikationsnummer ist ungültig"
+        },
+        "step": {
+            "otp": {
+                "data": {
+                    "otp": "OTP"
+                },
+                "description": "Bitte das Einmal-Kennwort (One-Time-Password) eingeben, welches dir soeben per Mail zugeschickt wurde."
+            },
+            "reauth_confirm": {
+                "description": "Die Volvo-Cars-Integration muss deinen Account erneut authentifizieren.",
+                "title": "Zugangsdaten abgelaufen"
+            },
+            "user": {
+                "data": {
+                    "friendly_name": "Friendly Name",
+                    "password": "Passwort",
+                    "username": "Benutzername",
+                    "vcc_api_key": "Volvo-Developers-API-Schlüssel",
+                    "vin": "Fahrzeug-Identifikationsnummer"
+                },
+                "data_description": {
+                    "friendly_name": "Dieser Wert wird in der Entitäts-ID benutzt (volvo_[friendly name]_[key]). Falls leer, wird die Fahrzeug-Identifiktationsnummer benutzt.",
+                    "vin": "Die Fahrzeug-Identifikationsnummer ist 17 Zeichen lang und beginnt normalerweise für Volvo-Fahrzeuge mit YV1 or YV4."
+                },
+                "description": "Bitte deine Volvo-Account-Zugangsdaten eingeben: Fahrzeug-Identifikationsnummer und Volvo-Developers-API-Schlüssel (https://developer.volvocars.com/)."
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "brake_fluid_level_warning": {
+                "name": "Bremsflüssigkeit",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "brake_light_center_warning": {
+                "name": "Zentrales Bremslicht",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "brake_light_left_warning": {
+                "name": "Bremslicht links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "brake_light_right_warning": {
+                "name": "Bremslicht rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "coolant_level_warning": {
+                "name": "Kühlflüssigkeitsstand",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "daytime_running_light_left_warning": {
+                "name": "Tagfahrlicht links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "daytime_running_light_right_warning": {
+                "name": "Tagfahrlicht rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "door_front_left": {
+                "name": "Tür vorne links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "door_front_right": {
+                "name": "Tür vorne rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "door_rear_left": {
+                "name": "Tür hinten links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "door_rear_right": {
+                "name": "Tür hinten rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "engine_status": {
+                "name": "Status Motor",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "fog_light_front_warning": {
+                "name": "Nebelscheinwerfer",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "fog_light_rear_warning": {
+                "name": "Nebelrückleuchte",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "hazard_lights_warning": {
+                "name": "Warnblinker",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "high_beam_left_warning": {
+                "name": "Fernlicht links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "high_beam_right_warning": {
+                "name": "Fernlicht rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "hood": {
+                "name": "Motorhaube",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "low_beam_left_warning": {
+                "name": "Abblendlicht links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "low_beam_right_warning": {
+                "name": "Abblendlicht rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "oil_level_warning": {
+                "name": "Ölstand",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    },
+                    "level": {
+                        "name": "Füllstand",
+                        "state": {
+                            "no_warning": "OK",
+                            "service_required": "Service benötigt",
+                            "too_high": "Zu hoch",
+                            "too_low": "Zu niedrig"
+                        }
+                    }
+                }
+            },
+            "position_light_front_left_warning": {
+                "name": "Standlicht vorne links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "position_light_front_right_warning": {
+                "name": "Standlicht vorne rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "position_light_rear_left_warning": {
+                "name": "Standlicht hinten links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "position_light_rear_right_warning": {
+                "name": "Standlicht hinten rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "registration_plate_light_warning": {
+                "name": "Kennzeichenbeleuchtung",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "reverse_lights_warning": {
+                "name": "Rückfahrlicht",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "service_warning": {
+                "name": "Service",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    },
+                    "reason": {
+                        "name": "Grund",
+                        "state": {
+                            "distance_driven_almost_time_for_service": "Bald Zeit für den Kilometer-Service",
+                            "distance_driven_overdue_for_service": "Kilometer-Service überfällig",
+                            "distance_driven_time_for_service": "Zeit für den Kilometer-Service",
+                            "engine_hours_almost_time_for_service": "Bald Zeit für den Service nach Betriebsstunden",
+                            "engine_hours_overdue_for_service": "Service nach Betriebsstunden überfällig",
+                            "engine_hours_time_for_service": "Zeit für den Service nach Betriebsstunden",
+                            "no_warning": "OK",
+                            "regular_maintenance_almost_time_for_service": "Bald Zeit für den turnusgemäßen Service",
+                            "regular_maintenance_overdue_for_service": "Turnusgemäßer Service überfällig",
+                            "regular_maintenance_time_for_service": "Zeit für den turnusgemäßen Service",
+                            "unknown_warning": "Unbekannte Warnung"
+                        }
+                    }
+                }
+            },
+            "side_mark_lights_warning": {
+                "name": "Seitliche Markierungsleuchten",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "sunroof": {
+                "name": "Schiebedach",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "tailgate": {
+                "name": "Kofferraum",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "tank_lid": {
+                "name": "Tank-/Ladeklappe",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "turn_indication_front_left_warning": {
+                "name": "Blinker vorne links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "turn_indication_front_right_warning": {
+                "name": "Blinker vorne rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "turn_indication_rear_left_warning": {
+                "name": "Blinker hinten links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "turn_indication_rear_right_warning": {
+                "name": "Blinker hinten rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "tyre_front_left": {
+                "name": "Reifen vorne links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    },
+                    "pressure": {
+                        "name": "Reifendruck",
+                        "state": {
+                            "high_pressure": "Hoher Reifendruck",
+                            "low_pressure": "Niedriger Reifendruck",
+                            "no_warning": "OK",
+                            "very_low_pressure": "Sehr niedriger Reifendruck"
+                        }
+                    }
+                }
+            },
+            "tyre_front_right": {
+                "name": "Reifen vorne rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    },
+                    "pressure": {
+                        "name": "Reifendruck",
+                        "state": {
+                            "high_pressure": "Hoher Reifendruck",
+                            "low_pressure": "Niedriger Reifendruck",
+                            "no_warning": "OK",
+                            "very_low_pressure": "Sehr niedriger Reifendruck"
+                        }
+                    }
+                }
+            },
+            "tyre_rear_left": {
+                "name": "Reifen hinten links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    },
+                    "pressure": {
+                        "name": "Reifendruck",
+                        "state": {
+                            "high_pressure": "Hoher Reifendruck",
+                            "low_pressure": "Niedriger Reifendruck",
+                            "no_warning": "OK",
+                            "very_low_pressure": "Sehr niedriger Reifendruck"
+                        }
+                    }
+                }
+            },
+            "tyre_rear_right": {
+                "name": "Reifen hinten rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    },
+                    "pressure": {
+                        "name": "Reifendruck",
+                        "state": {
+                            "high_pressure": "Hoher Reifendruck",
+                            "low_pressure": "Niedriger Reifendruck",
+                            "no_warning": "OK",
+                            "very_low_pressure": "Sehr niedriger Reifendruck"
+                        }
+                    }
+                }
+            },
+            "washer_fluid_level_warning": {
+                "name": "Füllstand Scheibenwischwasser",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "window_front_left": {
+                "name": "Fenster vorne links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "window_front_right": {
+                "name": "Fenster vorne rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "window_rear_left": {
+                "name": "Fenster hinten links",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "window_rear_right": {
+                "name": "Fenster hinten rechts",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            }
+        },
+        "button": {
+            "climatization_start": {
+                "name": "Klimatisierung starten",
+                "state_attributes": {
+                    "last_result": {
+                        "name": "Letztes Ergebnis",
+                        "state": {
+                            "car_error": "Fahrzeugfehler",
+                            "completed": "Abgeschlossen",
+                            "connection_failure": "Verbindungsfehler",
+                            "delivered": "Geliefert",
+                            "not_allowed_privacy_enabled": "Nicht erlaubt, Datenschutz aktiviert",
+                            "not_allowed_wrong_usage_mode": "Falscher Nutzungsmodus",
+                            "rejected": "Abgelehnt",
+                            "running": "Läuft",
+                            "timeout": "Zeitüberschreitung",
+                            "unknown": "Unbekannt",
+                            "vehicle_in_sleep": "Fahrzeug im Schlafmodus",
+                            "waiting": "Warten"
+                        }
+                    }
+                }
+            },
+            "climatization_stop": {
+                "name": "Klimatisierung ausschalten",
+                "state_attributes": {
+                    "last_result": {
+                        "name": "Letztes Ergebnis",
+                        "state": {
+                            "car_error": "Fahrzeugfehler",
+                            "completed": "Abgeschlossen",
+                            "connection_failure": "Verbindungsfehler",
+                            "delivered": "Geliefert",
+                            "not_allowed_privacy_enabled": "Nicht erlaubt, Datenschutz aktiviert",
+                            "not_allowed_wrong_usage_mode": "Falscher Nutzungsmodus",
+                            "rejected": "Abgelehnt",
+                            "running": "Läuft",
+                            "timeout": "Zeitüberschreitung",
+                            "unknown": "Unbekannt",
+                            "vehicle_in_sleep": "Fahrzeug im Schlafmodus",
+                            "waiting": "Warten"
+                        }
+                    }
+                }
+            },
+            "engine_start": {
+                "name": "Motor starten",
+                "state_attributes": {
+                    "last_result": {
+                        "name": "Letztes Ergebnis",
+                        "state": {
+                            "car_error": "Fahrzeugfehler",
+                            "completed": "Abgeschlossen",
+                            "connection_failure": "Verbindungsfehler",
+                            "delivered": "Geliefert",
+                            "not_allowed_privacy_enabled": "Nicht erlaubt, Datenschutz aktiviert",
+                            "not_allowed_wrong_usage_mode": "Falscher Nutzungsmodus",
+                            "rejected": "Abgelehnt",
+                            "running": "Läuft",
+                            "timeout": "Zeitüberschreitung",
+                            "unknown": "Unbekannt",
+                            "vehicle_in_sleep": "Fahrzeug im Schlafmodus",
+                            "waiting": "Warten"
+                        }
+                    }
+                }
+            },
+            "engine_stop": {
+                "name": "Motor ausschalten",
+                "state_attributes": {
+                    "last_result": {
+                        "name": "Letztes Ergebnis",
+                        "state": {
+                            "car_error": "Fahrzeugfehler",
+                            "completed": "Abgeschlossen",
+                            "connection_failure": "Verbindungsfehler",
+                            "delivered": "Geliefert",
+                            "not_allowed_privacy_enabled": "Nicht erlaubt, Datenschutz aktiviert",
+                            "not_allowed_wrong_usage_mode": "Falscher Nutzungsmodus",
+                            "rejected": "Abgelehnt",
+                            "running": "Läuft",
+                            "timeout": "Zeitüberschreitung",
+                            "unknown": "Unbekannt",
+                            "vehicle_in_sleep": "Fahrzeug im Schlafmodus",
+                            "waiting": "Warten"
+                        }
+                    }
+                }
+            },
+            "flash": {
+                "name": "Lichtsignal",
+                "state_attributes": {
+                    "last_result": {
+                        "name": "Letztes Ergebnis",
+                        "state": {
+                            "car_error": "Fahrzeugfehler",
+                            "completed": "Abgeschlossen",
+                            "connection_failure": "Verbindungsfehler",
+                            "delivered": "Geliefert",
+                            "not_allowed_privacy_enabled": "Nicht erlaubt, Datenschutz aktiviert",
+                            "not_allowed_wrong_usage_mode": "Falscher Nutzungsmodus",
+                            "rejected": "Abgelehnt",
+                            "timeout": "Zeitüberschreitung",
+                            "unknown": "Unbekannt",
+                            "vehicle_in_sleep": "Fahrzeug im Schlafmodus"
+                        }
+                    }
+                }
+            },
+            "honk": {
+                "name": "Signalhorn",
+                "state_attributes": {
+                    "last_result": {
+                        "name": "Letztes Ergebnis",
+                        "state": {
+                            "car_error": "Fahrzeugfehler",
+                            "completed": "Abgeschlossen",
+                            "connection_failure": "Verbindungsfehler",
+                            "delivered": "Geliefert",
+                            "not_allowed_privacy_enabled": "Nicht erlaubt, Datenschutz aktiviert",
+                            "not_allowed_wrong_usage_mode": "Falscher Nutzungsmodus",
+                            "rejected": "Abgelehnt",
+                            "timeout": "Zeitüberschreitung",
+                            "unknown": "Unbekannt",
+                            "vehicle_in_sleep": "Fahrzeug im Schlafmodus"
+                        }
+                    }
+                }
+            },
+            "honk_flash": {
+                "name": "Signalhorn & Lichtsignal",
+                "state_attributes": {
+                    "last_result": {
+                        "name": "Letztes Ergebnis",
+                        "state": {
+                            "car_error": "Fahrzeugfehler",
+                            "completed": "Abgeschlossen",
+                            "connection_failure": "Verbindungsfehler",
+                            "delivered": "Geliefert",
+                            "not_allowed_privacy_enabled": "Nicht erlaubt, Datenschutz aktiviert",
+                            "not_allowed_wrong_usage_mode": "Falscher Nutzungsmodus",
+                            "rejected": "Abgelehnt",
+                            "timeout": "Zeitüberschreitung",
+                            "unknown": "Unbekannt",
+                            "vehicle_in_sleep": "Fahrzeug im Schlafmodus"
+                        }
+                    }
+                }
+            },
+            "update_data": {
+                "name": "Daten aktualisieren"
+            }
+        },
+        "device_tracker": {
+            "location": {
+                "name": "Standort",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "direction": {
+                        "name": "Richtung"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            }
+        },
+        "image": {
+            "exterior": {
+                "name": "Außen Beifahrerseite"
+            },
+            "exterior_back": {
+                "name": "Heckansicht"
+            },
+            "exterior_back_driver": {
+                "name": "Außen Fahrerseite hinten"
+            },
+            "exterior_back_passenger": {
+                "name": "Außen Beifahrerseite hinten"
+            },
+            "exterior_front": {
+                "name": "Frontansicht"
+            },
+            "exterior_front_driver": {
+                "name": "Außen Fahrerseite vorne"
+            },
+            "exterior_front_passenger": {
+                "name": "Außen Beifahrerseite vorne"
+            },
+            "exterior_side_driver": {
+                "name": "Außen Fahrerseite"
+            },
+            "interior": {
+                "name": "Innen"
+            }
+        },
+        "lock": {
+            "lock": {
+                "name": "Zentralverriegelung",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    },
+                    "last_result": {
+                        "name": "Letztes Ergebnis",
+                        "state": {
+                            "completed": "Abgeschlossen",
+                            "connection_failure": "Verbindungsfehler",
+                            "delivered": "Geliefert",
+                            "not_allowed_privacy_enabled": "Nicht erlaubt, Datenschutz aktiviert",
+                            "not_allowed_wrong_usage_mode": "Falscher Nutzungsmodus",
+                            "rejected": "Abgelehnt",
+                            "timeout": "Zeitüberschreitung",
+                            "unable_to_lock_door_open": "Tür offen",
+                            "unknown": "Unbekannt",
+                            "unlock_time_frame_passed": "Zeitfenster abgelaufen",
+                            "vehicle_in_sleep": "Fahrzeug im Schlafmodus"
+                        }
+                    }
+                }
+            },
+            "lock_reduced_guard": {
+                "name": "Reduzierter Sicherheitsmodus",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    },
+                    "last_result": {
+                        "name": "Letztes Ergebnis",
+                        "state": {
+                            "completed": "Abgeschlossen",
+                            "connection_failure": "Verbindungsfehler",
+                            "delivered": "Geliefert",
+                            "not_allowed_privacy_enabled": "Nicht erlaubt, Datenschutz aktiviert",
+                            "not_allowed_wrong_usage_mode": "Falscher Nutzungsmodus",
+                            "rejected": "Abgelehnt",
+                            "timeout": "Zeitüberschreitung",
+                            "unable_to_lock_door_open": "Tür offen",
+                            "unknown": "Unbekannt",
+                            "unlock_time_frame_passed": "Zeitfenster abgelaufen",
+                            "vehicle_in_sleep": "Fahrzeug im Schlafmodus"
+                        }
+                    }
+                }
+            }
+        },
+        "number": {
+            "data_update_interval": {
+                "name": "Daten-Abrufintervall"
+            },
+            "engine_run_time": {
+                "name": "Motor-Betriebsstunden"
+            }
+        },
+        "sensor": {
+            "api_request_count": {
+                "name": "API Zugriffszähler"
+            },
+            "api_status": {
+                "name": "API Status",
+                "state_attributes": {
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "availability": {
+                "name": "Fahrzeugverbindung",
+                "state": {
+                    "available": "Verfügbar",
+                    "car_in_use": "Fahrzeug ist in Gebrauch",
+                    "no_internet": "Keine Internetverbindung",
+                    "power_saving_mode": "Energiesparmodus",
+                    "unavailable": "Nicht verfügbar",
+                    "unspecified": "Unbekannt"
+                },
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "average_energy_consumption": {
+                "name": "Durchschn. Energieverbrauch",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "average_energy_consumption_automatic": {
+                "name": "Durchschn. Energieverbrauch Automatik",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "average_energy_consumption_charge": {
+                "name": "Durchschn. Energieverbrauch seit dem Laden",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "average_fuel_consumption": {
+                "name": "Durchschn. Kraftstoffverbrauch",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "average_fuel_consumption_automatic": {
+                "name": "Durchschn. Kraftstoffverbrauch Automatik",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "average_speed": {
+                "name": "Durchschn. Geschwindigkeit",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "average_speed_automatic": {
+                "name": "Durchschn. Geschwindigkeit Automatik",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "battery_capacity": {
+                "name": "Batteriekapazität",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "battery_charge_level": {
+                "name": "Batterieladestand (SOC)",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "charging_connection_status": {
+                "name": "Status Ladeanschluss",
+                "state": {
+                    "connection_status_connected_ac": "Wechselstrom verbunden",
+                    "connection_status_connected_dc": "Gleichstrom verbunden",
+                    "connection_status_disconnected": "Getrennt",
+                    "connection_status_fault": "Fehler",
+                    "connection_status_unspecified": "Unbekannt"
+                },
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "charging_system_status": {
+                "name": "Ladezustand",
+                "state": {
+                    "charging_system_charging": "Laden",
+                    "charging_system_done": "Fertig",
+                    "charging_system_fault": "Fehler",
+                    "charging_system_idle": "Warten",
+                    "charging_system_scheduled": "Geplant",
+                    "charging_system_unspecified": "Unbekannt"
+                },
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "distance_to_empty_battery": {
+                "name": "Reichweite elektrisch",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "distance_to_empty_tank": {
+                "name": "Reichweite Verbrenner",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "distance_to_service": {
+                "name": "Kilometer bis zum Service",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "engine_time_to_service": {
+                "name": "Betriebsstunden bis zum Service",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "estimated_charging_time": {
+                "name": "Vorauss. Ladezeit",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "fuel_amount": {
+                "name": "Kraftstoffmenge",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "odometer": {
+                "name": "Gesamt-Kilometerstand",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "time_to_service": {
+                "name": "Zeit bis zum Service",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "trip_meter_automatic": {
+                "name": "Kilometerzähler Automatik",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            },
+            "trip_meter_manual": {
+                "name": "Kilometerzähler Manuell",
+                "state_attributes": {
+                    "api_timestamp": {
+                        "name": "API Zeitstempel"
+                    },
+                    "last_refresh": {
+                        "name": "Zuletzt aktualisiert"
+                    }
+                }
+            }
+        }
+    },
+    "exceptions": {
+        "lock_failure": {
+            "message": "{command} Fahrzeug fehlgeschlagen. Status: {status}. Nachricht: {message}"
+        }
+    },
+    "options": {
+        "abort": {
+            "no_options_available": "Für dein Fahrzeug sind keine Optionen auswählbar."
+        },
+        "step": {
+            "init": {
+                "sections": {
+                    "api": {
+                        "data": {
+                            "vcc_api_key": "Volvo-Developers-API-Schlüssel"
+                        },
+                        "name": "API"
+                    },
+                    "device_tracker": {
+                        "data": {
+                            "device_tracker_picture": "Bild"
+                        },
+                        "name": "Geräte-Tracker"
+                    },
+                    "images": {
+                        "data": {
+                            "image_bg_color": "Hintergrundfarbe Bilder",
+                            "image_transparent": "Transparenter Hintergrund Bilder"
+                        },
+                        "data_description": {
+                            "image_bg_color": "Nur auswählbar, wenn kein transparenter Hintergrund für Bilder ausgewählt wurde."
+                        },
+                        "name": "Bilder"
+                    },
+                    "units": {
+                        "data": {
+                            "energy_consumption_unit": "Einheit Energieverbrauch",
+                            "fuel_consumption_unit": "Verbrauchseinheit"
+                        },
+                        "name": "Einheit"
+                    }
+                }
+            }
+        }
+    },
+    "selector": {
+        "energy_consumption_unit": {
+            "options": {
+                "kwh_100km": "kWh/100 km",
+                "miles_kwh": "mi/kWh"
+            }
+        },
+        "fuel_consumption_unit": {
+            "options": {
+                "l_100km": "L/100 km",
+                "mpg_uk": "mpg (UK)",
+                "mpg_us": "mpg (US)"
+            }
+        },
+        "refresh_data_param": {
+            "options": {
+                "availability": "Verfügbarkeit",
+                "brakes": "Bremsen",
+                "diagnostics": "Diagnose",
+                "doors": "Türen",
+                "engine": "Motor",
+                "engine_status": "Motorstatus",
+                "fuel": "Kraftstoff",
+                "location": "Standort",
+                "odometer": "Gesamt-Kilometerstatus",
+                "recharge_status": "Ladestatus",
+                "statistics": "Statistiken",
+                "tyres": "Reifen",
+                "warnings": "Warnungen",
+                "windows": "Fenster"
+            }
+        }
+    },
+    "services": {
+        "refresh_data": {
+            "description": "Alle Daten, oder nur einzelne Teile aktualisieren.",
+            "fields": {
+                "data": {
+                    "description": "Feld leer lassen, um alle Daten zu aktualisieren.",
+                    "name": "Daten"
+                },
+                "entry": {
+                    "description": "Die zu aktualisierende Entität. Leer lassen, um alle Entitäten zu aktualisieren.",
+                    "name": "Entität"
+                }
+            },
+            "name": "Daten aktualisieren"
+        }
+    }
+}

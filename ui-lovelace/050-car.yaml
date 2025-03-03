@@ -2,10 +2,8 @@ title: Car
 icon: mdi:car-estate
 path: car
 cards:
-  - type: entities
-    show_header_toggle: false
-    entities:
-      - switch.xc60_climate
+  - type: picture-entity
+    entity: image.volvo_xc60_exterior_front
   - type: custom:auto-entities
     show_empty: false
     sort:
@@ -15,7 +13,27 @@ cards:
       show_header_toggle: false
     filter:
       include:
-        - entity_id: "/^sensor.xc60/"
+        - entity_id: "/^lock.*xc60/"
+  - type: custom:auto-entities
+    show_empty: false
+    sort:
+      method: id
+    card:
+      type: entities
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "/^button..*xc60/"
+  - type: custom:auto-entities
+    show_empty: false
+    sort:
+      method: id
+    card:
+      type: entities
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: "/^sensor.*xc60/"
   - type: custom:auto-entities
     show_empty: false
     sort:
@@ -25,7 +43,7 @@ cards:
       hours_to_show: 80
     filter:
       include:
-        - entity_id: "/^sensor.xc60.*_level/"
+        - entity_id: "/^sensor.*xc60.*_level/"
   - type: custom:auto-entities
     show_empty: false
     sort:
@@ -35,7 +53,8 @@ cards:
       hours_to_show: 80
     filter:
       include:
-        - entity_id: "/^sensor.xc60.*_range/"
+        - entity_id: sensor.volvo_xc60_distance_to_empty_battery
+        - entity_id: sensor.volvo_xc60_distance_to_empty_tank
   - type: custom:auto-entities
     show_empty: false
     sort:
@@ -45,4 +64,24 @@ cards:
       hours_to_show: 80
     filter:
       include:
-        - entity_id: "/^binary_sensor.xc60/"
+        - entity_id: "/^sensor.*xc60.*time/"
+  - type: custom:auto-entities
+    show_empty: false
+    sort:
+      method: id
+    card:
+      type: history-graph
+      hours_to_show: 80
+    filter:
+      include:
+        - entity_id: sensor.volvo_xc60_distance_to_service
+  - type: custom:auto-entities
+    show_empty: false
+    sort:
+      method: id
+    card:
+      type: history-graph
+      hours_to_show: 80
+    filter:
+      include:
+        - entity_id: "/^binary_sensor.*xc60/"
