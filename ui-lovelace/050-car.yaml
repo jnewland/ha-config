@@ -11,6 +11,16 @@ cards:
       show_header_toggle: false
     filter:
       include:
+        - entity_id: "/^lock.*xc60/"
+  - type: custom:auto-entities
+    show_empty: false
+    sort:
+      method: id
+    card:
+      type: entities
+      show_header_toggle: false
+    filter:
+      include:
         - entity_id: "/^button..*xc60/"
   - type: custom:auto-entities
     show_empty: false
@@ -41,7 +51,7 @@ cards:
       hours_to_show: 80
     filter:
       include:
-        - entity_id: "/^sensor.*xc60.*_range/"
+        - entity_id: "/^sensor.*xc60.*distance/"
   - type: custom:auto-entities
     show_empty: false
     sort:
