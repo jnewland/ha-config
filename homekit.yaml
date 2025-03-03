@@ -19,7 +19,6 @@ filter:
     - cover.bedroom_shades
     - cover.bathroom_shades
     - cover.yoga_room_shades
-    - switch.xc60_climate
     - switch.atrium_fountain
     - switch.back_porch
     - switch.back_porch_fountain
