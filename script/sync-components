@@ -62,6 +62,12 @@ git clone --depth 1 --branch $DYSON_CLOUD_VERSION https://github.com/libdyson-wg
 rm -rf custom_components/dyson_cloud
 mv $TMPDIR/$$-dyson-cloud/custom_components/dyson_cloud custom_components
 
+# renovate: datasource=github-releases depName=thomasddn/ha-volvo-cars
+VOLVO_VERSION=v1.4.3
+git clone --depth 1 --branch $VOLVO_VERSION https://github.com/thomasddn/ha-volvo-cars $TMPDIR/$$-volvo-cars
+rm -rf custom_components/volvo_cars || true
+mv $TMPDIR/$$-volvo-cars/custom_components/volvo_cars custom_components
+
 # git clone --depth 1 --branch main https://github.com/codyc1515/ha-uber-eats $TMPDIR/$$-uber-eats
 # rm -rf custom_components/uber_eats
 # mv $TMPDIR/$$-uber-eats/custom_components/uber_eats custom_components
