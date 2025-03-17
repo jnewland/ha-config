@@ -18,3 +18,5 @@
 .nfs*
 home-assistant.log.*
 automations.yaml
+env.dev
+template.jinja
