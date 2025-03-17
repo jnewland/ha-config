@@ -7,6 +7,6 @@ entities:
   - light.bedroom_closet
   - light.bedroom_nook
   - light.bedroom_windows
-  - light.bedside_lamp
+  # - light.bedside_lamp
   - light.bedside_table
   - light.bedroom_patio

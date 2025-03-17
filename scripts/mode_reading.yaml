@@ -20,7 +20,7 @@ sequence:
       entity_id:
         - light.bedroom_chandelier
         - light.chandelier_lamp
-        - light.bedside_lamp
+        # - light.bedside_lamp
         - light.bedside_table
         - light.bedroom_nook
         - light.bedroom_patio
