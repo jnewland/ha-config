@@ -8,7 +8,7 @@ cards:
       - input_select.mode
       - alarm_control_panel.alarm
       - lock.front_door
-      # - binary_sensor.front_gate_access_control_window_door_is_open
+      - binary_sensor.front_gate_window_door_is_open
       - input_number.brightness
       - vacuum.downstairs
       - automation.notify_when_person_detected_in_front_yard

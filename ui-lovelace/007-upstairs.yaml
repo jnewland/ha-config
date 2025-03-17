@@ -8,7 +8,7 @@ cards:
       - light.bedroom_overhead
       - light.bedroom_nook
       - light.bedroom_windows
-      - light.bedside_lamp
+      # - light.bedside_lamp
       - light.bedside_table
       - light.chandelier_lamp
       - light.bedroom_patio

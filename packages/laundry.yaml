@@ -60,7 +60,7 @@ binary_sensor:
         value_template: |
           {{
             states('sensor.laundry_electric_consumption_w') != 'unknown' and
-            is_state('binary_sensor.laundry', 'off') and
+            is_state('binary_sensor.laundry_power', 'off') and
             float(states('sensor.laundry_electric_consumption_w'), default=0) > 0 and
             float(states('sensor.laundry_electric_consumption_w'), default=0) < 10
           }}

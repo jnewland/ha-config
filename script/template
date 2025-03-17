@@ -1,4 +1,13 @@
 #!/bin/bash
+if [ -f .env.dev ]; then
+  # use xargs to load all env vars from env.dev
+  export $(cat .env.dev | xargs)
+  echo "Loaded env vars from .env.dev"
+else
+  echo "No .env.dev file found"
+  exit 1
+fi
+
 JSON="$(jq -a --raw-output --arg value "$(</dev/stdin)" '.["template"]=$value' <<< '{}')"
 curl -sS \
   -H "Authorization: Bearer $HASS_TOKEN" \
