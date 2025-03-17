@@ -51,7 +51,7 @@ homeassistant:
       haunt: light.bookshelf_right
     binary_sensor.record_cabinet_playing:
       trigger_service: script.pulse_record_cabinet_lights
-    binary_sensor.bookshelf_camera_in_use:
+    binary_sensor.bigmac_camera_in_use:
       trigger_service: script.red_record_cabinet_lights
       trigger_service_off: script.reset_record_cabinet_lights
     binary_sensor.spacebook_camera_in_use:
