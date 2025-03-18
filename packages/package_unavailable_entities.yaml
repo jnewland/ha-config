@@ -24,11 +24,12 @@ template:
             {% if state_attr('group.ignored_unavailable_entities','entity_id') != none %}
               {% set thirty_minutes = 1800 %}
               {% set ignore_ts = (now().timestamp() - thirty_minutes)|as_datetime %}
-              {% set entities = states|rejectattr('domain','in',['group','button','scene'])|selectattr('state','in',['unavailable','unknown','none'])|list %}
+              {% set entities = states|rejectattr('domain','in',['group','button','scene'])|selectattr('state','in',['unavailable'])|list %}
               {% set buttons = states.button|selectattr('state','eq','unavailable')|list %}
               {{ (entities + buttons)
                 |rejectattr('entity_id', 'in', state_attr('group.ignored_unavailable_entities','entity_id'))
                 |rejectattr('entity_id', 'in', integration_entities('sonos'))
+                |rejectattr('entity_id', 'in', integration_entities('xiaomi_ble'))
                 |rejectattr('entity_id', 'in', integration_entities('unifi'))
                 |rejectattr('entity_id', 'in', integration_entities('unifiprotect'))
                 |rejectattr('last_changed','ge',ignore_ts)
