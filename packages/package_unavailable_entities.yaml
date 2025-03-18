@@ -29,6 +29,8 @@ template:
               {{ (entities + buttons)
                 |rejectattr('entity_id', 'in', state_attr('group.ignored_unavailable_entities','entity_id'))
                 |rejectattr('entity_id', 'in', integration_entities('sonos'))
+                |rejectattr('entity_id', 'in', integration_entities('unifi'))
+                |rejectattr('entity_id', 'in', integration_entities('unifiprotect'))
                 |rejectattr('last_changed','ge',ignore_ts)
                 |rejectattr('entity_id','search','_channels')
                 |rejectattr('entity_id','search','webos_tv')
