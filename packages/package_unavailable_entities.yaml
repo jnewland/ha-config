@@ -21,14 +21,22 @@ template:
           {% endif %}
         attributes:
           entity_id: >
-            {% if state_attr('group.ignored_unavailable_entities','entity_id') != none %}
-              {% set thirty_minutes = 1800 %}
-              {% set ignore_ts = (now().timestamp() - thirty_minutes)|as_datetime %}
-              {% set entities = states|rejectattr('domain','in',['group','button','scene'])|selectattr('state','in',['unavailable','unknown','none'])|list %}
+            {% set ignored = state_attr('group.ignored_unavailable_entities','entity_id') %}
+            {% if ignored != none %}
+              {% set sonos = integration_entities('sonos') %}
+              {% set xiaomi_ble = integration_entities('xiaomi_ble') %}
+              {% set unifi = integration_entities('unifi') %}
+              {% set unifiprotect = integration_entities('unifiprotect') %}
+              {% set timeout = 600 %}
+              {% set ignore_ts = (now().timestamp() - timeout)|as_datetime %}
+              {% set entities = states|rejectattr('domain','in',['group','button','scene'])|selectattr('state','eq','unavailable')|list %}
               {% set buttons = states.button|selectattr('state','eq','unavailable')|list %}
               {{ (entities + buttons)
-                |rejectattr('entity_id', 'in', state_attr('group.ignored_unavailable_entities','entity_id'))
-                |rejectattr('entity_id', 'in', integration_entities('sonos'))
+                |rejectattr('entity_id', 'in', ignored)
+                |rejectattr('entity_id', 'in', sonos)
+                |rejectattr('entity_id', 'in', xiaomi_ble)
+                |rejectattr('entity_id', 'in', unifi)
+                |rejectattr('entity_id', 'in', unifiprotect)
                 |rejectattr('last_changed','ge',ignore_ts)
                 |rejectattr('entity_id','search','_channels')
                 |rejectattr('entity_id','search','webos_tv')
