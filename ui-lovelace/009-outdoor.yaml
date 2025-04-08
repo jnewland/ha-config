@@ -13,7 +13,6 @@ cards:
     title: atrium
     entities:
       # - switch.atrium_fan
-      - light.bamboo
       - light.atrium
       - light.atrium_door
       - light.garage_door

@@ -2,7 +2,6 @@ platform: group
 name: outdoor mood
 entities:
   - light.pergola_pendants
-  - light.bamboo
   - light.gate
   - light.wine_room
   - light.patio
