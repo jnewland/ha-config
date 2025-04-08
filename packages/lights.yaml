@@ -88,9 +88,6 @@ homeassistant:
     light.kitchen_cabinets:
       notify_action: duck
 
-    light.pergola_pendants:
-      fixed_brightness: 103
-
     light.bedside_table_white:
       ignore_brightness: true
     light.bedside_table_red:
