@@ -52,7 +52,8 @@ cards:
   - type: entities
     title: pergola
     entities:
-      - light.pergola_pendants
+      - light.maple
+      - light.pecan
       - switch.pergola_overhead
   - type: markdown
     content: |

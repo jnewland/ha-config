@@ -13,7 +13,6 @@ cards:
     title: atrium
     entities:
       # - switch.atrium_fan
-      - light.bamboo
       - light.atrium
       - light.atrium_door
       - light.garage_door
@@ -29,6 +28,9 @@ cards:
     entities:
       - light.front_porch
       - light.front_door
+      - light.oak
+      - light.maple
+      - light.pecan
       - binary_sensor.front_gate_window_door_is_open
   - type: entities
     title: patio
@@ -38,7 +40,8 @@ cards:
   - type: entities
     title: pergola
     entities:
-      - light.pergola_pendants
+      - light.maple
+      - light.pecan
       - switch.pergola_overhead
   - type: entities
     entities:

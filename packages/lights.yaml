@@ -69,10 +69,6 @@ homeassistant:
     light.atrium:
       notify_action: duck
       fixed_brightness: 64
-    light.bamboo:
-      notify_action: duck
-      fixed_brightness: 127
-      fixed_color_temp: 396
     light.front_porch:
       fixed_brightness: 255
 
@@ -91,9 +87,6 @@ homeassistant:
       fixed_brightness: 255
     light.kitchen_cabinets:
       notify_action: duck
-
-    light.pergola_pendants:
-      fixed_brightness: 103
 
     light.bedside_table_white:
       ignore_brightness: true

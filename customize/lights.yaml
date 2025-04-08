@@ -4,10 +4,7 @@ light.front_door:
   icon: mdi:outdoor-lamp
 light.front_porch:
   icon: mdi:ceiling-light
-light.bamboo:
-  icon: mdi:wall-sconce-flat-variant
 light.atrium:
   icon: mdi:ceiling-light
 light.atrium_door:
   icon: mdi:outdoor-lamp
- 

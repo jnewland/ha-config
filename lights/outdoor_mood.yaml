@@ -1,8 +1,6 @@
 platform: group
 name: outdoor mood
 entities:
-  - light.pergola_pendants
-  - light.bamboo
   - light.gate
   - light.wine_room
   - light.patio
@@ -10,3 +8,5 @@ entities:
   - light.lounge_fence
   - light.roof_deck_couch
   - light.oak
+  - light.maple
+  - light.pecan
