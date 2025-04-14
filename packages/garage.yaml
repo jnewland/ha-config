@@ -16,6 +16,8 @@ script:
         entity_id: media_player.garage
       - service: homeassistant.turn_on
         entity_id: fan.garage
+      - service: light.turn_on
+        entity_id: light.garage
 
   unlock_garage:
     sequence:
@@ -29,6 +31,7 @@ group:
       - switch.garage_overhead
       - media_player.garage
       - fan.garage
+      - light.garage
 
 binary_sensor:
   - platform: template
