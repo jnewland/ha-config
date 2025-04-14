@@ -16,7 +16,6 @@ automation:
           entity_id: sensor.upstairs_thermostat_air_temperature
 
   - alias: upstairs heat
-    mode: queued
     id: 052a2e46-33e4-4964-8da4-42609ca7e683
     trigger:
       platform: numeric_state
@@ -42,7 +41,6 @@ automation:
           temperature: 69
 
   - alias: upstairs AC
-    mode: queued
     id: c66cded8-2a60-4dd4-96cc-677ff080934c
     trigger:
       - platform: numeric_state
@@ -66,7 +64,6 @@ automation:
           temperature: 74
 
   - alias: upstairs reading
-    mode: queued
     id: f9784a98-1586-4f2f-b9fe-129bee235ac5
     trigger:
       - platform: state
@@ -91,7 +88,6 @@ automation:
           fan_mode: "Low"
 
   - alias: upstairs sleeping
-    mode: queued
     id: de717eac-9b51-4f6e-b636-9c8ddcd7e610
     trigger:
       - platform: state
@@ -116,7 +112,6 @@ automation:
           temperature: 69
 
   - alias: upstairs morning climate reset
-    mode: queued
     id: 16456902-c3b2-44ab-8765-454eab93d4b3
     trigger:
       - platform: state
