@@ -17,13 +17,7 @@ from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import (
-    ATTR_LAST_REFRESH,
-    DATA_BATTERY_CAPACITY,
-    DATA_REQUEST_COUNT,
-    DOMAIN,
-    MANUFACTURER,
-)
+from .const import DATA_BATTERY_CAPACITY, DATA_REQUEST_COUNT, DOMAIN, MANUFACTURER
 from .entity_description import VolvoCarsDescription
 from .store import VolvoCarsStoreManager
 from .volvo.api import VolvoCarsApi
@@ -201,7 +195,7 @@ class VolvoCarsDataCoordinator(DataUpdateCoordinator[CoordinatorData]):
                 if isinstance(result, VolvoApiException):
                     # Maybe it's just one call that fails. Log the error and
                     # continue processing the other calls.
-                    _LOGGER.debug(
+                    _LOGGER.warning(
                         "%s - Error during data update: %s",
                         self.config_entry.entry_id,
                         result.message,
@@ -213,13 +207,7 @@ class VolvoCarsDataCoordinator(DataUpdateCoordinator[CoordinatorData]):
                     # Something bad happened, raise immediately.
                     raise result
 
-                api_data = cast(CoordinatorData, result)
-
-                for v in api_data.values():
-                    if v:
-                        v.extra_data[ATTR_LAST_REFRESH] = datetime.now(UTC)
-
-                data |= api_data
+                data |= cast(CoordinatorData, result)
                 valid += 1
 
             # Raise an error if not a single API call succeeded
@@ -442,6 +430,7 @@ class TokenCoordinator:
             result = await self._auth_api.async_refresh_token(
                 self._store.data["refresh_token"]
             )
+
         except VolvoAuthException as ex:
             if raise_on_auth_failed:
                 _LOGGER.exception("Authentication failed: %s", ex.message)
@@ -460,6 +449,22 @@ class TokenCoordinator:
                     "Authentication failed: %s. Starting reauth flow", ex.message
                 )
                 self._entry.async_start_reauth(self._hass)
+
+        except VolvoApiException as ex:
+            if raise_on_auth_failed:
+                _LOGGER.exception("Authentication failed: %s", ex.message)
+                raise ConfigEntryAuthFailed(
+                    f"Authentication failed. {ex.message}"
+                ) from ex
+
+            if not self._delays:
+                self._delays = deque([300])
+
+            _LOGGER.exception(
+                "Authentication failed: %s. Trying again in %ss",
+                ex.message,
+                self._delays[0],
+            )
 
         if result and result.token:
             await self._store.async_update(
