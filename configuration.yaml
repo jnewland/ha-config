@@ -43,7 +43,7 @@ lovelace:
       type: js
     - url: /local/entity-attributes-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: js
-    - url: /local/auto-entities.js?source=https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/v1.13.0/auto-entities.js
+    - url: /local/auto-entities.js?source=https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/v1.14.0/auto-entities.js
       type: module
     - url: /local/card-mod.js?source=https://raw.githubusercontent.com/thomasloven/lovelace-card-mod/v3.4.4/card-mod.js
       type: module
