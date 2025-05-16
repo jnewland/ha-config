@@ -81,7 +81,7 @@ automation:
       - action: google_generative_ai_conversation.generate_content
         response_variable: gemini
         data:
-          image_filename:
+          filenames:
             - /tmp/person_{{ trigger.payload_json['after']['camera'] }}.jpg
           prompt: >-
             You are an AI agent designed to help busy homeowners stay aware of their
@@ -154,7 +154,7 @@ automation:
       - action: google_generative_ai_conversation.generate_content
         response_variable: gemini
         data:
-          image_filename:
+          filenames:
             - /tmp/dog_{{ trigger.payload_json['after']['camera'] }}.jpg
           prompt: >-
             You are an AI agent designed to help busy homeowners stay aware of their
@@ -265,7 +265,7 @@ automation:
       - service: google_generative_ai_conversation.generate_content
         response_variable: gemini
         data:
-          image_filename:
+          filenames:
             - /tmp/crate_medium.jpg
           prompt: >-
             You are an AI agent designed to help busy homeowners stay aware of their
