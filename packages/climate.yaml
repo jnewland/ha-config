@@ -7,18 +7,15 @@ automation:
       below: 68
       for:
         minutes: 3
-    condition:
-      condition: numeric_state
-      entity_id: weather.tomorrow_io_home_nowcast
-      attribute: temperature
-      below: 68
+    conditions: >-
+      {{ not is_state('climate.upstairs', 'heat') }}
     action:
       - service: climate.set_hvac_mode
         data:
           entity_id: climate.upstairs
           hvac_mode: heat
       - delay:
-          seconds: 10
+          seconds: 3
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
@@ -43,7 +40,7 @@ automation:
           entity_id: climate.upstairs
           hvac_mode: cool
       - delay:
-          seconds: 10
+          seconds: 3
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
@@ -61,17 +58,11 @@ automation:
           entity_id: climate.upstairs
           hvac_mode: cool
       - delay:
-          seconds: 10
+          seconds: 3
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
           temperature: 69
-      - delay:
-          seconds: 10
-      - service: climate.set_fan_mode
-        entity_id: climate.upstairs
-        data:
-          fan_mode: "Low"
 
   - alias: upstairs sleeping
     id: de717eac-9b51-4f6e-b636-9c8ddcd7e610
@@ -80,18 +71,12 @@ automation:
         entity_id: input_select.mode
         to: Sleeping
     action:
-      - service: climate.set_fan_mode
-        entity_id: climate.upstairs
-        data:
-          fan_mode: "Low"
-      - delay:
-          seconds: 10
       - service: climate.set_hvac_mode
         data:
           entity_id: climate.upstairs
           hvac_mode: cool
       - delay:
-          seconds: 10
+          seconds: 3
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
@@ -104,16 +89,10 @@ automation:
         entity_id: input_select.mode
         to: Morning
     action:
-      - service: climate.set_hvac_mode
+      - service: climate.set_preset_mode
         entity_id: climate.upstairs
         data:
-          hvac_mode: "off"
-      - delay:
-          seconds: 10
-      - service: climate.set_fan_mode
-        entity_id: climate.upstairs
-        data:
-          fan_mode: "Auto low"
+          preset_mode: home
 
   - alias: notify when leak sensor trips
     id: 85023ab0-13e5-4b4a-aba1-3e7d58973ad1
