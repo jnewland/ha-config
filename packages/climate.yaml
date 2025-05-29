@@ -35,6 +35,8 @@ automation:
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
         above: 75
+    conditions: >-
+      {{ not is_state('climate.upstairs', 'cool') }}
     action:
       - service: climate.set_hvac_mode
         data:

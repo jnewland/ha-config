@@ -43,7 +43,7 @@ lovelace:
       type: js
     - url: /local/entity-attributes-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: js
-    - url: /local/auto-entities.js?source=https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/v1.14.0/auto-entities.js
+    - url: /local/auto-entities.js?source=https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/v1.16.1/auto-entities.js
       type: module
     - url: /local/card-mod.js?source=https://raw.githubusercontent.com/thomasloven/lovelace-card-mod/v3.4.4/card-mod.js
       type: module
@@ -57,7 +57,7 @@ lovelace:
       type: module
     - url: /local/custom-sonos-card.js?source=https://github.com/johanfrick/custom-sonos-card/releases/download/v8.6.0/custom-sonos-card.js&v=3
       type: module
-    - url: /local/mini-graph-card-bundle.js?source=https://github.com/kalkih/mini-graph-card/releases/download/v0.12.1/mini-graph-card-bundle.js
+    - url: /local/mini-graph-card-bundle.js?source=https://github.com/kalkih/mini-graph-card/releases/download/v0.13.0/mini-graph-card-bundle.js
       type: module
     - url: /local/weather-chart-card.js?source=https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
       type: module
