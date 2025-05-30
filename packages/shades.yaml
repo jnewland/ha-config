@@ -111,11 +111,6 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
-        above: 74
-        for:
-          minutes: 3
-      - platform: numeric_state
-        entity_id: sensor.upstairs_thermostat_air_temperature
         above: 75
     condition:
       - condition: template
