@@ -4,7 +4,7 @@ automation:
     trigger:
       platform: numeric_state
       entity_id: sensor.upstairs_thermostat_air_temperature
-      below: 68
+      below: 67
       for:
         minutes: 3
     conditions: >-
