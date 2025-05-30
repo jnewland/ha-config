@@ -1,40 +1,21 @@
 automation:
-  - alias: poll GoControl GC-TBZ48
-    # I've set param 23 to 8319, which should cause the thing to report
-    # No such luck, so poll it every 5 minutes
-    id: 7195ed64-b3c1-4940-96bf-77251ea54b6b
-    trigger:
-      - platform: time_pattern
-        minutes: "/5"
-    action:
-      - service: zwave_js.refresh_value
-        data:
-          entity_id: climate.upstairs
-          refresh_all_values: true
-      - service: zwave_js.refresh_value
-        data:
-          entity_id: sensor.upstairs_thermostat_air_temperature
-
   - alias: upstairs heat
     id: 052a2e46-33e4-4964-8da4-42609ca7e683
     trigger:
       platform: numeric_state
       entity_id: sensor.upstairs_thermostat_air_temperature
-      below: 68
+      below: 67
       for:
         minutes: 3
-    condition:
-      condition: numeric_state
-      entity_id: weather.tomorrow_io_home_nowcast
-      attribute: temperature
-      below: 68
+    conditions: >-
+      {{ not is_state('climate.upstairs', 'heat') }}
     action:
       - service: climate.set_hvac_mode
         data:
           entity_id: climate.upstairs
           hvac_mode: heat
       - delay:
-          seconds: 10
+          seconds: 3
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
@@ -59,7 +40,7 @@ automation:
           entity_id: climate.upstairs
           hvac_mode: cool
       - delay:
-          seconds: 10
+          seconds: 3
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
@@ -77,17 +58,11 @@ automation:
           entity_id: climate.upstairs
           hvac_mode: cool
       - delay:
-          seconds: 10
+          seconds: 3
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
           temperature: 69
-      - delay:
-          seconds: 10
-      - service: climate.set_fan_mode
-        entity_id: climate.upstairs
-        data:
-          fan_mode: "Low"
 
   - alias: upstairs sleeping
     id: de717eac-9b51-4f6e-b636-9c8ddcd7e610
@@ -96,18 +71,12 @@ automation:
         entity_id: input_select.mode
         to: Sleeping
     action:
-      - service: climate.set_fan_mode
-        entity_id: climate.upstairs
-        data:
-          fan_mode: "Low"
-      - delay:
-          seconds: 10
       - service: climate.set_hvac_mode
         data:
           entity_id: climate.upstairs
           hvac_mode: cool
       - delay:
-          seconds: 10
+          seconds: 3
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
@@ -120,16 +89,10 @@ automation:
         entity_id: input_select.mode
         to: Morning
     action:
-      - service: climate.set_hvac_mode
+      - service: climate.set_preset_mode
         entity_id: climate.upstairs
         data:
-          hvac_mode: "off"
-      - delay:
-          seconds: 10
-      - service: climate.set_fan_mode
-        entity_id: climate.upstairs
-        data:
-          fan_mode: "Auto low"
+          preset_mode: home
 
   - alias: notify when leak sensor trips
     id: 85023ab0-13e5-4b4a-aba1-3e7d58973ad1

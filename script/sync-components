@@ -80,6 +80,12 @@ rm -rf custom_components/combustion || true
 # rm -rf custom_components/uber_eats
 # mv $TMPDIR/$$-uber-eats/custom_components/uber_eats custom_components
 
+# renovate: datasource=github-releases depName=dahlb/ha_carrier
+CARRIER_VERSION=v2.7.22
+git clone --depth 1 --branch $CARRIER_VERSION https://github.com/dahlb/ha_carrier $TMPDIR/$$-carrier
+rm -rf custom_components/ha_carrier || true
+mv $TMPDIR/$$-carrier/custom_components/ha_carrier custom_components
+
 curl -sL --fail -o $TMPDIR/advanced-camera-card.zip https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.2.1/advanced-camera-card.zip
 # unzipping this file directly creates a folder called dist
 # move all files into www
