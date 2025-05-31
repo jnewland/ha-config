@@ -11,7 +11,7 @@ template:
           {% set T = (T_f - 32) * 5 / 9 %}
           {% set a = 17.625 %}
           {% set b = 243.04 %}
-          {% set gamma = (((a * T) / (b + T)) + (RH / 100) | log) %}
+          {% set gamma = ((((a * T) / (b + T)) + (RH / 100)) | log) %}
           {% set dpC = (b * gamma) / (a - gamma) %}
           {{ ((dpC * 9 / 5) + 32) | round(1) }}
 
