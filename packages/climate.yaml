@@ -8,11 +8,17 @@ template:
         state: >
           {% set T_f = states('sensor.icomfort_s30_400ae1_current_temperature') | float(default=0) %}
           {% set RH = states('sensor.icomfort_s30_400ae1_current_humidity') | float(default=0) %}
+          {# Convert Fahrenheit to Celsius for the Magnus formula #}
           {% set T = (T_f - 32) * 5 / 9 %}
+          {# Magnus formula constants for calculating dew point #}
           {% set a = 17.625 %}
           {% set b = 243.04 %}
+          {# Calculate gamma using the Magnus approximation formula #}
+          {# This combines temperature and humidity to find the saturation point #}
           {% set gamma = ((((a * T) / (b + T)) + (RH / 100)) | log) %}
+          {# Calculate dew point in Celsius using the Magnus formula #}
           {% set dpC = (b * gamma) / (a - gamma) %}
+          {# Convert dew point back to Fahrenheit and round to 1 decimal place #}
           {{ ((dpC * 9 / 5) + 32) | round(1) }}
 
   - sensor:
