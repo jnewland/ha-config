@@ -6,8 +6,8 @@ template:
         device_class: temperature
         state_class: measurement
         state: >
-          {% set T_f = states('sensor.icomfort_s30_400ae1_current_temperature') | float(default=0) %}
-          {% set RH = states('sensor.icomfort_s30_400ae1_current_humidity') | float(default=0) %}
+          {% set T_f = states('sensor.downstairs_temperature') | float(default=0) %}
+          {% set RH = states('sensor.downstairs_humidity') | float(default=0) %}
           {# Convert Fahrenheit to Celsius for the Magnus formula #}
           {% set T = (T_f - 32) * 5 / 9 %}
           {# Magnus formula constants for calculating dew point #}
