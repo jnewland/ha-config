@@ -103,7 +103,7 @@ cards:
       show:
         fill: false
         extrema: true
-        points: hover
+        legend: false
     filter:
       include:
         - entity_id: "/.*_zone_daily_runtime$/"
