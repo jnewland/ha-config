@@ -105,3 +105,33 @@ cards:
       exclude:
         - last_updated: "> 20m ago"
         - state: "null"
+
+  - type: entities
+    entities:
+      - sensor.perceived_indoor_humidity_description
+
+  - type: custom:mini-graph-card
+    name: Dew point
+    entities:
+      - entity: sensor.indoor_dew_point
+        name: Dew Point (°F)
+    hours_to_show: 24
+    show:
+      labels: true
+      legend: false
+      fill: true
+    color_thresholds:
+      - value: 45
+        color: "#aad3df" # Extremely Comfortable
+      - value: 50
+        color: "#cdeccf" # Dry and Very Comfortable
+      - value: 55
+        color: "#f5e99d" # Comfortable
+      - value: 60
+        color: "#ffd27f" # Noticeable
+      - value: 65
+        color: "#ffb84d" # Muggy
+      - value: 70
+        color: "#ff7b5c" # Uncomfortable
+      - value: 75
+        color: "#e05757" # Oppressive

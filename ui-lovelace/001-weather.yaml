@@ -99,7 +99,7 @@ cards:
 
   - type: entities
     entities:
-      - sensor.perceived_humidity
+      - sensor.perceived_humidity_description
 
   - type: custom:mini-graph-card
     name: Dew point

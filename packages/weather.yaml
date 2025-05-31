@@ -163,7 +163,7 @@ template:
 
   - sensor:
       - name: Perceived Humidity
-        unique_id: perceived_humidity
+        unique_id: perceived_humidity_description
         state: >
           {% set dp = states('sensor.tomorrow_io_home_dew_point') | float(-100) %}
           {% if dp >= 75 %}
