@@ -13,49 +13,69 @@ cards:
       - automation.upstairs_reading
       - automation.upstairs_sleeping
       - automation.upstairs_morning_climate_reset
-  - type: custom:auto-entities
-    card:
-      type: custom:mini-graph-card
-      name: outdoor temperature
-      hours_to_show: 36
-      show:
-        fill: false
-        state: false
-    filter:
-      include:
-        - entity_id: "/^sensor.*_temperature/"
-      exclude:
-        - entity_id: "/^sensor.*_air_temperature$/"
-        - entity_id: "/diskstation/"
-        - entity_id: "/synology/"
-        - entity_id: "/icomfort/"
-        - entity_id: "/fan_temperature/"
+  - type: custom:mini-graph-card
+    hours_to_show: 24
+    show:
+      fill: false
+      state: false
+      average: true
+      extrema: true
+      labels: true
+      legend: false
+    entities:
+      - entity: sensor.upstairs_outdoor_temperature
   - type: custom:auto-entities
     card:
       type: custom:mini-graph-card
       name: humidity
-      hours_to_show: 36
+      hours_to_show: 24
       show:
         fill: false
         state: false
+        average: true
+        extrema: true
+        labels: true
+        legend: false
     filter:
       include:
-        - entity_id: "/^sensor.*_humidity/"
+        - entity_id: "/^sensor.*_humidity$/"
+      exclude:
+        - entity_id: "/^.*katt.*$/"
+        - entity_id: "/^.*dragon.*$/"
+        - entity_id: "/^.*wine.*$/"
   - type: custom:auto-entities
     card:
       type: custom:mini-graph-card
       name: indoor temperature
-      hours_to_show: 36
+      hours_to_show: 24
       show:
         fill: false
         state: false
+        average: true
+        extrema: true
+        labels: true
+        legend: false
+        loading_indicator: true
     filter:
       include:
-        - entity_id: "/^sensor.*_air_temperature$/"
-        - entity_id: "/^sensor.*_fan_temperature$/"
-        - entity_id: "/^sensor.*_current_temperature$/"
+        - entity_id: "/^sensor.*_temperature/"
       exclude:
-        - entity_id: sensor.wine_room_air_temperature
+        - last_updated: "> 20m ago"
+        - state: "null"
+        - entity_id: "/^.*max_.*$/"
+        - entity_id: "/^.*min_.*$/"
+        - entity_id: "/^.*katt.*$/"
+        - entity_id: "/^.*dragon.*$/"
+        - entity_id: "/^.*wine.*$/"
+        - entity_id: "/^.*pergola.*$/"
+        - entity_id: "/^.*outdoor.*$/"
+        - entity_id: "/diskstation/"
+        - entity_id: "/synology/"
+        - entity_id: "/icomfort/"
+        - entity_id: "/fan_temperature/"
+        - integration: unifi
+        - integration: unifiprotect
+
   - type: custom:mini-graph-card
     show:
       fill: false
@@ -63,17 +83,25 @@ cards:
     entities:
       - entity: sensor.wine_room_air_temperature
     name: wine room
-    hours_to_show: 168
+    hours_to_show: 24
     group_by: hour
   - type: custom:auto-entities
     card:
       type: custom:mini-graph-card
       name: light
-      hours_to_show: 36
+      hours_to_show: 24
       show:
         fill: false
         state: false
+        average: true
+        extrema: true
+        labels: true
+        legend: false
+        loading_indicator: true
     filter:
       include:
         - entity_id: "/^sensor.*_light$/"
         - entity_id: "/^sensor.*_illuminance$/"
+      exclude:
+        - last_updated: "> 20m ago"
+        - state: "null"
