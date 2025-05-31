@@ -136,3 +136,40 @@ cards:
         color: "#ff7b5c" # Uncomfortable
       - value: 75
         color: "#e05757" # Oppressive
+
+  # Daily duty-cycle bars (last 7 days)
+  - type: custom:mini-graph-card
+    name: HVAC Daily Duty Cycle
+    hours_to_show: 168 # 7 days
+    group_by: date
+    aggregate_func: avg # avg of 0/1 = duty %
+    show:
+      graph: bar
+      labels: true
+      extrema: true
+    entities:
+      - entity: binary_sensor.upstairs_hvac_active
+        name: Upstairs
+        color: "#1e90ff"
+      - entity: binary_sensor.downstairs_hvac_active
+        name: Downstairs
+        color: "#ff8c00"
+
+  # Weekly trend line (last 4 weeks)
+  - type: custom:mini-graph-card
+    name: HVAC Weekly Duty Cycle
+    hours_to_show: 672 # 4 weeks
+    group_by: date
+    aggregate_func: avg
+    points_per_hour: 0.1 # ~1 pt per day
+    show:
+      graph: line
+      labels: true
+      extrema: true
+    entities:
+      - entity: binary_sensor.upstairs_hvac_active
+        name: Upstairs
+        color: "#1e90ff"
+      - entity: binary_sensor.downstairs_hvac_active
+        name: Downstairs
+        color: "#ff8c00"
