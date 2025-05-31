@@ -36,6 +36,7 @@ cards:
         extrema: true
         labels: true
         legend: false
+        loading_indicator: false
     filter:
       include:
         - entity_id: "/^sensor.*_humidity$/"
@@ -55,7 +56,7 @@ cards:
         extrema: true
         labels: true
         legend: false
-        loading_indicator: true
+        loading_indicator: false
     filter:
       include:
         - entity_id: "/^sensor.*_temperature/"
@@ -97,7 +98,7 @@ cards:
         extrema: true
         labels: true
         legend: false
-        loading_indicator: true
+        loading_indicator: false
     filter:
       include:
         - entity_id: "/^sensor.*_light$/"
