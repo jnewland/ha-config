@@ -97,10 +97,6 @@ cards:
       - input_number.precipitation_forecast_probability_threshold
       - sensor.forecast_duration
 
-  - type: entities
-    entities:
-      - sensor.perceived_humidity_description
-
   - type: custom:mini-graph-card
     name: Dew point
     entities:

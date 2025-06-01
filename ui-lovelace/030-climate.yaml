@@ -124,7 +124,7 @@ cards:
   - type: custom:mini-graph-card
     name: Dew point
     entities:
-      - entity: sensor.indoor_dew_point
+      - entity: sensor.downstairs_comfort_dew_point
         name: Dew Point (°F)
     hours_to_show: 24
     show:
