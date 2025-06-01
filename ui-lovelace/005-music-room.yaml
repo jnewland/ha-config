@@ -24,3 +24,21 @@ cards:
     entity: media_player.music_room
   - type: media-control
     entity: media_player.music_room_channels
+
+  - type: mini-graph-card
+    entity: sensor.aranet4_12a46_carbon_dioxide
+    hours_to_show: 36
+    show:
+      fill: false
+      state: false
+      average: true
+      extrema: true
+      labels: true
+      legend: false
+    color_thresholds:
+      - value: 1000
+        color: "#00FF00"
+      - value: 1200
+        color: "#FFFF00"
+      - value: 1500
+        color: "#FF0000"
