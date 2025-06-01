@@ -44,6 +44,7 @@ cards:
         - entity_id: "/^.*katt.*$/"
         - entity_id: "/^.*dragon.*$/"
         - entity_id: "/^.*wine.*$/"
+        - entity_id: "/^.*comfort.*$/"
   - type: custom:auto-entities
     card:
       type: custom:mini-graph-card
