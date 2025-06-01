@@ -61,15 +61,6 @@ cards:
 
   - type: custom:mini-graph-card
     entities:
-      - sensor.dragon_wing_dew_point
-      - sensor.dragon_wing_temperature
-    name: temp and dew point
-    hours_to_show: 72
-    show:
-      fill: false
-
-  - type: custom:mini-graph-card
-    entities:
       - sensor.tomorrow_io_home_cloud_cover
     name: cloud cover
     hours_to_show: 72
