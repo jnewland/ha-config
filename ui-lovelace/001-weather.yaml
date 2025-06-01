@@ -126,3 +126,10 @@ cards:
         color: "#ff7b5c" # Uncomfortable
       - value: 75
         color: "#e05757" # Oppressive
+
+  - type: custom:auto-entities
+    card:
+      type: entities
+    filter:
+      include:
+        - device: /outdoor comfort/

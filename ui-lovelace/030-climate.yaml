@@ -108,8 +108,18 @@ cards:
         - state: "null"
 
   - type: entities
+    show_header_toggle: false
     entities:
-      - sensor.perceived_indoor_humidity_description
+      - number.downstairs_dehumidification_overcooling
+      - select.downstairs_humidity_mode
+      - switch.downstairs_allergen_defender
+
+  - type: entities
+    show_header_toggle: false
+    entities:
+      - sensor.upstairs_filter_remaining
+      - sensor.upstairs_airflow
+      - sensor.upstairs_static_pressure
 
   - type: custom:mini-graph-card
     name: Dew point
@@ -173,3 +183,17 @@ cards:
       - entity: binary_sensor.downstairs_hvac_active
         name: Downstairs
         color: "#ff8c00"
+
+  - type: custom:auto-entities
+    card:
+      type: entities
+    filter:
+      include:
+        - device: /upstairs comfort/
+
+  - type: custom:auto-entities
+    card:
+      type: entities
+    filter:
+      include:
+        - device: /downstairs comfort/
