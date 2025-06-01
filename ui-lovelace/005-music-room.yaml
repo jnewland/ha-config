@@ -26,7 +26,8 @@ cards:
     entity: media_player.music_room_channels
 
   - type: custom:mini-graph-card
-    entity: sensor.aranet4_12a46_carbon_dioxide
+    entities:
+      - sensor.aranet4_12a46_carbon_dioxide
     hours_to_show: 36
     show:
       fill: false
