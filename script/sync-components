@@ -93,6 +93,12 @@ git clone --depth 1 --branch $CARRIER_VERSION https://github.com/dahlb/ha_carrie
 rm -rf custom_components/ha_carrier || true
 mv $TMPDIR/$$-carrier/custom_components/ha_carrier custom_components
 
+# renovate datasource=github-releases depName=dolezsa/thermal_comfort
+THERMAL_COMFORT_VERSION=2.2.5
+git clone --depth 1 --branch $THERMAL_COMFORT_VERSION https://github.com/dolezsa/thermal_comfort $TMPDIR/$$-thermal_comfort
+rm -rf custom_components/thermal_comfort || true
+mv $TMPDIR/$$-thermal_comfort/custom_components/thermal_comfort custom_components
+
 curl -sL --fail -o $TMPDIR/advanced-camera-card.zip https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.2.1/advanced-camera-card.zip
 # unzipping this file directly creates a folder called dist
 # move all files into www
