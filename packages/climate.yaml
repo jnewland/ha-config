@@ -1,3 +1,51 @@
+template:
+  - binary_sensor:
+      - name: "Upstairs HVAC Active"
+        unique_id: upstairs_hvac_active
+        state: >
+          {{ state_attr('climate.upstairs', 'hvac_action')
+               in ['cooling', 'heating'] }}
+      - name: "Downstairs HVAC Active"
+        unique_id: downstairs_hvac_active
+        state: >
+          {{ state_attr('climate.downstairs', 'hvac_action')
+               in ['cooling', 'heating'] }}
+
+sensor:
+  ## Duty-cycle (% of current hour the system is ON)
+  - platform: history_stats
+    name: Upstairs HVAC Duty Cycle Hourly
+    entity_id: binary_sensor.upstairs_hvac_active
+    state: "on"
+    type: ratio
+    start: "{{ now().replace(minute=0, second=0, microsecond=0) }}"
+    duration: { hours: 1 }
+
+  - platform: history_stats
+    name: Downstairs HVAC Duty Cycle Hourly
+    entity_id: binary_sensor.downstairs_hvac_active
+    state: "on"
+    type: ratio
+    start: "{{ now().replace(minute=0, second=0, microsecond=0) }}"
+    duration: { hours: 1 }
+
+  ## Runtime (hours so far today)
+  - platform: history_stats
+    name: Upstairs HVAC Runtime Daily
+    entity_id: binary_sensor.upstairs_hvac_active
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0, microsecond=0) }}"
+    duration: { hours: 24 }
+
+  - platform: history_stats
+    name: Downstairs HVAC Runtime Daily
+    entity_id: binary_sensor.downstairs_hvac_active
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0, microsecond=0) }}"
+    duration: { hours: 24 }
+
 automation:
   - alias: upstairs heat
     id: 052a2e46-33e4-4964-8da4-42609ca7e683

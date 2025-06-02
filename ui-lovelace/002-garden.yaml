@@ -69,108 +69,108 @@ cards:
     title: precipitation
     show_header_toggle: false
     entities:
-      - sensor.dragon_wing_hourly_rain
-      - sensor.dragon_wing_daily_rain
-      - sensor.dragon_wing_weekly_rain
-      - sensor.dragon_wing_monthly_rain
+      - sensor.room_with_a_view_austin_hourly_rain
+      - sensor.room_with_a_view_austin_daily_rain
+      - sensor.room_with_a_view_austin_weekly_rain
+      - sensor.room_with_a_view_austin_monthly_rain
 
-  - type: custom:auto-entities
-    sort:
-      method: name
-      reverse: true
-    card:
-      type: custom:mini-graph-card
-      hours_to_show: 168
-      group_by: hour
-      show:
-        extrema: true
-        fill: false
-    filter:
-      include:
-        - integration: xiaomi_ble
-          entity_id: "/.*_conductivity$/"
-  - type: custom:auto-entities
-    sort:
-      method: name
-      reverse: true
-    card:
-      type: custom:mini-graph-card
-      hours_to_show: 168
-      group_by: hour
-      show:
-        extrema: true
-        fill: false
-    filter:
-      include:
-        - integration: xiaomi_ble
-          entity_id: "/.*_moisture$/"
-  - type: custom:auto-entities
-    sort:
-      method: name
-      reverse: true
-    card:
-      type: custom:mini-graph-card
-      hours_to_show: 168
-      group_by: hour
-      show:
-        extrema: true
-        fill: false
-    filter:
-      include:
-        - integration: xiaomi_ble
-          entity_id: "/.*_illuminance$/"
-  - type: custom:auto-entities
-    sort:
-      method: name
-      reverse: true
-    card:
-      type: custom:mini-graph-card
-      hours_to_show: 168
-      group_by: hour
-      show:
-        extrema: true
-        fill: false
-    filter:
-      include:
-        - integration: xiaomi_ble
-          entity_id: "/.*_temperature$/"
+  # - type: custom:auto-entities
+  #   sort:
+  #     method: name
+  #     reverse: true
+  #   card:
+  #     type: custom:mini-graph-card
+  #     hours_to_show: 168
+  #     group_by: hour
+  #     show:
+  #       extrema: true
+  #       fill: false
+  #   filter:
+  #     include:
+  #       - integration: xiaomi_ble
+  #         entity_id: "/.*_conductivity$/"
+  # - type: custom:auto-entities
+  #   sort:
+  #     method: name
+  #     reverse: true
+  #   card:
+  #     type: custom:mini-graph-card
+  #     hours_to_show: 168
+  #     group_by: hour
+  #     show:
+  #       extrema: true
+  #       fill: false
+  #   filter:
+  #     include:
+  #       - integration: xiaomi_ble
+  #         entity_id: "/.*_moisture$/"
+  # - type: custom:auto-entities
+  #   sort:
+  #     method: name
+  #     reverse: true
+  #   card:
+  #     type: custom:mini-graph-card
+  #     hours_to_show: 168
+  #     group_by: hour
+  #     show:
+  #       extrema: true
+  #       fill: false
+  #   filter:
+  #     include:
+  #       - integration: xiaomi_ble
+  #         entity_id: "/.*_illuminance$/"
+  # - type: custom:auto-entities
+  #   sort:
+  #     method: name
+  #     reverse: true
+  #   card:
+  #     type: custom:mini-graph-card
+  #     hours_to_show: 168
+  #     group_by: hour
+  #     show:
+  #       extrema: true
+  #       fill: false
+  #   filter:
+  #     include:
+  #       - integration: xiaomi_ble
+  #         entity_id: "/.*_temperature$/"
 
-  - type: custom:auto-entities
-    sort:
-      method: name
-      reverse: true
-    card:
-      type: custom:mini-graph-card
-      hours_to_show: 168
-      name: freezing plants
-      group_by: hour
-      show:
-        extrema: true
-        fill: false
-    filter:
-      include:
-        - integration: xiaomi_ble
-          entity_id: "/.*_temperature$/"
-          state: "< 33"
+  # - type: custom:auto-entities
+  #   sort:
+  #     method: name
+  #     reverse: true
+  #   card:
+  #     type: custom:mini-graph-card
+  #     hours_to_show: 168
+  #     name: freezing plants
+  #     group_by: hour
+  #     show:
+  #       extrema: true
+  #       fill: false
+  #   filter:
+  #     include:
+  #       - integration: xiaomi_ble
+  #         entity_id: "/.*_temperature$/"
+  #         state: "< 33"
 
-  - type: custom:auto-entities
-    sort:
-      method: name
-      reverse: true
-    card:
-      type: custom:mini-graph-card
-      hours_to_show: 168
-      name: cold plants
-      group_by: hour
-      show:
-        extrema: true
-        fill: false
-    filter:
-      include:
-        - integration: xiaomi_ble
-          entity_id: "/.*_temperature$/"
-          state 1: "> 32"
-          state 2: "< 40"
+  # - type: custom:auto-entities
+  #   sort:
+  #     method: name
+  #     reverse: true
+  #   card:
+  #     type: custom:mini-graph-card
+  #     hours_to_show: 168
+  #     name: cold plants
+  #     group_by: hour
+  #     show:
+  #       extrema: true
+  #       fill: false
+  #   filter:
+  #     include:
+  #       - integration: xiaomi_ble
+  #         entity_id: "/.*_temperature$/"
+  #         state 1: "> 32"
+  #         state 2: "< 40"
 
   - type: custom:mini-graph-card
     entities:
