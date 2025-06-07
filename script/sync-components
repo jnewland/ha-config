@@ -28,7 +28,7 @@ rm -rf custom_components/frigate || true
 mv $TMPDIR/$$-frigate/custom_components/frigate custom_components
 
 # renovate: datasource=github-releases depName=claytonjn/hass-circadian_lighting
-CIRCADIAN_VERSION=2.1.4
+CIRCADIAN_VERSION=2.1.5
 
 # a good fork, without a version
 git clone --depth 1 https://github.com/obi11235/hass-circadian_lighting $TMPDIR/$$-circadian_lighting
