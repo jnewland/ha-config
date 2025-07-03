@@ -109,7 +109,7 @@ rm -f $TMPDIR/advanced-camera-card.zip
 
 curl -sL --fail -o www/group-card.js https://raw.githubusercontent.com/custom-cards/group-card/0.0.6/group-card.js
 curl -sL --fail -o www/auto-entities.js https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/v1.16.1/auto-entities.js
-curl -sL --fail -o www/card-mod.js https://raw.githubusercontent.com/thomasloven/lovelace-card-mod/v3.4.4/card-mod.js
+curl -sL --fail -o www/card-mod.js https://raw.githubusercontent.com/thomasloven/lovelace-card-mod/v3.4.5/card-mod.js
 curl -sL --fail -o www/mini-media-player-bundle.js https://github.com/kalkih/mini-media-player/releases/download/v1.16.9/mini-media-player-bundle.js
 curl -sL --fail -o www/custom-sonos-card.js https://github.com/johanfrick/custom-sonos-card/releases/download/v8.6.0/custom-sonos-card.js
 curl -sL --fail -o www/mini-graph-card-bundle.js https://github.com/kalkih/mini-graph-card/releases/download/v0.13.0/mini-graph-card-bundle.js

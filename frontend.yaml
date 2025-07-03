@@ -24,4 +24,4 @@ themes:
     primary-color: black
     paper-item-icon-color: darkgrey
 extra_module_url:
-  - /local/card-mod.js?source=https://raw.githubusercontent.com/thomasloven/lovelace-card-mod/v3.4.4/card-mod.js
+  - /local/card-mod.js?source=https://raw.githubusercontent.com/thomasloven/lovelace-card-mod/v3.4.5/card-mod.js
