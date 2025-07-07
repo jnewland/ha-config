@@ -207,7 +207,7 @@ class VolvoCarsDataCoordinator(DataUpdateCoordinator[CoordinatorData]):
                     # Something bad happened, raise immediately.
                     raise result
 
-                data |= cast(CoordinatorData, result)
+                data |= cast("CoordinatorData", result)
                 valid += 1
 
             # Raise an error if not a single API call succeeded
@@ -467,10 +467,13 @@ class TokenCoordinator:
             )
 
         if result and result.token:
-            await self._store.async_update(
-                access_token=result.token.access_token,
-                refresh_token=result.token.refresh_token,
-            )
+            if result.token.access_token and result.token.refresh_token:
+                await self._store.async_update(
+                    access_token=result.token.access_token,
+                    refresh_token=result.token.refresh_token,
+                )
+            elif result.token.access_token:
+                await self._store.async_update(access_token=result.token.access_token)
 
             self._set_delays(result.token.expires_in)
 
