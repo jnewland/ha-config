@@ -83,7 +83,7 @@ rm -rf custom_components/lennoxs30 || true
 mv $TMPDIR/$$-lennoxs30/custom_components/lennoxs30 custom_components
 
 # renovate: datasource=github-releases depName=dahlb/ha_carrier
-CARRIER_VERSION=v2.7.22
+CARRIER_VERSION=v2.7.23
 git clone --depth 1 --branch $CARRIER_VERSION https://github.com/dahlb/ha_carrier $TMPDIR/$$-carrier
 rm -rf custom_components/ha_carrier || true
 mv $TMPDIR/$$-carrier/custom_components/ha_carrier custom_components
