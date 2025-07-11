@@ -94,6 +94,12 @@ git clone --depth 1 --branch $THERMAL_COMFORT_VERSION https://github.com/dolezsa
 rm -rf custom_components/thermal_comfort || true
 mv $TMPDIR/$$-thermal_comfort/custom_components/thermal_comfort custom_components
 
+# renovate: datasource=github-releases depName=mvdwetering/huesyncbox
+HUESYNCBOX_VERSION=v2.5.1
+git clone --depth 1 --branch $HUESYNCBOX_VERSION https://github.com/mvdwetering/huesyncbox $TMPDIR/$$-huesyncbox
+rm -rf custom_components/huesyncbox || true
+mv $TMPDIR/$$-huesyncbox/custom_components/huesyncbox custom_components
+
 curl -sL --fail -o $TMPDIR/advanced-camera-card.zip https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.2.1/advanced-camera-card.zip
 # unzipping this file directly creates a folder called dist
 # move all files into www
