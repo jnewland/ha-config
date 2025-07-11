@@ -1,0 +1,8 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "gitIgnoredAuthors": [
+    "104517645+jnewland-renovate[bot]@users.noreply.github.com"
+  ],
+  "extends": ["github>urcomputeringpal/.github"],
+  "prConcurrentLimit": 0
+}
