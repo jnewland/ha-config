@@ -74,12 +74,12 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
-        above: 74
+        above: 75
         for:
           minutes: 3
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
-        above: 75
+        above: 76
     conditions: >-
       {{ not is_state('climate.upstairs', 'cool') }}
     action:
@@ -92,7 +92,7 @@ automation:
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
-          temperature: 74
+          temperature: 75
 
   - alias: upstairs reading
     id: f9784a98-1586-4f2f-b9fe-129bee235ac5

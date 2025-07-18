@@ -129,12 +129,12 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
-        below: 75
+        below: 76
         for:
           minutes: 30
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
-        below: 74
+        below: 75
       - platform: template
         value_template: '{{ state_attr("sun.sun", "elevation") < 28 }}'
     condition:
