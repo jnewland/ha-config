@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 from logging import Logger, getLogger
+from typing import Any
+from collections.abc import Mapping
 
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass, SensorEntityDescription, SensorStateClass
 from homeassistant.const import (
@@ -43,6 +45,8 @@ async def async_setup_entry(hass, config_entry: ConfigEntry, async_add_entities)
                 IndoorUnitOperationalStatusSensor(updater, carrier_system.profile.serial),
             ]
         )
+        if carrier_system.profile.outdoor_unit_type == "varcaphp":
+            entities.append(HPVarSensor(updater, carrier_system.profile.serial))
         if carrier_system.config.humidifier_enabled:
             entities.append(HumidifierRemainingSensor(updater, carrier_system.profile.serial))
         if carrier_system.config.uv_enabled:
@@ -292,7 +296,7 @@ class TimestampSensor(CarrierEntity, SensorEntity):
     _attr_device_class = SensorDeviceClass.TIMESTAMP
 
     def __init__(self, updater: CarrierDataUpdateCoordinator, system_serial: str, key: str):
-        super().__init__(f"updated {key.replace("_", " ").capitalize()} at", updater, system_serial)
+        super().__init__(f"updated {key.replace('_', ' ').capitalize()} at", updater, system_serial)
         self.key = key
 
     @property
@@ -352,24 +356,36 @@ class StaticPressureSensor(CarrierEntity, SensorEntity):
 
 
 class OutdoorUnitOperationalStatusSensor(CarrierEntity, SensorEntity):
-    """Outdoor unit operational status sensor."""
-    _attr_device_class = SensorDeviceClass.ENUM
+    """Outdoor unit operational status sensor.
+    Maps numeric string values to 'on' for improved logbook phrasing in Home Assistant.
+    """
     _attr_icon = "mdi:hvac"
 
     def __init__(self, updater: CarrierDataUpdateCoordinator, system_serial: str):
-        """Creates outdoor unit operational status sensor."""
+        """Create outdoor unit operational status sensor."""
         super().__init__("ODU Status", updater, system_serial)
+        self.entity_description = SensorEntityDescription(key="ODU Status", device_class=SensorDeviceClass.ENUM)
 
     @property
-    def native_value(self) -> float:
-        """Return outdoor unit operational status."""
-        if self.carrier_system.status.outdoor_unit_operational_status is not None:
-            return self.carrier_system.status.outdoor_unit_operational_status
+    def native_value(self) -> Any | None:
+        """
+        Return outdoor unit operational status. Numeric strings (e.g., '1') are mapped to 'on'.
+        This improves logbook phrasing in Home Assistant.
+        """
+        value = self.carrier_system.status.outdoor_unit_operational_status
+        if value is not None:
+            if isinstance(value, str) and value.isdigit():
+                return "on"
+            return value
 
     @property
     def available(self) -> bool:
         """Return true if sensor is ready for display."""
         return self.native_value is not None
+
+    @property
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
+        return self.carrier_system.status.raw["odu"]
 
 
 class IndoorUnitOperationalStatusSensor(CarrierEntity, SensorEntity):
@@ -382,10 +398,48 @@ class IndoorUnitOperationalStatusSensor(CarrierEntity, SensorEntity):
         super().__init__("IDU Status", updater, system_serial)
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> str | None:
         """Return indoor unit operational status."""
         if self.carrier_system.status.indoor_unit_operational_status is not None:
             return self.carrier_system.status.indoor_unit_operational_status
+
+    @property
+    def available(self) -> bool:
+        """Return true if sensor is ready for display."""
+        return self.native_value is not None
+
+    @property
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
+        return self.carrier_system.status.raw["idu"]
+
+
+class HPVarSensor(CarrierEntity, SensorEntity):
+    """HP Var sensor for variable capacity heat pump percentage.
+    Only registered for systems with outdoor_unit_type == 'varcaphp'.
+    Returns the percentage as a float if the value is a numeric string (including decimals),
+    or 0 for any non-numeric value.
+    """
+    _attr_icon = "mdi:percent-box"
+    _attr_native_unit_of_measurement = PERCENTAGE
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
+    def __init__(self, updater: CarrierDataUpdateCoordinator, system_serial: str):
+        """Create HP Var sensor."""
+        super().__init__("HP Var", updater, system_serial)
+
+    @property
+    def native_value(self) -> float | None:
+        """
+        Return HP Var percentage as a float if the value is a numeric string (including decimals).
+        Returns 0 for any non-numeric value.
+        """
+        value = self.carrier_system.status.outdoor_unit_operational_status
+        if isinstance(value, str):
+            try:
+                return float(value)
+            except ValueError:
+                pass
+        return 0
 
     @property
     def available(self) -> bool:
