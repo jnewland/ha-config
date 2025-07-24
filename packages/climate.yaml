@@ -1,7 +1,7 @@
 me:
   upstairs_thermostat_target_temperature:
     name: upstairs daytime AC target
-    initial: 76
+    # initial: 76
     min: 67
     max: 78
     step: 1
@@ -9,7 +9,7 @@ me:
 
   upstairs_nighttime_target_temperature:
     name: upstairs nighttime AC target
-    initial: 69
+    # initial: 69
     min: 67
     max: 78
     step: 1
