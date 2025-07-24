@@ -110,9 +110,11 @@ automation:
       - platform: state
         entity_id: input_select.mode
       # stopgap for when the upstairs thermostat is set to heat while away or something
-      - condition: numeric_state
+      - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
         above: 78
+        for:
+          minutes: 3
     conditions:
       - condition: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
@@ -139,9 +141,11 @@ automation:
       - platform: state
         entity_id: input_number.upstairs_nighttime_target_temperature
       # stopgap
-      - condition: numeric_state
+      - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
         above: 78
+        for:
+          minutes: 3
       # mode changes
       - platform: state
         entity_id: input_select.mode
