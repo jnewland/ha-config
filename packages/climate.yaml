@@ -1,3 +1,20 @@
+me:
+  upstairs_thermostat_target_temperature:
+    name: upstairs daytime AC target
+    initial: 76
+    min: 67
+    max: 78
+    step: 1
+    mode: slider
+
+  upstairs_nighttime_target_temperature:
+    name: upstairs nighttime AC target
+    initial: 69
+    min: 67
+    max: 78
+    step: 1
+    mode: slider
+
 template:
   - binary_sensor:
       - name: "Upstairs HVAC Active"
@@ -50,13 +67,24 @@ automation:
   - alias: upstairs heat
     id: 052a2e46-33e4-4964-8da4-42609ca7e683
     trigger:
-      platform: numeric_state
-      entity_id: sensor.upstairs_thermostat_air_temperature
-      below: 67
-      for:
-        minutes: 3
-    conditions: >-
-      {{ not is_state('climate.upstairs', 'heat') }}
+      # controls
+      - id: input_number
+        platform: state
+        entity_id: input_number.upstairs_thermostat_target_temperature
+      # mode changes
+      - platform: state
+        entity_id: input_select.mode
+      # stopgap
+      - platform: numeric_state
+        entity_id: sensor.upstairs_thermostat_air_temperature
+        below: 67
+        for:
+          minutes: 3
+    conditions:
+      - "{{ not is_state('climate.upstairs', 'heat') }}"
+      - condition: numeric_state
+        entity_id: sensor.upstairs_thermostat_air_temperature
+        below: 67
     action:
       - service: climate.set_hvac_mode
         data:
@@ -67,21 +95,30 @@ automation:
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
-          temperature: 69
+          temperature: >
+            {{ states('input_number.upstairs_nighttime_target_temperature') | int }}
 
-  - alias: upstairs AC
+  - alias: upstairs daytime AC
     id: c66cded8-2a60-4dd4-96cc-677ff080934c
+    mode: queued
     trigger:
-      - platform: numeric_state
+      # controls
+      - id: input_number
+        platform: state
+        entity_id: input_number.upstairs_thermostat_target_temperature
+      # mode changes
+      - platform: state
+        entity_id: input_select.mode
+      # stopgap for when the upstairs thermostat is set to heat while away or something
+      - condition: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
-        above: 75
-        for:
-          minutes: 3
-      - platform: numeric_state
+        above: 78
+    conditions:
+      - condition: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
-        above: 76
-    conditions: >-
-      {{ not is_state('climate.upstairs', 'cool') }}
+        above: 67
+      - "{{ not is_state('input_select.mode', 'Sleeping') }}"
+      - "{{ not is_state('input_select.mode', 'Reading') }}"
     action:
       - service: climate.set_hvac_mode
         data:
@@ -92,32 +129,28 @@ automation:
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
-          temperature: 75
+          temperature: >
+            {{ states('input_number.upstairs_thermostat_target_temperature') | int }}
 
-  - alias: upstairs reading
+  - alias: upstairs nighttime AC
     id: f9784a98-1586-4f2f-b9fe-129bee235ac5
     trigger:
+      # controls
+      - platform: state
+        entity_id: input_number.upstairs_nighttime_target_temperature
+      # stopgap
+      - condition: numeric_state
+        entity_id: sensor.upstairs_thermostat_air_temperature
+        above: 78
+      # mode changes
       - platform: state
         entity_id: input_select.mode
         to: Reading
-    action:
-      - service: climate.set_hvac_mode
-        data:
-          entity_id: climate.upstairs
-          hvac_mode: cool
-      - delay:
-          seconds: 3
-      - service: climate.set_temperature
-        data:
-          entity_id: climate.upstairs
-          temperature: 69
-
-  - alias: upstairs sleeping
-    id: de717eac-9b51-4f6e-b636-9c8ddcd7e610
-    trigger:
       - platform: state
         entity_id: input_select.mode
         to: Sleeping
+    conditions:
+      - "{{ is_state('input_select.mode', 'Sleeping') or is_state('input_select.mode', 'Reading') }}"
     action:
       - service: climate.set_hvac_mode
         data:
@@ -128,19 +161,8 @@ automation:
       - service: climate.set_temperature
         data:
           entity_id: climate.upstairs
-          temperature: 69
-
-  - alias: upstairs morning climate reset
-    id: 16456902-c3b2-44ab-8765-454eab93d4b3
-    trigger:
-      - platform: state
-        entity_id: input_select.mode
-        to: Morning
-    action:
-      - service: climate.set_preset_mode
-        entity_id: climate.upstairs
-        data:
-          preset_mode: home
+          temperature: >
+            {{ states('input_number.upstairs_nighttime_target_temperature') | int }}
 
   - alias: notify when leak sensor trips
     id: 85023ab0-13e5-4b4a-aba1-3e7d58973ad1
