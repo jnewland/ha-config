@@ -9,10 +9,11 @@ cards:
     show_header_toggle: false
     entities:
       - automation.upstairs_ac
-      - automation.upstairs_heat
+      - input_number.upstairs_thermostat_target_temperature
       - automation.upstairs_reading
-      - automation.upstairs_sleeping
-      - automation.upstairs_morning_climate_reset
+      - input_number.upstairs_nighttime_target_temperature
+      - automation.upstairs_heat
+
   - type: custom:mini-graph-card
     hours_to_show: 24
     show:
