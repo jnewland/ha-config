@@ -1,4 +1,4 @@
-me:
+input_number:
   upstairs_thermostat_target_temperature:
     name: upstairs daytime AC target
     # initial: 76
