@@ -111,7 +111,7 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.upstairs_thermostat_air_temperature
-        above: 75
+        above: 76
     condition:
       - condition: template
         value_template: '{{ state_attr("sun.sun", "elevation") > 28 }}'
