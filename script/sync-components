@@ -100,7 +100,7 @@ git clone --depth 1 --branch $HUESYNCBOX_VERSION https://github.com/mvdwetering/
 rm -rf custom_components/huesyncbox || true
 mv $TMPDIR/$$-huesyncbox/custom_components/huesyncbox custom_components
 
-curl -sL --fail -o $TMPDIR/advanced-camera-card.zip https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.2.1/advanced-camera-card.zip
+curl -sL --fail -o $TMPDIR/advanced-camera-card.zip https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.14.3/advanced-camera-card.zip
 # unzipping this file directly creates a folder called dist
 # move all files into www
 unzip -o $TMPDIR/advanced-camera-card.zip -d $TMPDIR
