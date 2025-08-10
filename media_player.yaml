@@ -1,12 +1,12 @@
 - platform: channels
   name: music room channels
-  host: music-room
+  host: music-room-channels
 - platform: channels
   name: lounge channels
-  host: lounge
+  host: lounge-channels
 - platform: channels
   name: bedroom channels
-  host: bedroom
+  host: bedroom-channels
 - platform: channels
   name: garage channels
-  host: garage-tv
+  host: garage-channels

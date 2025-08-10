@@ -1,4 +1,3 @@
-
 script:
   change_all_to_camera:
     sequence:
@@ -36,28 +35,28 @@ script:
     sequence:
       - service: shell_command.notify_channels
         data:
-          host: music-room
+          host: music-room-channels
           title: |
             {{ title | default("") }}
           message: |
             {{ message | default("") }}
       - service: shell_command.notify_channels
         data:
-          host: lounge
+          host: lounge-channels
           title: |
             {{ title | default("") }}
           message: |
             {{ message | default("") }}
       - service: shell_command.notify_channels
         data:
-          host: bedroom
+          host: bedroom-channels
           title: |
             {{ title | default("") }}
           message: |
             {{ message | default("") }}
       - service: shell_command.notify_channels
         data:
-          host: garage-tv
+          host: garage-channels
           title: |
             {{ title | default("") }}
           message: |
