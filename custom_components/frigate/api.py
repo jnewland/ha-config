@@ -40,6 +40,7 @@ class FrigateApiClient:
         session: aiohttp.ClientSession,
         username: str | None = None,
         password: str | None = None,
+        validate_ssl: bool = True,
     ) -> None:
         """Construct API Client."""
         self._host = host
@@ -47,6 +48,7 @@ class FrigateApiClient:
         self._username = username
         self._password = password
         self._token_data: dict[str, Any] = {}
+        self.validate_ssl = validate_ssl
 
     async def async_get_version(self) -> str:
         """Get data from the API."""
@@ -309,7 +311,7 @@ class FrigateApiClient:
         if current_time >= self._token_data["expires"]:  # Compare UTC-aware datetimes
             await self._get_token()
 
-    async def _get_auth_headers(self) -> dict[str, str]:
+    async def get_auth_headers(self) -> dict[str, str]:
         """
         Get headers for API requests, including the JWT token if available.
         Ensures that the token is refreshed if needed.
@@ -340,14 +342,18 @@ class FrigateApiClient:
             headers = {}
 
         if not is_login_request:
-            headers.update(await self._get_auth_headers())
+            headers.update(await self.get_auth_headers())
 
         try:
             async with async_timeout.timeout(TIMEOUT):
                 func = getattr(self._session, method)
                 if func:
                     response = await func(
-                        url, headers=headers, raise_for_status=True, json=data
+                        url,
+                        headers=headers,
+                        raise_for_status=True,
+                        json=data,
+                        ssl=self.validate_ssl,
                     )
                     response.raise_for_status()
                     if is_login_request:
