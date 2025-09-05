@@ -51,12 +51,12 @@ jobs:
   validate-config:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Generate fake SSL cert
         run: |
           openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
       - name: Test config
-        uses: docker://homeassistant/home-assistant:2025.8.3@sha256:2eb83307a08de3287822b648fce4cbf1364423b55f2af623c149c6b21c2cef00
+        uses: docker://homeassistant/home-assistant:2025.9.1@sha256:816b80788e81b517c477a200a47f3d7e882cc2b9b0504f616957a19f59518d2f
         with:
           entrypoint: ./script/cibuild
   script-deploy:
