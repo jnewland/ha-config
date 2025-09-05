@@ -60,26 +60,6 @@ jobs:
         with:
           entrypoint: ./script/cibuild
 
-  token:
-    runs-on: ubuntu-latest
-    outputs:
-      token: ${{ steps.token.outputs.token }}
-    steps:
-      - name: Get token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
-        id: token
-        with:
-          app_id: ${{ secrets.RENOVATE_APP_ID }}
-          private_key: ${{ secrets.RENOVATE_APP_PEM }}      
-
-  update-branch:
-    needs: [token, validate-config]
-    uses: jnewland/.github/.github/workflows/update-branch.yaml@main
-    with:
-      pull_number: ${{ github.event.pull_request.number }}
-    secrets:
-      token: ${{ needs.token.outputs.token }}
-
   script-deploy:
     runs-on: ubuntu-latest
     needs: validate-config
