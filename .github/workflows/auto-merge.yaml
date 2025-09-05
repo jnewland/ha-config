@@ -1,5 +1,8 @@
 name: auto merge
 on:
+  push:
+    branches:
+      - main
   pull_request:
     types:
       - labeled
@@ -14,3 +17,39 @@ jobs:
       pullRequestId: ${{ github.event.pull_request.node_id }}
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
+
+  merge-default-into-prs-with-auto-merge-enabled:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get token
+        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        id: token
+        with:
+          app_id: ${{ secrets.RENOVATE_APP_ID }}
+          private_key: ${{ secrets.RENOVATE_APP_PEM }}
+
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        timeout-minutes: 30
+        with:
+          github-token: ${{ steps.token.outputs.token }}
+          script: |
+            const opts = github.rest.pulls.list.endpoint.merge({
+              ...context.repo,
+              state: 'open',
+              sort: 'updated',
+              direction: 'desc'
+            })
+            var prs = await github.paginate(opts);
+
+            await Promise.all(prs.map(async (pr) => {
+              if (pr.state != 'open' || pr.draft || !pr.auto_merge) {
+                console.log(`rejceted #${pr.number}`)
+                return;
+              }
+              console.log(`updating #${pr.number}`)
+              github.rest.pulls.updateBranch({
+                ...context.repo,
+                pull_number: pr.number
+              });
+            }));

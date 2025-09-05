@@ -9,7 +9,7 @@ module.exports = {
   packageRules: [
     {
       matchPackageNames: ['homeassistant/home-assistant', 'homeassistant/core'],
-      addLabels: ['deploy:manually-deployed', 'deploy:auto-merge'],
+      addLabels: ['deploy', 'deploy:auto-merge'],
       prBodyNotes:
         'Auto-updating [home-assistant](https://github.com/home-assistant/core/releases) /cc @jnewland',
     }
