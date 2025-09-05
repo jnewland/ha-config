@@ -44,12 +44,14 @@ jobs:
 
             await Promise.all(prs.map(async (pr) => {
               if (pr.state != 'open' || pr.draft || !pr.auto_merge) {
-                console.log(`rejceted #${pr.number}`)
+                console.log(`rejected #${pr.number}`)
                 return;
               }
-              console.log(`updating #${pr.number}`)
+              console.log(`picked #${pr.number} as tribute`)
               github.rest.pulls.updateBranch({
                 ...context.repo,
                 pull_number: pr.number
               });
+              console.log(`bailing to avoid causing a thundering herd`)
+              return;
             }));
