@@ -1301,13 +1301,15 @@ class Volume extends i$4 {
     super(...arguments);
     this.updateMembers = true;
     this.slim = false;
+    this.sliderMoving = false;
+    this.startVolumeSliderMoving = 0;
     this.togglePower = async () => await this.mediaControlService.togglePower(this.player);
   }
   render() {
     this.config = this.store.config;
     this.mediaControlService = this.store.mediaControlService;
     const volume = this.player.getVolume();
-    const max = this.getMax(volume);
+    const max = this.getMax();
     const isMuted = this.updateMembers ? this.player.isGroupMuted() : this.player.isMemberMuted();
     const muteIcon = isMuted ? mdiVolumeMute : mdiVolumeHigh;
     const disabled = this.player.ignoreVolume;
@@ -1319,14 +1321,14 @@ class Volume extends i$4 {
             .value=${volume}
             max=${max}
             @value-changed=${this.volumeChanged}
-            @slider-moved=${this.volumeChanged}
+            @slider-moved=${this.sliderMoved}
             .disabled=${disabled}
             class=${this.config.dynamicVolumeSlider && max === 100 ? "over-threshold" : ""}
           ></ha-control-slider>
           <div class="volume-level">
-            <div style="flex: ${volume}">0%</div>
+            <div style="flex: ${volume}">${volume > 0 ? "0%" : ""}</div>
             <div class="percentage">${volume}%</div>
-            <div style="flex: ${max - volume};text-align: right">${max}%</div>
+            <div style="flex: ${max - volume};text-align: right">${volume < max ? `${max}%` : ""}</div>
           </div>
         </div>
         <div class="percentage-slim" hide=${this.slim && E}>${volume}%</div>
@@ -1334,12 +1336,24 @@ class Volume extends i$4 {
       </div>
     `;
   }
-  getMax(volume) {
+  getMax() {
+    const volume = this.sliderMoving ? this.startVolumeSliderMoving : this.player.getVolume();
     const dynamicThreshold = Math.max(0, Math.min(this.config.dynamicVolumeSliderThreshold ?? 20, 100));
     const dynamicMax = Math.max(0, Math.min(this.config.dynamicVolumeSliderMax ?? 30, 100));
     return volume < dynamicThreshold && this.config.dynamicVolumeSlider ? dynamicMax : 100;
   }
+  async sliderMoved(e2) {
+    if (!this.sliderMoving) {
+      this.startVolumeSliderMoving = this.player.getVolume();
+    }
+    this.sliderMoving = true;
+    return await this.setVolume(e2);
+  }
   async volumeChanged(e2) {
+    this.sliderMoving = false;
+    return await this.setVolume(e2);
+  }
+  async setVolume(e2) {
     const newVolume = numberFromEvent(e2);
     return await this.mediaControlService.volumeSet(this.player, newVolume, this.updateMembers);
   }
@@ -1397,7 +1411,6 @@ class Volume extends i$4 {
       .percentage,
       .percentage-slim {
         font-weight: bold;
-        font-size: 12px;
         align-self: center;
       }
 
@@ -1422,6 +1435,12 @@ __decorateClass$q([
 __decorateClass$q([
   n$4()
 ], Volume.prototype, "slim");
+__decorateClass$q([
+  r$3()
+], Volume.prototype, "sliderMoving");
+__decorateClass$q([
+  r$3()
+], Volume.prototype, "startVolumeSliderMoving");
 function numberFromEvent(e2) {
   return Number.parseInt(e2?.target?.value);
 }
