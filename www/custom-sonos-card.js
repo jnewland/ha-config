@@ -2077,7 +2077,10 @@ class Store {
     this.config = config;
     const mediaPlayerHassEntities = this.getMediaPlayerHassEntities(this.hass);
     this.allGroups = this.createPlayerGroups(mediaPlayerHassEntities);
-    this.allMediaPlayers = this.allGroups.reduce((previousValue, currentValue) => [...previousValue, ...currentValue.members], []).sort((a2, b2) => a2.name.localeCompare(b2.name));
+    this.allMediaPlayers = this.allGroups.reduce(
+      (previousValue, currentValue) => [...previousValue, ...currentValue.members],
+      []
+    );
     this.activePlayer = this.determineActivePlayer(activePlayerId);
     this.hassService = new HassService(this.hass, currentSection, card, config);
     this.mediaControlService = new MediaControlService(this.hassService, config);
@@ -2546,6 +2549,10 @@ const ADVANCED_SCHEMA = [
   },
   {
     name: "doNotRememberSelectedPlayer",
+    selector: { boolean: {} }
+  },
+  {
+    name: "groupingDontSortMembersOnTop",
     selector: { boolean: {} }
   }
 ];
@@ -3810,12 +3817,14 @@ class Grouping extends i$4 {
     if (selectedItems.length === 1) {
       selectedItems[0].isDisabled = true;
     }
-    groupingItems.sort((a2, b2) => {
-      if (a2.isMain && !b2.isMain || a2.isSelected && !b2.isSelected) {
-        return -1;
-      }
-      return a2.name.localeCompare(b2.name);
-    });
+    if (!this.config.groupingDontSortMembersOnTop) {
+      groupingItems.sort((a2, b2) => {
+        if (a2.isMain && !b2.isMain || a2.isSelected && !a2.isModified && !b2.isSelected) {
+          return -1;
+        }
+        return 0;
+      });
+    }
     return groupingItems;
   }
   renderJoinAllButton() {
