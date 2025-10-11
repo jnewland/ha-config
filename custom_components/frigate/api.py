@@ -15,6 +15,7 @@ from yarl import URL
 from homeassistant.auth import jwt_wrapper
 
 TIMEOUT = 10
+REVIEW_SUMMARIZE_TIMEOUT = 60
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -40,6 +41,7 @@ class FrigateApiClient:
         session: aiohttp.ClientSession,
         username: str | None = None,
         password: str | None = None,
+        validate_ssl: bool = True,
     ) -> None:
         """Construct API Client."""
         self._host = host
@@ -47,6 +49,7 @@ class FrigateApiClient:
         self._username = username
         self._password = password
         self._token_data: dict[str, Any] = {}
+        self.validate_ssl = validate_ssl
 
     async def async_get_version(self) -> str:
         """Get data from the API."""
@@ -62,6 +65,21 @@ class FrigateApiClient:
         return cast(
             dict[str, Any],
             await self.api_wrapper("get", str(URL(self._host) / "api/stats")),
+        )
+
+    async def async_get_event(
+        self,
+        event_id: str,
+        decode_json: bool = True,
+    ) -> dict[str, Any]:
+        """Get a single event by ID from the API."""
+        return cast(
+            dict[str, Any],
+            await self.api_wrapper(
+                "get",
+                str(URL(self._host) / f"api/events/{event_id}"),
+                decode_json=decode_json,
+            ),
         )
 
     async def async_get_events(
@@ -260,6 +278,24 @@ class FrigateApiClient:
             ),
         )
 
+    async def async_review_summarize(
+        self,
+        start_time: float,
+        end_time: float,
+        decode_json: bool = True,
+    ) -> dict[str, Any] | str:
+        """Get review summary for a time period."""
+        result = await self.api_wrapper(
+            "post",
+            str(
+                URL(self._host)
+                / f"api/review/summarize/start/{start_time}/end/{end_time}"
+            ),
+            decode_json=decode_json,
+            timeout=REVIEW_SUMMARIZE_TIMEOUT,
+        )
+        return cast(dict[str, Any], result) if decode_json else result
+
     async def _get_token(self) -> None:
         """
         Obtain a new JWT token using the provided username and password.
@@ -309,7 +345,7 @@ class FrigateApiClient:
         if current_time >= self._token_data["expires"]:  # Compare UTC-aware datetimes
             await self._get_token()
 
-    async def _get_auth_headers(self) -> dict[str, str]:
+    async def get_auth_headers(self) -> dict[str, str]:
         """
         Get headers for API requests, including the JWT token if available.
         Ensures that the token is refreshed if needed.
@@ -332,6 +368,7 @@ class FrigateApiClient:
         headers: dict | None = None,
         decode_json: bool = True,
         is_login_request: bool = False,
+        timeout: int | None = None,
     ) -> Any:
         """Get information from the API."""
         if data is None:
@@ -340,14 +377,19 @@ class FrigateApiClient:
             headers = {}
 
         if not is_login_request:
-            headers.update(await self._get_auth_headers())
+            headers.update(await self.get_auth_headers())
 
         try:
-            async with async_timeout.timeout(TIMEOUT):
+            timeout_value = timeout if timeout is not None else TIMEOUT
+            async with async_timeout.timeout(timeout_value):
                 func = getattr(self._session, method)
                 if func:
                     response = await func(
-                        url, headers=headers, raise_for_status=True, json=data
+                        url,
+                        headers=headers,
+                        raise_for_status=True,
+                        json=data,
+                        ssl=self.validate_ssl,
                     )
                     response.raise_for_status()
                     if is_login_request:
