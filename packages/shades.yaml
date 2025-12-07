@@ -73,7 +73,7 @@ automation:
               entity_id: device_tracker.katie_s_iphone
               zone: zone.home
             - condition: zone
-              entity_id: device_tracker.jphone
+              entity_id: device_tracker.jphone_17_pro
               zone: zone.home
     action:
       - service: cover.open_cover
