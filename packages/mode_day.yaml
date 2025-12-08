@@ -25,7 +25,7 @@ automation:
         - condition: template
           value_template: |
             {{
-              (states.device_tracker.jphone.state == "not_home" or states.sensor.jphone_battery_state.state == "Not Charging") and
+              (states.device_tracker.jphone_17_pro.state == "not_home" or states.sensor.jphone_battery_state.state == "Not Charging") and
               (states.device_tracker.katie_s_iphone.state == "not_home" or states.sensor.katie_s_iphone_battery_state.state == "Not Charging")
             }}
     action:
@@ -52,7 +52,7 @@ automation:
         from: "off"
         to: "on"
       - platform: zone
-        entity_id: device_tracker.jphone
+        entity_id: device_tracker.jphone_17_pro
         zone: zone.home
         event: enter
       - platform: zone

@@ -14,11 +14,11 @@ automation:
         from: "on"
         to: "off"
     condition: |
-      {{ states('device_tracker.jphone') != 'not_home' }}
+      {{ states('device_tracker.jphone_17_pro') != 'not_home' }}
     action:
       - service: script.ack
         data:
-          notify_service: notify.mobile_app_jphone
+          notify_service: notify.mobile_app_jphone_17_pro
           entity_id: script.noop
           tag: precipitation
           message: Rain is forecasted soon. Prep for rain?
@@ -31,11 +31,11 @@ automation:
         from: "off"
         to: "on"
     condition: |
-      {{ states('device_tracker.jphone') != 'not_home' }}
+      {{ states('device_tracker.jphone_17_pro') != 'not_home' }}
     action:
       - service: script.ack
         data:
-          notify_service: notify.mobile_app_jphone
+          notify_service: notify.mobile_app_jphone_17_pro
           entity_id: script.noop
           tag: precipitation
           message: No rain in the forecast. Prep for sunshine?
@@ -59,9 +59,9 @@ binary_sensor:
       precipitation_in_forecast:
         friendly_name: Precipitation in forecast
         value_template: |
-          {{ 
-            states('sensor.forecast_precipitation_probability') | float(default=0) 
-            > 
+          {{
+            states('sensor.forecast_precipitation_probability') | float(default=0)
+            >
             states('input_number.precipitation_forecast_probability_threshold') | float(default=100)
           }}
         delay_on:
