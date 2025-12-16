@@ -14,7 +14,7 @@ script:
       - service: script.ack
         data:
           notify_service: >
-            {{ service | default('notify.mobile_app_jphone') }}
+            {{ service | default('notify.mobile_app_jphone_17_pro') }}
           tag: alarm_control_panel.alarm
           entity_id: >
             {%- if states.alarm_control_panel.alarm.state == "disarmed" -%}

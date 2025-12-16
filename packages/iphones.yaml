@@ -2,14 +2,14 @@ notify:
   - platform: group
     name: iphones
     services:
-      - service: mobile_app_jphone
+      - service: mobile_app_jphone_17_pro
       - service: mobile_app_katies_iphone
 template:
   - binary_sensor:
       - name: Jesse Home
         unique_id: jesse_home
         state: >
-          {{ distance(states.device_tracker.jphone) < (state_attr('zone.home', 'radius')/1000) }}
+          {{ distance(states.device_tracker.jphone_17_pro) < (state_attr('zone.home', 'radius')/1000) }}
         icon: >
           {% if is_state('binary_sensor.jesse_home', 'on') %}
             mdi:home
@@ -33,7 +33,7 @@ template:
           {% if is_state('binary_sensor.jesse_home', 'on') and is_state('binary_sensor.katie_home', 'on') %}
             notify.iphones
           {% elif is_state('binary_sensor.jesse_home', 'on') %}
-            notify.mobile_app_jphone
+            notify.mobile_app_jphone_17_pro
           {% elif is_state('binary_sensor.katie_home', 'on') %}
             notify.mobile_app_katies_iphone
           {% endif %}
