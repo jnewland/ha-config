@@ -10,5 +10,5 @@
   "loggers": ["lennoxs30api"],
   "quality_scale": "platinum",
   "requirements": ["lennoxs30api==0.2.19"],
-  "version": "2025.5.1"
+  "version": "2025.12.0"
 }
