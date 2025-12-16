@@ -77,13 +77,13 @@ rm -rf custom_components/combustion || true
 
 # https://github.com/PeteRager/lennoxs30
 # renovate: datasource=github-releases depName=PeteRager/lennoxs30
-LENOX_S30_VERSION=2025.5.1
+LENOX_S30_VERSION=2025.12.0
 git clone --depth 1 --branch $LENOX_S30_VERSION https://github.com/PeteRager/lennoxs30 $TMPDIR/$$-lennoxs30
 rm -rf custom_components/lennoxs30 || true
 mv $TMPDIR/$$-lennoxs30/custom_components/lennoxs30 custom_components
 
 # renovate: datasource=github-releases depName=dahlb/ha_carrier
-CARRIER_VERSION=v2.13.2
+CARRIER_VERSION=v2.16.0
 git clone --depth 1 --branch $CARRIER_VERSION https://github.com/dahlb/ha_carrier $TMPDIR/$$-carrier
 rm -rf custom_components/ha_carrier || true
 mv $TMPDIR/$$-carrier/custom_components/ha_carrier custom_components
