@@ -54,7 +54,7 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Generate fake SSL cert
         run: |
-          openssl req -x509 -newkey rsa:1024 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
+          openssl req -x509 -newkey rsa:2048 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
       - name: Test config
         uses: docker://homeassistant/home-assistant:2025.12.3@sha256:c9da2a0a5738ceb26e1b4f672825c09371e51ae5e285beffa3072757b7817f3e
         with:
