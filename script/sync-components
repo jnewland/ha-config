@@ -77,7 +77,7 @@ rm -rf custom_components/combustion || true
 
 # https://github.com/PeteRager/lennoxs30
 # renovate: datasource=github-releases depName=PeteRager/lennoxs30
-LENOX_S30_VERSION=2025.12.0
+LENOX_S30_VERSION=2025.12.1
 git clone --depth 1 --branch $LENOX_S30_VERSION https://github.com/PeteRager/lennoxs30 $TMPDIR/$$-lennoxs30
 rm -rf custom_components/lennoxs30 || true
 mv $TMPDIR/$$-lennoxs30/custom_components/lennoxs30 custom_components
