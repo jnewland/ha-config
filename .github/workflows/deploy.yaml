@@ -48,21 +48,21 @@ jobs:
   #             }
   #           }
 
-  # validate-config:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-  #     - name: Generate fake SSL cert
-  #       run: |
-  #         openssl req -x509 -newkey rsa:2048 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
-  #     - name: Test config
-  #       uses: docker://homeassistant/home-assistant:2025.11.3@sha256:f971850a6ec1fb5c5fd4e1748058e9e1f589aaf0da933b8d88bb5dee03f5b5e8
-  #       with:
-  #         entrypoint: ./script/cibuild
+  validate-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - name: Generate fake SSL cert
+        run: |
+          openssl req -x509 -newkey rsa:2048 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
+      - name: Test config
+        uses: docker://homeassistant/home-assistant:2025.11.3@sha256:f971850a6ec1fb5c5fd4e1748058e9e1f589aaf0da933b8d88bb5dee03f5b5e8
+        with:
+          entrypoint: ./script/cibuild
 
   script-deploy:
     runs-on: ubuntu-latest
-    # needs: validate-config
+    needs: validate-config
     if: |
       ( github.event.action == 'labeled' && github.event.label.name == 'deploy') ||
       ( github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy') )
