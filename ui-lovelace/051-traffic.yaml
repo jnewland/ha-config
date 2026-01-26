@@ -2,14 +2,37 @@ title: Traffic
 icon: mdi:traffic-light
 cards:
   - type: picture
-    image: https://cctv.austinmobility.io/image/336.jpg
+    image: https://cctv.austinmobility.io/image/1461.jpg
   - type: picture
     image: https://cctv.austinmobility.io/image/67.jpg
   - type: picture
+    image: https://cctv.austinmobility.io/image/1487.jpg
+
+  - type: picture
+    image: https://cctv.austinmobility.io/image/652.jpg
+  - type: picture
+    image: https://cctv.austinmobility.io/image/283.jpg
+
+  - type: picture
+    image: https://cctv.austinmobility.io/image/79.jpg
+  - type: picture
+    image: https://cctv.austinmobility.io/image/244.jpg
+
+  - type: picture
+    image: https://cctv.austinmobility.io/image/786.jpg
+  - type: picture
+    image: https://cctv.austinmobility.io/image/1447.jpg
+  - type: picture
     image: https://cctv.austinmobility.io/image/65.jpg
+
+  - type: picture
+    image: https://cctv.austinmobility.io/image/133.jpg
+  - type: picture
+    image: https://cctv.austinmobility.io/image/109.jpg
+
   - type: picture
     image: https://cctv.austinmobility.io/image/111.jpg
   - type: picture
-    image: https://cctv.austinmobility.io/image/547.jpg
+    image: https://cctv.austinmobility.io/image/203.jpg
   - type: picture
-    image: https://cctv.austinmobility.io/image/244.jpg
+    image: https://cctv.austinmobility.io/image/454.jpg
