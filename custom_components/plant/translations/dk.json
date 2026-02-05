@@ -1,18 +1,103 @@
 {
   "title": "Planteovervågning",
+  "entity": {
+    "sensor": {
+      "moisture": {
+        "name": "Jordfugtighed"
+      },
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "conductivity": {
+        "name": "Ledningsevne"
+      },
+      "illuminance": {
+        "name": "Belysningsstyrke"
+      },
+      "humidity": {
+        "name": "Luftfugtighed"
+      },
+      "co2": {
+        "name": "CO2"
+      },
+      "soil_temperature": {
+        "name": "Jordtemperatur"
+      },
+      "ppfd": {
+        "name": "PPFD"
+      },
+      "total_light_integral": {
+        "name": "Total lysintegral"
+      },
+      "daily_light_integral": {
+        "name": "Daglig lysintegral"
+      },
+      "dli_24h": {
+        "name": "DLI (24t rullende)"
+      }
+    },
+    "number": {
+      "max_moisture": {
+        "name": "Maks. jordfugtighed"
+      },
+      "min_moisture": {
+        "name": "Min. jordfugtighed"
+      },
+      "max_temperature": {
+        "name": "Maks. temperatur"
+      },
+      "min_temperature": {
+        "name": "Min. temperatur"
+      },
+      "max_illuminance": {
+        "name": "Maks. belysningsstyrke"
+      },
+      "min_illuminance": {
+        "name": "Min. belysningsstyrke"
+      },
+      "max_dli": {
+        "name": "Maks. DLI"
+      },
+      "min_dli": {
+        "name": "Min. DLI"
+      },
+      "max_conductivity": {
+        "name": "Maks. ledningsevne"
+      },
+      "min_conductivity": {
+        "name": "Min. ledningsevne"
+      },
+      "max_humidity": {
+        "name": "Maks. luftfugtighed"
+      },
+      "min_humidity": {
+        "name": "Min. luftfugtighed"
+      },
+      "max_co2": {
+        "name": "Maks. CO2"
+      },
+      "min_co2": {
+        "name": "Min. CO2"
+      },
+      "max_soil_temperature": {
+        "name": "Maks. jordtemperatur"
+      },
+      "min_soil_temperature": {
+        "name": "Min. jordtemperatur"
+      },
+      "lux_to_ppfd": {
+        "name": "Lux til PPFD faktor"
+      }
+    }
+  },
   "config": {
     "step": {
       "user": {
         "title": "Konfigurer en plante",
-        "description": "Hvis du ikke finder de rigtige sensorer i rullemenuerne, kan du tilføje dem efter installationen er fuldført",
+        "description": "Indtast et navn til din plante. Indtast eventuelt en art for at søge i OpenPlantbook.",
         "data": {
           "name": "Plantenavn",
-          "species": "Art",
-          "temperature_sensor": "Temperatursensor",
-          "moisture_sensor": "Jordfugtighedssensor",
-          "conductivity_sensor": "Ledningsevnesensor",
-          "illuminance_sensor": "Lysstyrkesensor",
-          "humidity_sensor": "Luftfugtighedssensor"
+          "species": "Art"
         },
         "data_description": {
           "species": "Bruges til søgning i OpenPlantbook"
@@ -22,10 +107,24 @@
         "title": "Vælg art fra OpenPlantbook",
         "description": "{desc}",
         "data": {
+          "search_for": "Søg efter en anden art",
           "species": "Art"
         },
         "menu_options": {
           "user": "Tilbage"
+        }
+      },
+      "sensors": {
+        "title": "Vælg sensorer",
+        "description": "Alle sensorer er valgfrie. Sensorer kan også tilføjes eller ændres senere.",
+        "data": {
+          "temperature_sensor": "Temperatursensor",
+          "moisture_sensor": "Jordfugtighedssensor",
+          "conductivity_sensor": "Ledningsevnesensor",
+          "illuminance_sensor": "Lysstyrkesensor",
+          "humidity_sensor": "Luftfugtighedssensor",
+          "co2_sensor": "CO2-sensor",
+          "soil_temperature_sensor": "Jordtemperatursensor"
         }
       },
       "limits": {
@@ -33,19 +132,19 @@
         "description": "# {name}\n![Plante]({entity_picture}){br}\n{extra_desc}Temperaturenheden er {temperature_unit}",
         "data": {
           "right_plant": "Dette er den plante, jeg ledte efter",
-          "display_pid": "Plantearter der skal vises",
-          "max_moisture": "Maksimal jordfugtighed (%)",
-          "min_moisture": "Minimal jordfugtighed (%)",
-          "max_illuminance": "Maksimal lysstyrke (lx)",
-          "min_illuminance": "Minimal lysstyrke (lx)",
-          "max_dli": "Maksimal DLI (mol/d⋅m²)",
-          "min_dli": "Minimal DLI (mol/d⋅m²)",
-          "max_temperature": "Maksimal temperatur (se ovenfor)",
-          "min_temperature": "Minimal temperatur (se ovenfor)",
-          "max_conductivity": "Maksimal ledningsevne (uS/cm)",
-          "min_conductivity": "Minimal ledningsevne (uS/cm)",
-          "max_humidity": "Maksimal luftfugtighed (%)",
-          "min_humidity": "Minimal luftfugtighed (%)",
+          "display_pid": "Planteart der skal vises",
+          "max_moisture": "Maks. jordfugtighed (%)",
+          "min_moisture": "Min. jordfugtighed (%)",
+          "max_illuminance": "Maks. lysstyrke (lx)",
+          "min_illuminance": "Min. lysstyrke (lx)",
+          "max_dli": "Maks. DLI (mol/d⋅m²)",
+          "min_dli": "Min. DLI (mol/d⋅m²)",
+          "max_temperature": "Maks. temperatur (se ovenfor)",
+          "min_temperature": "Min. temperatur (se ovenfor)",
+          "max_conductivity": "Maks. ledningsevne (uS/cm)",
+          "min_conductivity": "Min. ledningsevne (uS/cm)",
+          "max_humidity": "Maks. luftfugtighed (%)",
+          "min_humidity": "Min. luftfugtighed (%)",
           "entity_picture": "Billed-URL"
         }
       }
@@ -55,12 +154,12 @@
     "step": {
       "init": {
         "title": "Indstillinger",
-        "description": "",
+        "description": "**{plant_name}**",
         "data": {
           "check_days": "Dage til kontrol af lysstyrke",
           "species": "Art",
           "force_update": "Gennemtving opdatering af data fra OpenPlantbook",
-          "display_pid": "Plantearter der skal vises",
+          "display_pid": "Planteart der skal vises",
           "temperature_sensor": "Temperatursensor",
           "moisture_sensor": "Jordfugtighedssensor",
           "conductivity_sensor": "Ledningsevnesensor",
@@ -72,7 +171,25 @@
           "humidity_trigger": "Brug luftfugtighed som problemudløser",
           "conductivity_trigger": "Brug ledningsevne som problemudløser",
           "moisture_trigger": "Brug jordfugtighed som problemudløser",
-          "temperature_trigger": "Brug temperatur som problemudløser"
+          "temperature_trigger": "Brug temperatur som problemudløser",
+          "co2_trigger": "Brug CO2 som problemudløser",
+          "soil_temperature_trigger": "Brug jordtemperatur som problemudløser"
+        }
+      }
+    }
+  },
+  "services": {
+    "replace_sensor": {
+      "name": "Erstat sensor",
+      "description": "Erstatter kilden for en plantesensor.",
+      "fields": {
+        "meter_entity": {
+          "name": "Målerentitet",
+          "description": "Målerentiteten, hvis sensor skal erstattes."
+        },
+        "new_sensor": {
+          "name": "Sensorentitet",
+          "description": "Entitets-ID for den nye sensor. Lad være tom for at fjerne sensoren."
         }
       }
     }

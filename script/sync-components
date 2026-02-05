@@ -95,7 +95,7 @@ rm -rf custom_components/thermal_comfort || true
 mv $TMPDIR/$$-thermal_comfort/custom_components/thermal_comfort custom_components
 
 # renovate: datasource=github-releases depName=mvdwetering/huesyncbox
-HUESYNCBOX_VERSION=v2.5.1
+HUESYNCBOX_VERSION=v3.0.0
 git clone --depth 1 --branch $HUESYNCBOX_VERSION https://github.com/mvdwetering/huesyncbox $TMPDIR/$$-huesyncbox
 rm -rf custom_components/huesyncbox || true
 mv $TMPDIR/$$-huesyncbox/custom_components/huesyncbox custom_components
