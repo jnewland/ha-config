@@ -1,0 +1,84 @@
+switch:
+  - platform: template
+    switches:
+      # These switches are exposed to Homekit and automated with an automation to
+      # mirror the state of the lock in Homekit. The state of the lock is in
+      # Homekit so that Home Keys can be used to lock and unlock the door.
+      front_door_lock_state:
+        friendly_name: Front door lock state
+        turn_on:
+          - service: system_log.write
+            data:
+              message: Front door lock state changed to locked
+              logger: packages.schlage
+              level: debug
+        turn_off:
+          - service: system_log.write
+            data:
+              message: Front door lock state changed to unlocked
+              logger: packages.schlage
+              level: debug
+      back_porch_lock_state:
+        friendly_name: Back porch lock state
+        turn_on:
+          - service: system_log.write
+            data:
+              message: Back porch lock state changed to locked
+              logger: packages.schlage
+              level: debug
+        turn_off:
+          - service: system_log.write
+            data:
+              message: Back porch lock state changed to unlocked
+              logger: packages.schlage
+              level: debug
+
+      # These switcher are turned into lock.front_door and presented as the Home
+      # Assistant interface. It reads state from HomeKit and performs actions
+      # over the Schlage API.
+      front_door_lock:
+        value_template: '{{ states("switch.front_door_lock_state") }}'
+        friendly_name: Front door lock
+        turn_on:
+          - service: lock.unlock
+            entity_id: lock.front_door_schlage
+        turn_off:
+          - service: lock.lock
+            entity_id: lock.front_door_schlage
+
+      back_porch_lock:
+        value_template: '{{ states("switch.back_porch_lock_state") }}'
+        friendly_name: Back porch lock
+        turn_on:
+          - service: lock.unlock
+            entity_id: lock.back_porch_schlage
+        turn_off:
+          - service: lock.lock
+            entity_id: lock.back_porch_schlage
+
+
+automation:
+  - alias: Front door lock logs
+    mode: parallel
+    id: 7212bf3a-c65a-4871-a9eb-6c3e4769d301
+    trigger:
+      platform: state
+      entity_id: lock.front_door_schlage
+    action:
+      - service: system_log.write
+        data:
+          message: Front door lock state changed by {{ state_attr("lock.front_door_schlage", "changed_by") }}
+          logger: packages.schlage
+          level: debug
+  - alias: Back porch lock logs
+    mode: parallel
+    id: ef52b86a-f0e7-4d89-bddc-22580e518b1f
+    trigger:
+      platform: state
+      entity_id: lock.back_porch_schlage
+    action:
+      - service: system_log.write
+        data:
+          message: Front door lock state changed by {{ state_attr("lock.front_door_schlage", "changed_by") }}
+          logger: packages.schlage
+          level: debug
