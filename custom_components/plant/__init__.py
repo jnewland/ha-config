@@ -23,6 +23,7 @@ from homeassistant.const import (
     Platform,
 )
 from homeassistant.core import HomeAssistant, ServiceCall, callback
+from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
@@ -73,6 +74,7 @@ from .const import (
     FLOW_PLANT_INFO,
     FLOW_SOIL_TEMPERATURE_TRIGGER,
     FLOW_TEMPERATURE_TRIGGER,
+    HYSTERESIS_FRACTION,
     OPB_DISPLAY_PID,
     SERVICE_REPLACE_SENSOR,
     STATE_HIGH,
@@ -205,9 +207,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     component = EntityComponent(_LOGGER, DOMAIN, hass)
     await component.async_add_entities(plant_entities)
 
-    # Add the entities to device registry together with plant
+    # Add the entities to device registry and tie to config entry
     device_id = plant.device_id
-    await _plant_add_to_device_registry(hass, plant_entities, device_id)
+    await _plant_add_to_device_registry(hass, plant_entities, device_id, entry)
 
     # Set up utility sensor
     hass.data.setdefault(DATA_UTILITY, {})
@@ -315,15 +317,26 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 async def _plant_add_to_device_registry(
-    hass: HomeAssistant, plant_entities: list[Entity], device_id: str
+    hass: HomeAssistant,
+    plant_entities: list[Entity],
+    device_id: str,
+    entry: ConfigEntry,
 ) -> None:
-    """Add all related entities to the correct device_id"""
+    """Add all related entities to the correct device and config entry."""
 
     # There must be a better way to do this, but I just can't find a way to set the
     # device_id when adding the entities.
     erreg = er.async_get(hass)
     for entity in plant_entities:
-        erreg.async_update_entity(entity.registry_entry.entity_id, device_id=device_id)
+        if entity.registry_entry is None:
+            raise ConfigEntryNotReady(
+                f"Entity {entity.entity_id} not yet registered, retrying setup"
+            )
+        erreg.async_update_entity(
+            entity.registry_entry.entity_id,
+            device_id=device_id,
+            config_entry_id=entry.entry_id,
+        )
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -929,6 +942,27 @@ class PlantDevice(Entity):
                         disabled_by=er.RegistryEntryDisabler.INTEGRATION,
                     )
 
+    def _check_threshold(self, value, min_entity, max_entity, current_status):
+        """Check a value against min/max thresholds with hysteresis.
+
+        Returns STATE_LOW, STATE_HIGH, or STATE_OK.
+        When already in a problem state, require the value to cross back
+        by a margin (hysteresis band) before clearing.
+        """
+        min_val = float(min_entity.state)
+        max_val = float(max_entity.state)
+        band = (max_val - min_val) * HYSTERESIS_FRACTION
+
+        if value < min_val:
+            return STATE_LOW
+        if value > max_val:
+            return STATE_HIGH
+        if current_status == STATE_LOW and value <= min_val + band:
+            return STATE_LOW
+        if current_status == STATE_HIGH and value >= max_val - band:
+            return STATE_HIGH
+        return STATE_OK
+
     def update(self) -> None:
         """Run on every update of the entities"""
 
@@ -945,16 +979,17 @@ class PlantDevice(Entity):
                 and moisture != STATE_UNAVAILABLE
             ):
                 known_state = True
-                if float(moisture) < float(self.min_moisture.state):
-                    self.moisture_status = STATE_LOW
-                    if self.moisture_trigger:
-                        new_state = STATE_PROBLEM
-                elif float(moisture) > float(self.max_moisture.state):
-                    self.moisture_status = STATE_HIGH
-                    if self.moisture_trigger:
-                        new_state = STATE_PROBLEM
-                else:
-                    self.moisture_status = STATE_OK
+                self.moisture_status = self._check_threshold(
+                    float(moisture),
+                    self.min_moisture,
+                    self.max_moisture,
+                    self.moisture_status,
+                )
+                if (
+                    self.moisture_status in (STATE_LOW, STATE_HIGH)
+                    and self.moisture_trigger
+                ):
+                    new_state = STATE_PROBLEM
             else:
                 # Reset status when sensor is unavailable
                 self.moisture_status = None
@@ -972,16 +1007,17 @@ class PlantDevice(Entity):
                 and conductivity != STATE_UNAVAILABLE
             ):
                 known_state = True
-                if float(conductivity) < float(self.min_conductivity.state):
-                    self.conductivity_status = STATE_LOW
-                    if self.conductivity_trigger:
-                        new_state = STATE_PROBLEM
-                elif float(conductivity) > float(self.max_conductivity.state):
-                    self.conductivity_status = STATE_HIGH
-                    if self.conductivity_trigger:
-                        new_state = STATE_PROBLEM
-                else:
-                    self.conductivity_status = STATE_OK
+                self.conductivity_status = self._check_threshold(
+                    float(conductivity),
+                    self.min_conductivity,
+                    self.max_conductivity,
+                    self.conductivity_status,
+                )
+                if (
+                    self.conductivity_status in (STATE_LOW, STATE_HIGH)
+                    and self.conductivity_trigger
+                ):
+                    new_state = STATE_PROBLEM
             else:
                 # Reset status when sensor is unavailable
                 self.conductivity_status = None
@@ -999,16 +1035,17 @@ class PlantDevice(Entity):
                 and temperature != STATE_UNAVAILABLE
             ):
                 known_state = True
-                if float(temperature) < float(self.min_temperature.state):
-                    self.temperature_status = STATE_LOW
-                    if self.temperature_trigger:
-                        new_state = STATE_PROBLEM
-                elif float(temperature) > float(self.max_temperature.state):
-                    self.temperature_status = STATE_HIGH
-                    if self.temperature_trigger:
-                        new_state = STATE_PROBLEM
-                else:
-                    self.temperature_status = STATE_OK
+                self.temperature_status = self._check_threshold(
+                    float(temperature),
+                    self.min_temperature,
+                    self.max_temperature,
+                    self.temperature_status,
+                )
+                if (
+                    self.temperature_status in (STATE_LOW, STATE_HIGH)
+                    and self.temperature_trigger
+                ):
+                    new_state = STATE_PROBLEM
             else:
                 # Reset status when sensor is unavailable
                 self.temperature_status = None
@@ -1026,16 +1063,17 @@ class PlantDevice(Entity):
                 and humidity != STATE_UNAVAILABLE
             ):
                 known_state = True
-                if float(humidity) < float(self.min_humidity.state):
-                    self.humidity_status = STATE_LOW
-                    if self.humidity_trigger:
-                        new_state = STATE_PROBLEM
-                elif float(humidity) > float(self.max_humidity.state):
-                    self.humidity_status = STATE_HIGH
-                    if self.humidity_trigger:
-                        new_state = STATE_PROBLEM
-                else:
-                    self.humidity_status = STATE_OK
+                self.humidity_status = self._check_threshold(
+                    float(humidity),
+                    self.min_humidity,
+                    self.max_humidity,
+                    self.humidity_status,
+                )
+                if (
+                    self.humidity_status in (STATE_LOW, STATE_HIGH)
+                    and self.humidity_trigger
+                ):
+                    new_state = STATE_PROBLEM
             else:
                 # Reset status when sensor is unavailable
                 self.humidity_status = None
@@ -1049,16 +1087,11 @@ class PlantDevice(Entity):
             )
             if co2 is not None and co2 != STATE_UNKNOWN and co2 != STATE_UNAVAILABLE:
                 known_state = True
-                if float(co2) < float(self.min_co2.state):
-                    self.co2_status = STATE_LOW
-                    if self.co2_trigger:
-                        new_state = STATE_PROBLEM
-                elif float(co2) > float(self.max_co2.state):
-                    self.co2_status = STATE_HIGH
-                    if self.co2_trigger:
-                        new_state = STATE_PROBLEM
-                else:
-                    self.co2_status = STATE_OK
+                self.co2_status = self._check_threshold(
+                    float(co2), self.min_co2, self.max_co2, self.co2_status
+                )
+                if self.co2_status in (STATE_LOW, STATE_HIGH) and self.co2_trigger:
+                    new_state = STATE_PROBLEM
             else:
                 # Reset status when sensor is unavailable
                 self.co2_status = None
@@ -1078,16 +1111,17 @@ class PlantDevice(Entity):
                 and soil_temp != STATE_UNAVAILABLE
             ):
                 known_state = True
-                if float(soil_temp) < float(self.min_soil_temperature.state):
-                    self.soil_temperature_status = STATE_LOW
-                    if self.soil_temperature_trigger:
-                        new_state = STATE_PROBLEM
-                elif float(soil_temp) > float(self.max_soil_temperature.state):
-                    self.soil_temperature_status = STATE_HIGH
-                    if self.soil_temperature_trigger:
-                        new_state = STATE_PROBLEM
-                else:
-                    self.soil_temperature_status = STATE_OK
+                self.soil_temperature_status = self._check_threshold(
+                    float(soil_temp),
+                    self.min_soil_temperature,
+                    self.max_soil_temperature,
+                    self.soil_temperature_status,
+                )
+                if (
+                    self.soil_temperature_status in (STATE_LOW, STATE_HIGH)
+                    and self.soil_temperature_trigger
+                ):
+                    new_state = STATE_PROBLEM
             else:
                 # Reset status when sensor is unavailable
                 self.soil_temperature_status = None
@@ -1116,12 +1150,17 @@ class PlantDevice(Entity):
                     and illuminance != STATE_UNAVAILABLE
                 ):
                     known_state = True
-                    if float(illuminance) > float(self.max_illuminance.state):
-                        self.illuminance_status = STATE_HIGH
-                        if self.illuminance_trigger:
-                            new_state = STATE_PROBLEM
-                    else:
-                        self.illuminance_status = STATE_OK
+                    self.illuminance_status = self._check_threshold(
+                        float(illuminance),
+                        self.min_illuminance,
+                        self.max_illuminance,
+                        self.illuminance_status,
+                    )
+                    if (
+                        self.illuminance_status == STATE_HIGH
+                        and self.illuminance_trigger
+                    ):
+                        new_state = STATE_PROBLEM
                 else:
                     # Reset status when sensor is unavailable
                     self.illuminance_status = None
@@ -1138,20 +1177,15 @@ class PlantDevice(Entity):
             and self.dli.native_value != STATE_UNAVAILABLE
         ):
             known_state = True
-            if float(self.dli.extra_state_attributes["last_period"]) > 0 and float(
-                self.dli.extra_state_attributes["last_period"]
-            ) < float(self.min_dli.state):
-                self.dli_status = STATE_LOW
-                if self.dli_trigger:
-                    new_state = STATE_PROBLEM
-            elif float(self.dli.extra_state_attributes["last_period"]) > 0 and float(
-                self.dli.extra_state_attributes["last_period"]
-            ) > float(self.max_dli.state):
-                self.dli_status = STATE_HIGH
-                if self.dli_trigger:
-                    new_state = STATE_PROBLEM
+            dli_value = float(self.dli.extra_state_attributes["last_period"])
+            if dli_value > 0:
+                self.dli_status = self._check_threshold(
+                    dli_value, self.min_dli, self.max_dli, self.dli_status
+                )
             else:
                 self.dli_status = STATE_OK
+            if self.dli_status in (STATE_LOW, STATE_HIGH) and self.dli_trigger:
+                new_state = STATE_PROBLEM
         else:
             # Reset DLI status when sensor is unavailable or removed
             self.dli_status = None
