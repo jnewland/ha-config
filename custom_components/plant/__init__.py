@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 
 import voluptuous as vol
@@ -23,7 +24,6 @@ from homeassistant.const import (
     Platform,
 )
 from homeassistant.core import HomeAssistant, ServiceCall, callback
-from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
@@ -316,6 +316,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
+_REGISTRY_RETRY_DELAY = 1  # seconds between retries
+_REGISTRY_MAX_RETRIES = 5
+
+
 async def _plant_add_to_device_registry(
     hass: HomeAssistant,
     plant_entities: list[Entity],
@@ -328,12 +332,30 @@ async def _plant_add_to_device_registry(
     # device_id when adding the entities.
     erreg = er.async_get(hass)
     for entity in plant_entities:
-        if entity.registry_entry is None:
-            raise ConfigEntryNotReady(
-                f"Entity {entity.entity_id} not yet registered, retrying setup"
+        registry_entry = entity.registry_entry or erreg.async_get(entity.entity_id)
+        retries = 0
+        while registry_entry is None and retries < _REGISTRY_MAX_RETRIES:
+            retries += 1
+            _LOGGER.debug(
+                "Entity %s not yet in registry, retrying (%s/%s)",
+                entity.entity_id,
+                retries,
+                _REGISTRY_MAX_RETRIES,
             )
+            await asyncio.sleep(_REGISTRY_RETRY_DELAY)
+            registry_entry = entity.registry_entry or erreg.async_get(entity.entity_id)
+
+        if registry_entry is None:
+            _LOGGER.warning(
+                "Entity %s not found in registry after %s retries, "
+                "skipping device assignment",
+                entity.entity_id,
+                retries,
+            )
+            continue
+
         erreg.async_update_entity(
-            entity.registry_entry.entity_id,
+            registry_entry.entity_id,
             device_id=device_id,
             config_entry_id=entry.entry_id,
         )
