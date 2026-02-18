@@ -77,11 +77,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         service_info.device,
         service_info.manufacturer_data,
     )
-
     ember_mug = EmberMug(
         service_info.device,
         model_info=get_model_info_from_advertiser_data(service_info.advertisement),
         debug=entry.options.get(CONF_DEBUG, False),
+        use_metric=None,
     )
     mug_coordinator = MugDataUpdateCoordinator(
         hass,
@@ -103,7 +103,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         ),
     )
 
-    await mug_coordinator.async_config_entry_first_refresh()
+    hass.async_create_task(mug_coordinator.async_config_entry_first_refresh())
 
     entry.async_on_unload(
         bluetooth.async_track_unavailable(
