@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 
 import voluptuous as vol
@@ -23,7 +24,6 @@ from homeassistant.const import (
     Platform,
 )
 from homeassistant.core import HomeAssistant, ServiceCall, callback
-from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
@@ -206,6 +206,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Add all the entities to Hass
     component = EntityComponent(_LOGGER, DOMAIN, hass)
     await component.async_add_entities(plant_entities)
+    hass.data[DOMAIN][entry.entry_id]["component"] = component
 
     # Add the entities to device registry and tie to config entry
     device_id = plant.device_id
@@ -290,6 +291,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         schema=SERVICE_REPLACE_SENSOR_SCHEMA,
     )
     websocket_api.async_register_command(hass, ws_get_info)
+
+    if plant.hass is None:
+        _LOGGER.error(
+            "Plant entity %s was not added to Home Assistant "
+            "(possible duplicate unique_id). Aborting setup for %s",
+            plant.entity_id,
+            entry.title,
+        )
+        return False
+
     plant.async_schedule_update_ha_state(True)
 
     # Disable entities that have no external sensor configured
@@ -316,6 +327,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
+_REGISTRY_RETRY_DELAY = 1  # seconds between retries
+_REGISTRY_MAX_RETRIES = 5
+
+
 async def _plant_add_to_device_registry(
     hass: HomeAssistant,
     plant_entities: list[Entity],
@@ -328,12 +343,30 @@ async def _plant_add_to_device_registry(
     # device_id when adding the entities.
     erreg = er.async_get(hass)
     for entity in plant_entities:
-        if entity.registry_entry is None:
-            raise ConfigEntryNotReady(
-                f"Entity {entity.entity_id} not yet registered, retrying setup"
+        registry_entry = entity.registry_entry or erreg.async_get(entity.entity_id)
+        retries = 0
+        while registry_entry is None and retries < _REGISTRY_MAX_RETRIES:
+            retries += 1
+            _LOGGER.debug(
+                "Entity %s not yet in registry, retrying (%s/%s)",
+                entity.entity_id,
+                retries,
+                _REGISTRY_MAX_RETRIES,
             )
+            await asyncio.sleep(_REGISTRY_RETRY_DELAY)
+            registry_entry = entity.registry_entry or erreg.async_get(entity.entity_id)
+
+        if registry_entry is None:
+            _LOGGER.warning(
+                "Entity %s not found in registry after %s retries, "
+                "skipping device assignment",
+                entity.entity_id,
+                retries,
+            )
+            continue
+
         erreg.async_update_entity(
-            entity.registry_entry.entity_id,
+            registry_entry.entity_id,
             device_id=device_id,
             config_entry_id=entry.entry_id,
         )
@@ -345,6 +378,13 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     plant_data = hass.data.get(DOMAIN, {}).get(entry.entry_id, {})
     if ATTR_PLANT in plant_data:
         plant_data[ATTR_PLANT].plant_complete = False
+
+    # Remove the plant entity from the EntityComponent so reloads don't
+    # hit a duplicate unique_id error
+    plant = plant_data.get(ATTR_PLANT)
+    component = plant_data.get("component")
+    if component and plant and plant.entity_id:
+        await component.async_remove_entity(plant.entity_id)
 
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
@@ -731,11 +771,9 @@ class PlantDevice(Entity):
                 ATTR_UNIT_OF_MEASUREMENT: self.dli.unit_of_measurement,
                 ATTR_SENSOR: self.dli.entity_id,
             }
-            if (
-                self.dli.native_value is not None
-                and self.dli.native_value != STATE_UNKNOWN
-            ):
-                response[ATTR_DLI][ATTR_CURRENT] = float(self.dli.native_value)
+            dli_val = self._safe_float(self.dli.native_value, self.dli.entity_id)
+            if dli_val is not None:
+                response[ATTR_DLI][ATTR_CURRENT] = dli_val
 
         # Add rolling 24h DLI if available
         if self.dli_24h is not None and self._sensor_available(self.dli_24h):
@@ -747,11 +785,11 @@ class PlantDevice(Entity):
                 ATTR_UNIT_OF_MEASUREMENT: self.dli_24h.unit_of_measurement,
                 ATTR_SENSOR: self.dli_24h.entity_id,
             }
-            if (
-                self.dli_24h.native_value is not None
-                and self.dli_24h.native_value != STATE_UNKNOWN
-            ):
-                response[ATTR_DLI_24H][ATTR_CURRENT] = float(self.dli_24h.native_value)
+            dli_24h_val = self._safe_float(
+                self.dli_24h.native_value, self.dli_24h.entity_id
+            )
+            if dli_24h_val is not None:
+                response[ATTR_DLI_24H][ATTR_CURRENT] = dli_24h_val
 
         return response
 
@@ -926,21 +964,51 @@ class PlantDevice(Entity):
         """Disable or enable entities based on whether an external sensor is configured."""
         ent_reg = er.async_get(self.hass)
         has_sensor = meter_sensor.external_sensor is not None
+        _LOGGER.debug(
+            "update_entity_disabled_state: meter=%s, has_sensor=%s, external=%s",
+            meter_sensor.entity_id,
+            has_sensor,
+            meter_sensor.external_sensor,
+        )
         for entity in self._get_related_entities_for_sensor(meter_sensor):
             if entity is None:
                 continue
             entry = ent_reg.async_get(entity.entity_id)
             if entry is None:
+                _LOGGER.warning(
+                    "Entity %s not found in registry, skipping disable/enable",
+                    entity.entity_id,
+                )
                 continue
             if has_sensor:
                 if entry.disabled_by == er.RegistryEntryDisabler.INTEGRATION:
+                    _LOGGER.debug(
+                        "Enabling %s (was disabled by integration)",
+                        entry.entity_id,
+                    )
                     ent_reg.async_update_entity(entry.entity_id, disabled_by=None)
+                elif entry.disabled_by is not None:
+                    _LOGGER.warning(
+                        "Entity %s is disabled by %s (not by integration), "
+                        "cannot auto-enable — please enable manually via the UI",
+                        entry.entity_id,
+                        entry.disabled_by,
+                    )
             else:
                 if entry.disabled_by is None:
                     ent_reg.async_update_entity(
                         entry.entity_id,
                         disabled_by=er.RegistryEntryDisabler.INTEGRATION,
                     )
+
+    @staticmethod
+    def _safe_float(value, entity_id: str) -> float | None:
+        """Convert a sensor value to float, returning None on failure."""
+        try:
+            return float(value)
+        except (ValueError, TypeError):
+            _LOGGER.debug("Sensor %s has non-numeric value: %s", entity_id, value)
+            return None
 
     def _check_threshold(self, value, min_entity, max_entity, current_status):
         """Check a value against min/max thresholds with hysteresis.
@@ -949,19 +1017,44 @@ class PlantDevice(Entity):
         When already in a problem state, require the value to cross back
         by a margin (hysteresis band) before clearing.
         """
-        min_val = float(min_entity.state)
-        max_val = float(max_entity.state)
+        try:
+            min_val = float(min_entity.state)
+            max_val = float(max_entity.state)
+        except (ValueError, TypeError):
+            _LOGGER.warning(
+                "Threshold entity has non-numeric state "
+                "(min=%s [%s], max=%s [%s]) — skipping check",
+                min_entity.entity_id,
+                min_entity.state,
+                max_entity.entity_id,
+                max_entity.state,
+            )
+            return current_status
         band = (max_val - min_val) * HYSTERESIS_FRACTION
 
         if value < min_val:
-            return STATE_LOW
-        if value > max_val:
-            return STATE_HIGH
-        if current_status == STATE_LOW and value <= min_val + band:
-            return STATE_LOW
-        if current_status == STATE_HIGH and value >= max_val - band:
-            return STATE_HIGH
-        return STATE_OK
+            new_status = STATE_LOW
+        elif value > max_val:
+            new_status = STATE_HIGH
+        elif current_status == STATE_LOW and value <= min_val + band:
+            new_status = STATE_LOW
+        elif current_status == STATE_HIGH and value >= max_val - band:
+            new_status = STATE_HIGH
+        else:
+            new_status = STATE_OK
+
+        if new_status != current_status:
+            _LOGGER.debug(
+                "Threshold %s/%s: value=%.1f, range=[%.1f, %.1f], " "status %s -> %s",
+                min_entity.entity_id,
+                max_entity.entity_id,
+                value,
+                min_val,
+                max_val,
+                current_status,
+                new_status,
+            )
+        return new_status
 
     def update(self) -> None:
         """Run on every update of the entities"""
@@ -973,14 +1066,11 @@ class PlantDevice(Entity):
             moisture = getattr(
                 self.hass.states.get(self.sensor_moisture.entity_id), "state", None
             )
-            if (
-                moisture is not None
-                and moisture != STATE_UNKNOWN
-                and moisture != STATE_UNAVAILABLE
-            ):
+            moisture_val = self._safe_float(moisture, self.sensor_moisture.entity_id)
+            if moisture_val is not None:
                 known_state = True
                 self.moisture_status = self._check_threshold(
-                    float(moisture),
+                    moisture_val,
                     self.min_moisture,
                     self.max_moisture,
                     self.moisture_status,
@@ -991,7 +1081,7 @@ class PlantDevice(Entity):
                 ):
                     new_state = STATE_PROBLEM
             else:
-                # Reset status when sensor is unavailable
+                # Reset status when sensor is unavailable or non-numeric
                 self.moisture_status = None
         else:
             # Reset status when sensor is removed
@@ -1001,14 +1091,13 @@ class PlantDevice(Entity):
             conductivity = getattr(
                 self.hass.states.get(self.sensor_conductivity.entity_id), "state", None
             )
-            if (
-                conductivity is not None
-                and conductivity != STATE_UNKNOWN
-                and conductivity != STATE_UNAVAILABLE
-            ):
+            conductivity_val = self._safe_float(
+                conductivity, self.sensor_conductivity.entity_id
+            )
+            if conductivity_val is not None:
                 known_state = True
                 self.conductivity_status = self._check_threshold(
-                    float(conductivity),
+                    conductivity_val,
                     self.min_conductivity,
                     self.max_conductivity,
                     self.conductivity_status,
@@ -1019,7 +1108,7 @@ class PlantDevice(Entity):
                 ):
                     new_state = STATE_PROBLEM
             else:
-                # Reset status when sensor is unavailable
+                # Reset status when sensor is unavailable or non-numeric
                 self.conductivity_status = None
         else:
             # Reset status when sensor is removed
@@ -1029,14 +1118,13 @@ class PlantDevice(Entity):
             temperature = getattr(
                 self.hass.states.get(self.sensor_temperature.entity_id), "state", None
             )
-            if (
-                temperature is not None
-                and temperature != STATE_UNKNOWN
-                and temperature != STATE_UNAVAILABLE
-            ):
+            temperature_val = self._safe_float(
+                temperature, self.sensor_temperature.entity_id
+            )
+            if temperature_val is not None:
                 known_state = True
                 self.temperature_status = self._check_threshold(
-                    float(temperature),
+                    temperature_val,
                     self.min_temperature,
                     self.max_temperature,
                     self.temperature_status,
@@ -1047,7 +1135,7 @@ class PlantDevice(Entity):
                 ):
                     new_state = STATE_PROBLEM
             else:
-                # Reset status when sensor is unavailable
+                # Reset status when sensor is unavailable or non-numeric
                 self.temperature_status = None
         else:
             # Reset status when sensor is removed
@@ -1057,14 +1145,11 @@ class PlantDevice(Entity):
             humidity = getattr(
                 self.hass.states.get(self.sensor_humidity.entity_id), "state", None
             )
-            if (
-                humidity is not None
-                and humidity != STATE_UNKNOWN
-                and humidity != STATE_UNAVAILABLE
-            ):
+            humidity_val = self._safe_float(humidity, self.sensor_humidity.entity_id)
+            if humidity_val is not None:
                 known_state = True
                 self.humidity_status = self._check_threshold(
-                    float(humidity),
+                    humidity_val,
                     self.min_humidity,
                     self.max_humidity,
                     self.humidity_status,
@@ -1075,7 +1160,7 @@ class PlantDevice(Entity):
                 ):
                     new_state = STATE_PROBLEM
             else:
-                # Reset status when sensor is unavailable
+                # Reset status when sensor is unavailable or non-numeric
                 self.humidity_status = None
         else:
             # Reset status when sensor is removed
@@ -1085,15 +1170,16 @@ class PlantDevice(Entity):
             co2 = getattr(
                 self.hass.states.get(self.sensor_co2.entity_id), "state", None
             )
-            if co2 is not None and co2 != STATE_UNKNOWN and co2 != STATE_UNAVAILABLE:
+            co2_val = self._safe_float(co2, self.sensor_co2.entity_id)
+            if co2_val is not None:
                 known_state = True
                 self.co2_status = self._check_threshold(
-                    float(co2), self.min_co2, self.max_co2, self.co2_status
+                    co2_val, self.min_co2, self.max_co2, self.co2_status
                 )
                 if self.co2_status in (STATE_LOW, STATE_HIGH) and self.co2_trigger:
                     new_state = STATE_PROBLEM
             else:
-                # Reset status when sensor is unavailable
+                # Reset status when sensor is unavailable or non-numeric
                 self.co2_status = None
         else:
             # Reset status when sensor is removed
@@ -1105,14 +1191,13 @@ class PlantDevice(Entity):
                 "state",
                 None,
             )
-            if (
-                soil_temp is not None
-                and soil_temp != STATE_UNKNOWN
-                and soil_temp != STATE_UNAVAILABLE
-            ):
+            soil_temp_val = self._safe_float(
+                soil_temp, self.sensor_soil_temperature.entity_id
+            )
+            if soil_temp_val is not None:
                 known_state = True
                 self.soil_temperature_status = self._check_threshold(
-                    float(soil_temp),
+                    soil_temp_val,
                     self.min_soil_temperature,
                     self.max_soil_temperature,
                     self.soil_temperature_status,
@@ -1123,7 +1208,7 @@ class PlantDevice(Entity):
                 ):
                     new_state = STATE_PROBLEM
             else:
-                # Reset status when sensor is unavailable
+                # Reset status when sensor is unavailable or non-numeric
                 self.soil_temperature_status = None
         else:
             # Reset status when sensor is removed
@@ -1144,14 +1229,13 @@ class PlantDevice(Entity):
                     "state",
                     None,
                 )
-                if (
-                    illuminance is not None
-                    and illuminance != STATE_UNKNOWN
-                    and illuminance != STATE_UNAVAILABLE
-                ):
+                illuminance_val = self._safe_float(
+                    illuminance, self.sensor_illuminance.entity_id
+                )
+                if illuminance_val is not None:
                     known_state = True
                     self.illuminance_status = self._check_threshold(
-                        float(illuminance),
+                        illuminance_val,
                         self.min_illuminance,
                         self.max_illuminance,
                         self.illuminance_status,
@@ -1162,7 +1246,7 @@ class PlantDevice(Entity):
                     ):
                         new_state = STATE_PROBLEM
                 else:
-                    # Reset status when sensor is unavailable
+                    # Reset status when sensor is unavailable or non-numeric
                     self.illuminance_status = None
         else:
             # Reset status when sensor is removed
@@ -1177,7 +1261,14 @@ class PlantDevice(Entity):
             and self.dli.native_value != STATE_UNAVAILABLE
         ):
             known_state = True
-            dli_value = float(self.dli.extra_state_attributes["last_period"])
+            try:
+                dli_value = float(self.dli.extra_state_attributes.get("last_period", 0))
+            except (ValueError, TypeError):
+                _LOGGER.debug(
+                    "DLI last_period has non-numeric value: %s",
+                    self.dli.extra_state_attributes.get("last_period"),
+                )
+                dli_value = 0
             if dli_value > 0:
                 self.dli_status = self._check_threshold(
                     dli_value, self.min_dli, self.max_dli, self.dli_status
@@ -1193,6 +1284,13 @@ class PlantDevice(Entity):
         if not known_state:
             new_state = STATE_UNKNOWN
 
+        if new_state != self._attr_state:
+            _LOGGER.debug(
+                "Plant %s state changed: %s -> %s",
+                self.entity_id,
+                self._attr_state,
+                new_state,
+            )
         self._attr_state = new_state
         self.update_registry()
 
