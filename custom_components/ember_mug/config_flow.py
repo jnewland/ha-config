@@ -54,10 +54,19 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         await self.async_set_unique_id(discovery_info.address.replace(":", "").lower())
         self._abort_if_unique_id_configured()
 
+        try:
+            async with BleakClient(discovery_info.device) as client:
+                await client.connect()
+                with contextlib.suppress(BleakError, EOFError):
+                    await client.pair()
+        except BleakError:
+            self.async_abort(reason="cannot_connect")
+
         self._discovery_info = discovery_info
         self._model_info = get_model_info_from_advertiser_data(discovery_info.advertisement)
+        default_name = self._model_info.name.split("(")[0].strip() if self._model_info else "Ember Mug"
         self.context["title_placeholders"] = {
-            CONF_NAME: self._model_info.name if self._model_info.model is not None else "Ember Mug",
+            CONF_NAME: default_name,
             CONF_ADDRESS: discovery_info.address,
         }
         return await self.async_step_user()
@@ -78,7 +87,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_create_entry(title=user_input[CONF_NAME], data=user_input)
 
         if not self._discovery_info:
-            current_addresses = self._async_current_ids()
+            current_addresses = self._async_current_ids(include_ignore=False)
             for service_info in async_discovered_service_info(self.hass):
                 address = service_info.address
                 unique_id = address.replace(":", "").lower()
@@ -98,7 +107,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     async with BleakClient(service_info.device) as client:
                         await client.connect()
                         with contextlib.suppress(BleakError, EOFError):
-                            # An error will be raised if already paired
                             await client.pair()
                 except BleakError:
                     self.async_abort(reason="cannot_connect")
@@ -108,6 +116,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 return self.async_abort(reason="no_new_devices")
 
         name = self._discovery_info.name
+        default_name = self._model_info.name.split("(")[0].strip() if self._model_info else name
         data_schema = vol.Schema(
             {
                 vol.Required(CONF_ADDRESS): vol.In(
@@ -115,14 +124,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         self._discovery_info.address: f"{name} ({self._discovery_info.address})",
                     },
                 ),
-                vol.Required(CONF_NAME, default=self._model_info.name if self._model_info else name): str,
+                vol.Required(CONF_NAME, default=default_name): str,
             },
         )
-        return self.async_show_form(
-            step_id="user",
-            data_schema=data_schema,
-            errors=errors,
-        )
+        return self.async_show_form(step_id="user", data_schema=data_schema, errors=errors)
 
     @staticmethod
     @callback
