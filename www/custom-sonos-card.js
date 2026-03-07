@@ -1,4 +1,4 @@
-const t$3 = globalThis, e$5 = t$3.ShadowRoot && (void 0 === t$3.ShadyCSS || t$3.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, s$4 = Symbol(), o$6 = /* @__PURE__ */ new WeakMap();
+const t$3 = globalThis, e$5 = t$3.ShadowRoot && (void 0 === t$3.ShadyCSS || t$3.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, s$4 = /* @__PURE__ */ Symbol(), o$6 = /* @__PURE__ */ new WeakMap();
 let n$7 = class n {
   constructor(t2, e2, o2) {
     if (this._$cssResult$ = true, o2 !== s$4) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
@@ -18,14 +18,14 @@ let n$7 = class n {
   }
 };
 const r$7 = (t2) => new n$7("string" == typeof t2 ? t2 : t2 + "", void 0, s$4), i$7 = (t2, ...e2) => {
-  const o2 = 1 === t2.length ? t2[0] : e2.reduce((e3, s2, o3) => e3 + ((t3) => {
+  const o2 = 1 === t2.length ? t2[0] : e2.reduce(((e3, s2, o3) => e3 + ((t3) => {
     if (true === t3._$cssResult$) return t3.cssText;
     if ("number" == typeof t3) return t3;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + t3 + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
-  })(s2) + t2[o3 + 1], t2[0]);
+  })(s2) + t2[o3 + 1]), t2[0]);
   return new n$7(o2, t2, s$4);
 }, S$1 = (s2, o2) => {
-  if (e$5) s2.adoptedStyleSheets = o2.map((t2) => t2 instanceof CSSStyleSheet ? t2 : t2.styleSheet);
+  if (e$5) s2.adoptedStyleSheets = o2.map(((t2) => t2 instanceof CSSStyleSheet ? t2 : t2.styleSheet));
   else for (const e2 of o2) {
     const o3 = document.createElement("style"), n3 = t$3.litNonce;
     void 0 !== n3 && o3.setAttribute("nonce", n3), o3.textContent = e2.cssText, s2.appendChild(o3);
@@ -64,7 +64,7 @@ const { is: i$6, defineProperty: e$4, getOwnPropertyDescriptor: h$3, getOwnPrope
   }
   return i5;
 } }, f$3 = (t2, s2) => !i$6(t2, s2), b = { attribute: true, type: String, converter: u$1, reflect: false, useDefault: false, hasChanged: f$3 };
-Symbol.metadata ??= Symbol("metadata"), a$1.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
+Symbol.metadata ??= /* @__PURE__ */ Symbol("metadata"), a$1.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
 let y$1 = class y extends HTMLElement {
   static addInitializer(t2) {
     this._$Ei(), (this.l ??= []).push(t2);
@@ -74,7 +74,7 @@ let y$1 = class y extends HTMLElement {
   }
   static createProperty(t2, s2 = b) {
     if (s2.state && (s2.attribute = false), this._$Ei(), this.prototype.hasOwnProperty(t2) && ((s2 = Object.create(s2)).wrapped = true), this.elementProperties.set(t2, s2), !s2.noAccessor) {
-      const i5 = Symbol(), h2 = this.getPropertyDescriptor(t2, i5, s2);
+      const i5 = /* @__PURE__ */ Symbol(), h2 = this.getPropertyDescriptor(t2, i5, s2);
       void 0 !== h2 && e$4(this.prototype, t2, h2);
     }
   }
@@ -131,7 +131,7 @@ let y$1 = class y extends HTMLElement {
     super(), this._$Ep = void 0, this.isUpdatePending = false, this.hasUpdated = false, this._$Em = null, this._$Ev();
   }
   _$Ev() {
-    this._$ES = new Promise((t2) => this.enableUpdating = t2), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), this.constructor.l?.forEach((t2) => t2(this));
+    this._$ES = new Promise(((t2) => this.enableUpdating = t2)), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), this.constructor.l?.forEach(((t2) => t2(this)));
   }
   addController(t2) {
     (this._$EO ??= /* @__PURE__ */ new Set()).add(t2), void 0 !== this.renderRoot && this.isConnected && t2.hostConnected?.();
@@ -149,12 +149,12 @@ let y$1 = class y extends HTMLElement {
     return S$1(t2, this.constructor.elementStyles), t2;
   }
   connectedCallback() {
-    this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(true), this._$EO?.forEach((t2) => t2.hostConnected?.());
+    this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(true), this._$EO?.forEach(((t2) => t2.hostConnected?.()));
   }
   enableUpdating(t2) {
   }
   disconnectedCallback() {
-    this._$EO?.forEach((t2) => t2.hostDisconnected?.());
+    this._$EO?.forEach(((t2) => t2.hostDisconnected?.()));
   }
   attributeChangedCallback(t2, s2, i5) {
     this._$AK(t2, i5);
@@ -213,7 +213,7 @@ let y$1 = class y extends HTMLElement {
     let t2 = false;
     const s2 = this._$AL;
     try {
-      t2 = this.shouldUpdate(s2), t2 ? (this.willUpdate(s2), this._$EO?.forEach((t3) => t3.hostUpdate?.()), this.update(s2)) : this._$EM();
+      t2 = this.shouldUpdate(s2), t2 ? (this.willUpdate(s2), this._$EO?.forEach(((t3) => t3.hostUpdate?.())), this.update(s2)) : this._$EM();
     } catch (s3) {
       throw t2 = false, this._$EM(), s3;
     }
@@ -222,7 +222,7 @@ let y$1 = class y extends HTMLElement {
   willUpdate(t2) {
   }
   _$AE(t2) {
-    this._$EO?.forEach((t3) => t3.hostUpdated?.()), this.hasUpdated || (this.hasUpdated = true, this.firstUpdated(t2)), this.updated(t2);
+    this._$EO?.forEach(((t3) => t3.hostUpdated?.())), this.hasUpdated || (this.hasUpdated = true, this.firstUpdated(t2)), this.updated(t2);
   }
   _$EM() {
     this._$AL = /* @__PURE__ */ new Map(), this.isUpdatePending = false;
@@ -237,7 +237,7 @@ let y$1 = class y extends HTMLElement {
     return true;
   }
   update(t2) {
-    this._$Eq &&= this._$Eq.forEach((t3) => this._$ET(t3, this[t3])), this._$EM();
+    this._$Eq &&= this._$Eq.forEach(((t3) => this._$ET(t3, this[t3]))), this._$EM();
   }
   updated(t2) {
   }
@@ -246,7 +246,7 @@ let y$1 = class y extends HTMLElement {
 };
 y$1.elementStyles = [], y$1.shadowRootOptions = { mode: "open" }, y$1[d$1("elementProperties")] = /* @__PURE__ */ new Map(), y$1[d$1("finalized")] = /* @__PURE__ */ new Map(), p$1?.({ ReactiveElement: y$1 }), (a$1.reactiveElementVersions ??= []).push("2.1.0");
 const t$2 = globalThis, i$5 = t$2.trustedTypes, s$3 = i$5 ? i$5.createPolicy("lit-html", { createHTML: (t2) => t2 }) : void 0, e$3 = "$lit$", h$2 = `lit$${Math.random().toFixed(9).slice(2)}$`, o$4 = "?" + h$2, n$5 = `<${o$4}>`, r$5 = document, l = () => r$5.createComment(""), c$2 = (t2) => null === t2 || "object" != typeof t2 && "function" != typeof t2, a = Array.isArray, u = (t2) => a(t2) || "function" == typeof t2?.[Symbol.iterator], d = "[ 	\n\f\r]", f$2 = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, v = /-->/g, _ = />/g, m$1 = RegExp(`>|${d}(?:([^\\s"'>=/]+)(${d}*=${d}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), p = /'/g, g = /"/g, $ = /^(?:script|style|textarea|title)$/i, y2 = (t2) => (i5, ...s2) => ({ _$litType$: t2, strings: i5, values: s2 }), x = y2(1), T = Symbol.for("lit-noChange"), E = Symbol.for("lit-nothing"), A = /* @__PURE__ */ new WeakMap(), C = r$5.createTreeWalker(r$5, 129);
+\f\r"'\`<>=]|("|')|))|$)`, "g"), p = /'/g, g = /"/g, $ = /^(?:script|style|textarea|title)$/i, y2 = (t2) => (i5, ...s2) => ({ _$litType$: t2, strings: i5, values: s2 }), x = y2(1), T = /* @__PURE__ */ Symbol.for("lit-noChange"), E = /* @__PURE__ */ Symbol.for("lit-nothing"), A = /* @__PURE__ */ new WeakMap(), C = r$5.createTreeWalker(r$5, 129);
 function P(t2, i5) {
   if (!a(t2) || !t2.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return void 0 !== s$3 ? s$3.createHTML(i5) : i5;
@@ -957,7 +957,7 @@ let i$1 = class i3 {
     return this.Y;
   }
   pause() {
-    this.Y ??= new Promise((t2) => this.Z = t2);
+    this.Y ??= new Promise(((t2) => this.Z = t2));
   }
   resume() {
     this.Z?.(), this.Y = this.Z = void 0;
@@ -969,7 +969,7 @@ class c extends f {
     super(...arguments), this._$Cwt = h, this._$Cbt = [], this._$CK = new s(this), this._$CX = new i$1();
   }
   render(...s2) {
-    return s2.find((t2) => !n$2(t2)) ?? T;
+    return s2.find(((t2) => !n$2(t2))) ?? T;
   }
   update(s2, i5) {
     const e2 = this._$Cbt;
@@ -980,14 +980,14 @@ class c extends f {
     for (let t2 = 0; t2 < i5.length && !(t2 > this._$Cwt); t2++) {
       const s3 = i5[t2];
       if (!n$2(s3)) return this._$Cwt = t2, s3;
-      t2 < r2 && s3 === e2[t2] || (this._$Cwt = h, r2 = 0, Promise.resolve(s3).then(async (t3) => {
+      t2 < r2 && s3 === e2[t2] || (this._$Cwt = h, r2 = 0, Promise.resolve(s3).then((async (t3) => {
         for (; c2.get(); ) await c2.get();
         const i6 = o2.deref();
         if (void 0 !== i6) {
           const e3 = i6._$Cbt.indexOf(s3);
           e3 > -1 && e3 < i6._$Cwt && (i6._$Cwt = e3, i6.setValue(t3));
         }
-      }));
+      })));
     }
     return T;
   }
@@ -1098,10 +1098,10 @@ const n2 = "important", i4 = " !" + n2, o = e(class extends i$2 {
     if (super(t2), t2.type !== t$1.ATTRIBUTE || "style" !== t2.name || t2.strings?.length > 2) throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.");
   }
   render(t2) {
-    return Object.keys(t2).reduce((e2, r2) => {
+    return Object.keys(t2).reduce(((e2, r2) => {
       const s2 = t2[r2];
       return null == s2 ? e2 : e2 + `${r2 = r2.includes("-") ? r2 : r2.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g, "-$&").toLowerCase()}:${s2};`;
-    }, "");
+    }), "");
   }
   update(e2, [r2]) {
     const { style: s2 } = e2.element;
@@ -2353,11 +2353,11 @@ __decorateClass$n([
 ], Footer.prototype, "section");
 customElements.define("sonos-footer", Footer);
 var t, r;
-!function(e2) {
+!(function(e2) {
   e2.language = "language", e2.system = "system", e2.comma_decimal = "comma_decimal", e2.decimal_comma = "decimal_comma", e2.space_comma = "space_comma", e2.none = "none";
-}(t || (t = {})), function(e2) {
+})(t || (t = {})), (function(e2) {
   e2.language = "language", e2.system = "system", e2.am_pm = "12", e2.twenty_four = "24";
-}(r || (r = {}));
+})(r || (r = {}));
 var ne = function(e2, t2, r2, n3) {
   n3 = n3 || {}, r2 = null == r2 ? {} : r2;
   var i5 = new Event(t2, { bubbles: void 0 === n3.bubbles || n3.bubbles, cancelable: Boolean(n3.cancelable), composed: void 0 === n3.composed || n3.composed });
