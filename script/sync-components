@@ -40,7 +40,7 @@ rm -rf custom_components/adaptive_lighting || true
 mv $TMPDIR/$$-adaptive-lighting/custom_components/adaptive_lighting custom_components
 
 # renovate: datasource=github-releases depName=sopelj/hass-ember-mug-component
-EMBER_VERSION=1.3.0
+EMBER_VERSION=1.4.0
 git clone --depth 1 --branch $EMBER_VERSION https://github.com/sopelj/hass-ember-mug-component $TMPDIR/$$-ember
 rm -rf custom_components/ember_mug
 mv $TMPDIR/$$-ember/custom_components/ember_mug custom_components

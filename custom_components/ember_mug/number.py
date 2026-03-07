@@ -30,12 +30,12 @@ _LOGGER = logging.getLogger(__name__)
 NUMBER_TYPES = {
     "target_temp": NumberEntityDescription(
         key="target_temp",
-        native_min_value=MIN_TEMP_CELSIUS,
-        native_max_value=MAX_TEMP_CELSIUS,
         native_step=0.1,
-        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=NumberDeviceClass.TEMPERATURE,
         entity_category=EntityCategory.CONFIG,
+        native_min_value=MIN_TEMP_CELSIUS,
+        native_max_value=MAX_TEMP_CELSIUS,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
 }
 
@@ -57,7 +57,7 @@ class MugNumberEntity(BaseMugValueEntity, NumberEntity):
 
 
 class MugTargetTempNumberEntity(MugNumberEntity):
-    """Configurable NumerEntity for the Mug's target temp."""
+    """Configurable NumberEntity for the Mug's target temp."""
 
     @property
     def native_value(self) -> float | None:
