@@ -15,6 +15,7 @@ from yarl import URL
 from homeassistant.auth import jwt_wrapper
 
 TIMEOUT = 10
+REVIEW_SUMMARIZE_TIMEOUT = 60
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -40,6 +41,7 @@ class FrigateApiClient:
         session: aiohttp.ClientSession,
         username: str | None = None,
         password: str | None = None,
+        validate_ssl: bool = True,
     ) -> None:
         """Construct API Client."""
         self._host = host
@@ -47,6 +49,7 @@ class FrigateApiClient:
         self._username = username
         self._password = password
         self._token_data: dict[str, Any] = {}
+        self.validate_ssl = validate_ssl
 
     async def async_get_version(self) -> str:
         """Get data from the API."""
@@ -62,6 +65,21 @@ class FrigateApiClient:
         return cast(
             dict[str, Any],
             await self.api_wrapper("get", str(URL(self._host) / "api/stats")),
+        )
+
+    async def async_get_event(
+        self,
+        event_id: str,
+        decode_json: bool = True,
+    ) -> dict[str, Any]:
+        """Get a single event by ID from the API."""
+        return cast(
+            dict[str, Any],
+            await self.api_wrapper(
+                "get",
+                str(URL(self._host) / f"api/events/{event_id}"),
+                decode_json=decode_json,
+            ),
         )
 
     async def async_get_events(
@@ -106,6 +124,58 @@ class FrigateApiClient:
             ),
         )
 
+    async def async_get_reviews(
+        self,
+        cameras: list[str] | None = None,
+        labels: list[str] | None = None,
+        zones: list[str] | None = None,
+        severity: str | None = None,
+        after: float | None = None,
+        before: float | None = None,
+        limit: int | None = None,
+        reviewed: bool | None = None,
+        decode_json: bool = True,
+    ) -> list[dict[str, Any]]:
+        """Get review items from the API."""
+        params = {
+            "cameras": ",".join(cameras) if cameras else None,
+            "labels": ",".join(labels) if labels else None,
+            "zones": ",".join(zones) if zones else None,
+            "severity": severity,
+            "after": after,
+            "before": before,
+            "limit": limit,
+            "reviewed": int(reviewed) if reviewed is not None else None,
+        }
+
+        return cast(
+            list[dict[str, Any]],
+            await self.api_wrapper(
+                "get",
+                str(
+                    URL(self._host)
+                    / "api/review"
+                    % {k: v for k, v in params.items() if v is not None}
+                ),
+                decode_json=decode_json,
+            ),
+        )
+
+    async def async_set_reviews_viewed(
+        self,
+        ids: list[str],
+        viewed: bool = True,
+    ) -> dict[str, Any]:
+        """Mark reviews as viewed/unviewed."""
+        return cast(
+            dict[str, Any],
+            await self.api_wrapper(
+                "post",
+                str(URL(self._host) / "api/reviews/viewed"),
+                data={"ids": ids, "reviewed": viewed},
+            ),
+        )
+
     async def async_get_event_summary(
         self,
         has_clip: bool | None = None,
@@ -140,6 +210,39 @@ class FrigateApiClient:
             await self.api_wrapper("get", str(URL(self._host) / "api/config")),
         )
 
+    async def async_get_faces(self) -> list[str]:
+        """Get list of known faces."""
+        try:
+            result = await self.api_wrapper(
+                "get", str(URL(self._host) / "api/faces"), decode_json=True
+            )
+
+            if isinstance(result, dict):
+                return [name for name in result.keys() if name != "train"]
+
+            return []
+        except FrigateApiClientError:
+            return []
+
+    async def async_get_classification_model_classes(
+        self, model_name: str
+    ) -> list[str]:
+        """Get list of classification classes for a model."""
+        try:
+            result = await self.api_wrapper(
+                "get",
+                str(URL(self._host) / f"api/classification/{model_name}/dataset"),
+                decode_json=True,
+            )
+
+            if isinstance(result, dict) and "categories" in result:
+                categories = result["categories"]
+                if isinstance(categories, dict):
+                    return [name for name in categories.keys() if name != "none"]
+            return []
+        except FrigateApiClientError:
+            return []
+
     async def async_get_ptz_info(
         self,
         camera: str,
@@ -173,6 +276,7 @@ class FrigateApiClient:
         playback_factor: str,
         start_time: float,
         end_time: float,
+        name: str | None = None,
         decode_json: bool = True,
     ) -> dict[str, Any] | str:
         """Export recording."""
@@ -182,7 +286,7 @@ class FrigateApiClient:
                 URL(self._host)
                 / f"api/export/{camera}/start/{start_time}/end/{end_time}"
             ),
-            data={"playback": playback_factor},
+            data={"playback": playback_factor, "name": name},
             decode_json=decode_json,
         )
         return cast(dict[str, Any], result) if decode_json else result
@@ -260,6 +364,24 @@ class FrigateApiClient:
             ),
         )
 
+    async def async_review_summarize(
+        self,
+        start_time: float,
+        end_time: float,
+        decode_json: bool = True,
+    ) -> dict[str, Any] | str:
+        """Get review summary for a time period."""
+        result = await self.api_wrapper(
+            "post",
+            str(
+                URL(self._host)
+                / f"api/review/summarize/start/{start_time}/end/{end_time}"
+            ),
+            decode_json=decode_json,
+            timeout=REVIEW_SUMMARIZE_TIMEOUT,
+        )
+        return cast(dict[str, Any], result) if decode_json else result
+
     async def _get_token(self) -> None:
         """
         Obtain a new JWT token using the provided username and password.
@@ -309,7 +431,7 @@ class FrigateApiClient:
         if current_time >= self._token_data["expires"]:  # Compare UTC-aware datetimes
             await self._get_token()
 
-    async def _get_auth_headers(self) -> dict[str, str]:
+    async def get_auth_headers(self) -> dict[str, str]:
         """
         Get headers for API requests, including the JWT token if available.
         Ensures that the token is refreshed if needed.
@@ -332,6 +454,7 @@ class FrigateApiClient:
         headers: dict | None = None,
         decode_json: bool = True,
         is_login_request: bool = False,
+        timeout: int | None = None,
     ) -> Any:
         """Get information from the API."""
         if data is None:
@@ -340,14 +463,19 @@ class FrigateApiClient:
             headers = {}
 
         if not is_login_request:
-            headers.update(await self._get_auth_headers())
+            headers.update(await self.get_auth_headers())
 
         try:
-            async with async_timeout.timeout(TIMEOUT):
+            timeout_value = timeout if timeout is not None else TIMEOUT
+            async with async_timeout.timeout(timeout_value):
                 func = getattr(self._session, method)
                 if func:
                     response = await func(
-                        url, headers=headers, raise_for_status=True, json=data
+                        url,
+                        headers=headers,
+                        raise_for_status=True,
+                        json=data,
+                        ssl=self.validate_ssl,
                     )
                     response.raise_for_status()
                     if is_login_request:

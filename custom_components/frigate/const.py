@@ -41,15 +41,12 @@ ATTR_PTZ_ACTION = "action"
 ATTR_PTZ_ARGUMENT = "argument"
 ATTR_START_TIME = "start_time"
 ATTR_WS_EVENT_PROXY = "ws_event_proxy"
+ATTR_WS_REVIEW_PROXY = "ws_review_proxy"
 ATTR_LABEL = "label"
 ATTR_SUB_LABEL = "sub_label"
 ATTR_DURATION = "duration"
 ATTR_INCLUDE_RECORDING = "include_recording"
-
-# Frigate Attribute Labels
-# These are labels that are not individually tracked as they are
-# attributes of another label. ex: face is an attribute of person
-ATTRIBUTE_LABELS = ["amazon", "face", "fedex", "license_plate", "ups"]
+ATTR_NAME = "name"
 
 # Configuration and options
 CONF_MEDIA_BROWSER_ENABLE = "media_browser_enable"
@@ -68,6 +65,7 @@ CONF_RTMP_URL_TEMPLATE = "rtmp_url_template"
 # Defaults
 DEFAULT_NAME = DOMAIN
 DEFAULT_HOST = "http://ccab4aaf-frigate:5000"
+DEFAULT_VOD_EVENT_PADDING = 5
 
 
 STARTUP_MESSAGE = """
@@ -103,3 +101,4 @@ SERVICE_FAVORITE_EVENT = "favorite_event"
 SERVICE_PTZ = "ptz"
 SERVICE_CREATE_EVENT = "create_event"
 SERVICE_END_EVENT = "end_event"
+SERVICE_REVIEW_SUMMARIZE = "review_summarize"
