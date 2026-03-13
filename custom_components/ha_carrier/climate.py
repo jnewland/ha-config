@@ -181,24 +181,28 @@ class Thermostat(CarrierEntity, ClimateEntity):
     @property
     def target_temperature(self) -> float | None:
         """Return target temperature."""
+        # Use actual setpoints from status, not config activity lookup
+        # This fixes bug where API returns stale currentActivity but correct htsp/clsp
         if self.hvac_mode == HVACMode.HEAT:
-            return self._current_activity().heat_set_point
+            return self._status_zone.heat_set_point
         if self.hvac_mode == HVACMode.COOL:
-            return self._current_activity().cool_set_point
+            return self._status_zone.cool_set_point
         return None
 
     @property
     def target_temperature_high(self) -> float | None:
         """Return target temperature high."""
+        # Use actual setpoints from status, not config activity lookup
         if self.hvac_mode == HVACMode.HEAT_COOL:
-            return self._current_activity().cool_set_point
+            return self._status_zone.cool_set_point
         return None
 
     @property
     def target_temperature_low(self) -> float | None:
         """Return target temperature low."""
+        # Use actual setpoints from status, not config activity lookup
         if self.hvac_mode == HVACMode.HEAT_COOL:
-            return self._current_activity().heat_set_point
+            return self._status_zone.heat_set_point
         return None
 
     @property
@@ -210,7 +214,22 @@ class Thermostat(CarrierEntity, ClimateEntity):
 
     @property
     def preset_mode(self) -> str | None:
-        """Return preset mode."""
+        """Return preset mode by matching actual setpoints to configured activities."""
+        # Get actual setpoints from status (not from activity lookup)
+        actual_heat = self._status_zone.heat_set_point
+        actual_cool = self._status_zone.cool_set_point
+        # Find which activity matches these setpoints
+        for activity in self._config_zone.activities:
+            if (activity.heat_set_point == actual_heat and
+                activity.cool_set_point == actual_cool):
+                return activity.type.value
+        # No match found - fall back to API's reported activity
+        # This could happen during transitions or with custom setpoints
+        _LOGGER.debug(
+            f"Zone {self._config_zone.name}: No activity matched setpoints "
+            f"(heat={actual_heat}, cool={actual_cool}). "
+            f"Falling back to API activity: {self._current_activity().type.value}"
+        )
         return self._current_activity().type.value
 
     @property
@@ -226,7 +245,7 @@ class Thermostat(CarrierEntity, ClimateEntity):
         _LOGGER.debug(f"Setting target humidity to {humidity}")
         if humidity > 45:
             humidity = 45
-            _LOGGER.debug(f"Setting target humidity to max heating of 45")
+            _LOGGER.debug("Setting target humidity to max heating of 45")
         rounded_humidity = int(humidity/5)*5
         _LOGGER.debug(f"Setting target humidity to api acceptable multiple of 5 {rounded_humidity}")
         await self.coordinator.api_connection.set_config_heat_humidity(
@@ -263,12 +282,6 @@ class Thermostat(CarrierEntity, ClimateEntity):
         if not self.infinite_hold:
             return self._config_zone.next_activity_time()
         return None
-
-    @property
-    def _hold_activity_name(self):
-        if self._hold_until is None or self._config_zone.hold_activity is None:
-            return None
-        return self._config_zone.hold_activity.value
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
         """Set preset mode."""
@@ -348,11 +361,18 @@ class Thermostat(CarrierEntity, ClimateEntity):
             "status_mode": self.carrier_system.status.mode,
             "blower_rpm": self.carrier_system.status.blower_rpm,
             "damper_position": self._status_zone.damper_position,
-            "hold_activity": self._hold_activity_name,
-            "hold_until": self._hold_until,
+            "hold_activity": self._config_zone.hold_activity,
+            "hold_until": self._config_zone.hold_until,
+            "next_activity_time": self._config_zone.next_activity_time(),
         }
 
     @property
     def available(self) -> bool:
         """Return true if sensor is ready for display."""
-        return self._status_zone is not None and self._current_activity() is not None
+        # `find_activity(status.current_activity)` can transiently return None
+        # during websocket/config synchronization. Availability should reflect
+        # zone existence, not activity lookup success in that instant.
+        try:
+            return self._status_zone is not None and self._config_zone is not None
+        except ValueError:
+            return False
