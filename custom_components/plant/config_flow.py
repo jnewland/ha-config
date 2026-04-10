@@ -56,6 +56,7 @@ from .const import (
     DEFAULT_MIN_ILLUMINANCE,
     DEFAULT_MIN_MOISTURE,
     DEFAULT_MIN_TEMPERATURE,
+    DEFAULT_MOISTURE_GRACE_PERIOD,
     DOMAIN,
     DOMAIN_PLANTBOOK,
     DOMAIN_SENSOR,
@@ -66,6 +67,7 @@ from .const import (
     FLOW_FORCE_SPECIES_UPDATE,
     FLOW_HUMIDITY_TRIGGER,
     FLOW_ILLUMINANCE_TRIGGER,
+    FLOW_MOISTURE_GRACE_PERIOD,
     FLOW_MOISTURE_TRIGGER,
     FLOW_PLANT_INFO,
     FLOW_PLANT_LIMITS,
@@ -630,6 +632,16 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         data_schema[
             vol.Optional(FLOW_MOISTURE_TRIGGER, default=self.plant.moisture_trigger)
         ] = cv.boolean
+        # Add moisture grace period setting (in seconds)
+        current_grace_period = self.config_entry.options.get(
+            FLOW_MOISTURE_GRACE_PERIOD, DEFAULT_MOISTURE_GRACE_PERIOD
+        )
+        data_schema[
+            vol.Optional(
+                FLOW_MOISTURE_GRACE_PERIOD,
+                description={"suggested_value": current_grace_period},
+            )
+        ] = vol.All(vol.Coerce(int), vol.Range(min=0, max=86400))
         data_schema[
             vol.Optional(
                 FLOW_CONDUCTIVITY_TRIGGER, default=self.plant.conductivity_trigger
@@ -798,6 +810,13 @@ async def update_plant_options(
         # this will only be run once (unchanged options are will not trigger the flow)
         options = dict(entry.options)
         data = dict(entry.data)
+        # Persist refreshed OPB limits to config entry so they survive restarts
+        if plant_config[DATA_SOURCE] == DATA_SOURCE_PLANTBOOK:
+            plant_info = dict(data.get(FLOW_PLANT_INFO, {}))
+            plant_info[FLOW_PLANT_LIMITS] = dict(
+                plant_config[FLOW_PLANT_INFO][FLOW_PLANT_LIMITS]
+            )
+            data[FLOW_PLANT_INFO] = plant_info
         options[FLOW_FORCE_SPECIES_UPDATE] = False
         options[OPB_DISPLAY_PID] = plant.display_species
         options[ATTR_ENTITY_PICTURE] = plant.entity_picture
