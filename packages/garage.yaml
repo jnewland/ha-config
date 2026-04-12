@@ -35,18 +35,18 @@ group:
 
 template:
   - binary_sensor:
-      - default_entity_id: binary_sensor.garage
+      - unique_id: garage
         name: garage
         state: |
           {{ states("cover.garage") | default("") == "open" }}
 
-      - default_entity_id: binary_sensor.gate
+      - unique_id: gate
         name: gate
         state: |
           {{ states("cover.gate") | default("") == "open" }}
 
-      - default_entity_id: binary_sensor.garage_occupancy
-        name: garage occupied or locked
+      - unique_id: garage_occupancy
+        name: garage occupancy
         device_class: occupancy
         delay_off:
           minutes: 3
@@ -56,7 +56,7 @@ template:
             is_state('lock.garage', 'unlocked')
           }}
 
-      - default_entity_id: binary_sensor.garage_occupancy_non_lock
+      - unique_id: garage_occupancy_non_lock
         name: garage occupancy non lock
         device_class: occupancy
         delay_off:

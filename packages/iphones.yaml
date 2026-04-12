@@ -26,7 +26,7 @@ template:
           {% else %}
             mdi:home-outline
           {% endif %}
-      - default_entity_id: binary_sensor.together
+      - unique_id: together
         name: together
         state: >
           {{

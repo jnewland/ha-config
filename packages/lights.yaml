@@ -177,12 +177,12 @@ homeassistant:
 
 template:
   - binary_sensor:
-      - default_entity_id: binary_sensor.record_cabinet_playing
+      - unique_id: record_cabinet_playing
         name: record_cabinet_playing
         state: |
           {{ is_state("media_player.record_cabinet", "playing") }}
   - light:
-      - default_entity_id: light.global_brightness
+      - unique_id: global_brightness
         name: "Global Brightness"
         level: "{{ states('input_number.brightness')|int }}"
         state: "{{ states('input_number.brightness')|int > 0 }}"

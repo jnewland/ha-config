@@ -1,6 +1,6 @@
 template:
   - binary_sensor:
-      - default_entity_id: binary_sensor.ups_voltage_low
+      - unique_id: ups_voltage_low
         name: ups_voltage_low
         state: |
           {{ float(states('sensor.ups_input_voltage'), default=0) <= 114 }}

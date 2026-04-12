@@ -55,7 +55,7 @@ input_number:
 
 template:
   - binary_sensor:
-      - default_entity_id: binary_sensor.precipitation_in_forecast
+      - unique_id: precipitation_in_forecast
         name: Precipitation in forecast
         state: |
           {{

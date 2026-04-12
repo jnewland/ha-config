@@ -3,7 +3,7 @@ template:
       # These switches are exposed to Homekit and automated with an automation to
       # mirror the state of the lock in Homekit. The state of the lock is in
       # Homekit so that Home Keys can be used to lock and unlock the door.
-      - default_entity_id: switch.front_door_lock_state
+      - unique_id: front_door_lock_state
         name: Front door lock state
         turn_on:
           - action: system_log.write
@@ -18,7 +18,7 @@ template:
               logger: packages.schlage
               level: debug
 
-      - default_entity_id: switch.back_porch_lock_state
+      - unique_id: back_porch_lock_state
         name: Back porch lock state
         turn_on:
           - action: system_log.write
@@ -36,7 +36,7 @@ template:
       # These switcher are turned into lock.front_door and presented as the Home
       # Assistant interface. It reads state from HomeKit and performs actions
       # over the Schlage API.
-      - default_entity_id: switch.front_door_lock
+      - unique_id: front_door_lock
         name: Front door lock
         state: '{{ states("switch.front_door_lock_state") }}'
         turn_on:
@@ -48,7 +48,7 @@ template:
             target:
               entity_id: lock.front_door_schlage
 
-      - default_entity_id: switch.back_porch_lock
+      - unique_id: back_porch_lock
         name: Back porch lock
         state: '{{ states("switch.back_porch_lock_state") }}'
         turn_on:

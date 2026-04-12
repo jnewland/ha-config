@@ -112,8 +112,8 @@ template:
         delay_off:
           minutes: 10
   - binary_sensor:
-      - default_entity_id: binary_sensor.great_room_occupancy
-        name: great room occupied
+      - unique_id: great_room_occupancy
+        name: great room occupancy
         device_class: occupancy
         state: |
           {{
@@ -131,8 +131,8 @@ template:
         delay_off:
           minutes: 30
 
-      - default_entity_id: binary_sensor.lounge_occupancy
-        name: lounge occupied
+      - unique_id: lounge_occupancy
+        name: lounge occupancy
         device_class: occupancy
         state: |
           {{
@@ -149,8 +149,8 @@ template:
         delay_off:
           minutes: 15
 
-      - default_entity_id: binary_sensor.bedroom_occupancy
-        name: bedroom occupied
+      - unique_id: bedroom_occupancy
+        name: bedroom occupancy
         device_class: occupancy
         state: |
           {{
@@ -169,8 +169,8 @@ template:
         delay_off:
           minutes: 15
 
-      - default_entity_id: binary_sensor.bathroom_occupancy
-        name: bathroom occupied
+      - unique_id: bathroom_occupancy
+        name: bathroom occupancy
         device_class: occupancy
         state: |
           {{
@@ -179,8 +179,8 @@ template:
         delay_off:
           minutes: 15
 
-      - default_entity_id: binary_sensor.yoga_room_occupancy
-        name: yoga room occupied
+      - unique_id: yoga_room_occupancy
+        name: yoga room occupancy
         device_class: occupancy
         state: |
           {{
@@ -190,7 +190,7 @@ template:
         delay_off:
           minutes: 30
 
-      - default_entity_id: binary_sensor.back_porch_occupancy
+      - unique_id: back_porch_occupancy
         name: back porch occupancy
         device_class: occupancy
         state: |
@@ -200,7 +200,7 @@ template:
             states.sensor.back_porch_person_count.last_changed > (now() - timedelta(minutes=5))
           }}
 
-      - default_entity_id: binary_sensor.front_porch_occupancy
+      - unique_id: front_porch_occupancy
         name: front porch occupancy
         device_class: occupancy
         delay_on:
@@ -212,8 +212,8 @@ template:
             states.sensor.front_yard_left_person_count.last_changed > (now() - timedelta(minutes=5))
           }}
 
-      - default_entity_id: binary_sensor.stairs_occupancy
-        name: stairs occupied
+      - unique_id: stairs_occupancy
+        name: stairs occupancy
         device_class: occupancy
         state: |
           {{

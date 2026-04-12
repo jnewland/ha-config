@@ -5,7 +5,7 @@ input_boolean:
 
 template:
   - binary_sensor:
-      - default_entity_id: binary_sensor.freeze
+      - unique_id: freeze
         name: Freeze
         device_class: cold
         state: |

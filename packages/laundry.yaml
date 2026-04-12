@@ -24,7 +24,7 @@ group:
 
 template:
   - binary_sensor:
-      - default_entity_id: binary_sensor.laundry_activity
+      - unique_id: laundry_activity
         name: Laundry activity
         state: |
           {{
@@ -32,7 +32,7 @@ template:
             is_state('binary_sensor.laundry_room_motion_detection', 'on')
           }}
 
-      - default_entity_id: binary_sensor.laundry_cycle
+      - unique_id: laundry_cycle
         name: Laundry cycle
         device_class: running
         state: |
@@ -43,7 +43,7 @@ template:
         delay_off:
           minutes: 10
 
-      - default_entity_id: binary_sensor.laundry_power
+      - unique_id: laundry_power
         name: Laundry power
         device_class: power
         state: |
@@ -54,7 +54,7 @@ template:
         delay_off:
           minutes: 30
 
-      - default_entity_id: binary_sensor.laundry_door
+      - unique_id: laundry_door
         name: Laundry door
         device_class: door
         state: |
