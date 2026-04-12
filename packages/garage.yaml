@@ -33,27 +33,35 @@ group:
       - fan.garage
       - light.garage
 
-binary_sensor:
-  - platform: template
-    sensors:
-      garage_occupancy:
-        friendly_name: garage occupied or locked
+template:
+  - binary_sensor:
+      - default_entity_id: binary_sensor.garage
+        name: garage
+        state: |
+          {{ states("cover.garage") | default("") == "open" }}
+
+      - default_entity_id: binary_sensor.gate
+        name: gate
+        state: |
+          {{ states("cover.gate") | default("") == "open" }}
+
+      - default_entity_id: binary_sensor.garage_occupancy
+        name: garage occupied or locked
         device_class: occupancy
         delay_off:
           minutes: 3
-        value_template: |
+        state: |
           {{
             is_state('binary_sensor.garage_occupancy_non_lock', 'on') or
             is_state('lock.garage', 'unlocked')
           }}
-  - platform: template
-    sensors:
-      garage_occupancy_non_lock:
-        friendly_name: garage occupancy non lock
+
+      - default_entity_id: binary_sensor.garage_occupancy_non_lock
+        name: garage occupancy non lock
         device_class: occupancy
         delay_off:
           minutes: 3
-        value_template: |
+        state: |
           {{
             is_state('cover.garage', 'open') or
             is_state('light.ratgdo_garage_light', 'on') or

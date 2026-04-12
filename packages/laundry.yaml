@@ -22,20 +22,20 @@ group:
       - fan.laundry_room
       - light.laundry_room
 
-binary_sensor:
-  - platform: template
-    sensors:
-      laundry_activity:
-        friendly_name: Laundry activity
-        value_template: |
+template:
+  - binary_sensor:
+      - default_entity_id: binary_sensor.laundry_activity
+        name: Laundry activity
+        state: |
           {{
             is_state('binary_sensor.laundry_power', 'on') or
             is_state('binary_sensor.laundry_room_motion_detection', 'on')
           }}
-      laundry_cycle:
-        friendly_name: Laundry cycle
+
+      - default_entity_id: binary_sensor.laundry_cycle
+        name: Laundry cycle
         device_class: running
-        value_template: |
+        state: |
           {{
             states('sensor.laundry_electric_consumption_w') != 'unknown' and
             float(states('sensor.laundry_electric_consumption_w'), default=0) > 10
@@ -43,10 +43,10 @@ binary_sensor:
         delay_off:
           minutes: 10
 
-      laundry_power:
-        friendly_name: Laundry power
+      - default_entity_id: binary_sensor.laundry_power
+        name: Laundry power
         device_class: power
-        value_template: |
+        state: |
           {{
             states('sensor.laundry_electric_consumption_w') != 'unknown' and
             float(states('sensor.laundry_electric_consumption_w'), default=0) > 0
@@ -54,10 +54,10 @@ binary_sensor:
         delay_off:
           minutes: 30
 
-      laundry_door:
-        friendly_name: Laundry door
+      - default_entity_id: binary_sensor.laundry_door
+        name: Laundry door
         device_class: door
-        value_template: |
+        state: |
           {{
             states('sensor.laundry_electric_consumption_w') != 'unknown' and
             is_state('binary_sensor.laundry_power', 'off') and

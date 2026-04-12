@@ -1,7 +1,6 @@
-sensor:
-  - platform: template
-    sensors:
-      jphone_areas_of_interest:
-        friendly_name: jPhone areas of interest
-        value_template: |
+template:
+  - sensor:
+      - default_entity_id: sensor.jphone_areas_of_interest
+        name: jPhone areas of interest
+        state: |
           {{ state_attr('sensor.jphone_geocoded_location', 'Areas Of Interest') | join(' ,') }}

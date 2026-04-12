@@ -1,33 +1,33 @@
-switch:
-  - platform: template
-    switches:
+template:
+  - switch:
       # These switches are exposed to Homekit and automated with an automation to
       # mirror the state of the lock in Homekit. The state of the lock is in
       # Homekit so that Home Keys can be used to lock and unlock the door.
-      front_door_lock_state:
-        friendly_name: Front door lock state
+      - default_entity_id: switch.front_door_lock_state
+        name: Front door lock state
         turn_on:
-          - service: system_log.write
+          - action: system_log.write
             data:
               message: Front door lock state changed to locked
               logger: packages.schlage
               level: debug
         turn_off:
-          - service: system_log.write
+          - action: system_log.write
             data:
               message: Front door lock state changed to unlocked
               logger: packages.schlage
               level: debug
-      back_porch_lock_state:
-        friendly_name: Back porch lock state
+
+      - default_entity_id: switch.back_porch_lock_state
+        name: Back porch lock state
         turn_on:
-          - service: system_log.write
+          - action: system_log.write
             data:
               message: Back porch lock state changed to locked
               logger: packages.schlage
               level: debug
         turn_off:
-          - service: system_log.write
+          - action: system_log.write
             data:
               message: Back porch lock state changed to unlocked
               logger: packages.schlage
@@ -36,26 +36,29 @@ switch:
       # These switcher are turned into lock.front_door and presented as the Home
       # Assistant interface. It reads state from HomeKit and performs actions
       # over the Schlage API.
-      front_door_lock:
-        value_template: '{{ states("switch.front_door_lock_state") }}'
-        friendly_name: Front door lock
+      - default_entity_id: switch.front_door_lock
+        name: Front door lock
+        state: '{{ states("switch.front_door_lock_state") }}'
         turn_on:
-          - service: lock.unlock
-            entity_id: lock.front_door_schlage
+          - action: lock.unlock
+            target:
+              entity_id: lock.front_door_schlage
         turn_off:
-          - service: lock.lock
-            entity_id: lock.front_door_schlage
+          - action: lock.lock
+            target:
+              entity_id: lock.front_door_schlage
 
-      back_porch_lock:
-        value_template: '{{ states("switch.back_porch_lock_state") }}'
-        friendly_name: Back porch lock
+      - default_entity_id: switch.back_porch_lock
+        name: Back porch lock
+        state: '{{ states("switch.back_porch_lock_state") }}'
         turn_on:
-          - service: lock.unlock
-            entity_id: lock.back_porch_schlage
+          - action: lock.unlock
+            target:
+              entity_id: lock.back_porch_schlage
         turn_off:
-          - service: lock.lock
-            entity_id: lock.back_porch_schlage
-
+          - action: lock.lock
+            target:
+              entity_id: lock.back_porch_schlage
 
 automation:
   - alias: Front door lock logs
