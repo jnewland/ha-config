@@ -106,11 +106,32 @@ ensure_hass_version() {
 	fi
 }
 
+make_temp_log() {
+	local tmp_dir
+	local log_file
+
+	tmp_dir="${TMPDIR:-/tmp}"
+	if [[ -d "$tmp_dir" ]]; then
+		if log_file="$(mktemp "$tmp_dir/cibuild.XXXXXX.log" 2>/dev/null)"; then
+			echo "$log_file"
+			return 0
+		fi
+	fi
+
+	if log_file="$(mktemp -t "cibuild.XXXXXX" 2>/dev/null)"; then
+		echo "$log_file"
+		return 0
+	fi
+
+	echo "Failed to create a temporary log file" >&2
+	exit 1
+}
+
 run_check_config() {
 	local log_file
 	local error_count
 
-	log_file="$(mktemp "${TMPDIR:-/tmp}/cibuild.XXXXXX.log")"
+	log_file="$(make_temp_log)"
 	trap 'rm -f "$log_file"' EXIT
 
 	touch automations.yaml
