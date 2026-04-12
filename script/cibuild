@@ -3,11 +3,33 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+REQUIREMENTS_FILE="$REPO_ROOT/requirements.txt"
 
 usage() {
 	cat >&2 <<'EOF'
 Usage: ./script/cibuild
 EOF
+}
+
+in_ci() {
+	[[ -n "${CI:-}" ]]
+}
+
+required_hass_version() {
+	local version
+
+	if [[ ! -f "$REQUIREMENTS_FILE" ]]; then
+		echo "Expected $REQUIREMENTS_FILE" >&2
+		exit 1
+	fi
+
+	version="$(grep -E '^[[:space:]]*homeassistant==' "$REQUIREMENTS_FILE" | head -n 1 | sed -E 's/^[[:space:]]*homeassistant==([^[:space:]#]+).*/\1/')"
+	if [[ -z "$version" ]]; then
+		echo "Expected pinned homeassistant==... in $REQUIREMENTS_FILE" >&2
+		exit 1
+	fi
+
+	echo "$version"
 }
 
 load_env() {
@@ -25,6 +47,16 @@ load_env() {
 }
 
 run_hass() {
+	if in_ci; then
+		if command -v hass >/dev/null 2>&1; then
+			hass "$@"
+			return
+		fi
+
+		echo "Expected hass on PATH when CI is set." >&2
+		exit 127
+	fi
+
 	if [[ -x "$REPO_ROOT/.venv/bin/hass" ]]; then
 		"$REPO_ROOT/.venv/bin/hass" "$@"
 		return
@@ -35,8 +67,43 @@ run_hass() {
 		return
 	fi
 
-	echo "Expected Home Assistant in $REPO_ROOT/.venv. Install it there before running script/cibuild." >&2
+	echo "Expected Home Assistant in $REPO_ROOT/.venv. Run ./script/bootstrap." >&2
 	exit 127
+}
+
+installed_hass_version() {
+	if [[ ! -x "$REPO_ROOT/.venv/bin/python" ]]; then
+		return 1
+	fi
+
+	"$REPO_ROOT/.venv/bin/python" - <<'PY'
+from importlib.metadata import PackageNotFoundError, version
+
+try:
+    print(version("homeassistant"))
+except PackageNotFoundError:
+    raise SystemExit(1)
+PY
+}
+
+ensure_hass_version() {
+	local expected_version
+	local installed_version
+
+	if in_ci; then
+		return
+	fi
+
+	expected_version="$(required_hass_version)"
+	if ! installed_version="$(installed_hass_version)"; then
+		echo "Home Assistant is not installed in $REPO_ROOT/.venv. Run ./script/bootstrap." >&2
+		exit 127
+	fi
+
+	if [[ "$installed_version" != "$expected_version" ]]; then
+		echo "Home Assistant version mismatch: installed $installed_version, expected $expected_version from $REQUIREMENTS_FILE. Run ./script/bootstrap." >&2
+		exit 1
+	fi
 }
 
 run_check_config() {
@@ -72,4 +139,5 @@ done
 cd "$REPO_ROOT"
 
 load_env
+ensure_hass_version
 run_check_config
