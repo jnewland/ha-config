@@ -9,5 +9,6 @@
 
 ## Local Scripts
 
+- `./script/cibuild` validates the config with Home Assistant from `.venv` and requires `.env`.
 - `./script/repairs` lists active Home Assistant repair issues using `HASS_URL` and `HASS_TOKEN` from `.env.dev` or `.env`.
 - Pass `--json` for machine-readable output, `--all` to include ignored issues, or `--full` to include every returned field plus `issue_data`.

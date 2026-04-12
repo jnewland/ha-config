@@ -1,7 +1,75 @@
 #!/bin/bash
 set -euo pipefail
-export $(cat .env | xargs)
-touch automations.yaml
-hass -c . --script check_config -i all -f | tee /tmp/log
-set -x
-test "$(grep -v "Unknown device" /tmp/log | grep -c ^ERROR)" -eq 0
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+usage() {
+	cat >&2 <<'EOF'
+Usage: ./script/cibuild
+EOF
+}
+
+load_env() {
+	if [[ -f .env ]]; then
+		set -a
+		# shellcheck disable=SC1090
+		source .env
+		set +a
+		echo "Loaded env vars from .env"
+		return 0
+	fi
+
+	echo "Expected .env in $REPO_ROOT" >&2
+	exit 1
+}
+
+run_hass() {
+	if [[ -x "$REPO_ROOT/.venv/bin/hass" ]]; then
+		"$REPO_ROOT/.venv/bin/hass" "$@"
+		return
+	fi
+
+	if [[ -x "$REPO_ROOT/.venv/bin/python" ]]; then
+		"$REPO_ROOT/.venv/bin/python" -m homeassistant "$@"
+		return
+	fi
+
+	echo "Expected Home Assistant in $REPO_ROOT/.venv. Install it there before running script/cibuild." >&2
+	exit 127
+}
+
+run_check_config() {
+	local log_file
+	local error_count
+
+	log_file="$(mktemp "${TMPDIR:-/tmp}/cibuild.XXXXXX.log")"
+	trap 'rm -f "$log_file"' EXIT
+
+	touch automations.yaml
+	run_hass -c . --script check_config -i all -f | tee "$log_file"
+
+	error_count="$(grep -v "Unknown device" "$log_file" | grep -c '^ERROR' || true)"
+	set -x
+	test "$error_count" -eq 0
+}
+
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+		-h|--help)
+			usage
+			exit 0
+			;;
+		*)
+			echo "Unknown argument: $1" >&2
+			usage
+			exit 1
+			;;
+	esac
+	shift
+done
+
+cd "$REPO_ROOT"
+
+load_env
+run_check_config
