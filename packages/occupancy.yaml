@@ -111,14 +111,11 @@ template:
           }}
         delay_off:
           minutes: 10
-
-binary_sensor:
-  - platform: template
-    sensors:
-      great_room_occupancy:
-        friendly_name: great room occupied
+  - binary_sensor:
+      - unique_id: great_room_occupancy
+        name: great room occupancy
         device_class: occupancy
-        value_template: |
+        state: |
           {{
             states('binary_sensor.living_room_motion') == 'on' or
             states('binary_sensor.dining_room_motion_detection') == 'on' or
@@ -134,10 +131,10 @@ binary_sensor:
         delay_off:
           minutes: 30
 
-      lounge_occupancy:
-        friendly_name: lounge occupied
+      - unique_id: lounge_occupancy
+        name: lounge occupancy
         device_class: occupancy
-        value_template: |
+        state: |
           {{
             states('binary_sensor.lounge_home_security_motion_detection') == 'on' or
             (
@@ -152,10 +149,10 @@ binary_sensor:
         delay_off:
           minutes: 15
 
-      bedroom_occupancy:
-        friendly_name: bedroom occupied
+      - unique_id: bedroom_occupancy
+        name: bedroom occupancy
         device_class: occupancy
-        value_template: |
+        state: |
           {{
             states('binary_sensor.bathroom_home_security_motion_detection') == 'on' or
             states('binary_sensor.closet_motion_any') == 'on' or
@@ -172,20 +169,20 @@ binary_sensor:
         delay_off:
           minutes: 15
 
-      bathroom_occupancy:
-        friendly_name: bathroom occupied
+      - unique_id: bathroom_occupancy
+        name: bathroom occupancy
         device_class: occupancy
-        value_template: |
+        state: |
           {{
             states('binary_sensor.bathroom_home_security_motion_detection') == 'on'
           }}
         delay_off:
           minutes: 15
 
-      yoga_room_occupancy:
-        friendly_name: yoga room occupied
+      - unique_id: yoga_room_occupancy
+        name: yoga room occupancy
         device_class: occupancy
-        value_template: |
+        state: |
           {{
             states('binary_sensor.yoga_room_home_security_motion_detection') == 'on' or
             states('binary_sensor.yoga_chair_home_security_motion_detection') == 'on'
@@ -193,35 +190,32 @@ binary_sensor:
         delay_off:
           minutes: 30
 
-      back_porch_occupancy:
-        friendly_name: back porch occupancy
+      - unique_id: back_porch_occupancy
+        name: back porch occupancy
         device_class: occupancy
-        value_template: |
+        state: |
           {{
             states('lock.back_porch') == 'unlocked' or
             float(states('sensor.back_porch_person_count'), default=0) > 0 or
             states.sensor.back_porch_person_count.last_changed > (now() - timedelta(minutes=5))
           }}
 
-      front_porch_occupancy:
-        friendly_name: front porch occupancy
+      - unique_id: front_porch_occupancy
+        name: front porch occupancy
         device_class: occupancy
-        # dog / packages etc
         delay_on:
           seconds: 15
-        value_template: |
+        state: |
           {{
             states('lock.front_door') == 'unlocked' or
             float(states('sensor.front_yard_left_person_count'), default=0) > 0 or
             states.sensor.front_yard_left_person_count.last_changed > (now() - timedelta(minutes=5))
           }}
 
-  - platform: template
-    sensors:
-      stairs_occupancy:
-        friendly_name: stairs occupied
+      - unique_id: stairs_occupancy
+        name: stairs occupancy
         device_class: occupancy
-        value_template: |
+        state: |
           {{
             states('binary_sensor.stairs_home_security_motion_detection') == 'on' or
             states('binary_sensor.upstairs_home_security_motion_detection') == 'on'
