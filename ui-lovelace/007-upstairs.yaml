@@ -14,7 +14,7 @@ cards:
       - light.bedroom_patio
       - light.bedroom_closet
       - binary_sensor.closet_motion_any
-      - binary_sensor.bedroom_door_access_control_window_door_is_open
+      - binary_sensor.bedroom_door
       - cover.bedroom_shades
   - type: entities
     title: bath

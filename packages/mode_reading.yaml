@@ -3,7 +3,7 @@ automation:
     id: bb53911c-ef20-4ed1-8a83-84937a0a484b
     trigger:
       platform: state
-      entity_id: binary_sensor.bedroom_door_access_control_window_door_is_open
+      entity_id: binary_sensor.bedroom_door
       to: "off"
     condition:
       condition: and

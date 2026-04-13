@@ -31,7 +31,7 @@ cards:
       - light.oak
       - light.maple
       - light.pecan
-      - binary_sensor.front_gate_window_door_is_open
+      - binary_sensor.front_gate
   - type: entities
     title: patio
     entities:
@@ -45,7 +45,7 @@ cards:
       - switch.pergola_overhead
   - type: entities
     entities:
-      - binary_sensor.front_gate_window_door_is_open
+      - binary_sensor.front_gate
       - cover.garage
       - cover.gate
   - type: entities
