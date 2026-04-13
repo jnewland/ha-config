@@ -11,82 +11,82 @@ sensor:
       - time
     value_template: "{{ value_json.device.isEnabled }}"
 
-  - platform: template
-    sensors:
+template:
+  - sensor:
       #5G
-      tmhi_5g_band:
-        friendly_name: "TMHI 5G Band"
-        icon_template: mdi:signal-5g
-        value_template: >
+      - unique_id: tmhi_5g_band
+        name: "TMHI 5G Band"
+        icon: mdi:signal-5g
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'signal') ['5g'] ['bands'] [0] if '5g' in state_attr('sensor.tmhi_radio_status', 'signal') else 'N/A' }}
-      tmhi_5g_bars:
-        friendly_name: "TMHI 5G Bars"
-        icon_template: mdi:signal
+      - unique_id: tmhi_5g_bars
+        name: "TMHI 5G Bars"
+        icon: mdi:signal
         unit_of_measurement: "bars"
-        value_template: >
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'signal') ['5g'] ['bars'] | int if '5g' in state_attr('sensor.tmhi_radio_status', 'signal') else 0 }}
-      tmhi_5g_sinr:
-        friendly_name: "TMHI 5G SINR"
+      - unique_id: tmhi_5g_sinr
+        name: "TMHI 5G SINR"
         unit_of_measurement: "%"
-        icon_template: mdi:signal
-        value_template: >
+        icon: mdi:signal
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'signal') ['5g']['sinr'] if '5g' in state_attr('sensor.tmhi_radio_status', 'signal') else 0 }}
-      tmhi_5g_rsrp:
-        friendly_name: "TMHI 5G RSRP"
+      - unique_id: tmhi_5g_rsrp
+        name: "TMHI 5G RSRP"
         unit_of_measurement: "dBm"
-        icon_template: mdi:signal
-        value_template: >
+        icon: mdi:signal
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'signal') ['5g']['rsrp'] if '5g' in state_attr('sensor.tmhi_radio_status', 'signal') else -100 }}
-      tmhi_5g_rssi:
-        friendly_name: "TMHI 5G RSSI"
+      - unique_id: tmhi_5g_rssi
+        name: "TMHI 5G RSSI"
         unit_of_measurement: "dBm"
-        icon_template: mdi:signal
-        value_template: >
+        icon: mdi:signal
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'signal') ['5g']['rssi'] if '5g' in state_attr('sensor.tmhi_radio_status', 'signal') else -100 }}
       #4G
-      tmhi_4g_band:
-        friendly_name: "TMHI 4G Band"
-        icon_template: mdi:signal-4g
-        value_template: >
+      - unique_id: tmhi_4g_band
+        name: "TMHI 4G Band"
+        icon: mdi:signal-4g
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'signal') ['4g']['bands'][0] if '4g' in state_attr('sensor.tmhi_radio_status', 'signal') else 'N/A' }}
-      tmhi_4g_bars:
-        friendly_name: "TMHI 4G Bars"
-        icon_template: mdi:signal
+      - unique_id: tmhi_4g_bars
+        name: "TMHI 4G Bars"
+        icon: mdi:signal
         unit_of_measurement: "bars"
-        value_template: >
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'signal') ['4g']['bars'] | int if '4g' in state_attr('sensor.tmhi_radio_status', 'signal') else 0 }}
-      tmhi_4g_sinr:
-        friendly_name: "TMHI 4G SINR"
+      - unique_id: tmhi_4g_sinr
+        name: "TMHI 4G SINR"
         unit_of_measurement: "%"
-        icon_template: mdi:signal
-        value_template: >
+        icon: mdi:signal
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'signal') ['4g']['sinr'] if '4g' in state_attr('sensor.tmhi_radio_status', 'signal') else 0 }}
-      tmhi_4g_rsrp:
-        friendly_name: "TMHI 4G RSRP"
+      - unique_id: tmhi_4g_rsrp
+        name: "TMHI 4G RSRP"
         unit_of_measurement: "dBm"
-        icon_template: mdi:signal
-        value_template: >
+        icon: mdi:signal
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'signal') ['4g']['rsrp'] if '4g' in state_attr('sensor.tmhi_radio_status', 'signal') else -100 }}
-      tmhi_4g_rssi:
-        friendly_name: "TMHI 4G RSSI"
+      - unique_id: tmhi_4g_rssi
+        name: "TMHI 4G RSSI"
         unit_of_measurement: "dBm"
-        icon_template: mdi:signal
-        value_template: >
+        icon: mdi:signal
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'signal') ['4g']['rssi'] if '4g' in state_attr('sensor.tmhi_radio_status', 'signal') else -100 }}
       #Device
-      tmhi_software_version:
-        friendly_name: "TMHI Software Version"
-        value_template: >
+      - unique_id: tmhi_software_version
+        name: "TMHI Software Version"
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'device') ['softwareVersion'] }}
-      tmhi_serial:
-        friendly_name: "TMHI Serial"
-        value_template: >
+      - unique_id: tmhi_serial
+        name: "TMHI Serial"
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'device') ['serial']   }}
-      tmhi_update_state:
-        friendly_name: "TMHI Update State"
-        value_template: >
+      - unique_id: tmhi_update_state
+        name: "TMHI Update State"
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'device') ['updateState']   }}
-      tmhi_mac_id:
-        friendly_name: "TMHI MAC Id"
-        value_template: >
+      - unique_id: tmhi_mac_id
+        name: "TMHI MAC Id"
+        state: >
           {{ state_attr('sensor.tmhi_radio_status', 'device') ['macId']   }}

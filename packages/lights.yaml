@@ -175,12 +175,35 @@ homeassistant:
       ignore_brightness: true
       notify_action: duck
 
-binary_sensor:
-  - platform: template
-    sensors:
-      record_cabinet_playing:
-        value_template: |
+template:
+  - binary_sensor:
+      - unique_id: record_cabinet_playing
+        name: record_cabinet_playing
+        state: |
           {{ is_state("media_player.record_cabinet", "playing") }}
+  - light:
+      - unique_id: global_brightness
+        name: "Global Brightness"
+        level: "{{ states('input_number.brightness')|int }}"
+        state: "{{ states('input_number.brightness')|int > 0 }}"
+        turn_on:
+          action: input_number.set_value
+          target:
+            entity_id: input_number.brightness
+          data:
+            value: 255
+        turn_off:
+          action: input_number.set_value
+          target:
+            entity_id: input_number.brightness
+          data:
+            value: 0
+        set_level:
+          action: input_number.set_value
+          target:
+            entity_id: input_number.brightness
+          data:
+            value: "{{ brightness }}"
 
 switch:
   # lights without temperature control
@@ -684,29 +707,6 @@ automation:
 counter:
   light_automations:
     name: Light Automations
-
-light:
-  - platform: template
-    lights:
-      global_brightness:
-        friendly_name: "Global Brightness"
-        level_template: "{{ states('input_number.brightness')|int }}"
-        value_template: "{{ states('input_number.brightness')|int > 0 }}"
-        turn_on:
-          service: input_number.set_value
-          data:
-            entity_id: input_number.brightness
-            value: 255
-        turn_off:
-          service: input_number.set_value
-          data:
-            entity_id: input_number.brightness
-            value: 0
-        set_level:
-          service: input_number.set_value
-          data:
-            entity_id: input_number.brightness
-            value: "{{ brightness }}"
 
 input_number:
   brightness:

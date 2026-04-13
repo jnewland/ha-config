@@ -26,6 +26,15 @@ template:
           {% else %}
             mdi:home-outline
           {% endif %}
+      - unique_id: together
+        name: together
+        state: >
+          {{
+            states.device_tracker.katie_s_iphone != None and
+            states.device_tracker.jphone_17_pro != None and
+            distance(states.device_tracker.jphone_17_pro, states.device_tracker.katie_s_iphone) != None and
+            distance(states.device_tracker.jphone_17_pro, states.device_tracker.katie_s_iphone) < 0.25
+          }}
   - sensor:
       - name: Notify group
         unique_id: notify_group
@@ -37,4 +46,3 @@ template:
           {% elif is_state('binary_sensor.katie_home', 'on') %}
             notify.mobile_app_katies_iphone
           {% endif %}
-

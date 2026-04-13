@@ -1,0 +1,2 @@
+# Local Home Assistant runtime for script/bootstrap and script/cibuild.
+homeassistant==2026.4.2

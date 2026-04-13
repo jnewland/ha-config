@@ -53,12 +53,11 @@ input_number:
     max: 100
     step: 5
 
-binary_sensor:
-  - platform: template
-    sensors:
-      precipitation_in_forecast:
-        friendly_name: Precipitation in forecast
-        value_template: |
+template:
+  - binary_sensor:
+      - unique_id: precipitation_in_forecast
+        name: Precipitation in forecast
+        state: |
           {{
             states('sensor.forecast_precipitation_probability') | float(default=0)
             >
