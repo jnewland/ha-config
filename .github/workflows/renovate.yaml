@@ -6,6 +6,11 @@ on:
   workflow_dispatch: {}
   schedule:
     - cron:  '0 */4 * * *'
+
+concurrency:
+  group: renovate-${{ github.event.pull_request.number || github.event_name }}
+  cancel-in-progress: true
+
 jobs:
   renovate:
     uses: urcomputeringpal/.github/.github/workflows/renovate.yaml@main
