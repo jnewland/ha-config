@@ -50,9 +50,9 @@ SENSOR_TYPES = {
     "current_temp": SensorEntityDescription(
         key="current_temp",
         suggested_display_precision=1,
-        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
     "battery.percent": SensorEntityDescription(
         key="battery_percent",
@@ -119,7 +119,7 @@ class EmberMugStateSensor(EmberMugSensor):
                 "udsk": data.udsk,
                 "dsk": data.dsk,
             }
-        return attrs | super().extra_state_attributes
+        return attrs | dict(super().extra_state_attributes)
 
 
 class EmberMugLiquidLevelSensor(EmberMugSensor):
@@ -170,10 +170,7 @@ class EmberMugTemperatureSensor(EmberMugSensor):
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
         """Return device specific state attributes."""
-        return {
-            "native_value": self.coordinator.data.current_temp,
-            **super().extra_state_attributes,
-        }
+        return {"native_value": self.coordinator.data.current_temp, **super().extra_state_attributes}
 
 
 class EmberMugBatterySensor(EmberMugSensor):
@@ -188,7 +185,7 @@ class EmberMugBatterySensor(EmberMugSensor):
         }
         if self.coordinator.mug.has_attribute("battery_voltage"):
             attrs[ATTR_BATTERY_VOLTAGE] = data.battery_voltage
-        return attrs | super().extra_state_attributes
+        return attrs | dict(super().extra_state_attributes)
 
 
 async def async_setup_entry(

@@ -68,6 +68,7 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
         # Setup storage
         self.persistent_data = await self._store.async_load()
         try:
+            await self.mug.pair()
             await self.mug.update_initial()
             await self.mug.update_all()
             if not self.persistent_data:
@@ -80,9 +81,15 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
                 f"An error occurred updating {self.mug.model_name}: {e=}",
             ) from e
 
-        self.mug.register_callback(
-            self._async_handle_callback,
-        )
+        try:
+            is_writable = await self.mug.make_writable()
+            _LOGGER.debug("Mug writability: %s", is_writable)
+        except (TimeoutError, BleakError) as e:
+            if isinstance(e, BleakError):
+                _LOGGER.debug("An error occurred trying to make the %s writable: %s", self.mug.model_name, e)
+
+        self.mug.register_callback(self._async_handle_callback)
+        self.async_update_listeners()
 
     async def _async_update_data(self) -> MugData:
         """Poll the device."""
@@ -90,7 +97,7 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
         full_update = not self._last_refresh_was_full
         changed: list[Change] | None = []
         try:
-            if self._last_refresh_was_full is False:
+            if not self._last_refresh_was_full:
                 # Only fully poll all data every other call to limit time
                 changed += await self.mug.update_all()
             else:
@@ -100,7 +107,7 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
         except (TimeoutError, BleakError) as e:
             if isinstance(e, BleakError):
                 _LOGGER.debug("An error occurred trying to update the %s: %s", self.mug.model_name, e)
-            if self.available is True:
+            if self.available:
                 _LOGGER.debug("%s is not available: %s", self.mug.model_name, e)
                 self.available = False
             changed = None
@@ -126,7 +133,7 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
 
     def ensure_writable(self) -> None:
         """Writable check for service methods."""
-        if self.mug.can_write is False:
+        if not self.mug.can_write:
             raise ValueError(
                 f"Unable to write to {self.mug.data.model_info.device_type.value}",
             )
@@ -137,7 +144,7 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
 
         This is stored to disk, so it can be restored to the entity even if we restart Home Assistant.
         """
-        self.persistent_data = {"target_temp_bkp": target_temp}
+        self.persistent_data: PersistentData = {"target_temp_bkp": target_temp}
         await self._store.async_save(self.persistent_data)
 
     @property
@@ -165,7 +172,7 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
     def handle_bluetooth_event(
         self,
         service_info: BluetoothServiceInfoBleak,
-        change: BluetoothChange,
+        change: BluetoothChange.ADVERTISEMENT,
     ) -> None:
         """Handle a Bluetooth event."""
         _LOGGER.debug(
@@ -174,6 +181,8 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
             change,
         )
         self.mug.ble_event_callback(service_info.device, service_info.advertisement)
+        self.available = True
+        self.async_update_listeners()
         self.hass.loop.create_task(close_stale_connections(service_info.device))
 
     @callback
@@ -203,7 +212,7 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
         return DeviceInfo(
             connections={(CONNECTION_BLUETOOTH, self.mug.device.address)},
             identifiers={(DOMAIN, self.mug.device.address)},
-            name=name if (name := self.data.name) and name != "Ember Device" else self.device_name,
+            name=self.device_name,
             model=self.data.model_info.name,
             model_id=self.data.model_info.model.value if self.data.model_info.model else None,
             serial_number=self.data.meta.serial_number if self.data.meta else None,
