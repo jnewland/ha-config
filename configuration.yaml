@@ -36,15 +36,7 @@ ifttt: !include ifttt.yaml
 input_boolean: !include input_boolean.yaml
 light:
 light yaml: !include_dir_list lights
-lovelace:
-  resource_mode: yaml
-  dashboards:
-    lovelace:
-      mode: yaml
-      filename: ui-lovelace.yaml
-      title: Overview
-      icon: mdi:view-dashboard
-      show_in_sidebar: true
+lovelace: !include lovelace.yaml
   resources:
     - url: /local/monster-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
       type: js
