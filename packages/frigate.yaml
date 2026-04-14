@@ -92,7 +92,7 @@ automation:
             homeowner might want to know about in one or two short sentences, suitable
             for an iOS notification.
 
-            Focus out things that might be security risks, dangers, or threats to the
+            Focus on things that might be security risks, dangers, or threats to the
             homeowner, their pets, or property. Call out conditions that may allow
             pets to escape like open doors, gates, or garages.
 
@@ -165,7 +165,7 @@ automation:
             homeowner might want to know about in one or two short sentences, suitable
             for an iOS notification.
 
-            Focus out things that might be security risks, dangers, or threats to the
+            Focus on things that might be security risks, dangers, or threats to the
             homeowner, their pets, or property. Call out conditions that may allow
             pets to escape like open doors, gates, or garages.
 
@@ -302,8 +302,7 @@ automation:
           camera: >-
             camera.crate_medium
           camera_thumbnail: >-
-            {{ states('input_text.external_url') }}
-            {{ state_attr('camera.crate_medium', 'entity_picture') }}
+            {{ states('input_text.external_url') ~ state_attr('camera.crate_medium', 'entity_picture') }}
           message: >-
             {{ states('input_text.crate_summary') }}
           tag: counter.pets
