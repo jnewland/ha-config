@@ -13,6 +13,136 @@ input_select:
       - Away
     icon: mdi:cog
 
+script:
+  mode_morning:
+    sequence:
+      - service: input_select.select_option
+        entity_id: input_select.mode
+        data:
+          option: Morning
+
+  mode_day:
+    sequence:
+      - service: input_select.select_option
+        entity_id: input_select.mode
+        data:
+          option: Day
+
+  mode_evening:
+    sequence:
+      - service: input_select.select_option
+        entity_id: input_select.mode
+        data:
+          option: Evening
+      - service: input_number.set_value
+        data:
+          entity_id: input_number.brightness
+          value: 128
+      - service: homeassistant.turn_off
+        entity_id:
+          - light.lounge_overhead
+      - service: script.turn_on
+        entity_id: script.great_room_lights
+
+  mode_party:
+    sequence:
+      - service: homeassistant.turn_on
+        entity_id:
+          - group.all_lights
+      - service: input_select.select_option
+        entity_id: input_select.mode
+        data:
+          option: Party
+      - service: input_number.set_value
+        data:
+          entity_id: input_number.brightness
+          value: 255
+
+  mode_reading:
+    sequence:
+      - service: input_select.select_option
+        entity_id: input_select.mode
+        data:
+          option: Reading
+      - service: light.turn_off
+        data:
+          entity_id: |
+            {% if states.input_boolean.guests.state == "on" %}
+            group.downstairs_non_guest
+            {% else %}
+            group.downstairs
+            {% endif %}
+      - service: input_number.set_value
+        data:
+          entity_id: input_number.brightness
+          value: 42
+      - service: light.turn_on
+        data:
+          entity_id:
+            - light.bedroom_chandelier
+            - light.chandelier_lamp
+            # - light.bedside_lamp
+            - light.bedside_table
+            - light.bedroom_nook
+            - light.bedroom_patio
+            - light.striped_lamp
+          brightness: |
+            {{ states('input_number.brightness') | int }}
+      - service: light.turn_off
+        data:
+          entity_id:
+            - light.bedroom_overhead
+            - light.stairs
+      - service: script.lock_up
+      - service: python_script.close_if_open
+        entity_id: cover.garage
+      - condition: template
+        value_template: >
+          {{ states.input_boolean.guests.state != "on" }}
+      - service: script.ack
+        data:
+          entity_id: script.arm
+          tag: alarm_control_panel.alarm
+          message: "Alarm is disarmed. Arm?"
+          confirmation_message: armed the alarm.
+
+  mode_sleeping:
+    sequence:
+      - service: input_select.select_option
+        entity_id: input_select.mode
+        data:
+          option: Sleeping
+      - service: light.turn_off
+        entity_id:
+          - light.bedroom
+          - light.bathroom
+          - light.yoga_room
+          - light.hall
+      - service: homeassistant.turn_off
+        entity_id:
+          - group.upstairs_fans
+      - service: homeassistant.turn_off
+        data:
+          entity_id: |
+            {% if states.input_boolean.guests.state == "on" %}
+            group.downstairs_non_guest
+            {% else %}
+            group.downstairs
+            {% endif %}
+      - service: script.lock_up
+      - service: python_script.close_if_open
+        entity_id: cover.garage
+      - service: homeassistant.turn_off
+        entity_id: light.outdoor_mood
+      - service: input_number.set_value
+        data:
+          entity_id: input_number.brightness
+          value: 13
+      - condition: template
+        value_template: >
+          {{ states.input_boolean.guests.state != "on" }}
+      - service: script.arm
+
 automation:
   - alias: Mode selector
     id: a5d8a893-365d-4f4a-8297-ecaeff7fbe43
