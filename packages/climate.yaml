@@ -116,9 +116,7 @@ automation:
         for:
           minutes: 3
     conditions:
-      - condition: numeric_state
-        entity_id: sensor.upstairs_thermostat_air_temperature
-        above: 67
+      - "{{ not is_state('climate.upstairs', 'heat') }}"
       - "{{ not is_state('input_select.mode', 'Sleeping') }}"
       - "{{ not is_state('input_select.mode', 'Reading') }}"
     action:
