@@ -36,41 +36,7 @@ ifttt: !include ifttt.yaml
 input_boolean: !include input_boolean.yaml
 light:
 light yaml: !include_dir_list lights
-lovelace:
-  resource_mode: yaml
-  dashboards:
-    lovelace:
-      mode: yaml
-      filename: ui-lovelace.yaml
-      title: Overview
-      icon: mdi:view-dashboard
-      show_in_sidebar: true
-  resources:
-    - url: /local/monster-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
-      type: js
-    - url: /local/entity-attributes-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
-      type: js
-    - url: /local/auto-entities.js?source=https://raw.githubusercontent.com/thomasloven/lovelace-auto-entities/v1.16.1/auto-entities.js
-      type: module
-    - url: /local/card-mod.js?source=https://raw.githubusercontent.com/thomasloven/lovelace-card-mod/v3.4.6/card-mod.js
-      type: module
-    - url: /local/card-tools.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
-      type: module
-    - url: /local/flower-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
-      type: module
-    - url: /local/group-card.js?v=4c57f4eb-df4d-4c84-80f9-1e64c3e714a4
-      type: js
-    - url: /local/mini-media-player-bundle.js?source=https://github.com/kalkih/mini-media-player/releases/download/v1.16.11/mini-media-player-bundle.js&v=2
-      type: module
-    - url: /local/custom-sonos-card.js?source=https://github.com/johanfrick/custom-sonos-card/releases/download/v9.7.0/custom-sonos-card.js&v=3
-      type: module
-    - url: /local/mini-graph-card-bundle.js?source=https://github.com/kalkih/mini-graph-card/releases/download/v0.13.0/mini-graph-card-bundle.js
-      type: module
-    - url: /local/weather-chart-card.js?source=https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
-      type: module
-    - url: /local/advanced-camera-card/advanced-camera-card.js?source=https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.27.4/advanced-camera-card.zip
-      type: module
-
+lovelace: !include lovelace.yaml
 logger: !include logger.yaml
 media_player: !include media_player.yaml
 python_script:
