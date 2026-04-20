@@ -4,5 +4,11 @@
     "104517645+jnewland-renovate[bot]@users.noreply.github.com"
   ],
   "extends": ["github>urcomputeringpal/.github"],
-  "prConcurrentLimit": 0
+  "prConcurrentLimit": 0,
+  "packageRules": [
+    {
+      "matchPackageNames": ["homeassistant", "homeassistant/home-assistant"],
+      "groupName": "home-assistant"
+    }
+  ]
 }
