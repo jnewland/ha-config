@@ -8,7 +8,11 @@
   "packageRules": [
     {
       "matchPackageNames": ["homeassistant", "homeassistant/home-assistant"],
-      "groupName": "home-assistant"
+      "groupName": "home-assistant",
+      "addLabels": ["deploy", "deploy:auto-merge"],
+      "prBodyNotes":
+        "Auto-updating [home-assistant](https://github.com/home-assistant/core/releases) /cc @jnewland",
+    },
     }
   ]
 }

@@ -5,12 +5,4 @@ module.exports = {
     commands: ["./script/sync-components"],
     executionMode: "branch",
   },
-  packageRules: [
-    {
-      matchPackageNames: ["homeassistant/home-assistant", "homeassistant/core"],
-      addLabels: ["deploy", "deploy:auto-merge"],
-      prBodyNotes:
-        "Auto-updating [home-assistant](https://github.com/home-assistant/core/releases) /cc @jnewland",
-    },
-  ],
 };
