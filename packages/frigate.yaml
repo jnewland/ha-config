@@ -270,15 +270,12 @@ automation:
       - platform: state
         entity_id: camera.crate_medium
         from: "unavailable"
-        to: "idle"
       - platform: state
         entity_id: counter.pets
       - trigger: time_pattern
         minutes: "/5"
     action:
-      - condition: state
-        entity_id: camera.crate_medium
-        state: idle
+      - "{{ states('camera.crate_medium') != 'unavailable' }}"
       - service: camera.snapshot
         data:
           filename: /tmp/crate_medium.jpg
