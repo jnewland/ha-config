@@ -255,6 +255,14 @@ automation:
         data: {}
         target:
           entity_id: camera.crate
+      - service: homeassistant.turn_{{ 'off' if states('camera.crate_medium') == 'unavailable' else 'on' }}
+        data: {}
+        target:
+          entity_id:
+            - switch.crate_detect
+            - switch.crate_audio_detection
+            - switch.crate_motion
+            - switch.crate_recordings
 
   - alias: Pet the good girl?
     id: 8f376d0f-1ea7-4616-a2e8-2d0ab788976f
