@@ -274,8 +274,8 @@ automation:
         entity_id: counter.pets
       - trigger: time_pattern
         minutes: "/5"
+    conditions: "{{ states('camera.crate_medium') != 'unavailable' }}"
     action:
-      - "{{ states('camera.crate_medium') != 'unavailable' }}"
       - service: camera.snapshot
         data:
           filename: /tmp/crate_medium.jpg
