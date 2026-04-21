@@ -242,21 +242,40 @@ automation:
           entity_id:
             - automation.notify_when_dog_detected_in_yard
 
+  - alias: Toggle crate camera
+    id: c72aeeca-b219-468f-8976-6ccc63833505
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: camera.crate_medium
+    action:
+      - service: >-
+          camera.{{ 'turn_off' if states('camera.crate_medium') == 'unavailable' else 'turn_on' }}
+        data: {}
+        target:
+          entity_id: camera.crate
+      - service: homeassistant.turn_{{ 'off' if states('camera.crate_medium') == 'unavailable' else 'on' }}
+        data: {}
+        target:
+          entity_id:
+            - switch.crate_detect
+            - switch.crate_audio_detection
+            - switch.crate_motion
+            - switch.crate_recordings
+
   - alias: Pet the good girl?
     id: 8f376d0f-1ea7-4616-a2e8-2d0ab788976f
     trigger:
       - platform: state
         entity_id: camera.crate_medium
         from: "unavailable"
-        to: "idle"
       - platform: state
         entity_id: counter.pets
       - trigger: time_pattern
         minutes: "/5"
+    conditions: "{{ states('camera.crate_medium') != 'unavailable' }}"
     action:
-      - condition: state
-        entity_id: camera.crate_medium
-        state: idle
       - service: camera.snapshot
         data:
           filename: /tmp/crate_medium.jpg
