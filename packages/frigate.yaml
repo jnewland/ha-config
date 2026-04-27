@@ -73,17 +73,16 @@ automation:
           - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
           - "{{ trigger.payload_json['after']['end_time'] is not none }}"
     action:
-      - action: camera.snapshot
-        data:
-          filename: /tmp/person_{{ trigger.payload_json['after']['camera'] }}.jpg
-        target:
-          entity_id: camera.{{ trigger.payload_json['after']['camera'] }}_medium
-      - action: google_generative_ai_conversation.generate_content
+      - action: ai_task.generate_data
         response_variable: gemini
         data:
-          filenames:
-            - /tmp/person_{{ trigger.payload_json['after']['camera'] }}.jpg
-          prompt: >-
+          entity_id: ai_task.google_ai_task
+          task_name: person camera notification
+          attachments:
+            media_content_id: >-
+              media-source://camera/camera.{{ trigger.payload_json['after']['camera'] }}_medium
+            media_content_type: image/jpeg
+          instructions: >-
             You are an AI agent designed to help busy homeowners stay aware of their
             surroundings by observing their security cameras for things that are
             unusual or out of place.
@@ -114,7 +113,7 @@ automation:
           camera_thumbnail: >
             {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
-            {{ gemini['text'] }}
+            {{ gemini['data'] }}
           tag: >-
             {{ trigger.payload_json['after']['label'] }}-{{ trigger.payload_json['after']['camera'] }}
           confirmation_message: >-
@@ -146,17 +145,16 @@ automation:
           - "{{ trigger.payload_json['before']['entered_zones'] | length == 0 }}"
           - "{{ trigger.payload_json['after']['end_time'] is not none }}"
     action:
-      - action: camera.snapshot
-        data:
-          filename: /tmp/dog_{{ trigger.payload_json['after']['camera'] }}.jpg
-        target:
-          entity_id: camera.{{ trigger.payload_json['after']['camera'] }}_medium
-      - action: google_generative_ai_conversation.generate_content
+      - action: ai_task.generate_data
         response_variable: gemini
         data:
-          filenames:
-            - /tmp/dog_{{ trigger.payload_json['after']['camera'] }}.jpg
-          prompt: >-
+          entity_id: ai_task.google_ai_task
+          task_name: dog camera notification
+          attachments:
+            media_content_id: >-
+              media-source://camera/camera.{{ trigger.payload_json['after']['camera'] }}_medium
+            media_content_type: image/jpeg
+          instructions: >-
             You are an AI agent designed to help busy homeowners stay aware of their
             surroundings by observing their security cameras for things that are
             unusual or out of place.
@@ -187,7 +185,7 @@ automation:
           camera_thumbnail: >
             {{ states('input_text.external_url') }}/api/frigate/notifications/{{ trigger.payload_json['after']['id'] }}/snapshot.jpg
           message: >-
-            {{ gemini['text'] }}
+            {{ gemini['data'] }}
           tag: >-
             {{ trigger.payload_json['after']['label'] }}
           confirmation_message: >-
@@ -276,17 +274,15 @@ automation:
         minutes: "/5"
     conditions: "{{ states('camera.crate_medium') != 'unavailable' }}"
     action:
-      - service: camera.snapshot
-        data:
-          filename: /tmp/crate_medium.jpg
-        target:
-          entity_id: camera.crate_medium
-      - service: google_generative_ai_conversation.generate_content
+      - action: ai_task.generate_data
         response_variable: gemini
         data:
-          filenames:
-            - /tmp/crate_medium.jpg
-          prompt: >-
+          entity_id: ai_task.google_ai_task
+          task_name: crate camera summary
+          attachments:
+            media_content_id: media-source://camera/camera.crate_medium
+            media_content_type: image/jpeg
+          instructions: >-
             You are an AI agent designed to help busy homeowners stay aware of their
             surroundings by observing their security cameras for things that are
             unusual or out of place.
@@ -312,7 +308,7 @@ automation:
           entity_id: input_text.crate_summary
         data:
           value: >-
-            {{ gemini['text'] }}
+            {{ gemini['data'] }}
 
       - service: script.ack
         data:
