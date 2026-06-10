@@ -5,7 +5,12 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from homeassistant.components.number import NumberDeviceClass, NumberMode, RestoreNumber
+from homeassistant.components.number import (
+    DOMAIN as NUMBER_DOMAIN,
+    NumberDeviceClass,
+    NumberMode,
+    RestoreNumber,
+)
 from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
@@ -105,7 +110,9 @@ from .const import (
     READING_TEMPERATURE,
     READING_VPD,
     TEMPERATURE_MAX_VALUE,
+    TEMPERATURE_MAX_VALUE_FAHRENHEIT,
     TEMPERATURE_MIN_VALUE,
+    TEMPERATURE_MIN_VALUE_FAHRENHEIT,
     TRANSLATION_KEY_LUX_TO_PPFD,
     TRANSLATION_KEY_MAX_CO2,
     TRANSLATION_KEY_MAX_CONDUCTIVITY,
@@ -238,6 +245,21 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
+def _convert_default_temp(value_c: float, target_unit: UnitOfTemperature) -> float:
+    """Convert a Celsius default value to ``target_unit``, rounded.
+
+    Defaults in ``const.py`` and from OpenPlantbook are expressed in °C.
+    When HA's system unit is °F we need to convert before stamping the
+    value onto a temperature threshold entity, otherwise the user gets a
+    °C-numeric value labelled °F (e.g. a 40 °F max-temp ceiling).
+    """
+    if target_unit == UnitOfTemperature.CELSIUS:
+        return value_c
+    return round(
+        TemperatureConverter.convert(value_c, UnitOfTemperature.CELSIUS, target_unit)
+    )
+
+
 class PlantMinMax(RestoreNumber):
     """Parent class for the min/max classes below"""
 
@@ -258,9 +280,18 @@ class PlantMinMax(RestoreNumber):
         # New entities let has_entity_name derive the entity_id automatically,
         # which enables auto-rename when the device is renamed.
         ent_reg = er_async_get(hass)
-        if ent_reg.async_get_entity_id("number", DOMAIN, self._attr_unique_id):
+        # Track whether this is a brand-new config entry. HA's RestoreState
+        # keyed by entity_id preserves deleted entities' last state for ~7
+        # days, so a delete + re-add with the same plant name would restore
+        # stale values over the fresh ones from OpenPlantbook. Skip restore
+        # when the unique_id is new.
+        self._is_new_entity = (
+            ent_reg.async_get_entity_id(NUMBER_DOMAIN, DOMAIN, self._attr_unique_id)
+            is None
+        )
+        if not self._is_new_entity:
             self.entity_id = async_generate_entity_id(
-                f"{DOMAIN}.{{}}",
+                f"{NUMBER_DOMAIN}.{{}}",
                 f"{self._plant.name} {self._entity_id_key}",
                 current_ids={},
             )
@@ -336,6 +367,19 @@ class PlantMinMax(RestoreNumber):
     async def async_added_to_hass(self) -> None:
         """Restore state of thresholds on startup."""
         await super().async_added_to_hass()
+        if self._is_new_entity:
+            _LOGGER.debug(
+                "New entity %s, using default %s (skipping restore)",
+                self.entity_id,
+                self._default_value,
+            )
+            self.async_write_ha_state()
+            async_track_state_change_event(
+                self.hass,
+                [self.entity_id],
+                self._state_changed_event,
+            )
+            return
         state = await self.async_get_last_number_data()
         if not state:
             _LOGGER.debug(
@@ -453,9 +497,15 @@ class PlantMaxTemperature(PlantMinMax):
     ) -> None:
         """Initialize the Plant component."""
         self._attr_unique_id = f"{config.entry_id}-max-temperature"
-        self._default_value = config.data[FLOW_PLANT_INFO][FLOW_PLANT_LIMITS].get(
-            CONF_MAX_TEMPERATURE, DEFAULT_MAX_TEMPERATURE
+        self._default_value = _convert_default_temp(
+            config.data[FLOW_PLANT_INFO][FLOW_PLANT_LIMITS].get(
+                CONF_MAX_TEMPERATURE, DEFAULT_MAX_TEMPERATURE
+            ),
+            hass.config.units.temperature_unit,
         )
+        if hass.config.units.temperature_unit == UnitOfTemperature.FAHRENHEIT:
+            self._attr_native_max_value = TEMPERATURE_MAX_VALUE_FAHRENHEIT
+            self._attr_native_min_value = TEMPERATURE_MIN_VALUE_FAHRENHEIT
         super().__init__(hass, config, plantdevice)
         self._attr_native_unit_of_measurement = self.hass.config.units.temperature_unit
 
@@ -517,6 +567,16 @@ class PlantMaxTemperature(PlantMinMax):
                 new_state,
             )
 
+        # Update internal state AND publish via hass.states.async_set.
+        # Setting only _attr_native_value (without async_set) leaves the
+        # state machine stale until the next entity update; setting only
+        # via async_set leaves _attr_native_value stale so the next
+        # async_write_ha_state silently reverts the conversion. Both are
+        # required.
+        self._attr_native_value = new_state
+        self._attr_native_unit_of_measurement = new_attributes.get(
+            ATTR_UNIT_OF_MEASUREMENT
+        )
         self.hass.states.async_set(self.entity_id, new_state, new_attributes)
 
 
@@ -535,10 +595,16 @@ class PlantMinTemperature(PlantMinMax):
         self, hass: HomeAssistant, config: ConfigEntry, plantdevice: Entity
     ) -> None:
         """Initialize the component."""
-        self._default_value = config.data[FLOW_PLANT_INFO][FLOW_PLANT_LIMITS].get(
-            CONF_MIN_TEMPERATURE, DEFAULT_MIN_TEMPERATURE
+        self._default_value = _convert_default_temp(
+            config.data[FLOW_PLANT_INFO][FLOW_PLANT_LIMITS].get(
+                CONF_MIN_TEMPERATURE, DEFAULT_MIN_TEMPERATURE
+            ),
+            hass.config.units.temperature_unit,
         )
         self._attr_unique_id = f"{config.entry_id}-min-temperature"
+        if hass.config.units.temperature_unit == UnitOfTemperature.FAHRENHEIT:
+            self._attr_native_max_value = TEMPERATURE_MAX_VALUE_FAHRENHEIT
+            self._attr_native_min_value = TEMPERATURE_MIN_VALUE_FAHRENHEIT
         super().__init__(hass, config, plantdevice)
         self._attr_native_unit_of_measurement = self.hass.config.units.temperature_unit
 
@@ -600,6 +666,10 @@ class PlantMinTemperature(PlantMinMax):
                 new_state,
             )
 
+        self._attr_native_value = new_state
+        self._attr_native_unit_of_measurement = new_attributes.get(
+            ATTR_UNIT_OF_MEASUREMENT
+        )
         self.hass.states.async_set(self.entity_id, new_state, new_attributes)
 
 
@@ -657,7 +727,7 @@ class PlantMaxDli(PlantMinMax):
     _attr_native_unit_of_measurement = UNIT_DLI
     _attr_native_max_value = 100
     _attr_native_min_value = 0
-    _attr_native_step = 1
+    _attr_native_step = 0.1
     _attr_translation_key = TRANSLATION_KEY_MAX_DLI
     _entity_id_key = f"{ATTR_MAX} {READING_DLI}"
 
@@ -680,7 +750,7 @@ class PlantMinDli(PlantMinMax):
     _attr_native_unit_of_measurement = UNIT_DLI
     _attr_native_max_value = 100
     _attr_native_min_value = 0
-    _attr_native_step = 1
+    _attr_native_step = 0.1
     _attr_translation_key = TRANSLATION_KEY_MIN_DLI
     _entity_id_key = f"{ATTR_MIN} {READING_DLI}"
 
@@ -895,9 +965,15 @@ class PlantMaxSoilTemperature(PlantMinMax):
     ) -> None:
         """Initialize the Plant component."""
         self._attr_unique_id = f"{config.entry_id}-max-soil-temperature"
-        self._default_value = config.data[FLOW_PLANT_INFO][FLOW_PLANT_LIMITS].get(
-            CONF_MAX_SOIL_TEMPERATURE, DEFAULT_MAX_SOIL_TEMPERATURE
+        self._default_value = _convert_default_temp(
+            config.data[FLOW_PLANT_INFO][FLOW_PLANT_LIMITS].get(
+                CONF_MAX_SOIL_TEMPERATURE, DEFAULT_MAX_SOIL_TEMPERATURE
+            ),
+            hass.config.units.temperature_unit,
         )
+        if hass.config.units.temperature_unit == UnitOfTemperature.FAHRENHEIT:
+            self._attr_native_max_value = TEMPERATURE_MAX_VALUE_FAHRENHEIT
+            self._attr_native_min_value = TEMPERATURE_MIN_VALUE_FAHRENHEIT
         super().__init__(hass, config, plantdevice)
         self._attr_native_unit_of_measurement = self.hass.config.units.temperature_unit
 
@@ -953,6 +1029,7 @@ class PlantMaxSoilTemperature(PlantMinMax):
         self._attr_native_unit_of_measurement = new_attributes.get(
             ATTR_UNIT_OF_MEASUREMENT
         )
+        self.hass.states.async_set(self.entity_id, new_state, new_attributes)
 
 
 class PlantMinSoilTemperature(PlantMinMax):
@@ -970,10 +1047,16 @@ class PlantMinSoilTemperature(PlantMinMax):
         self, hass: HomeAssistant, config: ConfigEntry, plantdevice: Entity
     ) -> None:
         """Initialize the component."""
-        self._default_value = config.data[FLOW_PLANT_INFO][FLOW_PLANT_LIMITS].get(
-            CONF_MIN_SOIL_TEMPERATURE, DEFAULT_MIN_SOIL_TEMPERATURE
+        self._default_value = _convert_default_temp(
+            config.data[FLOW_PLANT_INFO][FLOW_PLANT_LIMITS].get(
+                CONF_MIN_SOIL_TEMPERATURE, DEFAULT_MIN_SOIL_TEMPERATURE
+            ),
+            hass.config.units.temperature_unit,
         )
         self._attr_unique_id = f"{config.entry_id}-min-soil-temperature"
+        if hass.config.units.temperature_unit == UnitOfTemperature.FAHRENHEIT:
+            self._attr_native_max_value = TEMPERATURE_MAX_VALUE_FAHRENHEIT
+            self._attr_native_min_value = TEMPERATURE_MIN_VALUE_FAHRENHEIT
         super().__init__(hass, config, plantdevice)
         self._attr_native_unit_of_measurement = self.hass.config.units.temperature_unit
 
@@ -1029,6 +1112,7 @@ class PlantMinSoilTemperature(PlantMinMax):
         self._attr_native_unit_of_measurement = new_attributes.get(
             ATTR_UNIT_OF_MEASUREMENT
         )
+        self.hass.states.async_set(self.entity_id, new_state, new_attributes)
 
 
 class PlantLuxToPpfd(PlantMinMax):
