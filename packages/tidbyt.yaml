@@ -56,7 +56,7 @@ notify:
       apiToken: !env_var TIDBYT_KATIE_API_TOKEN
       background: "false"
 
-  - name: tidbyt_music_room_background
+  - name: tronbyt_music_room_background
     platform: rest
     resource: http://tronbyt:8000/v0/devices/music-room-tidbyt/push_app
     method: POST_JSON
