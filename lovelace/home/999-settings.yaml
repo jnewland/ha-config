@@ -24,6 +24,7 @@ cards:
     entities:
       - sensor.current_version
       - automation.deploy_latest_deployment
+      - automation.force_deploy_latest_deployment
       - entity: zone.home
         icon: "mdi:restart"
         name: Restart

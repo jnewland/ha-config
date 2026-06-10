@@ -75,3 +75,15 @@ automation:
           sha: >
             {{ states('sensor.latest_deployment_sha') }}
       - service: homeassistant.restart
+  - alias: Force Deploy latest deployment
+    id: b833be91-0f5e-4196-a645-2cc7cf74fdc2
+    trigger:
+      - platform: state
+        entity_id: automation.force_deploy_latest_deployment
+        to: "on"
+    action:
+      - service: shell_command.deploy
+        data:
+          sha: >
+            {{ states('sensor.latest_deployment_sha') }}
+      - service: homeassistant.restart
