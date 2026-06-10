@@ -78,7 +78,6 @@ notify:
       Content-Type: application/json
     data:
       app_id: vertical-message
-      background: "false"
 
   - name: tidbyt_kitchen_once
     platform: rest
