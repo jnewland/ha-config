@@ -60,24 +60,29 @@ notify:
     platform: rest
     resource: http://tronbyt:8000/v0/devices/music-room-tidbyt/push_app
     method: POST_JSON
-    message_param_name: msg
     headers:
       Authorization: !env_var TRONBYT_MUSIC_ROOM_API_TOKEN
       Content-Type: application/json
     data:
       app_id: vertical-message
-      background: True
+      background: true
+    data_template:
+      config:
+        msg: "{{ message }}"
 
   - name: tronbyt_music_room_once
     platform: rest
     resource: http://tronbyt:8000/v0/devices/music-room-tidbyt/push_app
     method: POST_JSON
-    message_param_name: msg
     headers:
       Authorization: !env_var TRONBYT_MUSIC_ROOM_API_TOKEN
       Content-Type: application/json
     data:
       app_id: vertical-message
+      background: false
+    data_template:
+      config:
+        msg: "{{ message }}"
 
   - name: tidbyt_kitchen_once
     platform: rest
