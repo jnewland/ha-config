@@ -5,13 +5,13 @@
   ],
   "extends": ["github>urcomputeringpal/.github"],
   "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
   "packageRules": [
     {
       "matchPackageNames": ["homeassistant", "homeassistant/home-assistant"],
       "groupName": "home-assistant",
       "addLabels": ["deploy", "deploy:auto-merge"],
-      "prBodyNotes":
-        "Auto-updating [home-assistant](https://github.com/home-assistant/core/releases) /cc @jnewland",
+      "prBodyNotes": "Auto-updating [home-assistant](https://github.com/home-assistant/core/releases) /cc @jnewland"
     }
   ]
 }
