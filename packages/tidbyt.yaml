@@ -62,7 +62,8 @@ notify:
     method: POST_JSON
     message_param_name: msg
     headers:
-      authorization: !env_var TRONBYT_MUSIC_ROOM_API_TOKEN
+      Authorization: !env_var TRONBYT_MUSIC_ROOM_API_TOKEN
+      Content-Type: application/json
     data:
       app_id: vertical-message
       background: True
@@ -73,7 +74,8 @@ notify:
     method: POST_JSON
     message_param_name: msg
     headers:
-      authorization: !env_var TRONBYT_MUSIC_ROOM_API_TOKEN
+      Authorization: !env_var TRONBYT_MUSIC_ROOM_API_TOKEN
+      Content-Type: application/json
     data:
       app_id: vertical-message
       background: "false"
