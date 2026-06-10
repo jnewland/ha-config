@@ -63,10 +63,9 @@ notify:
     headers:
       Authorization: !env_var TRONBYT_MUSIC_ROOM_API_TOKEN
       Content-Type: application/json
-    data:
+    data_template:
       app_id: vertical-message
       background: true
-    data_template:
       config:
         msg: "{{ message }}"
 
@@ -77,10 +76,9 @@ notify:
     headers:
       Authorization: !env_var TRONBYT_MUSIC_ROOM_API_TOKEN
       Content-Type: application/json
-    data:
+    data_template:
       app_id: vertical-message
       background: false
-    data_template:
       config:
         msg: "{{ message }}"
 
