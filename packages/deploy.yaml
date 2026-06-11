@@ -51,6 +51,11 @@ template:
           drifted
           {% endif %}
 
+input_boolean:
+  deploy_in_progress:
+    name: Deploy In Progress
+    icon: mdi:progress-download
+
 shell_command:
   deploy: /bin/bash ./script/deploy {{ sha }}
 
@@ -70,6 +75,16 @@ automation:
         states('sensor.config_tree_sha') != states('sensor.latest_deployment_tree_sha')
       }}
     action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.deploy_in_progress
+      - service: notify.mobile_app_jphone_17_pro
+        data:
+          title: "Deploying Home Assistant Config"
+          message: "Deploying {{ states('sensor.latest_deployment_sha')[:7] }}"
+          data:
+            tag: deploy
+            url: https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}
       - service: shell_command.deploy
         data:
           sha: >
@@ -82,8 +97,56 @@ automation:
         entity_id: automation.force_deploy_latest_deployment
         to: "on"
     action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.deploy_in_progress
+      - service: notify.mobile_app_jphone_17_pro
+        data:
+          title: "Deploying Home Assistant Config"
+          message: "Deploying {{ states('sensor.latest_deployment_sha')[:7] }}..."
+          data:
+            tag: deploy
+            url: https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}
       - service: shell_command.deploy
         data:
           sha: >
             {{ states('sensor.latest_deployment_sha') }}
       - service: homeassistant.restart
+  - alias: Notify Home assistant start after deploy
+    id: 1a7b3bf1-63a5-4b4e-bae1-1ebaca4de5fa
+    trigger:
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: state
+        entity_id: input_boolean.deploy_in_progress
+        state: "on"
+    action:
+      - service: notify.mobile_app_jphone_17_pro
+        data:
+          title: "Home Assistant starting up after deploy"
+          message: "Deploy in progress..."
+          data:
+            tag: deploy
+            url: https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}
+  - alias: Notify deploy startup complete
+    id: 9c8b1a0c-5d9b-4f1e-8c3a-7c9e1f2a5b6d
+    trigger:
+      - platform: homeassistant
+        event: started
+    condition:
+      - condition: state
+        entity_id: input_boolean.deploy_in_progress
+        state: "on"
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.deploy_in_progress
+      - service: notify.mobile_app_jphone_17_pro
+        data:
+          title: "Home Assistant config deploy complete!"
+          message: "Now running {{ states('sensor.config_sha')[:7] }}"
+          data:
+            tag: deploy
+            # This last notification should allow opening the new Home Assistant version, don't need to link to the commit again.
+            # url: https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}

@@ -23,6 +23,7 @@ cards:
   - type: entities
     entities:
       - sensor.current_version
+      - input_boolean.deploy_in_progress
       - automation.deploy_latest_deployment
       - automation.force_deploy_latest_deployment
       - entity: zone.home
