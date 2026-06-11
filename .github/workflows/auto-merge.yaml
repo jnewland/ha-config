@@ -9,7 +9,7 @@ jobs:
     if: |
       ( github.event.action == 'labeled' && github.event.label.name == 'deploy:auto-merge' ) ||
       ( github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy:auto-merge') )
-    uses: jnewland/.github/.github/workflows/auto-merge.yaml@71ce3f2d6f02ec9bd8c639a0602e7da75a3d0af1 # main
+    uses: jnewland/.github/.github/workflows/auto-merge.yaml@cf0a82376c329d9f0be4d5f8fdda94fbd641cf57 # main
     with:
       pullRequestId: ${{ github.event.pull_request.node_id }}
     secrets:
