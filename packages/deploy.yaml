@@ -2,7 +2,12 @@ command_line:
   - sensor:
       name: Config SHA
       unique_id: 39e7636e-c767-4787-b497-4ef7adfdf49c
-      command: "tail -n 1 /config/.git/logs/HEAD | awk '{print $2'}"
+      command: "git -C /config rev-parse HEAD"
+
+  - sensor:
+      name: Config Tree SHA
+      unique_id: dcd091d3-4ecd-42ff-ab92-cee5de710032
+      command: "git -C /config rev-parse 'HEAD^{tree}'"
 
   - sensor:
       name: Latest Deployment SHA
@@ -15,6 +20,42 @@ command_line:
         "https://api.github.com/repos/jnewland/ha-config/deployments?environment=production" | \
         jq -r '.[0].sha'
 
+  - sensor:
+      name: Latest Deployment Tree SHA
+      unique_id: b37c6289-fa64-437c-acc4-bfedab3dcd71
+      scan_interval: 90
+      command: |
+        COMMIT=$(curl -s \
+          "https://api.github.com/repos/jnewland/ha-config/deployments?environment=production" | \
+          jq -r '.[0].sha') && \
+        curl -s \
+          "https://api.github.com/repos/jnewland/ha-config/commits/$COMMIT" | \
+          jq -r '.commit.tree.sha'
+
+template:
+  - sensor:
+      - name: Deploy Status
+        unique_id: bad5adca-c78c-406e-8f9a-8723995bc5b7
+        state: >-
+          {% set config_sha = states('sensor.config_sha') %}
+          {% set deploy_sha = states('sensor.latest_deployment_sha') %}
+          {% set config_tree = states('sensor.config_tree_sha') %}
+          {% set deploy_tree = states('sensor.latest_deployment_tree_sha') %}
+          {% if not has_value('sensor.config_sha') or not has_value('sensor.latest_deployment_tree_sha') %}
+          unknown
+          {% elif config_sha == deploy_sha %}
+          exact
+          {% elif config_tree == deploy_tree %}
+          same-tree
+          {% else %}
+          drifted
+          {% endif %}
+
+input_boolean:
+  deploy_in_progress:
+    name: Deploy In Progress
+    icon: mdi:progress-download
+
 shell_command:
   deploy: /bin/bash ./script/deploy {{ sha }}
 
@@ -23,19 +64,72 @@ automation:
     id: ef2019dd-0eda-437e-a8b1-b5860e262a7e
     trigger:
       - platform: state
-        entity_id: sensor.latest_deployment_sha
+        entity_id: sensor.latest_deployment_tree_sha
       - platform: state
         entity_id: automation.deploy_latest_deployment
         to: "on"
     condition: |
       {{
-        has_value('sensor.latest_deployment_sha') and
-        has_value('sensor.config_sha') and
-        states('sensor.config_sha') != states('sensor.latest_deployment_sha')
+        has_value('sensor.latest_deployment_tree_sha') and
+        has_value('sensor.config_tree_sha') and
+        states('sensor.config_tree_sha') != states('sensor.latest_deployment_tree_sha')
       }}
     action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.deploy_in_progress
+      - service: notify.mobile_app_jphone_17_pro
+        data:
+          title: "Deploying Home Assistant Config"
+          message: "Deploying {{ states('sensor.latest_deployment_sha')[:7] }}"
+          data:
+            tag: deploy
+            url: https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}
       - service: shell_command.deploy
         data:
           sha: >
             {{ states('sensor.latest_deployment_sha') }}
       - service: homeassistant.restart
+  - alias: Force Deploy latest deployment
+    id: b833be91-0f5e-4196-a645-2cc7cf74fdc2
+    trigger:
+      - platform: state
+        entity_id: automation.force_deploy_latest_deployment
+        to: "on"
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.deploy_in_progress
+      - service: notify.mobile_app_jphone_17_pro
+        data:
+          title: "Deploying Home Assistant Config"
+          message: "Deploying {{ states('sensor.latest_deployment_sha')[:7] }}..."
+          data:
+            tag: deploy
+            url: https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}
+      - service: shell_command.deploy
+        data:
+          sha: >
+            {{ states('sensor.latest_deployment_sha') }}
+      - service: homeassistant.restart
+  - alias: Notify Home assistant start after deploy
+    id: 1a7b3bf1-63a5-4b4e-bae1-1ebaca4de5fa
+    trigger:
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: state
+        entity_id: input_boolean.deploy_in_progress
+        state: "on"
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.deploy_in_progress
+      - service: notify.mobile_app_jphone_17_pro
+        data:
+          title: "Home Assistant config deploy complete!"
+          message: "Now running {{ states('sensor.config_sha')[:7] }}"
+          data:
+            tag: deploy
+            # This last notification should allow opening the new Home Assistant version, don't need to link to the commit again.
+            # url: https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}

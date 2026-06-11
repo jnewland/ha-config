@@ -9,12 +9,23 @@ cards:
       - automation.away_mode
       - input_boolean.christmas
       - input_boolean.visitor
+  - type: markdown
+    content: |
+      {% set config = states('sensor.config_sha') %}
+      {% set deployed = states('sensor.latest_deployment_sha') %}
+      {% set status = states('sensor.deploy_status') %}
+      {% if status == 'exact' %}✅ exact match
+      {% elif status == 'same-tree' %}🔄 same tree, different commit
+      {% elif status == 'drifted' %}⚠️ drifted — deploy pending
+      {% else %}⏳ loading{% endif %}
+
+      config [{{ config[:7] }}](https://github.com/jnewland/ha-config/commit/{{ config }}) · deployed [{{ deployed[:7] }}](https://github.com/jnewland/ha-config/commit/{{ deployed }}) · [compare ↗](https://github.com/jnewland/ha-config/compare/{{ deployed }}...{{ config }})
   - type: entities
     entities:
       - sensor.current_version
-      - sensor.config_sha
-      - sensor.latest_deployment_sha
+      - input_boolean.deploy_in_progress
       - automation.deploy_latest_deployment
+      - automation.force_deploy_latest_deployment
       - entity: zone.home
         icon: "mdi:restart"
         name: Restart
