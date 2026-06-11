@@ -27,7 +27,6 @@ jobs:
     with:
       pull_number: ${{ github.event.pull_request.number }}
     secrets:
-      # https://github.com/settings/personal-access-tokens/15706015
       token: ${{ secrets.UR_BOT_TOKEN }}
 
   script-deploy:

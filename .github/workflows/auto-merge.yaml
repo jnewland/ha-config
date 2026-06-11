@@ -13,5 +13,4 @@ jobs:
     with:
       pullRequestId: ${{ github.event.pull_request.node_id }}
     secrets:
-      # https://github.com/settings/personal-access-tokens/15706015
       token: ${{ secrets.UR_BOT_TOKEN }}
