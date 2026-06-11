@@ -1,0 +1,35 @@
+name: Automatically merge the default branch into PRs with auto-merge enabled
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  merge-default-into-prs-with-auto-merge-enabled:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        timeout-minutes: 30
+        with:
+          github-token: ${{ secrets.UR_BOT_TOKEN }}
+          script: |
+            const opts = github.rest.pulls.list.endpoint.merge({
+              ...context.repo,
+              state: 'open',
+              sort: 'updated',
+              direction: 'desc'
+            })
+            var prs = await github.paginate(opts);
+
+            await Promise.all(prs.map(async (pr) => {
+              if (pr.state != 'open' || pr.draft || !pr.auto_merge) {
+                console.log(`rejected #${pr.number}`)
+                return;
+              }
+              console.log(`updating #${pr.number}`)
+              github.rest.pulls.updateBranch({
+                ...context.repo,
+                pull_number: pr.number
+              });
+              return;
+            }));

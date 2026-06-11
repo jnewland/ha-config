@@ -9,9 +9,8 @@ jobs:
     if: |
       ( github.event.action == 'labeled' && github.event.label.name == 'deploy:manually-deployed' ) ||
       ( github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy:manually-deployed') )
-    uses: jnewland/.github/.github/workflows/manually-deployed.yaml@71ce3f2d6f02ec9bd8c639a0602e7da75a3d0af1 # main
+    uses: jnewland/.github/.github/workflows/manually-deployed.yaml@cf0a82376c329d9f0be4d5f8fdda94fbd641cf57 # main
     with:
       sha: ${{ github.event.pull_request.head.sha }}
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
-
