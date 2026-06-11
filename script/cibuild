@@ -134,6 +134,7 @@ run_check_config() {
 	log_file="$(make_temp_log)"
 	trap 'rm -f -- "${log_file:-}"' EXIT
 
+	jq . renovate.json
 	touch automations.yaml
 	run_hass -c . --script check_config -i all -f | tee "$log_file"
 

@@ -1,8 +1,8 @@
-sensor.jphone_battery_level:
-  friendly_name: jPhone battery level
-sensor.jphone_activity:
-  friendly_name: jPhone activity
-sensor.katie_s_iphone_battery_level:
+sensor.jphone_17_pro_battery_level:
+  friendly_name: jPhone 17 Pro battery level
+sensor.jphone_17_pro_activity:
+  friendly_name: jPhone 17 Pro activity
+sensor.katies_iphone_battery_level:
   friendly_name: Katie's iPhone battery level
-sensor.katie_s_iphone_activity:
+sensor.katies_iphone_activity:
   friendly_name: Katie's iPhone activity

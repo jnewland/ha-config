@@ -1,8 +1,5 @@
 name: auto merge
 on:
-  push:
-    branches:
-      - main
   pull_request:
     types:
       - labeled
@@ -12,46 +9,8 @@ jobs:
     if: |
       ( github.event.action == 'labeled' && github.event.label.name == 'deploy:auto-merge' ) ||
       ( github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy:auto-merge') )
-    uses: jnewland/.github/.github/workflows/auto-merge.yaml@71ce3f2d6f02ec9bd8c639a0602e7da75a3d0af1 # main
+    uses: jnewland/.github/.github/workflows/auto-merge.yaml@cf0a82376c329d9f0be4d5f8fdda94fbd641cf57 # main
     with:
       pullRequestId: ${{ github.event.pull_request.node_id }}
     secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
-
-  merge-default-into-prs-with-auto-merge-enabled:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
-        id: token
-        with:
-          app_id: ${{ secrets.RENOVATE_APP_ID }}
-          private_key: ${{ secrets.RENOVATE_APP_PEM }}
-
-      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        timeout-minutes: 30
-        with:
-          github-token: ${{ steps.token.outputs.token }}
-          script: |
-            const opts = github.rest.pulls.list.endpoint.merge({
-              ...context.repo,
-              state: 'open',
-              sort: 'updated',
-              direction: 'desc'
-            })
-            var prs = await github.paginate(opts);
-
-            await Promise.all(prs.map(async (pr) => {
-              if (pr.state != 'open' || pr.draft || !pr.auto_merge) {
-                console.log(`rejected #${pr.number}`)
-                return;
-              }
-              console.log(`picked #${pr.number} as tribute`)
-              github.rest.pulls.updateBranch({
-                ...context.repo,
-                pull_number: pr.number
-              });
-              console.log(`bailing to avoid causing a thundering herd`)
-              return;
-            }));
+      token: ${{ secrets.UR_BOT_TOKEN }}

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import traceback
 from datetime import timedelta
 from typing import TYPE_CHECKING, Any, TypedDict
 
@@ -112,23 +113,20 @@ class MugDataUpdateCoordinator(DataUpdateCoordinator[MugData]):
                 self.available = False
             changed = None
         except Exception as e:
-            _LOGGER.error(
-                "An unexpected error occurred whilst updating the %s: %s",
+            _LOGGER.exception(
+                "An unexpected error occurred whilst updating the %s",
                 self.mug.model_name,
-                e,
             )
             self.available = False
-            raise UpdateFailed(
-                f"An error occurred updating {self.mug.model_name}: {e=}",
-            ) from e
+            _LOGGER.debug("Stacktrace: %s", traceback.format_exception(e))
+            raise UpdateFailed(f"An error occurred updating {self.mug.model_name}: {e}") from e
 
         _LOGGER.debug(
             "[%s Update] Changed: %s",
             "Full" if full_update else "Partial",
             changed,
         )
-        if changed:
-            self.async_update_listeners()
+        self.async_update_listeners()
         return self.mug.data
 
     def ensure_writable(self) -> None:
