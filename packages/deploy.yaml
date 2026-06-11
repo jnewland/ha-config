@@ -122,23 +122,6 @@ automation:
         entity_id: input_boolean.deploy_in_progress
         state: "on"
     action:
-      - service: notify.mobile_app_jphone_17_pro
-        data:
-          title: "Home Assistant starting up after deploy"
-          message: "Deploy in progress..."
-          data:
-            tag: deploy
-            url: https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}
-  - alias: Notify deploy startup complete
-    id: 9c8b1a0c-5d9b-4f1e-8c3a-7c9e1f2a5b6d
-    trigger:
-      - platform: homeassistant
-        event: started
-    condition:
-      - condition: state
-        entity_id: input_boolean.deploy_in_progress
-        state: "on"
-    action:
       - service: input_boolean.turn_off
         target:
           entity_id: input_boolean.deploy_in_progress
