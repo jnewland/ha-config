@@ -6,6 +6,7 @@ on:
     branches: [main]
 concurrency:
   group: cd-${{ github.event.pull_request.number || github.ref_name }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name != 'pull_request' }}
 jobs:
   validate-config:
     runs-on: ubuntu-latest
@@ -21,15 +22,19 @@ jobs:
           entrypoint: ./script/cibuild
 
   update-branch:
+    if: github.event_name == 'pull_request'
     uses: jnewland/.github/.github/workflows/update-branch.yaml@71ce3f2d6f02ec9bd8c639a0602e7da75a3d0af1 # main
     with:
       pull_number: ${{ github.event.pull_request.number }}
     secrets:
+      # https://github.com/settings/personal-access-tokens/15706015
       token: ${{ secrets.UR_BOT_TOKEN }}
 
   script-deploy:
     runs-on: ubuntu-latest
-    needs: validate-config
+    needs:
+      - validate-config
+      - update-branch
     if: |
       github.event_name == 'push' ||
       ( github.event.action == 'labeled' && github.event.label.name == 'deploy') ||
