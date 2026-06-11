@@ -6,7 +6,7 @@ import logging
 from enum import Enum
 from typing import TYPE_CHECKING, Literal
 
-from ember_mug.consts import TemperatureUnit, VolumeLevel
+from ember_mug.consts import VolumeLevel
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.const import UnitOfTemperature
 from homeassistant.helpers.entity import EntityCategory
@@ -122,15 +122,15 @@ class MugTemperaturePresetSelectEntity(MugSelectEntity):
     ) -> None:
         """Set temperature presets and select options base on configs."""
         super().__init__(coordinator, device_attr)
-        if (
-            presets_unit != UnitOfTemperature.CELSIUS
-            and coordinator.mug.data.temperature_unit != TemperatureUnit.CELSIUS
-        ):
+        if presets_unit != UnitOfTemperature.CELSIUS:
             presets = {
-                label: TemperatureConverter.convert(
-                    temp,
-                    presets_unit,
-                    UnitOfTemperature.CELSIUS,
+                label: round(
+                    TemperatureConverter.convert(
+                        temp,
+                        presets_unit,
+                        UnitOfTemperature.CELSIUS,
+                    ),
+                    1,
                 )
                 for label, temp in presets.items()
             }
@@ -141,7 +141,7 @@ class MugTemperaturePresetSelectEntity(MugSelectEntity):
     @property
     def current_option(self) -> str | None:
         """Return selected option if found current temp is one of the presets."""
-        return self._temp_to_labels.get(self.coordinator.target_temp, None)
+        return self._temp_to_labels.get(round(self.coordinator.target_temp, 1), None)
 
     async def async_select_option(self, option: str) -> None:
         """Change the target temp of the mug based on preset."""
