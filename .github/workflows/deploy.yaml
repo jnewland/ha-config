@@ -37,7 +37,7 @@ jobs:
     if: |
       github.event_name == 'push' ||
       ( github.event.action == 'labeled' && github.event.label.name == 'deploy') ||
-      ( github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy') )
+      ( github.event.action != 'opened' && github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy') )
     environment: production
     concurrency: production
     steps:

@@ -1,5 +1,7 @@
 platform: group
-name: yoga room
+name: yoga room lights
 entities:
   - light.yoga_room
+  - light.yoga_room_hue
   - light.marble_lamp
+  - light.yoga_wall_led

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# shellcheck source=../.env.dev
+if [ -f "$(dirname "$0")/../.env.dev" ]; then
+  source "$(dirname "$0")/../.env.dev"
+fi
+[ -z "${HASS_URL:-}" ] && echo "HASS_URL is not set" && exit 1
+[ -z "${HASS_TOKEN:-}" ] && echo "HASS_TOKEN is not set" && exit 1
+exec curl -s -H "Authorization: Bearer $HASS_TOKEN" "$HASS_URL${1}" "${@:2}"
