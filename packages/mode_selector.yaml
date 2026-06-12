@@ -116,7 +116,7 @@ script:
         entity_id:
           - light.bedroom
           - light.bathroom
-          - light.yoga_room
+          - light.yoga_room_lights
           - light.hall
       - service: homeassistant.turn_off
         entity_id:
