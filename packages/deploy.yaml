@@ -18,7 +18,7 @@ command_line:
         -s \
         -H "Accept: application/vnd.github.ant-man-preview+json" \
         "https://api.github.com/repos/jnewland/ha-config/deployments?environment=production" | \
-        jq -r '.[0].sha'
+        jq -r '.[0].sha // empty'
 
   - sensor:
       name: Latest Deployment Tree SHA
@@ -27,10 +27,11 @@ command_line:
       command: |
         COMMIT=$(curl -s \
           "https://api.github.com/repos/jnewland/ha-config/deployments?environment=production" | \
-          jq -r '.[0].sha') && \
+          jq -r '.[0].sha // empty') && \
+        [ -n "$COMMIT" ] && \
         curl -s \
           "https://api.github.com/repos/jnewland/ha-config/commits/$COMMIT" | \
-          jq -r '.commit.tree.sha'
+          jq -r '.commit.tree.sha // empty'
 
 template:
   - sensor:
@@ -72,6 +73,8 @@ automation:
       {{
         has_value('sensor.latest_deployment_tree_sha') and
         has_value('sensor.config_tree_sha') and
+        states('sensor.latest_deployment_tree_sha') != 'null' and
+        states('sensor.latest_deployment_sha') != 'null' and
         states('sensor.config_tree_sha') != states('sensor.latest_deployment_tree_sha')
       }}
     action:
