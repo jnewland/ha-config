@@ -1,5 +1,6 @@
 platform: group
 name: hall
+unique_id: hall_light_group
 entities:
   - light.great_hall
   - light.stairs

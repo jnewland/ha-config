@@ -12,12 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - name: Generate fake SSL cert
         run: |
           openssl req -x509 -newkey rsa:2048 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
       - name: Test config
-        uses: docker://homeassistant/home-assistant:2026.6.2@sha256:b82fab7973fa1ba5eb69a8aaab3a830d56d986d495d894faf0ee969ad27839a6
+        uses: docker://homeassistant/home-assistant:2026.6.3@sha256:aed891b8f801072302815b4b0fab5adb714182967e9d2e2d4a2be558241c73ad
         with:
           entrypoint: ./script/cibuild
 
@@ -37,7 +37,7 @@ jobs:
     if: |
       github.event_name == 'push' ||
       ( github.event.action == 'labeled' && github.event.label.name == 'deploy') ||
-      ( github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy') )
+      ( github.event.action != 'opened' && github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy') )
     environment: production
     concurrency: production
     steps:

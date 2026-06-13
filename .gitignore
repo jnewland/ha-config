@@ -21,3 +21,4 @@ home-assistant.log.*
 automations.yaml
 template.jinja
 .env.dev
+*.pyc

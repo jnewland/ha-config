@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./script/ha-curl *)",
+      "Bash(python3 -m json.tool)"
+    ]
+  }
+}

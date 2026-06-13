@@ -22,7 +22,7 @@ rm -rf custom_components/alarmdotcom || true
 mv $TMPDIR/$$-alarmdotcom/custom_components/alarmdotcom custom_components
 
 # renovate: datasource=github-releases depName=blakeblackshear/frigate-hass-integration
-FRIGATE_VERSION=v5.15.2
+FRIGATE_VERSION=v5.15.4
 git clone --depth 1 --branch $FRIGATE_VERSION https://github.com/blakeblackshear/frigate-hass-integration $TMPDIR/$$-frigate
 rm -rf custom_components/frigate || true
 mv $TMPDIR/$$-frigate/custom_components/frigate custom_components
@@ -77,13 +77,13 @@ rm -rf custom_components/combustion || true
 
 # https://github.com/PeteRager/lennoxs30
 # renovate: datasource=github-releases depName=PeteRager/lennoxs30
-LENOX_S30_VERSION=2026.3.0
+LENOX_S30_VERSION=2026.6.0
 git clone --depth 1 --branch $LENOX_S30_VERSION https://github.com/PeteRager/lennoxs30 $TMPDIR/$$-lennoxs30
 rm -rf custom_components/lennoxs30 || true
 mv $TMPDIR/$$-lennoxs30/custom_components/lennoxs30 custom_components
 
 # renovate: datasource=github-releases depName=dahlb/ha_carrier
-CARRIER_VERSION=v2.18.1
+CARRIER_VERSION=v2.19.0
 git clone --depth 1 --branch $CARRIER_VERSION https://github.com/dahlb/ha_carrier $TMPDIR/$$-carrier
 rm -rf custom_components/ha_carrier || true
 mv $TMPDIR/$$-carrier/custom_components/ha_carrier custom_components
