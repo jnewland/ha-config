@@ -23,7 +23,7 @@ jobs:
 
   update-branch:
     if: github.event_name == 'pull_request'
-    uses: jnewland/.github/.github/workflows/update-branch.yaml@cf0a82376c329d9f0be4d5f8fdda94fbd641cf57 # main
+    uses: jnewland/.github/.github/workflows/update-branch.yaml@9cb74ffde4b52168439870ab437669347f3dcc07 # main
     with:
       pull_number: ${{ github.event.pull_request.number }}
     secrets:
