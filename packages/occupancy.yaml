@@ -250,7 +250,7 @@ automation:
     action:
       - service: persistent_notification.create
         data:
-          title: "Stuck motion sensor"
+          title: "Stuck: {{ trigger.to_state.attributes.friendly_name }}"
           message: >
-            {{ trigger.to_state.attributes.friendly_name }} has been on for 2+ hours — Z-Wave node may need to be woken and refreshed.
+            Has been on for 8+ hours — Z-Wave node may need to be woken and refreshed.
           notification_id: "stuck_motion_{{ trigger.entity_id }}"
