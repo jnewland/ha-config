@@ -220,3 +220,37 @@ template:
             states('binary_sensor.stairs_home_security_motion_detection') == 'on' or
             states('binary_sensor.upstairs_home_security_motion_detection') == 'on'
           }}
+
+automation:
+  - alias: Notify stuck motion sensor
+    id: b3f1c2a4-8e5d-4f7b-9c6e-1d2a3b4c5e6f
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.stairs_home_security_motion_detection
+          - binary_sensor.upstairs_home_security_motion_detection
+          - binary_sensor.great_hall_home_security_motion_detection
+          - binary_sensor.guest_hall_home_security_motion_detection
+          - binary_sensor.guest_bath_home_security_motion_detection
+          - binary_sensor.powder_room_home_security_motion_detection
+          - binary_sensor.lounge_home_security_motion_detection
+          - binary_sensor.music_room_home_security_motion_detection
+          - binary_sensor.bathroom_home_security_motion_detection
+          - binary_sensor.yoga_room_home_security_motion_detection
+          - binary_sensor.yoga_chair_home_security_motion_detection
+          - binary_sensor.wine_room_home_security_motion_detection
+          - binary_sensor.pantry_home_security_motion_detection
+          - binary_sensor.garage_hall_home_security_motion_detection
+          - binary_sensor.laundry_room_motion_detection
+          - binary_sensor.dining_room_motion_detection
+          - binary_sensor.leak_sensor_motion_detection
+        to: "on"
+        for:
+          hours: 8
+    action:
+      - service: persistent_notification.create
+        data:
+          title: "Stuck: {{ trigger.to_state.attributes.friendly_name }}"
+          message: >
+            Has been on for 8+ hours — Z-Wave node may need to be woken and refreshed.
+          notification_id: "stuck_motion_{{ trigger.entity_id }}"

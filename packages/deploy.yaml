@@ -66,6 +66,9 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.latest_deployment_tree_sha
+        not_from:
+          - unknown
+          - unavailable
       - platform: state
         entity_id: automation.deploy_latest_deployment
         to: "on"
