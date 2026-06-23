@@ -12,7 +12,7 @@ command_line:
   - sensor:
       name: Latest Deployment SHA
       unique_id: 1f3312ec-3976-43a6-afdc-88720472a96d
-      scan_interval: 90
+      scan_interval: 180
       command: |
         curl \
         -s \
@@ -23,7 +23,7 @@ command_line:
   - sensor:
       name: Latest Deployment Tree SHA
       unique_id: b37c6289-fa64-437c-acc4-bfedab3dcd71
-      scan_interval: 90
+      scan_interval: 180
       command: |
         COMMIT=$(curl -s \
           "https://api.github.com/repos/jnewland/ha-config/deployments?environment=production" | \
