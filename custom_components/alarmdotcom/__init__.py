@@ -1,198 +1,265 @@
 """The alarmdotcom integration."""
 
-from __future__ import annotations
+import os
+import sys
 
-import asyncio
-import json
+# pyalarmdotcomajax is vendored directly in this directory, as the
+# _pyalarmdotcomajax package (custom_components/alarmdotcom/_pyalarmdotcomajax/),
+# rather than installed as a separate pip package. This avoids the git+
+# dependency in manifest.json that blocked full HACS/hassfest compliance and
+# required lockstep version bumps across two repos for every fix.
+#
+# It's imported and referenced everywhere as _pyalarmdotcomajax (leading
+# underscore), not pyalarmdotcomajax, deliberately: no legitimate PyPI package
+# can use a leading underscore, so this name can never collide with a stray
+# pip-installed pyalarmdotcomajax left over from before this vendoring change
+# (or from anything else). A collision like that previously meant a missing
+# or broken vendored copy could silently fall back to a stale pip-installed
+# copy instead of failing - this rename makes that fall-back impossible: if
+# _pyalarmdotcomajax isn't on sys.path, importing it can only ever raise
+# ModuleNotFoundError, never silently resolve to the wrong thing.
+#
+# The vendored package's internal modules still use absolute imports (e.g.
+# `from _pyalarmdotcomajax.controllers.users import ...`), so this directory
+# is added to sys.path here, before anything imports _pyalarmdotcomajax, so
+# those imports resolve without needing every internal file rewritten to
+# relative imports.
+_VENDOR_PATH = os.path.dirname(__file__)
+if _VENDOR_PATH not in sys.path:
+    sys.path.insert(0, _VENDOR_PATH)
+
 import logging
-import re
 
+import _pyalarmdotcomajax as pyadc
 import aiohttp
+import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EVENT_HOMEASSISTANT_STOP
-from homeassistant.core import Event, HomeAssistant
-from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
-from homeassistant.helpers import device_registry as dr
-from pyalarmdotcomajax import OtpRequired
-from pyalarmdotcomajax.exceptions import (
-    AlarmdotcomException,
-    AuthenticationFailed,
-    ConfigureTwoFactorAuthentication,
+from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
+from homeassistant.core import Event, HomeAssistant, ServiceCall
+from homeassistant.exceptions import (
+    ConfigEntryAuthFailed,
+    ConfigEntryNotReady,
+    HomeAssistantError,
+    ServiceValidationError,
 )
+from homeassistant.helpers import config_validation as cv
 
+from .camera_api import AlarmCameraSession
 from .const import (
+    ATTR_PARTITION_ID,
+    ATTR_RESOURCE_ID,
     CONF_ARM_AWAY,
     CONF_ARM_HOME,
     CONF_ARM_NIGHT,
     CONF_FORCE_BYPASS,
+    CONF_MFA_TOKEN,
     CONF_NO_ENTRY_DELAY,
     CONF_SILENT_ARM,
-    DATA_CONTROLLER,
+    DATA_HUB,
     DEBUG_REQ_EVENT,
     DOMAIN,
     PLATFORMS,
-    SENSOR_SUBTYPE_BLACKLIST,
+    SERVICE_BYPASS_SENSOR,
+    SERVICE_UNBYPASS_SENSOR,
     STARTUP_MESSAGE,
 )
-from .controller import AlarmIntegrationController
+from .hub import AlarmHub
 
 LOGGER = logging.getLogger(__name__)
+
+
+def _log_pyadc_location() -> None:
+    """
+    Log which pyalarmdotcomajax copy actually loaded, warning if it's not the vendored one.
+
+    Pure path-string operations (join/abspath/normcase never touch the
+    filesystem for a path that's already resolved via a live module's
+    __file__), pulled into its own sync function rather than left inline
+    in async_setup_entry - it has no genuine async/await need.
+    """
+    pyadc_version = getattr(pyadc, "__version__", "unknown")
+    expected_pyadc_path = os.path.join(_VENDOR_PATH, "_pyalarmdotcomajax", "__init__.py")
+    resolved_pyadc_path = os.path.normcase(os.path.abspath(pyadc.__file__))
+    if resolved_pyadc_path != os.path.normcase(os.path.abspath(expected_pyadc_path)):
+        LOGGER.warning(
+            "pyalarmdotcomajax %s loaded from an UNEXPECTED location: %s "
+            "(expected the bundled copy at: %s). This usually means a leftover "
+            "pip-installed pyalarmdotcomajax from before this integration vendored "
+            "it directly (harmless on its own, but worth cleaning up with "
+            "'pip uninstall pyalarmdotcomajax' - see the CHANGELOG for details).",
+            pyadc_version,
+            pyadc.__file__,
+            expected_pyadc_path,
+        )
+    else:
+        LOGGER.info("pyalarmdotcomajax loaded from the bundled copy: %s", pyadc.__file__)
 
 
 async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Set up alarmdotcom hub from a config entry."""
 
     LOGGER.info("%s: Initializing Alarmdotcom from config entry.", __name__)
+    LOGGER.info(STARTUP_MESSAGE)
+    _log_pyadc_location()
 
-    if DOMAIN not in hass.data:
-        # Print startup message
-        LOGGER.info(STARTUP_MESSAGE)
-
-    hass.data.setdefault(DOMAIN, {})
-
-    #
-    # Initialize Alarm.com Connection & Data Update Coordinator
-    #
-
-    controller = AlarmIntegrationController(hass, config_entry)
+    hub = AlarmHub(hass, config_entry)
 
     try:
-        await controller.initialize()
-    except (OtpRequired, AuthenticationFailed) as ex:
-        raise ConfigEntryAuthFailed("Authentication failed. Please try logging in again.") from ex
-    except ConfigureTwoFactorAuthentication as ex:
+        await hub.initialize()
+    except pyadc.AuthenticationException as ex:
         raise ConfigEntryAuthFailed from ex
-    except (TimeoutError, AlarmdotcomException, aiohttp.ClientError) as ex:
+    except (TimeoutError, pyadc.AlarmdotcomException, aiohttp.ClientError) as ex:
         raise ConfigEntryNotReady from ex
 
-    # Store integration data for use during platform setup.
-    hass.data[DOMAIN][config_entry.entry_id] = {
-        DATA_CONTROLLER: controller,
-    }
+    if DOMAIN not in hass.data:
+        hass.data[DOMAIN] = {}
+    if config_entry.entry_id not in hass.data[DOMAIN]:
+        hass.data[DOMAIN][config_entry.entry_id] = {}
 
-    #
-    # Initialize WebSocket listener
-    #
+    hass.data[DOMAIN][config_entry.entry_id][DATA_HUB] = hub
 
-    asyncio.get_running_loop().create_task(controller.async_start_websocket_monitor())
-
-    config_entry.async_on_unload(hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, controller.stop))
-
-    #
-    # Delete devices from Home Assistant that are no longer present on Alarm.com.
-    #
-
-    device_registry = dr.async_get(hass)
-
-    # Get devices from Alarm.com
-    device_ids_via_adc: set[str] = set()
-    for device in controller.api.devices.all.values():
-        if device.device_subtype not in SENSOR_SUBTYPE_BLACKLIST and device.has_state:
-            device_ids_via_adc.add(device.id_)
-
-    # Purge deleted devices from Home Assistant
-    for deleted_device in list(device_registry.deleted_devices.values()):
-        for identifier in deleted_device.identifiers:
-            if identifier[0] == DOMAIN:
-                LOGGER.info("Removing orphaned device from Home Assistant: %s", deleted_device.identifiers)
-                del device_registry.deleted_devices[deleted_device.id]
-
-    # Will be used during virtual device creation.
-    device_ids_via_hass: set[str] = set()
-
-    # Compare against device registry
-    for device_entry in dr.async_entries_for_config_entry(device_registry, config_entry.entry_id):
-        for identifier in device_entry.identifiers:
-            if identifier[1] is None:
-                continue
-
-            matched_id: str
-
-            try:
-                # Remove _debug, _malfunction, etc. from IDs
-                id_matches = re.search(r"([0-9]+-[0-9]+)(?:_[a-zA-Z_]+)*", identifier[1])
-            except TypeError:
-                matched_id = identifier[1]
-            else:
-                if id_matches is not None:
-                    matched_id = id_matches.group(1)
-
-            if id_matches is not None and identifier[0] == DOMAIN and matched_id in device_ids_via_adc:
-                device_ids_via_hass.add(identifier[1])
-                break
-
-            LOGGER.info(
-                "Removing device no longer present on Alarm.com: %s (%s | %s)",
-                device_entry.name,
-                device_entry.identifiers,
-                device_entry.id,
-            )
-
-            device_registry.async_remove_device(device_entry.id)
-
-    # Create virtual DEVICES.
-    # Currently, only Skybell cameras are virtual devices. We support modifying configuration attributes but not viewing video.
-    for camera in controller.api.devices.cameras.values():
-        # Check if camera already created.
-        if camera.id_ in device_ids_via_hass:
-            continue
-
-        device_registry.async_get_or_create(
-            config_entry_id=config_entry.entry_id,
-            connections={(dr.CONNECTION_NETWORK_MAC, str(camera.mac_address))},
-            identifiers={(DOMAIN, camera.id_)},
-            name=camera.name,
-            model="Skybell HD",
-            manufacturer="Skybell",
+    # Initialize WebRTC camera session, best effort.
+    # Prefer reusing the already-authenticated pyalarmdotcomajax session to
+    # avoid a second login. Falls back to an independent login automatically.
+    try:
+        camera_session = AlarmCameraSession.from_alarm_bridge(
+            bridge=hub.api,
+            username=config_entry.data[CONF_USERNAME],
+            password=config_entry.data[CONF_PASSWORD],
+            mfa_cookie=config_entry.data.get(CONF_MFA_TOKEN),
         )
 
-    # Create real devices
+        # Only log in when we had to create our own independent session and
+        # still do not have an ajax key.
+        if camera_session.owns_session and not camera_session.ajax_key:
+            LOGGER.debug("Camera session: performing independent login.")
+            await camera_session.login()
+        else:
+            LOGGER.debug(
+                "Camera session: reusing pyalarmdotcomajax session, no second login needed."
+            )
+
+        hass.data[DOMAIN][config_entry.entry_id]["camera_session"] = camera_session
+    except Exception as err:
+        LOGGER.warning(
+            "Alarm.com camera session could not be initialized: %s. "
+            "Camera entities will be unavailable.",
+            err,
+        )
+        hass.data[DOMAIN][config_entry.entry_id]["camera_session"] = None
+
     await hass.config_entries.async_forward_entry_setups(config_entry, PLATFORMS)
 
     async def handle_alarmdotcom_debug_request_event(event: Event) -> None:
         """Dump debug data when requested via Home Assistant event."""
 
-        event_device = controller.api.devices.get(str(event.data.get("device_id")))
+        event_resource = hub.api.resources.get(str(event.data.get("resource_id")))
+
+        if event_resource is None:
+            LOGGER.warning(
+                "ALARM.COM DEBUG DATA FOR %s: No such device.",
+                str(event.data.get("resource_id")).upper(),
+            )
+            return
 
         LOGGER.warning(
             "ALARM.COM DEBUG DATA FOR %s: %s",
-            str(event_device.name).upper(),
-            json.dumps(event_device.debug_data),
+            str(event_resource.attributes.description).upper(),
+            event_resource.api_resource.to_json(),
         )
 
-    # Listen for debug entity requests
     hass.bus.async_listen(DEBUG_REQ_EVENT, handle_alarmdotcom_debug_request_event)
 
-    LOGGER.info("%s: Finished initializing Alarmdotcom from config entry.", __name__)
+    async def handle_bypass_service(call: ServiceCall) -> None:
+        """Handle a bypass or unbypass service request."""
 
+        resource_id = str(call.data[ATTR_RESOURCE_ID])
+        partition_id = call.data.get(ATTR_PARTITION_ID)
+        bypass = call.service == SERVICE_BYPASS_SENSOR
+
+        sensor = hub.api.sensors.get(resource_id)
+        if sensor is None:
+            raise ServiceValidationError(
+                f"No such Alarm.com sensor: {resource_id}. Check that the resource ID is correct "
+                "(see the 'resource_id' attribute on the sensor entity)."
+            )
+
+        if not (sensor.attributes.supports_bypass or sensor.attributes.supports_immediate_bypass):
+            raise ServiceValidationError(
+                f"Alarm.com sensor does not support bypass: {resource_id}. Some panels do not expose "
+                "bypass capabilities via the Alarm.com API for this sensor type."
+            )
+
+        resolved_partition_id = str(partition_id) if partition_id else None
+        if resolved_partition_id is None:
+            matching_partition = next(
+                (
+                    partition
+                    for partition in hub.api.partitions.values()
+                    if partition.system_id == sensor.system_id
+                ),
+                None,
+            )
+            if matching_partition is None:
+                raise ServiceValidationError(
+                    f"No partition found for sensor: {resource_id}. Provide partition_id explicitly."
+                )
+            resolved_partition_id = matching_partition.id
+
+        try:
+            await hub.api.partitions.change_sensor_bypass(
+                resolved_partition_id,
+                bypass_ids=[resource_id] if bypass else None,
+                unbypass_ids=[resource_id] if not bypass else None,
+            )
+        except Exception as err:
+            raise HomeAssistantError(
+                f"Failed to {'bypass' if bypass else 'unbypass'} Alarm.com sensor {resource_id}: {err}"
+            ) from err
+
+    service_schema = vol.Schema(
+        {
+            vol.Required(ATTR_RESOURCE_ID): cv.string,
+            vol.Optional(ATTR_PARTITION_ID): cv.string,
+        }
+    )
+
+    if not hass.services.has_service(DOMAIN, SERVICE_BYPASS_SENSOR):
+        hass.services.async_register(
+            DOMAIN,
+            SERVICE_BYPASS_SENSOR,
+            handle_bypass_service,
+            schema=service_schema,
+        )
+
+    if not hass.services.has_service(DOMAIN, SERVICE_UNBYPASS_SENSOR):
+        hass.services.async_register(
+            DOMAIN,
+            SERVICE_UNBYPASS_SENSOR,
+            handle_bypass_service,
+            schema=service_schema,
+        )
+
+    LOGGER.info("%s: Finished initializing Alarmdotcom from config entry.", __name__)
     return True
 
 
 async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Migrate old entry."""
 
-    #
-    # To v2
-    #
-
     if config_entry.version == 1:
         LOGGER.debug("Migrating from version %s", config_entry.version)
 
         v2_options = {**config_entry.options}
-
         v2_options["use_arm_code"] = bool(config_entry.options.get("arm_code"))
+        v2_options["arm_code"] = (
+            str(arm_code) if (arm_code := config_entry.options.get("arm_code")) else ""
+        )
 
-        v2_options["arm_code"] = str(arm_code) if (arm_code := config_entry.options.get("arm_code")) else ""
-
-        config_entry.version = 2
-
-        hass.config_entries.async_update_entry(config_entry, data={**config_entry.data}, options=v2_options)
-
-        LOGGER.info("Migration to version %s successful", config_entry.version)
-
-    #
-    # To v3
-    #
+        hass.config_entries.async_update_entry(
+            config_entry, data={**config_entry.data}, options=v2_options, version=2
+        )
+        LOGGER.info("Migration to version %s successful", 2)
 
     if config_entry.version == 2:
         LOGGER.debug("Migrating from version %s", config_entry.version)
@@ -202,45 +269,32 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         if not v3_options.get("use_arm_code"):
             v3_options["arm_code"] = None
 
-        # Populate Arm Home
-        new_arm_home = []
-
+        new_arm_home: list[str] = []
         if v3_options.get("force_bypass") in ["Stay Only", "Always"]:
             new_arm_home.append("bypass")
         if v3_options.get("silent_arming") in ["Stay Only", "Always"]:
             new_arm_home.append("silent")
         if v3_options.get("no_entry_delay") not in ["Stay Only", "Always"]:
             new_arm_home.append("delay")
-
         v3_options[CONF_ARM_HOME] = new_arm_home
 
-        # Populate Arm Away
-        new_arm_away = []
-
+        new_arm_away: list[str] = []
         if v3_options.get("force_bypass") in ["Away Only", "Always"]:
             new_arm_away.append("bypass")
         if v3_options.get("silent_arming") in ["Away Only", "Always"]:
             new_arm_away.append("silent")
         if v3_options.get("no_entry_delay") not in ["Away Only", "Always"]:
             new_arm_away.append("delay")
-
         v3_options[CONF_ARM_AWAY] = new_arm_away
 
-        # Populate Arm Night
-        new_arm_night = []
-
+        new_arm_night: list[str] = []
         if v3_options.get("force_bypass") == "Always":
             new_arm_night.append("bypass")
         if v3_options.get("silent_arming") == "Always":
             new_arm_night.append("silent")
         if v3_options.get("no_entry_delay") != "Always":
             new_arm_night.append("delay")
-
         v3_options[CONF_ARM_NIGHT] = new_arm_night
-
-        config_entry.version = 3
-
-        # Purge deprecated config options.
 
         if v3_options.get("use_arm_code"):
             v3_options["use_arm_code"] = None
@@ -251,26 +305,21 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         if v3_options.get("no_entry_delay"):
             v3_options["no_entry_delay"] = None
 
-        hass.config_entries.async_update_entry(config_entry, data={**config_entry.data}, options=v3_options)
-
-        LOGGER.info("Migration to version %s successful", config_entry.version)
-
-    #
-    # To v4
-    #
+        hass.config_entries.async_update_entry(
+            config_entry, data={**config_entry.data}, options=v3_options, version=3
+        )
+        LOGGER.info("Migration to version %s successful", 3)
 
     if config_entry.version == 3:
         LOGGER.debug("Migrating from version %s", config_entry.version)
 
         v4_options: dict = {**config_entry.options}
 
-        # Purge config options deprecated and set to None in v3 migration.
         v4_options.pop("use_arm_code", None)
         v4_options.pop("force_bypass", None)
         v4_options.pop("silent_arming", None)
         v4_options.pop("no_entry_delay", None)
 
-        # Make config option names more explicit. This allows for future rollout of selective bypass when arming.
         for arm_mode in (CONF_ARM_HOME, CONF_ARM_AWAY, CONF_ARM_NIGHT):
             if arm_mode in v4_options:
                 if "bypass" in v4_options[arm_mode]:
@@ -283,11 +332,22 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
                     v4_options[arm_mode].remove("delay")
                     v4_options[arm_mode].append(CONF_NO_ENTRY_DELAY)
 
-        config_entry.version = 4
+        hass.config_entries.async_update_entry(
+            config_entry, data={**config_entry.data}, options=v4_options, version=4
+        )
+        LOGGER.info("Migration to version %s successful", 4)
 
-        hass.config_entries.async_update_entry(config_entry, data={**config_entry.data}, options=v4_options)
+    if config_entry.version == 4:
+        LOGGER.debug("Migrating from version %s", config_entry.version)
 
-        LOGGER.info("Migration to version %s successful", config_entry.version)
+        v5_options: dict = {**config_entry.options}
+        v5_options.pop("update_interval", None)
+        v5_options.pop("ws_reconnect_timeout", None)
+
+        hass.config_entries.async_update_entry(
+            config_entry, data={**config_entry.data}, options=v5_options, version=5
+        )
+        LOGGER.info("Migration to version %s successful", 5)
 
     return True
 
@@ -295,13 +355,20 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
 async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Unload a config entry."""
 
-    controller: AlarmIntegrationController = hass.data[DOMAIN].pop(config_entry.entry_id)[DATA_CONTROLLER]
+    entry_data = hass.data[DOMAIN].pop(config_entry.entry_id)
+    hub: AlarmHub = entry_data[DATA_HUB]
+    camera_session: AlarmCameraSession | None = entry_data.get("camera_session")
 
-    controller.api.stop_websocket()
-    controller.stop_keep_alive()
+    if camera_session is not None:
+        await camera_session.close()
 
-    unload_ok: bool = await hass.config_entries.async_unload_platforms(config_entry, PLATFORMS)
-    if unload_ok:
-        LOGGER.debug("%s: Unloaded Alarm.com config entry.", __name__)
+    unload_success = await hub.close()
 
-    return unload_ok
+    if len(hass.data[DOMAIN]) == 0:
+        hass.data.pop(DOMAIN)
+        if hass.services.has_service(DOMAIN, SERVICE_BYPASS_SENSOR):
+            hass.services.async_remove(DOMAIN, SERVICE_BYPASS_SENSOR)
+        if hass.services.has_service(DOMAIN, SERVICE_UNBYPASS_SENSOR):
+            hass.services.async_remove(DOMAIN, SERVICE_UNBYPASS_SENSOR)
+
+    return unload_success
