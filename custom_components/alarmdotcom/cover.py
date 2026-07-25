@@ -1,121 +1,318 @@
-"""Alarmdotcom implementation of an HA cover (garage door)."""
+"""Interfaces with Alarm.com garage doors."""
 
 from __future__ import annotations
 
 import logging
-from typing import Any
+from collections.abc import Callable, Coroutine
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any, Generic
 
-from homeassistant import core
+import _pyalarmdotcomajax as pyadc
 from homeassistant.components.cover import (
     CoverDeviceClass,
     CoverEntity,
+    CoverEntityDescription,
     CoverEntityFeature,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.entity_platform import AddEntitiesCallback, DiscoveryInfoType
-from pyalarmdotcomajax.devices.garage_door import GarageDoor as libGarageDoor
-from pyalarmdotcomajax.devices.gate import Gate as libGate
-from pyalarmdotcomajax.exceptions import NotAuthorized
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.typing import DiscoveryInfoType
 
-from .base_device import HardwareBaseDevice
-from .const import DATA_CONTROLLER, DOMAIN
-from .controller import AlarmIntegrationController
+from .const import DATA_HUB, DOMAIN
+from .entity import AdcControllerT, AdcEntity, AdcEntityDescription, AdcManagedDeviceT
+from .util import cleanup_orphaned_entities_and_devices
 
-LOGGER = logging.getLogger(__name__)
+if TYPE_CHECKING:
+    from .hub import AlarmHub
+
+log = logging.getLogger(__name__)
+
+
+def _controller_resources(controller: Any) -> list[Any]:
+    """
+    Return a list of resources from a pyalarmdotcomajax controller.
+
+    Controllers vary across library versions:
+      - some look like dicts (values())
+      - some expose an attribute holding the resources
+      - some are iterable
+      - some only support .get(id) and have internal storage
+    This function tries common patterns and always returns a real list.
+    """
+    if controller is None:
+        return []
+
+    # Dict-like
+    if hasattr(controller, "values") and callable(controller.values):
+        try:
+            return list(controller.values())
+        except TypeError:
+            pass
+
+    # Common attribute patterns
+    for attr_name in ("doors", "garage_doors", "gates", "items", "resources"):
+        if hasattr(controller, attr_name):
+            try:
+                return list(getattr(controller, attr_name))
+            except TypeError:
+                pass
+
+    # Iterable controller
+    try:
+        return list(controller)
+    except TypeError:
+        return []
 
 
 async def async_setup_entry(
-    hass: core.HomeAssistant,
+    hass: HomeAssistant,
     config_entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     """Set up the cover platform."""
 
-    controller: AlarmIntegrationController = hass.data[DOMAIN][config_entry.entry_id][DATA_CONTROLLER]
+    hub: AlarmHub = hass.data[DOMAIN][config_entry.entry_id][DATA_HUB]
 
-    async_add_entities(
-        Cover(
-            controller=controller,
-            device=device,
-        )
-        for device in list(controller.api.devices.garage_doors.values())
-        + list(controller.api.devices.gates.values())
+    garage_door_resources = _controller_resources(hub.api.garage_doors)
+    gate_resources = _controller_resources(hub.api.gates)
+
+    # Log discovered devices for debugging
+    log.debug(
+        "Setting up cover platform. Found %d garage doors and %d gates.",
+        len(garage_door_resources),
+        len(gate_resources),
+    )
+    for device in garage_door_resources:
+        log.debug("  - Garage door: %s (ID: %s)", getattr(device, "name", "unknown"), getattr(device, "id", "unknown"))
+    for device in gate_resources:
+        log.debug("  - Gate: %s (ID: %s)", getattr(device, "name", "unknown"), getattr(device, "id", "unknown"))
+
+    all_resources = [*garage_door_resources, *gate_resources]
+
+    entities = [
+        AdcCoverEntity(hub=hub, resource_id=resource.id, description=entity_description)
+        for entity_description in ENTITY_DESCRIPTIONS
+        for resource in all_resources
+        if entity_description.supported_fn(hub, resource.id)
+    ]
+
+    log.info("Created %d cover entities.", len(entities))
+    async_add_entities(entities)
+
+    current_entity_ids = {entity.entity_id for entity in entities}
+    current_unique_ids = {
+        uid for uid in (entity.unique_id for entity in entities) if uid is not None
+    }
+    await cleanup_orphaned_entities_and_devices(
+        hass, config_entry, current_entity_ids, current_unique_ids, "cover"
     )
 
 
-class Cover(HardwareBaseDevice, CoverEntity):  # type: ignore
-    """Integration Cover Entity."""
-
-    _device_type_name: str = "Garage Door"
-    _device: libGarageDoor | libGate
-
-    def __init__(
-        self,
-        controller: AlarmIntegrationController,
-        device: libGarageDoor | libGate,
-    ) -> None:
-        """Pass coordinator to CoordinatorEntity."""
-        super().__init__(controller, device)
-
-        self._attr_device_class: CoverDeviceClass = (
-            CoverDeviceClass.GARAGE if isinstance(device, libGarageDoor) else CoverDeviceClass.GATE
+@callback
+def garage_door_supported_fn(hub: AlarmHub, resource_id: str) -> bool:
+    """Check if the resource is a garage door."""
+    is_supported = hub.api.garage_doors.get(resource_id) is not None
+    if is_supported:
+        device = hub.api.managed_devices.get(resource_id)
+        log.debug(
+            "Resource %s (%s) matched as garage_door",
+            resource_id,
+            device.name if device else "unknown",
         )
+    return is_supported
 
-        self._attr_supported_features = CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE
 
-    @property
-    def is_closing(self) -> bool | None:
-        """Return true if lock is unlocking."""
-
-        return (
-            not self._device.malfunction
-            and self._device.state != self._device.desired_state
-            and self._device.desired_state in [libGarageDoor.DeviceState.CLOSED, libGate.DeviceState.CLOSED]
+@callback
+def gate_supported_fn(hub: AlarmHub, resource_id: str) -> bool:
+    """Check if the resource is a gate."""
+    is_supported = hub.api.gates.get(resource_id) is not None
+    if is_supported:
+        device = hub.api.managed_devices.get(resource_id)
+        log.debug(
+            "Resource %s (%s) matched as gate",
+            resource_id,
+            device.name if device else "unknown",
         )
+    return is_supported
 
-    @property
-    def is_opening(self) -> bool | None:
-        """Return true if lock is unlocking."""
 
-        return (
-            not self._device.malfunction
-            and self._device.state != self._device.desired_state
-            and self._device.desired_state in [libGarageDoor.DeviceState.OPEN, libGate.DeviceState.OPEN]
+@callback
+def is_closed_fn(
+    controller: pyadc.GarageDoorController | pyadc.GateController, door_id: str
+) -> bool | None:
+    """Return whether the garage door is closed."""
+    resource = controller.get(door_id)
+    if resource is None:
+        log.debug(
+            "is_closed_fn: Resource %s not found in controller %s",
+            door_id,
+            type(controller).__name__,
         )
+        return None
+    return resource.attributes.state in [
+        pyadc.garage_door.GarageDoorState.CLOSED,
+        pyadc.gate.GateState.CLOSED,
+    ]
 
-    @property
-    def is_closed(self) -> bool | None:
-        """Return true if lock is locked."""
 
-        LOGGER.info("Processing is_closed %s for %s", self._device.state, self.name or self._device.name)
+@callback
+def garage_device_class_fn() -> CoverDeviceClass:
+    """Return the device class for a garage door."""
+    return CoverDeviceClass.GARAGE
 
-        if not self._device.malfunction:
-            match self._device.state:
-                case libGarageDoor.DeviceState.OPEN | libGate.DeviceState.OPEN:
-                    return False
-                case libGarageDoor.DeviceState.CLOSED | libGate.DeviceState.CLOSED:
-                    return True
 
-            LOGGER.error(
-                "Cannot determine cover state. Found raw state of %s.",
-                self._device.state,
+@callback
+def gate_device_class_fn() -> CoverDeviceClass:
+    """Return the device class for a gate."""
+    return CoverDeviceClass.GATE
+
+
+@callback
+def supported_features_fn() -> CoverEntityFeature:
+    """Return the supported features for the garage door."""
+    return CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE
+
+
+@callback
+async def control_fn(
+    controller: pyadc.GarageDoorController | pyadc.GateController,
+    door_id: str,
+    command: str,
+) -> None:
+    """Open or close the garage door."""
+    # Verify resource exists before attempting control
+    resource = controller.get(door_id)
+    if resource is None:
+        log.error(
+            "Cannot execute command '%s': Resource %s not found in controller %s",
+            command,
+            door_id,
+            type(controller).__name__,
+        )
+        raise ValueError(f"Resource {door_id} not found in controller")
+
+    try:
+        if command == "open":
+            await controller.open(door_id)
+        elif command == "close":
+            await controller.close(door_id)
+        else:
+            raise ValueError(f"Unsupported command: {command}")
+    except (pyadc.ServiceUnavailable, pyadc.UnexpectedResponse) as err:
+        log.error("Failed to execute garage door command: %s", err)
+        raise
+
+
+@dataclass(frozen=True, kw_only=True)
+class AdcCoverEntityDescription(
+    Generic[AdcManagedDeviceT, AdcControllerT],
+    AdcEntityDescription[AdcManagedDeviceT, AdcControllerT],
+    CoverEntityDescription,
+):
+    """Base Alarm.com garage door entity description."""
+
+    is_closed_fn: Callable[[AdcControllerT, str], bool | None]
+    """Return whether the garage door is closed."""
+    device_class_fn: Callable[[], CoverDeviceClass]
+    """Return the device class for the garage door."""
+    supported_features_fn: Callable[[], CoverEntityFeature]
+    """Return the supported features for the garage door."""
+    control_fn: Callable[[AdcControllerT, str, str], Coroutine[Any, Any, None]]
+    """Open or close the garage door."""
+
+
+ENTITY_DESCRIPTIONS: list[AdcEntityDescription] = [
+    AdcCoverEntityDescription[pyadc.garage_door.GarageDoor, pyadc.GarageDoorController](
+        key="garage_door",
+        controller_fn=lambda hub, _: hub.api.garage_doors,
+        supported_fn=garage_door_supported_fn,
+        is_closed_fn=is_closed_fn,
+        device_class_fn=garage_device_class_fn,
+        supported_features_fn=supported_features_fn,
+        control_fn=control_fn,
+    ),
+    AdcCoverEntityDescription[pyadc.gate.Gate, pyadc.GateController](
+        key="gate",
+        controller_fn=lambda hub, _: hub.api.gates,
+        supported_fn=gate_supported_fn,
+        is_closed_fn=is_closed_fn,
+        device_class_fn=gate_device_class_fn,
+        supported_features_fn=supported_features_fn,
+        control_fn=control_fn,
+    ),
+]
+
+
+class AdcCoverEntity(AdcEntity[AdcManagedDeviceT, AdcControllerT], CoverEntity):
+    """Base Alarm.com garage door entity."""
+
+    entity_description: AdcCoverEntityDescription
+
+    @callback
+    def initiate_state(self) -> None:
+        """Initiate entity state."""
+
+        # Verify the resource exists in the assigned controller
+        resource = self.controller.get(self.resource_id)
+        if resource is None:
+            device = self.hub.api.managed_devices.get(self.resource_id)
+            device_name = device.name if device else "unknown"
+            log.error(
+                "Resource %s (%s) not found in %s controller during initialization. "
+                "This may indicate a controller/device type mismatch.",
+                self.resource_id,
+                device_name,
+                self.entity_description.key,
+            )
+            # Mark entity as unavailable if resource not found in controller
+            self._attr_available = False
+            self._attr_is_closed = None
+        else:
+            log.debug(
+                "Initializing cover entity for %s (resource_id: %s) using %s controller",
+                resource.name,
+                self.resource_id,
+                self.entity_description.key,
+            )
+            self._attr_is_closed = self.entity_description.is_closed_fn(
+                self.controller, self.resource_id
             )
 
-        return None
+        self._attr_device_class = self.entity_description.device_class_fn()
+        self._attr_supported_features = self.entity_description.supported_features_fn()
+
+        super().initiate_state()
+
+    @callback
+    def update_state(self, message: pyadc.EventBrokerMessage | None = None) -> None:
+        """Update entity state."""
+
+        if isinstance(message, pyadc.ResourceEventMessage):
+            # Verify resource still exists in controller before updating
+            resource = self.controller.get(self.resource_id)
+            if resource is None:
+                log.warning(
+                    "Resource %s not found in %s controller during state update. Marking unavailable.",
+                    self.resource_id,
+                    self.entity_description.key,
+                )
+                self._attr_available = False
+                self._attr_is_closed = None
+            else:
+                self._attr_is_closed = self.entity_description.is_closed_fn(
+                    self.controller, self.resource_id
+                )
 
     async def async_open_cover(self, **kwargs: Any) -> None:
-        """Open the cover."""
-
-        try:
-            await self._device.async_open()
-        except NotAuthorized:
-            self._show_permission_error("open")
+        """Open the garage door."""
+        await self.entity_description.control_fn(
+            self.controller, self.resource_id, "open"
+        )
 
     async def async_close_cover(self, **kwargs: Any) -> None:
-        """Close the cover."""
-
-        try:
-            await self._device.async_close()
-        except NotAuthorized:
-            self._show_permission_error("close")
+        """Close the garage door."""
+        await self.entity_description.control_fn(
+            self.controller, self.resource_id, "close"
+        )
