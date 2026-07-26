@@ -70,6 +70,10 @@ automation:
       - platform: state
         entity_id: automation.deploy_latest_deployment
         to: "on"
+      # Fallback so a stuck/renamed tree-sha entity can't silently stop
+      # deploys forever again (see deploy_stale automation below).
+      - platform: time_pattern
+        minutes: "/15"
     condition: |
       {{
         has_value('sensor.latest_deployment_tree_sha') and
@@ -116,6 +120,24 @@ automation:
           sha: >
             {{ states('sensor.latest_deployment_sha') }}
       - service: homeassistant.restart
+  - alias: Notify on stale deploy
+    id: d452ebac-8665-4ed2-8708-e5dd5596c9b2
+    trigger:
+      - platform: state
+        entity_id: sensor.deploy_status
+        to: drifted
+        for:
+          hours: 1
+    action:
+      - service: notify.mobile_app_jphone_17_pro
+        data:
+          title: "Home Assistant deploy is stuck"
+          message: >-
+            sensor.deploy_status has been 'drifted' for over an hour —
+            the running config hasn't matched the latest deployment.
+            Check the deploy automation and sensor.latest_deployment_tree_sha.
+          data:
+            tag: deploy-stale
   - alias: Notify Home assistant start after deploy
     id: 1a7b3bf1-63a5-4b4e-bae1-1ebaca4de5fa
     trigger:

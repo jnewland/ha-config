@@ -5,19 +5,18 @@ set -ex
 : ${TMPDIR:=$(mktemp -d)}
 
 # renovate: datasource=github-releases depName=sebr/bhyve-home-assistant
-BHYVE_VERSION=3.3.0
+BHYVE_VERSION=4.1.2
 git clone --depth 1 --branch $BHYVE_VERSION https://github.com/sebr/bhyve-home-assistant $TMPDIR/$$-bhyve-home-assistant
 rm -rf custom_components/bhyve || true
-mv $TMPDIR/$$-bhyve-home-assistant/python_scripts/*.py python_scripts/
 mv $TMPDIR/$$-bhyve-home-assistant/custom_components/bhyve custom_components
 
 git clone https://github.com/Olen/homeassistant-plant $TMPDIR/$$-homeassistant-plant
 rm -rf custom_components/plant || true
 mv $TMPDIR/$$-homeassistant-plant/custom_components/plant custom_components
 
-# renovate: datasource=github-releases depName=nulledy/alarmdotcom
-ALARM_DOT_COM_VERSION=v3.0.15
-git clone --depth 1 --branch $ALARM_DOT_COM_VERSION https://github.com/nulledy/alarmdotcom $TMPDIR/$$-alarmdotcom
+# renovate: datasource=github-releases depName=ibasebcast/ha-alarmdotcom
+ALARM_DOT_COM_VERSION=2026.7.9.3
+git clone --depth 1 --branch $ALARM_DOT_COM_VERSION https://github.com/ibasebcast/ha-alarmdotcom $TMPDIR/$$-alarmdotcom
 rm -rf custom_components/alarmdotcom || true
 mv $TMPDIR/$$-alarmdotcom/custom_components/alarmdotcom custom_components
 
@@ -83,7 +82,7 @@ rm -rf custom_components/lennoxs30 || true
 mv $TMPDIR/$$-lennoxs30/custom_components/lennoxs30 custom_components
 
 # renovate: datasource=github-releases depName=dahlb/ha_carrier
-CARRIER_VERSION=v2.19.0
+CARRIER_VERSION=v2.26.1
 git clone --depth 1 --branch $CARRIER_VERSION https://github.com/dahlb/ha_carrier $TMPDIR/$$-carrier
 rm -rf custom_components/ha_carrier || true
 mv $TMPDIR/$$-carrier/custom_components/ha_carrier custom_components
