@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name != 'pull_request' }}
 jobs:
   changes:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: github.event_name == 'pull_request'
     outputs:
       ha-config: ${{ steps.filter.outputs.ha-config }}
@@ -50,7 +50,7 @@ jobs:
       token: ${{ secrets.UR_BOT_TOKEN }}
 
   script-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs:
       - validate-config
       - update-branch
