@@ -8,9 +8,29 @@ concurrency:
   group: cd-${{ github.event.pull_request.number || github.ref_name }}-${{ github.event_name }}
   cancel-in-progress: ${{ github.event_name != 'pull_request' }}
 jobs:
-  validate-config:
-    runs-on: ubuntu-latest
+  changes:
+    runs-on: ubuntu-slim
     if: github.event_name == 'pull_request'
+    outputs:
+      ha-config: ${{ steps.filter.outputs.ha-config }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4.0.2
+        id: filter
+        with:
+          filters: |
+            ha-config:
+              - '**'
+              - '!.*/**'
+              - '!doc/**'
+              - '!**/*.md'
+              - '!.*'
+
+  validate-config:
+    name: ./script/cibuild
+    runs-on: ubuntu-latest
+    needs: changes
+    if: github.event_name == 'pull_request' && needs.changes.outputs.ha-config == 'true'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Generate fake SSL cert
@@ -24,31 +44,29 @@ jobs:
   update-branch:
     if: github.event_name == 'pull_request'
     uses: jnewland/.github/.github/workflows/update-branch.yaml@9cb74ffde4b52168439870ab437669347f3dcc07 # main
+    concurrency: update-branch-main
     with:
       pull_number: ${{ github.event.pull_request.number }}
     secrets:
       token: ${{ secrets.UR_BOT_TOKEN }}
 
   script-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs:
       - validate-config
       - update-branch
     if: |
-      github.event_name == 'push' ||
-      ( github.event.action == 'labeled' && github.event.label.name == 'deploy') ||
-      ( github.event.action != 'opened' && github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy') )
+      !failure() && !cancelled() &&
+      (
+        github.event_name == 'push' ||
+        ( github.event.action == 'labeled' && github.event.label.name == 'deploy') ||
+        ( github.event.action != 'opened' && github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'deploy') )
+      )
     environment: production
     concurrency: production
     steps:
-      - name: deploy
-        run: "true"
-
-  create-deploy-status:
-    runs-on: ubuntu-latest
-    needs: script-deploy
-    steps:
       - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        if: github.event_name == 'pull_request'
         with:
           script: |
             await github.rest.repos.createCommitStatus({
