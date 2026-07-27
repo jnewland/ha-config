@@ -120,8 +120,4 @@ curl -sL --fail -o www/mini-media-player-bundle.js https://github.com/kalkih/min
 curl -sL --fail -o www/custom-sonos-card.js https://github.com/johanfrick/custom-sonos-card/releases/download/v10.7.1/custom-sonos-card.js
 curl -sL --fail -o www/mini-graph-card-bundle.js https://github.com/kalkih/mini-graph-card/releases/download/v0.13.0/mini-graph-card-bundle.js
 
-git add -A custom_components
-git add -A python_scripts
-git add -A www
-
 rm -rf $TMPDIR/$$-*
