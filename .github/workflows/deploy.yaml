@@ -8,9 +8,31 @@ concurrency:
   group: cd-${{ github.event.pull_request.number || github.ref_name }}-${{ github.event_name }}
   cancel-in-progress: ${{ github.event_name != 'pull_request' }}
 jobs:
-  validate-config:
+  changes:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    outputs:
+      ha-config: ${{ steps.filter.outputs.ha-config }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4.0.2
+        id: filter
+        with:
+          filters: |
+            ha-config:
+              - '**'
+              - '!.github/**'
+              - '!doc/**'
+              - '!.vscode/**'
+              - '!.claude/**'
+              - '!**/*.md'
+              - '!.gitignore'
+              - '!.prettierrc'
+
+  validate-config:
+    runs-on: ubuntu-latest
+    needs: changes
+    if: github.event_name == 'pull_request' && needs.changes.outputs.ha-config == 'true'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Generate fake SSL cert
