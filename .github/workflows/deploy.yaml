@@ -21,13 +21,10 @@ jobs:
           filters: |
             ha-config:
               - '**'
-              - '!.github/**'
+              - '!.*/**'
               - '!doc/**'
-              - '!.vscode/**'
-              - '!.claude/**'
               - '!**/*.md'
-              - '!.gitignore'
-              - '!.prettierrc'
+              - '!.*'
 
   validate-config:
     runs-on: ubuntu-latest
