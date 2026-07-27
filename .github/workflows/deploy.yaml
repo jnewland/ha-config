@@ -50,7 +50,7 @@ jobs:
     secrets:
       token: ${{ secrets.UR_BOT_TOKEN }}
 
-  deploy:
+  script-deploy:
     runs-on: ubuntu-slim
     needs:
       - validate-config
@@ -67,3 +67,20 @@ jobs:
     steps:
       - name: deploy
         run: "true"
+
+  create-deploy-status:
+    runs-on: ubuntu-latest
+    needs: script-deploy
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              ...context.repo,
+              sha:         context.payload.pull_request.head.sha,
+              state:       'success',
+              context:     'deploy',
+              description: 'PR was deployed with GitHub Actions',
+              target_url:  'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            });
