@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import inspect
 import logging
 import math
 import random
@@ -24,7 +25,6 @@ from homeassistant.const import (
     ATTR_ICON,
     ATTR_NAME,
     ATTR_UNIT_OF_MEASUREMENT,
-    CONCENTRATION_PARTS_PER_MILLION,
     LIGHT_LUX,
     PERCENTAGE,
     STATE_UNAVAILABLE,
@@ -33,6 +33,17 @@ from homeassistant.const import (
     UnitOfTemperature,
     UnitOfTime,
 )
+
+try:
+    # HA 2026.7+ deprecated CONCENTRATION_PARTS_PER_MILLION in favour of the
+    # UnitOfRatio enumerator (removed in HA Core 2027.8). Fall back to the old
+    # constant on HA < 2026.7, where UnitOfRatio does not exist yet.
+    from homeassistant.const import UnitOfRatio
+
+    _UNIT_PPM: str = UnitOfRatio.PARTS_PER_MILLION
+except ImportError:  # HA < 2026.7
+    from homeassistant.const import CONCENTRATION_PARTS_PER_MILLION as _UNIT_PPM
+
 from homeassistant.core import Event, HomeAssistant, State, callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
@@ -112,6 +123,25 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def _init_accepts_hass(cls: type) -> bool:
+    """Return True if ``cls.__init__`` still accepts a ``hass`` argument.
+
+    HA 2026.8 (core PRs #177596 / #177597 / #177603 - "Do not set a device on
+    YAML integration / statistics / utility_meter entities") dropped the leading
+    ``hass`` argument from ``IntegrationSensor`` / ``StatisticsSensor`` /
+    ``UtilityMeterSensor.__init__`` and added an optional ``device``. We pass
+    ``hass`` only on HA < 2026.8; on newer cores the plant subclasses still
+    supply their own device through the ``device_info`` property, so the new
+    ``device`` argument is not needed.
+    """
+    return "hass" in inspect.signature(cls.__init__).parameters
+
+
+_INTEGRATION_SENSOR_ACCEPTS_HASS = _init_accepts_hass(IntegrationSensor)
+_UTILITY_METER_SENSOR_ACCEPTS_HASS = _init_accepts_hass(UtilityMeterSensor)
+_STATISTICS_SENSOR_ACCEPTS_HASS = _init_accepts_hass(StatisticsSensor)
 
 
 async def async_setup_entry(
@@ -721,7 +751,7 @@ class PlantCurrentCo2(PlantCurrentStatus):
 
     _attr_device_class = SensorDeviceClass.CO2
     _attr_icon = ICON_CO2
-    _attr_native_unit_of_measurement = CONCENTRATION_PARTS_PER_MILLION
+    _attr_native_unit_of_measurement = _UNIT_PPM
     _attr_suggested_display_precision = 0
     _attr_translation_key = TRANSLATION_KEY_CO2
     _config_key = FLOW_SENSOR_CO2
@@ -1193,17 +1223,19 @@ class PlantTotalLightIntegral(IntegrationSensor):
         self._source_unique_id = illuminance_ppfd_sensor.unique_id
         self._state_change_unsub = None
         self._state_report_unsub = None
-        super().__init__(
-            hass,
-            integration_method=METHOD_TRAPEZOIDAL,
-            name=f"Total {READING_PPFD} Integral",
-            round_digits=2,
-            source_entity=illuminance_ppfd_sensor.entity_id,
-            unique_id=f"{config.entry_id}-ppfd-integral",
-            unit_prefix=None,
-            unit_time=UnitOfTime.SECONDS,
-            max_sub_interval=None,
-        )
+        integration_kwargs = {
+            "integration_method": METHOD_TRAPEZOIDAL,
+            "name": f"Total {READING_PPFD} Integral",
+            "round_digits": 2,
+            "source_entity": illuminance_ppfd_sensor.entity_id,
+            "unique_id": f"{config.entry_id}-ppfd-integral",
+            "unit_prefix": None,
+            "unit_time": UnitOfTime.SECONDS,
+            "max_sub_interval": None,
+        }
+        if _INTEGRATION_SENSOR_ACCEPTS_HASS:
+            integration_kwargs["hass"] = hass
+        super().__init__(**integration_kwargs)
         ent_reg = er_async_get(hass)
         if ent_reg.async_get_entity_id(
             SENSOR_DOMAIN, DOMAIN, f"{config.entry_id}-ppfd-integral"
@@ -1301,23 +1333,25 @@ class PlantDailyLightIntegral(UtilityMeterSensor):
         # Store the source sensor's unique_id for tracking entity_id changes
         self._source_unique_id = illuminance_integration_sensor.unique_id
 
-        super().__init__(
-            hass,
-            cron_pattern=None,
-            delta_values=None,
-            meter_offset=timedelta(seconds=0),
-            meter_type=DAILY,
-            name=READING_DLI,
-            net_consumption=None,
-            parent_meter=config.entry_id,
-            source_entity=illuminance_integration_sensor.entity_id,
-            tariff_entity=None,
-            tariff=None,
-            unique_id=f"{config.entry_id}-dli",
-            sensor_always_available=True,
-            suggested_entity_id=None,
-            periodically_resetting=True,
-        )
+        utility_meter_kwargs = {
+            "cron_pattern": None,
+            "delta_values": None,
+            "meter_offset": timedelta(seconds=0),
+            "meter_type": DAILY,
+            "name": READING_DLI,
+            "net_consumption": None,
+            "parent_meter": config.entry_id,
+            "source_entity": illuminance_integration_sensor.entity_id,
+            "tariff_entity": None,
+            "tariff": None,
+            "unique_id": f"{config.entry_id}-dli",
+            "sensor_always_available": True,
+            "suggested_entity_id": None,
+            "periodically_resetting": True,
+        }
+        if _UTILITY_METER_SENSOR_ACCEPTS_HASS:
+            utility_meter_kwargs["hass"] = hass
+        super().__init__(**utility_meter_kwargs)
         ent_reg = er_async_get(hass)
         if ent_reg.async_get_entity_id(SENSOR_DOMAIN, DOMAIN, f"{config.entry_id}-dli"):
             self.entity_id = async_generate_entity_id(
@@ -1418,18 +1452,20 @@ class PlantDailyLightIntegral24h(StatisticsSensor):
         self._plant = plantdevice
         self._source_unique_id = illuminance_integration_sensor.unique_id
 
-        super().__init__(
-            hass=hass,
-            source_entity_id=illuminance_integration_sensor.entity_id,
-            name=f"{READING_DLI} 24h",
-            unique_id=f"{config.entry_id}-dli-24h",
-            state_characteristic="change",
-            samples_max_buffer_size=None,  # Unlimited, driven by max_age
-            samples_max_age=timedelta(hours=24),
-            samples_keep_last=True,
-            precision=2,
-            percentile=50,  # Not used for "change" characteristic
-        )
+        statistics_kwargs = {
+            "source_entity_id": illuminance_integration_sensor.entity_id,
+            "name": f"{READING_DLI} 24h",
+            "unique_id": f"{config.entry_id}-dli-24h",
+            "state_characteristic": "change",
+            "samples_max_buffer_size": None,  # Unlimited, driven by max_age
+            "samples_max_age": timedelta(hours=24),
+            "samples_keep_last": True,
+            "precision": 2,
+            "percentile": 50,  # Not used for "change" characteristic
+        }
+        if _STATISTICS_SENSOR_ACCEPTS_HASS:
+            statistics_kwargs["hass"] = hass
+        super().__init__(**statistics_kwargs)
         ent_reg = er_async_get(hass)
         if ent_reg.async_get_entity_id(
             SENSOR_DOMAIN, DOMAIN, f"{config.entry_id}-dli-24h"
