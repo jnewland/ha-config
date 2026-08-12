@@ -170,6 +170,7 @@ script:
         data:
           code: " "
       - service: homeassistant.turn_off
+        continue_on_error: true
         entity_id:
           - group.indoor
       - service: script.lock_up
