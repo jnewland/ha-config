@@ -65,6 +65,7 @@ script:
         data:
           option: Reading
       - service: light.turn_off
+        continue_on_error: true
         data:
           entity_id: |
             {% if states.input_boolean.guests.state == "on" %}
@@ -77,6 +78,7 @@ script:
           entity_id: input_number.brightness
           value: 42
       - service: light.turn_on
+        continue_on_error: true
         data:
           entity_id:
             - light.bedroom_chandelier
@@ -89,6 +91,7 @@ script:
           brightness: |
             {{ states('input_number.brightness') | int }}
       - service: light.turn_off
+        continue_on_error: true
         data:
           entity_id:
             - light.bedroom_overhead
@@ -114,15 +117,18 @@ script:
         data:
           option: Sleeping
       - service: light.turn_off
+        continue_on_error: true
         entity_id:
           - light.bedroom
           - light.bathroom
           - light.yoga_room_lights
           - light.hall
       - service: homeassistant.turn_off
+        continue_on_error: true
         entity_id:
           - group.upstairs_fans
       - service: homeassistant.turn_off
+        continue_on_error: true
         data:
           entity_id: |
             {% if states.input_boolean.guests.state == "on" %}
@@ -134,6 +140,7 @@ script:
       - service: python_script.close_if_open
         entity_id: cover.garage
       - service: homeassistant.turn_off
+        continue_on_error: true
         entity_id: light.outdoor_mood
       - service: input_number.set_value
         data:
