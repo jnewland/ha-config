@@ -5,7 +5,6 @@ input_select:
       - Morning
       - Day
       - Evening
-      - Party
       - Cocktail
       - Cooking
       - Reading
@@ -49,6 +48,7 @@ script:
       - service: script.turn_on
         entity_id: script.great_room_lights
   mode_evening:
+    mode: parallel
     sequence:
       - service: input_select.select_option
         entity_id: input_select.mode
@@ -63,20 +63,6 @@ script:
           - light.lounge_overhead
       - service: script.turn_on
         entity_id: script.great_room_lights
-
-  mode_party:
-    sequence:
-      - service: homeassistant.turn_on
-        entity_id:
-          - group.all_lights
-      - service: input_select.select_option
-        entity_id: input_select.mode
-        data:
-          option: Party
-      - service: input_number.set_value
-        data:
-          entity_id: input_number.brightness
-          value: 255
 
   mode_reading:
     sequence:
