@@ -1,0 +1,15 @@
+automation:
+  - alias: Fire alarm
+    id: eadbbe5a-ee95-4f11-a0b7-a9dbb9ea1a9f
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door_fire_alarm_sound
+        to: "on"
+    action:
+      - service: script.ack
+        data:
+          entity_id: script.noop
+          tag: fire_alarm
+          message: Fire alarm sound detected ❗️�
+          confirmation_message: is checking the fire alarm, cool
+          decline_message: needs help with the fire alarm rn, can you?

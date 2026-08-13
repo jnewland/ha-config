@@ -1,0 +1,15 @@
+automation:
+  - alias: Doorbell push
+    id: d296cd50-02d7-4df0-ad43-106e0d42ce56
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door_doorbell_sound
+        to: "on"
+    action:
+      - service: script.ack
+        data:
+          entity_id: script.noop
+          tag: doorbell
+          message: Doorbell sound detected ❗️📢
+          confirmation_message: is getting the door, cool
+          decline_message: needs help with the doorbell rn, can you?
