@@ -15,6 +15,7 @@ automation:
         data:
           message: the front gate just opened!
           data:
+            tag: front_gate
             push:
               category: camera
             entity_id: camera.front_door_medium
@@ -38,12 +39,13 @@ automation:
       entity_id: binary_sensor.front_gate
       to: "on"
       for:
-        minutes: 3
+        minutes: 1
     action:
       - service: notify.iphones
         data:
-          message: the front gate has been open for a few minutes
+          message: the front gate has been open for a minute
           data:
+            tag: front_gate
             push:
               interruption-level: time-sensitive
               category: camera

@@ -1,5 +1,6 @@
 sequence:
   - service: lock.lock
+    continue_on_error: true
     entity_id:
       - lock.front_door
       - lock.back_porch

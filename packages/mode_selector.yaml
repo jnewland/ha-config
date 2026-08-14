@@ -105,6 +105,7 @@ script:
             - light.hall
       - service: script.lock_up
       - service: python_script.close_if_open
+        continue_on_error: true
         entity_id: cover.garage
       - condition: template
         value_template: >
@@ -144,6 +145,7 @@ script:
             {% endif %}
       - service: script.lock_up
       - service: python_script.close_if_open
+        continue_on_error: true
         entity_id: cover.garage
       - service: homeassistant.turn_off
         continue_on_error: true
