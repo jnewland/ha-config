@@ -12,10 +12,3 @@ device_tracker.private_ble_device_524e60 # WIP
 device_tracker.private_ble_device_9dfc84 # WIP
 light.couch_lamp_left # WIP
 light.couch_lamp_right # WIP
-
-valve.atrium_drippers_zone # live: valve.atrium_atrium_atrium_drippers_zone
-valve.fountain_refill_zone # live: valve.atrium_fountain_fountain_refil_zone (note: also moved under the "atrium_fountain" device, and "refil" is misspelled live)
-valve.front_yard_drippers_zone # live: valve.alley_front_yard_front_yard_drippers_zone
-valve.patio_drippers_zone # live: valve.patio_patio_patio_drippers_zone
-valve.pergola_drippers_zone # live: valve.pergola_pergola_pergola_drippers_zone
-valve.vegepod_sprayers_zone # no live equivalent under any name - this zone looks fully removed, unlike the other five which just got renamed
