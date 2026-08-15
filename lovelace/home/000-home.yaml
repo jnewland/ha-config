@@ -17,7 +17,7 @@ cards:
     conditions:
       - entity: device_tracker.jphone_17_pro
         state: "not_home"
-      - entity: device_tracker.katie_s_iphone
+      - entity: device_tracker.katies_iphone
         state: "not_home"
     card:
       type: picture-entity
