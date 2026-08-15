@@ -48,6 +48,8 @@ ENTITY_KEYS = {
     "include_entities",
     "exclude_entities",
     "lights",
+    "lights_ct",
+    "haunt",
     "trigger_entity_id",
     "trigger_entity_id_off",
 }
@@ -152,7 +154,10 @@ def gather_config_files(repo_root: Path, restrict: list[Path] | None) -> list[Pa
 
     out = []
     for p in files:
-        rel_parts = p.resolve().relative_to(repo_root).parts
+        try:
+            rel_parts = p.resolve().relative_to(repo_root).parts
+        except ValueError:
+            raise SystemExit(f"{p} is outside the repo ({repo_root}); nothing to scan.") from None
         if any(part in SKIP_DIRS for part in rel_parts):
             continue
         out.append(p)
@@ -221,10 +226,11 @@ class LineLocator:
 
     Successive lookups for the same entity id in the same file advance
     through its occurrences in order, so repeated references don't all
-    collapse onto the line of the first occurrence. Matching is by plain
-    substring (not tokenization) so forms like `states.domain.object_id`
-    resolve correctly instead of having their leading `states.` prefix
-    swallow the domain segment.
+    collapse onto the line of the first occurrence. Matching requires word
+    boundaries around the entity id (not plain substring) so a short id
+    like `light.kitchen` doesn't match inside a longer one on another line,
+    e.g. `light.kitchen_cabinets` - while still resolving forms like
+    `states.domain.object_id` correctly, since dots aren't word characters.
     """
 
     def __init__(self) -> None:
@@ -243,8 +249,9 @@ class LineLocator:
     def next_line(self, path: Path, entity_id: str) -> int | None:
         key = (path, entity_id)
         if key not in self._occurrences_cache:
+            pattern = re.compile(r"(?<![a-zA-Z0-9_])" + re.escape(entity_id) + r"(?![a-zA-Z0-9_])")
             self._occurrences_cache[key] = [
-                lineno for lineno, line in enumerate(self._lines(path), start=1) if entity_id in line
+                lineno for lineno, line in enumerate(self._lines(path), start=1) if pattern.search(line)
             ]
         occurrences = self._occurrences_cache[key]
         if not occurrences:
