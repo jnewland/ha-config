@@ -808,7 +808,7 @@ script:
           brightness: |
             {{ brightness | default(int((int(state_attr('switch.circadian_lighting_brightness', 'brightness'), default=100)/100)*255)) }}
           color_temp_kelvin: "{{ state_attr('sensor.circadian_values', 'colortemp') | default(2700) | int }}"
-      - service: switch.turn_on
+      - service: light.turn_on
         data:
           entity_id:
             - light.lounge_couch_left
