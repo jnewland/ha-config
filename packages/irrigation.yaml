@@ -140,8 +140,10 @@ automation:
         attribute: manual_preset_runtime
     variables:
       # bhyve's entity ids no longer match the short input_number names below,
-      # so the mapping has to be explicit instead of derived by string-splitting
-      valve_to_runtime:
+      # so the mapping has to be explicit instead of derived by string-splitting.
+      # Anchored so "Save changed zone's value" below reuses this same mapping
+      # instead of maintaining its own copy.
+      valve_to_runtime: &valve_to_runtime
         valve.atrium_atrium_atrium_drippers_zone: atrium_drippers_zone
         valve.alley_front_yard_front_yard_drippers_zone: front_yard_drippers_zone
         valve.patio_patio_patio_drippers_zone: patio_drippers_zone
@@ -173,12 +175,9 @@ automation:
           - input_number.atrium_drippers_zone_runtime
           - input_number.fountain_refill_zone_runtime
     variables:
-      runtime_to_valve:
-        input_number.atrium_drippers_zone_runtime: valve.atrium_atrium_atrium_drippers_zone
-        input_number.front_yard_drippers_zone_runtime: valve.alley_front_yard_front_yard_drippers_zone
-        input_number.patio_drippers_zone_runtime: valve.patio_patio_patio_drippers_zone
-        input_number.pergola_drippers_zone_runtime: valve.pergola_pergola_pergola_drippers_zone
-        input_number.fountain_refill_zone_runtime: valve.atrium_fountain_fountain_refil_zone
+      valve_to_runtime: *valve_to_runtime
+      runtime_to_valve: "{{ dict(zip(valve_to_runtime.values(), valve_to_runtime.keys())) }}"
+      runtime_name: "{{ trigger.entity_id.split('.')[1].replace('_runtime', '') }}"
     action:
       - service: system_log.write
         data:
@@ -186,11 +185,11 @@ automation:
             at=bhyve.set_manual_preset_runtime
             minutes={{ trigger.to_state.state }}
             entity_id={{ trigger.entity_id }}
-            target_entity_id={{ runtime_to_valve[trigger.entity_id] }}
+            target_entity_id={{ runtime_to_valve[runtime_name] }}
           logger: packages.irrigation
           level: debug
       - service: bhyve.set_manual_preset_runtime
         target:
-          entity_id: "{{ runtime_to_valve[trigger.entity_id] }}"
+          entity_id: "{{ runtime_to_valve[runtime_name] }}"
         data:
           minutes: "{{ trigger.to_state.state }}"
