@@ -41,7 +41,16 @@ TEMPLATE_FUNC_RE = re.compile(
 TEMPLATE_ACCESSOR_RE = re.compile(r"\bstates\.([a-z_][a-z0-9_]*\.[a-z0-9_]+)\b")
 
 # Keys whose value(s) HA treats strictly as entity id(s).
-ENTITY_KEYS = {"entity_id", "entity", "entities", "include_entities", "exclude_entities", "lights"}
+ENTITY_KEYS = {
+    "entity_id",
+    "entity",
+    "entities",
+    "include_entities",
+    "exclude_entities",
+    "lights",
+    "trigger_entity_id",
+    "trigger_entity_id_off",
+}
 
 SKIP_DIRS = {
     ".git",

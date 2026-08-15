@@ -1,24 +1,18 @@
 # Entity ids (or fnmatch globs) that ./script/lint-entities should not flag,
+
 # even though they're referenced in config but missing from the live system.
+
 # One pattern per line; everything after # on a line is a comment.
 
-switch.atrium_fountain # Fountain Pico (packages/picos.yaml) still calls switch.turn_on/off on this. The bhyve device now exposes valve.atrium_fountain_fountain_refil_zone (the real refill valve) and switch.atrium_fountain_smart_watering (a mode toggle, not the valve) - fixing this means switching services, not just renaming, so it's parked pending a decision on which target is correct
+switch.atrium_fountain # WIP
+switch.back_porch_fan_east # WIP
+switch.back_porch_fan_west # WIP
+switch.atrium_fan # WIP
+device_tracker.private_ble_device_524e60 # WIP
+device_tracker.private_ble_device_9dfc84 # WIP
+light.couch_lamp_left # WIP
+light.couch_lamp_right # WIP
 
-switch.back_porch_fan_east # East/west wall switches (packages/back_porch.yaml group + customize/switches.yaml) were replaced by a button-based fan controller (button.back_porch_fan_speed_up/down + power button). Buttons can't represent on/off state the same way, so group.back_porch_fan needs a redesign, not a rename
-switch.back_porch_fan_west # see switch.back_porch_fan_east
-
-switch.atrium_fan # Used functionally in packages/occupancy.yaml (occupancy-driven on/off) and customize/switches.yaml. No fan or switch entity resembling it exists live under any name - looks fully decommissioned. Needs on-site investigation before deciding whether to delete the references or restore the device
-
-device_tracker.private_ble_device_524e60 # packages/ble.yaml. Private BLE Device integration disables the device_tracker entity by default on current HA versions and only enables the diagnostic sensor (sensor.private_ble_device_524e60_source, which does exist live). Likely just needs re-enabling in Settings > Entities rather than a config change
-device_tracker.private_ble_device_9dfc84 # see device_tracker.private_ble_device_524e60
-
-binary_sensor.updater # Legacy HA "updater" component, removed from HA core years ago - will never exist again. Deliberately kept in packages/package_unavailable_entities.yaml's ignore list (see its "always unknown after restart" comment) to document a known historical quirk; harmless to leave referenced
-
-# packages/irrigation.yaml's bhyve valves all got renamed live with a doubled device/zone
-# prefix (e.g. valve.atrium_drippers_zone -> valve.atrium_atrium_atrium_drippers_zone).
-# Two automations in that file derive the matching input_number's object_id from the valve's
-# object_id by string split (and vice versa) - a naive rename would break that symmetry since
-# the input_numbers kept their short names. Needs a real decision, not a search-and-replace.
 valve.atrium_drippers_zone # live: valve.atrium_atrium_atrium_drippers_zone
 valve.fountain_refill_zone # live: valve.atrium_fountain_fountain_refil_zone (note: also moved under the "atrium_fountain" device, and "refil" is misspelled live)
 valve.front_yard_drippers_zone # live: valve.alley_front_yard_front_yard_drippers_zone
