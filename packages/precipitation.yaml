@@ -59,7 +59,7 @@ template:
         name: Precipitation in forecast
         state: |
           {{
-            states('sensor.forecast_precipitation_probability') | float(default=0)
+            states('sensor.precipitation_probability') | float(default=0)
             >
             states('input_number.precipitation_forecast_probability_threshold') | float(default=100)
           }}

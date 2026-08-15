@@ -146,10 +146,8 @@ cards:
       type: entities
       entities:
         - input_boolean.winterized
-        - binary_sensor.freeze_forecast
+        - binary_sensor.freeze_in_forecast
         - sensor.atrium_couch_temperature
-        - sensor.bamboo_temperature
-        - sensor.peppers_temperature
         - sensor.pergola_temperature
   - type: conditional
     conditions:
@@ -168,22 +166,22 @@ cards:
       - lock.garage
   - type: conditional
     conditions:
-      - entity: camera.front_door_person_medium
-        state: active
+      - entity: binary_sensor.front_door_person_occupancy
+        state: "on"
     card:
       type: picture-entity
       show_name: false
       show_state: false
-      entity: camera.front_door_person_medium
+      entity: camera.front_door_medium
   - type: conditional
     conditions:
-      - entity: camera.pergola_person_medium
-        state: active
+      - entity: binary_sensor.pergola_person_occupancy
+        state: "on"
     card:
       type: picture-entity
       show_name: false
       show_state: false
-      entity: camera.pergola_person_medium
+      entity: camera.pergola_medium
   - type: custom:sonos-card
     sections:
       - media browser

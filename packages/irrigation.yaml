@@ -35,7 +35,7 @@ sensor:
 
   - platform: history_stats
     name: driveway lawn zone daily runtime
-    entity_id: switch.driveway_lawn_sprayers
+    entity_id: switch.driveway_drip
     state: "on"
     type: time
     start: "{{ now().replace(hour=0, minute=0, second=0) }}"

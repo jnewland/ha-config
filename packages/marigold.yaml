@@ -4,7 +4,7 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - device_tracker.marigold
+          - device_tracker.marigold_tracker
           - sensor.front_door_front_gate_classification
           - sensor.gate_driveway_gate_classification
       - platform: homeassistant
@@ -12,7 +12,7 @@ automation:
     variables:
       should_be_on: >
         {{
-          is_state('device_tracker.marigold', 'home') and (
+          is_state('device_tracker.marigold_tracker', 'home') and (
             is_state('sensor.front_door_front_gate_classification', 'open') or
             is_state('sensor.gate_driveway_gate_classification', 'open')
           )

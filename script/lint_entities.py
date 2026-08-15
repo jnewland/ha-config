@@ -251,8 +251,8 @@ def load_ignore_patterns(path: Path | None) -> list[str]:
         return []
     patterns = []
     for raw_line in path.read_text(encoding="utf-8").splitlines():
-        line = raw_line.strip()
-        if not line or line.startswith("#"):
+        line = raw_line.split("#", 1)[0].strip()
+        if not line:
             continue
         patterns.append(line)
     return patterns
