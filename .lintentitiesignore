@@ -1,8 +1,4 @@
-# Entity ids (or fnmatch globs) that ./script/lint-entities should not flag,
-
-# even though they're referenced in config but missing from the live system.
-
-# One pattern per line; everything after # on a line is a comment.
+# Entity ids (or fnmatch globs) that ./script/lint-entities should not flag.
 
 switch.atrium_fountain # WIP
 switch.back_porch_fan_east # WIP
