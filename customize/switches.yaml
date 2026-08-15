@@ -8,7 +8,3 @@ switch.back_porch_fan_west:
   icon: mdi:fan
 switch.back_porch_fountain:
   icon: mdi:fountain
-switch.lounge_left:
-  icon: mdi:floor-lamp
-switch.lounge_right:
-  icon: mdi:floor-lamp

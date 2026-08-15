@@ -811,8 +811,8 @@ script:
       - service: switch.turn_on
         data:
           entity_id:
-            - switch.lounge_left
-            - switch.lounge_right
+            - light.lounge_couch_left
+            - light.lounge_couch_right
       - condition: template
         value_template: >
           {{ states.input_select.mode.state != "Evening" }}
