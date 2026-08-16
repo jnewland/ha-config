@@ -16,7 +16,7 @@ automation:
     id: 63cf36f6-2881-42a6-83e3-d7ea5528dbef
     trigger:
       - platform: state
-        entity_id: binary_sensor.freeze_forecast
+        entity_id: binary_sensor.freeze_in_forecast
         from: "on"
         to: "off"
     condition:

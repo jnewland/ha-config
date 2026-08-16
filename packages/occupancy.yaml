@@ -120,8 +120,8 @@ template:
             states('binary_sensor.living_room_motion') == 'on' or
             states('binary_sensor.dining_room_motion_detection') == 'on' or
             (
-              states('device_tracker.katie_s_iphone') == 'Kitchen' and
-              states.device_tracker.katie_s_iphone.last_changed > (now() - timedelta(minutes=5))
+              states('device_tracker.katies_iphone') == 'Kitchen' and
+              states.device_tracker.katies_iphone.last_changed > (now() - timedelta(minutes=5))
             ) or
             (
               states('device_tracker.jphone_17_pro') == 'Kitchen' and
@@ -138,8 +138,8 @@ template:
           {{
             states('binary_sensor.lounge_home_security_motion_detection') == 'on' or
             (
-              states('device_tracker.katie_s_iphone') == 'Lounge' and
-              states.device_tracker.katie_s_iphone.last_changed > (now() - timedelta(minutes=5))
+              states('device_tracker.katies_iphone') == 'Lounge' and
+              states.device_tracker.katies_iphone.last_changed > (now() - timedelta(minutes=5))
             ) or
             (
               states('device_tracker.jphone_17_pro') == 'Lounge' and
@@ -158,8 +158,8 @@ template:
             states('binary_sensor.closet_motion_any') == 'on' or
             states('binary_sensor.bedroom_door') == 'off' or
             (
-              states('device_tracker.katie_s_iphone') == 'Bedroom' and
-              states.device_tracker.katie_s_iphone.last_changed > (now() - timedelta(minutes=5))
+              states('device_tracker.katies_iphone') == 'Bedroom' and
+              states.device_tracker.katies_iphone.last_changed > (now() - timedelta(minutes=5))
             ) or
             (
               states('device_tracker.jphone_17_pro') == 'Bedroom' and

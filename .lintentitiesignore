@@ -1,0 +1,10 @@
+# Entity ids (or fnmatch globs) that ./script/lint-entities should not flag.
+
+switch.atrium_fountain # WIP
+switch.back_porch_fan_east # WIP
+switch.back_porch_fan_west # WIP
+switch.atrium_fan # WIP
+device_tracker.private_ble_device_524e60 # WIP
+device_tracker.private_ble_device_9dfc84 # WIP
+light.couch_lamp_left # WIP
+light.couch_lamp_right # WIP

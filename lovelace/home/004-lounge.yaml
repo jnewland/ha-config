@@ -22,7 +22,7 @@ cards:
   - type: media-control
     entity: media_player.lg_webos_tv_d510
   - type: media-control
-    entity: media_player.lounge
+    entity: media_player.screeno # temporarily replacing media_player.lounge
   - type: media-control
     entity: media_player.lounge_surround
   - type: media-control
