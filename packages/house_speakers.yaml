@@ -15,7 +15,7 @@ template:
       - name: house speaker source
         unique_id: house_speaker_source_entity_id
         state: >
-          {% if is_state('media_player.lounge', 'playing') and is_state('input_boolean.auto_group_tv_audio', 'on') %}
+          {% if is_state('media_player.screeno', 'playing') and is_state('input_boolean.auto_group_tv_audio', 'on') %}
             media_player.lounge_surround
           {% else %}
             media_player.house
@@ -143,7 +143,7 @@ automation:
     id: b6ba810d-20a9-4d2e-8252-f6afefd9824e
     trigger:
       - platform: state
-        entity_id: media_player.lounge
+        entity_id: media_player.screeno # temporarily replacing media_player.lounge
         to: playing
       - platform: state
         entity_id: media_player.bedroom
@@ -164,7 +164,7 @@ automation:
     id: 08f9e8e3-436e-4228-b507-e83e0e36f033
     trigger:
       - platform: state
-        entity_id: media_player.lounge
+        entity_id: media_player.screeno # temporarily replacing media_player.lounge
         to: playing
     condition:
       - condition: state

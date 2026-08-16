@@ -53,7 +53,6 @@ group:
   ignored_unavailable_entities:
     entities:
       - sensor.unavailable_entities # prevent template loop warnings
-      - binary_sensor.updater # always unknown after restart
       # occasional-use
       - sensor.flameboss_cook_link
 

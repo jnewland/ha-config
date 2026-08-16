@@ -4,7 +4,7 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - device_tracker.katie_s_iphone
+        - device_tracker.katies_iphone
       to: not_home
       for:
         minutes: 5
@@ -33,14 +33,14 @@ automation:
       - platform: state
         entity_id:
           - device_tracker.jphone_17_pro
-          - device_tracker.katie_s_iphone
+          - device_tracker.katies_iphone
         to: not_home
         for:
           minutes: 10
       - platform: state
         entity_id:
           - device_tracker.jphone_17_pro
-          - device_tracker.katie_s_iphone
+          - device_tracker.katies_iphone
         to: not_home
         for:
           minutes: 15
@@ -52,7 +52,7 @@ automation:
         states.input_boolean.guests.state == "off" and
         states.input_select.mode.state != "Away" and
         states.device_tracker.jphone_17_pro.state == "not_home" and
-        states.device_tracker.katie_s_iphone.state == "not_home"
+        states.device_tracker.katies_iphone.state == "not_home"
         }}
         '
     action:
@@ -149,7 +149,7 @@ automation:
     id: e483474f-9182-47f4-9c7a-726c096e732b
     trigger:
       platform: state
-      entity_id: device_tracker.katie_s_iphone
+      entity_id: device_tracker.katies_iphone
       from: not_home
       to: home
     condition:

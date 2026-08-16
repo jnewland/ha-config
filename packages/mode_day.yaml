@@ -26,7 +26,7 @@ automation:
           value_template: |
             {{
               (states.device_tracker.jphone_17_pro.state == "not_home" or states.sensor.jphone_17_pro_battery_state == "Not Charging") and
-              (states.device_tracker.katie_s_iphone.state == "not_home" or states.sensor.katies_iphone_battery_state.state == "Not Charging")
+              (states.device_tracker.katies_iphone.state == "not_home" or states.sensor.katies_iphone_battery_state.state == "Not Charging")
             }}
     action:
       - service: input_select.select_option
@@ -56,7 +56,7 @@ automation:
         zone: zone.home
         event: enter
       - platform: zone
-        entity_id: device_tracker.katie_s_iphone
+        entity_id: device_tracker.katies_iphone
         zone: zone.home
         event: enter
     condition:

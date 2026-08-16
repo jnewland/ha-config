@@ -70,7 +70,7 @@ automation:
         - condition: or
           conditions:
             - condition: zone
-              entity_id: device_tracker.katie_s_iphone
+              entity_id: device_tracker.katies_iphone
               zone: zone.home
             - condition: zone
               entity_id: device_tracker.jphone_17_pro
