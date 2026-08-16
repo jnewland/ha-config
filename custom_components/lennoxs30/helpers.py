@@ -10,7 +10,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.const import (
     PERCENTAGE,
@@ -21,10 +21,13 @@ from homeassistant.const import (
     UnitOfTime,
     UnitOfVolumeFlowRate,
 )
-from lennoxs30api import lennox_system
+from lennoxs30api import lennox_system, lennox_zone
 from lennoxs30api.lennox_equipment import lennox_equipment, lennox_equipment_parameter
 
-from . import DOMAIN, Manager
+from .const import LENNOX_DOMAIN
+
+if TYPE_CHECKING:
+    from . import Manager
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -54,14 +57,14 @@ def lennox_uom_to_ha_uom(unit: str) -> str:
     return unit
 
 
-def helper_get_equipment_device_info(manager: Manager, system: lennox_system, equipment_id: int) -> dict:
+def helper_get_equipment_device_info(manager: "Manager", system: lennox_system, equipment_id: int) -> dict:
     """Construct the HASS device info for an entity."""
     equip_device_map = manager.system_equip_device_map.get(system.sysId)
     if equip_device_map is not None:
         device = equip_device_map.get(equipment_id)
         if device is not None:
             return {
-                "identifiers": {(DOMAIN, device.unique_name)},
+                "identifiers": {(LENNOX_DOMAIN, device.unique_name)},
             }
         _LOGGER.warning(
             "helper_get_equipment_device_info Unable to find equipment_id [%s] in device map sysId [%s], please raise an issue",
@@ -75,13 +78,11 @@ def helper_get_equipment_device_info(manager: Manager, system: lennox_system, eq
             equipment_id,
         )
     return {
-        "identifiers": {(DOMAIN, system.unique_id)},
+        "identifiers": {(LENNOX_DOMAIN, system.unique_id)},
     }
 
 
-def helper_create_equipment_entity_name(
-    system: lennox_system, equipment: lennox_equipment, name: str, prefix: str | None = None
-) -> str:
+def helper_create_equipment_entity_name(system: lennox_system, equipment: lennox_equipment, name: str, prefix: str | None = None) -> str:
     """Create a name for the entity."""
     suffix = str(equipment.equipment_name)
     if equipment.equipment_id == 1:
@@ -110,9 +111,24 @@ def helper_create_system_unique_id(system: lennox_system, suffix: str) -> str:
     return result.replace(" ", "_").replace("-", "").replace(".", "").replace("__", "_")
 
 
-def helper_get_parameter_extra_attributes(
-    equipment: lennox_equipment, parameter: lennox_equipment_parameter
-) -> dict[str, Any]:
+def helper_create_zone_entity_name(system: lennox_system, zone: lennox_zone) -> str:
+    """Create a stable name for zone entities and zone devices."""
+    system_name: str = ""
+    if system.name is not None:
+        system_name = str(system.name).strip()
+    if system_name == "":
+        system_name = f"system_{system.sysId}"
+
+    zone_name: str = ""
+    if zone.name is not None:
+        zone_name = str(zone.name).strip()
+    if zone_name == "":
+        zone_name = f"Zone_{zone.id}"
+
+    return f"{system_name}_{zone_name}"
+
+
+def helper_get_parameter_extra_attributes(equipment: lennox_equipment, parameter: lennox_equipment_parameter) -> dict[str, Any]:
     """Construct extra attributes for equipment."""
     attrs: dict[str, Any] = {}
     attrs["equipment_id"] = equipment.equipment_id
