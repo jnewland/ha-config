@@ -141,6 +141,8 @@ automation:
       platform: state
       entity_id: sensor.gate_driveway_gate_classification
       to: "closed"
+      for:
+        seconds: 5
     action:
       - service: notify.iphones
         data:
