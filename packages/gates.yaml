@@ -4,7 +4,7 @@ homeassistant:
       device_class: opening
       icon: mdi:gate
 automation:
-  - alias: Gate Bell
+  - alias: Front gate Bell
     id: c228fcbc-a5ea-4d1f-8094-a884be31e362
     trigger:
       platform: state
@@ -32,7 +32,7 @@ automation:
         data:
           message: the front gate just opened
 
-  - alias: Gate open warning
+  - alias: Front gate open warning
     id: 3b46434a-487b-40ad-a678-24ac2c1d7d01
     trigger:
       platform: state
@@ -55,3 +55,31 @@ automation:
                 {{ states('input_text.external_url') }}{{ states.camera.front_door_medium.attributes.entity_picture }}
               content-type: jpeg
               hide-thumbnail: false
+
+  - alias: Driveway gate bell
+    id: d42e9c8d-95c9-4a90-8fdd-1034c4923b40
+    trigger:
+      platform: state
+      entity_id: sensor.gate_driveway_gate_classification
+      to: "open"
+    action:
+      - service: notify.iphones
+        data:
+          message: the driveway gate just opened!
+          data:
+            tag: driveway_gate
+            push:
+              category: camera
+            entity_id: camera.gate_medium
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ states.camera.gate_medium.attributes.entity_picture }}
+              content-type: jpeg
+              hide-thumbnail: false
+      - service: script.notify_with_lights
+      - service: notify.tidbyt_once
+        data:
+          message: The driveway gate just opened!
+      - service: script.notify_all_channels
+        data:
+          message: the driveway gate just opened
