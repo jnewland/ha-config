@@ -234,11 +234,12 @@ switch:
       - light.tv_right
       - light.living_room_mirror
       - light.living_room_fireplace
+      - light.couch_lamp_left
+      - light.couch_lamp_right
       - light.cabinets_left
       - light.cabinets_right
       - light.record_cabinet_right
       - light.record_cabinet_left
-      # - light.striped_lamp
       - light.network_closet
       - light.bookshelf_right
       - light.bookshelf_middle
