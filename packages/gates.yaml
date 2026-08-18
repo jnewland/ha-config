@@ -3,6 +3,8 @@ homeassistant:
     binary_sensor.front_gate:
       device_class: opening
       icon: mdi:gate
+    sensor.gate_driveway_gate_classification:
+      icon: mdi:gate
 automation:
   - alias: Front gate Bell
     id: c228fcbc-a5ea-4d1f-8094-a884be31e362
@@ -43,7 +45,8 @@ automation:
     action:
       - service: notify.iphones
         data:
-          message: the front gate has been open for a minute
+          message: >
+            the front gate has been open for {{ relative_time(trigger.from_state.last_changed) }}
           data:
             tag: front_gate
             push:
@@ -84,6 +87,8 @@ automation:
       platform: state
       entity_id: sensor.gate_driveway_gate_classification
       to: "open"
+      for:
+        seconds: 2
     action:
       - service: notify.iphones
         data:
