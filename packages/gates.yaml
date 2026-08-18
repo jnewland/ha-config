@@ -56,6 +56,28 @@ automation:
               content-type: jpeg
               hide-thumbnail: false
 
+  - alias: Front gate closed
+    id: 459becdc-9bd1-427f-a6ab-a4de81b9a3ea
+    trigger:
+      platform: state
+      entity_id: binary_sensor.front_gate
+      to: "off"
+    action:
+      - service: notify.iphones
+        data:
+          message: >
+            the front gate is closed after being open for {{ relative_time(trigger.from_state.last_changed) }}
+          data:
+            tag: front_gate
+            push:
+              category: camera
+            entity_id: camera.front_door_medium
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ states.camera.front_door_medium.attributes.entity_picture }}
+              content-type: jpeg
+              hide-thumbnail: false
+
   - alias: Driveway gate bell
     id: d42e9c8d-95c9-4a90-8fdd-1034c4923b40
     trigger:
@@ -100,6 +122,28 @@ automation:
             tag: driveway_gate
             push:
               interruption-level: time-sensitive
+              category: camera
+            entity_id: camera.gate_medium
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ states.camera.gate_medium.attributes.entity_picture }}
+              content-type: jpeg
+              hide-thumbnail: false
+
+  - alias: Driveway gate closed
+    id: af5abe97-61e2-408f-9381-3d865b511cd8
+    trigger:
+      platform: state
+      entity_id: sensor.gate_driveway_gate_classification
+      to: "closed"
+    action:
+      - service: notify.iphones
+        data:
+          message: >
+            the driveway gate is closed after being open for {{ relative_time(trigger.from_state.last_changed) }}
+          data:
+            tag: driveway_gate
+            push:
               category: camera
             entity_id: camera.gate_medium
             attachment:
