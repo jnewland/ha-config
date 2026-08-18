@@ -83,3 +83,27 @@ automation:
       - service: script.notify_all_channels
         data:
           message: the driveway gate just opened
+
+  - alias: Driveway gate open warning
+    id: eb4aba23-ff3d-49a7-8223-7fef415d4ae2
+    trigger:
+      platform: state
+      entity_id: sensor.gate_driveway_gate_classification
+      to: "open"
+      for:
+        minutes: 3
+    action:
+      - service: notify.iphones
+        data:
+          message: the driveway gate has been open for 3 minutes
+          data:
+            tag: driveway_gate
+            push:
+              interruption-level: time-sensitive
+              category: camera
+            entity_id: camera.gate_medium
+            attachment:
+              url: |
+                {{ states('input_text.external_url') }}{{ states.camera.gate_medium.attributes.entity_picture }}
+              content-type: jpeg
+              hide-thumbnail: false
