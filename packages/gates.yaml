@@ -122,7 +122,8 @@ automation:
     action:
       - service: notify.iphones
         data:
-          message: the driveway gate has been open for 3 minutes
+          message: >
+            the driveway gate has been open for {{ relative_time(trigger.from_state.last_changed) }}
           data:
             tag: driveway_gate
             push:
