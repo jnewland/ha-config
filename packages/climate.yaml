@@ -15,6 +15,15 @@ input_number:
     step: 1
     mode: slider
 
+  upstairs_leak_likely_threshold:
+    name: upstairs leak likely dew point margin
+    # how close outdoor dew point has to get to the AC setpoint to flag risk
+    initial: 2
+    min: 0.5
+    max: 5
+    step: 0.5
+    mode: slider
+
 template:
   - binary_sensor:
       - name: "Upstairs HVAC Active"
@@ -27,6 +36,30 @@ template:
         state: >
           {{ state_attr('climate.downstairs', 'hvac_action')
                in ['cooling', 'heating'] }}
+      # Outdoor dew point sitting close to the AC setpoint means anything near
+      # ambient temperature (like the intake pipe/plenum) is at risk of sweating.
+      - name: "Upstairs AC Leak Likely"
+        unique_id: upstairs_ac_leak_likely
+        device_class: problem
+        delay_on:
+          minutes: 30
+        delay_off:
+          minutes: 15
+        state: >
+          {% set dp = states('sensor.room_with_a_view_austin_dew_point') %}
+          {% set sp = state_attr('climate.upstairs', 'temperature') %}
+          {% set threshold = states('input_number.upstairs_leak_likely_threshold') %}
+          {{ dp not in ['unknown', 'unavailable', none]
+             and sp is not none
+             and not is_state('climate.upstairs', 'off')
+             and (dp | float - sp | float) | abs <= threshold | float }}
+        attributes:
+          dew_point: "{{ states('sensor.room_with_a_view_austin_dew_point') | float(none) }}"
+          setpoint: "{{ state_attr('climate.upstairs', 'temperature') }}"
+          margin_f: >
+            {% set dp = states('sensor.room_with_a_view_austin_dew_point') %}
+            {% set sp = state_attr('climate.upstairs', 'temperature') %}
+            {{ (dp | float - sp | float) | round(1) if dp not in ['unknown', 'unavailable', none] and sp is not none else none }}
 
 sensor:
   ## Duty-cycle (% of current hour the system is ON)
@@ -177,6 +210,22 @@ automation:
       - service: notify.iphones
         data:
           message: leak sensor detected a leak
+
+  - alias: notify when upstairs AC leak likely trips
+    id: c2d552de-8ffe-4b30-8597-f1ebf5c862dc
+    trigger:
+      platform: state
+      entity_id: binary_sensor.upstairs_ac_leak_likely
+      from: "off"
+      to: "on"
+    action:
+      - service: notify.iphones
+        data:
+          message: >
+            upstairs AC intake pipe condensation risk: outdoor dew point is
+            {{ state_attr('binary_sensor.upstairs_ac_leak_likely', 'dew_point') }}°F,
+            within {{ states('input_number.upstairs_leak_likely_threshold') }}°F of the
+            {{ state_attr('binary_sensor.upstairs_ac_leak_likely', 'setpoint') }}°F setpoint.
 
   - alias: notify us when the downstairs climate current_temperature goes above setpoint in cool mode
     id: 1b2b0b5e-5b0a-4b0e-8b0a-2b0b5e5b0a4b
