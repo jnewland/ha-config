@@ -46,7 +46,7 @@ automation:
       - service: notify.iphones
         data:
           message: >
-            the front gate has been open for {{ relative_time(trigger.from_state.last_changed) }}
+            the front gate has been open for {{ relative_time(trigger.to_state.last_changed) }}
           data:
             tag: front_gate
             push:
@@ -123,7 +123,7 @@ automation:
       - service: notify.iphones
         data:
           message: >
-            the driveway gate has been open for {{ relative_time(trigger.from_state.last_changed) }}
+            the driveway gate has been open for {{ relative_time(trigger.to_state.last_changed) }}
           data:
             tag: driveway_gate
             push:
