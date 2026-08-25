@@ -203,13 +203,16 @@ automation:
     id: 85023ab0-13e5-4b4a-aba1-3e7d58973ad1
     trigger:
       platform: state
-      entity_id: binary_sensor.leak_sensor_water_alarm_water_leak_detected
+      entity_id:
+        - binary_sensor.leak_sensor_water_alarm_water_leak_detected
+        - binary_sensor.bathroom_drain_leak_water_leak_detected
+        - binary_sensor.garage_garage_attic_leak_water_leak_detected
       from: "off"
       to: "on"
     action:
       - service: notify.iphones
         data:
-          message: leak sensor detected a leak
+          message_template: "{{ trigger.to_state.name }} detected"
 
   - alias: notify when upstairs AC leak likely trips
     id: c2d552de-8ffe-4b30-8597-f1ebf5c862dc
