@@ -5,17 +5,15 @@ automation:
       - platform: state
         entity_id:
           - device_tracker.marigold_tracker
-          - sensor.front_door_front_gate_classification
+          - binary_sensor.front_gate
           - sensor.gate_driveway_gate_classification
       - platform: homeassistant
         event: start
     variables:
       should_be_on: >
         {{
-          is_state('device_tracker.marigold_tracker', 'home') and (
-            is_state('sensor.front_door_front_gate_classification', 'open') or
-            is_state('sensor.gate_driveway_gate_classification', 'open')
-          )
+          is_state('binary_sensor.front_gate', 'on') or
+          is_state('sensor.gate_driveway_gate_classification', 'open')
         }}
     action:
       - choose:
