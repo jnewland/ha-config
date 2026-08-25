@@ -6,4 +6,9 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 cd "$REPO_ROOT"
 
-exec python3 "$SCRIPT_DIR/lint_entities.py" "$@"
+if [[ ! -x "$REPO_ROOT/.venv/bin/python" ]]; then
+	echo "Expected Python environment in $REPO_ROOT/.venv. Run ./script/bootstrap." >&2
+	exit 1
+fi
+
+exec "$REPO_ROOT/.venv/bin/python" "$SCRIPT_DIR/lint_entities.py" "$@"
