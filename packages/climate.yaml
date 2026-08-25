@@ -222,7 +222,7 @@ automation:
       from: "off"
       to: "on"
     action:
-      - service: notify.iphones
+      - service: notify.mobile_app_jphone_17_pro
         data:
           message: >
             upstairs AC intake pipe condensation risk: outdoor dew point is
