@@ -29,5 +29,5 @@ resources:
     type: module
   - url: /local/weather-chart-card.js?source=https://github.com/Yevgenium/weather-chart-card/releases/download/1.2.0/weather-chart-card.js
     type: module
-  - url: /local/advanced-camera-card/advanced-camera-card.js?source=https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.27.4/advanced-camera-card.zip
+  - url: /local/advanced-camera-card/advanced-camera-card.js?source=https://github.com/dermotduffy/advanced-camera-card/releases/download/v8.0.2/advanced-camera-card.zip
     type: module
