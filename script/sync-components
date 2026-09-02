@@ -105,7 +105,7 @@ git clone --depth 1 --branch $TRYFI_VERSION https://github.com/sbabcock23/hass-t
 rm -rf custom_components/tryfi || true
 mv $TMPDIR/$$-tryfi/custom_components/tryfi custom_components
 
-curl -sL --fail -o $TMPDIR/advanced-camera-card.zip https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.27.4/advanced-camera-card.zip
+curl -sL --fail -o $TMPDIR/advanced-camera-card.zip https://github.com/dermotduffy/advanced-camera-card/releases/download/v8.0.2/advanced-camera-card.zip
 # unzipping this file directly creates a folder called dist
 # move all files into www
 unzip -o $TMPDIR/advanced-camera-card.zip -d $TMPDIR
