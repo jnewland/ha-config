@@ -14,7 +14,7 @@
     "aiohuesyncbox"
   ],
   "requirements": [
-    "aiohuesyncbox==0.0.31"
+    "aiohuesyncbox==0.1.2"
   ],
   "version": "3.0.0",
   "zeroconf": [
