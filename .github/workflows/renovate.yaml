@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   renovate:
-    uses: urcomputeringpal/.github/.github/workflows/renovate.yaml@59512c621c99723dfeee313e27b04385185b5f74 # main
+    uses: urcomputeringpal/.github/.github/workflows/renovate.yaml@5dd9c80a25cb3021c6093e55cb9defebf337387c # main
     with:
       renovate_app_slug: jnewland-renovate
     secrets:
