@@ -8,9 +8,10 @@ from homeassistant.helpers import device_registry as dr
 from lennoxs30api.s30api_async import LennoxBle, lennox_equipment, lennox_system, lennox_zone
 
 from .const import LENNOX_DOMAIN, LENNOX_MFG
+from .helpers import helper_create_zone_entity_name
 
 
-class Device(object):
+class Device:
     """Represent a HASS device."""
 
     def __init__(self, equipment: lennox_equipment) -> None:
@@ -287,12 +288,13 @@ class S30ZoneThermostat(Device):
     def register_device(self) -> None:
         """Register the device with HASS."""
         device_registry = dr.async_get(self._hass)
+        name = helper_create_zone_entity_name(self._system, self._zone)
 
         device_registry.async_get_or_create(
             config_entry_id=self._config_entry.entry_id,
             identifiers={(LENNOX_DOMAIN, self.unique_name)},
             manufacturer=LENNOX_MFG,
-            name=self._system.name + "_" + self._zone.name,
+            name=name,
             model="thermostat",
             via_device=(LENNOX_DOMAIN, self._s30_controller_device.unique_name),
         )
