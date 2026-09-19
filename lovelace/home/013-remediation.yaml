@@ -108,16 +108,32 @@ cards:
         'automation.reading_mode',
         'automation.away_mode'
       ] -%}
+      {%- set watched_switches = [
+        ['switch.circadian_lighting_brightness', 'circadian: brightness'],
+        ['switch.circadian_lighting_color_bright', 'circadian: color bright'],
+        ['switch.circadian_lighting_color_accent', 'circadian: color accent'],
+        ['switch.circadian_lighting_brighter_accent', 'circadian: brighter accent'],
+        ['switch.circadian_lighting_min_brightness', 'circadian: min brightness'],
+        ['switch.adaptive_lighting_chandelier', 'adaptive: chandelier'],
+        ['switch.adaptive_lighting_cans', 'adaptive: cans'],
+        ['switch.adaptive_lighting_living_cans', 'adaptive: living cans']
+      ] -%}
+      {%- set total = (watched | count) + (watched_switches | count) -%}
       {%- set ns = namespace(on=[]) -%}
       {%- for e in watched -%}
         {%- if is_state(e, 'on') -%}
           {%- set ns.on = ns.on + [state_attr(e, 'friendly_name') or e] -%}
         {%- endif -%}
       {%- endfor -%}
+      {%- for e, label in watched_switches -%}
+        {%- if is_state(e, 'on') -%}
+          {%- set ns.on = ns.on + [label] -%}
+        {%- endif -%}
+      {%- endfor -%}
       {% if ns.on | count == 0 %}
-      ## ✅ All {{ watched | count }} are off
+      ## ✅ All {{ total }} are off
       {% else %}
-      ## ⚠️ {{ ns.on | count }} of {{ watched | count }} still on
+      ## ⚠️ {{ ns.on | count }} of {{ total }} still on
       {% for a in ns.on %}
       - {{ a }}
       {%- endfor %}
@@ -176,12 +192,44 @@ cards:
       - automation.indoor_grow_led_off
 
   - type: entities
+    title: Circadian lighting
+    show_header_toggle: true
+    entities:
+      - entity: switch.circadian_lighting_brightness
+        name: brightness (pendants, yoga, music room fan)
+      - entity: switch.circadian_lighting_color_bright
+        name: color bright (great room, music room)
+      - entity: switch.circadian_lighting_color_accent
+        name: color accent (bookcase, pillar, palm)
+      - entity: switch.circadian_lighting_brighter_accent
+        name: brighter accent (upper cabinets)
+      - entity: switch.circadian_lighting_min_brightness
+        name: min brightness (guest bath mirror, laundry)
+      - type: divider
+      - entity: sensor.circadian_values
+        name: circadian value
+      - entity: input_number.brightness
+        name: brightness slider
+
+  - type: entities
     title: Adaptive lighting
-    show_header_toggle: false
+    show_header_toggle: true
     entities:
       - switch.adaptive_lighting_chandelier
       - switch.adaptive_lighting_cans
       - switch.adaptive_lighting_living_cans
+
+  - type: entities
+    title: Light automation activity
+    show_header_toggle: false
+    entities:
+      - entity: counter.light_automations
+        name: light automations fired
+    footer:
+      type: graph
+      entity: counter.light_automations
+      hours_to_show: 6
+      detail: 2
 
   - type: entities
     title: Modes
