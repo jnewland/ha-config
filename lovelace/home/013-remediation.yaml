@@ -1,0 +1,704 @@
+title: Remediation
+icon: mdi:water-alert
+cards:
+  - type: markdown
+    content: >
+      ### Water damage remediation
+
+
+      **Containment:** stairs · upstairs · great hall · guest hall
+
+
+      Everything else is uncontained. Flip everything in the cards below off
+      while crews are working: motion shouldn't trip lights or speakers, modes
+      shouldn't fire scenes, and neither HVAC system should run.
+
+  # -------------------------------------------------------------------- HVAC
+  - type: markdown
+    title: HVAC
+    content: |
+      {%- set u = states('climate.upstairs') -%}
+      {%- set d = states('climate.downstairs') -%}
+      {%- set guards = ['automation.upstairs_ac', 'automation.upstairs_reading', 'automation.upstairs_heat'] -%}
+      {%- set ns = namespace(on=[]) -%}
+      {%- for e in guards -%}
+        {%- if is_state(e, 'on') -%}
+          {%- set ns.on = ns.on + [state_attr(e, 'friendly_name') or e] -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {% if u == 'off' and d == 'off' and ns.on | count == 0 %}
+      ## ✅ Both HVAC systems are OFF
+      Nothing is set to turn them back on.
+      {% else %}
+      ## ⚠️ HVAC is not fully shut down
+      - upstairs: **{{ u }}**{% if u != 'off' %} — set to off below{% endif %}
+
+      - downstairs: **{{ d }}**{% if d != 'off' %} — set to off below{% endif %}
+      {% if ns.on | count > 0 %}
+
+      These automations will turn the upstairs system back on:
+      {% for a in ns.on %}
+      - {{ a }}
+      {%- endfor %}
+      {% endif %}
+      {% endif %}
+
+  - type: tile
+    entity: climate.upstairs
+    name: upstairs HVAC
+    state_content: hvac_action
+    features:
+      - type: climate-hvac-modes
+        hvac_modes:
+          - "off"
+          - cool
+          - heat
+          - heat_cool
+
+  - type: tile
+    entity: climate.downstairs
+    name: downstairs HVAC
+    state_content: hvac_action
+    features:
+      - type: climate-hvac-modes
+        hvac_modes:
+          - "off"
+          - cool
+          - heat
+          - heat_cool
+
+  - type: thermostat
+    entity: climate.upstairs
+  - type: thermostat
+    entity: climate.downstairs
+
+  # ----------------------------------------------------------------- toggles
+  - type: markdown
+    title: Automations still enabled
+    content: |
+      {%- set watched = [
+        'automation.upstairs_ac',
+        'automation.upstairs_reading',
+        'automation.upstairs_heat',
+        'automation.turn_on_related_speakers',
+        'automation.turn_off_related_speakers',
+        'automation.turn_on_lights_when_motion_is_detected',
+        'automation.turn_on_switches_when_motion_is_detected',
+        'automation.turn_off_lights_after_sensors_have_turned_off',
+        'automation.turn_off_lights_with_delay',
+        'automation.turn_off_lights_immediately',
+        'automation.set_lights_to_correct_brightness_when_turned_on',
+        'automation.correct_light_brightness',
+        'automation.set_lights_to_correct_color_temp_when_turned_on',
+        'automation.react_to_changes_of_the_brightness_slider',
+        'automation.toggle_sleep_mode_on_adapative_lighting_switches',
+        'automation.turn_off_color_adjustment_on_some_adapative_lighting_configurations',
+        'automation.cabinet_sync_on',
+        'automation.cabinet_sync_off',
+        'automation.network_closet_lights',
+        'automation.haunt_lights',
+        'automation.indoor_grow_led_automation',
+        'automation.indoor_grow_led_off',
+        'automation.mode_selector',
+        'automation.morning_mode',
+        'automation.morning_to_day',
+        'automation.run_default_morning_actions',
+        'automation.mode_away_to_day',
+        'automation.mode_day_to_evening',
+        'automation.reading_mode',
+        'automation.away_mode'
+      ] -%}
+      {%- set watched_switches = [
+        ['switch.circadian_lighting_brightness', 'circadian: brightness'],
+        ['switch.circadian_lighting_color_bright', 'circadian: color bright'],
+        ['switch.circadian_lighting_color_accent', 'circadian: color accent'],
+        ['switch.circadian_lighting_brighter_accent', 'circadian: brighter accent'],
+        ['switch.circadian_lighting_min_brightness', 'circadian: min brightness'],
+        ['switch.adaptive_lighting_chandelier', 'adaptive: chandelier'],
+        ['switch.adaptive_lighting_cans', 'adaptive: cans'],
+        ['switch.adaptive_lighting_living_cans', 'adaptive: living cans']
+      ] -%}
+      {%- set total = (watched | count) + (watched_switches | count) -%}
+      {%- set ns = namespace(on=[]) -%}
+      {%- for e in watched -%}
+        {%- if is_state(e, 'on') -%}
+          {%- set ns.on = ns.on + [state_attr(e, 'friendly_name') or e] -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- for e, label in watched_switches -%}
+        {%- if is_state(e, 'on') -%}
+          {%- set ns.on = ns.on + [label] -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {% if ns.on | count == 0 %}
+      ## ✅ All {{ total }} are off
+      {% else %}
+      ## ⚠️ {{ ns.on | count }} of {{ total }} still on
+      {% for a in ns.on %}
+      - {{ a }}
+      {%- endfor %}
+      {% endif %}
+
+  - type: entities
+    title: AC
+    show_header_toggle: false
+    entities:
+      - entity: automation.upstairs_ac
+        name: upstairs daytime AC
+      - entity: automation.upstairs_reading
+        name: upstairs nighttime AC
+      - entity: automation.upstairs_heat
+        name: upstairs heat
+      - type: divider
+      - input_number.upstairs_thermostat_target_temperature
+      - input_number.upstairs_nighttime_target_temperature
+      - type: divider
+      - select.downstairs_humidity_mode
+      - number.downstairs_dehum_setpoint
+      - number.downstairs_dehumidification_overcooling
+
+  - type: entities
+    title: Motion → Sonos
+    show_header_toggle: false
+    entities:
+      - automation.turn_on_related_speakers
+      - automation.turn_off_related_speakers
+
+  - type: entities
+    title: Motion → lights
+    show_header_toggle: false
+    entities:
+      - automation.turn_on_lights_when_motion_is_detected
+      - automation.turn_on_switches_when_motion_is_detected
+      - automation.turn_off_lights_after_sensors_have_turned_off
+      - automation.turn_off_lights_with_delay
+      - automation.turn_off_lights_immediately
+
+  - type: entities
+    title: Indoor lights
+    show_header_toggle: false
+    entities:
+      - automation.set_lights_to_correct_brightness_when_turned_on
+      - automation.correct_light_brightness
+      - automation.set_lights_to_correct_color_temp_when_turned_on
+      - automation.react_to_changes_of_the_brightness_slider
+      - automation.toggle_sleep_mode_on_adapative_lighting_switches
+      - automation.turn_off_color_adjustment_on_some_adapative_lighting_configurations
+      - automation.cabinet_sync_on
+      - automation.cabinet_sync_off
+      - automation.network_closet_lights
+      - automation.haunt_lights
+      - automation.indoor_grow_led_automation
+      - automation.indoor_grow_led_off
+
+  - type: entities
+    title: Circadian lighting
+    show_header_toggle: true
+    entities:
+      - entity: switch.circadian_lighting_brightness
+        name: brightness (pendants, yoga, music room fan)
+      - entity: switch.circadian_lighting_color_bright
+        name: color bright (great room, music room)
+      - entity: switch.circadian_lighting_color_accent
+        name: color accent (bookcase, pillar, palm)
+      - entity: switch.circadian_lighting_brighter_accent
+        name: brighter accent (upper cabinets)
+      - entity: switch.circadian_lighting_min_brightness
+        name: min brightness (guest bath mirror, laundry)
+      - type: divider
+      - entity: sensor.circadian_values
+        name: circadian value
+      - entity: input_number.brightness
+        name: brightness slider
+
+  - type: entities
+    title: Adaptive lighting
+    show_header_toggle: true
+    entities:
+      - switch.adaptive_lighting_chandelier
+      - switch.adaptive_lighting_cans
+      - switch.adaptive_lighting_living_cans
+
+  - type: entities
+    title: Light automation activity
+    show_header_toggle: false
+    entities:
+      - entity: counter.light_automations
+        name: light automations fired
+    footer:
+      type: graph
+      entity: counter.light_automations
+      hours_to_show: 6
+      detail: 2
+
+  - type: entities
+    title: Modes
+    show_header_toggle: false
+    entities:
+      - entity: input_select.mode
+        name: current mode
+      - type: divider
+      - entity: automation.mode_selector
+        name: mode selector (runs mode scripts)
+      - automation.morning_mode
+      - automation.morning_to_day
+      - automation.run_default_morning_actions
+      - automation.mode_away_to_day
+      - automation.mode_day_to_evening
+      - automation.reading_mode
+      - automation.away_mode
+
+  - type: entities
+    title: Shades & seasonal (optional)
+    show_header_toggle: false
+    entities:
+      - automation.open_shades_on_workday_mornings_at_7am
+      - automation.close_shades_in_reading_and_sleeping_modes
+      - automation.close_shades_in_sleeping_modes
+      - automation.close_shades_when_it_gets_warm_upstairs
+      - automation.open_shades_when_its_cool_enough_and_the_door_is_open
+      - type: divider
+      - automation.sunrise
+      - automation.sunset
+      - automation.trees_at_sunset
+      - automation.trees_in_the_morning
+
+  # --------------------------------------------------------------------- fans
+  - type: entities
+    title: Exhaust fans
+    show_header_toggle: true
+    entities:
+      - entity: switch.bathroom_fan
+        name: master bath
+      - entity: switch.guest_bath_fan
+        name: guest bath
+      - entity: switch.powder_room_fan
+        name: powder room
+      - entity: fan.laundry_room
+        name: laundry room
+      - entity: fan.garage
+        name: garage
+      - type: divider
+      - entity: sensor.bathroom_humidity
+        name: master bath RH
+      - entity: sensor.guest_bath_humidity
+        name: guest bath RH
+      - entity: sensor.powder_room_humidity
+        name: powder room RH
+      - entity: sensor.laundry_room_humidity
+        name: laundry room RH
+
+  - type: tile
+    entity: fan.lounge
+    name: lounge purifier
+    features:
+      - type: fan-speed
+      - type: fan-preset-modes
+        style: dropdown
+        preset_modes:
+          - Auto
+          - Normal
+
+  - type: tile
+    entity: fan.living_room
+    name: living room purifier
+    features:
+      - type: fan-speed
+      - type: fan-preset-modes
+        style: dropdown
+        preset_modes:
+          - Auto
+          - Normal
+
+  - type: tile
+    entity: fan.bedroom
+    name: bedroom purifier
+    features:
+      - type: fan-speed
+      - type: fan-preset-modes
+        style: dropdown
+        preset_modes:
+          - Auto
+          - Normal
+
+  - type: entities
+    title: Air purifier settings
+    show_header_toggle: false
+    entities:
+      - entity: automation.lounge_fan_auto_mode
+        name: lounge auto mode automation
+      - entity: binary_sensor.lounge_air_quality_poor_or_room_occupied
+        name: lounge auto-mode trigger
+      - type: divider
+      - entity: switch.lounge_continuous_monitoring
+        name: lounge monitoring
+      - entity: switch.lounge_night_mode
+        name: lounge night mode
+      - entity: sensor.lounge_filter_life
+        name: lounge filter life
+      - type: divider
+      - entity: switch.living_room_continuous_monitoring
+        name: living room monitoring
+      - entity: switch.living_room_night_mode
+        name: living room night mode
+      - entity: sensor.living_room_filter_life
+        name: living room filter life
+      - type: divider
+      - entity: switch.bedroom_continuous_monitoring
+        name: bedroom monitoring
+      - entity: switch.bedroom_night_mode
+        name: bedroom night mode
+      - entity: sensor.bedroom_filter_life
+        name: bedroom filter life
+
+  - type: glance
+    title: Air quality
+    columns: 4
+    entities:
+      - entity: sensor.lounge_pm_2_5
+        name: lounge PM2.5
+      - entity: sensor.lounge_pm_10
+        name: lounge PM10
+      - entity: sensor.lounge_volatile_organic_compounds_index
+        name: lounge VOC
+      - entity: sensor.lounge_nitrogen_dioxide_index
+        name: lounge NO₂
+      - entity: sensor.living_room_pm_2_5
+        name: living PM2.5
+      - entity: sensor.living_room_pm_10
+        name: living PM10
+      - entity: sensor.living_room_volatile_organic_compounds_index
+        name: living VOC
+      - entity: sensor.living_room_hcho
+        name: living HCHO
+      - entity: sensor.bedroom_pm_2_5
+        name: bedroom PM2.5
+      - entity: sensor.bedroom_pm_10
+        name: bedroom PM10
+      - entity: sensor.bedroom_volatile_organic_compounds_index
+        name: bedroom VOC
+      - entity: sensor.bedroom_hcho
+        name: bedroom HCHO
+
+  - type: tile
+    entity: fan.music_room
+    name: music room ceiling fan
+    features:
+      - type: fan-speed
+      - type: fan-preset-modes
+        style: dropdown
+        preset_modes:
+          - auto
+
+  - type: entities
+    title: Music room ceiling fan
+    show_header_toggle: false
+    entities:
+      - entity: light.music_room_fan_light
+        name: fan light
+      - entity: climate.music_room_fan_auto_comfort
+        name: auto comfort
+      - entity: switch.music_room_fan_motion_sense
+        name: motion sense
+      - entity: switch.music_room_fan_return_to_auto
+        name: return to auto
+      - entity: switch.music_room_fan_light_return_to_auto
+        name: light return to auto
+      - entity: switch.music_room_fan_whoosh
+        name: whoosh
+      - entity: switch.music_room_fan_eco_mode
+        name: eco mode
+      - type: divider
+      - entity: binary_sensor.music_room_fan_occupancy
+        name: occupancy
+      - entity: sensor.music_room_fan_temperature
+        name: fan temperature
+
+  - type: history-graph
+    title: Fan runtime — 24h
+    hours_to_show: 24
+    entities:
+      - entity: switch.bathroom_fan
+        name: master bath
+      - entity: switch.guest_bath_fan
+        name: guest bath
+      - entity: switch.powder_room_fan
+        name: powder room
+      - entity: fan.laundry_room
+        name: laundry
+      - entity: fan.garage
+        name: garage
+      - entity: fan.lounge
+        name: lounge purifier
+      - entity: fan.living_room
+        name: living purifier
+      - entity: fan.bedroom
+        name: bedroom purifier
+      - entity: fan.music_room
+        name: music room ceiling
+
+  - type: entities
+    title: Leak detection
+    show_header_toggle: false
+    entities:
+      - binary_sensor.leak_sensor_water_alarm_water_leak_detected
+      - binary_sensor.bathroom_drain_leak_water_leak_detected
+      - binary_sensor.garage_garage_attic_leak_water_leak_detected
+      - binary_sensor.upstairs_ac_leak_likely
+      - sensor.leak_sensor_air_temperature
+      - type: divider
+      - sensor.upstairs_comfort_dew_point
+      - sensor.downstairs_comfort_dew_point
+      - sensor.outdoor_comfort_dew_point
+
+  # ------------------------------------------------------------------ current
+  - type: glance
+    title: Containment — now
+    columns: 4
+    state_color: true
+    entities:
+      - entity: sensor.stairs_air_temperature
+        name: stairs
+      - entity: sensor.upstairs_air_temperature
+        name: upstairs
+      - entity: sensor.great_hall_air_temperature
+        name: great hall
+      - entity: sensor.guest_hall_air_temperature
+        name: guest hall
+      - entity: sensor.stairs_humidity
+        name: stairs RH
+      - entity: sensor.upstairs_humidity
+        name: upstairs RH
+      - entity: sensor.great_hall_humidity
+        name: great hall RH
+      - entity: sensor.guest_hall_humidity
+        name: guest hall RH
+
+  - type: glance
+    title: Uncontained — now
+    columns: 4
+    state_color: true
+    entities:
+      - entity: sensor.bathroom_air_temperature
+        name: bathroom
+      - entity: sensor.bedside_table_air_temperature
+        name: bedside
+      - entity: sensor.dining_room_air_temperature
+        name: dining
+      - entity: sensor.garage_hall_air_temperature
+        name: garage hall
+      - entity: sensor.guest_bath_air_temperature
+        name: guest bath
+      - entity: sensor.laundry_room_air_temperature
+        name: laundry
+      - entity: sensor.lounge_air_temperature
+        name: lounge
+      - entity: sensor.music_room_air_temperature
+        name: music room
+      - entity: sensor.pantry_air_temperature
+        name: pantry
+      - entity: sensor.powder_room_air_temperature
+        name: powder
+      - entity: sensor.yoga_room_air_temperature
+        name: yoga
+      - entity: sensor.wine_room_air_temperature
+        name: wine
+      - entity: sensor.bathroom_humidity
+        name: bathroom RH
+      - entity: sensor.bedside_table_humidity
+        name: bedside RH
+      - entity: sensor.dining_room_humidity
+        name: dining RH
+      - entity: sensor.garage_hall_humidity
+        name: garage hall RH
+      - entity: sensor.guest_bath_humidity
+        name: guest bath RH
+      - entity: sensor.laundry_room_humidity
+        name: laundry RH
+      - entity: sensor.lounge_humidity
+        name: lounge RH
+      - entity: sensor.music_room_humidity
+        name: music room RH
+      - entity: sensor.pantry_humidity
+        name: pantry RH
+      - entity: sensor.powder_room_humidity
+        name: powder RH
+      - entity: sensor.yoga_room_humidity
+        name: yoga RH
+      - entity: sensor.wine_room_humidity
+        name: wine RH
+
+  # ------------------------------------------------------------------- 24 hour
+  - type: custom:mini-graph-card
+    name: Containment humidity — 24h
+    hours_to_show: 24
+    points_per_hour: 2
+    show:
+      fill: false
+      state: false
+      average: true
+      extrema: true
+      labels: true
+      legend: true
+    entities:
+      - entity: sensor.stairs_humidity
+        name: stairs
+      - entity: sensor.upstairs_humidity
+        name: upstairs
+      - entity: sensor.great_hall_humidity
+        name: great hall
+      - entity: sensor.guest_hall_humidity
+        name: guest hall
+
+  - type: custom:mini-graph-card
+    name: Containment temperature — 24h
+    hours_to_show: 24
+    points_per_hour: 2
+    show:
+      fill: false
+      state: false
+      average: true
+      extrema: true
+      labels: true
+      legend: true
+    entities:
+      - entity: sensor.stairs_air_temperature
+        name: stairs
+      - entity: sensor.upstairs_air_temperature
+        name: upstairs
+      - entity: sensor.great_hall_air_temperature
+        name: great hall
+      - entity: sensor.guest_hall_air_temperature
+        name: guest hall
+
+  - type: custom:mini-graph-card
+    name: Uncontained humidity — 24h
+    hours_to_show: 24
+    points_per_hour: 1
+    show:
+      fill: false
+      state: false
+      average: true
+      extrema: true
+      labels: true
+      legend: true
+    entities:
+      - entity: sensor.bathroom_humidity
+        name: bathroom
+      - entity: sensor.bedside_table_humidity
+        name: bedside
+      - entity: sensor.dining_room_humidity
+        name: dining
+      - entity: sensor.garage_hall_humidity
+        name: garage hall
+      - entity: sensor.guest_bath_humidity
+        name: guest bath
+      - entity: sensor.laundry_room_humidity
+        name: laundry
+      - entity: sensor.lounge_humidity
+        name: lounge
+      - entity: sensor.music_room_humidity
+        name: music room
+      - entity: sensor.pantry_humidity
+        name: pantry
+      - entity: sensor.powder_room_humidity
+        name: powder
+      - entity: sensor.yoga_room_humidity
+        name: yoga
+
+  - type: custom:mini-graph-card
+    name: Uncontained temperature — 24h
+    hours_to_show: 24
+    points_per_hour: 1
+    show:
+      fill: false
+      state: false
+      average: true
+      extrema: true
+      labels: true
+      legend: true
+    entities:
+      - entity: sensor.bathroom_air_temperature
+        name: bathroom
+      - entity: sensor.bedside_table_air_temperature
+        name: bedside
+      - entity: sensor.dining_room_air_temperature
+        name: dining
+      - entity: sensor.garage_hall_air_temperature
+        name: garage hall
+      - entity: sensor.guest_bath_air_temperature
+        name: guest bath
+      - entity: sensor.laundry_room_air_temperature
+        name: laundry
+      - entity: sensor.lounge_air_temperature
+        name: lounge
+      - entity: sensor.music_room_air_temperature
+        name: music room
+      - entity: sensor.pantry_air_temperature
+        name: pantry
+      - entity: sensor.powder_room_air_temperature
+        name: powder
+      - entity: sensor.yoga_room_air_temperature
+        name: yoga
+
+  # -------------------------------------------------------------- long history
+  - type: statistics-graph
+    title: Containment humidity — 30 days
+    days_to_show: 30
+    period: hour
+    stat_types:
+      - mean
+      - max
+    chart_type: line
+    entities:
+      - sensor.stairs_humidity
+      - sensor.upstairs_humidity
+      - sensor.great_hall_humidity
+      - sensor.guest_hall_humidity
+
+  - type: statistics-graph
+    title: Containment temperature — 30 days
+    days_to_show: 30
+    period: hour
+    stat_types:
+      - mean
+      - max
+    chart_type: line
+    entities:
+      - sensor.stairs_air_temperature
+      - sensor.upstairs_air_temperature
+      - sensor.great_hall_air_temperature
+      - sensor.guest_hall_air_temperature
+
+  - type: statistics-graph
+    title: Uncontained humidity — 30 days
+    days_to_show: 30
+    period: day
+    stat_types:
+      - mean
+    chart_type: line
+    entities:
+      - sensor.bathroom_humidity
+      - sensor.bedside_table_humidity
+      - sensor.dining_room_humidity
+      - sensor.garage_hall_humidity
+      - sensor.guest_bath_humidity
+      - sensor.laundry_room_humidity
+      - sensor.lounge_humidity
+      - sensor.music_room_humidity
+      - sensor.pantry_humidity
+      - sensor.powder_room_humidity
+      - sensor.yoga_room_humidity
+
+  - type: history-graph
+    title: Containment motion
+    hours_to_show: 24
+    entities:
+      - entity: binary_sensor.stairs_home_security_motion_detection
+        name: stairs
+      - entity: binary_sensor.upstairs_home_security_motion_detection
+        name: upstairs
+      - entity: binary_sensor.great_hall_home_security_motion_detection
+        name: great hall
+      - entity: binary_sensor.guest_hall_home_security_motion_detection
+        name: guest hall
