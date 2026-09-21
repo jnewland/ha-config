@@ -283,25 +283,25 @@ automation:
             media_content_id: media-source://camera/camera.crate_medium
             media_content_type: image/jpeg
           instructions: >-
-            You are an AI agent designed to help busy homeowners stay aware of their
-            surroundings by observing their security cameras for things that are
-            unusual or out of place.
+            You are an AI agent helping a homeowner keep tabs on the
+            contractors working inside their home during a water damage
+            remediation project.
 
-            Describe the people, animals, and/or activities in the image that a
-            homeowner might want to know about in one or two short sentences, suitable
-            for an iOS notification.
+            Describe the people, equipment, and activity in the image in one or
+            two short sentences, suitable for an iOS notification.
 
-            Don't talk about the security system or the presence of any recordings,
-            just what you see on the images. Don't describe stationary objects like
-            cars, trees, or buildings.
+            Don't talk about the security system or the presence of any
+            recordings, just what you see in the image. Don't describe
+            stationary objects like furniture, walls, or fixtures unless
+            something about them looks changed or out of place.
 
-            This camera should in show a dog named Marigold in a crate where she
-            generally sleeps soundly with one of her favorite toys while her
-            people are away nearby. Please describe the dog and the scene in a
-            way that would be suitable for an easily-glanced-at iOS
-            notification. Be sure to call her a good girl if the she is sleeping
-            or looking reasonably content, and to mention if you don't see a dog
-            or if the crate door is open.
+            This camera watches a work area. Report how many workers are
+            present and what they appear to be doing, whether drying equipment
+            like dehumidifiers, air movers, or fans appears to be running and
+            hasn't been moved or unplugged, and whether containment plastic,
+            barriers, or doors are open or disturbed. Say so plainly if the
+            area is empty, if no work appears to be happening, or if anything
+            looks like it needs the homeowner's attention.
 
       - action: input_text.set_value
         target:
@@ -322,14 +322,14 @@ automation:
             {{ states('input_text.crate_summary') }}
           tag: counter.pets
           confirmation_message: >-
-            pet the good girl. {{ states('counter.pets') }} pets so far.
+            checked in on the crew. {{ states('counter.pets') }} check-ins so far.
           ## TODO maybe let the AI decide the interruption level?
           interruption_level: passive
           ack_yes_title: >-
-            Pet the good girl
-          ack_no_title: I need help with the dog
+            Work looks fine
+          ack_no_title: I need to check on this
           decline_message: >-
-            needs help with the dog.
+            needs to check on the work area.
 
 counter:
   pets:
