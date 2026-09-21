@@ -5,7 +5,7 @@ on:
   push:
     branches: [main]
 concurrency:
-  group: cd-${{ github.event.pull_request.number || github.ref_name }}-${{ github.event_name }}
+  group: cd-${{ github.event.pull_request.number || github.ref_name }}-${{ github.event_name }}-${{ github.event.label.name }}
   cancel-in-progress: ${{ github.event_name != 'pull_request' }}
 jobs:
   changes:
