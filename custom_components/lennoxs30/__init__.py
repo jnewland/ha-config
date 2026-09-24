@@ -74,6 +74,7 @@ from .device import (
     S30ZoneThermostat,
     S40BleDevice,
 )
+from .helpers import helper_create_zone_entity_name
 from .util import dict_redact_fields
 
 DOMAIN = LENNOX_DOMAIN
@@ -282,7 +283,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     index: int = 1
     if _FIRST_ENTRY_TITLE is None:
         _FIRST_ENTRY_TITLE = entry.title
-    if _FIRST_ENTRY_TITLE == entry.title:
+    if entry.title == _FIRST_ENTRY_TITLE:
         index = 0
 
     is_cloud = entry.data[CONF_CLOUD_CONNECTION]
@@ -406,7 +407,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         return False
 
 
-class Manager(object):
+class Manager:
     """Manages the connection to cloud or local via API"""
 
     def __init__(
@@ -690,6 +691,15 @@ class Manager(object):
 
             for zone in system.zone_list:
                 if zone.is_zone_active():
+                    if zone.name is None or str(zone.name).strip() == "":
+                        fallback_name = helper_create_zone_entity_name(system, zone)
+                        _LOGGER.warning(
+                            "create_devices active zone missing name host [%s] sysId [%s] zone_id [%s] using fallback [%s]; this usually indicates incomplete zone config message delivery",
+                            self._ip_address,
+                            system.sysId,
+                            zone.id,
+                            fallback_name,
+                        )
                     z: S30ZoneThermostat = S30ZoneThermostat(self._hass, self.config_entry, system, zone, s30)
                     z.register_device()
 
@@ -770,13 +780,17 @@ class Manager(object):
                 if lsystem.config_complete() is False:
                     continue
                 numZones = len(lsystem.zone_list)
+                numActiveZones = sum(1 for z in lsystem.zone_list if z.is_zone_active())
+                numZoneNames = sum(1 for z in lsystem.zone_list if z.is_zone_active() and z.name is not None and str(z.name).strip() != "")
                 _LOGGER.debug(
-                    "configuration_initialization host [%s] wait for zones system [%s] numZone [%d]",
+                    "configuration_initialization host [%s] wait for zones system [%s] numZone [%d] activeZones [%d] namedZones [%d]",
                     self._ip_address,
                     lsystem.sysId,
                     numZones,
+                    numActiveZones,
+                    numZoneNames,
                 )
-                if numZones > 0:
+                if numActiveZones > 0 and numZoneNames == numActiveZones:
                     systemsWithZones += 1
             if got_message is False:
                 loops += 1
