@@ -100,6 +100,16 @@ DOCS[CONF_ADAPT_ONLY_ON_BARE_TURN_ON] = (
     "Needs `take_over_control` enabled. 🕵️"
 )
 
+CONF_MANUAL_CONTROL_ON_EXTERNAL_TURN_ON, DEFAULT_MANUAL_CONTROL_ON_EXTERNAL_TURN_ON = (
+    "manual_control_on_external_turn_on",
+    False,
+)
+DOCS[CONF_MANUAL_CONTROL_ON_EXTERNAL_TURN_ON] = (
+    "Treat turn-ons without a matching Home Assistant `light.turn_on` context as "
+    "manual control. Normal manual-control resets apply. Still allows "
+    "`detect_non_ha_changes` for already-on lights. Needs `take_over_control` enabled. 🕵️"
+)
+
 CONF_PREFER_RGB_COLOR, DEFAULT_PREFER_RGB_COLOR = "prefer_rgb_color", False
 DOCS[CONF_PREFER_RGB_COLOR] = (
     "Whether to prefer RGB color adjustment over "
@@ -243,6 +253,15 @@ DOCS[CONF_AUTORESET_CONTROL] = (
     "Set to 0 to disable. ⏲️"
 )
 
+(
+    CONF_RESET_MANUAL_CONTROL_ON_SLEEP_MODE_CHANGE,
+    DEFAULT_RESET_MANUAL_CONTROL_ON_SLEEP_MODE_CHANGE,
+) = ("reset_manual_control_on_sleep_mode_change", True)
+DOCS[CONF_RESET_MANUAL_CONTROL_ON_SLEEP_MODE_CHANGE] = (
+    "Reset manual control when the sleep mode switch is toggled. "
+    "Set to `false` to preserve manual control across sleep mode changes. 😴"
+)
+
 CONF_SKIP_REDUNDANT_COMMANDS, DEFAULT_SKIP_REDUNDANT_COMMANDS = (
     "skip_redundant_commands",
     False,
@@ -271,6 +290,14 @@ DOCS[CONF_MULTI_LIGHT_INTERCEPT] = (
     "into multiple calls, e.g., when lights are in different switches. "
     "Requires `intercept` to be enabled."
 )
+
+CONF_EXPAND_LIGHT_GROUPS, DEFAULT_EXPAND_LIGHT_GROUPS = "expand_light_groups", True
+DOCS[CONF_EXPAND_LIGHT_GROUPS] = (
+    "Expand light groups to their members (`true`, default). Set `false` to send "
+    "commands to the group and track manual control for the group. Explicit member "
+    "targets in services stay individual targets."
+)
+
 
 SLEEP_MODE_SWITCH = "sleep_mode_switch"
 ADAPT_COLOR_SWITCH = "adapt_color_switch"
@@ -312,6 +339,19 @@ DOCS_MANUAL_CONTROL = {
 DOCS_APPLY = {
     CONF_ENTITY_ID: "The `entity_id` of the switch with the settings to apply. 📝",
     CONF_LIGHTS: "A light (or list of lights) to apply the settings to. 💡",
+}
+
+# Basic options shown at top level in options flow (not in collapsed section)
+BASIC_OPTIONS: set[str] = {
+    CONF_LIGHTS,
+    CONF_MIN_BRIGHTNESS,
+    CONF_MAX_BRIGHTNESS,
+    CONF_MIN_COLOR_TEMP,
+    CONF_MAX_COLOR_TEMP,
+    CONF_SLEEP_BRIGHTNESS,
+    CONF_SLEEP_COLOR_TEMP,
+    CONF_TRANSITION,
+    CONF_INTERVAL,
 }
 
 
@@ -394,6 +434,16 @@ VALIDATION_TUPLES: list[tuple[str, Any, Any]] = [
     ),
     (CONF_ONLY_ONCE, DEFAULT_ONLY_ONCE, bool),
     (CONF_ADAPT_ONLY_ON_BARE_TURN_ON, DEFAULT_ADAPT_ONLY_ON_BARE_TURN_ON, bool),
+    (
+        CONF_MANUAL_CONTROL_ON_EXTERNAL_TURN_ON,
+        DEFAULT_MANUAL_CONTROL_ON_EXTERNAL_TURN_ON,
+        bool,
+    ),
+    (
+        CONF_RESET_MANUAL_CONTROL_ON_SLEEP_MODE_CHANGE,
+        DEFAULT_RESET_MANUAL_CONTROL_ON_SLEEP_MODE_CHANGE,
+        bool,
+    ),
     (CONF_SEPARATE_TURN_ON_COMMANDS, DEFAULT_SEPARATE_TURN_ON_COMMANDS, bool),
     (CONF_SEND_SPLIT_DELAY, DEFAULT_SEND_SPLIT_DELAY, int_between(0, 10000)),
     (CONF_ADAPT_DELAY, DEFAULT_ADAPT_DELAY, cv.positive_float),
@@ -405,6 +455,7 @@ VALIDATION_TUPLES: list[tuple[str, Any, Any]] = [
     (CONF_INTERCEPT, DEFAULT_INTERCEPT, bool),
     (CONF_MULTI_LIGHT_INTERCEPT, DEFAULT_MULTI_LIGHT_INTERCEPT, bool),
     (CONF_INCLUDE_CONFIG_IN_ATTRIBUTES, DEFAULT_INCLUDE_CONFIG_IN_ATTRIBUTES, bool),
+    (CONF_EXPAND_LIGHT_GROUPS, DEFAULT_EXPAND_LIGHT_GROUPS, bool),
 ]
 
 
@@ -459,22 +510,32 @@ _DOMAIN_SCHEMA = vol.Schema(
 )
 
 
-def apply_service_schema(initial_transition: int = 1) -> vol.Schema:
+def apply_service_schema() -> vol.Schema:
     """Return the schema for the apply service."""
     return vol.Schema(
         {
             vol.Optional(CONF_ENTITY_ID): cv.entity_ids,  # type: ignore[arg-type]
             vol.Optional(CONF_LIGHTS, default=[]): cv.entity_ids,  # type: ignore[arg-type]
-            vol.Optional(
-                CONF_TRANSITION,
-                default=initial_transition,
-            ): VALID_TRANSITION,
+            vol.Optional(CONF_TRANSITION): VALID_TRANSITION,
             vol.Optional(ATTR_ADAPT_BRIGHTNESS, default=True): cv.boolean,
             vol.Optional(ATTR_ADAPT_COLOR, default=True): cv.boolean,
             vol.Optional(CONF_PREFER_RGB_COLOR, default=False): cv.boolean,
             vol.Optional(CONF_TURN_ON_LIGHTS, default=False): cv.boolean,
         },
     )
+
+
+def change_switch_settings_schema() -> dict[vol.Marker, Any]:
+    """Return the schema for the change_switch_settings service."""
+    args: dict[vol.Marker, Any] = {
+        vol.Optional(CONF_USE_DEFAULTS, default="current"): cv.string,
+    }
+    # Modifying these after init isn't possible
+    skip = (CONF_INTERVAL, CONF_NAME, CONF_LIGHTS)
+    for k, _, valid in VALIDATION_TUPLES:
+        if k not in skip:
+            args[vol.Optional(k)] = valid
+    return args
 
 
 SET_MANUAL_CONTROL_SCHEMA = vol.Schema(
