@@ -1,0 +1,53 @@
+title: Camera Snapshot
+icon: mdi:camera-image
+path: camera-snapshot
+# opened from the Cameras view tiles, which pick the camera via the card's
+# query-string camera_select action. not shown as a tab.
+subview: true
+back_path: /lovelace/cameras
+type: panel
+cards:
+  - type: custom:advanced-camera-card
+    card_id: snapshot
+    cameras:
+      - camera_entity: camera.front_door_medium
+        id: front_door
+      - camera_entity: camera.front_yard_left_medium
+        id: front_yard_left
+      - camera_entity: camera.front_yard_right_medium
+        id: front_yard_right
+      - camera_entity: camera.atrium_medium
+        id: atrium
+      - camera_entity: camera.gate_medium
+        id: gate
+      - camera_entity: camera.garage_medium
+        id: garage
+      - camera_entity: camera.back_porch_medium
+        id: back_porch
+      - camera_entity: camera.pergola_medium
+        id: pergola
+      - camera_entity: camera.ac_medium
+        id: ac
+      - camera_entity: camera.bbq_medium
+        id: bbq
+      - camera_entity: camera.crate_medium
+        id: crate
+    view:
+      default: image
+    image:
+      mode: camera
+      refresh_seconds: 2
+      actions:
+        # tap the snapshot to open this camera on the Cameras Live view
+        tap_action:
+          action: navigate
+          navigation_path: >-
+            /lovelace/cameras-live?advanced-camera-card-action.live.camera_select={{ acc.camera }}
+    elements:
+      - type: custom:advanced-camera-card-menu-icon
+        icon: mdi:video
+        title: Watch live
+        tap_action:
+          action: navigate
+          navigation_path: >-
+            /lovelace/cameras-live?advanced-camera-card-action.live.camera_select={{ acc.camera }}
