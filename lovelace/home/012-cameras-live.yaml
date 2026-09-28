@@ -34,7 +34,8 @@ cards:
       - camera_entity: camera.ac
         id: ac
 
-      # not in Frigate, so use HA's own stream (HA's go2rtc serves WebRTC)
+      # UniFi Protect cameras (bbq isn't in Frigate; Frigate's crate stream is
+      # unreliable), so use HA's own stream (HA's go2rtc serves WebRTC)
       - camera_entity: camera.bbq_medium
         id: bbq
         live_provider: ha
