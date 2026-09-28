@@ -3,6 +3,10 @@ icon: mdi:video-high-definition
 path: cameras-live
 cards:
   - type: custom:advanced-camera-card
+    cameras_global:
+      # stream straight from Frigate's go2rtc (proxied by the Frigate
+      # integration) instead of HA's own stream, which starts much faster
+      live_provider: go2rtc
     cameras:
       # Frigate cameras trigger events automatically
       - camera_entity: camera.front_door
@@ -12,6 +16,7 @@ cards:
       - camera_entity: camera.gate
       - camera_entity: camera.garage
       - camera_entity: camera.back_porch
+      - camera_entity: camera.pergola
       - camera_entity: camera.ac
 
       # non-Frigate cameras can be triggered
@@ -31,8 +36,11 @@ cards:
           trigger: live
           untrigger: default
     live:
+      # start streaming in the background as soon as the dashboard loads,
+      # and show one camera at a time rather than decoding every stream at once
+      preload: true
       display:
-        mode: grid
+        mode: single
       controls:
         builtin: false
     media_viewer:
@@ -42,6 +50,8 @@ cards:
         mode: grid
     menu:
       buttons:
+        cameras:
+          enabled: true
         play:
           enabled: true
         mute:
