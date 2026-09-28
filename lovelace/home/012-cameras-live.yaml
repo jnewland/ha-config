@@ -34,6 +34,11 @@ cards:
       - camera_entity: camera.ac
         id: ac
 
+      # not in Frigate, so use HA's own stream (HA's go2rtc serves WebRTC)
+      - camera_entity: camera.bbq_medium
+        id: bbq
+        live_provider: ha
+
       # non-Frigate cameras can be triggered
       # by motion entity changes or a door being opened.
       # - camera_entity: camera.kitchen
@@ -154,3 +159,11 @@ cards:
         tap_action:
           action: navigate
           navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=ac
+      - type: picture-entity
+        entity: camera.bbq_medium
+        camera_view: auto
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=bbq
