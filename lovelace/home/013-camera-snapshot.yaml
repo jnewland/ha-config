@@ -30,6 +30,8 @@ cards:
         id: ac
       - camera_entity: camera.bbq_medium
         id: bbq
+      - camera_entity: camera.crate_medium
+        id: crate
     view:
       default: image
     image:

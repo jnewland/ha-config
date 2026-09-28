@@ -15,6 +15,9 @@ cards:
           show_name: false
           show_state: false
           entity: camera.crate_medium
+          tap_action:
+            action: navigate
+            navigation_path: /lovelace/camera-snapshot?advanced-camera-card-action.snapshot.camera_select=crate
         - type: markdown
           content: >
             {{ states('input_text.crate_summary') }}
