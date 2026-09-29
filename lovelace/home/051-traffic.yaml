@@ -1,8 +1,8 @@
 title: Traffic
 icon: mdi:traffic-light
 path: traffic
-# City of Austin traffic cameras (data.austintexas.gov dataset b4k4-adkb).
-# tap a camera to open it large on the Traffic Camera subview.
+# image entities from packages/traffic_cameras.yaml. tap a camera to open
+# it large in the more-info dialog.
 type: sections
 sections:
   - type: grid
@@ -10,252 +10,124 @@ sections:
       - type: heading
         heading: I-35
         icon: mdi:highway
-      - type: picture-glance
-        title: MLK / I-35 NB
-        entities: []
-        image: https://cctv.austinmobility.io/image/1461.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t1461
-      - type: picture-glance
-        title: MLK / I-35 SB
-        entities: []
-        image: https://cctv.austinmobility.io/image/67.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t67
-      - type: picture-glance
-        title: Manor / I-35
-        entities: []
-        image: https://cctv.austinmobility.io/image/244.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t244
-      - type: picture-glance
-        title: I-35 / 32nd
-        entities: []
-        image: https://cctv.austinmobility.io/image/286.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t286
-      - type: picture-glance
-        title: I-35 / 38th½
-        entities: []
-        image: https://cctv.austinmobility.io/image/76.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t76
-      - type: picture-glance
-        title: I-35 SB / 41st
-        entities: []
-        image: https://cctv.austinmobility.io/image/600.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t600
+      - type: picture-entity
+        entity: image.traffic_camera_1461
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_67
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_244
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_286
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_76
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_600
+        show_state: false
   - type: grid
     cards:
       - type: heading
         heading: Airport Blvd
         icon: mdi:road-variant
-      - type: picture-glance
-        title: Airport / MLK
-        entities: []
-        image: https://cctv.austinmobility.io/image/111.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t111
-      - type: picture-glance
-        title: Airport / Manor
-        entities: []
-        image: https://cctv.austinmobility.io/image/454.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t454
-      - type: picture-glance
-        title: Airport / Zach Scott
-        entities: []
-        image: https://cctv.austinmobility.io/image/452.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t452
-      - type: picture-glance
-        title: Airport / 38th½
-        entities: []
-        image: https://cctv.austinmobility.io/image/453.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t453
-      - type: picture-glance
-        title: Airport / Wilshire
-        entities: []
-        image: https://cctv.austinmobility.io/image/203.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t203
-      - type: picture-glance
-        title: Airport / I-35
-        entities: []
-        image: https://cctv.austinmobility.io/image/1407.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t1407
-      - type: picture-glance
-        title: Airport / 45th
-        entities: []
-        image: https://cctv.austinmobility.io/image/112.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t112
+      - type: picture-entity
+        entity: image.traffic_camera_111
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_454
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_452
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_453
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_203
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_1407
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_112
+        show_state: false
   - type: grid
     cards:
       - type: heading
         heading: Manor & Dean Keeton
         icon: mdi:road
-      - type: picture-glance
-        title: Manor / Cherrywood
-        entities: []
-        image: https://cctv.austinmobility.io/image/652.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t652
-      - type: picture-glance
-        title: Dean Keeton / Lafayette
-        entities: []
-        image: https://cctv.austinmobility.io/image/283.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t283
-      - type: picture-glance
-        title: Manor / Berkman
-        entities: []
-        image: https://cctv.austinmobility.io/image/498.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t498
+      - type: picture-entity
+        entity: image.traffic_camera_652
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_283
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_498
+        show_state: false
   - type: grid
     cards:
       - type: heading
         heading: Red River & UT
         icon: mdi:school
-      - type: picture-glance
-        title: Red River / Clyde Littlefield
-        entities: []
-        image: https://cctv.austinmobility.io/image/79.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t79
-      - type: picture-glance
-        title: Dedman / Manor Garage
-        entities: []
-        image: https://cctv.austinmobility.io/image/1487.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t1487
-      - type: picture-glance
-        title: Dedman / Trinity
-        entities: []
-        image: https://cctv.austinmobility.io/image/1395.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t1395
-      - type: picture-glance
-        title: Red River / Luther
-        entities: []
-        image: https://cctv.austinmobility.io/image/802.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t802
-      - type: picture-glance
-        title: Red River / 40th
-        entities: []
-        image: https://cctv.austinmobility.io/image/1454.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t1454
-      - type: picture-glance
-        title: Red River / 41st
-        entities: []
-        image: https://cctv.austinmobility.io/image/662.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t662
+      - type: picture-entity
+        entity: image.traffic_camera_79
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_1487
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_1395
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_802
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_1454
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_662
+        show_state: false
   - type: grid
     cards:
       - type: heading
         heading: MLK & 12th
         icon: mdi:road
-      - type: picture-glance
-        title: MLK / Trinity
-        entities: []
-        image: https://cctv.austinmobility.io/image/65.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t65
-      - type: picture-glance
-        title: MLK / Comal
-        entities: []
-        image: https://cctv.austinmobility.io/image/336.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t336
-      - type: picture-glance
-        title: MLK / Alexander
-        entities: []
-        image: https://cctv.austinmobility.io/image/597.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t597
-      - type: picture-glance
-        title: MLK / Chestnut
-        entities: []
-        image: https://cctv.austinmobility.io/image/73.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t73
-      - type: picture-glance
-        title: 12th / Chestnut
-        entities: []
-        image: https://cctv.austinmobility.io/image/546.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t546
-      - type: picture-glance
-        title: 12th / Chicon
-        entities: []
-        image: https://cctv.austinmobility.io/image/1537.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t1537
+      - type: picture-entity
+        entity: image.traffic_camera_65
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_336
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_597
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_73
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_546
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_1537
+        show_state: false
   - type: grid
     cards:
       - type: heading
         heading: Downtown
         icon: mdi:city
-      - type: picture-glance
-        title: 15th / San Jacinto
-        entities: []
-        image: https://cctv.austinmobility.io/image/1447.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t1447
-      - type: picture-glance
-        title: 6th / Congress
-        entities: []
-        image: https://cctv.austinmobility.io/image/133.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t133
-      - type: picture-glance
-        title: Congress / 2nd
-        entities: []
-        image: https://cctv.austinmobility.io/image/109.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t109
-      - type: picture-glance
-        title: Cesar Chavez / San Jacinto
-        entities: []
-        image: https://cctv.austinmobility.io/image/786.jpg
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/traffic-camera?advanced-camera-card-action.traffic.camera_select=t786
+      - type: picture-entity
+        entity: image.traffic_camera_1447
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_133
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_109
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_786
+        show_state: false
