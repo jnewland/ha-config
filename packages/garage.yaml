@@ -10,8 +10,8 @@ script:
   garage_occupancy:
     mode: parallel
     sequence:
-      - service: homeassistant.turn_on
-        entity_id: switch.garage_overhead
+      - service: light.turn_on
+        entity_id: light.garage_overhead
       - service: homeassistant.turn_on
         entity_id: media_player.garage
       - service: homeassistant.turn_on
@@ -28,7 +28,7 @@ script:
 group:
   garage_occupancy:
     entities:
-      - switch.garage_overhead
+      - light.garage_overhead
       - media_player.garage
       - fan.garage
       - light.garage
