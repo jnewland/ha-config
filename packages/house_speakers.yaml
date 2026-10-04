@@ -128,17 +128,29 @@ automation:
       event_type: state_changed
     variables:
       members: |
-        {% set ns = namespace(members=[]) %}
+        {% set attrs = ['media_player_group_member', 'media_player_group_member_2', 'media_player_group_member_3'] %}
+        {% set ns = namespace(members=[], claimed=[]) %}
         {% set new_state = trigger.event.data.new_state %}
-        {% if new_state is not none %}
-          {% for attr in ['media_player_group_member', 'media_player_group_member_2', 'media_player_group_member_3'] %}
+        {% if new_state is not none and new_state.domain == 'binary_sensor' and new_state.state == 'off' %}
+          {% for attr in attrs %}
             {% set member = new_state.attributes.get(attr) %}
             {% if member %}
               {% set ns.members = ns.members + [member] %}
             {% endif %}
           {% endfor %}
+          {% if ns.members %}
+            {# speakers still claimed by another occupied sensor stay grouped #}
+            {% for other in states.binary_sensor | selectattr('state', 'eq', 'on') | rejectattr('entity_id', 'eq', new_state.entity_id) %}
+              {% for attr in attrs %}
+                {% set member = other.attributes.get(attr) %}
+                {% if member %}
+                  {% set ns.claimed = ns.claimed + [member] %}
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          {% endif %}
         {% endif %}
-        {{ ns.members }}
+        {{ ns.members | reject('in', ns.claimed) | list }}
     condition:
       condition: template
       value_template: |
