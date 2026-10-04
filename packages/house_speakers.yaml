@@ -81,6 +81,23 @@ automation:
     trigger:
       platform: event
       event_type: state_changed
+    variables:
+      source: "{{ states('sensor.house_speaker_source') }}"
+      members: |
+        {% set ns = namespace(members=[]) %}
+        {% set new_state = trigger.event.data.new_state %}
+        {% if new_state is not none %}
+          {% for attr in ['media_player_group_member', 'media_player_group_member_2', 'media_player_group_member_3'] %}
+            {% set member = new_state.attributes.get(attr) %}
+            {% if member and
+                  member != source and
+                  member not in (state_attr(source, 'group_members') or []) and
+                  states(member) in ['idle', 'paused'] %}
+              {% set ns.members = ns.members + [member] %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        {{ ns.members }}
     condition:
       condition: template
       value_template: |
@@ -88,26 +105,19 @@ automation:
           trigger.event.data.old_state != None and
           trigger.event.data.new_state.domain == "binary_sensor" and
           is_state(trigger.event.data.new_state.entity_id, "on") and
-          trigger.event.data.new_state.attributes.media_player_group_member is defined and
-          states('sensor.house_speaker_source') is defined and
-          not is_state('sensor.house_speaker_source', trigger.event.data.new_state.attributes.media_player_group_member) and
-          trigger.event.data.new_state.attributes.media_player_group_member not in state_attr(states('sensor.house_speaker_source'), 'group_members') and
-          ( is_state(trigger.event.data.new_state.attributes.media_player_group_member, 'idle') or
-            is_state(trigger.event.data.new_state.attributes.media_player_group_member, 'paused') )
+          members | count > 0
         }}
     action:
       - service: media_player.join
         data:
-          group_members: |
-            {{ trigger.event.data.new_state.attributes.media_player_group_member }}
-          entity_id: |
-            {{ states('sensor.house_speaker_source') }}
+          group_members: "{{ members }}"
+          entity_id: "{{ source }}"
       - service: system_log.write
         data:
           message: >
             at=media_player.join
-            group_members={{ trigger.event.data.new_state.attributes.media_player_group_member }}
-            entity_id={{ states('sensor.house_speaker_source') }}
+            group_members={{ members | join(',') }}
+            entity_id={{ source }}
           logger: packages.house_speakers
           level: debug
   - alias: Ungroup sonos speakers
@@ -116,6 +126,19 @@ automation:
     trigger:
       platform: event
       event_type: state_changed
+    variables:
+      members: |
+        {% set ns = namespace(members=[]) %}
+        {% set new_state = trigger.event.data.new_state %}
+        {% if new_state is not none %}
+          {% for attr in ['media_player_group_member', 'media_player_group_member_2', 'media_player_group_member_3'] %}
+            {% set member = new_state.attributes.get(attr) %}
+            {% if member %}
+              {% set ns.members = ns.members + [member] %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        {{ ns.members }}
     condition:
       condition: template
       value_template: |
@@ -123,19 +146,18 @@ automation:
           trigger.event.data.old_state != None and
           trigger.event.data.new_state.domain == "binary_sensor" and
           is_state(trigger.event.data.new_state.entity_id, "off") and
-          trigger.event.data.new_state.attributes.media_player_group_member is defined
+          members | count > 0
         }}
     action:
       - service: media_player.unjoin
         data: {}
         target:
-          entity_id: |
-            {{ trigger.event.data.new_state.attributes.media_player_group_member }}
+          entity_id: "{{ members }}"
       - service: system_log.write
         data:
           message: >
             at=media_player.unjoin
-            entity_id={{ trigger.event.data.new_state.attributes.media_player_group_member }}
+            entity_id={{ members | join(',') }}
           logger: packages.house_speakers
           level: debug
   - alias: Pause house speakers when tvs are playing
