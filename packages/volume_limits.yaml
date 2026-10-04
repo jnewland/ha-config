@@ -4,21 +4,6 @@ input_number:
     min: 0
     max: 1
     step: 0.01
-  max_volume_kitchen_speakers:
-    name: "Kitchen Speakers Max Volume"
-    min: 0
-    max: 1
-    step: 0.01
-  max_volume_living_speakers:
-    name: "Living Speakers Max Volume"
-    min: 0
-    max: 1
-    step: 0.01
-  max_volume_bathroom_speakers:
-    name: "Bathroom Speakers Max Volume"
-    min: 0
-    max: 1
-    step: 0.01
   max_volume_patio_speakers:
     name: "Patio Speakers Max Volume"
     min: 0

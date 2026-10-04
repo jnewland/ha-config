@@ -1,9 +1,4 @@
 group:
-  great_room_speakers:
-    icon: mdi:speaker
-    entities:
-      - media_player.living_speakers
-      - media_player.kitchen_speakers
 
 input_boolean:
   auto_group_tv_audio:
