@@ -31,18 +31,6 @@ template:
         unique_id: atrium_speakers_scaled_volume
         state: >
           {{ ( ( state_attr('media_player.atrium_speakers', 'volume_level') | float(0) ) / ( states('input_number.max_volume_atrium_speakers') | float ) ) | round(2) }}
-      - name: Kitchen Speakers Scaled Volume
-        unique_id: kitchen_speakers_scaled_volume
-        state: >
-          {{ ( ( state_attr('media_player.kitchen_speakers', 'volume_level') | float(0) ) / ( states('input_number.max_volume_kitchen_speakers') | float ) ) | round(2) }}
-      - name: Living Speakers Scaled Volume
-        unique_id: living_speakers_scaled_volume
-        state: >
-          {{ ( ( state_attr('media_player.living_speakers', 'volume_level') | float(0) ) / ( states('input_number.max_volume_living_speakers') | float ) ) | round(2) }}
-      - name: Bathroom Speakers Scaled Volume
-        unique_id: bathroom_speakers_scaled_volume
-        state: >
-          {{ ( ( state_attr('media_player.master_bathroom_speakers', 'volume_level') | float(0) ) / ( states('input_number.max_volume_bathroom_speakers') | float ) ) | round(2) }}
       - name: Patio Speakers Scaled Volume
         unique_id: patio_speakers_scaled_volume
         state: >
@@ -72,78 +60,6 @@ media_player:
         data_template:
           entity_id: media_player.atrium_speakers
           volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_atrium_speakers') | float ) ) | round(2) }}"
-
-  - platform: universal
-    device_class: speaker
-    unique_id: kitchen_speakers_limited_volume
-    name: kitchen
-    children:
-      - media_player.kitchen_speakers
-    attributes:
-      state: media_player.kitchen_speakers
-      volume_level: sensor.kitchen_speakers_scaled_volume
-    commands:
-      turn_on:
-        service: media_player.turn_on
-        data:
-          entity_id: media_player.kitchen_speakers
-      turn_off:
-        service: media_player.turn_off
-        data:
-          entity_id: media_player.kitchen_speakers
-      volume_set:
-        service: media_player.volume_set
-        data_template:
-          entity_id: media_player.kitchen_speakers
-          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_kitchen_speakers') | float ) ) | round(2) }}"
-
-  - platform: universal
-    device_class: speaker
-    unique_id: living_speakers_limited_volume
-    name: living
-    children:
-      - media_player.living_speakers
-    attributes:
-      state: media_player.living_speakers
-      volume_level: sensor.living_speakers_scaled_volume
-    commands:
-      turn_on:
-        service: media_player.turn_on
-        data:
-          entity_id: media_player.living_speakers
-      turn_off:
-        service: media_player.turn_off
-        data:
-          entity_id: media_player.living_speakers
-      volume_set:
-        service: media_player.volume_set
-        data_template:
-          entity_id: media_player.living_speakers
-          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_living_speakers') | float ) ) | round(2) }}"
-
-  - platform: universal
-    device_class: speaker
-    unique_id: bathroom_speakers_limited_volume
-    name: bathroom
-    children:
-      - media_player.master_bathroom_speakers
-    attributes:
-      state: media_player.master_bathroom_speakers
-      volume_level: sensor.bathroom_speakers_scaled_volume
-    commands:
-      turn_on:
-        service: media_player.turn_on
-        data:
-          entity_id: media_player.master_bathroom_speakers
-      turn_off:
-        service: media_player.turn_off
-        data:
-          entity_id: media_player.master_bathroom_speakers
-      volume_set:
-        service: media_player.volume_set
-        data_template:
-          entity_id: media_player.master_bathroom_speakers
-          volume_level: "{{ ( (volume_level | float) * ( states('input_number.max_volume_bathroom_speakers') | float ) ) | round(2) }}"
 
   - platform: universal
     device_class: speaker
