@@ -1,5 +1,3 @@
-group:
-
 input_boolean:
   auto_group_tv_audio:
     name: auto-group Lounge TV audio
@@ -76,33 +74,38 @@ automation:
     trigger:
       platform: event
       event_type: state_changed
-    variables:
-      source: "{{ states('sensor.house_speaker_source') }}"
-      members: |
-        {% set ns = namespace(members=[]) %}
-        {% set new_state = trigger.event.data.new_state %}
-        {% if new_state is not none %}
-          {% for attr in ['media_player_group_member', 'media_player_group_member_2', 'media_player_group_member_3'] %}
-            {% set member = new_state.attributes.get(attr) %}
-            {% if member and
-                  member != source and
-                  member not in (state_attr(source, 'group_members') or []) and
-                  states(member) in ['idle', 'paused'] %}
-              {% set ns.members = ns.members + [member] %}
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-        {{ ns.members }}
     condition:
       condition: template
       value_template: |
+        {% set old_state = trigger.event.data.old_state %}
+        {% set new_state = trigger.event.data.new_state %}
         {{
-          trigger.event.data.old_state != None and
-          trigger.event.data.new_state.domain == "binary_sensor" and
-          is_state(trigger.event.data.new_state.entity_id, "on") and
-          members | count > 0
+          old_state != None and
+          new_state != None and
+          new_state.domain == "binary_sensor" and
+          new_state.state == "on" and
+          old_state.state != new_state.state and
+          ( new_state.attributes.media_player_group_member is defined or
+            new_state.attributes.media_player_group_member_2 is defined or
+            new_state.attributes.media_player_group_member_3 is defined )
         }}
     action:
+      - variables:
+          source: "{{ states('sensor.house_speaker_source') }}"
+          members: |
+            {% set ns = namespace(members=[]) %}
+            {% for attr in ['media_player_group_member', 'media_player_group_member_2', 'media_player_group_member_3'] %}
+              {% set member = trigger.event.data.new_state.attributes.get(attr) %}
+              {% if member and
+                    member != source and
+                    member not in (state_attr(source, 'group_members') or []) and
+                    states(member) in ['idle', 'paused'] %}
+                {% set ns.members = ns.members + [member] %}
+              {% endif %}
+            {% endfor %}
+            {{ ns.members }}
+      - condition: template
+        value_template: "{{ members | count > 0 }}"
       - service: media_player.join
         data:
           group_members: "{{ members }}"
@@ -121,21 +124,34 @@ automation:
     trigger:
       platform: event
       event_type: state_changed
-    variables:
-      members: |
-        {% set attrs = ['media_player_group_member', 'media_player_group_member_2', 'media_player_group_member_3'] %}
-        {% set ns = namespace(members=[], claimed=[]) %}
+    condition:
+      condition: template
+      value_template: |
+        {% set old_state = trigger.event.data.old_state %}
         {% set new_state = trigger.event.data.new_state %}
-        {% if new_state is not none and new_state.domain == 'binary_sensor' and new_state.state == 'off' %}
-          {% for attr in attrs %}
-            {% set member = new_state.attributes.get(attr) %}
-            {% if member %}
-              {% set ns.members = ns.members + [member] %}
-            {% endif %}
-          {% endfor %}
-          {% if ns.members %}
+        {{
+          old_state != None and
+          new_state != None and
+          new_state.domain == "binary_sensor" and
+          new_state.state == "off" and
+          old_state.state != new_state.state and
+          ( new_state.attributes.media_player_group_member is defined or
+            new_state.attributes.media_player_group_member_2 is defined or
+            new_state.attributes.media_player_group_member_3 is defined )
+        }}
+    action:
+      - variables:
+          members: |
+            {% set attrs = ['media_player_group_member', 'media_player_group_member_2', 'media_player_group_member_3'] %}
+            {% set ns = namespace(members=[], claimed=[]) %}
+            {% for attr in attrs %}
+              {% set member = trigger.event.data.new_state.attributes.get(attr) %}
+              {% if member %}
+                {% set ns.members = ns.members + [member] %}
+              {% endif %}
+            {% endfor %}
             {# speakers still claimed by another occupied sensor stay grouped #}
-            {% for other in states.binary_sensor | selectattr('state', 'eq', 'on') | rejectattr('entity_id', 'eq', new_state.entity_id) %}
+            {% for other in states.binary_sensor | selectattr('state', 'eq', 'on') | rejectattr('entity_id', 'eq', trigger.event.data.new_state.entity_id) %}
               {% for attr in attrs %}
                 {% set member = other.attributes.get(attr) %}
                 {% if member %}
@@ -143,19 +159,9 @@ automation:
                 {% endif %}
               {% endfor %}
             {% endfor %}
-          {% endif %}
-        {% endif %}
-        {{ ns.members | reject('in', ns.claimed) | list }}
-    condition:
-      condition: template
-      value_template: |
-        {{
-          trigger.event.data.old_state != None and
-          trigger.event.data.new_state.domain == "binary_sensor" and
-          is_state(trigger.event.data.new_state.entity_id, "off") and
-          members | count > 0
-        }}
-    action:
+            {{ ns.members | reject('in', ns.claimed) | list }}
+      - condition: template
+        value_template: "{{ members | count > 0 }}"
       - service: media_player.unjoin
         data: {}
         target:
@@ -175,7 +181,7 @@ automation:
         entity_id: media_player.screeno # temporarily replacing media_player.lounge
         to: playing
       - platform: state
-        entity_id: media_player.bedroom
+        entity_id: media_player.bedroom_tv
         to: playing
     condition:
       - condition: state
