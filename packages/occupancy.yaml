@@ -32,8 +32,8 @@ homeassistant:
     binary_sensor.atrium_occupancy:
       trigger_entity_id: switch.atrium_fan
       trigger_entity_id_off: switch.atrium_fan
-      speaker_entity: media_player.atrium_speakers
       media_player_group_member: media_player.rock
+      media_player_group_member_2: media_player.atrium
 
     binary_sensor.pergola_occupancy:
       media_player_group_member: media_player.pergola
