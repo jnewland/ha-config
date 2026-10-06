@@ -50,7 +50,7 @@ cards:
       - cover.gate
   - type: entities
     entities:
-      - media_player.atrium_speakers
+      - media_player.atrium
       - media_player.pergola
       - media_player.rock
   - type: history-graph

@@ -28,46 +28,6 @@ script:
             {{ is_state('media_player.house', 'playing') }}
 
 automation:
-  - alias: Turn on related speakers
-    mode: parallel
-    id: 3ba3e202-4fa0-4f94-8f7d-6cf2aeb674c3
-    trigger:
-      platform: event
-      event_type: state_changed
-    condition:
-      condition: template
-      value_template: |
-        {{
-          trigger.event.data.old_state != None and
-          trigger.event.data.new_state.domain == "binary_sensor" and
-          is_state(trigger.event.data.new_state.entity_id, "on") and
-          trigger.event.data.new_state.attributes.speaker_entity is defined
-        }}
-    action:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: |
-            {{ trigger.event.data.new_state.attributes.speaker_entity }}
-  - alias: Turn off related speakers
-    mode: parallel
-    id: d55dd41d-cd36-4544-8ed1-58b1578ec0ce
-    trigger:
-      platform: event
-      event_type: state_changed
-    condition:
-      condition: template
-      value_template: |
-        {{
-          trigger.event.data.old_state != None and
-          trigger.event.data.new_state.domain == "binary_sensor" and
-          is_state(trigger.event.data.new_state.entity_id, "off") and
-          trigger.event.data.new_state.attributes.speaker_entity is defined
-        }}
-    action:
-      - service: homeassistant.turn_off
-        data:
-          entity_id: |
-            {{ trigger.event.data.new_state.attributes.speaker_entity }}
   - alias: Group sonos speakers
     mode: parallel
     id: fe8d95bc-f94f-4454-83b0-527b9d403107

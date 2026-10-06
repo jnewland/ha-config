@@ -80,8 +80,8 @@ cards:
         'automation.upstairs_ac',
         'automation.upstairs_reading',
         'automation.upstairs_heat',
-        'automation.turn_on_related_speakers',
-        'automation.turn_off_related_speakers',
+        'automation.group_sonos_speakers',
+        'automation.ungroup_sonos_speakers',
         'automation.turn_on_lights_when_motion_is_detected',
         'automation.turn_on_switches_when_motion_is_detected',
         'automation.turn_off_lights_after_sensors_have_turned_off',
@@ -161,8 +161,8 @@ cards:
     title: Motion → Sonos
     show_header_toggle: false
     entities:
-      - automation.turn_on_related_speakers
-      - automation.turn_off_related_speakers
+      - automation.group_sonos_speakers
+      - automation.ungroup_sonos_speakers
 
   - type: entities
     title: Motion → lights
