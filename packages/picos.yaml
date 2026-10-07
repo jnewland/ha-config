@@ -52,7 +52,7 @@ automation:
             sequence:
               - service: media_player.media_play_pause
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.living
 
           - conditions:
               - condition: template
@@ -76,7 +76,7 @@ automation:
             sequence:
               - service: media_player.media_next_track
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.living
 
           - conditions:
               - condition: template
@@ -84,7 +84,7 @@ automation:
             sequence:
               - service: media_player.play_media
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.living
                 data:
                   media_content_id: >
                     {{ state_attr("sensor.sonos_favorites", "items") | list | random }}
@@ -110,7 +110,7 @@ automation:
             sequence:
               - service: media_player.media_play_pause
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.living
 
           - conditions:
               - condition: template
@@ -134,7 +134,7 @@ automation:
             sequence:
               - service: media_player.media_next_track
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.living
 
           - conditions:
               - condition: template
@@ -142,7 +142,7 @@ automation:
             sequence:
               - service: media_player.play_media
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.living
                 data:
                   media_content_id: >
                     {{ state_attr("sensor.sonos_favorites", "items") | list | random }}
@@ -168,7 +168,7 @@ automation:
             sequence:
               - service: media_player.media_play_pause
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.living
 
           - conditions:
               - condition: template
@@ -192,7 +192,7 @@ automation:
             sequence:
               - service: media_player.media_next_track
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.living
 
           - conditions:
               - condition: template
@@ -200,7 +200,7 @@ automation:
             sequence:
               - service: media_player.play_media
                 target:
-                  entity_id: media_player.house
+                  entity_id: media_player.living
                 data:
                   media_content_id: >
                     {{ state_attr("sensor.sonos_favorites", "items") | list | random }}
