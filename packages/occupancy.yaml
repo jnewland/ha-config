@@ -5,8 +5,7 @@ homeassistant:
       trigger_entity_id_off: group.great_room
       haunt: light.bookshelf_right
       media_player_group_member: media_player.sub
-      media_player_group_member_2: media_player.living
-      media_player_group_member_3: media_player.kitchen
+      media_player_group_member_2: media_player.kitchen
 
     binary_sensor.lounge_occupancy:
       trigger_service: script.lounge_lights

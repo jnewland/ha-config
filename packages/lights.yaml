@@ -37,6 +37,7 @@ homeassistant:
       trigger_service: script.music_room
       trigger_entity_id_off: group.music_room
       off_delay_seconds: 1800
+      media_player_group_member: media_player.house
     binary_sensor.bathroom_home_security_motion_detection:
       trigger_service: script.bathroom_lights
       trigger_entity_id_off: group.bathroom

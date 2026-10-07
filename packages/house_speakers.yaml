@@ -11,7 +11,7 @@ template:
           {% if is_state('media_player.screeno', 'playing') and is_state('input_boolean.auto_group_tv_audio', 'on') %}
             media_player.lounge_surround
           {% else %}
-            media_player.house
+            media_player.living
           {% endif %}
 
 script:
@@ -19,13 +19,13 @@ script:
     sequence:
       - service: media_player.play_media
         target:
-          entity_id: media_player.house
+          entity_id: media_player.living
         data:
           media_content_id: >
             {{ state_attr("sensor.sonos_favorites", "items") | list | random }}
           media_content_type: favorite_item_id
           enqueue: >-
-            {{ is_state('media_player.house', 'playing') }}
+            {{ is_state('media_player.living', 'playing') }}
 
 automation:
   - alias: Group sonos speakers
@@ -145,7 +145,7 @@ automation:
         to: playing
     condition:
       - condition: state
-        entity_id: media_player.house
+        entity_id: media_player.living
         state: playing
       - condition: state
         entity_id: input_boolean.auto_group_tv_audio
@@ -153,7 +153,7 @@ automation:
     action:
       - service: media_player.media_pause
         target:
-          entity_id: media_player.house
+          entity_id: media_player.living
   - alias: Group house speakers when Sonos paired tvs are playing
     mode: parallel
     id: 08f9e8e3-436e-4228-b507-e83e0e36f033
@@ -169,6 +169,6 @@ automation:
       - delay: 3
       - service: media_player.join
         data:
-          group_members: media_player.house
+          group_members: media_player.living
           entity_id: |
             {{ states('sensor.house_speaker_source') }}
