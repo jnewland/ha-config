@@ -37,7 +37,7 @@ homeassistant:
       trigger_service: script.music_room
       trigger_entity_id_off: group.music_room
       off_delay_seconds: 1800
-      media_player_group_member: media_player.house
+      media_player_group_member: media_player.music_room
     binary_sensor.bathroom_home_security_motion_detection:
       trigger_service: script.bathroom_lights
       trigger_entity_id_off: group.bathroom
@@ -771,7 +771,7 @@ script:
       - service: light.turn_on
         entity_id: light.music_room_fan_light
       - service: homeassistant.turn_on
-        entity_id: media_player.music_room
+        entity_id: media_player.music_room_tv
 
   notify_with_lights:
     mode: queued
