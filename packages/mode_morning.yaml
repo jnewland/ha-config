@@ -47,7 +47,6 @@ automation:
           value: 255
       - service: light.turn_on
         entity_id:
-          - group.speakers
           - light.kitchen_cabinets
           - light.record_cabinet_left
           - light.record_cabinet_right

@@ -34,7 +34,7 @@ cards:
       detail: 2
   - type: entities
     entities:
-      - media_player.kitchen_speakers
-      - media_player.living_speakers
+      - media_player.kitchen
+      - media_player.living
       - media_player.record_cabinet
       - media_player.sub

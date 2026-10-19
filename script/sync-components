@@ -105,6 +105,18 @@ git clone --depth 1 --branch $TRYFI_VERSION https://github.com/sbabcock23/hass-t
 rm -rf custom_components/tryfi || true
 mv $TMPDIR/$$-tryfi/custom_components/tryfi custom_components
 
+# Sonos Amp Multi support: https://github.com/SoCo/SoCo/pull/1014
+# HA Container puts deps/lib/pythonX.Y/site-packages ahead of its bundled
+# packages, so this shadows the soco HA pins. Copy only the package (no
+# dist-info) so HA's soco==<pin> check still passes and it doesn't reinstall.
+# The python3.14 path must match the HA image. Drop once HA ships the fix.
+SOCO_REF=5930d0ced0afccc037cf996ef1e68c3ed70652ee
+SOCO_SITE_PACKAGES=deps/lib/python3.14/site-packages
+curl -sL --fail -o $TMPDIR/$$-soco.tar.gz https://github.com/SoCo/SoCo/archive/$SOCO_REF.tar.gz
+rm -rf $SOCO_SITE_PACKAGES/soco
+mkdir -p $SOCO_SITE_PACKAGES
+tar -xzf $TMPDIR/$$-soco.tar.gz -C $SOCO_SITE_PACKAGES --strip-components=1 SoCo-$SOCO_REF/soco
+
 curl -sL --fail -o $TMPDIR/advanced-camera-card.zip https://github.com/dermotduffy/advanced-camera-card/releases/download/v7.27.4/advanced-camera-card.zip
 # unzipping this file directly creates a folder called dist
 # move all files into www

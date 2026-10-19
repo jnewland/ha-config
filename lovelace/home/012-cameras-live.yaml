@@ -1,18 +1,47 @@
 title: Cameras Live
 icon: mdi:video-high-definition
 path: cameras-live
+# main column for the live card, sidebar for thumbnails of the other
+# cameras (the sidebar drops below the live card on narrow screens)
+type: sidebar
 cards:
   - type: custom:advanced-camera-card
+    card_id: live
+    dimensions:
+      aspect_ratio: "16:9"
+    cameras_global:
+      # stream straight from Frigate's go2rtc (proxied by the Frigate
+      # integration) instead of HA's own stream, which starts much faster
+      live_provider: go2rtc
     cameras:
       # Frigate cameras trigger events automatically
       - camera_entity: camera.front_door
+        id: front_door
       - camera_entity: camera.front_yard_left
+        id: front_yard_left
       - camera_entity: camera.front_yard_right
+        id: front_yard_right
       - camera_entity: camera.atrium
+        id: atrium
       - camera_entity: camera.gate
+        id: gate
       - camera_entity: camera.garage
+        id: garage
       - camera_entity: camera.back_porch
+        id: back_porch
+      - camera_entity: camera.pergola
+        id: pergola
       - camera_entity: camera.ac
+        id: ac
+
+      # UniFi Protect cameras (bbq isn't in Frigate; Frigate's crate stream is
+      # unreliable), so use HA's own stream (HA's go2rtc serves WebRTC)
+      - camera_entity: camera.bbq_medium
+        id: bbq
+        live_provider: ha
+      - camera_entity: camera.crate_medium
+        id: crate
+        live_provider: ha
 
       # non-Frigate cameras can be triggered
       # by motion entity changes or a door being opened.
@@ -31,8 +60,11 @@ cards:
           trigger: live
           untrigger: default
     live:
+      # start streaming in the background as soon as the dashboard loads,
+      # and show one camera at a time rather than decoding every stream at once
+      preload: true
       display:
-        mode: grid
+        mode: single
       controls:
         builtin: false
     media_viewer:
@@ -42,7 +74,114 @@ cards:
         mode: grid
     menu:
       buttons:
+        cameras:
+          enabled: true
         play:
           enabled: true
         mute:
           enabled: true
+
+  # tap a snapshot to switch the live card to that camera (the card only
+  # hears actions fired from inside itself, so this goes through its
+  # query-string actions). uses the UniFi Protect medium-resolution
+  # snapshots, which are cheap to refresh.
+  - type: grid
+    columns: 2
+    square: false
+    view_layout:
+      position: sidebar
+    cards:
+      - type: picture-entity
+        entity: camera.front_door_medium
+        camera_view: auto
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=front_door
+      - type: picture-entity
+        entity: camera.front_yard_left_medium
+        camera_view: auto
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=front_yard_left
+      - type: picture-entity
+        entity: camera.front_yard_right_medium
+        camera_view: auto
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=front_yard_right
+      - type: picture-entity
+        entity: camera.atrium_medium
+        camera_view: auto
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=atrium
+      - type: picture-entity
+        entity: camera.gate_medium
+        camera_view: auto
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=gate
+      - type: picture-entity
+        entity: camera.garage_medium
+        camera_view: auto
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=garage
+      - type: picture-entity
+        entity: camera.back_porch_medium
+        camera_view: auto
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=back_porch
+      - type: picture-entity
+        entity: camera.pergola_medium
+        camera_view: auto
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=pergola
+      - type: picture-entity
+        entity: camera.ac_medium
+        camera_view: auto
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=ac
+      - type: picture-entity
+        entity: camera.bbq_medium
+        camera_view: auto
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=bbq
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: camera.crate_medium
+            state_not: unavailable
+        card:
+          type: picture-entity
+          entity: camera.crate_medium
+          camera_view: auto
+          show_name: false
+          show_state: false
+          tap_action:
+            action: navigate
+            navigation_path: /lovelace/cameras-live?advanced-camera-card-action.live.camera_select=crate

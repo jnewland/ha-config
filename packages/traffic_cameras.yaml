@@ -1,0 +1,133 @@
+# City of Austin traffic cameras (data.austintexas.gov dataset b4k4-adkb),
+# shown on the Traffic view. the url changes every minute so HA refetches
+# the snapshot; the camera server ignores the query string.
+template:
+  - image:
+      - unique_id: traffic_camera_1461
+        default_entity_id: image.traffic_camera_1461
+        name: MLK / I-35 NB
+        url: "https://cctv.austinmobility.io/image/1461.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_67
+        default_entity_id: image.traffic_camera_67
+        name: MLK / I-35 SB
+        url: "https://cctv.austinmobility.io/image/67.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_244
+        default_entity_id: image.traffic_camera_244
+        name: Manor / I-35
+        url: "https://cctv.austinmobility.io/image/244.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_286
+        default_entity_id: image.traffic_camera_286
+        name: I-35 / 32nd
+        url: "https://cctv.austinmobility.io/image/286.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_76
+        default_entity_id: image.traffic_camera_76
+        name: I-35 / 38th½
+        url: "https://cctv.austinmobility.io/image/76.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_600
+        default_entity_id: image.traffic_camera_600
+        name: I-35 SB / 41st
+        url: "https://cctv.austinmobility.io/image/600.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_111
+        default_entity_id: image.traffic_camera_111
+        name: Airport / MLK
+        url: "https://cctv.austinmobility.io/image/111.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_454
+        default_entity_id: image.traffic_camera_454
+        name: Airport / Manor
+        url: "https://cctv.austinmobility.io/image/454.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_452
+        default_entity_id: image.traffic_camera_452
+        name: Airport / Zach Scott
+        url: "https://cctv.austinmobility.io/image/452.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_453
+        default_entity_id: image.traffic_camera_453
+        name: Airport / 38th½
+        url: "https://cctv.austinmobility.io/image/453.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_203
+        default_entity_id: image.traffic_camera_203
+        name: Airport / Wilshire
+        url: "https://cctv.austinmobility.io/image/203.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_1407
+        default_entity_id: image.traffic_camera_1407
+        name: Airport / I-35
+        url: "https://cctv.austinmobility.io/image/1407.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_112
+        default_entity_id: image.traffic_camera_112
+        name: Airport / 45th
+        url: "https://cctv.austinmobility.io/image/112.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_652
+        default_entity_id: image.traffic_camera_652
+        name: Manor / Cherrywood
+        url: "https://cctv.austinmobility.io/image/652.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_283
+        default_entity_id: image.traffic_camera_283
+        name: Dean Keeton / Lafayette
+        url: "https://cctv.austinmobility.io/image/283.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_498
+        default_entity_id: image.traffic_camera_498
+        name: Manor / Berkman
+        url: "https://cctv.austinmobility.io/image/498.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_79
+        default_entity_id: image.traffic_camera_79
+        name: Red River / Clyde Littlefield
+        url: "https://cctv.austinmobility.io/image/79.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_1487
+        default_entity_id: image.traffic_camera_1487
+        name: Dedman / Manor Garage
+        url: "https://cctv.austinmobility.io/image/1487.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_1395
+        default_entity_id: image.traffic_camera_1395
+        name: Dedman / Trinity
+        url: "https://cctv.austinmobility.io/image/1395.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_802
+        default_entity_id: image.traffic_camera_802
+        name: Red River / Luther
+        url: "https://cctv.austinmobility.io/image/802.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_1454
+        default_entity_id: image.traffic_camera_1454
+        name: Red River / 40th
+        url: "https://cctv.austinmobility.io/image/1454.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_662
+        default_entity_id: image.traffic_camera_662
+        name: Red River / 41st
+        url: "https://cctv.austinmobility.io/image/662.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_65
+        default_entity_id: image.traffic_camera_65
+        name: MLK / Trinity
+        url: "https://cctv.austinmobility.io/image/65.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_336
+        default_entity_id: image.traffic_camera_336
+        name: MLK / Comal
+        url: "https://cctv.austinmobility.io/image/336.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_597
+        default_entity_id: image.traffic_camera_597
+        name: MLK / Alexander
+        url: "https://cctv.austinmobility.io/image/597.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_73
+        default_entity_id: image.traffic_camera_73
+        name: MLK / Chestnut
+        url: "https://cctv.austinmobility.io/image/73.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_546
+        default_entity_id: image.traffic_camera_546
+        name: 12th / Chestnut
+        url: "https://cctv.austinmobility.io/image/546.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_1537
+        default_entity_id: image.traffic_camera_1537
+        name: 12th / Chicon
+        url: "https://cctv.austinmobility.io/image/1537.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_1447
+        default_entity_id: image.traffic_camera_1447
+        name: 15th / San Jacinto
+        url: "https://cctv.austinmobility.io/image/1447.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_133
+        default_entity_id: image.traffic_camera_133
+        name: 6th / Congress
+        url: "https://cctv.austinmobility.io/image/133.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_109
+        default_entity_id: image.traffic_camera_109
+        name: Congress / 2nd
+        url: "https://cctv.austinmobility.io/image/109.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_786
+        default_entity_id: image.traffic_camera_786
+        name: Cesar Chavez / San Jacinto
+        url: "https://cctv.austinmobility.io/image/786.jpg?t={{ now().minute }}"

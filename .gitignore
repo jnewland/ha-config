@@ -11,7 +11,15 @@
 /.homekit.state
 /OZW_Log.txt
 /motion_detection
-/deps
+# keep deps ignored except the soco vendored by script/sync-components
+/deps/*
+!/deps/lib/
+/deps/lib/*
+!/deps/lib/python3.14/
+/deps/lib/python3.14/*
+!/deps/lib/python3.14/site-packages/
+/deps/lib/python3.14/site-packages/*
+!/deps/lib/python3.14/site-packages/soco/
 /ip_bans.yaml
 /*.pickle
 /custom_components/*/__pycache__

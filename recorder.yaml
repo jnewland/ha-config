@@ -8,3 +8,6 @@ exclude:
   event_types:
     - call_service
     - system_log_event
+  # traffic camera snapshots change every minute
+  entity_globs:
+    - image.traffic_camera_*

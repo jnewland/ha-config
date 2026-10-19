@@ -4,8 +4,8 @@ homeassistant:
       trigger_service: script.great_room_lights
       trigger_entity_id_off: group.great_room
       haunt: light.bookshelf_right
-      speaker_entity: group.great_room_speakers
       media_player_group_member: media_player.sub
+      media_player_group_member_2: media_player.kitchen
 
     binary_sensor.lounge_occupancy:
       trigger_service: script.lounge_lights
@@ -17,8 +17,8 @@ homeassistant:
       media_player_group_member: media_player.bedroom
 
     binary_sensor.bathroom_occupancy:
-      speaker_entity: media_player.master_bathroom_speakers
       media_player_group_member: media_player.shower
+      media_player_group_member_2: media_player.bathroom
 
     binary_sensor.front_porch_occupancy:
       media_player_group_member: media_player.front_porch
@@ -31,8 +31,8 @@ homeassistant:
     binary_sensor.atrium_occupancy:
       trigger_entity_id: switch.atrium_fan
       trigger_entity_id_off: switch.atrium_fan
-      speaker_entity: media_player.atrium_speakers
       media_player_group_member: media_player.rock
+      media_player_group_member_2: media_player.atrium
 
     binary_sensor.pergola_occupancy:
       media_player_group_member: media_player.pergola

@@ -36,7 +36,7 @@ cards:
                 | selectattr('attributes.group_members', 'defined')
                 if player.attributes.group_members[0] == player.entity_id and
                    states(player.entity_id) == 'playing' or
-                   player.entity_id == "media_player.house" -%}
+                   player.entity_id == "media_player.living" -%}
                 {% set ns = namespace(entities=[]) %}
                 {%- for entity in integration_entities('sonos') |
                         select('contains', 'media_player') |
@@ -59,7 +59,6 @@ cards:
                         'icon': true,
                         'shuffle': player.entity_id == 'media_player.lounge_surround',
                         'repeat': player.entity_id == 'media_player.lounge_surround',
-                        'volume': player.entity_id == 'media_player.house'
                       },
                       'speaker_group': {
                         'platform': 'sonos',
@@ -85,7 +84,7 @@ cards:
                      player.attributes.device_class == "speaker"
                    )and
                    states(player.entity_id) not in ['idle', 'unavailable'] and
-                   player.entity_id != "media_player.house" -%}
+                   player.entity_id != "media_player.living" -%}
                 {{-
                     {
                       'type': 'custom:mini-media-player',
@@ -186,7 +185,7 @@ cards:
     sections:
       - media browser
     entities:
-      - media_player.house
+      - media_player.living
     replaceHttpWithHttpsForThumbnails: true
     mediaBrowserTitle: " "
   - type: weather-forecast

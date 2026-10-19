@@ -74,9 +74,9 @@ cards:
           domain: switch
   - type: conditional
     conditions:
-      - entity: media_player.house
+      - entity: media_player.living
         state: playing
     card:
       type: markdown
       content: |
-        ![]({{ states.media_player.house.attributes.entity_picture }})
+        ![]({{ states.media_player.living.attributes.entity_picture }})
