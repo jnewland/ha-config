@@ -1,36 +1,58 @@
-filter:
-  include_domains:
-    - alarm_control_panel
-    - climate
-  exclude_domains:
-    - sensor
-    - script
-    - switch
-    - scene
-    - light
-    - lock
-    - media_player
-    - cover
-  include_entities:
-    - cover.garage
-    - cover.gate
-    - cover.shades
-    - cover.bedroom_shades
-    - cover.bathroom_shades
-    - cover.yoga_room_shades
-    - switch.atrium_fountain
-    - switch.back_porch
-    - switch.back_porch_fountain
-    - switch.bathroom_fan
-    - switch.volcano_fan
-    - switch.front_door_lock_state
-    - switch.back_porch_lock_state
-    - script.mode_away
-    - script.lounge_lights
-    - script.mode_reading
-    - script.mode_sleeping
-    - script.mode_party
-    - script.mode_cooking
-    - script.mode_cocktail
-    - vacuum.downstairs
-    - light.global_brightness
+# Main bridge (imported as "Home Assistant Bridge:51827")
+- filter:
+    include_domains:
+      - alarm_control_panel
+      - climate
+    exclude_domains:
+      - sensor
+      - script
+      - switch
+      - scene
+      - light
+      - lock
+      - media_player
+      - cover
+    exclude_entities:
+      - alarm_control_panel.music_room_unvr_alarm_manager
+    include_entities:
+      - cover.garage
+      - cover.gate
+      - cover.shades
+      - cover.bedroom_shades
+      - cover.bathroom_shades
+      - cover.yoga_room_shades
+      - switch.atrium_fountain
+      - switch.back_porch
+      - switch.back_porch_fountain
+      - switch.bathroom_fan
+      - switch.volcano_fan
+      - switch.front_door_lock_state
+      - switch.back_porch_lock_state
+      - script.mode_away
+      - script.lounge_lights
+      - script.mode_reading
+      - script.mode_sleeping
+      - script.mode_party
+      - script.mode_cooking
+      - script.mode_cocktail
+      - vacuum.downstairs
+      - light.global_brightness
+      - input_boolean.mute_front_gate_doorbell
+
+# Cameras have to be standalone HomeKit accessories (not bridged). The front
+# gate doorbell sensor (packages/gates.yaml) is linked as a doorbell because
+# tvOS only shows camera notifications (picture-in-picture with the live feed)
+# for doorbell cameras; linked motion sensors never reach Apple TV.
+- name: front gate
+  port: 21069
+  mode: accessory
+  filter:
+    include_entities:
+      - camera.front_door_medium
+  entity_config:
+    camera.front_door_medium:
+      name: front gate
+      linked_doorbell_sensor: binary_sensor.front_gate_doorbell
+      # Protect already streams H.264, so pass it through instead of transcoding
+      video_codec: copy
+      support_audio: true
