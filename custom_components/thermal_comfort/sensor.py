@@ -1,12 +1,13 @@
 """Sensor platform for thermal_comfort."""
 from asyncio import Lock
+import contextlib
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import StrEnum
 from functools import wraps
 import logging
 import math
-from typing import Any, Self
+from typing import Self
 
 import voluptuous as vol
 
@@ -29,10 +30,11 @@ from homeassistant.const import (
     CONF_UNIQUE_ID,
     STATE_UNAVAILABLE,
     STATE_UNKNOWN,
+    UnitOfPressure,
     UnitOfTemperature,
 )
-from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import TemplateError
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.exceptions import HomeAssistantError, TemplateError
 from homeassistant.helpers import entity_registry as er
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import DeviceInfo
@@ -43,7 +45,7 @@ from homeassistant.helpers.event import (
 )
 from homeassistant.helpers.template import Template
 from homeassistant.loader import async_get_custom_components
-from homeassistant.util.unit_conversion import TemperatureConverter
+from homeassistant.util.unit_conversion import PressureConverter, TemperatureConverter
 
 from .const import DEFAULT_NAME, DOMAIN
 
@@ -51,6 +53,7 @@ _LOGGER = logging.getLogger(__name__)
 
 ATTR_DEW_POINT = "dew_point"
 ATTR_HUMIDITY = "humidity"
+ATTR_PRESSURE = "pressure"
 ATTR_HUMIDEX = "humidex"
 ATTR_FROST_POINT = "frost_point"
 ATTR_RELATIVE_STRAIN_INDEX = "relative_strain_index"
@@ -65,11 +68,17 @@ CONF_SCAN_INTERVAL = "scan_interval"
 
 CONF_TEMPERATURE_SENSOR = "temperature_sensor"
 CONF_HUMIDITY_SENSOR = "humidity_sensor"
+CONF_PRESSURE_SENSOR = "pressure_sensor"
 CONF_POLL = "poll"
 # Default values
 POLL_DEFAULT = False
 SCAN_INTERVAL_DEFAULT = 30
 DISPLAY_PRECISION = 2
+HUMIDITY_MAX_OVERSHOOT = 105  # readings up to this are clipped to 100
+STANDARD_PRESSURE = 101325  # Pa, standard pressure at sea level
+# Plausible range of an atmospheric pressure reading, in Pa
+PRESSURE_MIN = 30000
+PRESSURE_MAX = 110000
 
 
 class LegacySensorType(StrEnum):
@@ -208,6 +217,7 @@ TC_ICONS = {
 SENSOR_TYPES = {
     SensorType.ABSOLUTE_HUMIDITY: {
         "key": SensorType.ABSOLUTE_HUMIDITY,
+        "device_class": SensorDeviceClass.ABSOLUTE_HUMIDITY,
         "suggested_display_precision": DISPLAY_PRECISION,
         "native_unit_of_measurement": "g/m³",
         "state_class": SensorStateClass.MEASUREMENT,
@@ -327,6 +337,7 @@ SENSOR_SCHEMA = vol.Schema(
         vol.Optional(CONF_NAME): cv.string,
         vol.Required(CONF_TEMPERATURE_SENSOR): cv.entity_id,
         vol.Required(CONF_HUMIDITY_SENSOR): cv.entity_id,
+        vol.Optional(CONF_PRESSURE_SENSOR): cv.entity_id,
         vol.Optional(CONF_ICON_TEMPLATE): cv.template,
         vol.Optional(CONF_ENTITY_PICTURE_TEMPLATE): cv.template,
         vol.Required(CONF_UNIQUE_ID): cv.string,
@@ -340,6 +351,8 @@ def compute_once_lock(sensor_type):
     def wrapper(func):
         @wraps(func)
         async def wrapped(self, *args, **kwargs):
+            if not self.available:
+                return None
             async with self._compute_states[sensor_type].lock:
                 if self._compute_states[sensor_type].needs_update:
                     setattr(self, f"_{sensor_type}", await func(self, *args, **kwargs))
@@ -355,7 +368,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     """Set up the Thermal Comfort sensors."""
     if discovery_info is None:
         _LOGGER.warning(
-            "Legacy YAML configuration is unsupported in 2.0. You should update to the new yaml format: https://github.com/dolezsa/thermal_comfort/blob/master/documentation/yaml.md"
+            "Legacy YAML configuration is unsupported since 2.0 and will stop working in the next release. You should update to the new yaml format: https://github.com/dolezsa/thermal_comfort/blob/master/documentation/yaml.md"
         )
         devices = [
             dict(device_config, **{CONF_NAME: device_name})
@@ -376,6 +389,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
             unique_id=device_config.get(CONF_UNIQUE_ID),
             temperature_entity=device_config.get(CONF_TEMPERATURE_SENSOR),
             humidity_entity=device_config.get(CONF_HUMIDITY_SENSOR),
+            pressure_entity=device_config.get(CONF_PRESSURE_SENSOR),
             should_poll=device_config.get(CONF_POLL, POLL_DEFAULT),
             scan_interval=device_config.get(
                 CONF_SCAN_INTERVAL, timedelta(seconds=SCAN_INTERVAL_DEFAULT)
@@ -423,11 +437,14 @@ async def async_setup_entry(
         unique_id=f"{config_entry.unique_id}",
         temperature_entity=data[CONF_TEMPERATURE_SENSOR],
         humidity_entity=data[CONF_HUMIDITY_SENSOR],
+        pressure_entity=data.get(CONF_PRESSURE_SENSOR),
         should_poll=data[CONF_POLL],
         scan_interval=timedelta(
             seconds=data.get(CONF_SCAN_INTERVAL, SCAN_INTERVAL_DEFAULT)
         ),
     )
+
+    config_entry.async_on_unload(compute_device.async_unsubscribe)
 
     entities: list[SensorThermalComfort] = [
         SensorThermalComfort(
@@ -456,6 +473,12 @@ def id_generator(unique_id: str, sensor_type: str) -> str:
 class SensorThermalComfort(SensorEntity):
     """Representation of a Thermal Comfort Sensor."""
 
+    # The source values change with almost every update, don't fill the
+    # database with a new attribute row each time.
+    _unrecorded_attributes = frozenset(
+        {ATTR_TEMPERATURE, ATTR_HUMIDITY, ATTR_PRESSURE}
+    )
+
     def __init__(
         self,
         device: "DeviceThermalComfort",
@@ -469,7 +492,8 @@ class SensorThermalComfort(SensorEntity):
         """Initialize the sensor."""
         self._device = device
         self._sensor_type = sensor_type
-        entity_description = SENSOR_TYPES[sensor_type]
+        self._is_config_entry = is_config_entry
+        entity_description = dict(SENSOR_TYPES[sensor_type])
         entity_description["translation_key"] = sensor_type
         entity_description["has_entity_name"] = True
         if not is_config_entry:
@@ -503,9 +527,9 @@ class SensorThermalComfort(SensorEntity):
         self._attr_should_poll = False
 
     @property
-    def device_info(self) -> dict[str, Any]:
-        """Return device information."""
-        return self._device.device_info
+    def device_info(self) -> DeviceInfo | None:
+        """Return device information, only config entries can have devices."""
+        return self._device.device_info if self._is_config_entry else None
 
     @property
     def extra_state_attributes(self):
@@ -524,13 +548,28 @@ class SensorThermalComfort(SensorEntity):
         if self._device.compute_states[self._sensor_type].needs_update:
             self.async_schedule_update_ha_state(True)
 
+    async def async_will_remove_from_hass(self):
+        """Unregister callbacks."""
+        if self in self._device.sensors:
+            self._device.sensors.remove(self)
+        if not self._device.sensors:
+            self._device.async_unsubscribe()
+
+    @property
+    def available(self) -> bool:
+        """Return True if both source values are valid."""
+        return self._device.available
+
     async def async_update(self):
         """Update the state of the sensor."""
+        if not self._device.available:
+            return
+
         value = await getattr(self._device, self._sensor_type)()
         if value is None:  # can happen during startup
             return
 
-        if type(value) == tuple and len(value) == 2:
+        if isinstance(value, tuple) and len(value) == 2:
             self._attr_extra_state_attributes.update(value[1])
             value = value[0]
 
@@ -590,6 +629,7 @@ class DeviceThermalComfort:
         humidity_entity: str,
         should_poll: bool,
         scan_interval: timedelta,
+        pressure_entity: str | None = None,
     ):
         """Initialize the sensor."""
         self.hass = hass
@@ -603,8 +643,12 @@ class DeviceThermalComfort:
         self.extra_state_attributes = {}
         self._temperature_entity = temperature_entity
         self._humidity_entity = humidity_entity
+        self._pressure_entity = pressure_entity
         self._temperature = None
         self._humidity = None
+        self._pressure = None  # Pa, None means the standard pressure
+        self._was_available = False
+        self._unsubscribers = []
         self._should_poll = should_poll
         self.sensors = []
         self._compute_states = {
@@ -612,13 +656,27 @@ class DeviceThermalComfort:
             for sensor_type in SENSOR_TYPES
         }
 
-        async_track_state_change_event(
-            self.hass, self._temperature_entity, self.temperature_state_listener
+        self._unsubscribers.append(
+            async_track_state_change_event(
+                self.hass, self._temperature_entity, self.temperature_state_listener
+            )
         )
 
-        async_track_state_change_event(
-            self.hass, self._humidity_entity, self.humidity_state_listener
+        self._unsubscribers.append(
+            async_track_state_change_event(
+                self.hass, self._humidity_entity, self.humidity_state_listener
+            )
         )
+
+        if self._pressure_entity:
+            # Read before the first computation, so it never starts with the
+            # standard pressure when the sensor is already there.
+            self._pressure = self._parse_pressure(hass.states.get(pressure_entity))
+            self._unsubscribers.append(
+                async_track_state_change_event(
+                    self.hass, self._pressure_entity, self.pressure_state_listener
+                )
+            )
 
         hass.async_create_task(
             self._new_temperature_state(hass.states.get(temperature_entity))
@@ -632,11 +690,19 @@ class DeviceThermalComfort:
         if self._should_poll:
             if scan_interval is None:
                 scan_interval = timedelta(seconds=SCAN_INTERVAL_DEFAULT)
-            async_track_time_interval(
-                self.hass,
-                self.async_update_sensors,
-                scan_interval,
+            self._unsubscribers.append(
+                async_track_time_interval(
+                    self.hass,
+                    self.async_update_sensors,
+                    scan_interval,
+                )
             )
+
+    @callback
+    def async_unsubscribe(self) -> None:
+        """Stop listening to the source entities and stop polling."""
+        while self._unsubscribers:
+            self._unsubscribers.pop()()
 
     async def _set_version(self):
         self._device_info["sw_version"] = (
@@ -648,32 +714,89 @@ class DeviceThermalComfort:
         await self._new_temperature_state(event.data.get("new_state"))
 
     async def _new_temperature_state(self, state):
+        temperature = None
         if _is_valid_state(state):
             hass = self.hass
             unit = state.attributes.get(ATTR_UNIT_OF_MEASUREMENT, hass.config.units.temperature_unit)
             temp = util.convert(state.state, float)
             # convert to celsius if necessary
-            temperature = TemperatureConverter.convert(temp, unit, UnitOfTemperature.CELSIUS)
-            if -89.2 <= temperature <= 56.7:
-                self.extra_state_attributes[ATTR_TEMPERATURE] = temp
-                self._temperature = temperature
-                await self.async_update()
-        else:
+            with contextlib.suppress(HomeAssistantError):
+                temperature = TemperatureConverter.convert(temp, unit, UnitOfTemperature.CELSIUS)
+            if temperature is not None and not -89.2 <= temperature <= 56.7:
+                temperature = None
+        if temperature is None:
             _LOGGER.info("Temperature has an invalid value: %s. Can't calculate new states.", state)
+            self.extra_state_attributes.pop(ATTR_TEMPERATURE, None)
+        else:
+            self.extra_state_attributes[ATTR_TEMPERATURE] = temp
+        self._temperature = temperature
+        await self.async_update()
 
     async def humidity_state_listener(self, event):
         """Handle humidity device state changes."""
         await self._new_humidity_state(event.data.get("new_state"))
 
     async def _new_humidity_state(self, state):
+        humidity = None
         if _is_valid_state(state):
             humidity = float(state.state)
-            if 0 < humidity <= 100:
-                self._humidity = float(state.state)
-                self.extra_state_attributes[ATTR_HUMIDITY] = self._humidity
-                await self.async_update()
-        else:
+            if 100 < humidity <= HUMIDITY_MAX_OVERSHOOT:
+                humidity = 100.0
+            if not 0 < humidity <= 100:
+                humidity = None
+        if humidity is None:
             _LOGGER.info("Relative humidity has an invalid value: %s. Can't calculate new states.", state)
+            self.extra_state_attributes.pop(ATTR_HUMIDITY, None)
+        else:
+            self.extra_state_attributes[ATTR_HUMIDITY] = humidity
+        self._humidity = humidity
+        await self.async_update()
+
+    async def pressure_state_listener(self, event):
+        """Handle pressure device state changes."""
+        await self._new_pressure_state(event.data.get("new_state"))
+
+    def _parse_pressure(self, state) -> float | None:
+        """Return the pressure of a source state in Pa, None if unusable."""
+        pressure = None
+        if _is_valid_state(state):
+            unit = state.attributes.get(
+                ATTR_UNIT_OF_MEASUREMENT, self.hass.config.units.pressure_unit
+            )
+            with contextlib.suppress(HomeAssistantError):
+                pressure = PressureConverter.convert(
+                    float(state.state), unit, UnitOfPressure.PA
+                )
+            if pressure is not None and not PRESSURE_MIN <= pressure <= PRESSURE_MAX:
+                pressure = None
+        if pressure is None:
+            _LOGGER.info(
+                "Pressure has an invalid value: %s. Using the standard pressure.",
+                state,
+            )
+        return pressure
+
+    async def _new_pressure_state(self, state):
+        pressure = self._parse_pressure(state)
+        if pressure == self._pressure:
+            return
+        self._pressure = pressure
+        # Only the enthalpy depends on the pressure
+        self._compute_states[SensorType.MOIST_AIR_ENTHALPY].needs_update = True
+        if self.available and not self._should_poll:
+            for sensor in self.sensors:
+                if sensor._sensor_type == SensorType.MOIST_AIR_ENTHALPY:
+                    sensor.async_schedule_update_ha_state(True)
+
+    def _actual_pressure(self) -> float:
+        """Return the pressure in Pa to use for the calculations.
+
+        The measured pressure when a valid one is available, otherwise the
+        standard pressure at sea level.
+        """
+        if self._pressure is not None:
+            return self._pressure
+        return STANDARD_PRESSURE
 
     @compute_once_lock(SensorType.DEW_POINT)
     async def dew_point(self) -> float:
@@ -856,7 +979,7 @@ class DeviceThermalComfort:
     @compute_once_lock(SensorType.WINTER_SCHARLAU_PERCEPTION)
     async def winter_scharlau_perception(self) -> (ScharlauPerception, dict):
         """<https://revistadechimie.ro/pdf/16%20RUSANESCU%204%2019.pdf>."""
-        tc = (0.0003 * self._humidity) + (0.1497 * self._humidity) - 7.7133
+        tc = -0.0003 * pow(self._humidity, 2) + 0.1497 * self._humidity - 7.7133
         ish = self._temperature - tc
         if self._temperature < -5 or self._temperature > 6 or self._humidity < 40:
             perception = ScharlauPerception.OUTSIDE_CALCULABLE_RANGE
@@ -915,9 +1038,9 @@ class DeviceThermalComfort:
         return summer_simmer_perception, {ATTR_SUMMER_SIMMER_INDEX: si}
 
     @compute_once_lock(SensorType.MOIST_AIR_ENTHALPY)
-    async def moist_air_enthalpy(self) -> float:
+    async def moist_air_enthalpy(self) -> float | tuple[float, dict]:
         """Calculate the enthalpy of moist air."""
-        patm = 101325  # standard pressure at sea-level
+        patm = self._actual_pressure()  # Pa
         c_to_k = 273.15
 
         # ASHRAE fundamentals 2021 pg 1.5
@@ -953,7 +1076,11 @@ class DeviceThermalComfort:
         W = 0.621945 * p_w / (patm - p_w)
 
         # calculate enthalpy (ASHRAE fundamentals 2021 pg 1.10 eq 30)
-        return 1.006 * self._temperature + W * (2501 + 1.86 * self._temperature)
+        enthalpy = 1.006 * self._temperature + W * (2501 + 1.86 * self._temperature)
+        if self._pressure_entity:
+            # Show the pressure in use, only where a sensor was configured
+            return enthalpy, {ATTR_PRESSURE: patm / 100}
+        return enthalpy
 
     @compute_once_lock(SensorType.THOMS_DISCOMFORT_PERCEPTION)
     async def thoms_discomfort_perception(self) -> (ThomsDiscomfortPerception, dict):
@@ -963,7 +1090,7 @@ class DeviceThermalComfort:
             * math.atan(0.151977 * pow(self._humidity + 8.313659, 1 / 2))
             + math.atan(self._temperature + self._humidity)
             - math.atan(self._humidity - 1.676331)
-            + pow(0.00391838 * self._humidity, 3 / 2)
+            + 0.00391838 * pow(self._humidity, 3 / 2)
             * math.atan(0.023101 * self._humidity)
             - 4.686035
         )
@@ -986,16 +1113,24 @@ class DeviceThermalComfort:
 
     async def async_update(self):
         """Update the state."""
-        if self._temperature is not None and self._humidity is not None:
+        available = self.available
+        if available:
             for sensor_type in SENSOR_TYPES:
                 self._compute_states[sensor_type].needs_update = True
-            if not self._should_poll:
-                await self.async_update_sensors(True)
+        # Polling devices refresh on the timer, but not when availability changes
+        if not self._should_poll or available != self._was_available:
+            await self.async_update_sensors(True)
+        self._was_available = available
 
     async def async_update_sensors(self, force_refresh: bool = False) -> None:
         """Update the state of the sensors."""
         for sensor in self.sensors:
             sensor.async_schedule_update_ha_state(force_refresh)
+
+    @property
+    def available(self) -> bool:
+        """Return True if both source values are valid."""
+        return self._temperature is not None and self._humidity is not None
 
     @property
     def compute_states(self) -> dict[SensorType, ComputeState]:

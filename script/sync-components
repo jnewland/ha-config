@@ -88,7 +88,7 @@ rm -rf custom_components/ha_carrier || true
 mv $TMPDIR/$$-carrier/custom_components/ha_carrier custom_components
 
 # renovate: datasource=github-releases depName=dolezsa/thermal_comfort
-THERMAL_COMFORT_VERSION=2.2.6
+THERMAL_COMFORT_VERSION=3.1.0
 git clone --depth 1 --branch $THERMAL_COMFORT_VERSION https://github.com/dolezsa/thermal_comfort $TMPDIR/$$-thermal_comfort
 rm -rf custom_components/thermal_comfort || true
 mv $TMPDIR/$$-thermal_comfort/custom_components/thermal_comfort custom_components
