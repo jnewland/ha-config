@@ -5,6 +5,24 @@ homeassistant:
       icon: mdi:gate
     sensor.gate_driveway_gate_classification:
       icon: mdi:gate
+input_boolean:
+  mute_front_gate_doorbell:
+    name: mute front gate doorbell
+    icon: mdi:bell-off
+template:
+  # Rings the HomeKit "front gate" doorbell camera (see homekit.yaml) when the
+  # gate opens, unless muted. Trigger-based so unmuting while the gate is open
+  # doesn't ring it.
+  - trigger:
+      - platform: state
+        entity_id: binary_sensor.front_gate
+        to: "on"
+    binary_sensor:
+      - unique_id: front_gate_doorbell
+        name: front gate doorbell
+        state: "{{ is_state('input_boolean.mute_front_gate_doorbell', 'off') }}"
+        auto_off:
+          seconds: 5
 automation:
   - alias: Front gate Bell
     id: c228fcbc-a5ea-4d1f-8094-a884be31e362

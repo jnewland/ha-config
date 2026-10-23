@@ -12,6 +12,8 @@
       - lock
       - media_player
       - cover
+    exclude_entities:
+      - alarm_control_panel.music_room_unvr_alarm_manager
     include_entities:
       - cover.garage
       - cover.gate
@@ -35,11 +37,12 @@
       - script.mode_cocktail
       - vacuum.downstairs
       - light.global_brightness
+      - input_boolean.mute_front_gate_doorbell
 
 # Cameras have to be standalone HomeKit accessories (not bridged). The front
-# gate contact sensor is linked as a doorbell because tvOS only shows camera
-# notifications (picture-in-picture with the live feed) for doorbell cameras;
-# linked motion sensors never reach Apple TV.
+# gate doorbell sensor (packages/gates.yaml) is linked as a doorbell because
+# tvOS only shows camera notifications (picture-in-picture with the live feed)
+# for doorbell cameras; linked motion sensors never reach Apple TV.
 - name: front gate
   port: 21069
   mode: accessory
@@ -49,7 +52,7 @@
   entity_config:
     camera.front_door_medium:
       name: front gate
-      linked_doorbell_sensor: binary_sensor.front_gate
+      linked_doorbell_sensor: binary_sensor.front_gate_doorbell
       # Protect already streams H.264, so pass it through instead of transcoding
       video_codec: copy
       support_audio: true
