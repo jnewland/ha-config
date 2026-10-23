@@ -37,9 +37,9 @@
       - light.global_brightness
 
 # Cameras have to be standalone HomeKit accessories (not bridged). The front
-# gate contact sensor is linked as the camera's motion sensor, so each gate
-# opening shows up as camera activity in the Home app, which tvOS displays as a
-# picture-in-picture notification with the live feed.
+# gate contact sensor is linked as a doorbell because tvOS only shows camera
+# notifications (picture-in-picture with the live feed) for doorbell cameras;
+# linked motion sensors never reach Apple TV.
 - name: front gate
   port: 21069
   mode: accessory
@@ -49,7 +49,7 @@
   entity_config:
     camera.front_door_medium:
       name: front gate
-      linked_motion_sensor: binary_sensor.front_gate
+      linked_doorbell_sensor: binary_sensor.front_gate
       # Protect already streams H.264, so pass it through instead of transcoding
       video_codec: copy
       support_audio: true
