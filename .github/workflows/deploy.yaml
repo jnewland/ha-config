@@ -37,7 +37,7 @@ jobs:
         run: |
           openssl req -x509 -newkey rsa:2048 -subj '/CN=example.com' -nodes -keyout key.pem -out cert.pem
       - name: Test config
-        uses: docker://homeassistant/home-assistant:2026.10.3@sha256:407b89cd11a8cb67d388d21739a226c74acbbebe1ac59e3b83b11b43ce76b98f
+        uses: docker://homeassistant/home-assistant:2026.10.4@sha256:23f4dfbb69ce76315dbc4de7915504f1c2dcecd7ca2648113a493a385972e133
         with:
           entrypoint: ./script/cibuild
 
