@@ -19,6 +19,9 @@
       "manufacturer_id": 961
     }
   ],
+  "categories": [
+    "appliances_cleaning"
+  ],
   "codeowners": [
     "@sopelj"
   ],
@@ -27,6 +30,7 @@
     "bluetooth_adapters"
   ],
   "documentation": "https://github.com/sopelj/hass_ember_mug",
+  "integration_type": "device",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/sopelj/hass_ember_mug/issues",
   "loggers": [
@@ -35,7 +39,7 @@
     "ember_mug"
   ],
   "requirements": [
-    "python-ember-mug==1.4.0b2"
+    "python-ember-mug==1.5.0"
   ],
-  "version": "1.5.0"
+  "version": "1.5.1"
 }
