@@ -8,6 +8,8 @@ automation:
     action:
       - service: script.ack
         data:
+          title: Doorbell
+          icon: mdi:doorbell
           entity_id: script.noop
           tag: doorbell
           message: Doorbell sound detected ❗️📢

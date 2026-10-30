@@ -212,7 +212,13 @@ automation:
     action:
       - service: notify.iphones
         data:
-          message_template: "{{ trigger.to_state.name }} detected"
+          title: Leak
+          message: "{{ trigger.to_state.name }} detected"
+          data:
+            notification_icon: mdi:water-alert
+            color: "#F44336"
+            push:
+              interruption-level: time-sensitive
 
   - alias: notify when upstairs AC leak likely trips
     id: c2d552de-8ffe-4b30-8597-f1ebf5c862dc
@@ -224,11 +230,15 @@ automation:
     action:
       - service: notify.mobile_app_jphone_17_pro
         data:
+          title: Climate
           message: >
             upstairs AC intake pipe condensation risk: outdoor dew point is
             {{ state_attr('binary_sensor.upstairs_ac_leak_likely', 'dew_point') }}°F,
             within {{ states('input_number.upstairs_leak_likely_threshold') }}°F of the
             {{ state_attr('binary_sensor.upstairs_ac_leak_likely', 'setpoint') }}°F setpoint.
+          data:
+            notification_icon: mdi:thermostat
+            color: "#03A9F4"
 
   - alias: notify us when the downstairs climate current_temperature goes above setpoint in cool mode
     id: 1b2b0b5e-5b0a-4b0e-8b0a-2b0b5e5b0a4b
@@ -245,10 +255,14 @@ automation:
     action:
       - service: notify.iphones
         data:
+          title: Climate
           message: >
             downstairs AC isn't keeping up.
             Current temp is {{ state_attr('climate.downstairs', 'current_temperature') }}
             and target temp is {{ state_attr('climate.downstairs', 'temperature') }}.
+          data:
+            notification_icon: mdi:thermostat
+            color: "#03A9F4"
 
   - alias: notify us when downstairs climate is idle
     id: 59b0a151-122a-46dc-81bd-fd099fba0018
@@ -266,7 +280,11 @@ automation:
     action:
       - service: notify.iphones
         data:
+          title: Climate
           message: >
             downstairs AC has given up.
             Current temp is {{ state_attr('climate.downstairs', 'current_temperature') }}
             and target temp is {{ state_attr('climate.downstairs', 'temperature') }}.
+          data:
+            notification_icon: mdi:thermostat
+            color: "#03A9F4"

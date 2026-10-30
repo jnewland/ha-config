@@ -106,6 +106,8 @@ automation:
 
       - service: script.ack
         data:
+          title: Person
+          icon: mdi:cctv
           service: homeassistant.turn_off
           entity_id: automation.notify_when_person_detected_in_front_yard
           camera: >-
@@ -178,6 +180,8 @@ automation:
 
       - service: script.ack
         data:
+          title: Dog
+          icon: mdi:dog
           service: homeassistant.turn_off
           entity_id: automation.notify_when_dog_detected_in_yard
           camera: >-
@@ -312,6 +316,8 @@ automation:
 
       - service: script.ack
         data:
+          title: Marigold
+          icon: mdi:dog
           service: counter.increment
           entity_id: counter.pets
           camera: >-

@@ -30,6 +30,8 @@ automation:
           level: debug
       - service: script.ack
         data:
+          title: Locks
+          icon: mdi:lock-alert
           service: lock.lock
           entity_id: "{{ trigger.entity_id }}"
           tag: "{{ trigger.entity_id }}"

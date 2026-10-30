@@ -33,8 +33,11 @@ automation:
     action:
       - service: notify.iphones
         data:
+          title: Front gate
           message: the front gate just opened!
           data:
+            notification_icon: mdi:gate
+            color: "#03A9F4"
             tag: front_gate
             push:
               category: camera
@@ -63,9 +66,12 @@ automation:
     action:
       - service: notify.iphones
         data:
+          title: Front gate
           message: >
             the front gate has been open for {{ relative_time(trigger.to_state.last_changed) }}
           data:
+            notification_icon: mdi:gate
+            color: "#FF9800"
             tag: front_gate
             push:
               interruption-level: time-sensitive
@@ -86,9 +92,12 @@ automation:
     action:
       - service: notify.iphones
         data:
+          title: Front gate
           message: >
             the front gate is closed after being open for {{ relative_time(trigger.from_state.last_changed) }}
           data:
+            notification_icon: mdi:gate
+            color: "#03A9F4"
             tag: front_gate
             push:
               category: camera
@@ -110,8 +119,11 @@ automation:
     action:
       - service: notify.iphones
         data:
+          title: Driveway gate
           message: the driveway gate just opened!
           data:
+            notification_icon: mdi:gate
+            color: "#03A9F4"
             tag: driveway_gate
             push:
               category: camera
@@ -140,9 +152,12 @@ automation:
     action:
       - service: notify.iphones
         data:
+          title: Driveway gate
           message: >
             the driveway gate has been open for {{ relative_time(trigger.to_state.last_changed) }}
           data:
+            notification_icon: mdi:gate
+            color: "#FF9800"
             tag: driveway_gate
             push:
               interruption-level: time-sensitive
@@ -165,9 +180,12 @@ automation:
     action:
       - service: notify.iphones
         data:
+          title: Driveway gate
           message: >
             the driveway gate is closed after being open for {{ relative_time(trigger.from_state.last_changed) }}
           data:
+            notification_icon: mdi:gate
+            color: "#03A9F4"
             tag: driveway_gate
             push:
               category: camera

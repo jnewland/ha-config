@@ -88,9 +88,11 @@ automation:
           entity_id: input_boolean.deploy_in_progress
       - service: notify.mobile_app_jphone_17_pro
         data:
-          title: "Deploying Home Assistant Config"
+          title: Deploy
           message: "Deploying {{ states('sensor.latest_deployment_sha')[:7] }}"
           data:
+            notification_icon: mdi:source-branch
+            color: "#03A9F4"
             tag: deploy
             url: https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}
       - service: shell_command.deploy
@@ -110,9 +112,11 @@ automation:
           entity_id: input_boolean.deploy_in_progress
       - service: notify.mobile_app_jphone_17_pro
         data:
-          title: "Deploying Home Assistant Config"
+          title: Deploy
           message: "Deploying {{ states('sensor.latest_deployment_sha')[:7] }}..."
           data:
+            notification_icon: mdi:source-branch
+            color: "#03A9F4"
             tag: deploy
             url: https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}
       - service: shell_command.deploy
@@ -131,12 +135,14 @@ automation:
     action:
       - service: notify.mobile_app_jphone_17_pro
         data:
-          title: "Home Assistant deploy is stuck"
+          title: Deploy
           message: >-
             sensor.deploy_status has been 'drifted' for over an hour —
             the running config hasn't matched the latest deployment.
             Check the deploy automation and sensor.latest_deployment_tree_sha.
           data:
+            notification_icon: mdi:source-branch
+            color: "#03A9F4"
             tag: deploy-stale
   - alias: Notify Home assistant start after deploy
     id: 1a7b3bf1-63a5-4b4e-bae1-1ebaca4de5fa
@@ -153,9 +159,11 @@ automation:
           entity_id: input_boolean.deploy_in_progress
       - service: notify.mobile_app_jphone_17_pro
         data:
-          title: "Home Assistant config deploy complete!"
+          title: Deploy
           message: "Now running {{ states('sensor.config_sha')[:7] }}"
           data:
+            notification_icon: mdi:source-branch
+            color: "#03A9F4"
             tag: deploy
             # This last notification should allow opening the new Home Assistant version, don't need to link to the commit again.
             # url: https://github.com/jnewland/ha-config/commit/{{ states('sensor.latest_deployment_sha') }}

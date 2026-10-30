@@ -18,6 +18,8 @@ automation:
     action:
       - service: script.ack
         data:
+          title: Weather
+          icon: mdi:weather-pouring
           notify_service: notify.mobile_app_jphone_17_pro
           entity_id: script.noop
           tag: precipitation
@@ -35,6 +37,8 @@ automation:
     action:
       - service: script.ack
         data:
+          title: Weather
+          icon: mdi:weather-sunny
           notify_service: notify.mobile_app_jphone_17_pro
           entity_id: script.noop
           tag: precipitation

@@ -15,10 +15,13 @@ automation:
     action:
       service: notify.mobile_app_jphone_17_pro
       data:
+        title: UPS
         message: |
           Core UPS reports status of {{ states('sensor.ups_status') | default("Unknown") }} with input of {{ float(states('sensor.ups_input_voltage', default=0)) | round }}{{ state_attr('sensor.ups_input_voltage','unit_of_measurement') }}.{{" "-}}
           Battery runtime estimated to be {{ float(states('sensor.ups_battery_runtime', default=60)/60) | round }} minutes.
         data:
+          notification_icon: mdi:power-plug-off
+          color: "#F44336"
           push:
             sound:
               name: default
