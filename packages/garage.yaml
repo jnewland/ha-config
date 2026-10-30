@@ -125,8 +125,7 @@ automation:
           camera: >
             camera.garage_medium
           camera_thumbnail: >-
-            {{ states('input_text.external_url') }}
-            {{ state_attr('camera.garage_medium', 'entity_picture') }}
+            {{ states('input_text.external_url') ~ state_attr('camera.garage_medium', 'entity_picture') }}
           message: >
             Lock the garage?
           confirmation_message: >
@@ -172,8 +171,7 @@ automation:
           camera: >-
             {{ trigger.entity_id | replace("cover.", "camera.") }}_medium
           camera_thumbnail: >-
-            {{ states('input_text.external_url') }}
-            {{ state_attr(trigger.entity_id | replace("lock.", "camera."), 'entity_picture') }}
+            {{ states('input_text.external_url') ~ state_attr((trigger.entity_id | replace("cover.", "camera.")) ~ "_medium", 'entity_picture') }}
           message: >-
             {{ trigger.to_state.name }} is {{ trigger.to_state.state }}. Close it?
           confirmation_message: >-

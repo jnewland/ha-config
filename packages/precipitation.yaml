@@ -11,8 +11,8 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.precipitation_in_forecast
-        from: "on"
-        to: "off"
+        from: "off"
+        to: "on"
     condition: |
       {{ states('device_tracker.jphone_17_pro') != 'not_home' }}
     action:
@@ -30,8 +30,8 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.precipitation_in_forecast
-        from: "off"
-        to: "on"
+        from: "on"
+        to: "off"
     condition: |
       {{ states('device_tracker.jphone_17_pro') != 'not_home' }}
     action:

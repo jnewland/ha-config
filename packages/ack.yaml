@@ -88,6 +88,8 @@ script:
                         {{ confirmation_message | default("turned on " + entity_id) }}
                       skip_confirmation: |
                         {{ skip_confirmation | default(false) }}
+                      decline_message: |
+                        {{ decline_message | default("👎 to " + entity_id) }}
                     push:
                       interruption-level: >
                         {{ interruption_level | default('active') }}
@@ -108,12 +110,14 @@ script:
                   {{ tag | default(entity_id) }}
                 actions:
                   - action: ACK_TURN_ON
-                    title: Hell yeah
+                    title: >-
+                      {{ ack_yes_title | default("Hell yeah") }}
                     destructive: true
                     authenticationRequired: |
                       {{ secure | default("false") != "false" }}
                   - action: ACK_NO
-                    title: Nah
+                    title: >-
+                      {{ ack_no_title | default("Nah") }}
                 action_data:
                   title: >-
                     {{ notification_title }}

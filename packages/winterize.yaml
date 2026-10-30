@@ -17,8 +17,8 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.freeze_in_forecast
-        from: "on"
-        to: "off"
+        from: "off"
+        to: "on"
     condition:
       condition: state
       entity_id: input_boolean.winterized
@@ -37,8 +37,8 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.freeze
-        from: "on"
-        to: "off"
+        from: "off"
+        to: "on"
     condition:
       condition: state
       entity_id: input_boolean.winterized
