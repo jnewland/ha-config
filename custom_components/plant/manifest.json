@@ -9,6 +9,9 @@
     "statistics",
     "utility_meter"
   ],
+  "categories": [
+    "garden_plants"
+  ],
   "codeowners": [
     "@Olen"
   ],
@@ -18,5 +21,5 @@
   "requirements": [
     "async-timeout>=4.0.2"
   ],
-  "version": "2026.9.0"
+  "version": "2026.11.0-beta1"
 }
