@@ -116,6 +116,8 @@ automation:
           level: debug
       - service: script.ack
         data:
+          title: Locks
+          icon: mdi:lock-alert
           service: lock.lock
           entity_id: lock.garage
           interruption_level: >-
@@ -123,8 +125,7 @@ automation:
           camera: >
             camera.garage_medium
           camera_thumbnail: >-
-            {{ states('input_text.external_url') }}
-            {{ state_attr('camera.garage_medium', 'entity_picture') }}
+            {{ states('input_text.external_url') ~ state_attr('camera.garage_medium', 'entity_picture') }}
           message: >
             Lock the garage?
           confirmation_message: >
@@ -156,6 +157,10 @@ automation:
     action:
       - service: script.ack
         data:
+          title: >-
+            {{ "Driveway gate" if trigger.entity_id == "cover.gate" else "Garage" }}
+          icon: >-
+            {{ "mdi:gate" if trigger.entity_id == "cover.gate" else "mdi:garage-alert" }}
           service: cover.close_cover
           entity_id: >-
             {{ trigger.entity_id }}
@@ -166,8 +171,7 @@ automation:
           camera: >-
             {{ trigger.entity_id | replace("cover.", "camera.") }}_medium
           camera_thumbnail: >-
-            {{ states('input_text.external_url') }}
-            {{ state_attr(trigger.entity_id | replace("lock.", "camera."), 'entity_picture') }}
+            {{ states('input_text.external_url') ~ state_attr((trigger.entity_id | replace("cover.", "camera.")) ~ "_medium", 'entity_picture') }}
           message: >-
             {{ trigger.to_state.name }} is {{ trigger.to_state.state }}. Close it?
           confirmation_message: >-
@@ -233,6 +237,8 @@ automation:
     action:
       - service: script.ack
         data:
+          title: Locks
+          icon: mdi:lock-alert
           secure: "true"
           tag: garage_button_1
           entity_id: script.unlock_garage

@@ -10,6 +10,21 @@ script:
   ack:
     mode: parallel
     sequence:
+      # title is a stable sender name: the iOS app builds each conversation from
+      # title, icon, and color, so changing details belong in message. color
+      # follows interruption_level; direct notify calls use the same hex values.
+      - variables:
+          notification_title: >-
+            {{ title | default("Home Assistant") }}
+          notification_icon: >-
+            {{ icon | default("mdi:home-assistant") }}
+          notification_color: >-
+            {{ color | default({
+              "passive": "#607D8B",
+              "active": "#03A9F4",
+              "time-sensitive": "#FF9800",
+              "critical": "#F44336"
+            }.get(interruption_level | default("active"), "#03A9F4")) }}
       - choose:
           - alias: with camera and camera_thumbnail
             conditions: |
@@ -26,9 +41,15 @@ script:
                     notify.iphones
                   {% endif %}
                 data:
+                  title: >-
+                    {{ notification_title }}
                   message: |
                     {{ message | default("Turn on " + entity_id) }}
                   data:
+                    notification_icon: >-
+                      {{ notification_icon }}
+                    color: >-
+                      {{ notification_color }}
                     entity_id: >-
                       {{ camera }}
                     attachment:
@@ -49,6 +70,12 @@ script:
                         title: >-
                           {{ ack_no_title | default("Nah") }}
                     action_data:
+                      title: >-
+                        {{ notification_title }}
+                      icon: >-
+                        {{ notification_icon }}
+                      color: >-
+                        {{ notification_color }}
                       tag: >
                         {{ tag | default(entity_id) }}
                       service: |
@@ -61,6 +88,8 @@ script:
                         {{ confirmation_message | default("turned on " + entity_id) }}
                       skip_confirmation: |
                         {{ skip_confirmation | default(false) }}
+                      decline_message: |
+                        {{ decline_message | default("👎 to " + entity_id) }}
                     push:
                       interruption-level: >
                         {{ interruption_level | default('active') }}
@@ -68,20 +97,34 @@ script:
           - service: >
               {{ notify_service | default(states('sensor.notify_group')) | default("notify.iphones") }}
             data:
+              title: >-
+                {{ notification_title }}
               message: |
                 {{ message | default("Turn on " + entity_id) }}
               data:
+                notification_icon: >-
+                  {{ notification_icon }}
+                color: >-
+                  {{ notification_color }}
                 tag: >
                   {{ tag | default(entity_id) }}
                 actions:
                   - action: ACK_TURN_ON
-                    title: Hell yeah
+                    title: >-
+                      {{ ack_yes_title | default("Hell yeah") }}
                     destructive: true
                     authenticationRequired: |
                       {{ secure | default("false") != "false" }}
                   - action: ACK_NO
-                    title: Nah
+                    title: >-
+                      {{ ack_no_title | default("Nah") }}
                 action_data:
+                  title: >-
+                    {{ notification_title }}
+                  icon: >-
+                    {{ notification_icon }}
+                  color: >-
+                    {{ notification_color }}
                   tag: >
                     {{ tag | default(entity_id) }}
                   service: |
@@ -112,9 +155,15 @@ automation:
     action:
       - service: "{{ trigger.event.data.action_data.notify_service }}"
         data:
+          title: >-
+            {{ trigger.event.data.action_data.title | default("Home Assistant") }}
           message: |
             {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.decline_message | default("👎 to " + trigger.event.data.action_data.entity_id) }}
           data:
+            notification_icon: >-
+              {{ trigger.event.data.action_data.icon | default("") }}
+            color: >-
+              {{ trigger.event.data.action_data.color | default("") }}
             tag: >
               {{ trigger.event.data.action_data.tag | default(trigger.event.data.action_data.entity_id) }}
             push:
@@ -144,9 +193,15 @@ automation:
           {{ not (trigger.event.data.action_data.skip_confirmation | default(false)) }}
       - service: "{{ trigger.event.data.action_data.notify_service }}"
         data:
+          title: >-
+            {{ trigger.event.data.action_data.title | default("Home Assistant") }}
           message: >
             {{ trigger.event.data.sourceDeviceName }} {{ trigger.event.data.action_data.confirmation_message }}
           data:
+            notification_icon: >-
+              {{ trigger.event.data.action_data.icon | default("") }}
+            color: >-
+              {{ trigger.event.data.action_data.color | default("") }}
             tag: >
               {{ trigger.event.data.action_data.confirmation_tag | default(trigger.event.data.action_data.tag) | default(trigger.event.data.action_data.entity_id) }}
             push:

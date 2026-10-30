@@ -112,6 +112,8 @@ script:
           {{ states.input_boolean.guests.state != "on" }}
       - service: script.ack
         data:
+          title: Alarm
+          icon: mdi:shield-home
           entity_id: script.arm
           tag: alarm_control_panel.alarm
           message: "Alarm is disarmed. Arm?"

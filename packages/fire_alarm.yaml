@@ -8,6 +8,10 @@ automation:
     action:
       - service: script.ack
         data:
+          title: Fire alarm
+          icon: mdi:fire-alert
+          color: "#F44336"
+          interruption_level: time-sensitive
           entity_id: script.noop
           tag: fire_alarm
           message: Fire alarm sound detected ❗️�

@@ -12,6 +12,8 @@ automation:
     action:
       - service: script.ack
         data:
+          title: Volcano
+          icon: mdi:volcano
           notify_service: notify.mobile_app_jphone_17_pro
           entity_id: switch.volcano_fan
           tag: volcano
@@ -32,6 +34,8 @@ automation:
     action:
       - service: script.ack
         data:
+          title: Volcano
+          icon: mdi:volcano
           notify_service: notify.mobile_app_jphone_17_pro
           service: homeassistant.turn_off
           entity_id: switch.volcano_fan

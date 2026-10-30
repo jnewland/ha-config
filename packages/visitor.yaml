@@ -26,11 +26,14 @@ automation:
             sequence:
               - service: notify.iphones
                 data:
+                  title: Visitor
                   message: >
                     visitor arrived.
                     alarm is {{ states("alarm_control_panel.alarm") }}.
                     attempting to disarm.
                   data:
+                    notification_icon: mdi:doorbell
+                    color: "#F44336"
                     tag: visitor
                     sound:
                       name: default
@@ -48,10 +51,13 @@ automation:
                   {{ is_state('alarm_control_panel.alarm', 'disarmed') }}
               - service: notify.iphones
                 data:
+                  title: Visitor
                   message: >
                     visitor arrived.
                     alarm is {{ states("alarm_control_panel.alarm") }}.
                   data:
+                    notification_icon: mdi:doorbell
+                    color: "#03A9F4"
                     tag: visitor
                     push:
                       category: camera
@@ -64,10 +70,13 @@ automation:
         default:
           - service: notify.iphones
             data:
+              title: Visitor
               message: >
                 visitor arrived.
                 alarm is {{ states("alarm_control_panel.alarm") }}.
               data:
+                notification_icon: mdi:doorbell
+                color: "#03A9F4"
                 tag: visitor
                 push:
                   category: camera
@@ -109,10 +118,13 @@ automation:
               timeout: 5
       - service: notify.iphones
         data:
+          title: Visitor
           message: >
             visitor locked the front door.
             alarm set to {{ states("alarm_control_panel.alarm") }}.
           data:
+            notification_icon: mdi:doorbell
+            color: "#03A9F4"
             tag: visitor
             push:
               category: camera

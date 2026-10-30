@@ -76,6 +76,8 @@ automation:
     action:
       - service: script.ack
         data:
+          title: Laundry
+          icon: mdi:washing-machine
           entity_id: script.noop
           tag: laundry
           message: Time to do the laundry thing. You have a second?

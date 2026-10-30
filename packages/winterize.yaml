@@ -17,8 +17,8 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.freeze_in_forecast
-        from: "on"
-        to: "off"
+        from: "off"
+        to: "on"
     condition:
       condition: state
       entity_id: input_boolean.winterized
@@ -26,6 +26,8 @@ automation:
     action:
       - service: script.ack
         data:
+          title: Freeze
+          icon: mdi:snowflake-alert
           entity_id: input_boolean.winterized
           message: There's a freeze in the forecast. Is everything winterized?
           confirmation_message: winterized, cool.
@@ -35,8 +37,8 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.freeze
-        from: "on"
-        to: "off"
+        from: "off"
+        to: "on"
     condition:
       condition: state
       entity_id: input_boolean.winterized
@@ -44,6 +46,8 @@ automation:
     action:
       - service: script.ack
         data:
+          title: Freeze
+          icon: mdi:snowflake-alert
           entity_id: input_boolean.winterized
           message: It's now below freezing. Is everything winterized?
           confirmation_message: winterized, cool.

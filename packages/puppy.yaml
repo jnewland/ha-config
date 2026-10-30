@@ -11,6 +11,8 @@ automation:
     action:
       - service: script.ack
         data:
+          title: Dog
+          icon: mdi:dog
           entity_id: script.noop
           tag: bark
           message: ❗️📢🐶
