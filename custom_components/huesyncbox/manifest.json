@@ -1,6 +1,9 @@
 {
   "domain": "huesyncbox",
-  "name": "Philips Hue Play HDMI Sync Box",
+  "name": "Philips Hue Play Sync devices",
+  "categories": [
+    "media_entertainment"
+  ],
   "codeowners": [
     "@mvdwetering"
   ],
@@ -14,9 +17,9 @@
     "aiohuesyncbox"
   ],
   "requirements": [
-    "aiohuesyncbox==0.0.31"
+    "aiohuesyncbox==0.1.6"
   ],
-  "version": "3.0.0",
+  "version": "3.2.3",
   "zeroconf": [
     "_huesync._tcp.local."
   ]
