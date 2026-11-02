@@ -16,18 +16,25 @@ automation:
         to: "Not Charging"
         for:
           seconds: 30
+      - platform: time
+        at: "10:00:00"
     condition:
       condition: and
       conditions:
         - condition: state
           entity_id: input_select.mode
           state: Morning
-        - condition: template
-          value_template: |
-            {{
-              (states.device_tracker.jphone_17_pro.state == "not_home" or states.sensor.jphone_17_pro_battery_state == "Not Charging") and
-              (states.device_tracker.katies_iphone.state == "not_home" or states.sensor.katies_iphone_battery_state.state == "Not Charging")
-            }}
+        - condition: or
+          conditions:
+            # Fallback for a phone left on its charger
+            - condition: time
+              after: "10:00:00"
+            - condition: template
+              value_template: |
+                {{
+                  (states.device_tracker.jphone_17_pro.state == "not_home" or states.sensor.jphone_17_pro_battery_state.state == "Not Charging") and
+                  (states.device_tracker.katies_iphone.state == "not_home" or states.sensor.katies_iphone_battery_state.state == "Not Charging")
+                }}
     action:
       - service: input_select.select_option
         entity_id: input_select.mode
@@ -64,20 +71,34 @@ automation:
       entity_id: input_select.mode
       state: Away
     action:
-      - service: input_select.select_option
-        entity_id: input_select.mode
-        data:
-          option: Day
+      # Coming home after Evening has started goes straight to Evening
+      - if:
+          - condition: sun
+            after: sunset
+            after_offset: "-00:45:00"
+        then:
+          - service: input_select.select_option
+            entity_id: input_select.mode
+            data:
+              option: Evening
+        else:
+          - service: input_select.select_option
+            entity_id: input_select.mode
+            data:
+              option: Day
 
   - alias: Mode day to evening
     id: b9bd62f2-3e44-4320-9b01-8b59ccd00fd0
     trigger:
-      - platform: time
-        at: "17:00:00"
+      - platform: sun
+        event: sunset
+        offset: "-00:45:00"
     condition:
       condition: state
       entity_id: input_select.mode
-      state: Day
+      state:
+        - Morning
+        - Day
     action:
       - service: script.turn_on
         entity_id: script.mode_evening

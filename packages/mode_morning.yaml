@@ -3,14 +3,17 @@ automation:
     id: ea8d312a-ccd9-483c-949c-0b103480ec28
     trigger:
       - platform: state
+        id: motion
         entity_id: binary_sensor.closet_motion_any
         from: "off"
         to: "on"
       - platform: state
+        id: motion
         entity_id: binary_sensor.bathroom_home_security_motion_detection
         from: "off"
         to: "on"
       - platform: state
+        id: phone
         entity_id:
           - sensor.jphone_17_pro_battery_state
           - sensor.katies_iphone_battery_state
@@ -26,6 +29,14 @@ automation:
         - condition: time
           after: "05:00:00"
           before: "12:00:00"
+        # Morning disarms the alarm, so an early bathroom trip shouldn't start
+        # it. Before 06:30 only a phone coming off its charger counts.
+        - condition: or
+          conditions:
+            - condition: trigger
+              id: phone
+            - condition: time
+              after: "06:30:00"
     action:
       - service: input_select.select_option
         data:

@@ -11,6 +11,7 @@ cards:
       - light.lounge_tv
       - light.lounge_couch_left
       - light.lounge_couch_right
+      - light.lounge_fence
       - binary_sensor.lounge_home_security_motion_detection
       - sensor.lounge_air_temperature
     footer:

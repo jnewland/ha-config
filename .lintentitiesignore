@@ -8,3 +8,4 @@ device_tracker.private_ble_device_524e60 # WIP
 device_tracker.private_ble_device_9dfc84 # WIP
 light.couch_lamp_left # WIP
 light.couch_lamp_right # WIP
+scene.notify_with_lights_restore # created at runtime by scene.create

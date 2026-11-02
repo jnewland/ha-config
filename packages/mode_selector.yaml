@@ -45,6 +45,11 @@ script:
         entity_id: input_select.mode
         data:
           option: Day
+      # Occupancy runs this scene when someone arrives, and nothing would turn
+      # it off in an empty room
+      - condition: template
+        value_template: >
+          {{ states.binary_sensor.great_room_occupancy.state == "on" }}
       - service: script.turn_on
         entity_id: script.great_room_lights
   mode_evening:
@@ -61,6 +66,11 @@ script:
       - service: homeassistant.turn_off
         entity_id:
           - light.lounge_overhead
+      # Occupancy runs this scene when someone arrives, and nothing would turn
+      # it off in an empty room
+      - condition: template
+        value_template: >
+          {{ states.binary_sensor.great_room_occupancy.state == "on" }}
       - service: script.turn_on
         entity_id: script.great_room_lights
 
