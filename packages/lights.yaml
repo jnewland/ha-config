@@ -773,29 +773,44 @@ script:
       - service: homeassistant.turn_on
         entity_id: media_player.music_room_tv
 
+  # Snapshot, dim, restore. Only lights that are on are touched, the dim never
+  # reaches zero, and one failed dim can't stop the restore. Overlapping calls
+  # are dropped: a second snapshot could capture the first one's dimmed state.
   notify_with_lights:
-    mode: queued
+    mode: single
+    max_exceeded: silent
     sequence:
-      - condition: template
-        value_template: |
-          {{
-            states.light |
-            selectattr("state", "equalto", "on") |
-            selectattr("attributes.notify_action", "equalto", "duck") |
-            map(attribute="entity_id") |
-            list |
-            length > 0
-          }}
-      - service: script.pulse_light
-        data:
-          entity_id: |
+      - variables:
+          ducked: |
             {{
               states.light |
               selectattr("state", "equalto", "on") |
               selectattr("attributes.notify_action", "equalto", "duck") |
               map(attribute="entity_id") |
-              join(', ')
+              list
             }}
+      - condition: template
+        value_template: |
+          {{ ducked | length > 0 }}
+      - service: scene.create
+        data:
+          scene_id: notify_with_lights_restore
+          snapshot_entities: "{{ ducked }}"
+      - repeat:
+          for_each: "{{ ducked }}"
+          sequence:
+            - service: light.turn_on
+              continue_on_error: true
+              data:
+                entity_id: "{{ repeat.item }}"
+                brightness: |
+                  {% set brightness = state_attr(repeat.item, 'brightness') | int(255) %}
+                  {{ max(brightness - (state_attr(repeat.item, 'duck_step') | int(127)), (brightness / 4) | int, 1) }}
+      - delay:
+          seconds: 2
+      - service: scene.turn_on
+        data:
+          entity_id: scene.notify_with_lights_restore
 
   lounge_lights:
     mode: parallel
@@ -824,22 +839,6 @@ script:
             - light.lounge_overhead
           brightness: |
             {{ brightness | default(int((int(state_attr('switch.circadian_lighting_brightness', 'brightness'), default=100)/100)*255)) }}
-
-  pulse_light:
-    mode: parallel
-    sequence:
-      - service: python_script.dim_step
-        data:
-          action: down
-          entity_id: |
-            {{ entity_id }}
-      - delay:
-          seconds: 2
-      - service: python_script.dim_step
-        data:
-          action: up
-          entity_id: |
-            {{ entity_id }}
 
   haunt:
     mode: parallel
