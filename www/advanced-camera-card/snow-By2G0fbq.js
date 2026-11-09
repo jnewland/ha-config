@@ -1,0 +1,13 @@
+import{Fo as e,I as t,L as n,Mo as r,No as i,Ro as a,jo as o,pt as s}from"./shared-DKvQuQy0.js";var c=`:host{left:var(--start-x);color:#fff;-webkit-user-select:none;user-select:none;pointer-events:none;will-change:transform;animation:fall var(--fall-duration) linear infinite;animation-delay:var(--fall-delay);position:absolute}@keyframes fall{0%{opacity:var(--max-opacity,1);top:-2em;transform:translate(0)}25%{transform:translateX(calc(var(--end-x) - var(--start-x) + 8px));top:25%}50%{transform:translateX(calc(var(--end-x) - var(--start-x) - 10px));top:50%}75%{transform:translateX(calc(var(--end-x) - var(--start-x) + 20px));top:75%}90%{opacity:var(--max-opacity,1)}to{transform:translateX(calc(var(--end-x) - var(--start-x)));opacity:0;top:100%}}`,l=class extends i{constructor(...e){super(...e),this.char=`❄`,this.size=`1em`,this.maxOpacity=1,this.fallDuration=`10s`,this.fallDelay=`0s`,this.startX=`0%`,this.endX=`0%`}render(){return e`${this.char}`}updated(){this.style.setProperty(`--max-opacity`,`${this.maxOpacity}`),this.style.setProperty(`--fall-duration`,this.fallDuration),this.style.setProperty(`--fall-delay`,this.fallDelay),this.style.setProperty(`--start-x`,this.startX),this.style.setProperty(`--end-x`,this.endX),this.style.fontSize=this.size}static get styles(){return a(c)}};s([o({type:String})],l.prototype,`char`,void 0),s([o({type:String})],l.prototype,`size`,void 0),s([o({type:Number})],l.prototype,`maxOpacity`,void 0),s([o({type:String})],l.prototype,`fallDuration`,void 0),s([o({type:String})],l.prototype,`fallDelay`,void 0),s([o({type:String})],l.prototype,`startX`,void 0),s([o({type:String})],l.prototype,`endX`,void 0),l=s([r(`advanced-camera-card-snowflake`)],l);var u=[`❄`,`❅`,`❆`],d=50,f=class extends n{constructor(){super(),this._snowflakes=Array.from({length:d},(e,t)=>{let n=Math.random()*10+10,r=-Math.random()*n*.8;return{id:t,char:u[Math.floor(Math.random()*u.length)],size:`${Math.random()*1.5+.5}em`,maxOpacity:Math.random()*.5+.5,fallDuration:`${n}s`,fallDelay:`${r}s`,startX:`${Math.random()*100}%`,endX:`${Math.random()*100}%`}})}render(){return e`
+      ${t(this._snowflakes,e=>e.id,t=>e`
+          <advanced-camera-card-snowflake
+            .char=${t.char}
+            .size=${t.size}
+            .maxOpacity=${t.maxOpacity}
+            .fallDuration=${t.fallDuration}
+            .fallDelay=${t.fallDelay}
+            .startX=${t.startX}
+            .endX=${t.endX}
+          ></advanced-camera-card-snowflake>
+        `)}
+    `}};f=s([r(`advanced-camera-card-effect-snow`)],f);export{f as AdvancedCameraCardEffectSnow};

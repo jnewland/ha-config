@@ -10,6 +10,7 @@ CARD_FILENAME = "flower-card.js"
 CARD_VERSION_FILENAME = "flower-card.version"
 CARD_URL_PATH = "/plant/flower-card.js"
 ISSUE_OTHER_FLOWER_CARD = "other_flower_card"
+ISSUE_MISSING_FLOWER_CARD = "missing_flower_card"
 
 # URL patterns
 URL_SCHEME_HTTP = "http"
@@ -171,11 +172,9 @@ DATA_UPDATED = "plant_data_updated"
 
 
 UNIT_PPFD = "mol/s⋅m²"
-UNIT_MICRO_PPFD = "µmol/s⋅m²"
 UNIT_TOTAL_LIGHT_INTEGRAL = "mol/m²"
 UNIT_DLI = "mol/d⋅m²"
 UNIT_VPD = "kPa"
-UNIT_MICRO_DLI = "µmol/d⋅m²"
 # Note: For conductivity, use UnitOfConductivity.MICROSIEMENS_PER_CM from homeassistant.const
 # Note: For CO2, use UnitOfRatio.PARTS_PER_MILLION from homeassistant.const
 
