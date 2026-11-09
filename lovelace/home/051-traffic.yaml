@@ -11,6 +11,12 @@ sections:
         heading: I-35
         icon: mdi:highway
       - type: picture-entity
+        entity: image.traffic_camera_1409
+        show_state: false
+      - type: picture-entity
+        entity: image.traffic_camera_896
+        show_state: false
+      - type: picture-entity
         entity: image.traffic_camera_1461
         show_state: false
       - type: picture-entity

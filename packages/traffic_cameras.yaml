@@ -3,6 +3,14 @@
 # the snapshot; the camera server ignores the query string.
 template:
   - image:
+      - unique_id: traffic_camera_1409
+        default_entity_id: image.traffic_camera_1409
+        name: I-35 / 12th
+        url: "https://cctv.austinmobility.io/image/1409.jpg?t={{ now().minute }}"
+      - unique_id: traffic_camera_896
+        default_entity_id: image.traffic_camera_896
+        name: I-35 / 15th
+        url: "https://cctv.austinmobility.io/image/896.jpg?t={{ now().minute }}"
       - unique_id: traffic_camera_1461
         default_entity_id: image.traffic_camera_1461
         name: MLK / I-35 NB
