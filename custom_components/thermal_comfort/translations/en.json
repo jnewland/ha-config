@@ -2,17 +2,50 @@
   "options": {
     "error": {
       "temperature_not_found": "Temperature sensor not found",
-      "humidity_not_found": "Humidity sensor not found"
+      "humidity_not_found": "Humidity sensor not found",
+      "pressure_not_found": "Pressure sensor not found",
+      "temperature_attribute_not_found": "The temperature source has no attribute with this name, see the advanced options",
+      "humidity_attribute_not_found": "The humidity source has no attribute with this name, see the advanced options",
+      "outdoor_temperature_not_found": "Outdoor temperature sensor not found",
+      "outdoor_humidity_not_found": "Outdoor humidity sensor not found",
+      "outdoor_incomplete": "Choose both the outdoor temperature and the outdoor humidity sensor, or neither",
+      "outdoor_same_as_indoor": "The outdoor sensors must be other than the indoor sensors",
+      "wind_speed_not_found": "Wind speed sensor not found"
     },
     "step": {
       "init": {
-        "title": "Thermal comfort settings",
+        "title": "Thermal Comfort settings",
         "data": {
+          "name": "Device name",
           "temperature_sensor": "Temperature sensor",
           "humidity_sensor": "Humidity sensor",
-          "poll": "Enable Polling",
-          "scan_interval": "Poll interval (seconds)",
-          "custom_icons": "Use custom icons pack"
+          "outdoor_temperature_sensor": "Outdoor temperature sensor (optional)",
+          "outdoor_humidity_sensor": "Outdoor humidity sensor (optional)",
+          "pressure_sensor": "Pressure sensor (optional)",
+          "wind_speed_sensor": "Wind speed sensor (optional)"
+        },
+        "data_description": {
+          "name": "Used as the device name and as the prefix of the sensor names, for example the name of the room.",
+          "outdoor_temperature_sensor": "With the outdoor humidity sensor, the sensors that compare the room with the outdoor air are created: the moisture excess and the ventilation sensors. A weather entity can be used.",
+          "outdoor_humidity_sensor": "With the outdoor temperature sensor, the sensors that compare the room with the outdoor air are created. A weather entity can be used.",
+          "wind_speed_sensor": "The wind at the place of the temperature and humidity sensors above, so outdoors. With it the wind chill and the apparent temperature are calculated. Set it only on a device whose sources are outdoor sensors or a weather entity, not on the device of a room. A weather entity can be used."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Advanced options",
+            "data": {
+              "poll": "Enable polling",
+              "scan_interval": "Poll interval (seconds)",
+              "custom_icons": "Use custom icons",
+              "temperature_attribute": "Temperature attribute (optional)",
+              "humidity_attribute": "Humidity attribute (optional)"
+            },
+            "data_description": {
+              "custom_icons": "Uses the icons of this integration for the dew point, frost point and perception sensors. Switch it off for the standard Home Assistant icons.",
+              "temperature_attribute": "Attribute of the temperature sensor that has the value, instead of its state. Not needed for weather and climate entities.",
+              "humidity_attribute": "Attribute of the humidity sensor that has the value, instead of its state. Not needed for weather and climate entities."
+            }
+          }
         }
       }
     }
@@ -20,24 +53,56 @@
   "config": {
     "abort": {
       "already_configured": "This combination of temperature and humidity sensors is already configured",
-      "no_sensors": "No temperature or humidity sensors found. Try again in advanced mode.",
-      "no_sensors_advanced": "No temperature or humidity sensors found."
+      "no_sensors": "No temperature or humidity sensors found"
     },
     "error": {
       "temperature_not_found": "Temperature sensor not found",
-      "humidity_not_found": "Humidity sensor not found"
+      "humidity_not_found": "Humidity sensor not found",
+      "pressure_not_found": "Pressure sensor not found",
+      "temperature_attribute_not_found": "The temperature source has no attribute with this name, see the advanced options",
+      "humidity_attribute_not_found": "The humidity source has no attribute with this name, see the advanced options",
+      "outdoor_temperature_not_found": "Outdoor temperature sensor not found",
+      "outdoor_humidity_not_found": "Outdoor humidity sensor not found",
+      "outdoor_incomplete": "Choose both the outdoor temperature and the outdoor humidity sensor, or neither",
+      "outdoor_same_as_indoor": "The outdoor sensors must be other than the indoor sensors",
+      "wind_speed_not_found": "Wind speed sensor not found"
     },
     "step": {
       "user": {
-        "title": "Thermal comfort settings",
+        "title": "Thermal Comfort settings",
         "data": {
-          "name": "Name",
+          "name": "Device name",
           "temperature_sensor": "Temperature sensor",
           "humidity_sensor": "Humidity sensor",
-          "poll": "Enable Polling",
-          "scan_interval": "Poll interval (seconds)",
-          "custom_icons": "Use custom icons pack",
-          "enabled_sensors": "Enabled sensors"
+          "outdoor_temperature_sensor": "Outdoor temperature sensor (optional)",
+          "outdoor_humidity_sensor": "Outdoor humidity sensor (optional)",
+          "pressure_sensor": "Pressure sensor (optional)",
+          "wind_speed_sensor": "Wind speed sensor (optional)"
+        },
+        "data_description": {
+          "name": "Used as the device name and as the prefix of the sensor names, for example the name of the room.",
+          "outdoor_temperature_sensor": "With the outdoor humidity sensor, the sensors that compare the room with the outdoor air are created: the moisture excess and the ventilation sensors. A weather entity can be used.",
+          "outdoor_humidity_sensor": "With the outdoor temperature sensor, the sensors that compare the room with the outdoor air are created. A weather entity can be used.",
+          "wind_speed_sensor": "The wind at the place of the temperature and humidity sensors above, so outdoors. With it the wind chill and the apparent temperature are calculated. Set it only on a device whose sources are outdoor sensors or a weather entity, not on the device of a room. A weather entity can be used."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Advanced options",
+            "data": {
+              "poll": "Enable polling",
+              "scan_interval": "Poll interval (seconds)",
+              "custom_icons": "Use custom icons",
+              "enabled_sensors": "Enabled sensors",
+              "temperature_attribute": "Temperature attribute (optional)",
+              "humidity_attribute": "Humidity attribute (optional)"
+            },
+            "data_description": {
+              "custom_icons": "Uses the icons of this integration for the dew point, frost point and perception sensors. Switch it off for the standard Home Assistant icons.",
+              "temperature_attribute": "Attribute of the temperature sensor that has the value, instead of its state. Not needed for weather and climate entities.",
+              "humidity_attribute": "Attribute of the humidity sensor that has the value, instead of its state. Not needed for weather and climate entities.",
+              "enabled_sensors": "Sensors you do not select are still created, but disabled. You can enable them later in the entity settings."
+            }
+          }
         }
       }
     }
@@ -60,7 +125,7 @@
           "somewhat_uncomfortable": "Somewhat uncomfortable",
           "quite_uncomfortable": "Very humid, quite uncomfortable",
           "extremely_uncomfortable": "Extremely uncomfortable, oppressive",
-          "severely_high": "Severely high, even deadly for asthma related illnesses"
+          "severely_high": "Severely high, even deadly for asthma-related illnesses"
         }
       },
       "frost_point": {
@@ -89,7 +154,7 @@
           "evident_discomfort": "Evident discomfort",
           "great_discomfort": "Great discomfort, avoid exertion",
           "dangerous_discomfort": "Dangerous discomfort",
-          "heat_stroke": "Heat stroke possible"
+          "heat_stroke": "Heatstroke possible"
         }
       },
       "moist_air_enthalpy": {
@@ -143,6 +208,9 @@
           "circulatory_collapse_imminent": "Circulatory collapse imminent"
         }
       },
+      "thoms_discomfort_index": {
+        "name": "Thoms discomfort index"
+      },
       "thoms_discomfort_perception": {
         "name": "Thoms discomfort perception",
         "state": {
@@ -151,8 +219,43 @@
           "more_than_half": "More than half of the population feels discomfort",
           "most": "Most individuals feel discomfort and deterioration of psychophysical conditions",
           "everyone": "Everyone feels significant discomfort",
-          "dangerous": "Dangerous, very strong discomfort which may cause heat strokes"
+          "dangerous": "Dangerous, very strong discomfort which may cause heatstroke"
         }
+      },
+      "wet_bulb_temperature": {
+        "name": "Wet-bulb temperature"
+      },
+      "humidity_ratio": {
+        "name": "Humidity ratio"
+      },
+      "vapor_pressure_deficit": {
+        "name": "Vapor pressure deficit"
+      },
+      "moisture_excess": {
+        "name": "Moisture excess"
+      },
+      "ventilation_advice": {
+        "name": "Ventilation advice",
+        "state": {
+          "drier_outside": "Airing dries the room",
+          "similar": "Airing changes little",
+          "more_humid_outside": "Airing adds moisture",
+          "condensation_risk": "Do not air: condensation risk"
+        }
+      },
+      "ventilation_need": {
+        "name": "Ventilation need",
+        "state": {
+          "above_limit": "Above the limit",
+          "within_limit": "Within the limit",
+          "not_winter": "Not winter"
+        }
+      },
+      "wind_chill": {
+        "name": "Wind chill"
+      },
+      "apparent_temperature": {
+        "name": "Apparent temperature"
       }
     }
   }
