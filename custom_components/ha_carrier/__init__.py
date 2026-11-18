@@ -1,31 +1,39 @@
 """Initialize and manage the Home Assistant Carrier integration lifecycle."""
 
 import asyncio
+from datetime import timedelta
 import logging
 
-from carrier_api import ApiConnectionGraphql, CarrierApiConnectionError
+from carrier_api import CarrierApiConnectionError
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
-from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import config_validation as cv, device_registry as dr
+from homeassistant.helpers.typing import ConfigType
 
-from .carrier_data_update_coordinator import CarrierDataUpdateCoordinator
 from .const import (
+    CONF_FULL_REFRESH_INTERVAL,
     CONFIG_FLOW_VERSION,
+    DEFAULT_FULL_REFRESH_INTERVAL_MINUTES,
     DOMAIN,
+    MAX_FULL_REFRESH_INTERVAL_MINUTES,
+    MIN_FULL_REFRESH_INTERVAL_MINUTES,
     PLATFORMS,
     RETRY_JITTER_FRACTION,
     TO_REDACT,
     WEBSOCKET_RETRY_INITIAL_DELAY_SECONDS,
     WEBSOCKET_RETRY_MAX_DELAY_SECONDS,
 )
+from .coordinator import CarrierDataUpdateCoordinator
 from .exceptions import CarrierUnauthorizedError
 from .migrate import migrate_1_to_2, migrate_2_to_3
 from .resiliency import RetryPolicy, compute_backoff_delay
+from .services import async_setup_services
 from .util import (
     WEBSOCKET_DATA_UPDATE_EXCEPTIONS,
     WEBSOCKET_RECOVERABLE_EXCEPTIONS,
+    async_create_api_connection,
     async_redact_data,
     is_unauthorized_error,
 )
@@ -43,10 +51,53 @@ WEBSOCKET_RETRY_POLICY = RetryPolicy(
 # `async_call_with_retry` with this `WEBSOCKET_RETRY_POLICY` and
 # `max_attempts=None` if websocket reconnections should enforce that flag.
 
+# How often the websocket loop rechecks coordinator health after an auth failure.
+WEBSOCKET_AUTH_RECOVERY_POLL_SECONDS: float = float(WEBSOCKET_RETRY_MAX_DELAY_SECONDS)
+
 type ConfigEntryCarrier = ConfigEntry[CarrierDataUpdateCoordinator]
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Set up integration-wide resources that do not depend on a config entry.
+
+    Args:
+        hass: Home Assistant instance.
+        config: Home Assistant configuration (unused; the integration is
+            configured through config entries only).
+
+    Returns:
+        bool: True once the integration's service actions are registered.
+    """
+    async_setup_services(hass)
+    return True
+
+
+async def _async_wait_for_coordinator_recovery(
+    coordinator: CarrierDataUpdateCoordinator,
+) -> bool:
+    """Wait until the coordinator refreshes successfully after an auth failure.
+
+    The Carrier client logs in with the stored password whenever its refresh
+    token was rejected, so reconnecting the websocket while credentials are
+    failing would retry that password every backoff interval. Waiting here
+    leaves login attempts and reauth escalation to the coordinator's own
+    polling.
+
+    Args:
+        coordinator: Coordinator whose refresh results gate reconnection.
+
+    Returns:
+        bool: True once a refresh succeeds; False when the coordinator has
+            escalated to reauthentication.
+    """
+    while not coordinator.last_update_success:
+        if isinstance(coordinator.last_exception, ConfigEntryAuthFailed):
+            return False
+        await asyncio.sleep(WEBSOCKET_AUTH_RECOVERY_POLL_SECONDS)
+    return True
 
 
 async def _async_await_websocket_task(websocket_task: asyncio.Task[None]) -> None:
@@ -98,10 +149,21 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntryCarrie
     password = config_entry.data[CONF_PASSWORD]
 
     try:
-        api_connection = ApiConnectionGraphql(username=username, password=password)
+        api_connection = async_create_api_connection(hass, username, password)
         coordinator = CarrierDataUpdateCoordinator(
             hass=hass,
             api_connection=api_connection,
+            full_refresh_interval=timedelta(
+                minutes=min(
+                    max(
+                        config_entry.options.get(
+                            CONF_FULL_REFRESH_INTERVAL, DEFAULT_FULL_REFRESH_INTERVAL_MINUTES
+                        ),
+                        MIN_FULL_REFRESH_INTERVAL_MINUTES,
+                    ),
+                    MAX_FULL_REFRESH_INTERVAL_MINUTES,
+                )
+            ),
         )
         await coordinator.async_config_entry_first_refresh()
         config_entry.runtime_data = coordinator
@@ -115,7 +177,10 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntryCarrie
             after a successful listener session. The websocket loop does not
             update resiliency counters directly; it requests a coordinator
             refresh, and the refresh path owns outage accounting and any reauth
-            escalation.
+            escalation. After an unauthorized failure the loop waits for a
+            successful coordinator refresh before reconnecting, and stops once
+            the coordinator escalates to reauthentication; the reauth flow
+            reloads the entry, which starts a new websocket task.
 
             Returns:
                 None: This coroutine runs until cancelled.
@@ -147,14 +212,26 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntryCarrie
                     await coordinator.async_request_refresh()
                     await asyncio.sleep(delay)
                     attempt += 1
+                    if is_unauthorized_error(
+                        error
+                    ) and not await _async_wait_for_coordinator_recovery(coordinator):
+                        _LOGGER.warning(
+                            "Carrier rejected the stored credentials; websocket updates "
+                            "stop until the integration is reauthenticated"
+                        )
+                        return
                 except WEBSOCKET_DATA_UPDATE_EXCEPTIONS as error:
                     delay = compute_backoff_delay(WEBSOCKET_RETRY_POLICY, attempt)
-                    _LOGGER.exception(
+                    # Log the stack trace once per failure streak; repeats until the
+                    # listener next succeeds only go to debug.
+                    _LOGGER.log(
+                        logging.ERROR if attempt == 0 else logging.DEBUG,
                         "websocket data update failed with %s; requesting refresh and "
                         "retrying in %.1f seconds (attempt %d)",
                         type(error).__name__,
                         delay,
                         attempt + 1,
+                        exc_info=error,
                     )
                     coordinator.data_flush = True
                     await coordinator.async_request_refresh()
@@ -181,14 +258,17 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntryCarrie
             websocket_task.cancel()
 
         config_entry.async_on_unload(cancel_websocket_task)
+    # Home Assistant logs a not-ready setup (and each background retry) and
+    # starts reauthentication itself, so these paths only debug-log the cause to
+    # avoid repeating a stack trace on every setup retry while Carrier is down.
     except ConfigEntryAuthFailed:
-        _LOGGER.exception("Carrier authentication failed during setup")
+        _LOGGER.debug("Carrier authentication failed during setup", exc_info=True)
         raise
     except CarrierUnauthorizedError as error:
-        _LOGGER.exception("Carrier unauthorized during setup")
+        _LOGGER.debug("Carrier unauthorized during setup", exc_info=error)
         raise ConfigEntryAuthFailed("Carrier API rejected credentials during setup.") from error
     except CarrierApiConnectionError as error:
-        _LOGGER.exception("Carrier connection error during setup")
+        _LOGGER.debug("Carrier connection error during setup", exc_info=error)
         raise ConfigEntryNotReady(error) from error
     except (
         asyncio.CancelledError,
@@ -198,16 +278,103 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntryCarrie
         raise
     except ConfigEntryNotReady as err:
         if is_unauthorized_error(err):
-            _LOGGER.exception("Carrier authentication failed during initial setup refresh")
+            _LOGGER.debug(
+                "Carrier authentication failed during initial setup refresh", exc_info=err
+            )
             raise ConfigEntryAuthFailed("Carrier API rejected credentials during setup.") from err
         _LOGGER.debug("Carrier setup is not ready; Home Assistant will retry", exc_info=err)
         raise
 
     await hass.config_entries.async_forward_entry_setups(config_entry, PLATFORMS)
 
+    @callback
+    def _async_remove_stale_devices_listener() -> None:
+        """Drop devices for systems that left the account after each refresh."""
+        _async_remove_stale_devices(hass, config_entry)
+
+    _async_remove_stale_devices(hass, config_entry)
+    config_entry.async_on_unload(
+        coordinator.async_add_listener(_async_remove_stale_devices_listener)
+    )
     config_entry.async_on_unload(config_entry.add_update_listener(async_update_options))
 
     return True
+
+
+def _current_serials(coordinator: CarrierDataUpdateCoordinator) -> set[str]:
+    """Return the serials of every system the Carrier account currently reports.
+
+    Args:
+        coordinator: Coordinator tracking the account's systems.
+
+    Returns:
+        set[str]: Infinity / Evolution and entry-level system serials.
+    """
+    return {system.profile.serial for system in coordinator.systems} | {
+        system.serial for system in coordinator.entry_level_systems
+    }
+
+
+def _device_serials(device: dr.DeviceEntry) -> set[str]:
+    """Return the Carrier serials a device registry entry is identified by.
+
+    Args:
+        device: Device registry entry.
+
+    Returns:
+        set[str]: Serials from the device's ``ha_carrier`` identifiers.
+    """
+    return {identifier for domain, identifier in device.identifiers if domain == DOMAIN}
+
+
+@callback
+def _async_remove_stale_devices(hass: HomeAssistant, config_entry: ConfigEntryCarrier) -> None:
+    """Remove devices whose Carrier system is no longer on the account.
+
+    The coordinator drops a system from ``systems`` after a full refresh that no
+    longer returns it. Its device, and with it its entities, are removed here.
+    Cleanup is skipped unless the latest entry-level load succeeded, because a
+    failed load leaves that list incomplete, and skipped entirely when the
+    account reports no systems at all, which is far likelier to be a Carrier
+    glitch than every thermostat being removed at once.
+
+    Args:
+        hass: Home Assistant instance.
+        config_entry: Carrier config entry whose devices are checked.
+    """
+    coordinator = config_entry.runtime_data
+    if not coordinator.entry_level_systems_loaded:
+        return
+    current_serials = _current_serials(coordinator)
+    if not current_serials:
+        return
+    device_registry = dr.async_get(hass)
+    for device in dr.async_entries_for_config_entry(device_registry, config_entry.entry_id):
+        serials = _device_serials(device)
+        if serials and not serials & current_serials:
+            _LOGGER.info(
+                "Removing Carrier device %s; its system is no longer on the account",
+                device.name,
+            )
+            device_registry.async_update_device(
+                device.id, remove_config_entry_id=config_entry.entry_id
+            )
+
+
+async def async_remove_config_entry_device(
+    hass: HomeAssistant, config_entry: ConfigEntryCarrier, device_entry: dr.DeviceEntry
+) -> bool:
+    """Let the user delete a device only once Carrier no longer reports it.
+
+    Args:
+        hass: Home Assistant instance.
+        config_entry: Carrier config entry the device belongs to.
+        device_entry: Device the user asked to delete.
+
+    Returns:
+        bool: True when none of the device's serials is a current system.
+    """
+    return not _device_serials(device_entry) & _current_serials(config_entry.runtime_data)
 
 
 async def async_update_options(hass: HomeAssistant, config_entry: ConfigEntryCarrier) -> None:

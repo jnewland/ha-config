@@ -1,0 +1,63 @@
+set_activity_setpoint:
+  target:
+    entity:
+      integration: ha_carrier
+      domain: climate
+  fields:
+    temperature:
+      example: 74
+      selector:
+        number:
+          min: 7
+          max: 95
+          step: 0.5
+    target_temp_low:
+      example: 68
+      selector:
+        number:
+          min: 7
+          max: 95
+          step: 0.5
+    target_temp_high:
+      example: 74
+      selector:
+        number:
+          min: 7
+          max: 95
+          step: 0.5
+    activity:
+      example: sleep
+      selector:
+        select:
+          options:
+            - home
+            - away
+            - sleep
+            - wake
+            - manual
+
+get_schedule:
+  target:
+    entity:
+      integration: ha_carrier
+      domain: climate
+
+set_program_day:
+  target:
+    entity:
+      integration: ha_carrier
+      domain: climate
+  fields:
+    day_id:
+      required: true
+      example: "3"
+      selector:
+        text:
+    periods:
+      required: true
+      example: '[{"id": "1", "activity": "wake", "time": "06:00", "enabled": "on"}]'
+      selector:
+        object:
+    etag:
+      selector:
+        text:

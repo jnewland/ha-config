@@ -1,17 +1,77 @@
 """Shared entity base for Carrier systems and zones."""
 
+from collections.abc import Callable, Iterable
 import logging
 
-from carrier_api import ConfigZone, StatusZone, System
+from carrier_api import ConfigZone, EntryLevelSystem, StatusZone, System
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import callback
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
-from .carrier_data_update_coordinator import CarrierDataUpdateCoordinator
 from .const import DOMAIN
+from .coordinator import CarrierDataUpdateCoordinator
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
+
+
+@callback
+def async_add_entities_for_systems(
+    config_entry: ConfigEntry[CarrierDataUpdateCoordinator],
+    async_add_entities: AddEntitiesCallback,
+    build_system_entities: Callable[[System], Iterable[Entity]],
+    build_entry_level_entities: Callable[[EntryLevelSystem], Iterable[Entity]] | None = None,
+) -> None:
+    """Add a platform's entities for every system now, and for systems found later.
+
+    The coordinator adds systems that appear in the Carrier account on a full
+    refresh. This listens to the coordinator and builds entities only for
+    serials the platform has not seen, so a new thermostat gets its entities
+    without reloading the integration. A serial that disappears is forgotten,
+    so the system gets fresh entities if it later returns.
+
+    Args:
+        config_entry: Carrier config entry whose coordinator tracks the systems.
+        async_add_entities: Platform callback that registers entities.
+        build_system_entities: Builds the platform's entities for one
+            Infinity / Evolution system.
+        build_entry_level_entities: Optional builder for one entry-level
+            (Smart Thermostat) system.
+    """
+    coordinator = config_entry.runtime_data
+    known_systems: set[str] = set()
+    known_entry_level_systems: set[str] = set()
+
+    @callback
+    def _async_add_new_systems() -> None:
+        """Build and register entities for systems the platform has not seen."""
+        new_entities: list[Entity] = []
+
+        systems = {system.profile.serial: system for system in coordinator.systems}
+        known_systems.intersection_update(systems)
+        for serial, system in systems.items():
+            if serial in known_systems:
+                continue
+            known_systems.add(serial)
+            new_entities.extend(build_system_entities(system))
+
+        if build_entry_level_entities is not None:
+            entry_level = {system.serial: system for system in coordinator.entry_level_systems}
+            known_entry_level_systems.intersection_update(entry_level)
+            for serial, entry_level_system in entry_level.items():
+                if serial in known_entry_level_systems:
+                    continue
+                known_entry_level_systems.add(serial)
+                new_entities.extend(build_entry_level_entities(entry_level_system))
+
+        if new_entities:
+            async_add_entities(new_entities)
+
+    _async_add_new_systems()
+    config_entry.async_on_unload(coordinator.async_add_listener(_async_add_new_systems))
 
 
 class CarrierEntity(CoordinatorEntity[CarrierDataUpdateCoordinator]):
@@ -29,15 +89,22 @@ class CarrierEntity(CoordinatorEntity[CarrierDataUpdateCoordinator]):
     ) -> None:
         """Initialize shared entity identity and coordinator context.
 
+        Entities that define ``_attr_translation_key`` get their display name
+        from the integration's translations; ``entity_name`` is then only the
+        English seed for the unique ID, which keeps existing unique IDs stable.
+
         Args:
-            entity_name: Friendly suffix used in entity name and unique ID.
+            entity_name: English entity name, used as the display name when the
+                entity has no translation key and as the unique ID suffix when
+                ``unique_id_suffix`` is not given.
             coordinator: Coordinator that supplies Carrier system data.
             system_serial: Carrier system serial used as coordinator context.
             unique_id_suffix: Optional stable suffix used for the entity unique ID.
         """
         super().__init__(coordinator, system_serial)
         self._system_serial = system_serial
-        self._attr_name = entity_name
+        if self.translation_key is None:
+            self._attr_name = entity_name
         unique_id_raw = f"{system_serial}_{unique_id_suffix or entity_name}"
         self._attr_unique_id = slugify(unique_id_raw)
         self._attr_device_info = DeviceInfo(
@@ -214,6 +281,7 @@ class CarrierZoneEntity(CarrierEntity):
         """
         self.zone_api_id = zone_api_id
         self.zone_name = self.resolve_zone_name(coordinator, system_serial, zone_api_id)
+        self._attr_translation_placeholders = {"zone_name": self.zone_name}
         zone_unique_id_suffix = f"zone_{zone_api_id}"
         if unique_id_suffix is not None:
             zone_unique_id_suffix = f"{zone_unique_id_suffix}_{unique_id_suffix}"

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 
-from carrier_api import EnergyPeriod, EnergyUsageMetric, StatusUnit, TemperatureUnits
+from carrier_api import EnergyPeriod, EnergyUsageMetric, StatusUnit, System, TemperatureUnits
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorStateClass
 from homeassistant.const import (
     PERCENTAGE,
@@ -19,11 +19,15 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import ConfigEntryCarrier
-from .carrier_data_update_coordinator import CarrierDataUpdateCoordinator
-from .carrier_entity import CarrierEntity, CarrierZoneEntity
+from .coordinator import CarrierDataUpdateCoordinator
+from .entity import CarrierEntity, CarrierZoneEntity, async_add_entities_for_systems
 from .util import TIMESTAMP_TYPES
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
+
+# Read-only platform: the coordinator fetches data centrally, so entity updates
+# never call Carrier and need no limit.
+PARALLEL_UPDATES = 0
 
 
 def _unit_status_attributes(unit: StatusUnit | None) -> dict[str, object]:
@@ -54,111 +58,136 @@ async def async_setup_entry(
         async_add_entities: Callback used to register created entities.
     """
     coordinator = config_entry.runtime_data
-    entities: list[SensorEntity] = []
-    for carrier_system in coordinator.systems:
-        entities.extend(
-            [
-                OutdoorTemperatureSensor(
-                    coordinator=coordinator, system_serial=carrier_system.profile.serial
-                ),
-                FilterUsedSensor(
-                    coordinator=coordinator, system_serial=carrier_system.profile.serial
-                ),
-                AirflowSensor(coordinator=coordinator, system_serial=carrier_system.profile.serial),
-                StaticPressureSensor(
-                    coordinator=coordinator, system_serial=carrier_system.profile.serial
-                ),
-                OutdoorUnitOperationalStatusSensor(
-                    coordinator=coordinator, system_serial=carrier_system.profile.serial
-                ),
-                IndoorUnitOperationalStatusSensor(
-                    coordinator=coordinator, system_serial=carrier_system.profile.serial
-                ),
-            ]
-        )
-        entities.extend(
-            [
-                TimestampSensor(
-                    coordinator=coordinator,
-                    system_serial=carrier_system.profile.serial,
-                    timestamp_type=timestamp_type,
-                )
-                for timestamp_type in TIMESTAMP_TYPES
-            ]
-        )
+    async_add_entities_for_systems(
+        config_entry,
+        async_add_entities,
+        lambda carrier_system: _system_entities(coordinator, carrier_system),
+    )
 
-        if carrier_system.profile.outdoor_unit_type in ["varcaphp", "varcapac"]:
-            entities.append(
-                OutdoorUnitVarSensor(
-                    coordinator=coordinator, system_serial=carrier_system.profile.serial
-                )
+
+def _system_entities(
+    coordinator: CarrierDataUpdateCoordinator,
+    carrier_system: System,
+) -> list[SensorEntity]:
+    """Build this platform's entities for one Carrier system.
+
+    Args:
+        coordinator: Coordinator that supplies Carrier system data.
+        carrier_system: Carrier system to build entities for.
+
+    Returns:
+        list[SensorEntity]: Entities for the system.
+    """
+    entities: list[SensorEntity] = []
+    entities.extend(
+        [
+            OutdoorTemperatureSensor(
+                coordinator=coordinator, system_serial=carrier_system.profile.serial
+            ),
+            FilterUsedSensor(coordinator=coordinator, system_serial=carrier_system.profile.serial),
+            AirflowSensor(coordinator=coordinator, system_serial=carrier_system.profile.serial),
+            StaticPressureSensor(
+                coordinator=coordinator, system_serial=carrier_system.profile.serial
+            ),
+            OutdoorUnitOperationalStatusSensor(
+                coordinator=coordinator, system_serial=carrier_system.profile.serial
+            ),
+            IndoorUnitOperationalStatusSensor(
+                coordinator=coordinator, system_serial=carrier_system.profile.serial
+            ),
+        ]
+    )
+    entities.extend(
+        [
+            TimestampSensor(
+                coordinator=coordinator,
+                system_serial=carrier_system.profile.serial,
+                timestamp_type=timestamp_type,
             )
-        if carrier_system.config.humidifier_enabled:
-            entities.append(
-                HumidifierRemainingSensor(
-                    coordinator=coordinator, system_serial=carrier_system.profile.serial
-                )
+            for timestamp_type in TIMESTAMP_TYPES
+        ]
+    )
+
+    if carrier_system.profile.outdoor_unit_type in ["varcaphp", "varcapac"]:
+        entities.append(
+            OutdoorUnitVarSensor(
+                coordinator=coordinator, system_serial=carrier_system.profile.serial
             )
-        if carrier_system.config.uv_enabled:
-            entities.append(
-                UVLampRemainingSensor(
-                    coordinator=coordinator, system_serial=carrier_system.profile.serial
-                )
+        )
+    # The profile only says "furnace"; the status payload names the staging.
+    indoor_unit = carrier_system.status.indoor_unit
+    if indoor_unit is not None and indoor_unit.type == "furnacemodulating":
+        entities.append(
+            IndoorUnitVarSensor(
+                coordinator=coordinator, system_serial=carrier_system.profile.serial
             )
-        for electric_metric in carrier_system.energy.enabled_usage_metrics():
-            entities.extend(
-                [
-                    YearlyEnergyMeasurementSensor(
-                        coordinator=coordinator,
-                        system_serial=carrier_system.profile.serial,
-                        metric=electric_metric,
-                    ),
-                    DailyEnergyMeasurementSensor(
-                        coordinator=coordinator,
-                        system_serial=carrier_system.profile.serial,
-                        metric=electric_metric,
-                    ),
-                    MonthlyEnergyMeasurementSensor(
-                        coordinator=coordinator,
-                        system_serial=carrier_system.profile.serial,
-                        metric=electric_metric,
-                    ),
-                ]
+        )
+    if carrier_system.config.humidifier_enabled:
+        entities.append(
+            HumidifierRemainingSensor(
+                coordinator=coordinator, system_serial=carrier_system.profile.serial
             )
-        fuel_type = carrier_system.config.fuel_type
-        if (
-            carrier_system.energy.is_usage_metric_enabled(EnergyUsageMetric.GAS)
-            and fuel_type is not None
-        ):
-            entities.append(
-                GasMeasurementSensor(
+        )
+    if carrier_system.config.uv_enabled:
+        entities.append(
+            UVLampRemainingSensor(
+                coordinator=coordinator, system_serial=carrier_system.profile.serial
+            )
+        )
+    for electric_metric in carrier_system.energy.enabled_usage_metrics():
+        entities.extend(
+            [
+                YearlyEnergyMeasurementSensor(
                     coordinator=coordinator,
                     system_serial=carrier_system.profile.serial,
-                    fuel_type=fuel_type,
+                    metric=electric_metric,
+                ),
+                DailyEnergyMeasurementSensor(
+                    coordinator=coordinator,
+                    system_serial=carrier_system.profile.serial,
+                    metric=electric_metric,
+                ),
+                MonthlyEnergyMeasurementSensor(
+                    coordinator=coordinator,
+                    system_serial=carrier_system.profile.serial,
+                    metric=electric_metric,
+                ),
+            ]
+        )
+    fuel_type = carrier_system.config.fuel_type
+    if (
+        carrier_system.energy.is_usage_metric_enabled(EnergyUsageMetric.GAS)
+        and fuel_type is not None
+    ):
+        entities.append(
+            GasMeasurementSensor(
+                coordinator=coordinator,
+                system_serial=carrier_system.profile.serial,
+                fuel_type=fuel_type,
+            )
+        )
+        if fuel_type == "propane":
+            entities.append(
+                PropaneMeasurementSensor(
+                    coordinator=coordinator, system_serial=carrier_system.profile.serial
                 )
             )
-            if fuel_type == "propane":
-                entities.append(
-                    PropaneMeasurementSensor(
-                        coordinator=coordinator, system_serial=carrier_system.profile.serial
-                    )
-                )
-        for zone in carrier_system.config.zones:
-            entities.extend(
-                [
-                    ZoneTemperatureSensor(
-                        coordinator=coordinator,
-                        system_serial=carrier_system.profile.serial,
-                        zone_api_id=zone.api_id,
-                    ),
-                    ZoneHumiditySensor(
-                        coordinator=coordinator,
-                        system_serial=carrier_system.profile.serial,
-                        zone_api_id=zone.api_id,
-                    ),
-                ]
-            )
-    async_add_entities(entities)
+    for zone in carrier_system.config.zones:
+        entities.extend(
+            [
+                ZoneTemperatureSensor(
+                    coordinator=coordinator,
+                    system_serial=carrier_system.profile.serial,
+                    zone_api_id=zone.api_id,
+                ),
+                ZoneHumiditySensor(
+                    coordinator=coordinator,
+                    system_serial=carrier_system.profile.serial,
+                    zone_api_id=zone.api_id,
+                ),
+            ]
+        )
+    return entities
 
 
 class CarrierSensor(CarrierEntity, SensorEntity):
@@ -235,6 +264,7 @@ class CarrierZoneSensor(CarrierZoneEntity, CarrierSensor):
 class ZoneHumiditySensor(CarrierZoneSensor):
     """Sensor entity that reports current humidity for a specific zone."""
 
+    _attr_translation_key = "zone_humidity"
     _attr_device_class = SensorDeviceClass.HUMIDITY
     _attr_state_class = SensorStateClass.MEASUREMENT
     _attr_native_unit_of_measurement = PERCENTAGE
@@ -266,6 +296,7 @@ class ZoneHumiditySensor(CarrierZoneSensor):
 class GasMeasurementSensor(CarrierSensor):
     """Yearly gas usage sensor with fuel-specific unit conversion."""
 
+    _attr_translation_key = "fuel_usage_year_to_date"
     _attr_device_class = SensorDeviceClass.GAS
     _attr_state_class = SensorStateClass.TOTAL_INCREASING
 
@@ -287,6 +318,7 @@ class GasMeasurementSensor(CarrierSensor):
         """
         self.metric = EnergyUsageMetric.GAS
         self.fuel_type = fuel_type
+        self._attr_translation_placeholders = {"fuel_type": fuel_type.capitalize()}
         super().__init__(
             entity_name=f"{self.fuel_type.capitalize()} Usage Year to Date",
             coordinator=coordinator,
@@ -340,6 +372,7 @@ class GasMeasurementSensor(CarrierSensor):
 class PropaneMeasurementSensor(CarrierSensor):
     """Yearly propane usage sensor expressed in gallons."""
 
+    _attr_translation_key = "propane_consumption_year_to_date"
     _attr_device_class = SensorDeviceClass.VOLUME
     _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_native_unit_of_measurement = UnitOfVolume.GALLONS
@@ -379,6 +412,7 @@ class PropaneMeasurementSensor(CarrierSensor):
 class YearlyEnergyMeasurementSensor(CarrierSensor):
     """Yearly electrical energy consumption sensor for a Carrier metric."""
 
+    _attr_translation_key = "energy_year_to_date"
     _attr_device_class = SensorDeviceClass.ENERGY
     _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
@@ -398,6 +432,7 @@ class YearlyEnergyMeasurementSensor(CarrierSensor):
             metric: Carrier API energy metric to expose.
         """
         self.metric = metric
+        self._attr_translation_placeholders = {"metric": metric.label}
         super().__init__(
             entity_name=f"{metric.label} Energy Year to Date",
             coordinator=coordinator,
@@ -415,6 +450,7 @@ class YearlyEnergyMeasurementSensor(CarrierSensor):
 class DailyEnergyMeasurementSensor(CarrierSensor):
     """Sensor for yesterday's energy usage by Carrier metric."""
 
+    _attr_translation_key = "energy_yesterday"
     _attr_device_class = SensorDeviceClass.ENERGY
     _attr_state_class = SensorStateClass.TOTAL
     _attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
@@ -434,6 +470,7 @@ class DailyEnergyMeasurementSensor(CarrierSensor):
             metric: Carrier API energy metric to expose.
         """
         self.metric = metric
+        self._attr_translation_placeholders = {"metric": metric.label}
         super().__init__(
             entity_name=f"{metric.label} Energy Yesterday",
             coordinator=coordinator,
@@ -451,6 +488,7 @@ class DailyEnergyMeasurementSensor(CarrierSensor):
 class MonthlyEnergyMeasurementSensor(CarrierSensor):
     """Sensor for last month's energy usage by Carrier metric."""
 
+    _attr_translation_key = "energy_last_month"
     _attr_device_class = SensorDeviceClass.ENERGY
     _attr_state_class = SensorStateClass.TOTAL
     _attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
@@ -470,6 +508,7 @@ class MonthlyEnergyMeasurementSensor(CarrierSensor):
             metric: Carrier API energy metric to expose.
         """
         self.metric = metric
+        self._attr_translation_placeholders = {"metric": metric.label}
         super().__init__(
             entity_name=f"{metric.label} Energy Last Month",
             coordinator=coordinator,
@@ -489,6 +528,7 @@ class MonthlyEnergyMeasurementSensor(CarrierSensor):
 class ZoneTemperatureSensor(CarrierZoneSensor):
     """Sensor entity that reports current temperature for a specific zone."""
 
+    _attr_translation_key = "zone_temperature"
     _attr_device_class = SensorDeviceClass.TEMPERATURE
     _attr_state_class = SensorStateClass.MEASUREMENT
 
@@ -523,6 +563,7 @@ class ZoneTemperatureSensor(CarrierZoneSensor):
 class OutdoorTemperatureSensor(CarrierSensor):
     """Sensor entity that reports outdoor ambient temperature."""
 
+    _attr_translation_key = "outdoor_temperature"
     _attr_device_class = SensorDeviceClass.TEMPERATURE
     _attr_state_class = SensorStateClass.MEASUREMENT
     # Outdoor temperature seems to always send as Fahrenheit regardless
@@ -551,9 +592,9 @@ class OutdoorTemperatureSensor(CarrierSensor):
 class FilterUsedSensor(CarrierSensor):
     """Filter life sensor represented as a percentage."""
 
+    _attr_translation_key = "filter_remaining"
     _attr_native_unit_of_measurement = PERCENTAGE
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_icon = "mdi:air-filter"
 
     def __init__(self, coordinator: CarrierDataUpdateCoordinator, system_serial: str) -> None:
         """Initialize a filter remaining-life sensor.
@@ -580,9 +621,9 @@ class FilterUsedSensor(CarrierSensor):
 class HumidifierRemainingSensor(CarrierSensor):
     """Humidifier level sensor represented as a remaining percentage."""
 
+    _attr_translation_key = "humidifier_remaining"
     _attr_native_unit_of_measurement = PERCENTAGE
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_icon = "mdi:air-filter"
 
     def __init__(self, coordinator: CarrierDataUpdateCoordinator, system_serial: str) -> None:
         """Initialize a humidifier remaining-life sensor.
@@ -609,9 +650,9 @@ class HumidifierRemainingSensor(CarrierSensor):
 class UVLampRemainingSensor(CarrierSensor):
     """UV lamp life sensor represented as a remaining percentage."""
 
+    _attr_translation_key = "uv_lamp_remaining"
     _attr_native_unit_of_measurement = PERCENTAGE
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_icon = "mdi:lightbulb-fluorescent-tube-outline"
 
     def __init__(self, coordinator: CarrierDataUpdateCoordinator, system_serial: str) -> None:
         """Initialize a UV lamp remaining-life sensor.
@@ -640,6 +681,8 @@ class TimestampSensor(CarrierSensor):
 
     _attr_entity_category = EntityCategory.DIAGNOSTIC
     _attr_device_class = SensorDeviceClass.TIMESTAMP
+    # Troubleshooting aids that change on every update; enable when debugging.
+    _attr_entity_registry_enabled_default = False
 
     def __init__(
         self, coordinator: CarrierDataUpdateCoordinator, system_serial: str, timestamp_type: str
@@ -652,6 +695,7 @@ class TimestampSensor(CarrierSensor):
             timestamp_type: Timestamp suffix such as "all_data", "websocket", or "energy".
         """
         self.timestamp_type = timestamp_type
+        self._attr_translation_key = f"{timestamp_type}_last_updated"
         super().__init__(
             entity_name=f"{timestamp_type.replace('_', ' ').title()} Last Updated",
             coordinator=coordinator,
@@ -667,10 +711,10 @@ class TimestampSensor(CarrierSensor):
 class AirflowSensor(CarrierSensor):
     """Sensor entity that reports indoor airflow in CFM."""
 
+    _attr_translation_key = "airflow"
     _attr_device_class = SensorDeviceClass.VOLUME_FLOW_RATE
     _attr_native_unit_of_measurement = UnitOfVolumeFlowRate.CUBIC_FEET_PER_MINUTE
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_icon = "mdi:fan"
 
     def __init__(self, coordinator: CarrierDataUpdateCoordinator, system_serial: str) -> None:
         """Initialize an airflow sensor.
@@ -701,10 +745,13 @@ class AirflowSensor(CarrierSensor):
 class StaticPressureSensor(CarrierSensor):
     """Sensor entity that reports system static pressure."""
 
+    _attr_translation_key = "static_pressure"
     _attr_device_class = SensorDeviceClass.PRESSURE
     _attr_native_unit_of_measurement = UnitOfPressure.INH2O
+    # Home Assistant's unit systems would otherwise convert this to psi or kPa,
+    # which makes duct static pressure unreadable.
+    _attr_suggested_unit_of_measurement = UnitOfPressure.INH2O
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_icon = "mdi:air-filter"
 
     def __init__(self, coordinator: CarrierDataUpdateCoordinator, system_serial: str) -> None:
         """Initialize a static pressure sensor.
@@ -735,7 +782,7 @@ class StaticPressureSensor(CarrierSensor):
 class OutdoorUnitOperationalStatusSensor(CarrierSensor):
     """Sensor for outdoor unit operational status and mapped unit details."""
 
-    _attr_icon = "mdi:hvac"
+    _attr_translation_key = "odu_status"
 
     def __init__(self, coordinator: CarrierDataUpdateCoordinator, system_serial: str) -> None:
         """Initialize an outdoor unit operational status sensor.
@@ -768,7 +815,7 @@ class OutdoorUnitOperationalStatusSensor(CarrierSensor):
 class IndoorUnitOperationalStatusSensor(CarrierSensor):
     """Sensor for indoor unit operational status and mapped unit details."""
 
-    _attr_icon = "mdi:hvac"
+    _attr_translation_key = "idu_status"
 
     def __init__(self, coordinator: CarrierDataUpdateCoordinator, system_serial: str) -> None:
         """Initialize an indoor unit operational status sensor.
@@ -794,31 +841,40 @@ class IndoorUnitOperationalStatusSensor(CarrierSensor):
 class OutdoorUnitVarSensor(CarrierSensor):
     """Sensor for variable-capacity outdoor unit percentage output."""
 
-    _attr_icon = "mdi:percent-box"
+    _attr_translation_key = "odu_var"
+    _entity_name = "ODU Var"
     _attr_native_unit_of_measurement = PERCENTAGE
     _attr_state_class = SensorStateClass.MEASUREMENT
 
     def __init__(self, coordinator: CarrierDataUpdateCoordinator, system_serial: str) -> None:
-        """Initialize a variable outdoor unit percentage sensor.
+        """Initialize a variable-capacity unit percentage sensor.
 
         Args:
             coordinator: Coordinator that provides system telemetry.
             system_serial: Carrier system serial for this entity.
         """
         super().__init__(
-            entity_name="ODU Var",
+            entity_name=self._entity_name,
             coordinator=coordinator,
             system_serial=system_serial,
         )
 
+    def _operational_status(self) -> str | None:
+        """Return the unit operational status that carries the percentage.
+
+        Returns:
+            Carrier's operational status for the outdoor unit.
+        """
+        return self.carrier_system.status.outdoor_unit_operational_status
+
     def _update_entity_attrs(self) -> None:
-        """Update outdoor unit variable rate.
+        """Update the unit's variable rate.
 
         Non-numeric values such as ``'off'`` are treated as 0 % so the sensor
         stays available while the unit is idle rather than going unavailable.
 
         """
-        value = self.carrier_system.status.outdoor_unit_operational_status
+        value = self._operational_status()
         if value is None or not isinstance(value, str):
             self._attr_available = False
             return
@@ -831,3 +887,19 @@ class OutdoorUnitVarSensor(CarrierSensor):
             self._attr_available = True
         except ValueError:
             self._attr_available = False
+
+
+class IndoorUnitVarSensor(OutdoorUnitVarSensor):
+    """Sensor for modulating furnace percentage output."""
+
+    _attr_translation_key = "idu_var"
+
+    _entity_name = "IDU Var"
+
+    def _operational_status(self) -> str | None:
+        """Return the unit operational status that carries the percentage.
+
+        Returns:
+            Carrier's operational status for the indoor unit.
+        """
+        return self.carrier_system.status.indoor_unit_operational_status
