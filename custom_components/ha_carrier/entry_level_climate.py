@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from functools import partial
 import logging
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.climate import (
     ClimateEntity,
@@ -15,12 +15,12 @@ from homeassistant.components.climate import (
 from homeassistant.components.climate.const import ATTR_TARGET_TEMP_HIGH, ATTR_TARGET_TEMP_LOW
 from homeassistant.const import ATTR_TEMPERATURE, PRECISION_WHOLE, UnitOfTemperature
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
-from .carrier_data_update_coordinator import CarrierDataUpdateCoordinator
 from .const import DOMAIN
+from .coordinator import CarrierDataUpdateCoordinator
 
 if TYPE_CHECKING:
     from carrier_api import EntryLevelSystem, EntryLevelZone
@@ -44,20 +44,18 @@ HVAC_TO_MODE: dict[HVACMode, str] = {
 
 def build_entry_level_entities(
     coordinator: CarrierDataUpdateCoordinator,
+    system: EntryLevelSystem,
 ) -> list[EntryLevelThermostat]:
-    """Build a climate entity for each entry-level zone the coordinator tracks.
+    """Build a climate entity for each zone of one entry-level system.
 
     Args:
         coordinator: Coordinator that supplies Carrier entry-level data.
+        system: Entry-level system to build entities for.
 
     Returns:
         A list of entry-level thermostat entities to register.
     """
-    return [
-        EntryLevelThermostat(coordinator, system.serial, zone.index)
-        for system in coordinator.entry_level_systems
-        for zone in system.zones
-    ]
+    return [EntryLevelThermostat(coordinator, system.serial, zone.index) for zone in system.zones]
 
 
 class EntryLevelThermostat(CoordinatorEntity[CarrierDataUpdateCoordinator], ClimateEntity):
@@ -65,14 +63,8 @@ class EntryLevelThermostat(CoordinatorEntity[CarrierDataUpdateCoordinator], Clim
 
     _attr_has_entity_name = True
     _attr_name = None
-    _attr_temperature_unit = UnitOfTemperature.FAHRENHEIT
+    _attr_native_temperature_unit = UnitOfTemperature.FAHRENHEIT
     _attr_target_temperature_step = PRECISION_WHOLE
-    _attr_hvac_modes: ClassVar[list[HVACMode]] = [
-        HVACMode.OFF,
-        HVACMode.COOL,
-        HVACMode.HEAT,
-        HVACMode.HEAT_COOL,
-    ]
     _attr_supported_features = (
         ClimateEntityFeature.TARGET_TEMPERATURE
         | ClimateEntityFeature.TARGET_TEMPERATURE_RANGE
@@ -90,6 +82,7 @@ class EntryLevelThermostat(CoordinatorEntity[CarrierDataUpdateCoordinator], Clim
             index: Zone index within the entry-level system.
         """
         super().__init__(coordinator, serial)
+        self._attr_hvac_modes = [HVACMode.OFF, HVACMode.COOL, HVACMode.HEAT, HVACMode.HEAT_COOL]
         self._serial = serial
         self._index = index
         self._attr_unique_id = slugify(f"{serial}_{index}_entry_level_thermostat")
@@ -127,7 +120,7 @@ class EntryLevelThermostat(CoordinatorEntity[CarrierDataUpdateCoordinator], Clim
         )
 
     @property
-    def current_temperature(self) -> float | None:
+    def native_current_temperature(self) -> float | None:
         """Return the current room temperature."""
         zone = self._zone
         return None if zone is None else zone.temperature
@@ -162,7 +155,7 @@ class EntryLevelThermostat(CoordinatorEntity[CarrierDataUpdateCoordinator], Clim
         return HVACAction.IDLE
 
     @property
-    def target_temperature(self) -> float | None:
+    def native_target_temperature(self) -> float | None:
         """Return the single target set point for heat or cool mode."""
         zone = self._zone
         if zone is None:
@@ -174,7 +167,7 @@ class EntryLevelThermostat(CoordinatorEntity[CarrierDataUpdateCoordinator], Clim
         return None
 
     @property
-    def target_temperature_high(self) -> float | None:
+    def native_target_temperature_high(self) -> float | None:
         """Return the cool set point when in heat/cool mode."""
         zone = self._zone
         if zone is None or self.hvac_mode != HVACMode.HEAT_COOL:
@@ -182,7 +175,7 @@ class EntryLevelThermostat(CoordinatorEntity[CarrierDataUpdateCoordinator], Clim
         return zone.cool_set_point
 
     @property
-    def target_temperature_low(self) -> float | None:
+    def native_target_temperature_low(self) -> float | None:
         """Return the heat set point when in heat/cool mode."""
         zone = self._zone
         if zone is None or self.hvac_mode != HVACMode.HEAT_COOL:
@@ -197,7 +190,9 @@ class EntryLevelThermostat(CoordinatorEntity[CarrierDataUpdateCoordinator], Clim
         """
         zone = self._zone
         if zone is None:
-            raise HomeAssistantError("Entry-level zone unavailable, try again later")
+            raise HomeAssistantError(
+                translation_domain=DOMAIN, translation_key="entry_level_zone_unavailable"
+            )
         cool_set_point = zone.cool_set_point
         heat_set_point = zone.heat_set_point
         if (temperature := kwargs.get(ATTR_TEMPERATURE)) is not None:
