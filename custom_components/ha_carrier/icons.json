@@ -1,0 +1,105 @@
+{
+  "entity": {
+    "binary_sensor": {
+      "online": {
+        "default": "mdi:wifi-strength-outline",
+        "state": {
+          "on": "mdi:wifi-check"
+        }
+      },
+      "humidifier_running": {
+        "default": "mdi:air-humidifier-off",
+        "state": {
+          "on": "mdi:air-humidifier"
+        }
+      },
+      "indoor_unit_lockout": {
+        "default": "mdi:lock-open-outline",
+        "state": {
+          "on": "mdi:lock-alert"
+        }
+      },
+      "outdoor_unit_lockout": {
+        "default": "mdi:lock-open-outline",
+        "state": {
+          "on": "mdi:lock-alert"
+        }
+      }
+    },
+    "select": {
+      "heat_source": {
+        "default": "mdi:heat-pump"
+      }
+    },
+    "sensor": {
+      "filter_remaining": {
+        "default": "mdi:air-filter"
+      },
+      "humidifier_remaining": {
+        "default": "mdi:air-filter"
+      },
+      "uv_lamp_remaining": {
+        "default": "mdi:lightbulb-fluorescent-tube-outline"
+      },
+      "airflow": {
+        "default": "mdi:fan"
+      },
+      "static_pressure": {
+        "default": "mdi:air-filter"
+      },
+      "odu_status": {
+        "default": "mdi:hvac"
+      },
+      "idu_status": {
+        "default": "mdi:hvac"
+      },
+      "odu_var": {
+        "default": "mdi:percent-box"
+      },
+      "idu_var": {
+        "default": "mdi:percent-box"
+      },
+      "blower_speed": {
+        "default": "mdi:fan"
+      },
+      "outdoor_fan_speed": {
+        "default": "mdi:fan"
+      },
+      "outdoor_coil_temperature": {
+        "default": "mdi:coolant-temperature"
+      },
+      "discharge_temperature": {
+        "default": "mdi:thermometer-high"
+      },
+      "suction_temperature": {
+        "default": "mdi:thermometer-low"
+      },
+      "suction_pressure": {
+        "default": "mdi:gauge"
+      },
+      "suction_superheat": {
+        "default": "mdi:thermometer-plus"
+      },
+      "line_voltage": {
+        "default": "mdi:flash"
+      },
+      "zone_damper_position": {
+        "default": "mdi:valve"
+      },
+      "zone_conditioning": {
+        "default": "mdi:hvac"
+      }
+    }
+  },
+  "services": {
+    "set_activity_setpoint": {
+      "service": "mdi:thermostat"
+    },
+    "get_schedule": {
+      "service": "mdi:calendar-clock"
+    },
+    "set_program_day": {
+      "service": "mdi:calendar-edit"
+    }
+  }
+}

@@ -23,7 +23,7 @@ from math import ceil, log2
 import random
 
 from .exceptions import CarrierUnauthorizedError
-from .util import is_transient_transport_error, is_unauthorized_error
+from .util import is_retryable_error, is_unauthorized_error
 
 
 @dataclass(frozen=True)
@@ -192,7 +192,7 @@ def compute_backoff_delay(policy: RetryPolicy, attempt: int) -> float:
     else:
         max_exponent = 0
     exponent = min(max(attempt, 0), max_exponent)
-    raw = policy.base_delay * (2**exponent)
+    raw = policy.base_delay * (2.0**exponent)
     capped = min(raw, policy.max_delay)
     capped = max(0.0, capped)
     if policy.jitter_fraction <= 0:
@@ -220,8 +220,10 @@ async def async_call_with_retry[T](
     retry in-place when the policy allows it or propagate to the caller for
     cycle-level handling.
 
-    Transient transport failures update the shared transient counter. They retry
-    with exponential backoff until the policy's attempt limit is reached or the
+    Retryable failures update the shared transient counter. These are transport
+    errors plus the application-layer Carrier errors that are usually
+    short-lived, such as a rejected GraphQL operation. They retry with
+    exponential backoff until the policy's attempt limit is reached or the
     shared transient threshold escalates, in which case the original error is
     raised.
 
@@ -277,7 +279,7 @@ async def async_call_with_retry[T](
                     attempt += 1
                     continue
                 raise
-            if is_transient_transport_error(error):
+            if is_retryable_error(error):
                 escalated = state.record_transient(logger, operation_name, error)
                 if escalated:
                     raise

@@ -1,0 +1,120 @@
+# Home Assistant Integration Quality Scale self-assessment.
+# Rules: https://developers.home-assistant.io/docs/core/integration-quality-scale/rules
+# hassfest only validates this file for core integrations; tests/test_quality_scale.py
+# checks its format here.
+rules:
+  # Bronze
+  action-setup:
+    status: done
+    comment: >-
+      services.py registers the climate entity services from async_setup with
+      service.async_register_platform_entity_service.
+  appropriate-polling:
+    status: done
+    comment: >-
+      Websocket push for live updates; polls every 30 minutes for energy and does a full
+      refresh at the configurable full refresh interval.
+  brands: done
+  common-modules: done
+  config-flow: done
+  config-flow-test-coverage: done
+  dependency-transparency: done
+  docs-actions: done
+  docs-conditions:
+    status: exempt
+    comment: The integration provides no conditions.
+  docs-high-level-description: done
+  docs-installation-instructions: done
+  docs-removal-instructions: done
+  docs-triggers:
+    status: exempt
+    comment: The integration provides no triggers.
+  entity-event-setup: done
+  entity-unique-id: done
+  has-entity-name: done
+  runtime-data: done
+  test-before-configure: done
+  test-before-setup: done
+  unique-config-entry:
+    status: done
+    comment: Config entries are keyed by the Carrier account identity ID.
+
+  # Silver
+  action-exceptions: done
+  config-entry-unloading: done
+  docs-configuration-parameters: done
+  docs-installation-parameters: done
+  entity-unavailable: done
+  integration-owner: done
+  log-when-unavailable:
+    status: done
+    comment: >-
+      Failed refreshes raise UpdateFailed and only debug-log, so DataUpdateCoordinator logs
+      the outage once and its recovery once; websocket data errors log once per streak.
+  parallel-updates: done
+  reauthentication-flow: done
+  test-coverage:
+    status: done
+    comment: >-
+      Coverage (statements and branches) is above 95% for every module, and
+      [tool.coverage.report] fail_under = 95 keeps it there.
+
+  # Gold
+  devices: done
+  diagnostics: done
+  discovery:
+    status: exempt
+    comment: Cloud account integration; there is nothing on the local network to discover.
+  discovery-update-info:
+    status: exempt
+    comment: Cloud account integration; there is nothing on the local network to discover.
+  docs-data-update: done
+  docs-examples: done
+  docs-known-limitations: done
+  docs-supported-devices: done
+  docs-supported-functions: done
+  docs-troubleshooting: done
+  docs-use-cases: done
+  dynamic-devices:
+    status: done
+    comment: >-
+      Platforms listen to the coordinator and add entities for systems that appear on a
+      full refresh (entity.async_add_entities_for_systems).
+  entity-category: done
+  entity-device-class: done
+  entity-disabled-by-default:
+    status: done
+    comment: The diagnostic last updated timestamp sensors are disabled by default.
+  entity-translations:
+    status: done
+    comment: >-
+      Zone thermostats are named after the user's zone, so they have no translation key.
+  exception-translations: done
+  icon-translations: done
+  reconfiguration-flow: done
+  repair-issues:
+    status: exempt
+    comment: >-
+      No user-fixable issues beyond credentials, which the reauthentication flow handles.
+  stale-devices:
+    status: done
+    comment: >-
+      Devices for systems Carrier no longer reports are removed after a refresh (skipped
+      if the entry-level load failed or the account reports no systems), and
+      async_remove_config_entry_device lets users delete a gone device.
+
+  # Platinum
+  async-dependency: done
+  inject-websession:
+    status: done
+    comment: >-
+      util.async_create_api_connection passes Home Assistant's shared aiohttp session as
+      carrier_api's client_session, and the integration never calls cleanup() on it.
+      carrier_api uses that session for the websocket; its GraphQL requests still go
+      through gql's AIOHTTPTransport, which carrier_api does not yet let callers give a
+      session to.
+  strict-typing:
+    status: done
+    comment: >-
+      pyproject.toml sets strict = true for custom_components/ha_carrier, which type-checks
+      cleanly; the Lint workflow runs mypy on every push and pull request.
