@@ -4,11 +4,13 @@ import asyncio
 from collections.abc import Awaitable, Callable, Mapping
 from datetime import UTC, datetime, timedelta
 import functools
+from json import JSONDecodeError, loads
 import logging
+import math
 from typing import Any, NoReturn
 
 from carrier_api import ApiConnectionGraphql, CarrierApiError, Energy, EntryLevelSystem, System
-from carrier_api.api_websocket_data_updater import WebsocketDataUpdater
+from carrier_api.api_websocket_data_updater import WebsocketDataUpdater, unwrap_envelope
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, HomeAssistantError
 from homeassistant.helpers.debounce import Debouncer
@@ -19,9 +21,9 @@ from homeassistant.helpers.update_coordinator import (
 )
 
 from .const import (
+    DEFAULT_FULL_REFRESH_INTERVAL_MINUTES,
     DEFAULT_UPDATE_INTERVAL_MINUTES,
     DOMAIN,
-    FULL_RECONCILE_INTERVAL_MINUTES,
     MAX_REFRESH_ATTEMPTS,
     MAX_WRITE_ATTEMPTS,
     POST_WRITE_INTERCEPT_WINDOW_MINUTES,
@@ -45,7 +47,8 @@ from .util import (
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
-FULL_RECONCILE_INTERVAL = timedelta(minutes=FULL_RECONCILE_INTERVAL_MINUTES)
+DEFAULT_FULL_REFRESH_INTERVAL = timedelta(minutes=DEFAULT_FULL_REFRESH_INTERVAL_MINUTES)
+DEFAULT_POLL_INTERVAL = timedelta(minutes=DEFAULT_UPDATE_INTERVAL_MINUTES)
 POST_WRITE_INTERCEPT_WINDOW = timedelta(minutes=POST_WRITE_INTERCEPT_WINDOW_MINUTES)
 
 REFRESH_RETRY_POLICY = RetryPolicy(
@@ -72,21 +75,70 @@ ENERGY_REFRESH_EXCEPTIONS: tuple[type[BaseException], ...] = (
 )
 
 
+def poll_interval_for(full_refresh_interval: timedelta) -> timedelta:
+    """Return the poll interval that fits a full refresh interval evenly.
+
+    The poll interval is the longest interval, no longer than the default poll,
+    that divides the full refresh interval into whole polls. A full refresh
+    then lands on a poll instead of waiting for the next one, while the polls
+    in between stay lightweight energy-only refreshes.
+
+    Args:
+        full_refresh_interval: How often a full refresh should run.
+
+    Returns:
+        timedelta: How often the coordinator should poll.
+    """
+    polls_per_full_refresh = math.ceil(full_refresh_interval / DEFAULT_POLL_INTERVAL)
+    return full_refresh_interval / polls_per_full_refresh
+
+
+def is_device_message(message: str) -> bool:
+    """Return True when a websocket message is addressed to a Carrier device.
+
+    Carrier answers each keepalive with an empty ``{}`` that carries no device
+    id and no data. Only messages that name a device can update a system.
+
+    Args:
+        message: Raw websocket payload string.
+
+    Returns:
+        bool: True when the (possibly envelope-wrapped) message has a
+            ``deviceId`` or ``serial``.
+    """
+    try:
+        message_json = loads(message)
+    except JSONDecodeError:
+        return False
+    if not isinstance(message_json, dict):
+        return False
+    body = unwrap_envelope(message_json)
+    return body.get("deviceId") is not None or body.get("serial") is not None
+
+
 class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
     """Maintain Carrier data and shared API resiliency state for one account."""
+
+    full_refresh_interval: timedelta = DEFAULT_FULL_REFRESH_INTERVAL
+    poll_interval: timedelta = poll_interval_for(DEFAULT_FULL_REFRESH_INTERVAL)
 
     def __init__(
         self,
         hass: HomeAssistant,
         api_connection: ApiConnectionGraphql,
+        full_refresh_interval: timedelta = DEFAULT_FULL_REFRESH_INTERVAL,
     ) -> None:
         """Initialize coordinator state and refresh scheduling.
 
         Args:
             hass: Home Assistant instance used for task scheduling and callbacks.
             api_connection: Authenticated Carrier API connection wrapper.
+            full_refresh_interval: How often to run a full refresh even while
+                the websocket stays connected.
         """
         self.hass: HomeAssistant = hass
+        self.full_refresh_interval = full_refresh_interval
+        self.poll_interval = poll_interval_for(full_refresh_interval)
         self.api_connection: ApiConnectionGraphql = api_connection
         self.resiliency = ResiliencyState(
             unauthorized_threshold=UNAUTHORIZED_RETRY_THRESHOLD,
@@ -94,6 +146,9 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         )
         self.systems: list[System] = []
         self.entry_level_systems: list[EntryLevelSystem] = []
+        # Whether the latest entry-level load succeeded. Stale-device cleanup
+        # only trusts entry_level_systems as the full list when this is True.
+        self.entry_level_systems_loaded = False
         self.websocket_data_updater: WebsocketDataUpdater | None = None
         self.websocket_task: asyncio.Task[None] | None = None
         self._websocket_initialized = False
@@ -107,7 +162,7 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
             hass,
             _LOGGER,
             name=f"{DOMAIN}-{self.api_connection.username}",
-            update_interval=timedelta(minutes=DEFAULT_UPDATE_INTERVAL_MINUTES),
+            update_interval=self.poll_interval,
             always_update=False,
             request_refresh_debouncer=Debouncer(
                 hass,
@@ -127,13 +182,22 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         stays connected. A periodic full refresh reconciles that state against an
         authoritative pull.
 
+        A refresh counts as due once it is closer to the next full refresh than
+        to the last one, i.e. half a poll interval early. Scheduled polls land
+        on the same full refreshes as an exact comparison would, but a poll that
+        HA fires slightly early (it truncates the loop clock when scheduling),
+        a wall-clock step, or an off-cycle refresh that HA then re-anchors the
+        schedule to can no longer push the full refresh back by a whole poll.
+
         Returns:
-            bool: True when the last full refresh is older than
-                ``FULL_RECONCILE_INTERVAL`` or has never completed.
+            bool: True when the last full refresh is at least
+                ``full_refresh_interval`` less half a ``poll_interval`` old, or
+                has never completed.
         """
         if self.timestamp_all_data is None:
             return True
-        return datetime.now(UTC) - self.timestamp_all_data >= FULL_RECONCILE_INTERVAL
+        elapsed = datetime.now(UTC) - self.timestamp_all_data
+        return elapsed >= self.full_refresh_interval - self.poll_interval / 2
 
     def begin_post_write_intercept(
         self, system_serial: str, zone_api_id: str | None = None
@@ -292,11 +356,18 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
                 cannot complete successfully for other reasons.
         """
         if not self.data_flush and self._full_reconcile_due():
-            _LOGGER.debug(
-                "forcing full refresh: last full reconcile was >= %s minutes ago",
-                FULL_RECONCILE_INTERVAL_MINUTES,
-            )
-            self.data_flush = True
+            if self._in_post_write_intercept():
+                # A full read ends every post-write guard, which would leave a
+                # later stale websocket replay of the pre-write values free to
+                # land. Wait for the guards to expire; a forced flush (a failed
+                # write, an auth retry) still reads immediately.
+                _LOGGER.debug("deferring scheduled full refresh: post-write window is open")
+            else:
+                _LOGGER.debug(
+                    "forcing full refresh: last full refresh was >= %s ago",
+                    self.full_refresh_interval,
+                )
+                self.data_flush = True
 
         if self.data_flush:
             refresh_context = "full data refresh"
@@ -323,15 +394,18 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         except RECOVERABLE_REFRESH_EXCEPTIONS as error:
             self.data_flush = True
             self.update_interval = timedelta(minutes=1)
+            # DataUpdateCoordinator logs the first UpdateFailed as an error and
+            # logs again once a refresh succeeds, so only debug-log each failure
+            # here to avoid repeating the error every retry while Carrier is down.
             if is_unauthorized_error(error):
-                _LOGGER.info(
+                _LOGGER.debug(
                     "Carrier %s returned unauthorized without crossing the reauth threshold.",
                     refresh_context,
                 )
                 raise UpdateFailed(
                     f"Carrier temporarily rejected {refresh_context}; will retry."
                 ) from error
-            _LOGGER.exception("Carrier %s failed", refresh_context, exc_info=error)
+            _LOGGER.debug("Carrier %s failed", refresh_context, exc_info=error)
             raise UpdateFailed(
                 f"Unexpected error during Carrier {refresh_context}: {error}"
             ) from error
@@ -402,7 +476,7 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         self.timestamp_all_data = datetime.now(UTC)
         self.timestamp_energy = self.timestamp_all_data
         self.data_flush = False
-        self.update_interval = timedelta(minutes=DEFAULT_UPDATE_INTERVAL_MINUTES)
+        self.update_interval = self.poll_interval
         # A full read is authoritative; end every post-write guard so re-assert
         # cannot fight freshly-read truth.
         self._intercept_guards = {}
@@ -454,7 +528,7 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
             self.resiliency.reset_unauthorized()
             self.resiliency.reset_transient()
             self.timestamp_energy = datetime.now(UTC)
-            self.update_interval = timedelta(minutes=DEFAULT_UPDATE_INTERVAL_MINUTES)
+            self.update_interval = self.poll_interval
 
     async def _async_handle_failed_write(
         self,
@@ -483,7 +557,7 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         # refresh so one recovered write outage does not force credentials
         # invalid.
         raise HomeAssistantError(
-            "Carrier rejected repeated write attempts. Try again shortly."
+            translation_domain=DOMAIN, translation_key="write_rejected_repeatedly"
         ) from error
 
     async def _async_reconcile_failed_write(
@@ -563,12 +637,12 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         except RECOVERABLE_WRITE_COMMUNICATION_EXCEPTIONS as error:
             await self._async_reconcile_failed_write(operation_name, error)
             raise HomeAssistantError(
-                "Failed to communicate with Carrier service — operation could not be completed."
+                translation_domain=DOMAIN, translation_key="communication_error"
             ) from error
         except CarrierApiError as error:
             await self._async_reconcile_failed_write(operation_name, error)
             raise HomeAssistantError(
-                "Carrier rejected the request. Check the requested setting and try again."
+                translation_domain=DOMAIN, translation_key="request_rejected"
             ) from error
 
     def system(self, system_serial: str) -> System | None:
@@ -590,14 +664,19 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
 
         Entry-level data is independent of the Infinity systems and websocket
         path, so a failure here is logged and swallowed rather than failing the
-        whole refresh.
+        whole refresh. ``entry_level_systems_loaded`` records whether the list
+        is current, so stale-device cleanup never acts on a failed load.
         """
         try:
             self.entry_level_systems = await self.api_connection.load_entry_level_data()
         except asyncio.CancelledError, KeyboardInterrupt, SystemExit:
             raise
-        except (CarrierApiError, *RECOVERABLE_REFRESH_EXCEPTIONS) as error:
+        except RECOVERABLE_REFRESH_EXCEPTIONS as error:
+            # Includes CarrierApiError, so any Carrier-side failure is non-fatal.
+            self.entry_level_systems_loaded = False
             _LOGGER.debug("Carrier entry-level refresh failed (non-fatal): %s", error)
+        else:
+            self.entry_level_systems_loaded = True
 
     def entry_level_system(self, serial: str) -> EntryLevelSystem | None:
         """Return the tracked entry-level system matching a serial.
@@ -632,16 +711,21 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
             raise TypeError("carrier_api System serializer returned a non-mapping payload")
         return dict(mapped_data)
 
-    async def updated_callback(self, _message: str) -> None:
+    async def updated_callback(self, message: str) -> None:
         """Handle websocket updates and notify Home Assistant listeners.
 
+        ``timestamp_websocket`` only moves for messages addressed to a device,
+        so the keepalive replies Carrier sends every minute do not make a
+        silent feed look live.
+
         Args:
-            _message: Raw websocket payload string (unused after callback wiring).
+            message: Raw websocket payload string.
 
         Returns:
             None: Listener state is refreshed in-place.
         """
-        self.timestamp_websocket = datetime.now(UTC)
+        if is_device_message(message):
+            self.timestamp_websocket = datetime.now(UTC)
         _LOGGER.debug("websocket updated system")
         if _LOGGER.isEnabledFor(logging.DEBUG):
             for system in self.systems:

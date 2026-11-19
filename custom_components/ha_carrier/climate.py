@@ -4,9 +4,17 @@ from __future__ import annotations
 
 from functools import partial
 import logging
+import math
 from typing import Any
 
-from carrier_api import ActivityTypes, ConfigZoneActivity, FanModes, SystemModes, TemperatureUnits
+from carrier_api import (
+    ActivityTypes,
+    ConfigZoneActivity,
+    FanModes,
+    System,
+    SystemModes,
+    TemperatureUnits,
+)
 from homeassistant.components.climate import (
     ClimateEntity,
     ClimateEntityFeature,
@@ -20,17 +28,30 @@ from homeassistant.const import (
     PRECISION_WHOLE,
     UnitOfTemperature,
 )
-from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.core import CALLBACK_TYPE, HomeAssistant, ServiceResponse
+from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.event import async_call_later
 
 from . import ConfigEntryCarrier
-from .carrier_data_update_coordinator import CarrierDataUpdateCoordinator
-from .carrier_entity import CarrierZoneEntity
-from .const import CONF_INFINITE_HOLDS, DEFAULT_INFINITE_HOLDS, FAN_AUTO
+from .const import (
+    CONF_INFINITE_HOLDS,
+    DEFAULT_INFINITE_HOLDS,
+    DOMAIN,
+    FAN_AUTO,
+    HUMIDITY_STEP,
+    MAX_HUMIDITY,
+    MIN_HUMIDITY,
+    PROGRAM_READBACK_DELAY_S,
+)
+from .coordinator import CarrierDataUpdateCoordinator
+from .entity import CarrierZoneEntity, async_add_entities_for_systems
 from .entry_level_climate import build_entry_level_entities
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
+
+# Commands go to Carrier's cloud API, which rate limits; send one at a time.
+PARALLEL_UPDATES = 1
 
 BASE_SUPPORT_FLAGS: ClimateEntityFeature = (
     ClimateEntityFeature.TURN_ON
@@ -55,36 +76,71 @@ async def async_setup_entry(
     _LOGGER.debug("setting up climate entry")
     infinite_hold = config_entry.options.get(CONF_INFINITE_HOLDS, DEFAULT_INFINITE_HOLDS)
     coordinator = config_entry.runtime_data
+    async_add_entities_for_systems(
+        config_entry,
+        async_add_entities,
+        lambda carrier_system: _system_entities(coordinator, carrier_system, infinite_hold),
+        lambda system: build_entry_level_entities(coordinator, system),
+    )
+
+
+def _system_entities(
+    coordinator: CarrierDataUpdateCoordinator,
+    carrier_system: System,
+    infinite_hold: bool,
+) -> list[Thermostat]:
+    """Build a zone thermostat for every zone of one Carrier system.
+
+    Args:
+        coordinator: Coordinator that supplies Carrier system data.
+        carrier_system: Carrier system to build entities for.
+        infinite_hold: Whether manual holds should be open-ended.
+
+    Returns:
+        list[Thermostat]: Entities for the system.
+    """
     entities: list[Thermostat] = []
-    for carrier_system in coordinator.systems:
-        support_flags = BASE_SUPPORT_FLAGS
-        supported_hvac_capabilities = carrier_system.supported_hvac_capabilities()
-        hvac_modes: list[HVACMode] = [
-            HVACMode.OFF,
-        ]
-        if supported_hvac_capabilities["fan"]:
-            support_flags |= ClimateEntityFeature.FAN_MODE
-            hvac_modes.append(HVACMode.FAN_ONLY)
-        if supported_hvac_capabilities["cool"]:
-            hvac_modes.append(HVACMode.COOL)
-        if supported_hvac_capabilities["heat"]:
-            hvac_modes.append(HVACMode.HEAT)
-        if supported_hvac_capabilities["cool"] and supported_hvac_capabilities["heat"]:
-            support_flags |= ClimateEntityFeature.TARGET_TEMPERATURE_RANGE
-            hvac_modes.append(HVACMode.HEAT_COOL)
-        entities.extend(
-            Thermostat(
-                coordinator=coordinator,
-                system_serial=carrier_system.profile.serial,
-                infinite_hold=infinite_hold,
-                zone_api_id=zone.api_id,
-                support_flags=support_flags,
-                hvac_modes=hvac_modes,
-            )
-            for zone in carrier_system.config.zones
+    support_flags = BASE_SUPPORT_FLAGS
+    supported_hvac_capabilities = carrier_system.supported_hvac_capabilities()
+    hvac_modes: list[HVACMode] = [
+        HVACMode.OFF,
+    ]
+    if supported_hvac_capabilities["fan"]:
+        support_flags |= ClimateEntityFeature.FAN_MODE
+        hvac_modes.append(HVACMode.FAN_ONLY)
+    if supported_hvac_capabilities["cool"]:
+        hvac_modes.append(HVACMode.COOL)
+    if supported_hvac_capabilities["heat"]:
+        hvac_modes.append(HVACMode.HEAT)
+    if supported_hvac_capabilities["cool"] and supported_hvac_capabilities["heat"]:
+        support_flags |= ClimateEntityFeature.TARGET_TEMPERATURE_RANGE
+        hvac_modes.append(HVACMode.HEAT_COOL)
+    entities.extend(
+        Thermostat(
+            coordinator=coordinator,
+            system_serial=carrier_system.profile.serial,
+            infinite_hold=infinite_hold,
+            zone_api_id=zone.api_id,
+            support_flags=support_flags,
+            hvac_modes=hvac_modes,
         )
-    async_add_entities(entities)
-    async_add_entities(build_entry_level_entities(coordinator))
+        for zone in carrier_system.config.zones
+    )
+    return entities
+
+
+def normalize_humidity_target(humidity: float) -> int:
+    """Return the Carrier-acceptable humidity target closest to a requested value.
+
+    Args:
+        humidity: Requested target humidity percentage.
+
+    Returns:
+        int: The value clamped to ``MIN_HUMIDITY``..``MAX_HUMIDITY`` and rounded
+            half up to the nearest multiple of ``HUMIDITY_STEP``.
+    """
+    clamped = min(max(humidity, MIN_HUMIDITY), MAX_HUMIDITY)
+    return math.floor(clamped / HUMIDITY_STEP + 0.5) * HUMIDITY_STEP
 
 
 class CarrierClimate(CarrierZoneEntity, ClimateEntity):
@@ -114,6 +170,7 @@ class CarrierClimate(CarrierZoneEntity, ClimateEntity):
             zone_api_id=zone_api_id,
             unique_id_suffix=unique_id_suffix,
         )
+        self._cancel_program_readback: CALLBACK_TYPE | None = None
         self._sync_entity_attrs()
 
     def _current_activity(self) -> ConfigZoneActivity | None:
@@ -177,8 +234,8 @@ class CarrierClimate(CarrierZoneEntity, ClimateEntity):
                 hvac_mode = None
 
         self._attr_current_humidity = self._status_zone.humidity
-        self._attr_current_temperature = self._status_zone.temperature
-        self._attr_temperature_unit = temperature_unit
+        self._attr_native_current_temperature = self._status_zone.temperature
+        self._attr_native_temperature_unit = temperature_unit
         self._attr_hvac_mode = hvac_mode
         if hvac_mode == HVACMode.OFF:
             self._attr_hvac_action = HVACAction.OFF
@@ -211,16 +268,16 @@ class CarrierClimate(CarrierZoneEntity, ClimateEntity):
         # so it reflects the true target promptly. Fall back to the status zone
         # when the current activity can't be resolved from config.
         setpoint_source = self._current_activity() or self._status_zone
-        self._attr_target_temperature = None
-        self._attr_target_temperature_high = None
-        self._attr_target_temperature_low = None
+        self._attr_native_target_temperature = None
+        self._attr_native_target_temperature_high = None
+        self._attr_native_target_temperature_low = None
         if hvac_mode == HVACMode.HEAT:
-            self._attr_target_temperature = setpoint_source.heat_set_point
+            self._attr_native_target_temperature = setpoint_source.heat_set_point
         elif hvac_mode == HVACMode.COOL:
-            self._attr_target_temperature = setpoint_source.cool_set_point
+            self._attr_native_target_temperature = setpoint_source.cool_set_point
         elif hvac_mode == HVACMode.HEAT_COOL:
-            self._attr_target_temperature_high = setpoint_source.cool_set_point
-            self._attr_target_temperature_low = setpoint_source.heat_set_point
+            self._attr_native_target_temperature_high = setpoint_source.cool_set_point
+            self._attr_native_target_temperature_low = setpoint_source.heat_set_point
 
         if self.carrier_system.config.humidifier_enabled:
             self._attr_target_humidity = self.carrier_system.config.humidifier_heat_target
@@ -244,11 +301,11 @@ class CarrierClimate(CarrierZoneEntity, ClimateEntity):
         hold_activity_name = (
             self._config_zone.hold_activity.value if self._config_zone.hold_activity else None
         )
+        # Readings that change on their own (conditioning, blower speed, damper
+        # position) are sensors so they can be graphed; these attributes describe
+        # the thermostat's own schedule and hold state.
         self._attr_extra_state_attributes = {
-            "conditioning": self._status_zone.conditioning,
             "status_mode": self.carrier_system.status.mode,
-            "blower_rpm": self.carrier_system.status.blower_rpm,
-            "damper_position": self._status_zone.damper_position,
             "hold_activity": hold_activity_name,
             "hold_until": self._config_zone.hold_until,
             "next_activity_time": self._config_zone.next_activity_time(),
@@ -260,8 +317,8 @@ class Thermostat(CarrierClimate):
     """Climate entity that controls a single Carrier zone thermostat."""
 
     _enable_turn_on_off_backwards_compatibility = False
-    _attr_max_humidity = 45
-    _attr_min_humidity = 0
+    _attr_max_humidity = MAX_HUMIDITY
+    _attr_min_humidity = MIN_HUMIDITY
 
     def __init__(
         self,
@@ -305,18 +362,15 @@ class Thermostat(CarrierClimate):
     async def async_set_humidity(self, humidity: int) -> None:
         """Set and normalize a new target humidity value.
 
+        Carrier only accepts heating humidity targets between ``MIN_HUMIDITY``
+        and ``MAX_HUMIDITY`` in ``HUMIDITY_STEP`` increments, so the requested
+        value is clamped to that range and rounded to the nearest step.
+
         Args:
             humidity: Requested target humidity percentage.
         """
-        _LOGGER.debug("Setting target humidity to %s", humidity)
-        if humidity > 45:
-            humidity = 45
-            _LOGGER.debug("Setting target humidity to max heating of 45")
-        rounded_humidity = int(humidity / 5) * 5
-        _LOGGER.debug(
-            "Setting target humidity to api acceptable multiple of 5 %s",
-            rounded_humidity,
-        )
+        rounded_humidity = normalize_humidity_target(humidity)
+        _LOGGER.debug("Setting target humidity to %s (requested %s)", rounded_humidity, humidity)
         await self.coordinator.async_perform_api_call(
             "set humidity",
             partial(
@@ -433,7 +487,9 @@ class Thermostat(CarrierClimate):
         selected_fan_mode = FanModes.OFF if fan_mode == FAN_AUTO else FanModes(fan_mode)
         current_activity = self._current_activity()
         if current_activity is None:
-            raise HomeAssistantError("Current activity unavailable, try again later")
+            raise HomeAssistantError(
+                translation_domain=DOMAIN, translation_key="current_activity_unavailable"
+            )
         await self.coordinator.async_perform_api_call(
             "set fan mode",
             partial(
@@ -455,6 +511,8 @@ class Thermostat(CarrierClimate):
 
         Raises:
             HomeAssistantError: Raised when the manual activity profile cannot be resolved.
+            ServiceValidationError: Raised when the heat and cool set points
+                cannot both be resolved from the request.
         """
         _LOGGER.debug("set_temperature; kwargs: %s", kwargs)
         heat_set_point = kwargs.get(ATTR_TARGET_TEMP_LOW)
@@ -462,7 +520,9 @@ class Thermostat(CarrierClimate):
         temperature = kwargs.get(ATTR_TEMPERATURE)
         manual_activity = self._config_zone.find_activity(ActivityTypes.MANUAL)
         if manual_activity is None:
-            raise HomeAssistantError("Manual activity unavailable, try again later")
+            raise HomeAssistantError(
+                translation_domain=DOMAIN, translation_key="manual_activity_unavailable"
+            )
 
         hold_until_sent = self._hold_until
 
@@ -474,8 +534,8 @@ class Thermostat(CarrierClimate):
             cool_set_point = manual_activity.cool_set_point
 
         if heat_set_point is None or cool_set_point is None:
-            raise HomeAssistantError(
-                "Both heat and cool set points must be resolved before applying a manual hold"
+            raise ServiceValidationError(
+                translation_domain=DOMAIN, translation_key="set_points_unresolved"
             )
 
         fan_mode = manual_activity.fan
@@ -518,3 +578,193 @@ class Thermostat(CarrierClimate):
         self._status_zone.cool_set_point = cool_set_point
         self._status_zone.heat_set_point = heat_set_point
         self._write_local_state()
+
+    async def async_set_activity_setpoint(self, **kwargs: Any) -> None:
+        """Edit an activity's comfort set points in place without creating a hold.
+
+        Unlike async_set_temperature (which forces a MANUAL hold and suspends the schedule), this
+        edits the set points of the activity named by ``activity``, or of whatever activity the
+        zone is currently following when it is omitted, via the carrier_api zone-activity
+        mutation. So a human can still place an independent hold that
+        takes precedence, and if HA is offline the thermostat keeps running its own schedule at
+        the last value written.
+
+        Raises:
+            HomeAssistantError: When the current activity can't be resolved.
+            ServiceValidationError: When the requested activity is not
+                configured or a required set point is missing.
+        """
+        current_activity = self._current_activity()
+        requested = kwargs.get("activity")
+        if requested is None:
+            current = current_activity
+            if current is None:
+                raise HomeAssistantError(
+                    translation_domain=DOMAIN, translation_key="current_activity_unavailable"
+                )
+        else:
+            current = self._config_zone.find_activity(ActivityTypes(requested))
+            if current is None:
+                raise ServiceValidationError(
+                    translation_domain=DOMAIN,
+                    translation_key="activity_not_configured",
+                    translation_placeholders={"activity": str(requested)},
+                )
+        is_current_activity = current_activity is not None and current.type == current_activity.type
+
+        heat_set_point = kwargs.get(ATTR_TARGET_TEMP_LOW)
+        cool_set_point = kwargs.get(ATTR_TARGET_TEMP_HIGH)
+        temperature = kwargs.get(ATTR_TEMPERATURE)
+
+        mode = self.carrier_system.config.mode
+        if mode == SystemModes.COOL.value:
+            heat_set_point = current.heat_set_point
+            cool_set_point = temperature if temperature is not None else cool_set_point
+        elif mode == SystemModes.HEAT.value:
+            heat_set_point = temperature if temperature is not None else heat_set_point
+            cool_set_point = current.cool_set_point
+        # HEAT_COOL / AUTO: use the provided target_temp_low / target_temp_high as-is.
+
+        if heat_set_point is None or cool_set_point is None:
+            raise ServiceValidationError(
+                translation_domain=DOMAIN, translation_key="activity_setpoint_missing_temperature"
+            )
+
+        _LOGGER.debug(
+            "set_activity_setpoint; activity=%s heat=%s cool=%s",
+            current.type.value,
+            heat_set_point,
+            cool_set_point,
+        )
+        await self.coordinator.async_perform_api_call(
+            "set activity setpoint",
+            partial(
+                self.coordinator.api_connection.set_config_activity,
+                system_serial=self.carrier_system.profile.serial,
+                zone_id=self._required_zone_api_id,
+                activity_type=current.type,
+                heat_set_point=str(heat_set_point),
+                cool_set_point=str(cool_set_point),
+            ),
+        )
+        # reflect promptly; deliberately do NOT touch any hold_* / current_status_activity_type
+        current.heat_set_point = heat_set_point
+        current.cool_set_point = cool_set_point
+        if is_current_activity:
+            self._status_zone.heat_set_point = heat_set_point
+            self._status_zone.cool_set_point = cool_set_point
+        self._write_local_state()
+
+    async def async_get_schedule(self) -> ServiceResponse:
+        """Return the zone's program and activity set points.
+
+        Returns:
+            ServiceResponse: The zone id, the config and program etags, each
+            program day keyed by its Carrier day id with its etag and periods,
+            and each configured activity's set points and fan mode.
+        """
+        program = self._config_zone.program_json or {}
+        days: dict[str, Any] = {}
+        for day in program.get("day") or []:
+            days[str(day.get("id"))] = {
+                "etag": day.get("etag"),
+                "periods": [
+                    {
+                        "id": period.get("id"),
+                        "activity": period.get("activity"),
+                        "time": period.get("time"),
+                        "enabled": period.get("enabled"),
+                    }
+                    for period in day.get("period") or []
+                ],
+            }
+        return {
+            "zone_id": self._required_zone_api_id,
+            "config_etag": self.carrier_system.config.etag,
+            "program_etag": program.get("etag"),
+            "program": days,
+            "activities": {
+                activity.type.value: {
+                    "htsp": activity.heat_set_point,
+                    "clsp": activity.cool_set_point,
+                    "fan": activity.fan.value,
+                }
+                for activity in self._config_zone.activities
+            },
+        }
+
+    async def async_set_program_day(
+        self, day_id: str, periods: list[dict[str, str]], etag: str | None = None
+    ) -> None:
+        """Replace one day of the zone's program.
+
+        The Carrier replaces the day with the periods sent, so pass every
+        period of the day as ``get_schedule`` returns them. Without ``etag`` the
+        day's own etag from the last refresh is sent.
+
+        Args:
+            day_id: Carrier day id, as ``get_schedule`` returns it.
+            periods: The day's periods (``id``, ``activity``, optional ``time``
+                and ``enabled``).
+            etag: Optional etag to send instead of the day's.
+
+        Raises:
+            ServiceValidationError: When the day is not in the zone's program.
+            HomeAssistantError: When no etag is known or the Carrier refuses
+                the write.
+        """
+        program = self._config_zone.program_json or {}
+        day = next(
+            (day for day in program.get("day") or [] if str(day.get("id")) == day_id),
+            None,
+        )
+        if day is None:
+            raise ServiceValidationError(
+                translation_domain=DOMAIN,
+                translation_key="program_day_not_found",
+                translation_placeholders={"day_id": day_id},
+            )
+        send_etag = (
+            etag or day.get("etag") or program.get("etag") or self.carrier_system.config.etag
+        )
+        if not send_etag:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN, translation_key="program_etag_unknown"
+            )
+        _LOGGER.debug(
+            "set_program_day; zone=%s day=%s periods=%s", self.zone_api_id, day_id, periods
+        )
+        await self.coordinator.async_perform_api_call(
+            "set program day",
+            partial(
+                self.coordinator.api_connection.set_program_day,
+                system_serial=self.carrier_system.profile.serial,
+                zone_id=self._required_zone_api_id,
+                day_id=day_id,
+                periods=[dict(period) for period in periods],
+                etag=send_etag,
+            ),
+        )
+        # A plain refresh after a write is the light energy refresh; force a
+        # full read now, and once more after PROGRAM_READBACK_DELAY_S, because
+        # the cloud returns the old day for a while after the write.
+        self.coordinator.data_flush = True
+        await self.coordinator.async_refresh()
+        if self._cancel_program_readback is not None:
+            self._cancel_program_readback()
+        self._cancel_program_readback = async_call_later(
+            self.hass, PROGRAM_READBACK_DELAY_S, self._async_read_program_again
+        )
+
+    async def _async_read_program_again(self, _now: Any) -> None:
+        """Read the program in full once the cloud shows a program write."""
+        self._cancel_program_readback = None
+        self.coordinator.data_flush = True
+        await self.coordinator.async_refresh()
+
+    async def async_will_remove_from_hass(self) -> None:
+        """Cancel a pending program read-back with the entity."""
+        if self._cancel_program_readback is not None:
+            self._cancel_program_readback()
+            self._cancel_program_readback = None
+        await super().async_will_remove_from_hass()
