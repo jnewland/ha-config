@@ -8,9 +8,10 @@ from homeassistant.helpers import device_registry as dr
 from lennoxs30api.s30api_async import LennoxBle, lennox_equipment, lennox_system, lennox_zone
 
 from .const import LENNOX_DOMAIN, LENNOX_MFG
+from .helpers import helper_create_zone_entity_name
 
 
-class Device(object):
+class Device:
     """Represent a HASS device."""
 
     def __init__(self, equipment: lennox_equipment) -> None:
@@ -39,6 +40,7 @@ class S30ControllerDevice(Device):
         self._hass = hass
         self._system = system
         self._config_entry = config_entry
+        self.device_id: str | None = None
 
     @property
     def unique_name(self) -> str:
@@ -49,7 +51,7 @@ class S30ControllerDevice(Device):
         """Register the device with HASS."""
         device_registry = dr.async_get(self._hass)
 
-        device_registry.async_get_or_create(
+        device_entry = device_registry.async_get_or_create(
             config_entry_id=self._config_entry.entry_id,
             #            connections={(dr.CONNECTION_NETWORK_MAC, config.mac)},
             identifiers={(LENNOX_DOMAIN, self.unique_name)},
@@ -59,6 +61,7 @@ class S30ControllerDevice(Device):
             model=self._system.productType,
             sw_version=self._system.softwareVersion,
         )
+        self.device_id = device_entry.id
 
 
 class S30OutdoorUnit(Device):
@@ -108,7 +111,7 @@ class S30OutdoorUnit(Device):
             name=name,
             model=self.device_model,
             hw_version=self.hw_version,
-            via_device=(LENNOX_DOMAIN, self._s30_controller_device.unique_name),
+            via_device_id=self._s30_controller_device.device_id,
         )
 
 
@@ -159,7 +162,7 @@ class S30IndoorUnit(Device):
             name=name,
             model=self.device_model,
             hw_version=self.hw_version,
-            via_device=(LENNOX_DOMAIN, self._s30_controller_device.unique_name),
+            via_device_id=self._s30_controller_device.device_id,
         )
 
 
@@ -211,7 +214,7 @@ class S30AuxiliaryUnit(Device):
             name=name,
             model=self.device_model,
             hw_version=self.hw_version,
-            via_device=(LENNOX_DOMAIN, self._s30_controller_device.unique_name),
+            via_device_id=self._s30_controller_device.device_id,
         )
 
 
@@ -256,7 +259,7 @@ class S30VentilationUnit(Device):
             suggested_area="basement",
             name=name,
             model=self.device_model,
-            via_device=(LENNOX_DOMAIN, self._s30_controller_device.unique_name),
+            via_device_id=self._s30_controller_device.device_id,
         )
 
 
@@ -287,14 +290,15 @@ class S30ZoneThermostat(Device):
     def register_device(self) -> None:
         """Register the device with HASS."""
         device_registry = dr.async_get(self._hass)
+        name = helper_create_zone_entity_name(self._system, self._zone)
 
         device_registry.async_get_or_create(
             config_entry_id=self._config_entry.entry_id,
             identifiers={(LENNOX_DOMAIN, self.unique_name)},
             manufacturer=LENNOX_MFG,
-            name=self._system.name + "_" + self._zone.name,
+            name=name,
             model="thermostat",
-            via_device=(LENNOX_DOMAIN, self._s30_controller_device.unique_name),
+            via_device_id=self._s30_controller_device.device_id,
         )
 
 
@@ -337,7 +341,7 @@ class S40BleDevice(Device):
             manufacturer=LENNOX_MFG,
             name=self._system.name + " " + self._ble_device.deviceName,
             model=self._ble_device.controlModelNumber,
-            via_device=(LENNOX_DOMAIN, self._s30_controller_device.unique_name),
+            via_device_id=self._s30_controller_device.device_id,
             sw_version=self._ble_device.controlSoftwareVersion,
             hw_version=self._ble_device.controlHardwareVersion,
         )

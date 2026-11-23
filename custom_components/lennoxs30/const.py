@@ -1,4 +1,5 @@
 """Constants used by the integration."""
+
 from typing import Final
 
 CONF_FAST_POLL_INTERVAL = "fast_scan_interval"
@@ -28,6 +29,9 @@ MANAGER = "manager"
 LENNOX_DOMAIN = "lennoxs30"
 LENNOX_MFG = "Lennox"
 
+# Dispatcher signal sent when BLE devices are discovered, formatted with the config entry id
+SIGNAL_BLE_DEVICES_UPDATED: Final = "lennoxs30_ble_devices_updated_{}"
+
 UNIQUE_ID_SUFFIX_DIAG_SENSOR: Final = "DS"
 UNIQUE_ID_SUFFIX_EQ_PARAM_NUMBER: Final = "EPN"
 UNIQUE_ID_SUFFIX_EQ_PARAM_SELECT: Final = "EPS"
@@ -46,6 +50,7 @@ UNIQUE_ID_SUFFIX_BLE: Final = "_BLE"
 UNIQUE_ID_SUFFIX_BLE_COMMSTATUS: Final = "_BLE_COMMSTATUS"
 UNIQUE_ID_SUFFIX_VENTILATION_SELECT: Final = "_VENT_SELECT"
 UNIQUE_ID_SUFFIX_WIFI_RSSI: Final = "_WIFI_RSSI"
+UNIQUE_ID_SUFFIX_REMINDER: Final = "_REMINDER_"
 UNIQUE_ID_SUFFIX_EMERGENCY_HEAT: Final = "_EHEAT"
 UNIQUE_ID_SUFFIX_ZONEMODE_SELECT: Final = "_ZONE_MODE_SELECT"
 UNIQUE_ID_SUFFIX_HUM_SETPOINT: Final = "_HUM_SETPOINT"
