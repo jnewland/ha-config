@@ -1,10 +1,8 @@
 """The Philips Hue Play HDMI Sync Box integration services."""
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.light import ATTR_BRIGHTNESS
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv, device_registry as dr
 import voluptuous as vol
@@ -37,6 +35,10 @@ from .helpers import (
     stop_sync_and_retry_on_invalid_state,
 )
 
+if TYPE_CHECKING:
+    from homeassistant.config_entries import ConfigEntry
+    from homeassistant.core import HomeAssistant, ServiceCall
+
 HUESYNCBOX_SET_BRIDGE_SCHEMA = vol.Schema(
     {
         vol.Required(ATTR_DEVICE_ID): cv.string,
@@ -68,12 +70,10 @@ def syncbox_config_entry_for_device_id(
     device_registry = dr.async_get(hass)
 
     if device_entry := device_registry.async_get(device_id):
-        # Multiple config entries can be associated with a device.
-        # So need to find the correct one for this integration.
-        for config_entry_id in device_entry.config_entries:
-            entry = hass.config_entries.async_get_entry(config_entry_id)
-            if entry is not None and entry.domain == DOMAIN:
-                return entry
+        # Since Home Assistant 2026.8 a device belongs to a single config entry.
+        entry = hass.config_entries.async_get_entry(device_entry.config_entry_id)
+        if entry is not None and entry.domain == DOMAIN:
+            return entry
 
     raise ServiceValidationError(
         translation_domain=DOMAIN,
@@ -121,21 +121,33 @@ async def async_register_set_sync_state_service(hass: HomeAssistant) -> None:
 
         # Resolve entertainment area
         group = get_group_from_area_name(
-            coordinator.api, target_sync_state.get(ATTR_ENTERTAINMENT_AREA, None)
+            coordinator.api, target_sync_state.get(ATTR_ENTERTAINMENT_AREA, "")
         )
         hue_target = get_hue_target_from_id(group.id) if group else None
 
         state = {
             "hdmi_active": target_sync_state.get(ATTR_POWER, None),
             "sync_active": target_sync_state.get(ATTR_SYNC, None),
-            "mode": target_sync_state.get(ATTR_MODE, None),
-            "hdmi_source": target_sync_state.get(ATTR_INPUT, None),
+            "mode": (
+                aiohuesyncbox.ExecutionMode(target_sync_state[ATTR_MODE])
+                if ATTR_MODE in target_sync_state
+                else None
+            ),
+            "hdmi_source": (
+                aiohuesyncbox.HdmiSource(target_sync_state[ATTR_INPUT])
+                if ATTR_INPUT in target_sync_state
+                else None
+            ),
             "brightness": (
                 BrightnessRangeConverter.ha_to_api(target_sync_state[ATTR_BRIGHTNESS])
                 if ATTR_BRIGHTNESS in target_sync_state
                 else None
             ),
-            "intensity": target_sync_state.get(ATTR_INTENSITY, None),
+            "intensity": (
+                aiohuesyncbox.Intensity(target_sync_state[ATTR_INTENSITY])
+                if ATTR_INTENSITY in target_sync_state
+                else None
+            ),
             "hue_target": hue_target,
         }
 
