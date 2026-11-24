@@ -100,7 +100,7 @@ rm -rf custom_components/huesyncbox || true
 mv $TMPDIR/$$-huesyncbox/custom_components/huesyncbox custom_components
 
 # renovate: datasource=github-releases depName=sbabcock23/hass-tryfi
-TRYFI_VERSION=0.0.26
+TRYFI_VERSION=v0.1.1
 git clone --depth 1 --branch $TRYFI_VERSION https://github.com/sbabcock23/hass-tryfi $TMPDIR/$$-tryfi
 rm -rf custom_components/tryfi || true
 mv $TMPDIR/$$-tryfi/custom_components/tryfi custom_components
