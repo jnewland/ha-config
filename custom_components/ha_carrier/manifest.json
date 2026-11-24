@@ -13,8 +13,9 @@
     "ha_carrier",
     "carrier_api"
   ],
+  "quality_scale": "platinum",
   "requirements": [
-    "carrier-api==3.4.1"
+    "carrier-api==3.12.0"
   ],
-  "version": "2.26.1"
+  "version": "3.2.0"
 }
