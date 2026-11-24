@@ -2,13 +2,25 @@
 
 import asyncio
 from collections.abc import Awaitable, Callable, Mapping
+from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 import functools
+from json import JSONDecodeError, loads
 import logging
+import math
 from typing import Any, NoReturn
 
-from carrier_api import ApiConnectionGraphql, CarrierApiError, Energy, EntryLevelSystem, System
-from carrier_api.api_websocket_data_updater import WebsocketDataUpdater
+from carrier_api import (
+    ActivityTypes,
+    ApiConnectionGraphql,
+    CarrierApiError,
+    ConfigZone,
+    Energy,
+    EntryLevelSystem,
+    StatusZone,
+    System,
+)
+from carrier_api.api_websocket_data_updater import WebsocketDataUpdater, unwrap_envelope
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, HomeAssistantError
 from homeassistant.helpers.debounce import Debouncer
@@ -19,9 +31,9 @@ from homeassistant.helpers.update_coordinator import (
 )
 
 from .const import (
+    DEFAULT_FULL_REFRESH_INTERVAL_MINUTES,
     DEFAULT_UPDATE_INTERVAL_MINUTES,
     DOMAIN,
-    FULL_RECONCILE_INTERVAL_MINUTES,
     MAX_REFRESH_ATTEMPTS,
     MAX_WRITE_ATTEMPTS,
     POST_WRITE_INTERCEPT_WINDOW_MINUTES,
@@ -40,12 +52,14 @@ from .util import (
     RECOVERABLE_REFRESH_EXCEPTIONS,
     RECOVERABLE_WRITE_COMMUNICATION_EXCEPTIONS,
     async_redact_data,
+    is_retryable_error,
     is_unauthorized_error,
 )
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
-FULL_RECONCILE_INTERVAL = timedelta(minutes=FULL_RECONCILE_INTERVAL_MINUTES)
+DEFAULT_FULL_REFRESH_INTERVAL = timedelta(minutes=DEFAULT_FULL_REFRESH_INTERVAL_MINUTES)
+DEFAULT_POLL_INTERVAL = timedelta(minutes=DEFAULT_UPDATE_INTERVAL_MINUTES)
 POST_WRITE_INTERCEPT_WINDOW = timedelta(minutes=POST_WRITE_INTERCEPT_WINDOW_MINUTES)
 
 REFRESH_RETRY_POLICY = RetryPolicy(
@@ -72,21 +86,116 @@ ENERGY_REFRESH_EXCEPTIONS: tuple[type[BaseException], ...] = (
 )
 
 
-class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
-    """Maintain Carrier data and shared API resiliency state for one account."""
+def poll_interval_for(full_refresh_interval: timedelta) -> timedelta:
+    """Return the poll interval that fits a full refresh interval evenly.
+
+    The poll interval is the longest interval, no longer than the default poll,
+    that divides the full refresh interval into whole polls. A full refresh
+    then lands on a poll instead of waiting for the next one, while the polls
+    in between stay lightweight energy-only refreshes.
+
+    Args:
+        full_refresh_interval: How often a full refresh should run.
+
+    Returns:
+        timedelta: How often the coordinator should poll.
+    """
+    polls_per_full_refresh = math.ceil(full_refresh_interval / DEFAULT_POLL_INTERVAL)
+    return full_refresh_interval / polls_per_full_refresh
+
+
+@dataclass(frozen=True, slots=True)
+class ModeGuard:
+    """Post-write guard for a system's mode.
+
+    Attributes:
+        expires_at: When the guard stops re-asserting the mode.
+        mode: Carrier system mode the write left the system in.
+    """
+
+    expires_at: datetime
+    mode: str | None
+
+
+@dataclass(frozen=True, slots=True)
+class ZoneGuard:
+    """Post-write guard for one zone's activity and set points.
+
+    Attributes:
+        expires_at: When the guard stops re-asserting the zone.
+        zone_api_id: Zone the guard protects.
+        activity_type: Activity the write left the zone in.
+        heat_set_point: Heat set point the write left the zone at.
+        cool_set_point: Cool set point the write left the zone at.
+    """
+
+    expires_at: datetime
+    zone_api_id: str
+    activity_type: ActivityTypes
+    heat_set_point: float
+    cool_set_point: float
+
+
+def is_device_message(message: str) -> bool:
+    """Return True when a websocket message is addressed to a Carrier device.
+
+    Carrier answers each keepalive with an empty ``{}`` that carries no device
+    id and no data. Only messages that name a device can update a system.
+
+    Args:
+        message: Raw websocket payload string.
+
+    Returns:
+        bool: True when the (possibly envelope-wrapped) message has a
+            ``deviceId`` or ``serial``.
+    """
+    try:
+        message_json = loads(message)
+    except JSONDecodeError:
+        return False
+    if not isinstance(message_json, dict):
+        return False
+    body = unwrap_envelope(message_json)
+    return body.get("deviceId") is not None or body.get("serial") is not None
+
+
+type SystemSnapshots = list[dict[str, Any]]
+"""Serialized copies of every tracked system (``System.as_dict()``), in order."""
+
+
+class CarrierDataUpdateCoordinator(DataUpdateCoordinator[SystemSnapshots]):
+    """Maintain Carrier data and shared API resiliency state for one account.
+
+    Entities read live state from ``systems`` and ``entry_level_systems``,
+    which refreshes and websocket messages update in place. ``data`` holds
+    serialized snapshots of ``systems`` that nothing reads field by field.
+    It serves two purposes: with ``always_update=False``, Home Assistant
+    compares each refresh's snapshots with the previous ones and notifies
+    listeners only when they differ; and ``data is None`` means no refresh
+    has succeeded yet, so there is no last known state to fall back on.
+    Websocket messages notify listeners directly and leave ``data`` alone.
+    """
+
+    full_refresh_interval: timedelta = DEFAULT_FULL_REFRESH_INTERVAL
+    poll_interval: timedelta = poll_interval_for(DEFAULT_FULL_REFRESH_INTERVAL)
 
     def __init__(
         self,
         hass: HomeAssistant,
         api_connection: ApiConnectionGraphql,
+        full_refresh_interval: timedelta = DEFAULT_FULL_REFRESH_INTERVAL,
     ) -> None:
         """Initialize coordinator state and refresh scheduling.
 
         Args:
             hass: Home Assistant instance used for task scheduling and callbacks.
             api_connection: Authenticated Carrier API connection wrapper.
+            full_refresh_interval: How often to run a full refresh even while
+                the websocket stays connected.
         """
         self.hass: HomeAssistant = hass
+        self.full_refresh_interval = full_refresh_interval
+        self.poll_interval = poll_interval_for(full_refresh_interval)
         self.api_connection: ApiConnectionGraphql = api_connection
         self.resiliency = ResiliencyState(
             unauthorized_threshold=UNAUTHORIZED_RETRY_THRESHOLD,
@@ -94,6 +203,9 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         )
         self.systems: list[System] = []
         self.entry_level_systems: list[EntryLevelSystem] = []
+        # Whether the latest entry-level load succeeded. Stale-device cleanup
+        # only trusts entry_level_systems as the full list when this is True.
+        self.entry_level_systems_loaded = False
         self.websocket_data_updater: WebsocketDataUpdater | None = None
         self.websocket_task: asyncio.Task[None] | None = None
         self._websocket_initialized = False
@@ -101,13 +213,15 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         self.timestamp_all_data: datetime | None = None
         self.timestamp_websocket: datetime | None = None
         self.timestamp_energy: datetime | None = None
-        self._intercept_guards: dict[tuple[str, str | None], dict[str, Any]] = {}
+        # Keyed by (system serial, zone id); a None zone id holds the system's
+        # ModeGuard and a zone id holds that zone's ZoneGuard.
+        self._intercept_guards: dict[tuple[str, str | None], ModeGuard | ZoneGuard] = {}
 
         super().__init__(
             hass,
             _LOGGER,
             name=f"{DOMAIN}-{self.api_connection.username}",
-            update_interval=timedelta(minutes=DEFAULT_UPDATE_INTERVAL_MINUTES),
+            update_interval=self.poll_interval,
             always_update=False,
             request_refresh_debouncer=Debouncer(
                 hass,
@@ -127,13 +241,22 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         stays connected. A periodic full refresh reconciles that state against an
         authoritative pull.
 
+        A refresh counts as due once it is closer to the next full refresh than
+        to the last one, i.e. half a poll interval early. Scheduled polls land
+        on the same full refreshes as an exact comparison would, but a poll that
+        HA fires slightly early (it truncates the loop clock when scheduling),
+        a wall-clock step, or an off-cycle refresh that HA then re-anchors the
+        schedule to can no longer push the full refresh back by a whole poll.
+
         Returns:
-            bool: True when the last full refresh is older than
-                ``FULL_RECONCILE_INTERVAL`` or has never completed.
+            bool: True when the last full refresh is at least
+                ``full_refresh_interval`` less half a ``poll_interval`` old, or
+                has never completed.
         """
         if self.timestamp_all_data is None:
             return True
-        return datetime.now(UTC) - self.timestamp_all_data >= FULL_RECONCILE_INTERVAL
+        elapsed = datetime.now(UTC) - self.timestamp_all_data
+        return elapsed >= self.full_refresh_interval - self.poll_interval / 2
 
     def begin_post_write_intercept(
         self, system_serial: str, zone_api_id: str | None = None
@@ -171,43 +294,50 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         if system is None:
             return
         expires_at = datetime.now(UTC) + POST_WRITE_INTERCEPT_WINDOW
-        self._intercept_guards[(system_serial, None)] = {
-            "expires_at": expires_at,
-            "mode": system.config.mode,
-        }
+        self._intercept_guards[(system_serial, None)] = ModeGuard(
+            expires_at=expires_at, mode=system.config.mode
+        )
         if zone_api_id is not None:
-            zone_state = self._capture_zone_state(system, zone_api_id)
-            if zone_state is not None:
-                self._intercept_guards[(system_serial, zone_api_id)] = {
-                    "expires_at": expires_at,
-                    **zone_state,
-                }
+            zone_guard = self._capture_zone_guard(system, zone_api_id, expires_at)
+            if zone_guard is not None:
+                self._intercept_guards[(system_serial, zone_api_id)] = zone_guard
 
-    def _capture_zone_state(self, system: System, zone_api_id: str) -> dict[str, Any] | None:
-        """Return the intended activity type and resolved set points for one zone.
+    def _capture_zone_guard(
+        self, system: System, zone_api_id: str, expires_at: datetime
+    ) -> ZoneGuard | None:
+        """Return a guard holding one zone's intended activity type and set points.
 
         Resolves the set point the same way the climate entity reads it back
         (``config_zone.current_status_activity(status_zone) or status_zone``) so a
         later re-assert compares like with like. Volatile status (temperature,
         humidity, conditioning, blower) is deliberately excluded so a normal reading
         update is never mistaken for a reverted write.
+
+        Args:
+            system: System the zone belongs to.
+            zone_api_id: Zone to capture.
+            expires_at: When the guard expires.
+
+        Returns:
+            ZoneGuard | None: The guard, or None when the zone is unknown.
         """
-        status_zone, config_zone = self._zone_pair(system, zone_api_id)
-        if status_zone is None or config_zone is None:
+        zones = self._zone_pair(system, zone_api_id)
+        if zones is None:
             return None
+        status_zone, config_zone = zones
         source = config_zone.current_status_activity(status_zone) or status_zone
-        return {
-            "activity_type": status_zone.current_status_activity_type,
-            "heat_set_point": source.heat_set_point,
-            "cool_set_point": source.cool_set_point,
-        }
+        return ZoneGuard(
+            expires_at=expires_at,
+            zone_api_id=zone_api_id,
+            activity_type=status_zone.current_status_activity_type,
+            heat_set_point=source.heat_set_point,
+            cool_set_point=source.cool_set_point,
+        )
 
     def _prune_intercept_guards(self) -> None:
         """Drop post-write guards whose own protection period has elapsed."""
         now = datetime.now(UTC)
-        expired = [
-            key for key, guard in self._intercept_guards.items() if now >= guard["expires_at"]
-        ]
+        expired = [key for key, guard in self._intercept_guards.items() if now >= guard.expires_at]
         for key in expired:
             del self._intercept_guards[key]
 
@@ -216,8 +346,17 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         self._prune_intercept_guards()
         return bool(self._intercept_guards)
 
-    def _zone_pair(self, system: System, zone_api_id: str) -> tuple[Any, Any] | tuple[None, None]:
-        """Return the (status_zone, config_zone) pair for a zone id, or (None, None)."""
+    def _zone_pair(self, system: System, zone_api_id: str) -> tuple[StatusZone, ConfigZone] | None:
+        """Return the status and config zones for a zone id.
+
+        Args:
+            system: System the zone belongs to.
+            zone_api_id: Zone to look up.
+
+        Returns:
+            tuple[StatusZone, ConfigZone] | None: Both zones, or None when either
+                is missing.
+        """
         status_zone = next(
             (zone for zone in system.status.zones if zone.api_id == zone_api_id), None
         )
@@ -225,7 +364,7 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
             (zone for zone in system.config.zones if zone.api_id == zone_api_id), None
         )
         if status_zone is None or config_zone is None:
-            return None, None
+            return None
         return status_zone, config_zone
 
     def _reassert_control(self) -> None:
@@ -240,37 +379,43 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         guard expires that target is trusted again.
         """
         self._prune_intercept_guards()
-        for (system_serial, zone_api_id), guard in self._intercept_guards.items():
+        for (system_serial, _zone_api_id), guard in self._intercept_guards.items():
             system = self.system(system_serial)
             if system is None:
                 continue
-            if zone_api_id is None:
-                if system.config.mode != guard["mode"]:
-                    system.config.mode = guard["mode"]
+            if isinstance(guard, ModeGuard):
+                if system.config.mode != guard.mode:
+                    system.config.mode = guard.mode
             else:
-                self._reassert_zone(system, zone_api_id, guard)
+                self._reassert_zone(system, guard)
 
-    def _reassert_zone(self, system: System, zone_api_id: str, zone_state: dict[str, Any]) -> None:
-        """Restore one written zone's reverted activity type and set points."""
-        status_zone, config_zone = self._zone_pair(system, zone_api_id)
-        if status_zone is None or config_zone is None:
+    def _reassert_zone(self, system: System, guard: ZoneGuard) -> None:
+        """Restore one written zone's reverted activity type and set points.
+
+        Args:
+            system: System the zone belongs to.
+            guard: The zone and its intended post-write activity type and set points.
+        """
+        zones = self._zone_pair(system, guard.zone_api_id)
+        if zones is None:
             return
+        status_zone, config_zone = zones
         source = config_zone.current_status_activity(status_zone) or status_zone
         if (
-            source.heat_set_point == zone_state["heat_set_point"]
-            and source.cool_set_point == zone_state["cool_set_point"]
-            and status_zone.current_status_activity_type == zone_state["activity_type"]
+            source.heat_set_point == guard.heat_set_point
+            and source.cool_set_point == guard.cool_set_point
+            and status_zone.current_status_activity_type == guard.activity_type
         ):
             return
-        status_zone.current_status_activity_type = zone_state["activity_type"]
-        status_zone.heat_set_point = zone_state["heat_set_point"]
-        status_zone.cool_set_point = zone_state["cool_set_point"]
-        reasserted = config_zone.find_activity(zone_state["activity_type"])
+        status_zone.current_status_activity_type = guard.activity_type
+        status_zone.heat_set_point = guard.heat_set_point
+        status_zone.cool_set_point = guard.cool_set_point
+        reasserted = config_zone.find_activity(guard.activity_type)
         if reasserted is not None:
-            reasserted.heat_set_point = zone_state["heat_set_point"]
-            reasserted.cool_set_point = zone_state["cool_set_point"]
+            reasserted.heat_set_point = guard.heat_set_point
+            reasserted.cool_set_point = guard.cool_set_point
 
-    async def _async_update_data(self) -> list[dict[str, Any]]:
+    async def _async_update_data(self) -> SystemSnapshots:
         """Fetch Carrier data and translate escalated failures for Home Assistant.
 
         Performs either a full system refresh or a lighter energy-only refresh,
@@ -278,12 +423,16 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         `ResiliencyState` tracks 401 and transient failures across API calls.
         Unauthorized failures only become `ConfigEntryAuthFailed` after a fresh
         refresh attempt fails and crosses the shared threshold, so a later
-        successful refresh can still clear an old outage window. Non-escalated
-        refresh failures remain `UpdateFailed`, which lets Home Assistant retry
-        later.
+        successful refresh can still clear an old outage window. Unauthorized
+        and retryable failures that have not yet crossed their shared thresholds
+        return the last known data (once an initial refresh has succeeded), so
+        entities stay available through short Carrier blips while the coordinator
+        retries on a one-minute cadence. Escalated or untracked failures raise
+        `UpdateFailed`, which marks entities unavailable and lets Home Assistant
+        retry later.
 
         Returns:
-            list[dict[str, Any]]: List of mappings representing tracked systems.
+            SystemSnapshots: Serialized snapshots of the tracked systems.
 
         Raises:
             ConfigEntryAuthFailed: Raised when 401 responses cross the
@@ -292,11 +441,18 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
                 cannot complete successfully for other reasons.
         """
         if not self.data_flush and self._full_reconcile_due():
-            _LOGGER.debug(
-                "forcing full refresh: last full reconcile was >= %s minutes ago",
-                FULL_RECONCILE_INTERVAL_MINUTES,
-            )
-            self.data_flush = True
+            if self._in_post_write_intercept():
+                # A full read ends every post-write guard, which would leave a
+                # later stale websocket replay of the pre-write values free to
+                # land. Wait for the guards to expire; a forced flush (a failed
+                # write, an auth retry) still reads immediately.
+                _LOGGER.debug("deferring scheduled full refresh: post-write window is open")
+            else:
+                _LOGGER.debug(
+                    "forcing full refresh: last full refresh was >= %s ago",
+                    self.full_refresh_interval,
+                )
+                self.data_flush = True
 
         if self.data_flush:
             refresh_context = "full data refresh"
@@ -307,34 +463,62 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
 
         try:
             await refresh_operation()
-            return [self.mapped_system_data(system) for system in self.systems]
+            return self._system_snapshots()
         except CarrierUnauthorizedError as error:
             self.data_flush = True
             self.update_interval = timedelta(minutes=1)
             raise ConfigEntryAuthFailed(
                 "Carrier API rejected credentials; reauthentication required."
             ) from error
-        except (
-            asyncio.CancelledError,
-            KeyboardInterrupt,
-            SystemExit,
-        ):
-            raise
         except RECOVERABLE_REFRESH_EXCEPTIONS as error:
             self.data_flush = True
             self.update_interval = timedelta(minutes=1)
+            if self.data is not None and self._failure_within_threshold(error):
+                # Keep entities available on the last known data until the
+                # shared resiliency thresholds escalate the failure to an outage.
+                _LOGGER.debug(
+                    "Carrier %s failed below the outage threshold; keeping last known data",
+                    refresh_context,
+                    exc_info=error,
+                )
+                return self._system_snapshots()
+            # DataUpdateCoordinator logs the first UpdateFailed as an error and
+            # logs again once a refresh succeeds, so only debug-log each failure
+            # here to avoid repeating the error every retry while Carrier is down.
             if is_unauthorized_error(error):
-                _LOGGER.info(
+                _LOGGER.debug(
                     "Carrier %s returned unauthorized without crossing the reauth threshold.",
                     refresh_context,
                 )
                 raise UpdateFailed(
                     f"Carrier temporarily rejected {refresh_context}; will retry."
                 ) from error
-            _LOGGER.exception("Carrier %s failed", refresh_context, exc_info=error)
+            _LOGGER.debug("Carrier %s failed", refresh_context, exc_info=error)
             raise UpdateFailed(
                 f"Unexpected error during Carrier {refresh_context}: {error}"
             ) from error
+
+    def _failure_within_threshold(self, error: BaseException) -> bool:
+        """Return True when a refresh failure has not yet escalated to an outage.
+
+        Unauthorized responses and retryable transport/API failures are counted
+        in the shared `ResiliencyState`. Until those counters reach their
+        thresholds the failure is treated as a transient blip, so entities keep
+        their last known state instead of becoming unavailable. Any other
+        failure is not tracked by the resiliency counters and is never treated
+        as within threshold.
+
+        Args:
+            error: Exception raised by the refresh operation.
+
+        Returns:
+            bool: True when the failure is a tracked, non-escalated blip.
+        """
+        if is_unauthorized_error(error):
+            return self.resiliency.consecutive_unauthorized < self.resiliency.unauthorized_threshold
+        if is_retryable_error(error):
+            return self.resiliency.consecutive_transient < self.resiliency.transient_threshold
+        return False
 
     async def _async_full_refresh(self) -> None:
         """Load all Carrier systems through the normal retry path.
@@ -390,7 +574,6 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
             api_websocket = self.api_connection.api_websocket
             if api_websocket is None:
                 raise RuntimeError("Carrier API websocket client is not initialized")
-            api_websocket.callback_add(self.websocket_data_updater.message_handler)
             api_websocket.callback_add(self.updated_callback)
             self._websocket_initialized = True
         if _LOGGER.isEnabledFor(logging.DEBUG):
@@ -402,7 +585,7 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         self.timestamp_all_data = datetime.now(UTC)
         self.timestamp_energy = self.timestamp_all_data
         self.data_flush = False
-        self.update_interval = timedelta(minutes=DEFAULT_UPDATE_INTERVAL_MINUTES)
+        self.update_interval = self.poll_interval
         # A full read is authoritative; end every post-write guard so re-assert
         # cannot fight freshly-read truth.
         self._intercept_guards = {}
@@ -454,7 +637,7 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
             self.resiliency.reset_unauthorized()
             self.resiliency.reset_transient()
             self.timestamp_energy = datetime.now(UTC)
-            self.update_interval = timedelta(minutes=DEFAULT_UPDATE_INTERVAL_MINUTES)
+            self.update_interval = self.poll_interval
 
     async def _async_handle_failed_write(
         self,
@@ -483,7 +666,7 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         # refresh so one recovered write outage does not force credentials
         # invalid.
         raise HomeAssistantError(
-            "Carrier rejected repeated write attempts. Try again shortly."
+            translation_domain=DOMAIN, translation_key="write_rejected_repeatedly"
         ) from error
 
     async def _async_reconcile_failed_write(
@@ -554,22 +737,33 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         except CarrierUnauthorizedError as error:
             await self._async_handle_failed_write(operation_name, error)
             raise AssertionError("unreachable after failed write handling") from error
-        except (
-            asyncio.CancelledError,
-            KeyboardInterrupt,
-            SystemExit,
-        ):
-            raise
         except RECOVERABLE_WRITE_COMMUNICATION_EXCEPTIONS as error:
             await self._async_reconcile_failed_write(operation_name, error)
             raise HomeAssistantError(
-                "Failed to communicate with Carrier service — operation could not be completed."
+                translation_domain=DOMAIN, translation_key="communication_error"
             ) from error
         except CarrierApiError as error:
             await self._async_reconcile_failed_write(operation_name, error)
             raise HomeAssistantError(
-                "Carrier rejected the request. Check the requested setting and try again."
+                translation_domain=DOMAIN, translation_key="request_rejected"
             ) from error
+
+    async def async_request_full_refresh(self, *, immediate: bool = False) -> None:
+        """Mark the cached data dirty and refresh it with a full read.
+
+        A plain coordinator refresh is the light energy-only refresh, so callers
+        that need fresh system status (a resumed schedule, a program write, a
+        websocket failure) use this instead of setting ``data_flush`` themselves.
+
+        Args:
+            immediate: True to refresh now and wait for it; False to go through
+                the request-refresh debouncer, which coalesces bursts of requests.
+        """
+        self.data_flush = True
+        if immediate:
+            await self.async_refresh()
+        else:
+            await self.async_request_refresh()
 
     def system(self, system_serial: str) -> System | None:
         """Return the tracked system matching a Carrier serial.
@@ -590,14 +784,17 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
 
         Entry-level data is independent of the Infinity systems and websocket
         path, so a failure here is logged and swallowed rather than failing the
-        whole refresh.
+        whole refresh. ``entry_level_systems_loaded`` records whether the list
+        is current, so stale-device cleanup never acts on a failed load.
         """
         try:
             self.entry_level_systems = await self.api_connection.load_entry_level_data()
-        except asyncio.CancelledError, KeyboardInterrupt, SystemExit:
-            raise
-        except (CarrierApiError, *RECOVERABLE_REFRESH_EXCEPTIONS) as error:
+        except RECOVERABLE_REFRESH_EXCEPTIONS as error:
+            # Includes CarrierApiError, so any Carrier-side failure is non-fatal.
+            self.entry_level_systems_loaded = False
             _LOGGER.debug("Carrier entry-level refresh failed (non-fatal): %s", error)
+        else:
+            self.entry_level_systems_loaded = True
 
     def entry_level_system(self, serial: str) -> EntryLevelSystem | None:
         """Return the tracked entry-level system matching a serial.
@@ -612,6 +809,14 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
             if system.serial == serial:
                 return system
         return None
+
+    def _system_snapshots(self) -> SystemSnapshots:
+        """Serialize every tracked system for the coordinator's ``data``.
+
+        Returns:
+            SystemSnapshots: One mapping per system, in ``systems`` order.
+        """
+        return [self.mapped_system_data(system) for system in self.systems]
 
     @staticmethod
     def mapped_system_data(system: System) -> dict[str, Any]:
@@ -632,16 +837,34 @@ class CarrierDataUpdateCoordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
             raise TypeError("carrier_api System serializer returned a non-mapping payload")
         return dict(mapped_data)
 
-    async def updated_callback(self, _message: str) -> None:
+    async def updated_callback(self, message: str) -> None:
         """Handle websocket updates and notify Home Assistant listeners.
 
+        ``timestamp_websocket`` only moves for messages addressed to a device,
+        so the keepalive replies Carrier sends every minute do not make a
+        silent feed look live.
+
         Args:
-            _message: Raw websocket payload string (unused after callback wiring).
+            message: Raw websocket payload string.
 
         Returns:
             None: Listener state is refreshed in-place.
         """
-        self.timestamp_websocket = datetime.now(UTC)
+        if self.websocket_data_updater is not None:
+            try:
+                await self.websocket_data_updater.message_handler(message)
+            except (ValueError, KeyError, TypeError, IndexError, AttributeError) as error:
+                # assuming partial message and flushing data
+                _LOGGER.debug(
+                    "Failed to decode websocket message: %s",
+                    error,
+                )
+                await self.async_request_full_refresh()
+        else:
+            _LOGGER.debug("websocket update received before websocket_data_updater was initialized")
+
+        if is_device_message(message):
+            self.timestamp_websocket = datetime.now(UTC)
         _LOGGER.debug("websocket updated system")
         if _LOGGER.isEnabledFor(logging.DEBUG):
             for system in self.systems:

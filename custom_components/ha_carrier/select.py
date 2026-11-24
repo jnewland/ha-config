@@ -8,15 +8,23 @@ import logging
 from carrier_api.const import HeatSourceTypes
 from homeassistant.components.select import SelectEntity
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import ConfigEntryCarrier
-from .carrier_data_update_coordinator import CarrierDataUpdateCoordinator
-from .carrier_entity import CarrierEntity
-from .const import HEAT_SOURCE_IDU_ONLY_LABEL, HEAT_SOURCE_ODU_ONLY_LABEL, HEAT_SOURCE_SYSTEM_LABEL
+from .const import (
+    DOMAIN,
+    HEAT_SOURCE_IDU_ONLY_LABEL,
+    HEAT_SOURCE_ODU_ONLY_LABEL,
+    HEAT_SOURCE_SYSTEM_LABEL,
+)
+from .coordinator import CarrierDataUpdateCoordinator
+from .entity import CarrierEntity, async_add_entities_for_systems
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
+
+# Commands go to Carrier's cloud API, which rate limits; send one at a time.
+PARALLEL_UPDATES = 1
 
 
 async def async_setup_entry(
@@ -32,12 +40,15 @@ async def async_setup_entry(
         async_add_entities: Callback used to register entity instances.
     """
     coordinator = config_entry.runtime_data
-    entities: list[SelectEntity] = [
-        HeatSourceSelect(coordinator=coordinator, system_serial=system.profile.serial)
-        for system in coordinator.systems
-        if system.supports_heat()
-    ]
-    async_add_entities(entities)
+    async_add_entities_for_systems(
+        config_entry,
+        async_add_entities,
+        lambda system: (
+            [HeatSourceSelect(coordinator=coordinator, system_serial=system.profile.serial)]
+            if system.supports_heat()
+            else []
+        ),
+    )
 
 
 class CarrierSelect(CarrierEntity, SelectEntity):
@@ -47,7 +58,7 @@ class CarrierSelect(CarrierEntity, SelectEntity):
         self,
         entity_name: str,
         coordinator: CarrierDataUpdateCoordinator,
-        system_serial: str | None = None,
+        system_serial: str,
         unique_id_suffix: str | None = None,
     ) -> None:
         """Initialize a Carrier select entity.
@@ -57,12 +68,7 @@ class CarrierSelect(CarrierEntity, SelectEntity):
             coordinator: Coordinator that provides Carrier data.
             system_serial: Carrier system serial for this entity.
             unique_id_suffix: Optional stable suffix used for the entity unique ID.
-
-        Raises:
-            ValueError: Raised when no Carrier system serial is provided.
         """
-        if system_serial is None:
-            raise ValueError("Carrier select system serial is required")
         super().__init__(
             entity_name=entity_name,
             coordinator=coordinator,
@@ -84,7 +90,7 @@ class CarrierSelect(CarrierEntity, SelectEntity):
 class HeatSourceSelect(CarrierSelect):
     """Select entity that controls which unit provides primary heating."""
 
-    _attr_icon = "mdi:heat-pump"
+    _attr_translation_key = "heat_source"
     _attr_options: list[str]
 
     def __init__(self, coordinator: CarrierDataUpdateCoordinator, system_serial: str) -> None:
@@ -96,6 +102,7 @@ class HeatSourceSelect(CarrierSelect):
         """
         super().__init__("Heat Source", coordinator, system_serial)
         if self.carrier_system.profile.outdoor_unit_type in [
+            "hp1stg",
             "hp2stg",
             "varcaphp",
             "multistghp",
@@ -144,7 +151,8 @@ class HeatSourceSelect(CarrierSelect):
             option: Selected Home Assistant option label.
 
         Raises:
-            HomeAssistantError: Raised when the selected option is not a known heat source label.
+            ServiceValidationError: Raised when the selected option is not a known
+                heat source label.
         """
         heat_source_map: dict[str, HeatSourceTypes] = {
             self._idu_only_label(
@@ -155,7 +163,11 @@ class HeatSourceSelect(CarrierSelect):
         }
         if option not in heat_source_map:
             _LOGGER.error("Unsupported heat source option selected: %s", option)
-            raise HomeAssistantError(f"Unsupported heat source option: {option}")
+            raise ServiceValidationError(
+                translation_domain=DOMAIN,
+                translation_key="unsupported_heat_source",
+                translation_placeholders={"option": option},
+            )
 
         new_heat_source = heat_source_map[option]
         _LOGGER.debug("Selected heat source: %s", new_heat_source)
