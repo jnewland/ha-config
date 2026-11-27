@@ -1,6 +1,13 @@
-//#region \0rolldown/runtime.js
+// \0rolldown/runtime.js
 var __defProp = Object.defineProperty;
-var __esmMin = (fn, res) => () => (fn && (res = fn(fn = 0)), res);
+var __esmMin = (fn, res, err) => () => {
+	if (err) throw err[0];
+	try {
+		return fn && (res = fn(fn = 0)), res;
+	} catch (e) {
+		throw err = [e], e;
+	}
+};
 var __exportAll = (all, no_symbols) => {
 	let target = {};
 	for (var name in all) __defProp(target, name, {
@@ -10,14 +17,16 @@ var __exportAll = (all, no_symbols) => {
 	if (!no_symbols) __defProp(target, Symbol.toStringTag, { value: "Module" });
 	return target;
 };
-//#endregion
-//#region node_modules/@lit/reactive-element/css-tag.js
+// node_modules/@lit/reactive-element/css-tag.js
 /**
 * @license
 * Copyright 2019 Google LLC
 * SPDX-License-Identifier: BSD-3-Clause
 */
-var t$5 = globalThis, e$7 = t$5.ShadowRoot && (void 0 === t$5.ShadyCSS || t$5.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, s$5 = Symbol(), o$6 = /* @__PURE__ */ new WeakMap();
+var t$5 = globalThis;
+var e$7 = t$5.ShadowRoot && (void 0 === t$5.ShadyCSS || t$5.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype;
+var s$5 = Symbol();
+var o$6 = /* @__PURE__ */ new WeakMap();
 var n$8 = class {
 	constructor(t, e, o) {
 		if (this._$cssResult$ = !0, o !== s$5) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
@@ -36,25 +45,27 @@ var n$8 = class {
 		return this.cssText;
 	}
 };
-var r$7 = (t) => new n$8("string" == typeof t ? t : t + "", void 0, s$5), i$8 = (t, ...e) => {
-	return new n$8(1 === t.length ? t[0] : e.reduce(((e, s, o) => e + ((t) => {
+var r$7 = (t) => new n$8("string" == typeof t ? t : t + "", void 0, s$5);
+var i$8 = (t, ...e) => {
+	return new n$8(1 === t.length ? t[0] : e.reduce((e, s, o) => e + ((t) => {
 		if (!0 === t._$cssResult$) return t.cssText;
 		if ("number" == typeof t) return t;
 		throw Error("Value passed to 'css' function must be a 'css' function result: " + t + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
-	})(s) + t[o + 1]), t[0]), t, s$5);
-}, S$1 = (s, o) => {
-	if (e$7) s.adoptedStyleSheets = o.map(((t) => t instanceof CSSStyleSheet ? t : t.styleSheet));
+	})(s) + t[o + 1], t[0]), t, s$5);
+};
+var S$1 = (s, o) => {
+	if (e$7) s.adoptedStyleSheets = o.map((t) => t instanceof CSSStyleSheet ? t : t.styleSheet);
 	else for (const e of o) {
 		const o = document.createElement("style"), n = t$5.litNonce;
 		void 0 !== n && o.setAttribute("nonce", n), o.textContent = e.cssText, s.appendChild(o);
 	}
-}, c$6 = e$7 ? (t) => t : (t) => t instanceof CSSStyleSheet ? ((t) => {
+};
+var c$6 = e$7 ? (t) => t : (t) => t instanceof CSSStyleSheet ? ((t) => {
 	let e = "";
 	for (const s of t.cssRules) e += s.cssText;
 	return r$7(e);
 })(t) : t;
-//#endregion
-//#region node_modules/@lit/reactive-element/reactive-element.js
+// node_modules/@lit/reactive-element/reactive-element.js
 /**
 * @license
 * Copyright 2017 Google LLC
@@ -158,7 +169,7 @@ var y$1 = class extends HTMLElement {
 	static finalizeStyles(s) {
 		const i = [];
 		if (Array.isArray(s)) {
-			const e = new Set(s.flat(Infinity).reverse());
+			const e = new Set(s.flat(1 / 0).reverse());
 			for (const s of e) i.unshift(c$6(s));
 		} else void 0 !== s && i.push(c$6(s));
 		return i;
@@ -171,7 +182,7 @@ var y$1 = class extends HTMLElement {
 		super(), this._$Ep = void 0, this.isUpdatePending = !1, this.hasUpdated = !1, this._$Em = null, this._$Ev();
 	}
 	_$Ev() {
-		this._$ES = new Promise(((t) => this.enableUpdating = t)), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), this.constructor.l?.forEach(((t) => t(this)));
+		this._$ES = new Promise((t) => this.enableUpdating = t), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), this.constructor.l?.forEach((t) => t(this));
 	}
 	addController(t) {
 		(this._$EO ??= /* @__PURE__ */ new Set()).add(t), void 0 !== this.renderRoot && this.isConnected && t.hostConnected?.();
@@ -189,11 +200,11 @@ var y$1 = class extends HTMLElement {
 		return S$1(t, this.constructor.elementStyles), t;
 	}
 	connectedCallback() {
-		this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(!0), this._$EO?.forEach(((t) => t.hostConnected?.()));
+		this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(!0), this._$EO?.forEach((t) => t.hostConnected?.());
 	}
 	enableUpdating(t) {}
 	disconnectedCallback() {
-		this._$EO?.forEach(((t) => t.hostDisconnected?.()));
+		this._$EO?.forEach((t) => t.hostDisconnected?.());
 	}
 	attributeChangedCallback(t, s, i) {
 		this._$AK(t, i);
@@ -209,13 +220,15 @@ var y$1 = class extends HTMLElement {
 		const i = this.constructor, e = i._$Eh.get(t);
 		if (void 0 !== e && this._$Em !== e) {
 			const t = i.getPropertyOptions(e), h = "function" == typeof t.converter ? { fromAttribute: t.converter } : void 0 !== t.converter?.fromAttribute ? t.converter : u$3;
-			this._$Em = e, this[e] = h.fromAttribute(s, t.type) ?? this._$Ej?.get(e) ?? null, this._$Em = null;
+			this._$Em = e;
+			const r = h.fromAttribute(s, t.type);
+			this[e] = r ?? this._$Ej?.get(e) ?? r, this._$Em = null;
 		}
 	}
-	requestUpdate(t, s, i) {
+	requestUpdate(t, s, i, e = !1, h) {
 		if (void 0 !== t) {
-			const e = this.constructor, h = this[t];
-			if (i ??= e.getPropertyOptions(t), !((i.hasChanged ?? f$3)(h, s) || i.useDefault && i.reflect && h === this._$Ej?.get(t) && !this.hasAttribute(e._$Eu(t, i)))) return;
+			const r = this.constructor;
+			if (!1 === e && (h = this[t]), i ??= r.getPropertyOptions(t), !((i.hasChanged ?? f$3)(h, s) || i.useDefault && i.reflect && h === this._$Ej?.get(t) && !this.hasAttribute(r._$Eu(t, i)))) return;
 			this.C(t, s, i);
 		}
 		!1 === this.isUpdatePending && (this._$ES = this._$EP());
@@ -252,7 +265,7 @@ var y$1 = class extends HTMLElement {
 		let t = !1;
 		const s = this._$AL;
 		try {
-			t = this.shouldUpdate(s), t ? (this.willUpdate(s), this._$EO?.forEach(((t) => t.hostUpdate?.())), this.update(s)) : this._$EM();
+			t = this.shouldUpdate(s), t ? (this.willUpdate(s), this._$EO?.forEach((t) => t.hostUpdate?.()), this.update(s)) : this._$EM();
 		} catch (s) {
 			throw t = !1, this._$EM(), s;
 		}
@@ -260,7 +273,7 @@ var y$1 = class extends HTMLElement {
 	}
 	willUpdate(t) {}
 	_$AE(t) {
-		this._$EO?.forEach(((t) => t.hostUpdated?.())), this.hasUpdated || (this.hasUpdated = !0, this.firstUpdated(t)), this.updated(t);
+		this._$EO?.forEach((t) => t.hostUpdated?.()), this.hasUpdated || (this.hasUpdated = !0, this.firstUpdated(t)), this.updated(t);
 	}
 	_$EM() {
 		this._$AL = /* @__PURE__ */ new Map(), this.isUpdatePending = !1;
@@ -275,102 +288,127 @@ var y$1 = class extends HTMLElement {
 		return !0;
 	}
 	update(t) {
-		this._$Eq &&= this._$Eq.forEach(((t) => this._$ET(t, this[t]))), this._$EM();
+		this._$Eq &&= this._$Eq.forEach((t) => this._$ET(t, this[t])), this._$EM();
 	}
 	updated(t) {}
 	firstUpdated(t) {}
 };
-y$1.elementStyles = [], y$1.shadowRootOptions = { mode: "open" }, y$1[d$2("elementProperties")] = /* @__PURE__ */ new Map(), y$1[d$2("finalized")] = /* @__PURE__ */ new Map(), p$2?.({ ReactiveElement: y$1 }), (a$1.reactiveElementVersions ??= []).push("2.1.0");
-//#endregion
-//#region node_modules/lit-html/lit-html.js
+y$1.elementStyles = [], y$1.shadowRootOptions = { mode: "open" }, y$1[d$2("elementProperties")] = /* @__PURE__ */ new Map(), y$1[d$2("finalized")] = /* @__PURE__ */ new Map(), p$2?.({ ReactiveElement: y$1 }), (a$1.reactiveElementVersions ??= []).push("2.1.2");
+// node_modules/lit-html/lit-html.js
 /**
 * @license
 * Copyright 2017 Google LLC
 * SPDX-License-Identifier: BSD-3-Clause
 */
-var t$4 = globalThis, i$6 = t$4.trustedTypes, s$4 = i$6 ? i$6.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, e$5 = "$lit$", h$3 = `lit$${Math.random().toFixed(9).slice(2)}$`, o$4 = "?" + h$3, n$6 = `<${o$4}>`, r$5 = document, l$1 = () => r$5.createComment(""), c$4 = (t) => null === t || "object" != typeof t && "function" != typeof t, a = Array.isArray, u$2 = (t) => a(t) || "function" == typeof t?.[Symbol.iterator], d$1 = "[ 	\n\f\r]", f$2 = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, v$1 = /-->/g, _ = />/g, m$2 = RegExp(`>|${d$1}(?:([^\\s"'>=/]+)(${d$1}*=${d$1}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"), p$1 = /'/g, g = /"/g, $ = /^(?:script|style|textarea|title)$/i, y = (t) => (i, ...s) => ({
+var t$4 = globalThis;
+var i$6 = (t) => t;
+var s$4 = t$4.trustedTypes;
+var e$5 = s$4 ? s$4.createPolicy("lit-html", { createHTML: (t) => t }) : void 0;
+var h$3 = "$lit$";
+var o$4 = `lit$${Math.random().toFixed(9).slice(2)}$`;
+var n$6 = "?" + o$4;
+var r$5 = `<${n$6}>`;
+var l$1 = document;
+var c$4 = () => l$1.createComment("");
+var a = (t) => null === t || "object" != typeof t && "function" != typeof t;
+var u$2 = Array.isArray;
+var d$1 = (t) => u$2(t) || "function" == typeof t?.[Symbol.iterator];
+var f$2 = "[ 	\n\f\r]";
+var v$1 = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g;
+var _ = /-->/g;
+var m$2 = />/g;
+var p$1 = RegExp(`>|${f$2}(?:([^\\s"'>=/]+)(${f$2}*=${f$2}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g");
+var g = /'/g;
+var $ = /"/g;
+var y = /^(?:script|style|textarea|title)$/i;
+var x = (t) => (i, ...s) => ({
 	_$litType$: t,
 	strings: i,
 	values: s
-}), x = y(1), T = Symbol.for("lit-noChange"), E = Symbol.for("lit-nothing"), A = /* @__PURE__ */ new WeakMap(), C = r$5.createTreeWalker(r$5, 129);
-function P(t, i) {
-	if (!a(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
-	return void 0 !== s$4 ? s$4.createHTML(i) : i;
+});
+var b = x(1);
+var E = Symbol.for("lit-noChange");
+var A = Symbol.for("lit-nothing");
+var C = /* @__PURE__ */ new WeakMap();
+var P = l$1.createTreeWalker(l$1, 129);
+function V(t, i) {
+	if (!u$2(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
+	return void 0 !== e$5 ? e$5.createHTML(i) : i;
 }
-var V = (t, i) => {
-	const s = t.length - 1, o = [];
-	let r, l = 2 === i ? "<svg>" : 3 === i ? "<math>" : "", c = f$2;
+var N = (t, i) => {
+	const s = t.length - 1, e = [];
+	let n, l = 2 === i ? "<svg>" : 3 === i ? "<math>" : "", c = v$1;
 	for (let i = 0; i < s; i++) {
 		const s = t[i];
-		let a, u, d = -1, y = 0;
-		for (; y < s.length && (c.lastIndex = y, u = c.exec(s), null !== u);) y = c.lastIndex, c === f$2 ? "!--" === u[1] ? c = v$1 : void 0 !== u[1] ? c = _ : void 0 !== u[2] ? ($.test(u[2]) && (r = RegExp("</" + u[2], "g")), c = m$2) : void 0 !== u[3] && (c = m$2) : c === m$2 ? ">" === u[0] ? (c = r ?? f$2, d = -1) : void 0 === u[1] ? d = -2 : (d = c.lastIndex - u[2].length, a = u[1], c = void 0 === u[3] ? m$2 : "\"" === u[3] ? g : p$1) : c === g || c === p$1 ? c = m$2 : c === v$1 || c === _ ? c = f$2 : (c = m$2, r = void 0);
-		const x = c === m$2 && t[i + 1].startsWith("/>") ? " " : "";
-		l += c === f$2 ? s + n$6 : d >= 0 ? (o.push(a), s.slice(0, d) + e$5 + s.slice(d) + h$3 + x) : s + h$3 + (-2 === d ? i : x);
+		let a, u, d = -1, f = 0;
+		for (; f < s.length && (c.lastIndex = f, u = c.exec(s), null !== u);) f = c.lastIndex, c === v$1 ? "!--" === u[1] ? c = _ : void 0 !== u[1] ? c = m$2 : void 0 !== u[2] ? (y.test(u[2]) && (n = RegExp("</" + u[2], "g")), c = p$1) : void 0 !== u[3] && (c = p$1) : c === p$1 ? ">" === u[0] ? (c = n ?? v$1, d = -1) : void 0 === u[1] ? d = -2 : (d = c.lastIndex - u[2].length, a = u[1], c = void 0 === u[3] ? p$1 : "\"" === u[3] ? $ : g) : c === $ || c === g ? c = p$1 : c === _ || c === m$2 ? c = v$1 : (c = p$1, n = void 0);
+		const x = c === p$1 && t[i + 1].startsWith("/>") ? " " : "";
+		l += c === v$1 ? s + r$5 : d >= 0 ? (e.push(a), s.slice(0, d) + h$3 + s.slice(d) + o$4 + x) : s + o$4 + (-2 === d ? i : x);
 	}
-	return [P(t, l + (t[s] || "<?>") + (2 === i ? "</svg>" : 3 === i ? "</math>" : "")), o];
+	return [V(t, l + (t[s] || "<?>") + (2 === i ? "</svg>" : 3 === i ? "</math>" : "")), e];
 };
-var N = class N {
-	constructor({ strings: t, _$litType$: s }, n) {
+var S = class S {
+	constructor({ strings: t, _$litType$: i }, e) {
 		let r;
 		this.parts = [];
-		let c = 0, a = 0;
-		const u = t.length - 1, d = this.parts, [f, v] = V(t, s);
-		if (this.el = N.createElement(f, n), C.currentNode = this.el.content, 2 === s || 3 === s) {
+		let l = 0, a = 0;
+		const u = t.length - 1, d = this.parts, [f, v] = N(t, i);
+		if (this.el = S.createElement(f, e), P.currentNode = this.el.content, 2 === i || 3 === i) {
 			const t = this.el.content.firstChild;
 			t.replaceWith(...t.childNodes);
 		}
-		for (; null !== (r = C.nextNode()) && d.length < u;) {
+		for (; null !== (r = P.nextNode()) && d.length < u;) {
 			if (1 === r.nodeType) {
-				if (r.hasAttributes()) for (const t of r.getAttributeNames()) if (t.endsWith(e$5)) {
-					const i = v[a++], s = r.getAttribute(t).split(h$3), e = /([.?@])?(.*)/.exec(i);
+				if (r.hasAttributes()) for (const t of r.getAttributeNames()) if (t.endsWith(h$3)) {
+					const i = v[a++], s = r.getAttribute(t).split(o$4), e = /([.?@])?(.*)/.exec(i);
 					d.push({
 						type: 1,
-						index: c,
+						index: l,
 						name: e[2],
 						strings: s,
-						ctor: "." === e[1] ? H : "?" === e[1] ? I : "@" === e[1] ? L : k
+						ctor: "." === e[1] ? I : "?" === e[1] ? L : "@" === e[1] ? z : H
 					}), r.removeAttribute(t);
-				} else t.startsWith(h$3) && (d.push({
+				} else t.startsWith(o$4) && (d.push({
 					type: 6,
-					index: c
+					index: l
 				}), r.removeAttribute(t));
-				if ($.test(r.tagName)) {
-					const t = r.textContent.split(h$3), s = t.length - 1;
-					if (s > 0) {
-						r.textContent = i$6 ? i$6.emptyScript : "";
-						for (let i = 0; i < s; i++) r.append(t[i], l$1()), C.nextNode(), d.push({
+				if (y.test(r.tagName)) {
+					const t = r.textContent.split(o$4), i = t.length - 1;
+					if (i > 0) {
+						r.textContent = s$4 ? s$4.emptyScript : "";
+						for (let s = 0; s < i; s++) r.append(t[s], c$4()), P.nextNode(), d.push({
 							type: 2,
-							index: ++c
+							index: ++l
 						});
-						r.append(t[s], l$1());
+						r.append(t[i], c$4());
 					}
 				}
-			} else if (8 === r.nodeType) if (r.data === o$4) d.push({
+			} else if (8 === r.nodeType) if (r.data === n$6) d.push({
 				type: 2,
-				index: c
+				index: l
 			});
 			else {
 				let t = -1;
-				for (; -1 !== (t = r.data.indexOf(h$3, t + 1));) d.push({
+				for (; -1 !== (t = r.data.indexOf(o$4, t + 1));) d.push({
 					type: 7,
-					index: c
-				}), t += h$3.length - 1;
+					index: l
+				}), t += o$4.length - 1;
 			}
-			c++;
+			l++;
 		}
 	}
 	static createElement(t, i) {
-		const s = r$5.createElement("template");
+		const s = l$1.createElement("template");
 		return s.innerHTML = t, s;
 	}
 };
-function S(t, i, s = t, e) {
-	if (i === T) return i;
+function M$1(t, i, s = t, e) {
+	if (i === E) return i;
 	let h = void 0 !== e ? s._$Co?.[e] : s._$Cl;
-	const o = c$4(i) ? void 0 : i._$litDirective$;
-	return h?.constructor !== o && (h?._$AO?.(!1), void 0 === o ? h = void 0 : (h = new o(t), h._$AT(t, s, e)), void 0 !== e ? (s._$Co ??= [])[e] = h : s._$Cl = h), void 0 !== h && (i = S(t, h._$AS(t, i.values), h, e)), i;
+	const o = a(i) ? void 0 : i._$litDirective$;
+	return h?.constructor !== o && (h?._$AO?.(!1), void 0 === o ? h = void 0 : (h = new o(t), h._$AT(t, s, e)), void 0 !== e ? (s._$Co ??= [])[e] = h : s._$Cl = h), void 0 !== h && (i = M$1(t, h._$AS(t, i.values), h, e)), i;
 }
-var M$1 = class {
+var R = class {
 	constructor(t, i) {
 		this._$AV = [], this._$AN = void 0, this._$AD = t, this._$AM = i;
 	}
@@ -381,29 +419,29 @@ var M$1 = class {
 		return this._$AM._$AU;
 	}
 	u(t) {
-		const { el: { content: i }, parts: s } = this._$AD, e = (t?.creationScope ?? r$5).importNode(i, !0);
-		C.currentNode = e;
-		let h = C.nextNode(), o = 0, n = 0, l = s[0];
-		for (; void 0 !== l;) {
-			if (o === l.index) {
+		const { el: { content: i }, parts: s } = this._$AD, e = (t?.creationScope ?? l$1).importNode(i, !0);
+		P.currentNode = e;
+		let h = P.nextNode(), o = 0, n = 0, r = s[0];
+		for (; void 0 !== r;) {
+			if (o === r.index) {
 				let i;
-				2 === l.type ? i = new R(h, h.nextSibling, this, t) : 1 === l.type ? i = new l.ctor(h, l.name, l.strings, this, t) : 6 === l.type && (i = new z(h, this, t)), this._$AV.push(i), l = s[++n];
+				2 === r.type ? i = new k(h, h.nextSibling, this, t) : 1 === r.type ? i = new r.ctor(h, r.name, r.strings, this, t) : 6 === r.type && (i = new Z(h, this, t)), this._$AV.push(i), r = s[++n];
 			}
-			o !== l?.index && (h = C.nextNode(), o++);
+			o !== r?.index && (h = P.nextNode(), o++);
 		}
-		return C.currentNode = r$5, e;
+		return P.currentNode = l$1, e;
 	}
 	p(t) {
 		let i = 0;
 		for (const s of this._$AV) void 0 !== s && (void 0 !== s.strings ? (s._$AI(t, s, i), i += s.strings.length - 2) : s._$AI(t[i])), i++;
 	}
 };
-var R = class R {
+var k = class k {
 	get _$AU() {
 		return this._$AM?._$AU ?? this._$Cv;
 	}
 	constructor(t, i, s, e) {
-		this.type = 2, this._$AH = E, this._$AN = void 0, this._$AA = t, this._$AB = i, this._$AM = s, this.options = e, this._$Cv = e?.isConnected ?? !0;
+		this.type = 2, this._$AH = A, this._$AN = void 0, this._$AA = t, this._$AB = i, this._$AM = s, this.options = e, this._$Cv = e?.isConnected ?? !0;
 	}
 	get parentNode() {
 		let t = this._$AA.parentNode;
@@ -417,7 +455,7 @@ var R = class R {
 		return this._$AB;
 	}
 	_$AI(t, i = this) {
-		t = S(this, t, i), c$4(t) ? t === E || null == t || "" === t ? (this._$AH !== E && this._$AR(), this._$AH = E) : t !== this._$AH && t !== T && this._(t) : void 0 !== t._$litType$ ? this.$(t) : void 0 !== t.nodeType ? this.T(t) : u$2(t) ? this.k(t) : this._(t);
+		t = M$1(this, t, i), a(t) ? t === A || null == t || "" === t ? (this._$AH !== A && this._$AR(), this._$AH = A) : t !== this._$AH && t !== E && this._(t) : void 0 !== t._$litType$ ? this.$(t) : void 0 !== t.nodeType ? this.T(t) : d$1(t) ? this.k(t) : this._(t);
 	}
 	O(t) {
 		return this._$AA.parentNode.insertBefore(t, this._$AB);
@@ -426,38 +464,38 @@ var R = class R {
 		this._$AH !== t && (this._$AR(), this._$AH = this.O(t));
 	}
 	_(t) {
-		this._$AH !== E && c$4(this._$AH) ? this._$AA.nextSibling.data = t : this.T(r$5.createTextNode(t)), this._$AH = t;
+		this._$AH !== A && a(this._$AH) ? this._$AA.nextSibling.data = t : this.T(l$1.createTextNode(t)), this._$AH = t;
 	}
 	$(t) {
-		const { values: i, _$litType$: s } = t, e = "number" == typeof s ? this._$AC(t) : (void 0 === s.el && (s.el = N.createElement(P(s.h, s.h[0]), this.options)), s);
+		const { values: i, _$litType$: s } = t, e = "number" == typeof s ? this._$AC(t) : (void 0 === s.el && (s.el = S.createElement(V(s.h, s.h[0]), this.options)), s);
 		if (this._$AH?._$AD === e) this._$AH.p(i);
 		else {
-			const t = new M$1(e, this), s = t.u(this.options);
+			const t = new R(e, this), s = t.u(this.options);
 			t.p(i), this.T(s), this._$AH = t;
 		}
 	}
 	_$AC(t) {
-		let i = A.get(t.strings);
-		return void 0 === i && A.set(t.strings, i = new N(t)), i;
+		let i = C.get(t.strings);
+		return void 0 === i && C.set(t.strings, i = new S(t)), i;
 	}
 	k(t) {
-		a(this._$AH) || (this._$AH = [], this._$AR());
+		u$2(this._$AH) || (this._$AH = [], this._$AR());
 		const i = this._$AH;
 		let s, e = 0;
-		for (const h of t) e === i.length ? i.push(s = new R(this.O(l$1()), this.O(l$1()), this, this.options)) : s = i[e], s._$AI(h), e++;
+		for (const h of t) e === i.length ? i.push(s = new k(this.O(c$4()), this.O(c$4()), this, this.options)) : s = i[e], s._$AI(h), e++;
 		e < i.length && (this._$AR(s && s._$AB.nextSibling, e), i.length = e);
 	}
-	_$AR(t = this._$AA.nextSibling, i) {
-		for (this._$AP?.(!1, !0, i); t && t !== this._$AB;) {
-			const i = t.nextSibling;
-			t.remove(), t = i;
+	_$AR(t = this._$AA.nextSibling, s) {
+		for (this._$AP?.(!1, !0, s); t !== this._$AB;) {
+			const s = i$6(t).nextSibling;
+			i$6(t).remove(), t = s;
 		}
 	}
 	setConnected(t) {
 		void 0 === this._$AM && (this._$Cv = t, this._$AP?.(t));
 	}
 };
-var k = class {
+var H = class {
 	get tagName() {
 		return this.element.tagName;
 	}
@@ -465,53 +503,53 @@ var k = class {
 		return this._$AM._$AU;
 	}
 	constructor(t, i, s, e, h) {
-		this.type = 1, this._$AH = E, this._$AN = void 0, this.element = t, this.name = i, this._$AM = e, this.options = h, s.length > 2 || "" !== s[0] || "" !== s[1] ? (this._$AH = Array(s.length - 1).fill(/* @__PURE__ */ new String()), this.strings = s) : this._$AH = E;
+		this.type = 1, this._$AH = A, this._$AN = void 0, this.element = t, this.name = i, this._$AM = e, this.options = h, s.length > 2 || "" !== s[0] || "" !== s[1] ? (this._$AH = Array(s.length - 1).fill(/* @__PURE__ */ new String()), this.strings = s) : this._$AH = A;
 	}
 	_$AI(t, i = this, s, e) {
 		const h = this.strings;
 		let o = !1;
-		if (void 0 === h) t = S(this, t, i, 0), o = !c$4(t) || t !== this._$AH && t !== T, o && (this._$AH = t);
+		if (void 0 === h) t = M$1(this, t, i, 0), o = !a(t) || t !== this._$AH && t !== E, o && (this._$AH = t);
 		else {
 			const e = t;
 			let n, r;
-			for (t = h[0], n = 0; n < h.length - 1; n++) r = S(this, e[s + n], i, n), r === T && (r = this._$AH[n]), o ||= !c$4(r) || r !== this._$AH[n], r === E ? t = E : t !== E && (t += (r ?? "") + h[n + 1]), this._$AH[n] = r;
+			for (t = h[0], n = 0; n < h.length - 1; n++) r = M$1(this, e[s + n], i, n), r === E && (r = this._$AH[n]), o ||= !a(r) || r !== this._$AH[n], r === A ? t = A : t !== A && (t += (r ?? "") + h[n + 1]), this._$AH[n] = r;
 		}
 		o && !e && this.j(t);
 	}
 	j(t) {
-		t === E ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t ?? "");
+		t === A ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t ?? "");
 	}
 };
-var H = class extends k {
+var I = class extends H {
 	constructor() {
 		super(...arguments), this.type = 3;
 	}
 	j(t) {
-		this.element[this.name] = t === E ? void 0 : t;
+		this.element[this.name] = t === A ? void 0 : t;
 	}
 };
-var I = class extends k {
+var L = class extends H {
 	constructor() {
 		super(...arguments), this.type = 4;
 	}
 	j(t) {
-		this.element.toggleAttribute(this.name, !!t && t !== E);
+		this.element.toggleAttribute(this.name, !!t && t !== A);
 	}
 };
-var L = class extends k {
+var z = class extends H {
 	constructor(t, i, s, e, h) {
 		super(t, i, s, e, h), this.type = 5;
 	}
 	_$AI(t, i = this) {
-		if ((t = S(this, t, i, 0) ?? E) === T) return;
-		const s = this._$AH, e = t === E && s !== E || t.capture !== s.capture || t.once !== s.once || t.passive !== s.passive, h = t !== E && (s === E || e);
+		if ((t = M$1(this, t, i, 0) ?? A) === E) return;
+		const s = this._$AH, e = t === A && s !== A || t.capture !== s.capture || t.once !== s.once || t.passive !== s.passive, h = t !== A && (s === A || e);
 		e && this.element.removeEventListener(this.name, this, s), h && this.element.addEventListener(this.name, this, t), this._$AH = t;
 	}
 	handleEvent(t) {
 		"function" == typeof this._$AH ? this._$AH.call(this.options?.host ?? this.element, t) : this._$AH.handleEvent(t);
 	}
 };
-var z = class {
+var Z = class {
 	constructor(t, i, s) {
 		this.element = t, this.type = 6, this._$AN = void 0, this._$AM = i, this.options = s;
 	}
@@ -519,37 +557,37 @@ var z = class {
 		return this._$AM._$AU;
 	}
 	_$AI(t) {
-		S(this, t);
+		M$1(this, t);
 	}
 };
-var Z = {
-	M: e$5,
-	P: h$3,
-	A: o$4,
+var j$1 = {
+	M: h$3,
+	P: o$4,
+	A: n$6,
 	C: 1,
-	L: V,
-	R: M$1,
-	D: u$2,
-	V: S,
-	I: R,
-	H: k,
-	N: I,
-	U: L,
-	B: H,
-	F: z
-}, j = t$4.litHtmlPolyfillSupport;
-j?.(N, R), (t$4.litHtmlVersions ??= []).push("3.3.0");
-var B = (t, i, s) => {
+	L: N,
+	R,
+	D: d$1,
+	V: M$1,
+	I: k,
+	H,
+	N: L,
+	U: z,
+	B: I,
+	F: Z
+};
+var B = t$4.litHtmlPolyfillSupport;
+B?.(S, k), (t$4.litHtmlVersions ??= []).push("3.3.3");
+var D = (t, i, s) => {
 	const e = s?.renderBefore ?? i;
 	let h = e._$litPart$;
 	if (void 0 === h) {
 		const t = s?.renderBefore ?? null;
-		e._$litPart$ = h = new R(i.insertBefore(l$1(), t), t, void 0, s ?? {});
+		e._$litPart$ = h = new k(i.insertBefore(c$4(), t), t, void 0, s ?? {});
 	}
 	return h._$AI(t), h;
 };
-//#endregion
-//#region node_modules/lit-element/lit-element.js
+// node_modules/lit-element/lit-element.js
 /**
 * @license
 * Copyright 2017 Google LLC
@@ -565,7 +603,7 @@ var i$5 = class extends y$1 {
 	}
 	update(t) {
 		const r = this.render();
-		this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t), this._$Do = B(r, this.renderRoot, this.renderOptions);
+		this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t), this._$Do = D(r, this.renderRoot, this.renderOptions);
 	}
 	connectedCallback() {
 		super.connectedCallback(), this._$Do?.setConnected(!0);
@@ -574,27 +612,25 @@ var i$5 = class extends y$1 {
 		super.disconnectedCallback(), this._$Do?.setConnected(!1);
 	}
 	render() {
-		return T;
+		return E;
 	}
 };
 i$5._$litElement$ = !0, i$5["finalized"] = !0, s$3.litElementHydrateSupport?.({ LitElement: i$5 });
 var o$3 = s$3.litElementPolyfillSupport;
 o$3?.({ LitElement: i$5 });
-(s$3.litElementVersions ??= []).push("4.2.0");
-//#endregion
-//#region node_modules/@lit/reactive-element/decorators/custom-element.js
+(s$3.litElementVersions ??= []).push("4.2.2");
+// node_modules/@lit/reactive-element/decorators/custom-element.js
 /**
 * @license
 * Copyright 2017 Google LLC
 * SPDX-License-Identifier: BSD-3-Clause
 */
 var t$3 = (t) => (e, o) => {
-	void 0 !== o ? o.addInitializer((() => {
+	void 0 !== o ? o.addInitializer(() => {
 		customElements.define(t, e);
-	})) : customElements.define(t, e);
+	}) : customElements.define(t, e);
 };
-//#endregion
-//#region node_modules/@lit/reactive-element/decorators/property.js
+// node_modules/@lit/reactive-element/decorators/property.js
 /**
 * @license
 * Copyright 2017 Google LLC
@@ -605,7 +641,8 @@ var t$3 = (t) => (e, o) => {
 	converter: u$3,
 	reflect: !1,
 	hasChanged: f$3
-}, r$4 = (t = o$2, e, r) => {
+};
+var r$4 = (t = o$2, e, r) => {
 	const { kind: n, metadata: i } = r;
 	let s = globalThis.litPropertyMetadata.get(i);
 	if (void 0 === s && globalThis.litPropertyMetadata.set(i, s = /* @__PURE__ */ new Map()), "setter" === n && ((t = Object.create(t)).wrapped = !0), s.set(r.name, t), "accessor" === n) {
@@ -613,7 +650,7 @@ var t$3 = (t) => (e, o) => {
 		return {
 			set(r) {
 				const n = e.get.call(this);
-				e.set.call(this, r), this.requestUpdate(o, n, t);
+				e.set.call(this, r), this.requestUpdate(o, n, t, !0, r);
 			},
 			init(e) {
 				return void 0 !== e && this.C(o, void 0, t, e), e;
@@ -624,7 +661,7 @@ var t$3 = (t) => (e, o) => {
 		const { name: o } = r;
 		return function(r) {
 			const n = this[o];
-			e.call(this, r), this.requestUpdate(o, n, t);
+			e.call(this, r), this.requestUpdate(o, n, t, !0, r);
 		};
 	}
 	throw Error("Unsupported decorator location: " + n);
@@ -635,8 +672,7 @@ function n$5(t) {
 		return e.constructor.createProperty(o, t), r ? Object.getOwnPropertyDescriptor(e, o) : void 0;
 	})(t, e, o);
 }
-//#endregion
-//#region node_modules/@lit/reactive-element/decorators/state.js
+// node_modules/@lit/reactive-element/decorators/state.js
 /**
 * @license
 * Copyright 2017 Google LLC
@@ -648,8 +684,7 @@ function n$5(t) {
 		attribute: !1
 	});
 }
-//#endregion
-//#region node_modules/@lit/reactive-element/decorators/event-options.js
+// node_modules/@lit/reactive-element/decorators/event-options.js
 /**
 * @license
 * Copyright 2017 Google LLC
@@ -661,16 +696,14 @@ function t$2(t) {
 		Object.assign(c, t);
 	};
 }
-//#endregion
-//#region node_modules/@lit/reactive-element/decorators/base.js
+// node_modules/@lit/reactive-element/decorators/base.js
 /**
 * @license
 * Copyright 2017 Google LLC
 * SPDX-License-Identifier: BSD-3-Clause
 */
 var e$4 = (e, t, c) => (c.configurable = !0, c.enumerable = !0, Reflect.decorate && "object" != typeof t && Object.defineProperty(e, t, c), c);
-//#endregion
-//#region node_modules/@lit/reactive-element/decorators/query.js
+// node_modules/@lit/reactive-element/decorators/query.js
 /**
 * @license
 * Copyright 2017 Google LLC
@@ -700,8 +733,7 @@ var e$4 = (e, t, c) => (c.configurable = !0, c.enumerable = !0, Reflect.decorate
 		} });
 	};
 }
-//#endregion
-//#region src/sections/player/player-section.styles.ts
+// src/sections/player/player-section.styles.ts
 var playerSectionStyles = i$8`
   .container {
     position: relative;
@@ -778,8 +810,7 @@ var playerSectionStyles = i$8`
     border-radius: 10px;
   }
 `;
-//#endregion
-//#region src/constants.ts
+// src/constants.ts
 var dispatchPrefix = "sonos-card-dispatch-event-";
 var ACTIVE_PLAYER_EVENT_INTERNAL = "active-player";
 var ACTIVE_PLAYER_EVENT = "sonos-card-dispatch-event-active-player";
@@ -791,7 +822,7 @@ var SESSION_STORAGE_PLAYER_ID = "sonos-card-player-id";
 var HASS_MORE_INFO = "hass-more-info";
 var listStyle = i$8`
   .list {
-    --mdc-theme-primary: var(--accent-color);
+    --mdc-theme-primary: var(--primary-color);
     --mdc-list-vertical-padding: 0px;
     overflow: hidden;
   }
@@ -806,8 +837,7 @@ var mediaItemTitleStyle = i$8`
     white-space: nowrap;
   }
 `;
-//#endregion
-//#region node_modules/lit-html/directive.js
+// node_modules/lit-html/directive.js
 /**
 * @license
 * Copyright 2017 Google LLC
@@ -820,7 +850,8 @@ var t$1 = {
 	BOOLEAN_ATTRIBUTE: 4,
 	EVENT: 5,
 	ELEMENT: 6
-}, e$2 = (t) => (...e) => ({
+};
+var e$2 = (t) => (...e) => ({
 	_$litDirective$: t,
 	values: e
 });
@@ -839,21 +870,22 @@ var i$4 = class {
 		return this.render(...e);
 	}
 };
-//#endregion
-//#region node_modules/lit-html/directives/style-map.js
+// node_modules/lit-html/directives/style-map.js
 /**
 * @license
 * Copyright 2018 Google LLC
 * SPDX-License-Identifier: BSD-3-Clause
-*/ var n$4 = "important", i$3 = " !important", o$1 = e$2(class extends i$4 {
+*/ var n$4 = "important";
+var i$3 = " !" + n$4;
+var o$1 = e$2(class extends i$4 {
 	constructor(t) {
 		if (super(t), t.type !== t$1.ATTRIBUTE || "style" !== t.name || t.strings?.length > 2) throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.");
 	}
 	render(t) {
-		return Object.keys(t).reduce(((e, r) => {
+		return Object.keys(t).reduce((e, r) => {
 			const s = t[r];
 			return null == s ? e : e + `${r = r.includes("-") ? r : r.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g, "-$&").toLowerCase()}:${s};`;
-		}), "");
+		}, "");
 	}
 	update(e, [r]) {
 		const { style: s } = e.element;
@@ -867,11 +899,10 @@ var i$4 = class {
 				t.includes("-") || r ? s.setProperty(t, r ? e.slice(0, -11) : e, r ? n$4 : "") : s[t] = e;
 			}
 		}
-		return T;
+		return E;
 	}
 });
-//#endregion
-//#region src/utils/media-browse-utils.ts
+// src/utils/media-browse-utils.ts
 function findMatchingCustomFavorite(customFavorites, mediaContentId, playerId) {
 	if (!customFavorites || !mediaContentId) return;
 	const keys = playerId ? [playerId, "all"] : Object.keys(customFavorites);
@@ -956,13 +987,12 @@ function renderFavoritesItem(item, showTitle = true, titleColor, titleBgColor) {
 		backgroundColor: titleBgColor ?? ""
 	});
 	const thumbnailStyle = item.thumbnail ? `background-image: url("${item.thumbnail}")` : "";
-	return x`
+	return b`
     <div class="thumbnail" ?hidden=${!item.thumbnail} style=${thumbnailStyle}></div>
     <div class="title" ?hidden=${!showTitle} style=${titleStyle}>${item.title}</div>
   `;
 }
-//#endregion
-//#region src/sections/player/player-artwork-utils.ts
+// src/sections/player/player-artwork-utils.ts
 function matchesString(value, expected) {
 	return !!value && value === expected;
 }
@@ -1037,8 +1067,7 @@ function getArtworkStyle(store, imageLoaded, resolvedImageUrl) {
 	if (borderRadius > 0) return `${bg}; border-radius: ${borderRadius}px; background-size: cover; aspect-ratio: 1; height: 100%; max-height: 50vh; width: auto; margin: 0 auto;`;
 	return `${bg}; min-height: ${minHeight}rem`;
 }
-//#endregion
-//#region node_modules/@mdi/js/mdi.js
+// node_modules/@mdi/js/mdi.js
 var mdiAccessPoint = "M4.93,4.93C3.12,6.74 2,9.24 2,12C2,14.76 3.12,17.26 4.93,19.07L6.34,17.66C4.89,16.22 4,14.22 4,12C4,9.79 4.89,7.78 6.34,6.34L4.93,4.93M19.07,4.93L17.66,6.34C19.11,7.78 20,9.79 20,12C20,14.22 19.11,16.22 17.66,17.66L19.07,19.07C20.88,17.26 22,14.76 22,12C22,9.24 20.88,6.74 19.07,4.93M7.76,7.76C6.67,8.85 6,10.35 6,12C6,13.65 6.67,15.15 7.76,16.24L9.17,14.83C8.45,14.11 8,13.11 8,12C8,10.89 8.45,9.89 9.17,9.17L7.76,7.76M16.24,7.76L14.83,9.17C15.55,9.89 16,10.89 16,12C16,13.11 15.55,14.11 14.83,14.83L16.24,16.24C17.33,15.15 18,13.65 18,12C18,10.35 17.33,8.85 16.24,7.76M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10Z";
 var mdiAccount = "M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z";
 var mdiAccountMusic = "M11,14C12,14 13.05,14.16 14.2,14.44C13.39,15.31 13,16.33 13,17.5C13,18.39 13.25,19.23 13.78,20H3V18C3,16.81 3.91,15.85 5.74,15.12C7.57,14.38 9.33,14 11,14M11,12C9.92,12 9,11.61 8.18,10.83C7.38,10.05 7,9.11 7,8C7,6.92 7.38,6 8.18,5.18C9,4.38 9.92,4 11,4C12.11,4 13.05,4.38 13.83,5.18C14.61,6 15,6.92 15,8C15,9.11 14.61,10.05 13.83,10.83C13.05,11.61 12.11,12 11,12M18.5,10H20L22,10V12H20V17.5A2.5,2.5 0 0,1 17.5,20A2.5,2.5 0 0,1 15,17.5A2.5,2.5 0 0,1 17.5,15C17.86,15 18.19,15.07 18.5,15.21V10Z";
@@ -1114,8 +1143,7 @@ var mdiVolumeMinus = "M3,9H7L12,4V20L7,15H3V9M14,11H22V13H14V11Z";
 var mdiVolumeMute = "M3,9H7L12,4V20L7,15H3V9M16.59,12L14,9.41L15.41,8L18,10.59L20.59,8L22,9.41L19.41,12L22,14.59L20.59,16L18,13.41L15.41,16L14,14.59L16.59,12Z";
 var mdiVolumePlus = "M3,9H7L12,4V20L7,15H3V9M14,11H17V8H19V11H22V13H19V16H17V13H14V11Z";
 var mdiWeb = "M16.36,14C16.44,13.34 16.5,12.68 16.5,12C16.5,11.32 16.44,10.66 16.36,10H19.74C19.9,10.64 20,11.31 20,12C20,12.69 19.9,13.36 19.74,14M14.59,19.56C15.19,18.45 15.65,17.25 15.97,16H18.92C17.96,17.65 16.43,18.93 14.59,19.56M14.34,14H9.66C9.56,13.34 9.5,12.68 9.5,12C9.5,11.32 9.56,10.65 9.66,10H14.34C14.43,10.65 14.5,11.32 14.5,12C14.5,12.68 14.43,13.34 14.34,14M12,19.96C11.17,18.76 10.5,17.43 10.09,16H13.91C13.5,17.43 12.83,18.76 12,19.96M8,8H5.08C6.03,6.34 7.57,5.06 9.4,4.44C8.8,5.55 8.35,6.75 8,8M5.08,16H8C8.35,17.25 8.8,18.45 9.4,19.56C7.57,18.93 6.03,17.65 5.08,16M4.26,14C4.1,13.36 4,12.69 4,12C4,11.31 4.1,10.64 4.26,10H7.64C7.56,10.66 7.5,11.32 7.5,12C7.5,12.68 7.56,13.34 7.64,14M12,4.03C12.83,5.23 13.5,6.57 13.91,8H10.09C10.5,6.57 11.17,5.23 12,4.03M18.92,8H15.97C15.65,6.75 15.19,5.55 14.59,4.44C16.43,5.07 17.96,6.34 18.92,8M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z";
-//#endregion
-//#region src/types.ts
+// src/types.ts
 var Section = /* @__PURE__ */ function(Section) {
 	Section["GROUPS"] = "groups";
 	Section["MEDIA_BROWSER"] = "media browser";
@@ -1127,18 +1155,15 @@ var Section = /* @__PURE__ */ function(Section) {
 	return Section;
 }({});
 var MASS_QUEUE_NOT_INSTALLED = "MASS_QUEUE_NOT_INSTALLED";
-//#endregion
-//#region src/upstream/data/entity.ts
+// src/upstream/data/entity.ts
 var isUnavailableState = (state) => {
 	return state === "unavailable" || state === "unknown" || !state;
 };
-//#endregion
-//#region src/upstream/data/tts.ts
+// src/upstream/data/tts.ts
 var isTTSMediaSource = (mediaContentId) => {
 	return mediaContentId?.startsWith("media-source://tts/") ?? false;
 };
-//#endregion
-//#region src/upstream/data/media-player.ts
+// src/upstream/data/media-player.ts
 var MediaPlayerEntityFeature = /* @__PURE__ */ function(MediaPlayerEntityFeature) {
 	MediaPlayerEntityFeature[MediaPlayerEntityFeature["PAUSE"] = 1] = "PAUSE";
 	MediaPlayerEntityFeature[MediaPlayerEntityFeature["SEEK"] = 2] = "SEEK";
@@ -1262,8 +1287,7 @@ var browseMediaPlayer = (hass, entityId, mediaContentId, mediaContentType) => ha
 	media_content_id: mediaContentId,
 	media_content_type: mediaContentType
 });
-//#endregion
-//#region src/utils/utils.ts
+// src/utils/utils.ts
 function getSpeakerList(mainPlayer, predefinedGroups = []) {
 	const playerIds = mainPlayer.members.map((member) => member.id).sort();
 	if (predefinedGroups?.length) {
@@ -1368,16 +1392,14 @@ function findPlayer(mediaPlayers, playerId) {
 function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
-//#endregion
-//#region \0@oxc-project+runtime@0.133.0/helpers/esm/decorate.js
+// \0@oxc-project+runtime@0.156.0/helpers/esm/decorate.js
 function __decorate$1(decorators, target, key, desc) {
 	var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
 	else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
-//#endregion
-//#region src/components/icon-button.ts
+// src/components/icon-button.ts
 var IconButton = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -1385,9 +1407,9 @@ var IconButton = class extends i$5 {
 		this.title = "";
 	}
 	render() {
-		return x`
-      <button ?disabled=${this.disabled} title=${this.title || E} aria-label=${this.title || E}>
-        ${this.path ? x`<ha-svg-icon .path=${this.path}></ha-svg-icon>` : x`<slot></slot>`}
+		return b`
+      <button ?disabled=${this.disabled} title=${this.title || A} aria-label=${this.title || A}>
+        ${this.path ? b`<ha-svg-icon .path=${this.path}></ha-svg-icon>` : b`<slot></slot>`}
       </button>
     `;
 	}
@@ -1465,8 +1487,7 @@ __decorate$1([n$5({
 __decorate$1([n$5({ reflect: true })], IconButton.prototype, "selected", void 0);
 __decorate$1([n$5()], IconButton.prototype, "title", void 0);
 customElements.define("sonos-icon-button", IconButton);
-//#endregion
-//#region src/sections/player/player-favorite-button.ts
+// src/sections/player/player-favorite-button.ts
 var PlayerFavoriteButton = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -1501,7 +1522,7 @@ var PlayerFavoriteButton = class extends i$5 {
 		const isMusicAssistant = this.store.hassService.musicAssistantService.isMusicAssistantPlayer(this.store.activePlayer);
 		const favoriteClass = `favorite-button ${this.isFavorite ? "is-favorite" : ""} ${this.favoriteLoading ? "loading" : ""}`;
 		const favoriteTitle = this.isFavorite ? "Remove from favorites" : "Add to favorites";
-		return x`
+		return b`
       <sonos-icon-button
         class=${favoriteClass}
         ?hidden=${!isMusicAssistant}
@@ -1522,9 +1543,6 @@ var PlayerFavoriteButton = class extends i$5 {
       [hidden] {
         display: none !important;
       }
-      .favorite-button.is-favorite {
-        color: var(--accent-color);
-      }
       .favorite-button.loading {
         opacity: 0.5;
       }
@@ -1535,8 +1553,7 @@ __decorate$1([n$5({ attribute: false })], PlayerFavoriteButton.prototype, "store
 __decorate$1([r$3()], PlayerFavoriteButton.prototype, "isFavorite", void 0);
 __decorate$1([r$3()], PlayerFavoriteButton.prototype, "favoriteLoading", void 0);
 customElements.define("sonos-player-favorite-button", PlayerFavoriteButton);
-//#endregion
-//#region src/sections/player/player-controls.ts
+// src/sections/player/player-controls.ts
 var PlayerControls = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -1564,18 +1581,18 @@ var PlayerControls = class extends i$5 {
 		};
 	}
 	render() {
-		const { stopInsteadOfPause, volumeEntityId, controlsColor, controlsLargeIcons, showVolumeUpAndDownButtons, hideControlShuffleButton, hideControlPrevTrackButton, showFastForwardAndRewindButtons, hideControlNextTrackButton, hideControlRepeatButton, showBrowseMediaButton, hideVolume } = this.store.config.player ?? {};
+		const { stopInsteadOfPause, volumeEntityId, controlsColor, controlsLargeIcons, showVolumeUpAndDownButtons, hideControlFavoriteButton, hideControlShuffleButton, hideControlPrevTrackButton, showFastForwardAndRewindButtons, hideControlNextTrackButton, hideControlRepeatButton, showBrowseMediaButton, hideVolume } = this.store.config.player ?? {};
 		const playing = this.store.activePlayer.isPlaying();
 		const playPauseIcon = playing ? stopInsteadOfPause ? mdiStopCircle : mdiPauseCircle : mdiPlayCircle;
 		const playPauseHandler = playing ? this.pauseOrStop : this.play;
 		const volumePlayer = this.getVolumePlayer();
 		const updateMemberVolumes = !volumeEntityId;
 		const hidePower = this.store.hidePower(true) === true;
-		return x`
-      <div class="main" id="mediaControls" style=${(controlsColor ? `--controls-color: ${controlsColor}` : "") || E}>
+		return b`
+      <div class="main" id="mediaControls" style=${(controlsColor ? `--controls-color: ${controlsColor}` : "") || A}>
         <div class="icons ${controlsLargeIcons ? "large-icons" : ""}">
           <div class="flex-1">
-            <sonos-player-favorite-button .store=${this.store}></sonos-player-favorite-button>
+            <sonos-player-favorite-button ?hidden=${!!hideControlFavoriteButton} .store=${this.store}></sonos-player-favorite-button>
           </div>
           <sonos-icon-button ?hidden=${!showVolumeUpAndDownButtons} @click=${this.volDown} .path=${mdiVolumeMinus}></sonos-icon-button>
           <sonos-shuffle ?hidden=${!!hideControlShuffleButton} .store=${this.store}></sonos-shuffle>
@@ -1626,6 +1643,9 @@ var PlayerControls = class extends i$5 {
         display: flex;
         align-items: center;
       }
+      .icons:first-child {
+        color: var(--secondary-text-color);
+      }
       .icons * {
         color: var(--controls-color, inherit);
       }
@@ -1633,6 +1653,7 @@ var PlayerControls = class extends i$5 {
         display: none !important;
       }
       .big-icon {
+        color: var(--controls-color, var(--primary-color));
         --icon-button-size: 5rem;
         --icon-size: 5rem;
       }
@@ -1658,41 +1679,33 @@ var PlayerControls = class extends i$5 {
 };
 __decorate$1([n$5({ attribute: false })], PlayerControls.prototype, "store", void 0);
 customElements.define("sonos-player-controls", PlayerControls);
-//#endregion
-//#region node_modules/lit-html/directive-helpers.js
+// node_modules/lit-html/directive-helpers.js
 /**
 * @license
 * Copyright 2020 Google LLC
 * SPDX-License-Identifier: BSD-3-Clause
-*/ var { I: t } = Z, i$2 = (o) => null === o || "object" != typeof o && "function" != typeof o, f$1 = (o) => void 0 === o.strings, s$2 = () => document.createComment(""), r$2 = (o, i, n) => {
-	const e = o._$AA.parentNode, l = void 0 === i ? o._$AB : i._$AA;
-	if (void 0 === n) n = new t(e.insertBefore(s$2(), l), e.insertBefore(s$2(), l), o, o.options);
+*/ var { I: t } = j$1, i$2 = (o) => o, n$3 = (o) => null === o || "object" != typeof o && "function" != typeof o, r$2 = (o) => void 0 === o.strings, s$2 = () => document.createComment(""), v = (o, n, e) => {
+	const l = o._$AA.parentNode, d = void 0 === n ? o._$AB : n._$AA;
+	if (void 0 === e) e = new t(l.insertBefore(s$2(), d), l.insertBefore(s$2(), d), o, o.options);
 	else {
-		const t = n._$AB.nextSibling, i = n._$AM, c = i !== o;
+		const t = e._$AB.nextSibling, n = e._$AM, c = n !== o;
 		if (c) {
 			let t;
-			n._$AQ?.(o), n._$AM = o, void 0 !== n._$AP && (t = o._$AU) !== i._$AU && n._$AP(t);
+			e._$AQ?.(o), e._$AM = o, void 0 !== e._$AP && (t = o._$AU) !== n._$AU && e._$AP(t);
 		}
-		if (t !== l || c) {
-			let o = n._$AA;
+		if (t !== d || c) {
+			let o = e._$AA;
 			for (; o !== t;) {
-				const t = o.nextSibling;
-				e.insertBefore(o, l), o = t;
+				const t = i$2(o).nextSibling;
+				i$2(l).insertBefore(o, d), o = t;
 			}
 		}
 	}
-	return n;
-}, v = (o, t, i = o) => (o._$AI(t, i), o), u$1 = {}, m$1 = (o, t = u$1) => o._$AH = t, p = (o) => o._$AH, M = (o) => {
-	o._$AP?.(!1, !0);
-	let t = o._$AA;
-	const i = o._$AB.nextSibling;
-	for (; t !== i;) {
-		const o = t.nextSibling;
-		t.remove(), t = o;
-	}
+	return e;
+}, u$1 = (o, t, i = o) => (o._$AI(t, i), o), m$1 = {}, p = (o, t = m$1) => o._$AH = t, M = (o) => o._$AH, h$2 = (o) => {
+	o._$AR(), o._$AA.remove();
 };
-//#endregion
-//#region node_modules/lit-html/async-directive.js
+// node_modules/lit-html/async-directive.js
 /**
 * @license
 * Copyright 2017 Google LLC
@@ -1702,13 +1715,15 @@ customElements.define("sonos-player-controls", PlayerControls);
 	if (void 0 === e) return !1;
 	for (const i of e) i._$AO?.(t, !1), s$1(i, t);
 	return !0;
-}, o = (i) => {
+};
+var o = (i) => {
 	let t, e;
 	do {
 		if (void 0 === (t = i._$AM)) break;
 		e = t._$AN, e.delete(i), i = t;
 	} while (0 === e?.size);
-}, r$1 = (i) => {
+};
+var r$1 = (i) => {
 	for (let t; t = i._$AM; i = t) {
 		let e = t._$AN;
 		if (void 0 === e) t._$AN = e = /* @__PURE__ */ new Set();
@@ -1739,7 +1754,7 @@ var f = class extends i$4 {
 		i !== this.isConnected && (this.isConnected = i, i ? this.reconnected?.() : this.disconnected?.()), t && (s$1(this, i), o(this));
 	}
 	setValue(t) {
-		if (f$1(this._$Ct)) this._$Ct._$AI(t, this);
+		if (r$2(this._$Ct)) this._$Ct._$AI(t, this);
 		else {
 			const i = [...this._$Ct._$AH];
 			i[this._$Ci] = t, this._$Ct._$AI(i, this, 0);
@@ -1748,8 +1763,7 @@ var f = class extends i$4 {
 	disconnected() {}
 	reconnected() {}
 };
-//#endregion
-//#region node_modules/lit-html/directives/private-async-helpers.js
+// node_modules/lit-html/directives/private-async-helpers.js
 /**
 * @license
 * Copyright 2021 Google LLC
@@ -1777,25 +1791,25 @@ var i$1 = class {
 		return this.Y;
 	}
 	pause() {
-		this.Y ??= new Promise(((t) => this.Z = t));
+		this.Y ??= new Promise((t) => this.Z = t);
 	}
 	resume() {
 		this.Z?.(), this.Y = this.Z = void 0;
 	}
 };
-//#endregion
-//#region node_modules/lit-html/directives/until.js
+// node_modules/lit-html/directives/until.js
 /**
 * @license
 * Copyright 2017 Google LLC
 * SPDX-License-Identifier: BSD-3-Clause
-*/ var n$1 = (t) => !i$2(t) && "function" == typeof t.then, h = 1073741823;
+*/ var n$1 = (t) => !n$3(t) && "function" == typeof t.then;
+var h = 1073741823;
 var c$1 = class extends f {
 	constructor() {
 		super(...arguments), this._$Cwt = h, this._$Cbt = [], this._$CK = new s(this), this._$CX = new i$1();
 	}
 	render(...s) {
-		return s.find(((t) => !n$1(t))) ?? T;
+		return s.find((t) => !n$1(t)) ?? E;
 	}
 	update(s, i) {
 		const e = this._$Cbt;
@@ -1806,16 +1820,16 @@ var c$1 = class extends f {
 		for (let t = 0; t < i.length && !(t > this._$Cwt); t++) {
 			const s = i[t];
 			if (!n$1(s)) return this._$Cwt = t, s;
-			t < r && s === e[t] || (this._$Cwt = h, r = 0, Promise.resolve(s).then((async (t) => {
+			t < r && s === e[t] || (this._$Cwt = h, r = 0, Promise.resolve(s).then(async (t) => {
 				for (; c.get();) await c.get();
 				const i = o.deref();
 				if (void 0 !== i) {
 					const e = i._$Cbt.indexOf(s);
 					e > -1 && e < i._$Cwt && (i._$Cwt = e, i.setValue(t));
 				}
-			})));
+			}));
 		}
-		return T;
+		return E;
 	}
 	disconnected() {
 		this._$CK.disconnect(), this._$CX.pause();
@@ -1825,8 +1839,7 @@ var c$1 = class extends f {
 	}
 };
 var m = e$2(c$1);
-//#endregion
-//#region node_modules/lit-html/directives/when.js
+// node_modules/lit-html/directives/when.js
 /**
 * @license
 * Copyright 2021 Google LLC
@@ -1835,14 +1848,13 @@ var m = e$2(c$1);
 function n(n, r, t) {
 	return n ? r(n) : t?.(n);
 }
-//#endregion
-//#region src/sections/player/player-header.ts
+// src/sections/player/player-header.ts
 var PlayerHeader = class extends i$5 {
 	render() {
 		const { headerEntityFontSize, headerSongFontSize, hideEntityName, hideArtistAlbum, showAudioInputFormat } = this.store.config.player ?? {};
 		const entityStyle = headerEntityFontSize ? { fontSize: `${headerEntityFontSize}rem` } : {};
 		const songStyle = headerSongFontSize ? { fontSize: `${headerSongFontSize}rem` } : {};
-		return x` <div class="info">
+		return b` <div class="info">
       <div class="entity" style=${o$1(entityStyle)} ?hidden=${!!hideEntityName}>
         ${getSpeakerList(this.store.activePlayer, this.store.predefinedGroups)}
       </div>
@@ -1867,7 +1879,7 @@ var PlayerHeader = class extends i$5 {
 	}
 	async getAudioInputFormat() {
 		const audioInputFormat = (await this.store.hassService.getRelatedEntities(this.store.activePlayer, "sensor")).find((sensor) => sensor.entity_id.includes("audio_input_format"));
-		return audioInputFormat && audioInputFormat.state && audioInputFormat.state !== "No audio" ? x`<span class="audio-input-format">${audioInputFormat.state}</span>` : "";
+		return audioInputFormat && audioInputFormat.state && audioInputFormat.state !== "No audio" ? b`<span class="audio-input-format">${audioInputFormat.state}</span>` : "";
 	}
 	static get styles() {
 		return i$8`
@@ -1889,7 +1901,7 @@ var PlayerHeader = class extends i$5 {
         text-overflow: ellipsis;
         font-size: calc(var(--sonos-font-size, 1rem) * 1.15);
         font-weight: 400;
-        color: var(--accent-color);
+        color: var(--primary-color);
       }
 
       .artist-album {
@@ -1918,8 +1930,7 @@ var PlayerHeader = class extends i$5 {
 };
 __decorate$1([n$5({ attribute: false })], PlayerHeader.prototype, "store", void 0);
 customElements.define("sonos-player-header", PlayerHeader);
-//#endregion
-//#region src/sections/player/player-progress.ts
+// src/sections/player/player-progress.ts
 var PlayerProgress = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -1936,7 +1947,7 @@ var PlayerProgress = class extends i$5 {
 		this.mediaDuration = this.store.activePlayer?.attributes.media_duration || 0;
 		const showProgress = this.mediaDuration > 0;
 		if (showProgress) this.trackProgress();
-		return x`
+		return b`
       <div class="progress" ?hidden=${!showProgress}>
         <span>${convertProgress(this.playingProgress)}</span>
         <div class="bar" @click=${this.handleSeek}>
@@ -1989,7 +2000,7 @@ var PlayerProgress = class extends i$5 {
       }
 
       .progress-bar {
-        background-color: var(--accent-color);
+        background-color: var(--primary-color);
         height: 50%;
         transition: width 0.1s linear;
       }
@@ -2005,8 +2016,7 @@ var convertProgress = (duration) => {
 	return (date.startsWith("00:") ? date.substring(3) : date).replace(/^0(\d)/, "$1");
 };
 customElements.define("sonos-progress", PlayerProgress);
-//#endregion
-//#region src/components/volume.ts
+// src/components/volume.ts
 var Volume = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -2022,7 +2032,9 @@ var Volume = class extends i$5 {
 		this.playerConfig = this.config.player ?? {};
 		this.mediaControlService = this.store.mediaControlService;
 		const volume = this.player.getVolume();
-		const max = this.getMax();
+		const dynamicThreshold = Math.max(0, Math.min(this.config.dynamicVolumeSliderThreshold ?? 20, 100));
+		const max = this.getMax(dynamicThreshold);
+		const overThreshold = this.config.dynamicVolumeSlider && volume >= dynamicThreshold;
 		const muteIcon = (this.updateMembers ? this.player.isGroupMuted() : this.player.isMemberMuted()) ? mdiVolumeMute : mdiVolumeHigh;
 		const disabled = this.player.ignoreVolume;
 		const globalSliderHeight = this.config.volumeSliderHeight;
@@ -2030,13 +2042,13 @@ var Volume = class extends i$5 {
 		const iconButtonSize = (this.isPlayer ? this.playerConfig.volumeMuteButtonSize : void 0) ?? sliderHeight;
 		const buttonStyle = [sliderHeight ? `height: ${sliderHeight}rem;` : "", iconButtonSize ? `--icon-button-size: ${iconButtonSize}rem;--icon-size: ${iconButtonSize * .75}rem;` : ""].join("");
 		const sliderStyle = sliderHeight ? `--control-slider-thickness: ${sliderHeight}rem;` : "";
-		return x`
-      <div class="volume" slim=${this.slim || E}>
+		return b`
+      <div class="volume" slim=${this.slim || A}>
         <sonos-icon-button
           .disabled=${disabled}
           @click=${this.mute}
           .path=${muteIcon}
-          hide=${this.isPlayer && this.playerConfig.hideVolumeMuteButton || E}
+          hide=${this.isPlayer && this.playerConfig.hideVolumeMuteButton || A}
           style=${buttonStyle}
         >
         </sonos-icon-button>
@@ -2047,23 +2059,22 @@ var Volume = class extends i$5 {
             @value-changed=${this.volumeChanged}
             @slider-moved=${this.sliderMoved}
             .disabled=${disabled}
-            class=${this.config.dynamicVolumeSlider && max === 100 ? "over-threshold" : ""}
+            class=${overThreshold ? "over-threshold" : ""}
             style=${sliderStyle}
           ></ha-control-slider>
-          <div class="volume-level" hide=${this.isPlayer && this.playerConfig.hideVolumePercentage || E}>
+          <div class="volume-level" hide=${this.isPlayer && this.playerConfig.hideVolumePercentage || A}>
             <div style="flex: ${volume}">${volume > 0 ? "0%" : ""}</div>
             <div class="percentage">${volume}%</div>
             <div style="flex: ${max - volume};text-align: right">${volume < max ? `${max}%` : ""}</div>
           </div>
         </div>
-        <div class="percentage-slim" hide=${this.slim && E}>${volume}%</div>
+        <div class="percentage-slim" hide=${this.slim && A}>${volume}%</div>
         <sonos-icon-button hide=${this.store.hidePower()} @click=${this.togglePower} .path=${mdiPower} style=${buttonStyle}></sonos-icon-button>
       </div>
     `;
 	}
-	getMax() {
+	getMax(dynamicThreshold) {
 		const volume = this.sliderMoving ? this.startVolumeSliderMoving : this.player.getVolume();
-		const dynamicThreshold = Math.max(0, Math.min(this.config.dynamicVolumeSliderThreshold ?? 20, 100));
 		const dynamicMax = Math.max(0, Math.min(this.config.dynamicVolumeSliderMax ?? 30, 100));
 		return volume < dynamicThreshold && this.config.dynamicVolumeSlider ? dynamicMax : 100;
 	}
@@ -2089,11 +2100,11 @@ var Volume = class extends i$5 {
 	static get styles() {
 		return i$8`
       ha-control-slider {
-        --control-slider-color: var(--accent-color);
+        --control-slider-color: var(--sonos-volume-slider-color, var(--primary-color));
       }
 
       ha-control-slider.over-threshold {
-        --control-slider-color: var(--primary-text-color);
+        --control-slider-color: var(--error-color);
       }
 
       ha-control-slider[disabled] {
@@ -2162,8 +2173,7 @@ function numberFromEvent(e) {
 	return Number.parseInt((e?.target)?.value);
 }
 customElements.define("sonos-volume", Volume);
-//#endregion
-//#region src/sections/player/player-section.ts
+// src/sections/player/player-section.ts
 var Player = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -2179,16 +2189,16 @@ var Player = class extends i$5 {
 		const containerStyle = artworkAsBackground ? blurAmount > 0 ? `--blur-background-image: ${getBackgroundImageUrl(this.store, this.imageLoaded, this.resolvedImageUrl)}; --blur-amount: ${blurAmount}px; ${opacityStyle}` : `${getBackgroundImage(this.store, this.imageLoaded, this.resolvedImageUrl)}; ${opacityStyle}` : "";
 		const hideArtwork = artworkAsBackground && !blurAmount || !!hideArtworkConfig;
 		const controlsMarginStyle = controlsMargin ? `margin: ${controlsMargin}` : "";
-		return x`
-      <div class="container ${blurAmount > 0 ? "blurred-background" : ""}" style=${containerStyle || E}>
-        <sonos-player-header class="header" background=${artworkAsBackground || E} .store=${this.store} ?hidden=${!!hideHeader}></sonos-player-header>
+		return b`
+      <div class="container ${blurAmount > 0 ? "blurred-background" : ""}" style=${containerStyle || A}>
+        <sonos-player-header class="header" background=${artworkAsBackground || A} .store=${this.store} ?hidden=${!!hideHeader}></sonos-player-header>
         <div class="artwork" ?hidden=${hideArtwork} style=${getArtworkStyle(this.store, this.imageLoaded, this.resolvedImageUrl)}></div>
         <sonos-player-controls
           class="controls"
-          background=${artworkAsBackground || E}
+          background=${artworkAsBackground || A}
           .store=${this.store}
           ?hidden=${!!hideControls}
-          style=${controlsMarginStyle || E}
+          style=${controlsMarginStyle || A}
         ></sonos-player-controls>
       </div>
     `;
@@ -2230,8 +2240,7 @@ var Player = class extends i$5 {
 __decorate$1([n$5({ attribute: false })], Player.prototype, "store", void 0);
 __decorate$1([r$3()], Player.prototype, "resolvedImageUrl", void 0);
 __decorate$1([r$3()], Player.prototype, "imageLoaded", void 0);
-//#endregion
-//#region node_modules/lit-html/directives/choose.js
+// node_modules/lit-html/directives/choose.js
 /**
 * @license
 * Copyright 2021 Google LLC
@@ -2241,8 +2250,42 @@ var r = (r, o, t) => {
 	for (const t of o) if (t[0] === r) return (0, t[1])();
 	return t?.();
 };
-//#endregion
-//#region src/services/music-assistant-service.ts
+// src/services/music-assistant-collection-service.ts
+async function getMusicAssistantCollectionItems(hass, uri, mediaType, configEntryId) {
+	const service = mediaType === "podcast" ? "get_podcast_episodes" : `get_${mediaType}_tracks`;
+	try {
+		const { response } = await hass.callWS({
+			type: "call_service",
+			domain: "mass_queue",
+			service,
+			service_data: {
+				uri,
+				config_entry_id: configEntryId
+			},
+			return_response: true
+		});
+		return transformCollectionItems(response, mediaType);
+	} catch (e) {
+		console.error(`Failed to get collection items (${service}):`, e);
+		throw e;
+	}
+}
+function transformCollectionItems(response, mediaType) {
+	const items = mediaType === "podcast" ? response.episodes : response.tracks;
+	if (!Array.isArray(items)) throw new Error(`Invalid ${mediaType} collection response`);
+	return items.map((item) => transformCollectionItem(item, mediaType === "podcast" ? "podcast_episode" : "track"));
+}
+function transformCollectionItem(item, mediaType) {
+	return {
+		title: item.media_artist ? `${item.media_artist} - ${item.media_title}` : item.media_title,
+		subtitle: (mediaType === "podcast_episode" ? item.release_date : item.media_album_name) || void 0,
+		uri: item.media_content_id,
+		mediaType,
+		imageUrl: item.media_image || void 0,
+		favorite: item.favorite
+	};
+}
+// src/services/music-assistant-service.ts
 var LIBRARY_URI_PREFIX = "library://";
 var MusicAssistantService = class {
 	constructor(hass) {
@@ -2272,7 +2315,8 @@ var MusicAssistantService = class {
 		"album",
 		"artist",
 		"playlist",
-		"radio"
+		"radio",
+		"podcast"
 	]) {
 		const allFavorites = [];
 		for (const mediaType of mediaTypes) try {
@@ -2314,6 +2358,7 @@ var MusicAssistantService = class {
 			case "artist": return "Artists";
 			case "playlist": return "Playlists";
 			case "radio": return "Radio";
+			case "podcast": return "Podcasts";
 			default: return mediaType;
 		}
 	}
@@ -2370,6 +2415,7 @@ var MusicAssistantService = class {
 			case "track": return response.tracks ?? [];
 			case "playlist": return response.playlists ?? [];
 			case "radio": return response.radio ?? [];
+			case "podcast": return response.podcasts ?? [];
 			default: return [];
 		}
 	}
@@ -2508,39 +2554,8 @@ var MusicAssistantService = class {
 	/**
 	* Get collection items based on media type
 	*/
-	async getCollectionItems(uri, mediaType, massConfigEntryId) {
-		return this.getCollectionTracks(`get_${mediaType}_tracks`, uri, massConfigEntryId);
-	}
-	async getCollectionTracks(service, uri, massQueueConfigEntryId) {
-		try {
-			const items = (await this.hass.callWS({
-				type: "call_service",
-				domain: "mass_queue",
-				service,
-				service_data: {
-					uri,
-					config_entry_id: massQueueConfigEntryId
-				},
-				return_response: true
-			})).response?.tracks;
-			if (!Array.isArray(items)) return [];
-			return items.map((item) => this.mapCollectionTrack(item));
-		} catch (e) {
-			console.error(`Failed to get collection tracks (${service}):`, e);
-			throw e;
-		}
-	}
-	mapCollectionTrack(item) {
-		const artist = item.media_artist || "";
-		const title = item.media_title || "";
-		return {
-			title: artist ? `${artist} - ${title}` : title,
-			subtitle: item.media_album_name || void 0,
-			uri: item.media_content_id,
-			mediaType: "track",
-			imageUrl: item.media_image || void 0,
-			favorite: item.favorite
-		};
+	async getCollectionItems(uri, mediaType, massQueueConfigEntryId) {
+		return getMusicAssistantCollectionItems(this.hass, uri, mediaType, massQueueConfigEntryId);
 	}
 	async findRelatedEntityId(mediaPlayer, entityType, namePart) {
 		const template = `{{ device_entities(device_id('${mediaPlayer.id}')) }}`;
@@ -2668,8 +2683,7 @@ var MusicAssistantService = class {
 		}
 	}
 };
-//#endregion
-//#region src/services/hass-service.ts
+// src/services/hass-service.ts
 var HassService = class {
 	constructor(hass, section, card) {
 		this.hass = hass;
@@ -2776,8 +2790,7 @@ var HassService = class {
 		return (await this.getRelatedEntities(player, entityType)).find((e) => e?.entity_id?.toLowerCase().includes(namePart.toLowerCase()))?.entity_id;
 	}
 };
-//#endregion
-//#region src/services/media-browse-service.ts
+// src/services/media-browse-service.ts
 var MediaBrowseService = class {
 	constructor(hass, config) {
 		this.massConfigEntryId = null;
@@ -2858,8 +2871,7 @@ var MediaBrowseService = class {
 		element.dispatchEvent(customEvent(HASS_MORE_INFO, detail));
 	}
 };
-//#endregion
-//#region src/services/media-control-service.ts
+// src/services/media-control-service.ts
 var MediaControlService = class {
 	constructor(hassService, config) {
 		this.hassService = hassService;
@@ -3111,13 +3123,51 @@ var MediaControlService = class {
 		await this.hassService.callMediaService(service, { entity_id: mediaPlayer.id });
 	}
 };
-//#endregion
-//#region src/model/media-player.ts
+// src/utils/group-member-utils.ts
+function isGroupPlayer(hassEntity) {
+	const groupMembers = hassEntity.attributes.group_members?.filter((id) => id !== null && id !== void 0) ?? [];
+	return groupMembers.length > 0 && !groupMembers.includes(hassEntity.entity_id);
+}
+function getGroupMemberCandidates(config, hass, mainHassEntity, mediaPlayerHassEntities) {
+	if (!config.allowGroupMembersOutsideOfEntities || !hass || !isGroupPlayer(mainHassEntity)) return mediaPlayerHassEntities;
+	return mainHassEntity.attributes.group_members.map((id) => hass.states[id]).filter((hassEntity) => hassEntity !== void 0);
+}
+function getAllMediaPlayers(groups, config) {
+	const players = groups.flatMap((group) => group.members);
+	if (!config.allowGroupMembersOutsideOfEntities) return players;
+	return players.filter((player, index) => players.findIndex((other) => other.id === player.id) === index);
+}
+// src/utils/entity-name-utils.ts
+var FIRST_SUPPORTED_MAJOR = 2026;
+var FIRST_SUPPORTED_MINOR = 4;
+var supportsEntityNames = (hass) => {
+	if (typeof hass?.formatEntityName !== "function") return false;
+	const [major, minor] = (hass?.config?.version ?? "").split(".", 2);
+	return Number(major) > FIRST_SUPPORTED_MAJOR || Number(major) === FIRST_SUPPORTED_MAJOR && Number(minor) >= FIRST_SUPPORTED_MINOR;
+};
+var getEntityName = (hass, hassEntity, name) => {
+	if (!hassEntity) return "";
+	if (supportsEntityNames(hass)) return hass.formatEntityName(hassEntity, name) ?? "";
+	return hassEntity.attributes.friendly_name ?? "";
+};
+var getPlayerName = (hass, hassEntity, config) => {
+	const name = getEntityName(hass, hassEntity, config.entityName);
+	const displayName = config.entityNameRegexToReplace ? name.replace(new RegExp(config.entityNameRegexToReplace, "g"), config.entityNameReplacement || "") : name;
+	if (config.entityName === void 0 || displayName.trim()) return displayName;
+	const defaultName = getEntityName(hass, hassEntity);
+	return defaultName.trim() ? defaultName : hassEntity?.entity_id || "";
+};
+var getEntityNameWithoutDevice = (hass, hassEntity, deviceName) => {
+	if (supportsEntityNames(hass)) return getEntityName(hass, hassEntity, { type: "entity" });
+	return getEntityName(hass, hassEntity).replaceAll(deviceName, "").trim();
+};
+// src/model/media-player.ts
 var MediaPlayer = class MediaPlayer {
-	constructor(hassEntity, config, mediaPlayerHassEntities) {
+	constructor(hassEntity, config, mediaPlayerHassEntities, hass) {
 		this.id = hassEntity.entity_id;
 		this.config = config;
-		this.name = this.getEntityName(hassEntity);
+		this.hass = hass;
+		this.name = getPlayerName(hass, hassEntity, config);
 		this.state = hassEntity.state;
 		this.attributes = hassEntity.attributes;
 		this.members = mediaPlayerHassEntities ? this.createGroupMembers(hassEntity, mediaPlayerHassEntities) : [this];
@@ -3149,15 +3199,10 @@ var MediaPlayer = class MediaPlayer {
 		if (this.config.mediaTitleRegexToReplace) track = track.replace(new RegExp(this.config.mediaTitleRegexToReplace, "g"), this.config.mediaTitleReplacement || "");
 		return track;
 	}
-	getEntityName(hassEntity) {
-		const name = hassEntity.attributes.friendly_name || "";
-		if (this.config.entityNameRegexToReplace) return name.replace(new RegExp(this.config.entityNameRegexToReplace, "g"), this.config.entityNameReplacement || "");
-		return name;
-	}
 	createGroupMembers(mainHassEntity, mediaPlayerHassEntities) {
 		const groupPlayerIds = getGroupPlayerIds(mainHassEntity);
-		return mediaPlayerHassEntities.reduce((players, hassEntity) => {
-			if (groupPlayerIds.includes(hassEntity.entity_id)) return [...players, new MediaPlayer(hassEntity, this.config)];
+		return getGroupMemberCandidates(this.config, this.hass, mainHassEntity, mediaPlayerHassEntities).reduce((players, hassEntity) => {
+			if (groupPlayerIds.includes(hassEntity.entity_id)) return [...players, new MediaPlayer(hassEntity, this.config, void 0, this.hass)];
 			return players;
 		}, []);
 	}
@@ -3182,8 +3227,7 @@ var MediaPlayer = class MediaPlayer {
 		return this.state !== "off" && this.state !== "unavailable";
 	}
 };
-//#endregion
-//#region src/model/store.ts
+// src/model/store.ts
 var Store = class {
 	getJoinedPlayerIds() {
 		return this.allMediaPlayers.map((p) => p.id).filter((id) => id === this.activePlayer.id || this.activePlayer.hasMember(id));
@@ -3200,7 +3244,7 @@ var Store = class {
 		this.config = config;
 		const mediaPlayerHassEntities = this.getMediaPlayerHassEntities(this.hass);
 		this.allGroups = this.createPlayerGroups(mediaPlayerHassEntities);
-		this.allMediaPlayers = this.allGroups.reduce((previousValue, currentValue) => [...previousValue, ...currentValue.members], []);
+		this.allMediaPlayers = getAllMediaPlayers(this.allGroups, this.config);
 		this.activePlayer = this.determineActivePlayer(activePlayerId);
 		this.hassService = new HassService(this.hass, currentSection, card);
 		this.mediaControlService = new MediaControlService(this.hassService, config);
@@ -3274,7 +3318,7 @@ var Store = class {
 			const isGrouped = groupIds?.length > 1;
 			const isMainInGroup = isGrouped && groupIds && groupIds[0] === hassEntity.entity_id;
 			const available = this.hass.states[hassEntity.entity_id]?.state !== "unavailable";
-			return (!isGrouped || isMainInGroup) && available;
+			return (this.config.allowGroupMembersOutsideOfEntities && isGroupPlayer(hassEntity) || !isGrouped || isMainInGroup) && available;
 		} catch (e) {
 			console.error("Failed to determine main player", JSON.stringify(hassEntity), e);
 			return false;
@@ -3282,7 +3326,7 @@ var Store = class {
 	}
 	createPlayerGroup(hassEntity, mediaPlayerHassEntities) {
 		try {
-			return new MediaPlayer(hassEntity, this.config, mediaPlayerHassEntities);
+			return new MediaPlayer(hassEntity, this.config, mediaPlayerHassEntities, this.hass);
 		} catch (e) {
 			console.error("Failed to create group", JSON.stringify(hassEntity), e);
 			return;
@@ -3307,11 +3351,10 @@ var Store = class {
 		if (this.config.player?.hideControlPowerButton) return true;
 		else if (!supportsTurnOn(this.activePlayer)) return true;
 		else if (hideIfOn && this.activePlayer.isOn()) return true;
-		else return E;
+		else return A;
 	}
 };
-//#endregion
-//#region src/components/section-button.ts
+// src/components/section-button.ts
 var SectionButton = class extends i$5 {
 	render() {
 		const size = this.config.sectionButtonIconSize;
@@ -3319,9 +3362,9 @@ var SectionButton = class extends i$5 {
 			"--icon-button-size": `${size}rem`,
 			"--icon-size": `${size * .6}rem`
 		} : {};
-		return x`<sonos-icon-button
+		return b`<sonos-icon-button
       @click=${() => this.dispatchSection()}
-      selected=${this.selectedSection === this.section || E}
+      selected=${this.selectedSection === this.section || A}
       style=${o$1(styles)}
     >
       <ha-icon .icon=${this.icon}></ha-icon>
@@ -3333,7 +3376,7 @@ var SectionButton = class extends i$5 {
 	static get styles() {
 		return i$8`
       :host > *[selected] {
-        color: var(--accent-color);
+        color: var(--primary-color);
       }
     `;
 	}
@@ -3343,8 +3386,7 @@ __decorate$1([n$5()], SectionButton.prototype, "icon", void 0);
 __decorate$1([n$5()], SectionButton.prototype, "section", void 0);
 __decorate$1([n$5()], SectionButton.prototype, "selectedSection", void 0);
 customElements.define("sonos-section-button", SectionButton);
-//#endregion
-//#region src/components/footer.ts
+// src/components/footer.ts
 var { GROUPING: GROUPING$1, GROUPS: GROUPS$1, MEDIA_BROWSER: MEDIA_BROWSER$1, PLAYER: PLAYER$1, VOLUMES: VOLUMES$1, QUEUE: QUEUE$1, SEARCH: SEARCH$1 } = Section;
 var Footer = class extends i$5 {
 	render() {
@@ -3360,8 +3402,8 @@ var Footer = class extends i$5 {
 		];
 		if (!isQueueSupported(this.config)) sections = sections.filter(([section]) => section !== QUEUE$1);
 		sections = sections.filter(([section]) => !this.config.sections || this.config.sections?.includes(section));
-		return x`
-      ${sections.map(([section, icon]) => x`
+		return b`
+      ${sections.map(([section, icon]) => b`
           <sonos-section-button .config=${this.config} .icon=${icon} .selectedSection=${this.section} .section=${section}></sonos-section-button>
         `)}
     `;
@@ -3381,8 +3423,7 @@ var Footer = class extends i$5 {
 __decorate$1([n$5({ attribute: false })], Footer.prototype, "config", void 0);
 __decorate$1([n$5()], Footer.prototype, "section", void 0);
 customElements.define("sonos-footer", Footer);
-//#endregion
-//#region node_modules/custom-card-helpers/dist/index.m.js
+// node_modules/custom-card-helpers/dist/index.m.js
 var NumberFormat;
 (function(NumberFormat) {
 	NumberFormat["language"] = "language";
@@ -3448,8 +3489,7 @@ var debounce = (func, wait, immediate = false) => {
 		if (callNow) func.apply(context, args);
 	};
 };
-//#endregion
-//#region src/editor/base-editor.ts
+// src/editor/base-editor.ts
 var BaseEditor = class extends i$5 {
 	setConfig(config) {
 		this.config = JSON.parse(JSON.stringify(config));
@@ -3480,8 +3520,7 @@ var BaseEditor = class extends i$5 {
 };
 __decorate$1([n$5({ attribute: false })], BaseEditor.prototype, "config", void 0);
 __decorate$1([n$5({ attribute: false })], BaseEditor.prototype, "hass", void 0);
-//#endregion
-//#region src/editor/schema/groups-schema.ts
+// src/editor/schema/groups-schema.ts
 var GROUPS_SCHEMA = [
 	{
 		name: "title",
@@ -3524,8 +3563,7 @@ var GROUPS_SCHEMA = [
 		valueMin: .1
 	}
 ];
-//#endregion
-//#region src/editor/schema/grouping-schema.ts
+// src/editor/schema/grouping-schema.ts
 var GROUPING_SCHEMA = [
 	{
 		name: "title",
@@ -3571,8 +3609,7 @@ var GROUPING_SCHEMA = [
 		selector: { boolean: {} }
 	}
 ];
-//#endregion
-//#region src/editor/schema/volumes-schema.ts
+// src/editor/schema/volumes-schema.ts
 var VOLUMES_SCHEMA = [
 	{
 		name: "title",
@@ -3595,8 +3632,7 @@ var VOLUMES_SCHEMA = [
 		type: "string"
 	}
 ];
-//#endregion
-//#region src/editor/schema/queue-schema.ts
+// src/editor/schema/queue-schema.ts
 var QUEUE_SCHEMA = [
 	{
 		name: "title",
@@ -3647,7 +3683,8 @@ var SEARCH_SCHEMA = [
 			artist: "Artist",
 			album: "Album",
 			playlist: "Playlist",
-			radio: "Radio"
+			radio: "Radio",
+			podcast: "Podcast"
 		}).map((entry) => entry),
 		name: "defaultMediaType"
 	},
@@ -3681,8 +3718,7 @@ var SEARCH_SCHEMA = [
 		help: "Debounce delay in ms (default: 1000)"
 	}
 ];
-//#endregion
-//#region src/editor/schema/common-schema.ts
+// src/editor/schema/common-schema.ts
 var options = {
 	player: "Player",
 	"media browser": "Media Browser",
@@ -3709,6 +3745,11 @@ var COMMON_SCHEMA = [
 	},
 	{
 		name: "adjustVolumeRelativeToMainPlayer",
+		selector: { boolean: {} }
+	},
+	{
+		name: "allowGroupMembersOutsideOfEntities",
+		help: "Show members of group players (e.g. Music Assistant sync groups) in volumes and grouping, even if they are not in the entities list",
 		selector: { boolean: {} }
 	},
 	{
@@ -3868,6 +3909,11 @@ var ENTITIES_SCHEMA = [
 		selector: { text: {} }
 	},
 	{
+		name: "entityName",
+		label: "Entity name",
+		selector: { entity_name: {} }
+	},
+	{
 		name: "entityNameRegexToReplace",
 		type: "string"
 	},
@@ -3902,8 +3948,7 @@ var PREDEFINED_GROUP_SCHEMA = [
 		} }
 	}
 ];
-//#endregion
-//#region src/editor/tabs/predefined-group-editor.ts
+// src/editor/tabs/predefined-group-editor.ts
 var PredefinedGroupEditor = class extends BaseEditor {
 	constructor(..._args) {
 		super(..._args);
@@ -3952,8 +3997,8 @@ var PredefinedGroupEditor = class extends BaseEditor {
 	}
 	render() {
 		if (!this.predefinedGroup) this.initPredefinedGroup();
-		if (!this.predefinedGroup) return x``;
-		return x`
+		if (!this.predefinedGroup) return b``;
+		return b`
       <h3>Add/Edit Predefined Group</h3>
       <sonos-card-editor-form
         .data=${{
@@ -3991,11 +4036,11 @@ var PredefinedGroupEditor = class extends BaseEditor {
 		const schema = [{
 			type: "integer",
 			name: "volume",
-			label: `${this.hass.states[player]?.attributes.friendly_name ?? player}${volume !== void 0 ? `: ${volume}` : ""}`,
+			label: `${(this.config.entityName === void 0 ? getEntityName(this.hass, this.hass.states[player]) : getPlayerName(this.hass, this.hass.states[player], this.config)) || player}${volume !== void 0 ? `: ${volume}` : ""}`,
 			valueMin: 0,
 			valueMax: 100
 		}];
-		return x`
+		return b`
       <sonos-card-editor-form
         .data=${{ volume }}
         .schema=${schema}
@@ -4009,8 +4054,7 @@ var PredefinedGroupEditor = class extends BaseEditor {
 __decorate$1([n$5({ type: Number })], PredefinedGroupEditor.prototype, "index", void 0);
 __decorate$1([r$3()], PredefinedGroupEditor.prototype, "predefinedGroup", void 0);
 customElements.define("sonos-card-predefined-group-editor", PredefinedGroupEditor);
-//#endregion
-//#region src/editor/tabs/common-tab.ts
+// src/editor/tabs/common-tab.ts
 var CommonTab = class extends BaseEditor {
 	constructor(..._args) {
 		super(..._args);
@@ -4019,15 +4063,16 @@ var CommonTab = class extends BaseEditor {
 			const { useMusicAssistant, ...formData } = ev.detail.value;
 			const prevUseMusicAssistant = this.config.entityPlatform === "music_assistant";
 			const newUseMusicAssistant = !!useMusicAssistant;
-			if (newUseMusicAssistant !== prevUseMusicAssistant) if (newUseMusicAssistant) this.config = {
-				...this.config,
-				entityPlatform: "music_assistant"
-			};
-			else this.config = {
-				...this.config,
-				entityPlatform: void 0
-			};
-			else this.config = {
+			if (newUseMusicAssistant !== prevUseMusicAssistant) {
+				if (newUseMusicAssistant) this.config = {
+					...this.config,
+					entityPlatform: "music_assistant"
+				};
+				else this.config = {
+					...this.config,
+					entityPlatform: void 0
+				};
+			} else this.config = {
 				...this.config,
 				...formData
 			};
@@ -4042,7 +4087,7 @@ var CommonTab = class extends BaseEditor {
 		};
 	}
 	render() {
-		if (this.editPredefinedGroup > -1) return x`
+		if (this.editPredefinedGroup > -1) return b`
         <sonos-card-predefined-group-editor
           .index=${this.editPredefinedGroup}
           .config=${this.config}
@@ -4050,7 +4095,7 @@ var CommonTab = class extends BaseEditor {
           @closed=${() => this.editPredefinedGroup = -1}
         ></sonos-card-predefined-group-editor>
       `;
-		return x`
+		return b`
       <h3>Entities</h3>
       ${this.renderEntitiesForm()}
       <h3>Predefined Groups</h3>
@@ -4065,9 +4110,9 @@ var CommonTab = class extends BaseEditor {
 			...this.config,
 			useMusicAssistant
 		};
-		return x`
+		return b`
       <sonos-card-editor-form
-        .schema=${ENTITIES_SCHEMA}
+        .schema=${supportsEntityNames(this.hass) ? ENTITIES_SCHEMA : ENTITIES_SCHEMA.filter(({ name }) => name !== "entityName")}
         .config=${this.config}
         .hass=${this.hass}
         .data=${data}
@@ -4076,7 +4121,7 @@ var CommonTab = class extends BaseEditor {
     `;
 	}
 	renderForm(schema) {
-		return x`
+		return b`
       <sonos-card-editor-form
         .schema=${schema}
         .config=${this.config}
@@ -4088,9 +4133,9 @@ var CommonTab = class extends BaseEditor {
 	}
 	renderPredefinedGroupsList() {
 		const groups = this.config.predefinedGroups;
-		return x`
+		return b`
       <ha-control-button-group>
-        ${groups?.map((pg, index) => x`
+        ${groups?.map((pg, index) => b`
             <ha-control-button @click=${() => this.editPredefinedGroup = index}>
               ${pg.name}<ha-svg-icon .path=${mdiPen} label="Edit"></ha-svg-icon>
             </ha-control-button>
@@ -4104,8 +4149,7 @@ var CommonTab = class extends BaseEditor {
 };
 __decorate$1([r$3()], CommonTab.prototype, "editPredefinedGroup", void 0);
 customElements.define("sonos-card-common-tab", CommonTab);
-//#endregion
-//#region src/editor/schema/player-schema.ts
+// src/editor/schema/player-schema.ts
 var PLAYER_SCHEMA = [
 	{
 		name: "artworkAsBackground",
@@ -4196,6 +4240,10 @@ var PLAYER_SCHEMA = [
 	},
 	{
 		name: "hideArtwork",
+		selector: { boolean: {} }
+	},
+	{
+		name: "hideControlFavoriteButton",
 		selector: { boolean: {} }
 	},
 	{
@@ -4298,8 +4346,7 @@ var PLAYER_SCHEMA = [
 		valueMin: .1
 	}
 ];
-//#endregion
-//#region src/editor/tabs/artwork-override-editor.ts
+// src/editor/tabs/artwork-override-editor.ts
 var ARTWORK_OVERRIDE_SCHEMA = [
 	{
 		name: "ifMissing",
@@ -4418,7 +4465,7 @@ var ArtworkOverrideEditor = class extends BaseEditor {
 		const playerConfig = this.config.player ?? {};
 		const override = playerConfig.mediaArtworkOverrides?.[this.index] ?? { ifMissing: false };
 		const isExisting = !!playerConfig.mediaArtworkOverrides?.[this.index];
-		return x`
+		return b`
       <h3>Add/Edit Artwork Override</h3>
       <sonos-card-editor-form
         .data=${override}
@@ -4429,15 +4476,14 @@ var ArtworkOverrideEditor = class extends BaseEditor {
       ></sonos-card-editor-form>
       <ha-control-button-group>
         <ha-control-button @click=${this.dispatchClose}>OK<ha-svg-icon .path=${mdiCheck}></ha-svg-icon></ha-control-button>
-        ${isExisting ? x`<ha-control-button @click=${this.delete}>Delete<ha-svg-icon .path=${mdiDelete}></ha-svg-icon></ha-control-button>` : E}
+        ${isExisting ? b`<ha-control-button @click=${this.delete}>Delete<ha-svg-icon .path=${mdiDelete}></ha-svg-icon></ha-control-button>` : A}
       </ha-control-button-group>
     `;
 	}
 };
 __decorate$1([n$5({ type: Number })], ArtworkOverrideEditor.prototype, "index", void 0);
 customElements.define("sonos-card-artwork-override-editor", ArtworkOverrideEditor);
-//#endregion
-//#region src/editor/tabs/player-tab.ts
+// src/editor/tabs/player-tab.ts
 var PlayerTab = class extends BaseEditor {
 	constructor(..._args) {
 		super(..._args);
@@ -4455,7 +4501,7 @@ var PlayerTab = class extends BaseEditor {
 		};
 	}
 	render() {
-		if (this.editArtworkOverride > -1) return x`
+		if (this.editArtworkOverride > -1) return b`
         <sonos-card-artwork-override-editor
           .index=${this.editArtworkOverride}
           .config=${this.config}
@@ -4463,7 +4509,7 @@ var PlayerTab = class extends BaseEditor {
           @closed=${() => this.editArtworkOverride = -1}
         ></sonos-card-artwork-override-editor>
       `;
-		return x`
+		return b`
       <sonos-card-editor-form
         .schema=${PLAYER_SCHEMA}
         .config=${this.config}
@@ -4477,9 +4523,9 @@ var PlayerTab = class extends BaseEditor {
 	}
 	renderArtworkOverridesList() {
 		const items = this.config.player?.mediaArtworkOverrides;
-		return x`
+		return b`
       <ha-control-button-group>
-        ${items?.map((item, index) => x`
+        ${items?.map((item, index) => b`
             <ha-control-button @click=${() => this.editArtworkOverride = index}>
               ${this.getOverrideName(item, index)}<ha-svg-icon .path=${mdiPen} label="Edit"></ha-svg-icon>
             </ha-control-button>
@@ -4496,8 +4542,7 @@ var PlayerTab = class extends BaseEditor {
 };
 __decorate$1([r$3()], PlayerTab.prototype, "editArtworkOverride", void 0);
 customElements.define("sonos-card-player-tab", PlayerTab);
-//#endregion
-//#region src/editor/schema/media-browser-schema.ts
+// src/editor/schema/media-browser-schema.ts
 var MEDIA_BROWSER_SCHEMA = [
 	{
 		name: "hideHeader",
@@ -4622,8 +4667,7 @@ var FAVORITES_SUB_SCHEMA = [
 		type: "string"
 	}
 ];
-//#endregion
-//#region src/editor/tabs/media-browser-tab.ts
+// src/editor/tabs/media-browser-tab.ts
 var MediaBrowserTab = class extends BaseEditor {
 	constructor(..._args) {
 		super(..._args);
@@ -4697,7 +4741,7 @@ var MediaBrowserTab = class extends BaseEditor {
 		const shortcutData = { ...shortcutConfig };
 		const hasShowOnly = showOnlyItems.length > 0;
 		const hasHideItems = hideItems.length > 0;
-		return x`
+		return b`
       <sonos-card-editor-form
         .schema=${MEDIA_BROWSER_SCHEMA}
         .config=${this.config}
@@ -4777,8 +4821,7 @@ var MediaBrowserTab = class extends BaseEditor {
 	}
 };
 customElements.define("sonos-card-media-browser-tab", MediaBrowserTab);
-//#endregion
-//#region src/editor/tabs/section-tab.ts
+// src/editor/tabs/section-tab.ts
 var SectionTab = class extends BaseEditor {
 	constructor(..._args) {
 		super(..._args);
@@ -4795,7 +4838,7 @@ var SectionTab = class extends BaseEditor {
 		};
 	}
 	render() {
-		return x`
+		return b`
       <sonos-card-editor-form
         .schema=${this.schema}
         .config=${this.config}
@@ -4809,8 +4852,7 @@ var SectionTab = class extends BaseEditor {
 __decorate$1([n$5({ attribute: false })], SectionTab.prototype, "schema", void 0);
 __decorate$1([n$5()], SectionTab.prototype, "section", void 0);
 customElements.define("sonos-card-section-tab", SectionTab);
-//#endregion
-//#region src/editor/form.ts
+// src/editor/form.ts
 var Form = class extends BaseEditor {
 	constructor(..._args) {
 		super(..._args);
@@ -4832,7 +4874,7 @@ var Form = class extends BaseEditor {
 	}
 	render() {
 		const schema = filterEditorSchemaOnCardType(this.schema, this.config.type);
-		return x`
+		return b`
       <ha-form
         .data=${this.section ? this.config[this.section] ?? {} : this.data || this.config}
         .schema=${schema}
@@ -4858,8 +4900,7 @@ function filterEditorSchemaOnCardType(schema, cardType) {
 	return schema.filter((schema) => schema.cardType === void 0 || cardType.indexOf(schema.cardType) > -1);
 }
 customElements.define("sonos-card-editor-form", Form);
-//#endregion
-//#region src/editor/editor.ts
+// src/editor/editor.ts
 var Tab = /* @__PURE__ */ function(Tab) {
 	Tab["COMMON"] = "Common";
 	Tab["PLAYER"] = "Player";
@@ -4908,16 +4949,16 @@ var CardEditor = class extends BaseEditor {
 		});
 	}
 	render() {
-		if (!this.config) return x``;
+		if (!this.config) return b``;
 		const tabs = this.tabs;
 		const activeIndex = this.activeTabIndex;
 		const showLeftArrow = activeIndex > 0;
 		const showRightArrow = activeIndex < tabs.length - 1;
-		return x`
+		return b`
       <div class="tabs-container">
         <sonos-icon-button class="nav-arrow ${showLeftArrow ? "" : "hidden"}" .path=${mdiChevronLeft} @click=${this.navigatePrev}></sonos-icon-button>
         <div class="tabs-list">
-          ${tabs.map((tab) => x` <button class="tab-button ${this.activeTab === tab ? "active" : ""}" @click=${() => this.activeTab = tab}>${tab}</button> `)}
+          ${tabs.map((tab) => b` <button class="tab-button ${this.activeTab === tab ? "active" : ""}" @click=${() => this.activeTab = tab}>${tab}</button> `)}
         </div>
         <sonos-icon-button class="nav-arrow ${showRightArrow ? "" : "hidden"}" .path=${mdiChevronRight} @click=${this.navigateNext}></sonos-icon-button>
       </div>
@@ -4926,11 +4967,11 @@ var CardEditor = class extends BaseEditor {
 	}
 	renderTabContent() {
 		const c = this.config, h = this.hass;
-		const t = (s, sec) => x`<sonos-card-section-tab .schema=${s} .section=${sec} .config=${c} .hass=${h}></sonos-card-section-tab>`;
+		const t = (s, sec) => b`<sonos-card-section-tab .schema=${s} .section=${sec} .config=${c} .hass=${h}></sonos-card-section-tab>`;
 		return r(this.activeTab, [
-			["Common", () => x`<sonos-card-common-tab .config=${c} .hass=${h}></sonos-card-common-tab>`],
-			["Player", () => x`<sonos-card-player-tab .config=${c} .hass=${h}></sonos-card-player-tab>`],
-			["Media Browser", () => x`<sonos-card-media-browser-tab .config=${c} .hass=${h}></sonos-card-media-browser-tab>`],
+			["Common", () => b`<sonos-card-common-tab .config=${c} .hass=${h}></sonos-card-common-tab>`],
+			["Player", () => b`<sonos-card-player-tab .config=${c} .hass=${h}></sonos-card-player-tab>`],
+			["Media Browser", () => b`<sonos-card-media-browser-tab .config=${c} .hass=${h}></sonos-card-media-browser-tab>`],
 			["Groups", () => t(GROUPS_SCHEMA, "groups")],
 			["Grouping", () => t(GROUPING_SCHEMA, "grouping")],
 			["Volumes", () => t(VOLUMES_SCHEMA, "volumes")],
@@ -5002,8 +5043,7 @@ var CardEditor = class extends BaseEditor {
 };
 __decorate$1([r$3()], CardEditor.prototype, "activeTab", void 0);
 customElements.define("sonos-card-editor", CardEditor);
-//#endregion
-//#region src/components/shuffle.ts
+// src/components/shuffle.ts
 var Shuffle = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -5012,7 +5052,7 @@ var Shuffle = class extends i$5 {
 	render() {
 		this.activePlayer = this.store.activePlayer;
 		this.mediaControlService = this.store.mediaControlService;
-		return x`<sonos-icon-button @click=${this.shuffle} .path=${this.shuffleIcon()}></sonos-icon-button> `;
+		return b`<sonos-icon-button @click=${this.shuffle} .path=${this.shuffleIcon()}></sonos-icon-button> `;
 	}
 	shuffleIcon() {
 		return this.activePlayer?.attributes.shuffle ? mdiShuffle : mdiShuffleDisabled;
@@ -5020,8 +5060,7 @@ var Shuffle = class extends i$5 {
 };
 __decorate$1([n$5({ attribute: false })], Shuffle.prototype, "store", void 0);
 customElements.define("sonos-shuffle", Shuffle);
-//#endregion
-//#region src/components/repeat.ts
+// src/components/repeat.ts
 var Repeat = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -5030,7 +5069,7 @@ var Repeat = class extends i$5 {
 	render() {
 		this.activePlayer = this.store.activePlayer;
 		this.mediaControlService = this.store.mediaControlService;
-		return x`<sonos-icon-button @click=${this.repeat} .path=${this.repeatIcon()}></sonos-icon-button> `;
+		return b`<sonos-icon-button @click=${this.repeat} .path=${this.repeatIcon()}></sonos-icon-button> `;
 	}
 	repeatIcon() {
 		const repeatState = this.activePlayer?.attributes.repeat;
@@ -5039,8 +5078,7 @@ var Repeat = class extends i$5 {
 };
 __decorate$1([n$5({ attribute: false })], Repeat.prototype, "store", void 0);
 customElements.define("sonos-repeat", Repeat);
-//#endregion
-//#region src/components/source.ts
+// src/components/source.ts
 var Source = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -5065,7 +5103,7 @@ var Source = class extends i$5 {
 			this.selectedSourcePlayerId = this.activePlayer.id;
 		}
 		const sourceLabel = this.store.hass.localize("ui.card.media_player.source") || "Source";
-		return x`
+		return b`
       <div>
         <span>${sourceLabel}</span>
         <ha-select .label=${sourceLabel} .value=${this.selectedSource ?? this.activePlayer.attributes.source ?? ""} .options=${this.activePlayer.attributes.source_list?.map((source) => ({
@@ -5094,8 +5132,7 @@ __decorate$1([n$5({ attribute: false })], Source.prototype, "player", void 0);
 __decorate$1([r$3()], Source.prototype, "selectedSource", void 0);
 __decorate$1([r$3()], Source.prototype, "selectedSourcePlayerId", void 0);
 customElements.define("sonos-source", Source);
-//#endregion
-//#region src/card.ts
+// src/card.ts
 var { GROUPING, GROUPS, MEDIA_BROWSER, PLAYER, VOLUMES, QUEUE, SEARCH } = Section;
 var TITLE_HEIGHT = 2;
 var FOOTER_HEIGHT = 5;
@@ -5125,8 +5162,10 @@ var Card = class extends i$5 {
 		this.callMediaDoneListener = () => {
 			this.cancelLoader = true;
 			const duration = Date.now() - this.loaderTimestamp;
-			if (this.showLoader) if (duration < 1e3) setTimeout(() => this.showLoader = false, 1e3 - duration);
-			else this.showLoader = false;
+			if (this.showLoader) {
+				if (duration < 1e3) setTimeout(() => this.showLoader = false, 1e3 - duration);
+				else this.showLoader = false;
+			}
 		};
 		this.activePlayerListener = (event) => {
 			const newEntityId = event.detail.entityId;
@@ -5150,26 +5189,26 @@ var Card = class extends i$5 {
 		const title = this.config.title;
 		height = title ? height + TITLE_HEIGHT : height;
 		const noPlayersText = isSonosCard(this.config) ? "No supported players found" : "No players found. Make sure you have configured entities in the card's configuration, or configured `entityPlatform`.";
-		return x`
+		return b`
       <ha-card style=${this.haCardStyle(height)}>
         <div class="loader" ?hidden=${!this.showLoader}>
           <ha-circular-progress indeterminate></ha-circular-progress></div
         >
         </div>
-        ${title ? x`<div class="title">${title}</div>` : x``}
-        ${this.configError ? x`<div class="no-players">${this.configError}</div>` : x``}
+        ${title ? b`<div class="title">${title}</div>` : b``}
+        ${this.configError ? b`<div class="no-players">${this.configError}</div>` : b``}
         <div class="content" style=${this.contentStyle(contentHeight)}>
           ${this.activePlayerId ? r(this.section, [
-			[PLAYER, () => x` <sonos-player .store=${this.store}></sonos-player>`],
-			[GROUPS, () => x` <sonos-groups .store=${this.store} @active-player=${this.activePlayerListener}></sonos-groups>`],
-			[GROUPING, () => x`<sonos-grouping .store=${this.store} @active-player=${this.activePlayerListener}></sonos-grouping>`],
-			[VOLUMES, () => x` <sonos-volumes .store=${this.store}></sonos-volumes>`],
-			[MEDIA_BROWSER, () => x`<sonos-media-browser .store=${this.store} @item-selected=${this.onMediaItemSelected}></sonos-media-browser>`],
-			[QUEUE, () => x`<sonos-queue .store=${this.store} @item-selected=${this.onMediaItemSelected}></sonos-queue>`],
-			[SEARCH, () => x`<sonos-search .store=${this.store} @item-selected=${this.onMediaItemSelected}></sonos-search>`]
-		]) : x`<div class="no-players">${noPlayersText}</div>`}
+			[PLAYER, () => b` <sonos-player .store=${this.store}></sonos-player>`],
+			[GROUPS, () => b` <sonos-groups .store=${this.store} @active-player=${this.activePlayerListener}></sonos-groups>`],
+			[GROUPING, () => b`<sonos-grouping .store=${this.store} @active-player=${this.activePlayerListener}></sonos-grouping>`],
+			[VOLUMES, () => b` <sonos-volumes .store=${this.store}></sonos-volumes>`],
+			[MEDIA_BROWSER, () => b`<sonos-media-browser .store=${this.store} @item-selected=${this.onMediaItemSelected}></sonos-media-browser>`],
+			[QUEUE, () => b`<sonos-queue .store=${this.store} @item-selected=${this.onMediaItemSelected}></sonos-queue>`],
+			[SEARCH, () => b`<sonos-search .store=${this.store} @item-selected=${this.onMediaItemSelected}></sonos-search>`]
+		]) : b`<div class="no-players">${noPlayersText}</div>`}
         </div>
-        ${n(showFooter, () => x`<sonos-footer
+        ${n(showFooter, () => b`<sonos-footer
               style=${this.footerStyle(footerHeight)}
               .config=${this.config}
               .section=${this.section}
@@ -5262,6 +5301,7 @@ var Card = class extends i$5 {
 			if (newConfig.showNonSonosPlayers) newConfig.entityPlatform = void 0;
 		}
 		this.configError = this.getConfigError(newConfig);
+		if (this.config && newConfig.entityId && newConfig.entityId !== this.config.entityId) this.activePlayerId = newConfig.entityId;
 		this.config = newConfig;
 	}
 	getConfigError(config) {
@@ -5279,7 +5319,7 @@ var Card = class extends i$5 {
         --mdc-icon-size: 2rem;
       }
       ha-circular-progress {
-        --md-sys-color-primary: var(--accent-color);
+        --md-sys-color-primary: var(--primary-color);
       }
       .loader {
         position: absolute;
@@ -5287,7 +5327,7 @@ var Card = class extends i$5 {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        --mdc-theme-primary: var(--accent-color);
+        --mdc-theme-primary: var(--primary-color);
       }
       .title {
         margin: 0.4rem 0;
@@ -5312,8 +5352,7 @@ __decorate$1([r$3()], Card.prototype, "loaderTimestamp", void 0);
 __decorate$1([r$3()], Card.prototype, "cancelLoader", void 0);
 __decorate$1([r$3()], Card.prototype, "activePlayerId", void 0);
 __decorate$1([r$3()], Card.prototype, "configError", void 0);
-//#endregion
-//#region src/model/grouping-item.ts
+// src/model/grouping-item.ts
 var GroupingItem = class {
 	constructor(player, activePlayer, isModified) {
 		this.isDisabled = false;
@@ -5326,8 +5365,7 @@ var GroupingItem = class {
 		this.icon = this.isSelected ? "check-circle" : "checkbox-blank-circle-outline";
 	}
 };
-//#endregion
-//#region src/sections/grouping/grouping-section.styles.ts
+// src/sections/grouping/grouping-section.styles.ts
 var groupingSectionStyles = [listStyle, i$8`
     :host {
       --mdc-icon-size: 24px;
@@ -5348,7 +5386,7 @@ var groupingSectionStyles = [listStyle, i$8`
       padding-top: 0.5rem;
     }
     .apply {
-      --control-button-background-color: var(--accent-color);
+      --control-button-background-color: var(--primary-color);
     }
     [hidden] {
       display: none !important;
@@ -5367,8 +5405,7 @@ var groupingSectionStyles = [listStyle, i$8`
       pointer-events: none;
     }
   `];
-//#endregion
-//#region src/sections/grouping/grouping-utils.ts
+// src/sections/grouping/grouping-utils.ts
 var SYNC_POLL_INTERVAL = 500;
 var SYNC_TIMEOUT = 3e4;
 function buildGroupingItems(store, modifiedItems) {
@@ -5408,19 +5445,18 @@ function waitForGroupSync(getStore, mainPlayerId, expectedIds) {
 		}, SYNC_POLL_INTERVAL);
 	});
 }
-//#endregion
-//#region src/sections/grouping/grouping-button.ts
+// src/sections/grouping/grouping-button.ts
 var GroupingButton = class extends i$5 {
 	render() {
-		const iconAndName = !!this.icon && !!this.name || E;
+		const iconAndName = !!this.icon && !!this.name || A;
 		const buttonStyle = o$1({
 			...this.buttonColor ? { "--control-button-background-color": this.buttonColor } : {},
 			...this.fontSize ? { fontSize: `${this.fontSize}rem` } : {}
 		});
-		return x`
-      <ha-control-button selected=${this.selected || E} style=${buttonStyle}>
+		return b`
+      <ha-control-button selected=${this.selected || A} style=${buttonStyle}>
         <div>
-          ${this.icon ? x` <ha-icon icon-and-name=${iconAndName} .icon=${this.icon}></ha-icon>` : ""} ${this.name ? x`<span>${this.name}</span>` : ""}
+          ${this.icon ? b` <ha-icon icon-and-name=${iconAndName} .icon=${this.icon}></ha-icon>` : ""} ${this.name ? b`<span>${this.name}</span>` : ""}
         </div>
       </ha-control-button>
     `;
@@ -5429,11 +5465,11 @@ var GroupingButton = class extends i$5 {
 		return i$8`
       ha-control-button {
         width: fit-content;
-        --control-button-background-color: var(--secondary-text-color);
-        --control-button-icon-color: var(--secondary-text-color);
+        --control-button-background-color: var(--grouping-button-color, var(--accent-color));
+        --control-button-icon-color: var(--grouping-button-color, var(--accent-color));
       }
       ha-control-button[selected] {
-        --control-button-icon-color: var(--accent-color);
+        --control-button-background-opacity: 0.3;
       }
 
       span {
@@ -5448,8 +5484,7 @@ __decorate$1([n$5()], GroupingButton.prototype, "selected", void 0);
 __decorate$1([n$5()], GroupingButton.prototype, "buttonColor", void 0);
 __decorate$1([n$5()], GroupingButton.prototype, "fontSize", void 0);
 customElements.define("sonos-grouping-button", GroupingButton);
-//#endregion
-//#region src/sections/grouping/grouping-actions.ts
+// src/sections/grouping/grouping-actions.ts
 var GroupingActions = class extends i$5 {
 	render() {
 		const { store, selectedPredefinedGroup } = this;
@@ -5458,11 +5493,12 @@ var GroupingActions = class extends i$5 {
 		const unJoinAllIcon = store.config.grouping?.buttonIcons?.unJoinAll ?? "mdi:minus-box-multiple-outline";
 		const pgIcon = store.config.grouping?.buttonIcons?.predefinedGroup ?? "mdi:speaker-multiple";
 		const fontSize = store.config.grouping?.buttonFontSize;
-		const isCompact = store.config.grouping?.compact || E;
+		const isCompact = store.config.grouping?.compact || A;
 		const hideUngroupButtons = !!store.config.grouping?.hideUngroupAllButtons;
-		return x`
+		return b`
       <div class="predefined-groups" compact=${isCompact}>
         <sonos-grouping-button
+          class="select-all"
           ?hidden=${hideUngroupButtons || !notJoinedCount}
           @click=${() => this.dispatch({ type: "select-all" })}
           .icon=${joinAllIcon}
@@ -5470,6 +5506,7 @@ var GroupingActions = class extends i$5 {
           .fontSize=${fontSize}
         ></sonos-grouping-button>
         <sonos-grouping-button
+          class="select-none"
           ?hidden=${hideUngroupButtons || !joinedCount}
           @click=${() => this.dispatch({ type: "deselect-all" })}
           .icon=${unJoinAllIcon}
@@ -5478,7 +5515,7 @@ var GroupingActions = class extends i$5 {
         ></sonos-grouping-button>
         ${store.predefinedGroups.map((pg) => {
 			const isSelected = selectedPredefinedGroup?.name === pg.name;
-			return x` <sonos-grouping-button
+			return b` <sonos-grouping-button
             @click=${() => this.dispatch({
 				type: "select-predefined-group",
 				predefinedGroup: pg
@@ -5502,6 +5539,12 @@ var GroupingActions = class extends i$5 {
 	}
 	static get styles() {
 		return i$8`
+      .select-all {
+        --grouping-button-color: var(--primary-color);
+      }
+      .select-none {
+        --grouping-button-color: var(--error-color);
+      }
       .predefined-groups {
         margin: 1rem;
         display: flex;
@@ -5519,8 +5562,7 @@ var GroupingActions = class extends i$5 {
 __decorate$1([n$5({ attribute: false })], GroupingActions.prototype, "store", void 0);
 __decorate$1([n$5({ attribute: false })], GroupingActions.prototype, "selectedPredefinedGroup", void 0);
 customElements.define("sonos-grouping-actions", GroupingActions);
-//#endregion
-//#region src/sections/grouping/grouping-item-row.ts
+// src/sections/grouping/grouping-item-row.ts
 var GroupingItemRow = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -5528,9 +5570,13 @@ var GroupingItemRow = class extends i$5 {
 	}
 	render() {
 		const { item, applying, store } = this;
-		return x`
-      <div class="item" modified=${item.isModified || E} disabled=${item.isDisabled || applying || E} compact=${store.config.grouping?.compact || E}>
-        <ha-icon class="icon" selected=${item.isSelected || E} .icon="mdi:${item.icon}" @click=${this.handleToggle}></ha-icon>
+		const isModified = item.isModified || A;
+		const isDisabled = item.isDisabled || applying || A;
+		const isCompact = store.config.grouping?.compact || A;
+		const isSelected = item.isSelected || A;
+		return b`
+      <div class="item" selected=${isSelected} modified=${isModified} disabled=${isDisabled} compact=${isCompact}>
+        <ha-icon class="icon" selected=${isSelected} .icon="mdi:${item.icon}" @click=${this.handleToggle}></ha-icon>
         <div class="name-and-volume">
           <span class="name">${item.name}</span>
           <sonos-volume
@@ -5569,7 +5615,7 @@ var GroupingItemRow = class extends i$5 {
         padding-right: 0.5rem;
         flex-shrink: 0;
       }
-      .icon[selected] {
+      .item[selected] .icon {
         color: var(--accent-color);
       }
       .item[modified] .name {
@@ -5584,8 +5630,8 @@ var GroupingItemRow = class extends i$5 {
         flex-direction: column;
         flex: 1;
       }
-      .volume {
-        --accent-color: var(--secondary-text-color);
+      .item[selected] .volume {
+        --sonos-volume-slider-color: var(--accent-color);
       }
     `;
 	}
@@ -5594,8 +5640,7 @@ __decorate$1([n$5({ attribute: false })], GroupingItemRow.prototype, "store", vo
 __decorate$1([n$5({ attribute: false })], GroupingItemRow.prototype, "item", void 0);
 __decorate$1([n$5({ type: Boolean })], GroupingItemRow.prototype, "applying", void 0);
 customElements.define("sonos-grouping-item-row", GroupingItemRow);
-//#endregion
-//#region src/sections/grouping/grouping-section.ts
+// src/sections/grouping/grouping-section.ts
 var POST_SYNC_DELAY = 1e3;
 var Grouping = class extends i$5 {
 	constructor(..._args) {
@@ -5609,7 +5654,7 @@ var Grouping = class extends i$5 {
 		const { applying, selectedPredefinedGroup, modifiedItems, store } = this;
 		const hasChanges = modifiedItems.length > 0 || !!selectedPredefinedGroup;
 		const hideButtons = applying || !hasChanges || !!store.config.grouping?.skipApplyButton;
-		return x`
+		return b`
       <div class="wrapper">
         <sonos-grouping-actions
           .store=${store}
@@ -5617,7 +5662,7 @@ var Grouping = class extends i$5 {
           @grouping-action=${this.handleGroupingAction}
         ></sonos-grouping-actions>
         <div class="list">
-          ${items.map((item) => x`
+          ${items.map((item) => b`
               <sonos-grouping-item-row .store=${store} .item=${item} .applying=${applying} @toggle-item=${this.handleToggleItem}></sonos-grouping-item-row>
             `)}
         </div>
@@ -5712,16 +5757,15 @@ __decorate$1([n$5({ attribute: false })], Grouping.prototype, "store", void 0);
 __decorate$1([r$3()], Grouping.prototype, "modifiedItems", void 0);
 __decorate$1([r$3()], Grouping.prototype, "selectedPredefinedGroup", void 0);
 __decorate$1([r$3()], Grouping.prototype, "applying", void 0);
-//#endregion
-//#region src/components/playing-bars.ts
+// src/components/playing-bars.ts
 var PlayingBars = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
 		this.show = false;
 	}
 	render() {
-		if (!this.show) return E;
-		return x`
+		if (!this.show) return A;
+		return b`
       <div class="bars">
         <div></div>
         <div></div>
@@ -5782,8 +5826,7 @@ var PlayingBars = class extends i$5 {
 };
 __decorate$1([n$5({ type: Boolean })], PlayingBars.prototype, "show", void 0);
 customElements.define("sonos-playing-bars", PlayingBars);
-//#endregion
-//#region src/sections/groups/group-icons.ts
+// src/sections/groups/group-icons.ts
 var GroupIcons = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -5793,10 +5836,10 @@ var GroupIcons = class extends i$5 {
 		const length = this.icons.length;
 		const iconsToShow = this.icons.slice(0, 4);
 		const iconClass = length > 1 ? "small" : "";
-		const iconsHtml = iconsToShow.map((icon) => x` <ha-icon class=${iconClass} .icon=${icon}></ha-icon>`);
-		if (length > 4) iconsHtml.splice(3, 1, x`<span>+${length - 3}</span>`);
-		if (length > 2) iconsHtml.splice(2, 0, x`<br />`);
-		return x` <div class="icons" ?empty=${length === 0}>${iconsHtml}</div>`;
+		const iconsHtml = iconsToShow.map((icon) => b` <ha-icon class=${iconClass} .icon=${icon}></ha-icon>`);
+		if (length > 4) iconsHtml.splice(3, 1, b`<span>+${length - 3}</span>`);
+		if (length > 2) iconsHtml.splice(2, 0, b`<br />`);
+		return b` <div class="icons" ?empty=${length === 0}>${iconsHtml}</div>`;
 	}
 	static get styles() {
 		return i$8`
@@ -5826,8 +5869,7 @@ var GroupIcons = class extends i$5 {
 };
 __decorate$1([n$5({ attribute: false })], GroupIcons.prototype, "icons", void 0);
 customElements.define("sonos-group-icons", GroupIcons);
-//#endregion
-//#region src/sections/groups/group.ts
+// src/sections/groups/group.ts
 var Group = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -5847,7 +5889,7 @@ var Group = class extends i$5 {
 		});
 		const speakersStyle = o$1(speakersFontSize ? { fontSize: `${speakersFontSize}rem` } : {});
 		const titleStyle = o$1(titleFontSize ? { fontSize: `${titleFontSize}rem` } : {});
-		return x`
+		return b`
       <mwc-list-item
         hasMeta
         class=${compact ? "compact" : ""}
@@ -5875,10 +5917,12 @@ var Group = class extends i$5 {
 	handleGroupClicked() {
 		if (!this.selected) {
 			this.selected = true;
-			if (!this.store.config.doNotRememberSelectedPlayer) if (this.store.config.storePlayerInSessionStorage) window.sessionStorage.setItem(SESSION_STORAGE_PLAYER_ID, this.player.id);
-			else {
-				const newUrl = window.location.href.replace(/#.*/g, "");
-				window.location.replace(`${newUrl}#${this.player.id}`);
+			if (!this.store.config.doNotRememberSelectedPlayer) {
+				if (this.store.config.storePlayerInSessionStorage) window.sessionStorage.setItem(SESSION_STORAGE_PLAYER_ID, this.player.id);
+				else {
+					const newUrl = window.location.href.replace(/#.*/g, "");
+					window.location.replace(`${newUrl}#${this.player.id}`);
+				}
 			}
 			this.dispatchEntityIdEvent();
 		}
@@ -5886,11 +5930,18 @@ var Group = class extends i$5 {
 	static get styles() {
 		return i$8`
       mwc-list-item {
+        --group-color: var(--primary-color);
+        --mdc-theme-primary: var(--group-color);
         height: fit-content;
         margin: 1rem;
         border-radius: 1rem;
-        background: var(--secondary-background-color);
+        color: var(--secondary-text-color);
+        background: color-mix(in srgb, var(--group-color) 12%, var(--secondary-background-color));
         padding-left: 0;
+      }
+
+      mwc-list-item[selected] {
+        --group-color: var(--accent-color);
       }
 
       mwc-list-item.compact {
@@ -5898,6 +5949,7 @@ var Group = class extends i$5 {
       }
 
       .row {
+        color: var(--secondary-text-color);
         display: flex;
         margin: 1em 0;
         align-items: center;
@@ -5913,12 +5965,10 @@ var Group = class extends i$5 {
         white-space: initial;
         font-size: calc(var(--sonos-font-size, 1rem) * 1.1);
         font-weight: bold;
-        color: var(--secondary-text-color);
       }
 
       .song-title {
         font-size: calc(var(--sonos-font-size, 1rem) * 0.9);
-        font-weight: bold;
       }
 
       .compact ha-icon {
@@ -5937,16 +5987,15 @@ __decorate$1([n$5({ attribute: false })], Group.prototype, "store", void 0);
 __decorate$1([n$5({ attribute: false })], Group.prototype, "player", void 0);
 __decorate$1([n$5({ type: Boolean })], Group.prototype, "selected", void 0);
 customElements.define("sonos-group", Group);
-//#endregion
-//#region src/sections/groups/groups-section.ts
+// src/sections/groups/groups-section.ts
 var Groups = class extends i$5 {
 	render() {
 		const { buttonWidth } = this.store.config.groups ?? {};
-		return x`
+		return b`
       <mwc-list activatable class="list" style=${buttonWidth ? o$1({ width: `${buttonWidth}rem` }) : ""}>
         ${this.store.allGroups.map((group) => {
 			const selected = this.store.activePlayer.id === group.id;
-			return x` <sonos-group .store=${this.store} .player=${group} .selected=${selected}></sonos-group> `;
+			return b` <sonos-group .store=${this.store} .player=${group} .selected=${selected}></sonos-group> `;
 		})}
       </mwc-list>
     `;
@@ -5956,15 +6005,65 @@ var Groups = class extends i$5 {
 	}
 };
 __decorate$1([n$5({ attribute: false })], Groups.prototype, "store", void 0);
-//#endregion
-//#region src/sections/media-browser/favorites/favorites-list.ts
+// src/sections/media-browser/favorites/favorites-utils.ts
+function getFavoriteItems(items, config) {
+	const favorites = itemsWithFallbacks(items, config);
+	if (config.mediaBrowser?.favorites?.sortByType) favorites.sort((a, b) => (a.favoriteType ?? "").localeCompare(b.favoriteType ?? "") || a.title.localeCompare(b.title));
+	return favorites;
+}
+// src/sections/media-browser/favorites/favorite-type-header.ts
+var _FavoriteTypeHeader;
+var FavoriteTypeHeader = class extends i$5 {
+	willUpdate() {
+		this.hidden = !this.store.config.mediaBrowser?.favorites?.sortByType || !this.favoriteType || this.favoriteType === this.previousType;
+	}
+	render() {
+		const config = this.store.config.mediaBrowser?.favorites;
+		return b`
+      <div
+        style=${o$1({
+			color: config?.typeColor,
+			fontSize: config?.typeFontSize,
+			fontWeight: config?.typeFontWeight,
+			marginBottom: config?.typeMarginBottom
+		})}
+      >
+        ${this.favoriteType}
+      </div>
+    `;
+	}
+};
+_FavoriteTypeHeader = FavoriteTypeHeader;
+_FavoriteTypeHeader.styles = i$8`
+    :host {
+      display: block;
+      width: 100%;
+      margin-top: 0.2rem;
+      margin-left: 15px;
+      font-weight: bold;
+    }
+
+    :host([hidden]) {
+      display: none;
+    }
+  `;
+__decorate$1([n$5({ attribute: false })], FavoriteTypeHeader.prototype, "store", void 0);
+__decorate$1([n$5({ type: String })], FavoriteTypeHeader.prototype, "favoriteType", void 0);
+__decorate$1([n$5({ type: String })], FavoriteTypeHeader.prototype, "previousType", void 0);
+customElements.define("sonos-favorite-type-header", FavoriteTypeHeader);
+// src/sections/media-browser/favorites/favorites-list.ts
 var FavoritesList = class extends i$5 {
 	render() {
-		this.config = this.store.config;
-		return x`
+		const items = getFavoriteItems(this.items, this.store.config);
+		return b`
       <mwc-list multi class="list">
-        ${itemsWithFallbacks(this.items, this.config).map((item) => {
-			return x`
+        ${items.map((item, index) => {
+			return b`
+            <sonos-favorite-type-header
+              .store=${this.store}
+              .favoriteType=${item.favoriteType}
+              .previousType=${items[index - 1]?.favoriteType}
+            ></sonos-favorite-type-header>
             <sonos-media-row @click=${() => this.dispatchEvent(customEvent(MEDIA_ITEM_SELECTED, item))} .item=${item} .store=${this.store}></sonos-media-row>
           `;
 		})}
@@ -5972,14 +6071,22 @@ var FavoritesList = class extends i$5 {
     `;
 	}
 	static get styles() {
-		return listStyle;
+		return [listStyle, i$8`
+        sonos-favorite-type-header {
+          margin-top: 1.2rem;
+          margin-left: 0;
+        }
+
+        sonos-favorite-type-header:first-child {
+          margin-top: 0.5rem;
+        }
+      `];
 	}
 };
 __decorate$1([n$5({ attribute: false })], FavoritesList.prototype, "store", void 0);
 __decorate$1([n$5({ type: Array })], FavoritesList.prototype, "items", void 0);
 customElements.define("sonos-favorites-list", FavoritesList);
-//#endregion
-//#region src/sections/media-browser/utils.ts
+// src/sections/media-browser/utils.ts
 var mediaGridCardStyles = i$8`
   .child {
     display: flex;
@@ -6055,12 +6162,12 @@ var mediaGridCardStyles = i$8`
   }
 `;
 function renderMediaGridCard(params) {
-	const { item, onClick, thumbnailContent, actionContent = E, titleContent, cardStyle } = params;
-	return x`
+	const { item, onClick, thumbnailContent, actionContent = A, titleContent, cardStyle } = params;
+	return b`
     <div class="child" .item=${item} @click=${onClick}>
       <ha-card outlined style=${cardStyle ?? ""}>
         <div class="thumbnail">${thumbnailContent} ${actionContent}</div>
-        ${titleContent !== void 0 ? titleContent : x`<div class="title">${item.title}</div>`}
+        ${titleContent !== void 0 ? titleContent : b`<div class="title">${item.title}</div>`}
       </ha-card>
     </div>
   `;
@@ -6071,39 +6178,23 @@ async function playAll(store, children) {
 	return children[0];
 }
 function renderShortcutButton(shortcut, onClick, isActive = false) {
-	if (!shortcut?.media_content_id || !shortcut?.media_content_type || !shortcut?.name) return E;
+	if (!shortcut?.media_content_id || !shortcut?.media_content_type || !shortcut?.name) return A;
 	const icon = shortcut.icon ?? "M17,3H7A2,2 0 0,0 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z";
-	return x`
+	return b`
     <sonos-icon-button class=${isActive ? "shortcut-active" : ""} @click=${onClick} title=${shortcut.name} .path=${icon.startsWith("mdi:") ? void 0 : icon}>
-      ${icon.startsWith("mdi:") ? x`<ha-icon .icon=${icon}></ha-icon>` : E}
+      ${icon.startsWith("mdi:") ? b`<ha-icon .icon=${icon}></ha-icon>` : A}
     </sonos-icon-button>
   `;
 }
-//#endregion
-//#region src/sections/media-browser/favorites/favorites-icons.ts
+// src/sections/media-browser/favorites/favorites-icons.ts
 var FavoritesIcons = class extends i$5 {
 	render() {
 		const mediaBrowserConfig = this.store.config.mediaBrowser ?? {};
 		const favoritesConfig = this.store.config.mediaBrowser?.favorites ?? {};
-		const items = itemsWithFallbacks(this.items, this.store.config);
-		let prevType = "";
-		this.sortItemsByFavoriteTypeIfConfigured(items, favoritesConfig);
-		const typeColor = favoritesConfig.typeColor;
-		const typeFontSize = favoritesConfig.typeFontSize;
-		const typeFontWeight = favoritesConfig.typeFontWeight;
-		const typeMarginBottom = favoritesConfig.typeMarginBottom;
-		return x`
-      <style>
-        .favorite-type {
-          ${typeColor ? `color: ${typeColor};` : ""}
-          ${typeFontSize ? `font-size: ${typeFontSize};` : ""}
-          ${typeFontWeight ? `font-weight: ${typeFontWeight};` : ""}
-          ${typeMarginBottom ? `margin-bottom: ${typeMarginBottom};` : ""}
-        }
-      </style>
+		const items = getFavoriteItems(this.items, this.store.config);
+		return b`
       <div class="icons">
-        ${items.map((item) => {
-			const showFavoriteType = favoritesConfig.sortByType && item.favoriteType !== prevType || E;
+        ${items.map((item, index) => {
 			const showTitle = !item.thumbnail || !favoritesConfig.hideTitleForThumbnailIcons;
 			const thumbnailInset = favoritesConfig.iconPadding !== void 0 ? `${favoritesConfig.iconPadding}rem` : void 0;
 			const imageStyle = [thumbnailInset ? `top:${thumbnailInset};right:${thumbnailInset};bottom:${thumbnailInset};left:${thumbnailInset};` : "", item.thumbnail ? `background-image:url("${item.thumbnail}")` : ""].join(" ");
@@ -6111,28 +6202,25 @@ var FavoritesIcons = class extends i$5 {
 				color: favoritesConfig.iconTitleColor ?? "",
 				backgroundColor: favoritesConfig.iconTitleBackgroundColor ?? ""
 			});
-			const toRender = x`
-            <div class="favorite-type" show=${showFavoriteType}>${item.favoriteType}</div>
+			return b`
+            <sonos-favorite-type-header
+              .store=${this.store}
+              .favoriteType=${item.favoriteType}
+              .previousType=${items[index - 1]?.favoriteType}
+            ></sonos-favorite-type-header>
             <div style=${this.buttonStyle(mediaBrowserConfig.itemsPerRow || 4)}>
               ${renderMediaGridCard({
 				item,
 				onClick: () => this.dispatchEvent(customEvent(MEDIA_ITEM_SELECTED, item)),
-				thumbnailContent: item.thumbnail ? x`<div class="image" style=${imageStyle}></div>` : x`<div class="image image-placeholder" style=${thumbnailInset ? imageStyle : ""}></div>`,
-				titleContent: showTitle ? x`<div class="title" style=${titleStyle}>${item.title}</div>` : E,
+				thumbnailContent: item.thumbnail ? b`<div class="image" style=${imageStyle}></div>` : b`<div class="image image-placeholder" style=${thumbnailInset ? imageStyle : ""}></div>`,
+				titleContent: showTitle ? b`<div class="title" style=${titleStyle}>${item.title}</div>` : A,
 				cardStyle: favoritesConfig.iconBorder ? `border:${favoritesConfig.iconBorder};` : ""
 			})}
             </div>
           `;
-			prevType = item.favoriteType;
-			return toRender;
 		})}
       </div>
     `;
-	}
-	sortItemsByFavoriteTypeIfConfigured(items, config) {
-		if (config.sortByType) items.sort((a, b) => {
-			return a.favoriteType?.localeCompare(b.favoriteType ?? "") || a.title.localeCompare(b.title);
-		});
 	}
 	buttonStyle(favoritesItemsPerRow) {
 		const margin = `${this.store.config.mediaBrowser?.favorites?.iconMarginPercentage ?? 1}%`;
@@ -6154,18 +6242,6 @@ var FavoritesIcons = class extends i$5 {
         .image-placeholder {
           background: var(--secondary-background-color);
         }
-
-        .favorite-type {
-          width: 100%;
-          display: none;
-          margin-top: 0.2rem;
-          margin-left: 15px;
-          font-weight: bold;
-        }
-
-        .favorite-type[show] {
-          display: block;
-        }
       `
 		];
 	}
@@ -6173,8 +6249,7 @@ var FavoritesIcons = class extends i$5 {
 __decorate$1([n$5({ attribute: false })], FavoritesIcons.prototype, "store", void 0);
 __decorate$1([n$5({ attribute: false })], FavoritesIcons.prototype, "items", void 0);
 customElements.define("sonos-favorites-icons", FavoritesIcons);
-//#endregion
-//#region src/sections/media-browser/favorites/favorites.ts
+// src/sections/media-browser/favorites/favorites.ts
 var Favorites = class Favorites extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -6236,12 +6311,12 @@ var Favorites = class Favorites extends i$5 {
 		else await this.store.mediaControlService.setSource(player, mediaItem.title);
 	}
 	render() {
-		if (!this.cachedFavorites) return E;
-		if (!this.cachedFavorites.length) return x`<div class="no-items">No favorites found</div>`;
-		if (this.layout !== "list") return x`
+		if (!this.cachedFavorites) return A;
+		if (!this.cachedFavorites.length) return b`<div class="no-items">No favorites found</div>`;
+		if (this.layout !== "list") return b`
         <sonos-favorites-icons .items=${this.cachedFavorites} .store=${this.store} @item-selected=${this.onFavoriteSelected}></sonos-favorites-icons>
       `;
-		else return x`
+		else return b`
         <sonos-favorites-list .items=${this.cachedFavorites} .store=${this.store} @item-selected=${this.onFavoriteSelected}></sonos-favorites-list>
       `;
 	}
@@ -6268,8 +6343,7 @@ var Favorites = class Favorites extends i$5 {
 __decorate$1([n$5({ attribute: false })], Favorites.prototype, "store", void 0);
 __decorate$1([n$5({ type: String })], Favorites.prototype, "layout", void 0);
 __decorate$1([r$3()], Favorites.prototype, "cachedFavorites", void 0);
-//#endregion
-//#region node_modules/@lit-labs/virtualizer/layouts/shared/BaseLayout.js
+// node_modules/@lit-labs/virtualizer/layouts/shared/BaseLayout.js
 /**
 * @license
 * Copyright 2021 Google LLC
@@ -6639,8 +6713,7 @@ var init_BaseLayout = __esmMin((() => {
 		}
 	};
 }));
-//#endregion
-//#region node_modules/@lit-labs/virtualizer/layouts/shared/SizeGapPaddingBaseLayout.js
+// node_modules/@lit-labs/virtualizer/layouts/shared/SizeGapPaddingBaseLayout.js
 init_BaseLayout();
 /**
 * @license
@@ -6775,8 +6848,7 @@ var SizeGapPaddingBaseLayout = class extends BaseLayout {
 		}
 	}
 };
-//#endregion
-//#region node_modules/@lit-labs/virtualizer/layouts/shared/GridBaseLayout.js
+// node_modules/@lit-labs/virtualizer/layouts/shared/GridBaseLayout.js
 /**
 * @license
 * Copyright 2021 Google LLC
@@ -6894,8 +6966,7 @@ var GridBaseLayout = class extends SizeGapPaddingBaseLayout {
 		this._metrics = metrics;
 	}
 };
-//#endregion
-//#region node_modules/@lit-labs/virtualizer/layouts/grid.js
+// node_modules/@lit-labs/virtualizer/layouts/grid.js
 init_BaseLayout();
 /**
 * @license
@@ -6956,8 +7027,7 @@ var GridLayout = class extends GridBaseLayout {
 		this._scrollSize = size;
 	}
 };
-//#endregion
-//#region node_modules/lit-html/directives/class-map.js
+// node_modules/lit-html/directives/class-map.js
 /**
 * @license
 * Copyright 2018 Google LLC
@@ -6967,11 +7037,11 @@ var GridLayout = class extends GridBaseLayout {
 		if (super(t), t.type !== t$1.ATTRIBUTE || "class" !== t.name || t.strings?.length > 2) throw Error("`classMap()` can only be used in the `class` attribute and must be the only part in the attribute.");
 	}
 	render(t) {
-		return " " + Object.keys(t).filter(((s) => t[s])).join(" ") + " ";
+		return " " + Object.keys(t).filter((s) => t[s]).join(" ") + " ";
 	}
 	update(s, [i]) {
 		if (void 0 === this.st) {
-			this.st = /* @__PURE__ */ new Set(), void 0 !== s.strings && (this.nt = new Set(s.strings.join(" ").split(/\s/).filter(((t) => "" !== t))));
+			this.st = /* @__PURE__ */ new Set(), void 0 !== s.strings && (this.nt = new Set(s.strings.join(" ").split(/\s/).filter((t) => "" !== t)));
 			for (const t in i) i[t] && !this.nt?.has(t) && this.st.add(t);
 			return this.render(i);
 		}
@@ -6981,11 +7051,10 @@ var GridLayout = class extends GridBaseLayout {
 			const s = !!i[t];
 			s === this.st.has(t) || this.nt?.has(t) || (s ? (r.add(t), this.st.add(t)) : (r.remove(t), this.st.delete(t)));
 		}
-		return T;
+		return E;
 	}
 });
-//#endregion
-//#region src/upstream/common/slugify.ts
+// src/upstream/common/slugify.ts
 var slugify = (value, delimiter = "_") => {
 	const a = "àáâäæãåāăąабçćčđďдèéêëēėęěеёэфğǵгḧхîïíīįìıİийкłлḿмñńǹňнôöòóœøōõőоṕпŕřрßśšşșсťțтûüùúūǘůűųувẃẍÿýыžźżз·";
 	const b = `aaaaaaaaaaabcccdddeeeeeeeeeeefggghhiiiiiiiiijkllmmnnnnnoooooooooopprrrsssssstttuuuuuuuuuuvwxyyyzzzz${delimiter}`;
@@ -7008,32 +7077,28 @@ var slugify = (value, delimiter = "_") => {
 	}
 	return slugified;
 };
-//#endregion
-//#region src/upstream/data/media_source.ts
+// src/upstream/data/media_source.ts
 var browseLocalMediaPlayer = (hass, mediaContentId) => hass.callWS({
 	type: "media_source/browse_media",
 	media_content_id: mediaContentId
 });
 var MANUAL_MEDIA_SOURCE_PREFIX = "__MANUAL_ENTRY__";
 var isManualMediaSourceContentId = (mediaContentId) => mediaContentId.startsWith(MANUAL_MEDIA_SOURCE_PREFIX);
-//#endregion
-//#region src/upstream/resources/styles.ts
+// src/upstream/resources/styles.ts
 var haStyle = i$8`
   .mdc-deprecated-list-item__graphic {
     margin-inline-end: 16px;
     margin-inline-start: 0;
   }
 `;
-//#endregion
-//#region node_modules/tslib/tslib.es6.mjs
+// node_modules/tslib/tslib.es6.mjs
 function __decorate(decorators, target, key, desc) {
 	var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
 	else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
-//#endregion
-//#region node_modules/lit-html/directives/repeat.js
+// node_modules/lit-html/directives/repeat.js
 /**
 * @license
 * Copyright 2017 Google LLC
@@ -7043,7 +7108,8 @@ var u = (e, s, t) => {
 	const r = /* @__PURE__ */ new Map();
 	for (let l = s; l <= t; l++) r.set(e[l], l);
 	return r;
-}, c = e$2(class extends i$4 {
+};
+var c = e$2(class extends i$4 {
 	constructor(e) {
 		if (super(e), e.type !== t$1.CHILD) throw Error("repeat() can only be used in text expressions");
 	}
@@ -7062,38 +7128,37 @@ var u = (e, s, t) => {
 		return this.dt(e, s, t).values;
 	}
 	update(s, [t, r, c]) {
-		const d = p(s), { values: p$3, keys: a } = this.dt(t, r, c);
+		const d = M(s), { values: p$3, keys: a } = this.dt(t, r, c);
 		if (!Array.isArray(d)) return this.ut = a, p$3;
 		const h = this.ut ??= [], v$2 = [];
 		let m, y, x = 0, j = d.length - 1, k = 0, w = p$3.length - 1;
 		for (; x <= j && k <= w;) if (null === d[x]) x++;
 		else if (null === d[j]) j--;
-		else if (h[x] === a[k]) v$2[k] = v(d[x], p$3[k]), x++, k++;
-		else if (h[j] === a[w]) v$2[w] = v(d[j], p$3[w]), j--, w--;
-		else if (h[x] === a[w]) v$2[w] = v(d[x], p$3[w]), r$2(s, v$2[w + 1], d[x]), x++, w--;
-		else if (h[j] === a[k]) v$2[k] = v(d[j], p$3[k]), r$2(s, d[x], d[j]), j--, k++;
+		else if (h[x] === a[k]) v$2[k] = u$1(d[x], p$3[k]), x++, k++;
+		else if (h[j] === a[w]) v$2[w] = u$1(d[j], p$3[w]), j--, w--;
+		else if (h[x] === a[w]) v$2[w] = u$1(d[x], p$3[w]), v(s, v$2[w + 1], d[x]), x++, w--;
+		else if (h[j] === a[k]) v$2[k] = u$1(d[j], p$3[k]), v(s, d[x], d[j]), j--, k++;
 		else if (void 0 === m && (m = u(a, k, w), y = u(h, x, j)), m.has(h[x])) if (m.has(h[j])) {
 			const e = y.get(a[k]), t = void 0 !== e ? d[e] : null;
 			if (null === t) {
-				const e = r$2(s, d[x]);
-				v(e, p$3[k]), v$2[k] = e;
-			} else v$2[k] = v(t, p$3[k]), r$2(s, d[x], t), d[e] = null;
+				const e = v(s, d[x]);
+				u$1(e, p$3[k]), v$2[k] = e;
+			} else v$2[k] = u$1(t, p$3[k]), v(s, d[x], t), d[e] = null;
 			k++;
-		} else M(d[j]), j--;
-		else M(d[x]), x++;
+		} else h$2(d[j]), j--;
+		else h$2(d[x]), x++;
 		for (; k <= w;) {
-			const e = r$2(s, v$2[w + 1]);
-			v(e, p$3[k]), v$2[k++] = e;
+			const e = v(s, v$2[w + 1]);
+			u$1(e, p$3[k]), v$2[k++] = e;
 		}
 		for (; x <= j;) {
 			const e = d[x++];
-			null !== e && M(e);
+			null !== e && h$2(e);
 		}
-		return this.ut = a, m$1(s, v$2), T;
+		return this.ut = a, p(s, v$2), E;
 	}
 });
-//#endregion
-//#region node_modules/@lit-labs/virtualizer/events.js
+// node_modules/@lit-labs/virtualizer/events.js
 /**
 * @license
 * Copyright 2021 Google LLC
@@ -7121,8 +7186,7 @@ var UnpinnedEvent = class UnpinnedEvent extends Event {
 	}
 };
 UnpinnedEvent.eventName = "unpinned";
-//#endregion
-//#region node_modules/@lit-labs/virtualizer/ScrollerController.js
+// node_modules/@lit-labs/virtualizer/ScrollerController.js
 /**
 * @license
 * Copyright 2021 Google LLC
@@ -7290,17 +7354,35 @@ var ScrollerController = class extends ScrollerShim {
 		}
 	}
 };
-//#endregion
-//#region \0vite/preload-helper.js
+// \0vite/preload-helper.js
 var scriptRel = "modulepreload";
 var assetsURL = function(dep) {
 	return "/" + dep;
 };
 var seen = {};
+var isCssPreloadUrl = function isCssPreloadUrl(url) {
+	return url.pathname.endsWith(".css");
+};
+var preloadOnce = function preloadOnce(seen, href, preload) {
+	if (href in seen) return seen[href];
+	const promise = preload();
+	if (!promise) {
+		seen[href] = void 0;
+		return;
+	}
+	const preloadPromise = promise.then(() => {
+		seen[href] = void 0;
+	}, (err) => {
+		seen[href] = void 0;
+		throw err;
+	});
+	seen[href] = preloadPromise;
+	return preloadPromise;
+};
 var __vitePreload = function preload(baseModule, deps, importerUrl) {
 	let promise = Promise.resolve();
 	if (deps && deps.length > 0) {
-		const links = document.getElementsByTagName("link");
+		let preloadedHrefs;
 		const cspNonceMeta = document.querySelector("meta[property=csp-nonce]");
 		const cspNonce = cspNonceMeta?.nonce || cspNonceMeta?.getAttribute("nonce");
 		function allSettled(promises) {
@@ -7312,29 +7394,51 @@ var __vitePreload = function preload(baseModule, deps, importerUrl) {
 				reason
 			}))));
 		}
-		promise = allSettled(deps.map((dep) => {
-			dep = assetsURL(dep, importerUrl);
-			if (dep in seen) return;
-			seen[dep] = true;
-			const isCss = dep.endsWith(".css");
-			const cssSelector = isCss ? "[rel=\"stylesheet\"]" : "";
-			if (!!importerUrl) for (let i = links.length - 1; i >= 0; i--) {
-				const link = links[i];
-				if (link.href === dep && (!isCss || link.rel === "stylesheet")) return;
-			}
-			else if (document.querySelector(`link[href="${dep}"]${cssSelector}`)) return;
-			const link = document.createElement("link");
-			link.rel = isCss ? "stylesheet" : scriptRel;
-			if (!isCss) link.as = "script";
-			link.crossOrigin = "";
-			link.href = dep;
-			if (cspNonce) link.setAttribute("nonce", cspNonce);
-			document.head.appendChild(link);
-			if (isCss) return new Promise((res, rej) => {
-				link.addEventListener("load", res);
-				link.addEventListener("error", () => rej(/* @__PURE__ */ new Error(`Unable to preload CSS for ${dep}`)));
+		function importMetaResolve(specifier) {
+			if (import.meta.resolve) return new URL(import.meta.resolve(specifier));
+			return new URL(
+				specifier,
+				/** #__KEEP__ */
+				import.meta.url
+			);
+		}
+		promise = allSettled(deps.map((depString) => {
+			depString = assetsURL(depString, importerUrl);
+			const dep = importMetaResolve(depString);
+			const isCss = isCssPreloadUrl(dep);
+			return preloadOnce(seen, dep.href, () => {
+				if (preloadedHrefs === void 0) {
+					preloadedHrefs = {
+						all: /* @__PURE__ */ new Set(),
+						styles: /* @__PURE__ */ new Set()
+					};
+					const links = document.getElementsByTagName("link");
+					for (let i = links.length - 1; i >= 0; i--) {
+						const link = links[i];
+						preloadedHrefs.all.add(link.href);
+						if (link.rel === "stylesheet") preloadedHrefs.styles.add(link.href);
+					}
+				}
+				if ((isCss ? preloadedHrefs.styles : preloadedHrefs.all).has(dep.href)) return;
+				const link = document.createElement("link");
+				link.rel = isCss ? "stylesheet" : scriptRel;
+				if (!isCss) link.as = "script";
+				link.crossOrigin = "";
+				link.href = dep.href;
+				if (cspNonce) link.setAttribute("nonce", cspNonce);
+				document.head.appendChild(link);
+				if (isCss) return new Promise((res, rej) => {
+					const handleSettle = (e) => {
+						link.removeEventListener("load", handleSettle);
+						link.removeEventListener("error", handleSettle);
+						if (e.type === "error") rej(/* @__PURE__ */ new Error(`Unable to preload CSS for ${dep}`));
+						else res(e);
+					};
+					link.addEventListener("load", handleSettle);
+					link.addEventListener("error", handleSettle);
+				});
 			});
-		}));
+		}).filter((p) => p !== void 0));
 	}
 	function handlePreloadError(err) {
 		const e = new Event("vite:preloadError", { cancelable: true });
@@ -7350,8 +7454,7 @@ var __vitePreload = function preload(baseModule, deps, importerUrl) {
 		return baseModule().catch(handlePreloadError);
 	});
 };
-//#endregion
-//#region node_modules/@lit-labs/virtualizer/layouts/shared/SizeCache.js
+// node_modules/@lit-labs/virtualizer/layouts/shared/SizeCache.js
 var SizeCache;
 var init_SizeCache = __esmMin((() => {
 	SizeCache = class {
@@ -7387,8 +7490,7 @@ var init_SizeCache = __esmMin((() => {
 		}
 	};
 }));
-//#endregion
-//#region node_modules/@lit-labs/virtualizer/layouts/flow.js
+// node_modules/@lit-labs/virtualizer/layouts/flow.js
 var flow_exports = /* @__PURE__ */ __exportAll({
 	FlowLayout: () => FlowLayout,
 	flow: () => flow
@@ -7740,8 +7842,7 @@ var init_flow = __esmMin((() => {
 		}
 	};
 }));
-//#endregion
-//#region node_modules/@lit-labs/virtualizer/Virtualizer.js
+// node_modules/@lit-labs/virtualizer/Virtualizer.js
 /**
 * @license
 * Copyright 2021 Google LLC
@@ -8321,15 +8422,14 @@ function getClippingAncestors(el, includeSelf = false) {
 		return style.overflow !== "visible";
 	});
 }
-//#endregion
-//#region node_modules/@lit-labs/virtualizer/virtualize.js
+// node_modules/@lit-labs/virtualizer/virtualize.js
 /**
 * @license
 * Copyright 2021 Google LLC
 * SPDX-License-Identifier: BSD-3-Clause
 */
 var defaultKeyFunction = (item) => item;
-var defaultRenderItem = (item, idx) => x`${idx}: ${JSON.stringify(item, null, 2)}`;
+var defaultRenderItem = (item, idx) => b`${idx}: ${JSON.stringify(item, null, 2)}`;
 var VirtualizeDirective = class extends f {
 	constructor(part) {
 		super(part);
@@ -8353,7 +8453,7 @@ var VirtualizeDirective = class extends f {
 		this._items = config.items || [];
 		if (this._virtualizer) this._updateVirtualizerConfig(part, config);
 		else this._initialize(part, config);
-		return itemsChanged ? T : this.render();
+		return itemsChanged ? E : this.render();
 	}
 	async _updateVirtualizerConfig(part, config) {
 		if (!await this._virtualizer.updateLayoutConfig(config.layout || {})) {
@@ -8397,8 +8497,7 @@ var VirtualizeDirective = class extends f {
 	}
 };
 var virtualize = e$2(VirtualizeDirective);
-//#endregion
-//#region node_modules/@lit-labs/virtualizer/LitVirtualizer.js
+// node_modules/@lit-labs/virtualizer/LitVirtualizer.js
 /**
 * @license
 * Copyright 2021 Google LLC
@@ -8418,7 +8517,7 @@ var LitVirtualizer = class extends i$5 {
 	}
 	render() {
 		const { items, renderItem, keyFunction, layout, scroller } = this;
-		return x`${virtualize({
+		return b`${virtualize({
 			items,
 			renderItem,
 			keyFunction,
@@ -8448,11 +8547,9 @@ __decorate([n$5({
 	reflect: true,
 	type: Boolean
 })], LitVirtualizer.prototype, "scroller", void 0);
-//#endregion
-//#region src/upstream/resources/virtualizer.ts
-if (!customElements.get("lit-virtualizer")) customElements.define("lit-virtualizer", LitVirtualizer);
-//#endregion
-//#region src/upstream/util/brands-url.ts
+// src/upstream/resources/virtualizer.ts
+if (!customElements.get("sonos-lit-virtualizer")) customElements.define("sonos-lit-virtualizer", LitVirtualizer);
+// src/upstream/util/brands-url.ts
 var brandsUrl = (options) => `https://brands.home-assistant.io/_/${options.domain}/${options.darkOptimized ? "dark_" : ""}${options.type}.png`;
 var isBrandUrl = (url) => {
 	return url?.startsWith("https://brands.home-assistant.io/") ?? false;
@@ -8460,13 +8557,11 @@ var isBrandUrl = (url) => {
 var extractDomainFromBrandUrl = (url) => {
 	return url.match(/brands\.home-assistant\.io\/[^/]+\/([^/]+)\//)?.[1] ?? "";
 };
-//#endregion
-//#region src/upstream/util/documentation-url.ts
+// src/upstream/util/documentation-url.ts
 var documentationUrl = (_hass, path) => {
 	return `https://www.home-assistant.io${path}`;
 };
-//#endregion
-//#region src/upstream/ha-media-player-browse.ts
+// src/upstream/ha-media-player-browse.ts
 var MANUAL_ITEM = {
 	can_expand: true,
 	can_play: false,
@@ -8495,7 +8590,7 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
 			return renderMediaGridCard({
 				item: child,
 				onClick: this._childClicked,
-				thumbnailContent: child.thumbnail ? x`
+				thumbnailContent: child.thumbnail ? b`
             <div
               class="${e({
 					"centered-image": ["app", "directory"].includes(child.media_class),
@@ -8503,7 +8598,7 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
 				})} image"
               style="background-image: ${m(backgroundImage, "")}"
             ></div>
-          ` : x`
+          ` : b`
             <div class="icon-holder image">
               <ha-svg-icon
                 class=${child.iconPath ? "icon" : "folder"}
@@ -8511,7 +8606,7 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
               ></ha-svg-icon>
             </div>
           `,
-				actionContent: child.can_play ? x`
+				actionContent: child.can_play ? b`
             <ha-icon-button
               class="play ${e({ can_expand: child.can_expand })}"
               .item=${child}
@@ -8519,8 +8614,8 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
               .path=${this.action === "play" ? mdiPlay : mdiPlus}
               @click=${this._actionClicked}
             ></ha-icon-button>
-          ` : E,
-				titleContent: x`
+          ` : A,
+				titleContent: b`
         <ha-tooltip .for="grid-${slugify(child.title)}" distance="-4"> ${child.title} </ha-tooltip>
         <div .id="grid-${slugify(child.title)}" class="title">${child.title}</div>
       `
@@ -8529,12 +8624,12 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
 		this._renderListItem = (child) => {
 			const mediaClass = MediaClassBrowserSettings[this._currentItem.media_class];
 			const backgroundImage = mediaClass.show_list_images && child.thumbnail ? this._getThumbnailURLorBase64(child.thumbnail).then((value) => `url(${value})`) : "none";
-			return x`
+			return b`
       <ha-list-item @click=${this._childClicked} .item=${child} .graphic=${mediaClass.show_list_images ? "medium" : "avatar"}>
-        ${backgroundImage === "none" && !child.can_play ? x`<ha-svg-icon
+        ${backgroundImage === "none" && !child.can_play ? b`<ha-svg-icon
               .path=${MediaClassBrowserSettings[child.media_class === "directory" ? child.children_media_class || child.media_class : child.media_class].icon}
               slot="graphic"
-            ></ha-svg-icon>` : x`<div
+            ></ha-svg-icon>` : b`<div
               class=${e({
 				graphic: true,
 				thumbnail: mediaClass.show_list_images === true
@@ -8542,13 +8637,13 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
               style="background-image: ${m(backgroundImage, "")}"
               slot="graphic"
             >
-              ${child.can_play ? x`<ha-icon-button
+              ${child.can_play ? b`<ha-icon-button
                     class="play ${e({ show: !mediaClass.show_list_images || !child.thumbnail })}"
                     .item=${child}
                     .label=${this.hass.localize(`ui.components.media-browser.${this.action}-media`)}
                     .path=${this.action === "play" ? mdiPlay : mdiPlus}
                     @click=${this._actionClicked}
-                  ></ha-icon-button>` : E}
+                  ></ha-icon-button>` : A}
             </div>`}
         <span class="title">${child.title}</span>
       </ha-list-item>
@@ -8681,12 +8776,12 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
 		}
 	}
 	render() {
-		if (this._error) return x`
+		if (this._error) return b`
         <div class="container">
           <ha-alert alert-type="error"> ${this._renderError(this._error)} </ha-alert>
         </div>
       `;
-		if (!this._currentItem) return x`<ha-spinner></ha-spinner>`;
+		if (!this._currentItem) return b`<ha-spinner></ha-spinner>`;
 		const currentItem = this._currentItem;
 		const subtitle = this.hass.localize(`ui.components.media-browser.class.${currentItem.media_class}`);
 		const filter = this.navigateIds.length === 1 && !this.navigateIds[0]?.media_content_id ? {
@@ -8714,8 +8809,8 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
 		const mediaClass = MediaClassBrowserSettings[currentItem.media_class];
 		const childrenMediaClass = currentItem.children_media_class ? MediaClassBrowserSettings[currentItem.children_media_class] : MediaClassBrowserSettings.directory;
 		const backgroundImage = currentItem.thumbnail ? this._getThumbnailURLorBase64(currentItem.thumbnail).then((value) => `url(${value})`) : "none";
-		return x`
-              ${currentItem.can_play ? x`
+		return b`
+              ${currentItem.can_play ? b`
                       <div
                         class="header ${e({
 			"no-img": !currentItem.thumbnail,
@@ -8724,9 +8819,9 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
                         @transitionend=${this._setHeaderHeight}
                       >
                         <div class="header-content">
-                          ${currentItem.thumbnail ? x`
+                          ${currentItem.thumbnail ? b`
                                 <div class="img" style="background-image: ${m(backgroundImage, "")}">
-                                  ${this.narrow && currentItem?.can_play && (!this.accept || canPlayChildren.has(currentItem.media_content_id)) ? x`
+                                  ${this.narrow && currentItem?.can_play && (!this.accept || canPlayChildren.has(currentItem.media_content_id)) ? b`
                                         <ha-fab mini .item=${currentItem} @click=${this._actionClicked}>
                                           <ha-svg-icon
                                             slot="icon"
@@ -8737,13 +8832,13 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
                                         </ha-fab>
                                       ` : ""}
                                 </div>
-                              ` : E}
+                              ` : A}
                           <div class="header-info">
                             <div class="breadcrumb">
                               <h1 class="title">${currentItem.title}</h1>
-                              ${subtitle ? x` <h2 class="subtitle">${subtitle}</h2> ` : ""}
+                              ${subtitle ? b` <h2 class="subtitle">${subtitle}</h2> ` : ""}
                             </div>
-                            ${currentItem.can_play && (!currentItem.thumbnail || !this.narrow) ? x`
+                            ${currentItem.can_play && (!currentItem.thumbnail || !this.narrow) ? b`
                                   <ha-button .item=${currentItem} @click=${this._actionClicked}>
                                     <ha-svg-icon
                                       .label=${this.hass.localize(`ui.components.media-browser.${this.action}-media`)}
@@ -8762,11 +8857,11 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
             @scroll=${this._scroll}
             @touchmove=${this._scroll}
           >
-            ${this._error ? x`
+            ${this._error ? b`
                     <div class="container">
                       <ha-alert alert-type="error"> ${this._renderError(this._error)} </ha-alert>
                     </div>
-                  ` : isManualMediaSourceContentId(currentItem.media_content_id) ? x`<ha-browse-media-manual
+                  ` : isManualMediaSourceContentId(currentItem.media_content_id) ? b`<ha-browse-media-manual
                       .item=${{
 			media_content_id: this.defaultId || "",
 			media_content_type: this.defaultType || ""
@@ -8775,16 +8870,16 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
                       .hideContentType=${this.hideContentType}
                       .contentIdHelper=${this.contentIdHelper}
                       @manual-media-picked=${this._manualPicked}
-                    ></ha-browse-media-manual>` : isTTSMediaSource(currentItem.media_content_id) ? x`
+                    ></ha-browse-media-manual>` : isTTSMediaSource(currentItem.media_content_id) ? b`
                         <ha-browse-media-tts
                           .item=${currentItem}
                           .hass=${this.hass}
                           .action=${this.action}
                           @tts-picked=${this._ttsPicked}
                         ></ha-browse-media-tts>
-                      ` : !children.length && !currentItem.not_shown ? x`
+                      ` : !children.length && !currentItem.not_shown ? b`
                           <div class="container no-items">
-                            ${currentItem.media_content_id === "media-source://media_source/local/." ? x`
+                            ${currentItem.media_content_id === "media-source://media_source/local/." ? b`
                                   <div class="highlight-add-button">
                                     <span>
                                       <ha-svg-icon .path=${mdiArrowUpRight}></ha-svg-icon>
@@ -8793,15 +8888,15 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
                                   </div>
                                 ` : this.hass.localize("ui.components.media-browser.no_items")}
                           </div>
-                        ` : this.preferredLayout === "list" ? x`
+                        ` : this.preferredLayout === "list" ? b`
                             <ha-list>
-                              <lit-virtualizer
+                              <sonos-lit-virtualizer
                                 scroller
                                 .items=${children}
                                 style=${o$1({ height: `${children.length * 72 + 26}px` })}
                                 .renderItem=${this._renderListItem}
-                              ></lit-virtualizer>
-                              ${currentItem.not_shown ? x`
+                              ></sonos-lit-virtualizer>
+                              ${currentItem.not_shown ? b`
                                     <ha-list-item noninteractive class="not-shown" .graphic=${mediaClass.show_list_images ? "medium" : "avatar"}>
                                       <span class="title">
                                         ${this.hass.localize("ui.components.media-browser.not_shown", { count: currentItem.not_shown })}
@@ -8809,19 +8904,19 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
                                     </ha-list-item>
                                   ` : ""}
                             </ha-list>
-                          ` : this.itemsPerRow ? x`
+                          ` : this.itemsPerRow ? b`
                               <div class="children flex-grid" style="--items-per-row: ${this.itemsPerRow}">
                                 ${children.map((child) => this._renderGridItem(child))}
                               </div>
-                              ${currentItem.not_shown ? x`
+                              ${currentItem.not_shown ? b`
                                     <div class="grid not-shown">
                                       <div class="title">
                                         ${this.hass.localize("ui.components.media-browser.not_shown", { count: currentItem.not_shown })}
                                       </div>
                                     </div>
                                   ` : ""}
-                            ` : this.preferredLayout === "grid" || this.preferredLayout === "auto" && childrenMediaClass.layout === "grid" ? x`
-                                <lit-virtualizer
+                            ` : this.preferredLayout === "grid" || this.preferredLayout === "auto" && childrenMediaClass.layout === "grid" ? b`
+                                <sonos-lit-virtualizer
                                   scroller
                                   .layout=${grid({
 			itemSize: getGridItemSize(this.itemsPerRow, childrenMediaClass.thumbnail_ratio === "portrait"),
@@ -8836,23 +8931,23 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
 			portrait: childrenMediaClass.thumbnail_ratio === "portrait",
 			not_shown: !!currentItem.not_shown
 		})}"
-                                ></lit-virtualizer>
-                                ${currentItem.not_shown ? x`
+                                ></sonos-lit-virtualizer>
+                                ${currentItem.not_shown ? b`
                                       <div class="grid not-shown">
                                         <div class="title">
                                           ${this.hass.localize("ui.components.media-browser.not_shown", { count: currentItem.not_shown })}
                                         </div>
                                       </div>
                                     ` : ""}
-                              ` : x`
+                              ` : b`
                                 <ha-list>
-                                  <lit-virtualizer
+                                  <sonos-lit-virtualizer
                                     scroller
                                     .items=${children}
                                     style=${o$1({ height: `${children.length * 72 + 26}px` })}
                                     .renderItem=${this._renderListItem}
-                                  ></lit-virtualizer>
-                                  ${currentItem.not_shown ? x`
+                                  ></sonos-lit-virtualizer>
+                                  ${currentItem.not_shown ? b`
                                         <ha-list-item noninteractive class="not-shown" .graphic=${mediaClass.show_list_images ? "medium" : "avatar"}>
                                           <span class="title">
                                             ${this.hass.localize("ui.components.media-browser.not_shown", { count: currentItem.not_shown })}
@@ -8937,19 +9032,19 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
 		this.hass.localize("ui.components.media-browser.media_browsing_error"), this._renderError(error);
 	}
 	_renderError(err) {
-		if (err.message === "Media directory does not exist.") return x`
+		if (err.message === "Media directory does not exist.") return b`
         <h2>${this.hass.localize("ui.components.media-browser.no_local_media_found")}</h2>
         <p>
           ${this.hass.localize("ui.components.media-browser.no_media_folder")}
           <br />
-          ${this.hass.localize("ui.components.media-browser.setup_local_help", { documentation: x`<a href=${documentationUrl(this.hass, "/more-info/local-media/setup-media")} target="_blank" rel="noreferrer"
+          ${this.hass.localize("ui.components.media-browser.setup_local_help", { documentation: b`<a href=${documentationUrl(this.hass, "/more-info/local-media/setup-media")} target="_blank" rel="noreferrer"
               >${this.hass.localize("ui.components.media-browser.documentation")}</a
             >` })}
           <br />
           ${this.hass.localize("ui.components.media-browser.local_media_files")}
         </p>
       `;
-		return x`<span class="error">${err.message}</span>`;
+		return b`<span class="error">${err.message}</span>`;
 	}
 	async _setHeaderHeight() {
 		await this.updateComplete;
@@ -9422,13 +9517,13 @@ var HaMediaPlayerBrowse = class HaMediaPlayerBrowse extends i$5 {
           --mdc-theme-secondary: rgba(var(--rgb-primary-color), 0.5);
         }
 
-        lit-virtualizer {
+        sonos-lit-virtualizer {
           display: block;
           height: 100%;
           overflow: auto !important;
         }
 
-        lit-virtualizer.not_shown {
+        sonos-lit-virtualizer.not_shown {
           height: calc(100% - 36px);
         }
 
@@ -9466,28 +9561,26 @@ __decorate$1([r$3()], HaMediaPlayerBrowse.prototype, "_parentItem", void 0);
 __decorate$1([r$3()], HaMediaPlayerBrowse.prototype, "_currentItem", void 0);
 __decorate$1([e$3(".header")], HaMediaPlayerBrowse.prototype, "_header", void 0);
 __decorate$1([e$3(".content")], HaMediaPlayerBrowse.prototype, "_content", void 0);
-__decorate$1([e$3("lit-virtualizer")], HaMediaPlayerBrowse.prototype, "_virtualizer", void 0);
+__decorate$1([e$3("sonos-lit-virtualizer")], HaMediaPlayerBrowse.prototype, "_virtualizer", void 0);
 __decorate$1([t$2({ passive: true })], HaMediaPlayerBrowse.prototype, "_scroll", null);
 HaMediaPlayerBrowse = __decorate$1([t$3("sonos-ha-media-player-browse")], HaMediaPlayerBrowse);
-//#endregion
-//#region node_modules/lit-html/directives/keyed.js
+// node_modules/lit-html/directives/keyed.js
 /**
 * @license
 * Copyright 2021 Google LLC
 * SPDX-License-Identifier: BSD-3-Clause
 */ var i = e$2(class extends i$4 {
 	constructor() {
-		super(...arguments), this.key = E;
+		super(...arguments), this.key = A;
 	}
 	render(r, t) {
 		return this.key = r, t;
 	}
 	update(r, [t, e]) {
-		return t !== this.key && (m$1(r), this.key = t), e;
+		return t !== this.key && (p(r), this.key = t), e;
 	}
 });
-//#endregion
-//#region src/sections/media-browser/styles.ts
+// src/sections/media-browser/styles.ts
 var mediaBrowserStyles = i$8`
   :host {
     display: flex;
@@ -9545,10 +9638,10 @@ var mediaBrowserStyles = i$8`
     margin-top: 50%;
   }
   sonos-icon-button.startpath-active {
-    color: var(--accent-color);
+    color: var(--primary-color);
   }
   sonos-icon-button.shortcut-active {
-    color: var(--accent-color);
+    color: var(--primary-color);
   }
   .play-all-warning {
     padding: 8px 12px;
@@ -9588,11 +9681,10 @@ var mediaBrowserStyles = i$8`
     overflow: auto;
   }
 `;
-//#endregion
-//#region src/sections/media-browser/layout-menu.ts
-var selectedStyle = { color: "var(--accent-color)" };
+// src/sections/media-browser/layout-menu.ts
+var selectedStyle = { color: "var(--primary-color)" };
 function renderLayoutMenu(layout, onSelect) {
-	return x`
+	return b`
     <ha-dropdown @wa-select=${onSelect}>
       <sonos-icon-button slot="trigger" .path=${mdiDotsVertical}></sonos-icon-button>
       <ha-dropdown-item value="auto" .selected=${layout === "auto"} style=${o$1(layout === "auto" ? selectedStyle : {})}>
@@ -9610,8 +9702,7 @@ function renderLayoutMenu(layout, onSelect) {
     </ha-dropdown>
   `;
 }
-//#endregion
-//#region src/sections/media-browser/browser.ts
+// src/sections/media-browser/browser.ts
 var currentPath = null;
 var currentPathTitle = "";
 var ROOT_NAV = {
@@ -9706,26 +9797,26 @@ var MediaBrowserBrowser = class extends i$5 {
 		const shortcut = config.shortcut;
 		const playerName = getSpeakerList(this.store.activePlayer, this.store.predefinedGroups);
 		const hideActivePlayerName = config.hideActivePlayerName ?? false;
-		return x`
-      ${this.playAllLoading ? x`<div class="loading-overlay"><div class="loading-spinner"></div></div>` : E}
-      ${this.playAllWarning ? x`<div class="play-all-warning">${this.playAllWarning}</div>` : E}
-      ${config.hideHeader ? "" : x`<div class="header">
-            ${this.navigateIds.length > 1 ? x`<sonos-icon-button .path=${mdiArrowLeft} @click=${this.goBack}></sonos-icon-button>` : x`<div class="spacer"></div>`}
-            <div class="title-section">
-              <span class="title">${this.currentTitle || "Media Browser"}</span>
-              <span class="player-name" ?hidden=${hideActivePlayerName}>${playerName}</span>
-            </div>
-            ${this.renderPlayAllButton()} ${renderShortcutButton(shortcut, () => this.navigateToShortcut(shortcut), this.isShortcutActive(shortcut))}
-            <sonos-icon-button .path=${mdiStar} @click=${this.goToFavorites} title="Favorites"></sonos-icon-button>
-            <sonos-icon-button
-              class=${this.isCurrentPathStart ? "startpath-active" : ""}
-              .path=${this.isCurrentPathStart ? mdiFolderStar : mdiFolderStarOutline}
-              @click=${this.toggleStartPath}
-              title=${this.isCurrentPathStart ? "Unset start page" : "Set as start page"}
-            ></sonos-icon-button>
-            ${renderLayoutMenu(this.layout, this.handleLayoutChange)}
-          </div>`}
-      ${i(this.layout, x`<sonos-ha-media-player-browse
+		return b`
+      ${this.playAllLoading ? b`<div class="loading-overlay"><div class="loading-spinner"></div></div>` : A}
+      ${this.playAllWarning ? b`<div class="play-all-warning">${this.playAllWarning}</div>` : A}
+      ${config.hideHeader ? "" : b`<div class="header">
+              ${this.navigateIds.length > 1 ? b`<sonos-icon-button .path=${mdiArrowLeft} @click=${this.goBack}></sonos-icon-button>` : b`<div class="spacer"></div>`}
+              <div class="title-section">
+                <span class="title">${this.currentTitle || "Media Browser"}</span>
+                <span class="player-name" ?hidden=${hideActivePlayerName}>${playerName}</span>
+              </div>
+              ${this.renderPlayAllButton()} ${renderShortcutButton(shortcut, () => this.navigateToShortcut(shortcut), this.isShortcutActive(shortcut))}
+              <sonos-icon-button .path=${mdiStar} @click=${this.goToFavorites} title="Favorites"></sonos-icon-button>
+              <sonos-icon-button
+                class=${this.isCurrentPathStart ? "startpath-active" : ""}
+                .path=${this.isCurrentPathStart ? mdiFolderStar : mdiFolderStarOutline}
+                @click=${this.toggleStartPath}
+                title=${this.isCurrentPathStart ? "Unset start page" : "Set as start page"}
+              ></sonos-icon-button>
+              ${renderLayoutMenu(this.layout, this.handleLayoutChange)}
+            </div>`}
+      ${i(this.layout, b`<sonos-ha-media-player-browse
           .hass=${this.store.hass}
           .entityId=${this.store.activePlayer.id}
           .navigateIds=${this.navigateIds}
@@ -9744,8 +9835,8 @@ var MediaBrowserBrowser = class extends i$5 {
 	}
 	renderPlayAllButton() {
 		const playableCount = this.mediaBrowser?.getPlayableChildren().length ?? 0;
-		if (playableCount === 0 || this.playAllLoading) return E;
-		return x`<sonos-icon-button .path=${mdiPlay} @click=${this.handlePlayAll} title="Play all (${playableCount} tracks)"></sonos-icon-button>`;
+		if (playableCount === 0 || this.playAllLoading) return A;
+		return b`<sonos-icon-button .path=${mdiPlay} @click=${this.handlePlayAll} title="Play all (${playableCount} tracks)"></sonos-icon-button>`;
 	}
 	async handlePlayAll() {
 		const children = this.mediaBrowser?.getPlayableChildren() || [];
@@ -9788,8 +9879,7 @@ __decorate$1([r$3()], MediaBrowserBrowser.prototype, "playAllLoading", void 0);
 __decorate$1([r$3()], MediaBrowserBrowser.prototype, "playAllWarning", void 0);
 __decorate$1([r$3()], MediaBrowserBrowser.prototype, "mediaLoaded", void 0);
 __decorate$1([e$3("sonos-ha-media-player-browse")], MediaBrowserBrowser.prototype, "mediaBrowser", void 0);
-//#endregion
-//#region src/sections/media-browser/media-browser-section.ts
+// src/sections/media-browser/media-browser-section.ts
 var START_PATH_KEY = "sonos-card-media-browser-start";
 var LAYOUT_KEY = "sonos-card-media-browser-layout";
 var FAVORITES_VIEW = "favorites";
@@ -9879,27 +9969,27 @@ var MediaBrowser = class extends i$5 {
 		const playerName = getSpeakerList(this.store.activePlayer, this.store.predefinedGroups);
 		const onlyFavorites = config.onlyFavorites ?? false;
 		const hideActivePlayerName = config.hideActivePlayerName ?? false;
-		return x`
-      ${config.hideHeader ? "" : x`<div class="header">
-            <div class="title-section">
-              <span class="title">${title}</span>
-              <span class="player-name" ?hidden=${hideActivePlayerName}>${playerName}</span>
-            </div>
-            ${onlyFavorites ? "" : renderShortcutButton(config.shortcut, this.onShortcutClick)}
-            ${onlyFavorites ? "" : x`<sonos-icon-button .path=${mdiPlayBoxMultiple} @click=${this.goToBrowser} title="Browse Media"></sonos-icon-button>
-                  <sonos-icon-button
-                    class=${this.isCurrentPathStart ? "startpath-active" : ""}
-                    .path=${this.isCurrentPathStart ? mdiFolderStar : mdiFolderStarOutline}
-                    @click=${this.toggleStartPath}
-                    title=${this.isCurrentPathStart ? "Unset start page" : "Set as start page"}
-                  ></sonos-icon-button>`}
-            ${renderLayoutMenu(this.layout, this.handleMenuAction)}
-          </div>`}
+		return b`
+      ${config.hideHeader ? "" : b`<div class="header">
+              <div class="title-section">
+                <span class="title">${title}</span>
+                <span class="player-name" ?hidden=${hideActivePlayerName}>${playerName}</span>
+              </div>
+              ${onlyFavorites ? "" : renderShortcutButton(config.shortcut, this.onShortcutClick)}
+              ${onlyFavorites ? "" : b`<sonos-icon-button .path=${mdiPlayBoxMultiple} @click=${this.goToBrowser} title="Browse Media"></sonos-icon-button>
+                      <sonos-icon-button
+                        class=${this.isCurrentPathStart ? "startpath-active" : ""}
+                        .path=${this.isCurrentPathStart ? mdiFolderStar : mdiFolderStarOutline}
+                        @click=${this.toggleStartPath}
+                        title=${this.isCurrentPathStart ? "Unset start page" : "Set as start page"}
+                      ></sonos-icon-button>`}
+              ${renderLayoutMenu(this.layout, this.handleMenuAction)}
+            </div>`}
       <sonos-favorites .store=${this.store} .layout=${this.layout} @item-selected=${this.onMediaItemSelected}></sonos-favorites>
     `;
 	}
 	renderBrowser() {
-		return x`
+		return b`
       <sonos-media-browser-browser
         .store=${this.store}
         .layout=${this.layout}
@@ -9918,12 +10008,11 @@ __decorate$1([r$3()], MediaBrowser.prototype, "isCurrentPathStart", void 0);
 __decorate$1([r$3()], MediaBrowser.prototype, "layout", void 0);
 __decorate$1([r$3()], MediaBrowser.prototype, "view", void 0);
 __decorate$1([e$3("sonos-media-browser-browser")], MediaBrowser.prototype, "browserComponent", void 0);
-//#endregion
-//#region src/components/operation-overlay.ts
+// src/components/operation-overlay.ts
 var OperationOverlay = class extends i$5 {
 	render() {
-		if (!this.progress) return E;
-		return x`
+		if (!this.progress) return A;
+		return b`
       <div class="operation-overlay">
         <div class="operation-overlay-content">
           <ha-spinner></ha-spinner>
@@ -9965,7 +10054,7 @@ var OperationOverlay = class extends i$5 {
         color: var(--primary-text-color, #fff);
       }
       .accent {
-        --control-button-background-color: var(--accent-color);
+        --control-button-background-color: var(--primary-color);
       }
     `;
 	}
@@ -9973,8 +10062,7 @@ var OperationOverlay = class extends i$5 {
 __decorate$1([n$5({ attribute: false })], OperationOverlay.prototype, "progress", void 0);
 __decorate$1([n$5({ attribute: false })], OperationOverlay.prototype, "hass", void 0);
 customElements.define("sonos-operation-overlay", OperationOverlay);
-//#endregion
-//#region src/components/play-menu.ts
+// src/components/play-menu.ts
 var _PlayMenu;
 var PLAY_MENU_ACTIONS = [
 	{ enqueue: "replace" },
@@ -9992,15 +10080,16 @@ var PlayMenu = class extends i$5 {
 		super(..._args);
 		this.disabled = false;
 		this.hasSelection = false;
+		this.showRadio = true;
 		this.inline = false;
 	}
 	render() {
-		if (!this.hasSelection) return E;
+		if (!this.hasSelection) return A;
 		if (this.inline) return this.renderInlineMenu();
 		return this.renderButtonMenu();
 	}
 	renderButtonMenu() {
-		return x`
+		return b`
       <ha-dropdown @wa-select=${this.handleAction}>
         <sonos-icon-button slot="trigger" .path=${mdiPlay} title="Play options" ?disabled=${this.disabled}></sonos-icon-button>
         ${this.renderMenuItems()}
@@ -10008,11 +10097,11 @@ var PlayMenu = class extends i$5 {
     `;
 	}
 	renderInlineMenu() {
-		return x`
+		return b`
       <div class="inline-menu" @click=${(e) => e.stopPropagation()}>
         <sonos-icon-button class="close-btn" .path=${mdiClose} @click=${this.closeMenu} title="Close"></sonos-icon-button>
-        ${PLAY_MENU_ACTIONS.map((_action, index) => x`
-            <div class="inline-menu-item" @click=${() => this.selectAction(index)}>
+        ${PLAY_MENU_ACTIONS.map((action, index) => b`
+            <div class="inline-menu-item" ?hidden=${action.radioMode && !this.showRadio} @click=${() => this.selectAction(index)}>
               <ha-svg-icon .path=${this.getActionIcon(index)}></ha-svg-icon>
               <span>${this.getActionLabel(index)}</span>
             </div>
@@ -10021,12 +10110,12 @@ var PlayMenu = class extends i$5 {
     `;
 	}
 	renderMenuItems() {
-		return x`
+		return b`
       <ha-dropdown-item value="0">
         <ha-svg-icon slot="icon" .path=${mdiPlayBoxMultiple}></ha-svg-icon>
         Play Now (clear queue)
       </ha-dropdown-item>
-      <ha-dropdown-item value="1">
+      <ha-dropdown-item value="1" ?hidden=${!this.showRadio}>
         <ha-svg-icon slot="icon" .path=${mdiAccessPoint}></ha-svg-icon>
         Start Radio
       </ha-dropdown-item>
@@ -10085,6 +10174,9 @@ _PlayMenu.styles = i$8`
     :host {
       display: contents;
     }
+    [hidden] {
+      display: none !important;
+    }
     .inline-menu {
       position: relative;
       background: var(--card-background-color, var(--primary-background-color));
@@ -10122,10 +10214,10 @@ _PlayMenu.styles = i$8`
   `;
 __decorate$1([n$5({ type: Boolean })], PlayMenu.prototype, "disabled", void 0);
 __decorate$1([n$5({ type: Boolean })], PlayMenu.prototype, "hasSelection", void 0);
+__decorate$1([n$5({ type: Boolean })], PlayMenu.prototype, "showRadio", void 0);
 __decorate$1([n$5({ type: Boolean })], PlayMenu.prototype, "inline", void 0);
 customElements.define("sonos-play-menu", PlayMenu);
-//#endregion
-//#region src/sections/queue/queue-search-utils.ts
+// src/sections/queue/queue-search-utils.ts
 var QUEUE_SEARCH_STORAGE_KEY = "sonos-queue-search-state";
 function restoreQueueSearchState() {
 	const saved = localStorage.getItem(QUEUE_SEARCH_STORAGE_KEY);
@@ -10161,14 +10253,13 @@ function createQueueSearchMatch(index, currentMatchIndex, matchIndices) {
 		matchIndices
 	};
 }
-//#endregion
-//#region src/sections/queue/queue-search.styles.ts
+// src/sections/queue/queue-search.styles.ts
 var queueSearchStyles = i$8`
   :host {
     display: contents;
   }
   :host > sonos-icon-button[selected] {
-    color: var(--accent-color);
+    color: var(--primary-color);
   }
   .search-row {
     display: flex;
@@ -10193,7 +10284,7 @@ var queueSearchStyles = i$8`
   }
   input:focus {
     outline: none;
-    border-color: var(--accent-color, #03a9f4);
+    border-color: var(--primary-color, #03a9f4);
   }
   input.no-match {
     border-color: var(--error-color, red);
@@ -10209,11 +10300,10 @@ var queueSearchStyles = i$8`
     --icon-size: 1.2rem;
   }
   .search-row sonos-icon-button[selected] {
-    color: var(--accent-color);
+    color: var(--primary-color);
   }
 `;
-//#endregion
-//#region src/sections/queue/queue-search-panel.ts
+// src/sections/queue/queue-search-panel.ts
 var _QueueSearchPanel;
 var QueueSearchPanel = class extends i$5 {
 	constructor(..._args) {
@@ -10228,7 +10318,7 @@ var QueueSearchPanel = class extends i$5 {
 	render() {
 		const hasText = this.searchText.length > 0;
 		const hasMatches = this.matchCount > 0;
-		return x`
+		return b`
       <div class="search-row">
         <input
           type="text"
@@ -10317,7 +10407,7 @@ _QueueSearchPanel.styles = i$8`
     }
     input:focus {
       outline: none;
-      border-color: var(--accent-color, #03a9f4);
+      border-color: var(--primary-color, #03a9f4);
     }
     input.no-match {
       border-color: var(--error-color, red);
@@ -10333,7 +10423,7 @@ _QueueSearchPanel.styles = i$8`
       --icon-size: 1.2rem;
     }
     .search-row sonos-icon-button[selected] {
-      color: var(--accent-color);
+      color: var(--primary-color);
     }
   `;
 __decorate$1([n$5()], QueueSearchPanel.prototype, "searchText", void 0);
@@ -10343,8 +10433,7 @@ __decorate$1([n$5({ type: Number })], QueueSearchPanel.prototype, "currentMatchI
 __decorate$1([n$5({ type: Boolean })], QueueSearchPanel.prototype, "hasNoMatch", void 0);
 __decorate$1([n$5({ type: Boolean })], QueueSearchPanel.prototype, "showOnlyMatches", void 0);
 customElements.define("sonos-queue-search-panel", QueueSearchPanel);
-//#endregion
-//#region src/sections/queue/queue-search.ts
+// src/sections/queue/queue-search.ts
 var _QueueSearch;
 var QueueSearch = class extends i$5 {
 	constructor(..._args) {
@@ -10423,7 +10512,7 @@ var QueueSearch = class extends i$5 {
 	}
 	render() {
 		const hasNoMatch = this.searchText.length > 0 && this.matchIndices.length === 0;
-		return x`
+		return b`
       <sonos-icon-button
         .path=${mdiMagnify}
         @click=${this.toggleExpanded}
@@ -10558,8 +10647,7 @@ __decorate$1([r$3()], QueueSearch.prototype, "currentMatchIndex", void 0);
 __decorate$1([r$3()], QueueSearch.prototype, "showOnlyMatches", void 0);
 __decorate$1([e$3("sonos-queue-search-panel")], QueueSearch.prototype, "panel", void 0);
 customElements.define("sonos-queue-search", QueueSearch);
-//#endregion
-//#region src/components/selection-actions.ts
+// src/components/selection-actions.ts
 var _SelectionActions;
 var SelectionActions = class extends i$5 {
 	constructor(..._args) {
@@ -10567,11 +10655,17 @@ var SelectionActions = class extends i$5 {
 		this.hasSelection = false;
 		this.disabled = false;
 		this.showInvert = true;
+		this.showRadio = true;
 	}
 	render() {
-		return x`
-      ${this.showInvert ? x`<sonos-icon-button .path=${mdiSelectInverse} @click=${this.invertSelection} title="Invert selection"></sonos-icon-button>` : E}
-      <sonos-play-menu .hasSelection=${this.hasSelection} .disabled=${this.disabled} @play-menu-action=${this.onPlayMenuAction}></sonos-play-menu>
+		return b`
+      ${this.showInvert ? b`<sonos-icon-button .path=${mdiSelectInverse} @click=${this.invertSelection} title="Invert selection"></sonos-icon-button>` : A}
+      <sonos-play-menu
+        .hasSelection=${this.hasSelection}
+        .disabled=${this.disabled}
+        .showRadio=${this.showRadio}
+        @play-menu-action=${this.onPlayMenuAction}
+      ></sonos-play-menu>
     `;
 	}
 	invertSelection() {
@@ -10596,9 +10690,7 @@ var SelectionActions = class extends i$5 {
 			case "add":
 				this.dispatchEvent(customEvent("queue-selected-at-end", { enqueue: "add" }));
 				break;
-			case "replace_next":
-				this.dispatchEvent(customEvent("queue-selected", { enqueue: "replace_next" }));
-				break;
+			case "replace_next": this.dispatchEvent(customEvent("queue-selected", { enqueue: "replace_next" }));
 		}
 	}
 };
@@ -10611,9 +10703,9 @@ _SelectionActions.styles = i$8`
 __decorate$1([n$5({ type: Boolean })], SelectionActions.prototype, "hasSelection", void 0);
 __decorate$1([n$5({ type: Boolean })], SelectionActions.prototype, "disabled", void 0);
 __decorate$1([n$5({ type: Boolean })], SelectionActions.prototype, "showInvert", void 0);
+__decorate$1([n$5({ type: Boolean })], SelectionActions.prototype, "showRadio", void 0);
 customElements.define("sonos-selection-actions", SelectionActions);
-//#endregion
-//#region src/sections/queue/queue-header.ts
+// src/sections/queue/queue-header.ts
 var _QueueHeader;
 var QueueHeader = class extends i$5 {
 	constructor(..._args) {
@@ -10628,7 +10720,7 @@ var QueueHeader = class extends i$5 {
 	render() {
 		const playerName = getSpeakerList(this.store.activePlayer, this.store.predefinedGroups);
 		const hideActivePlayerName = this.store.config.queue?.hideActivePlayerName ?? false;
-		return x`
+		return b`
       <div class="header">
         <div class="title-section">
           <div class="title-row">
@@ -10767,8 +10859,7 @@ __decorate$1([n$5({ type: Boolean })], QueueHeader.prototype, "hasSelection", vo
 __decorate$1([n$5({ type: Boolean })], QueueHeader.prototype, "operationRunning", void 0);
 __decorate$1([n$5({ attribute: false })], QueueHeader.prototype, "store", void 0);
 customElements.define("sonos-queue-header", QueueHeader);
-//#endregion
-//#region src/components/media-row.ts
+// src/components/media-row.ts
 var MediaRow = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -10795,7 +10886,7 @@ var MediaRow = class extends i$5 {
 		const hasBadges = this.showFavoriteBadge || this.showLibraryBadge || this.isFavorite !== null || this.isInLibrary !== null;
 		const showClickableHeart = this.isFavorite !== null;
 		const showClickableLibrary = this.isInLibrary !== null;
-		return x`
+		return b`
       <mwc-list-item
         ?hasMeta=${this.playing || hasBadges}
         ?selected=${this.selected}
@@ -10804,31 +10895,31 @@ var MediaRow = class extends i$5 {
         style="${cssVars}"
       >
         <div class="row">
-          ${this.showCheckbox ? x`<div class="icon-slot">
-                <ha-checkbox .checked=${this.checked} @change=${this.onCheckboxChange} @click=${(e) => e.stopPropagation()}></ha-checkbox>
-              </div>` : this.showQueueButton ? x`<div class="icon-slot">
-                  <sonos-icon-button
-                    class=${e({
+          ${this.showCheckbox ? b`<div class="icon-slot">
+                  <ha-checkbox .checked=${this.checked} @change=${this.onCheckboxChange} @click=${(e) => e.stopPropagation()}></ha-checkbox>
+                </div>` : this.showQueueButton ? b`<div class="icon-slot">
+                    <sonos-icon-button
+                      class=${e({
 			"queue-btn": true,
 			disabled: this.queueButtonDisabled
 		})}
-                    .path=${mdiSkipNext}
-                    ?disabled=${this.queueButtonDisabled}
-                    @click=${this.onQueueClick}
-                  ></sonos-icon-button>
-                </div>` : E}
+                      .path=${mdiSkipNext}
+                      ?disabled=${this.queueButtonDisabled}
+                      @click=${this.onQueueClick}
+                    ></sonos-icon-button>
+                  </div>` : A}
           ${renderFavoritesItem(this.item)}
         </div>
         <div class="meta-content" slot="meta">
           <sonos-playing-bars .show=${this.playing}></sonos-playing-bars>
-          ${hasBadges ? x`<div class="badges">
-                ${showClickableHeart ? x`<div class="badge-toggle ${this.favoriteLoading ? "loading" : ""}" @click=${this.onFavoriteClick}>
-                      ${this.favoriteLoading ? x`<ha-circular-progress indeterminate size="tiny"></ha-circular-progress>` : x`<ha-svg-icon class=${this.isFavorite ? "accent" : ""} .path=${this.isFavorite ? mdiHeart : mdiHeartOutline}></ha-svg-icon>`}
-                    </div>` : this.showFavoriteBadge ? x`<ha-svg-icon class="accent" .path=${mdiHeart}></ha-svg-icon>` : E}
-                ${showClickableLibrary ? x`<div class="badge-toggle ${this.libraryLoading ? "loading" : ""}" @click=${this.onLibraryClick}>
-                      ${this.libraryLoading ? x`<ha-circular-progress indeterminate size="tiny"></ha-circular-progress>` : x`<ha-svg-icon class=${this.isInLibrary ? "accent" : ""} .path=${mdiBookshelf}></ha-svg-icon>`}
-                    </div>` : this.showLibraryBadge ? x`<ha-svg-icon class="accent" .path=${mdiBookshelf}></ha-svg-icon>` : E}
-              </div>` : E}
+          ${hasBadges ? b`<div class="badges">
+                  ${showClickableHeart ? b`<div class="badge-toggle ${this.favoriteLoading ? "loading" : ""}" @click=${this.onFavoriteClick}>
+                          ${this.favoriteLoading ? b`<ha-circular-progress indeterminate size="tiny"></ha-circular-progress>` : b`<ha-svg-icon class=${this.isFavorite ? "accent" : ""} .path=${this.isFavorite ? mdiHeart : mdiHeartOutline}></ha-svg-icon>`}
+                        </div>` : this.showFavoriteBadge ? b`<ha-svg-icon class="accent" .path=${mdiHeart}></ha-svg-icon>` : A}
+                  ${showClickableLibrary ? b`<div class="badge-toggle ${this.libraryLoading ? "loading" : ""}" @click=${this.onLibraryClick}>
+                          ${this.libraryLoading ? b`<ha-circular-progress indeterminate size="tiny"></ha-circular-progress>` : b`<ha-svg-icon class=${this.isInLibrary ? "accent" : ""} .path=${mdiBookshelf}></ha-svg-icon>`}
+                        </div>` : this.showLibraryBadge ? b`<ha-svg-icon class="accent" .path=${mdiBookshelf}></ha-svg-icon>` : A}
+                </div>` : A}
           <slot></slot>
         </div>
       </mwc-list-item>
@@ -10884,7 +10975,7 @@ var MediaRow = class extends i$5 {
         }
 
         .button.search-highlight {
-          outline: 2px solid var(--accent-color, #03a9f4);
+          outline: 2px solid var(--primary-color, #03a9f4);
           outline-offset: -2px;
         }
 
@@ -10954,7 +11045,7 @@ var MediaRow = class extends i$5 {
         }
 
         .badges ha-svg-icon.accent {
-          color: var(--accent-color, #03a9f4);
+          color: var(--primary-color, #03a9f4);
           opacity: 1;
         }
 
@@ -11013,8 +11104,7 @@ __decorate$1([n$5({ type: Boolean })], MediaRow.prototype, "favoriteLoading", vo
 __decorate$1([n$5({ type: Boolean })], MediaRow.prototype, "isInLibrary", void 0);
 __decorate$1([n$5({ type: Boolean })], MediaRow.prototype, "libraryLoading", void 0);
 customElements.define("sonos-media-row", MediaRow);
-//#endregion
-//#region src/sections/queue/queue-list.ts
+// src/sections/queue/queue-list.ts
 var _QueueList;
 var QueueList = class extends i$5 {
 	constructor(..._args) {
@@ -11036,7 +11126,7 @@ var QueueList = class extends i$5 {
 		});
 	}
 	render() {
-		return x`
+		return b`
       <div class="list ${this.searchExpanded ? "search-active" : ""}">
         <div class="loading" ?hidden=${!this.loading}><ha-spinner></ha-spinner></div>
         <mwc-list multi ?hidden=${this.loading}>
@@ -11047,7 +11137,7 @@ var QueueList = class extends i$5 {
 			const isSearchHighlight = this.searchHighlightIndex === realIndex;
 			const isChecked = this.selectedIndices.has(realIndex);
 			const queueButtonDisabled = isSelected || this.selectedIndex >= 0 && realIndex === this.selectedIndex + 1;
-			return x`
+			return b`
               <sonos-media-row
                 @click=${() => this.dispatchAction({
 				type: "item-click",
@@ -11124,8 +11214,7 @@ __decorate$1([n$5({ attribute: false })], QueueList.prototype, "displayItems", v
 __decorate$1([n$5({ attribute: false })], QueueList.prototype, "shownIndices", void 0);
 __decorate$1([n$5({ attribute: false })], QueueList.prototype, "selectedIndices", void 0);
 customElements.define("sonos-queue-list", QueueList);
-//#endregion
-//#region src/sections/section-common.styles.ts
+// src/sections/section-common.styles.ts
 /**
 * Common styles shared between Queue and Search sections
 */
@@ -11188,7 +11277,7 @@ var sectionCommonStyles = i$8`
     --icon-size: 1em;
   }
   sonos-icon-button[selected] {
-    color: var(--accent-color);
+    color: var(--primary-color);
   }
   .loading {
     display: flex;
@@ -11218,8 +11307,7 @@ var sectionCommonStyles = i$8`
     background: rgba(0, 0, 0, 0.3);
   }
 `;
-//#endregion
-//#region src/sections/queue/styles.ts
+// src/sections/queue/styles.ts
 var queueStyles = [sectionCommonStyles, i$8`
     /* Queue uses section-container class name */
     .queue-container {
@@ -11271,8 +11359,7 @@ var queueStyles = [sectionCommonStyles, i$8`
       line-height: 1.5;
     }
   `];
-//#endregion
-//#region src/sections/queue/queue-section-utils.ts
+// src/sections/queue/queue-section-utils.ts
 var MASS_CONFIG_MESSAGE = "To see the Music Assistant queue, enable useMusicAssistant (or set entityPlatform: music_assistant) in the card configuration.";
 var MASS_QUEUE_MESSAGE = "The current queue is not managed by Music Assistant.";
 var MASS_QUEUE_INSTALL_MESSAGE = "To show the queue for Music Assistant, install the mass_queue integration from HACS: github.com/droans/mass_queue";
@@ -11322,11 +11409,10 @@ function applyQueueSearchAction(action, searchMatchIndices, selectedIndices) {
 		shownIndices: action.payload.shownIndices
 	};
 	if (action.type === "expanded") return { searchExpanded: action.payload.expanded };
-	if (action.type === "select-all") return { selectedIndices: new Set([...selectedIndices, ...searchMatchIndices]) };
+	if (action.type === "select-all") return { selectedIndices: /* @__PURE__ */ new Set([...selectedIndices, ...searchMatchIndices]) };
 	return {};
 }
-//#endregion
-//#region src/utils/selection-utils.ts
+// src/utils/selection-utils.ts
 /**
 * Utility functions for managing selection state in lists
 */
@@ -11352,8 +11438,7 @@ function invertSelection(selectedIndices, totalItems) {
 function clearSelection() {
 	return /* @__PURE__ */ new Set();
 }
-//#endregion
-//#region src/sections/queue/queue-controller.ts
+// src/sections/queue/queue-controller.ts
 var QueueController = class {
 	constructor(host, getStore) {
 		this.host = host;
@@ -11459,8 +11544,7 @@ var QueueController = class {
 		} else console.warn("Error getting queue", error);
 	}
 };
-//#endregion
-//#region src/utils/batch-operation-utils.ts
+// src/utils/batch-operation-utils.ts
 /**
 * Queue items after the currently playing track.
 * Items are added in reverse order so they appear in the correct sequence.
@@ -11496,8 +11580,7 @@ function recalculateIndicesAfterDeletion(remaining, deleted) {
 	const deleteCount = deleted.length;
 	return remaining.filter((i) => !deletedSet.has(i)).map((i) => i > maxDeleted ? i - deleteCount : i);
 }
-//#endregion
-//#region src/sections/queue/queue-operations-utils.ts
+// src/sections/queue/queue-operations-utils.ts
 var QUEUE_REFRESH_DELAY_MS = 500;
 function resetOperationState(ctrl) {
 	ctrl.operationProgress = null;
@@ -11630,8 +11713,7 @@ async function deleteBatch(ctrl, remaining) {
 		indices = recalculateIndicesAfterDeletion(indices, succeededIndices);
 	}
 }
-//#endregion
-//#region src/sections/queue/queue-controller-utils.ts
+// src/sections/queue/queue-controller-utils.ts
 function handleSearchAction(ctrl, action) {
 	Object.assign(ctrl, applyQueueSearchAction(action, ctrl.searchMatchIndices, ctrl.selectedIndices));
 	ctrl.requestUpdate();
@@ -11699,8 +11781,7 @@ function toggleSelectMode(ctrl) {
 		ctrl.requestUpdate();
 	}
 }
-//#endregion
-//#region src/sections/queue/queue-mass.ts
+// src/sections/queue/queue-mass.ts
 var QueueMass = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -11711,7 +11792,7 @@ var QueueMass = class extends i$5 {
 		const hasSelection = ctrl.selectedIndices.size > 0;
 		const operationRunning = ctrl.operationProgress !== null;
 		const shownIndices = ctrl.showOnlyMatches ? ctrl.shownIndices : [];
-		return x`
+		return b`
       <div class="queue-container" @keydown=${(e) => handleKeyDown(ctrl, e.key)} tabindex="-1">
         <sonos-operation-overlay
           .progress=${ctrl.operationProgress}
@@ -11768,8 +11849,7 @@ var QueueMass = class extends i$5 {
 	}
 };
 __decorate$1([n$5()], QueueMass.prototype, "store", void 0);
-//#endregion
-//#region src/sections/queue/queue-sonos-utils.ts
+// src/sections/queue/queue-sonos-utils.ts
 async function queueAfterCurrent(store, activePlayer, queueItems, index, setProgress, shouldCancel, onDone) {
 	const item = queueItems[index];
 	if (!item?.media_content_id) return;
@@ -11882,8 +11962,7 @@ function recalculateIndices(remaining, deleted) {
 	const deleteCount = deleted.length;
 	return remaining.filter((i) => !deletedSet.has(i)).map((i) => i > maxDeleted ? i - deleteCount : i);
 }
-//#endregion
-//#region src/sections/queue/queue-sonos.ts
+// src/sections/queue/queue-sonos.ts
 var QueueSonos = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -11901,7 +11980,7 @@ var QueueSonos = class extends i$5 {
 		this.onSearchAction = (e) => {
 			const a = e.detail;
 			if (a.type === "match") this.searchHighlightIndex = a.payload.index;
-			else if (a.type === "select-all") this.selectedIndices = new Set([...this.selectedIndices, ...a.payload.indices]);
+			else if (a.type === "select-all") this.selectedIndices = /* @__PURE__ */ new Set([...this.selectedIndices, ...a.payload.indices]);
 			else if (a.type === "expanded") this.searchExpanded = a.payload.expanded;
 			else if (a.type === "show-only") {
 				this.showOnlyMatches = a.payload.showOnlyMatches;
@@ -11977,7 +12056,7 @@ var QueueSonos = class extends i$5 {
 		const hasSelection = this.selectedIndices.size > 0;
 		const operationRunning = this.operationProgress !== null;
 		const shownIndices = this.showOnlyMatches ? this.shownIndices : [];
-		return x`
+		return b`
       <div class="queue-container" @keydown=${this.onKeyDown} tabindex="-1">
         <sonos-operation-overlay
           .progress=${this.operationProgress}
@@ -12055,12 +12134,11 @@ __decorate$1([r$3()], QueueSonos.prototype, "queueItems", void 0);
 __decorate$1([r$3()], QueueSonos.prototype, "loading", void 0);
 __decorate$1([r$3()], QueueSonos.prototype, "operationProgress", void 0);
 __decorate$1([r$3()], QueueSonos.prototype, "cancelOperation", void 0);
-//#endregion
-//#region src/sections/queue/queue-section.ts
+// src/sections/queue/queue-section.ts
 var _Queue;
 var Queue = class extends i$5 {
 	render() {
-		return this.store.config.entityPlatform === "music_assistant" ? x`<sonos-queue-mass .store=${this.store}></sonos-queue-mass>` : x`<sonos-queue-sonos .store=${this.store}></sonos-queue-sonos>`;
+		return this.store.config.entityPlatform === "music_assistant" ? b`<sonos-queue-mass .store=${this.store}></sonos-queue-mass>` : b`<sonos-queue-sonos .store=${this.store}></sonos-queue-sonos>`;
 	}
 };
 _Queue = Queue;
@@ -12072,15 +12150,16 @@ _Queue.styles = i$8`
     }
   `;
 __decorate$1([n$5()], Queue.prototype, "store", void 0);
-//#endregion
-//#region src/sections/search/search-utils.ts
+// src/sections/search/search-utils.ts
 var LOCAL_STORAGE_KEY = "sonos-search-state";
 var MEDIA_TYPE_ICONS = {
 	album: mdiAlbum,
 	artist: mdiAccount,
 	playlist: mdiPlaylistMusic,
 	radio: mdiRadio,
-	track: mdiMusic
+	track: mdiMusic,
+	podcast: mdiPodcast,
+	podcast_episode: mdiPodcast
 };
 function getMediaTypeIcon(mediaType) {
 	return MEDIA_TYPE_ICONS[mediaType] ?? "M21,3V15.5A3.5,3.5 0 0,1 17.5,19A3.5,3.5 0 0,1 14,15.5A3.5,3.5 0 0,1 17.5,12C18.04,12 18.55,12.12 19,12.34V6.47L9,8.6V17.5A3.5,3.5 0 0,1 5.5,21A3.5,3.5 0 0,1 2,17.5A3.5,3.5 0 0,1 5.5,14C6.04,14 6.55,14.12 7,14.34V6L21,3Z";
@@ -12100,7 +12179,8 @@ function getSearchTypeLabels(mediaTypes) {
 		artist: "artists",
 		album: "albums",
 		playlist: "playlists",
-		radio: "radio"
+		radio: "radio",
+		podcast: "podcasts"
 	};
 	return Array.from(mediaTypes).map((t) => labelMap[t]).filter(Boolean).join(", ");
 }
@@ -12127,7 +12207,7 @@ function restoreSearchState() {
 		}
 	} catch {}
 	return {
-		mediaTypes: new Set(["track"]),
+		mediaTypes: /* @__PURE__ */ new Set(["track"]),
 		searchText: "",
 		libraryFilter: "all"
 	};
@@ -12145,14 +12225,14 @@ var ALL_SEARCH_TYPES = [
 	"artist",
 	"album",
 	"playlist",
-	"radio"
+	"radio",
+	"podcast"
 ];
 async function performMassSearch(svc, configEntryId, searchText, mediaTypes, libraryFilter, searchLimit) {
 	const typesToSearch = mediaTypes.size > 0 ? Array.from(mediaTypes) : ALL_SEARCH_TYPES;
 	return svc.searchMultipleTypes(configEntryId, searchText.trim(), typesToSearch, searchLimit, libraryFilter);
 }
-//#endregion
-//#region src/sections/search/search-service.ts
+// src/sections/search/search-service.ts
 var SearchService = class {
 	constructor(host) {
 		this.host = host;
@@ -12210,8 +12290,7 @@ var SearchService = class {
 		saveSearchState(mediaTypes, "", libraryFilter);
 	}
 };
-//#endregion
-//#region src/sections/search/styles.ts
+// src/sections/search/styles.ts
 var searchStyles = [sectionCommonStyles, i$8`
     /* Search uses section-container class name */
     .search-container {
@@ -12235,7 +12314,7 @@ var searchStyles = [sectionCommonStyles, i$8`
       align-items: center;
     }
     .media-type-icons sonos-icon-button[selected] {
-      color: var(--accent-color);
+      color: var(--primary-color);
     }
     .separator {
       width: 1px;
@@ -12249,7 +12328,7 @@ var searchStyles = [sectionCommonStyles, i$8`
       cursor: pointer;
     }
     .library-filter-btn sonos-icon-button[selected] {
-      color: var(--accent-color);
+      color: var(--primary-color);
     }
     .library-filter-btn .overlay-icon {
       position: absolute;
@@ -12257,7 +12336,7 @@ var searchStyles = [sectionCommonStyles, i$8`
       right: 2px;
       width: 14px;
       height: 14px;
-      fill: var(--accent-color);
+      fill: var(--primary-color);
       pointer-events: none;
     }
     .search-bar {
@@ -12323,7 +12402,7 @@ var searchStyles = [sectionCommonStyles, i$8`
       display: inline-flex;
     }
     .filter-menu-anchor sonos-icon-button[selected] {
-      color: var(--accent-color);
+      color: var(--primary-color);
     }
     .filter-menu {
       position: absolute;
@@ -12358,7 +12437,7 @@ var searchStyles = [sectionCommonStyles, i$8`
     }
     .filter-menu-item .check {
       --mdc-icon-size: 18px;
-      color: var(--accent-color);
+      color: var(--primary-color);
     }
     .filter-menu-divider {
       height: 1px;
@@ -12371,7 +12450,7 @@ var searchStyles = [sectionCommonStyles, i$8`
       justify-content: center;
       padding: 8px 16px;
       cursor: pointer;
-      color: var(--accent-color);
+      color: var(--primary-color);
       font-size: 0.9rem;
       font-weight: 500;
     }
@@ -12380,8 +12459,7 @@ var searchStyles = [sectionCommonStyles, i$8`
     }
   `];
 var searchResultsStyles = [sectionCommonStyles];
-//#endregion
-//#region src/sections/search/search-filter-menu.ts
+// src/sections/search/search-filter-menu.ts
 var LIBRARY_LABELS$1 = {
 	all: "All",
 	library: "Library only",
@@ -12396,9 +12474,9 @@ var SearchFilterMenu = class extends i$5 {
 	render() {
 		const mediaTypeOverflows = this.overflowIcons.filter((i) => i.type !== "library-filter");
 		const hasLibraryFilter = this.overflowIcons.some((i) => i.type === "library-filter");
-		return x`
+		return b`
       <div class="filter-menu" @click=${(e) => e.stopPropagation()}>
-        ${mediaTypeOverflows.map((icon) => x`
+        ${mediaTypeOverflows.map((icon) => b`
             <div class="filter-menu-item" @click=${() => this.dispatch({
 			type: "toggle-media-type",
 			mediaType: icon.type
@@ -12408,14 +12486,14 @@ var SearchFilterMenu = class extends i$5 {
               <ha-svg-icon class="check" .path=${mdiCheck} ?hidden=${!this.mediaTypes.has(icon.type)}></ha-svg-icon>
             </div>
           `)}
-        ${hasLibraryFilter ? x`
-              ${mediaTypeOverflows.length > 0 ? x`<div class="filter-menu-divider"></div>` : E}
-              <div class="filter-menu-item" @click=${() => this.dispatch({ type: "toggle-library-filter" })}>
-                <ha-svg-icon .path=${mdiBookshelf}></ha-svg-icon>
-                <span>${LIBRARY_LABELS$1[this.libraryFilter]}</span>
-                <ha-svg-icon class="check" .path=${mdiCheck} ?hidden=${this.libraryFilter === "all"}></ha-svg-icon>
-              </div>
-            ` : E}
+        ${hasLibraryFilter ? b`
+                ${mediaTypeOverflows.length > 0 ? b`<div class="filter-menu-divider"></div>` : A}
+                <div class="filter-menu-item" @click=${() => this.dispatch({ type: "toggle-library-filter" })}>
+                  <ha-svg-icon .path=${mdiBookshelf}></ha-svg-icon>
+                  <span>${LIBRARY_LABELS$1[this.libraryFilter]}</span>
+                  <ha-svg-icon class="check" .path=${mdiCheck} ?hidden=${this.libraryFilter === "all"}></ha-svg-icon>
+                </div>
+              ` : A}
         <div class="filter-menu-divider"></div>
         <div class="filter-menu-done" @click=${() => this.dispatch({ type: "close" })}>Done</div>
       </div>
@@ -12462,7 +12540,7 @@ var SearchFilterMenu = class extends i$5 {
       }
       .filter-menu-item .check {
         --mdc-icon-size: 18px;
-        color: var(--accent-color);
+        color: var(--primary-color);
       }
       .filter-menu-divider {
         height: 1px;
@@ -12475,7 +12553,7 @@ var SearchFilterMenu = class extends i$5 {
         justify-content: center;
         padding: 8px 16px;
         cursor: pointer;
-        color: var(--accent-color);
+        color: var(--primary-color);
         font-size: 0.9rem;
         font-weight: 500;
       }
@@ -12489,8 +12567,7 @@ __decorate$1([n$5({ attribute: false })], SearchFilterMenu.prototype, "overflowI
 __decorate$1([n$5({ attribute: false })], SearchFilterMenu.prototype, "mediaTypes", void 0);
 __decorate$1([n$5()], SearchFilterMenu.prototype, "libraryFilter", void 0);
 customElements.define("sonos-search-filter-menu", SearchFilterMenu);
-//#endregion
-//#region src/sections/search/search-header.ts
+// src/sections/search/search-header.ts
 var ALL_HEADER_ICONS = [
 	{
 		type: "track",
@@ -12518,6 +12595,11 @@ var ALL_HEADER_ICONS = [
 		title: "Radio"
 	},
 	{
+		type: "podcast",
+		icon: mdiPodcast,
+		title: "Podcasts"
+	},
+	{
 		type: "library-filter",
 		icon: mdiBookshelf,
 		title: "Library filter"
@@ -12535,6 +12617,7 @@ var SearchHeader = class extends i$5 {
 		this.title = "Search";
 		this.selectMode = false;
 		this.hasSelection = false;
+		this.showRadio = true;
 		this.operationProgress = null;
 		this.libraryFilter = "all";
 		this.viewMode = "list";
@@ -12555,7 +12638,7 @@ var SearchHeader = class extends i$5 {
 		if (!hostWidth) return;
 		const headerPadding = 16;
 		const titleMinWidth = 60;
-		const fixedButtonsWidth = ICON_BUTTON_WIDTH * 2;
+		const fixedButtonsWidth = 96;
 		const total = ALL_HEADER_ICONS.length;
 		if (hostWidth - headerPadding - titleMinWidth - fixedButtonsWidth >= total * ICON_BUTTON_WIDTH) {
 			if (this.visibleCount !== total) this.visibleCount = total;
@@ -12590,7 +12673,7 @@ var SearchHeader = class extends i$5 {
 		const hasOverflow = this.overflowIcons.length > 0;
 		const playerName = getSpeakerList(this.store.activePlayer, this.store.predefinedGroups);
 		const hideActivePlayerName = this.store.config.search?.hideActivePlayerName ?? false;
-		return x`
+		return b`
       <div class="header">
         <div class="title-container">
           <div class="title-text">
@@ -12600,7 +12683,7 @@ var SearchHeader = class extends i$5 {
         </div>
         <div class="header-icons">
           <div class="media-type-icons" ?hidden=${this.selectMode}>
-            ${this.visibleIcons.map((icon) => x`
+            ${this.visibleIcons.map((icon) => b`
                 <sonos-icon-button
                   .path=${icon.icon}
                   @click=${() => this.onIconClick(icon)}
@@ -12608,28 +12691,29 @@ var SearchHeader = class extends i$5 {
                   title=${this.getIconTitle(icon)}
                 ></sonos-icon-button>
               `)}
-            ${hasOverflow ? x`
-                  <div class="separator" ?hidden=${this.visibleCount === 0}></div>
-                  <div class="filter-menu-anchor">
-                    <sonos-icon-button
-                      .path=${mdiDotsVertical}
-                      @click=${() => this.filterMenuOpen = !this.filterMenuOpen}
-                      title="More filters"
-                      ?selected=${this.overflowIcons.some((i) => this.isIconActive(i))}
-                    ></sonos-icon-button>
-                    <sonos-search-filter-menu
-                      ?hidden=${!this.filterMenuOpen}
-                      .overflowIcons=${this.overflowIcons}
-                      .mediaTypes=${this.mediaTypes}
-                      .libraryFilter=${this.libraryFilter}
-                      @filter-action=${this.handleFilterAction}
-                    ></sonos-search-filter-menu>
-                  </div>
-                ` : E}
+            ${hasOverflow ? b`
+                    <div class="separator" ?hidden=${this.visibleCount === 0}></div>
+                    <div class="filter-menu-anchor">
+                      <sonos-icon-button
+                        .path=${mdiDotsVertical}
+                        @click=${() => this.filterMenuOpen = !this.filterMenuOpen}
+                        title="More filters"
+                        ?selected=${this.overflowIcons.some((i) => this.isIconActive(i))}
+                      ></sonos-icon-button>
+                      <sonos-search-filter-menu
+                        ?hidden=${!this.filterMenuOpen}
+                        .overflowIcons=${this.overflowIcons}
+                        .mediaTypes=${this.mediaTypes}
+                        .libraryFilter=${this.libraryFilter}
+                        @filter-action=${this.handleFilterAction}
+                      ></sonos-search-filter-menu>
+                    </div>
+                  ` : A}
           </div>
           <sonos-selection-actions
             ?hidden=${!this.selectMode}
             .hasSelection=${this.hasSelection}
+            .showRadio=${this.showRadio}
             .disabled=${this.operationProgress !== null}
             .showInvert=${this.hasSelection}
             @invert-selection=${() => this.dispatch({ type: "invert-selection" })}
@@ -12724,7 +12808,7 @@ var SearchHeader = class extends i$5 {
         align-items: center;
       }
       .media-type-icons sonos-icon-button[selected] {
-        color: var(--accent-color);
+        color: var(--primary-color);
       }
       .separator {
         width: 1px;
@@ -12737,7 +12821,7 @@ var SearchHeader = class extends i$5 {
         display: inline-flex;
       }
       .filter-menu-anchor sonos-icon-button[selected] {
-        color: var(--accent-color);
+        color: var(--primary-color);
       }
     `;
 	}
@@ -12746,6 +12830,7 @@ __decorate$1([n$5()], SearchHeader.prototype, "title", void 0);
 __decorate$1([n$5({ attribute: false })], SearchHeader.prototype, "mediaTypes", void 0);
 __decorate$1([n$5({ type: Boolean })], SearchHeader.prototype, "selectMode", void 0);
 __decorate$1([n$5({ type: Boolean })], SearchHeader.prototype, "hasSelection", void 0);
+__decorate$1([n$5({ type: Boolean })], SearchHeader.prototype, "showRadio", void 0);
 __decorate$1([n$5({ attribute: false })], SearchHeader.prototype, "operationProgress", void 0);
 __decorate$1([n$5()], SearchHeader.prototype, "libraryFilter", void 0);
 __decorate$1([n$5()], SearchHeader.prototype, "viewMode", void 0);
@@ -12753,15 +12838,14 @@ __decorate$1([n$5({ attribute: false })], SearchHeader.prototype, "store", void 
 __decorate$1([r$3()], SearchHeader.prototype, "filterMenuOpen", void 0);
 __decorate$1([r$3()], SearchHeader.prototype, "visibleCount", void 0);
 customElements.define("sonos-search-header", SearchHeader);
-//#endregion
-//#region src/sections/search/search-bar.ts
+// src/sections/search/search-bar.ts
 var SearchBar = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
 		this.searchText = "";
 	}
 	render() {
-		return x`
+		return b`
       <div class="search-bar">
         <sonos-icon-button .path=${mdiMagnify} @click=${() => this.dispatchEvent(customEvent("search-submit"))}></sonos-icon-button>
         <input type="text" placeholder="Search ${getSearchTypeLabels(this.mediaTypes)}..." .value=${this.searchText} @input=${this.onInput} @keydown=${this.onKeyDown} />
@@ -12820,8 +12904,7 @@ __decorate$1([n$5()], SearchBar.prototype, "searchText", void 0);
 __decorate$1([n$5({ attribute: false })], SearchBar.prototype, "mediaTypes", void 0);
 __decorate$1([e$3("input")], SearchBar.prototype, "input", void 0);
 customElements.define("sonos-search-bar", SearchBar);
-//#endregion
-//#region src/sections/search/search-batch-utils.ts
+// src/sections/search/search-batch-utils.ts
 function getSelectedItems(results, selectedIndices) {
 	return Array.from(selectedIndices).sort((a, b) => a - b).map((i) => toMediaPlayerItem(results[i]));
 }
@@ -12856,8 +12939,7 @@ async function runBatch(operation, initialProgress, callbacks) {
 		callbacks.setProgress(null);
 	}
 }
-//#endregion
-//#region src/sections/search/search-results.ts
+// src/sections/search/search-results.ts
 var SearchResults = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -12881,7 +12963,7 @@ var SearchResults = class extends i$5 {
 		const tooShort = this.searchText && this.searchText.trim().length < autoSearchMinChars;
 		const noResults = !this.loading && this.results.length === 0 && this.searchText && !tooShort;
 		const emptyPrompt = !this.loading && this.results.length === 0 && !this.searchText;
-		return x`
+		return b`
       <sonos-operation-overlay
         .progress=${this.operationProgress}
         .hass=${this.store.hass}
@@ -12910,11 +12992,11 @@ var SearchResults = class extends i$5 {
     `;
 	}
 	renderList(hasContent) {
-		return x`
+		return b`
       <div class="list" ?hidden=${!hasContent}>
         <mwc-list multi>
           ${c(this.results, (item) => item.uri, (item, index) => {
-			return x`
+			return b`
                 <sonos-media-row
                   @click=${() => this.onItemClick(index)}
                   .item=${toMediaPlayerItem(item)}
@@ -12937,23 +13019,23 @@ var SearchResults = class extends i$5 {
 	}
 	renderGrid(hasContent) {
 		const columns = this.store.config.search?.gridColumns ?? 4;
-		return x`
+		return b`
       <div class="grid-scroll" ?hidden=${!hasContent}>
         <div class="grid" style="grid-template-columns: repeat(${columns}, minmax(0, 1fr))">
           ${c(this.results, (item) => item.uri, (item, index) => {
 			const selected = this.selectedIndices.has(index);
-			return x`
+			return b`
                 <div class="grid-tile ${selected ? "selected" : ""}" @click=${() => this.onItemClick(index)}>
-                  ${this.selectMode ? x`<ha-checkbox
-                        class="grid-checkbox"
-                        .checked=${selected}
-                        @change=${(e) => this.onCheckboxChange(index, e.target.checked)}
-                        @click=${(e) => e.stopPropagation()}
-                      ></ha-checkbox>` : ""}
-                  ${item.imageUrl ? x`<img class="grid-img" src="${item.imageUrl}" alt="${item.title}" loading="lazy" />` : x`<div class="grid-placeholder"><ha-svg-icon .path=${getMediaTypeIcon(item.mediaType)}></ha-svg-icon></div>`}
+                  ${this.selectMode ? b`<ha-checkbox
+                          class="grid-checkbox"
+                          .checked=${selected}
+                          @change=${(e) => this.onCheckboxChange(index, e.target.checked)}
+                          @click=${(e) => e.stopPropagation()}
+                        ></ha-checkbox>` : ""}
+                  ${item.imageUrl ? b`<img class="grid-img" src="${item.imageUrl}" alt="${item.title}" loading="lazy" />` : b`<div class="grid-placeholder"><ha-svg-icon .path=${getMediaTypeIcon(item.mediaType)}></ha-svg-icon></div>`}
                   <div class="grid-info">
                     <div class="grid-title">${item.title}</div>
-                    ${item.subtitle ? x`<div class="grid-subtitle">${item.subtitle}</div>` : ""}
+                    ${item.subtitle ? b`<div class="grid-subtitle">${item.subtitle}</div>` : ""}
                   </div>
                 </div>
               `;
@@ -12965,8 +13047,12 @@ var SearchResults = class extends i$5 {
 	get hasSelection() {
 		return this.selectedIndices.size > 0;
 	}
+	hasPodcastSelection(results = this.results) {
+		return Array.from(this.selectedIndices).some((index) => results[index]?.mediaType === "podcast");
+	}
 	handleInvertSelection() {
 		this.selectedIndices = invertSelection(this.selectedIndices, this.results.length);
+		this.dispatchEvent(customEvent("has-selection-change", this.hasSelection));
 	}
 	clearSelectionState() {
 		this.selectedIndices = clearSelection();
@@ -13001,7 +13087,7 @@ var SearchResults = class extends i$5 {
 			this.dispatchEvent(customEvent("has-selection-change", this.selectedIndices.size > 0));
 			return;
 		}
-		if (item.mediaType === "album" || item.mediaType === "playlist" || item.mediaType === "artist") {
+		if (item.mediaType === "album" || item.mediaType === "playlist" || item.mediaType === "artist" || item.mediaType === "podcast") {
 			this.dispatchEvent(customEvent("browse-collection", item));
 			return;
 		}
@@ -13074,7 +13160,7 @@ var SearchResults = class extends i$5 {
           outline: 2px solid var(--divider-color, rgba(255, 255, 255, 0.2));
         }
         .grid-tile.selected {
-          outline: 2px solid var(--accent-color);
+          outline: 2px solid var(--primary-color);
         }
         .grid-checkbox {
           position: absolute;
@@ -13147,8 +13233,7 @@ __decorate$1([r$3()], SearchResults.prototype, "playMenuItemIndex", void 0);
 __decorate$1([r$3()], SearchResults.prototype, "operationProgress", void 0);
 __decorate$1([r$3()], SearchResults.prototype, "cancelOperation", void 0);
 customElements.define("sonos-search-results", SearchResults);
-//#endregion
-//#region src/sections/search/search-browse-view.ts
+// src/sections/search/search-browse-view.ts
 var SearchBrowseView = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -13156,14 +13241,17 @@ var SearchBrowseView = class extends i$5 {
 		this.massQueueConfigEntryId = "";
 		this.browseResults = [];
 		this.browseLoading = false;
+		this.browseError = null;
+		this.browseRequestId = 0;
 	}
 	willUpdate(changedProperties) {
 		if (changedProperties.has("item") && this.item) this.loadCollection();
+		else if (changedProperties.has("item")) this.browseRequestId++;
 	}
 	render() {
-		if (!this.item) return x``;
+		if (!this.item) return b``;
 		const typeIcon = getMediaTypeIcon(this.item.mediaType);
-		return x`
+		return b`
       <div class="header browse-header">
         <sonos-icon-button .path=${mdiArrowLeft} @click=${this.goBack} title="Back to results"></sonos-icon-button>
         <ha-dropdown @wa-select=${this.handlePlayMenuAction}>
@@ -13172,7 +13260,7 @@ var SearchBrowseView = class extends i$5 {
             <ha-svg-icon slot="icon" .path=${mdiPlayBoxMultiple}></ha-svg-icon>
             Play Now (clear queue)
           </ha-dropdown-item>
-          <ha-dropdown-item value="1">
+          <ha-dropdown-item value="1" ?hidden=${this.item.mediaType === "podcast"}>
             <ha-svg-icon slot="icon" .path=${mdiAccessPoint}></ha-svg-icon>
             Start Radio
           </ha-dropdown-item>
@@ -13197,29 +13285,38 @@ var SearchBrowseView = class extends i$5 {
         <sonos-icon-button .path=${typeIcon} disabled class="type-indicator"></sonos-icon-button>
       </div>
       <div class="loading" ?hidden=${!this.browseLoading || this.browseResults.length > 0}><ha-spinner></ha-spinner></div>
-      <div class="no-results" ?hidden=${this.browseLoading || this.browseResults.length > 0}>No items found</div>
+      <div class="no-results" ?hidden=${!this.browseError}>${this.browseError}</div>
+      <div class="no-results" ?hidden=${this.browseLoading || !!this.browseError || this.browseResults.length > 0}>No items found</div>
       <div class="list" ?hidden=${this.browseResults.length === 0}>
         <mwc-list multi>
           ${c(this.browseResults, (browseItem) => browseItem.uri, (browseItem, index) => {
-			return x` <sonos-media-row @click=${() => this.onBrowseItemClick(index)} .item=${toMediaPlayerItem(browseItem)} .store=${this.store}></sonos-media-row> `;
+			return b` <sonos-media-row @click=${() => this.onBrowseItemClick(index)} .item=${toMediaPlayerItem(browseItem)} .store=${this.store}></sonos-media-row> `;
 		})}
         </mwc-list>
       </div>
     `;
 	}
 	async loadCollection() {
+		const requestId = ++this.browseRequestId;
+		const item = this.item;
 		this.browseLoading = true;
+		this.browseResults = [];
+		this.browseError = null;
 		try {
-			this.browseResults = await this.musicAssistantService.getCollectionItems(this.item.uri, this.item.mediaType, this.massQueueConfigEntryId);
+			const results = await this.musicAssistantService.getCollectionItems(item.uri, item.mediaType, this.massQueueConfigEntryId);
+			if (requestId === this.browseRequestId) this.browseResults = results;
 		} catch (e) {
 			console.error("Failed to browse collection:", e);
+			if (requestId === this.browseRequestId) this.browseError = e instanceof Error ? e.message : "Failed to browse collection";
 		} finally {
-			this.browseLoading = false;
+			if (requestId === this.browseRequestId) this.browseLoading = false;
 		}
 	}
 	goBack() {
+		this.browseRequestId++;
 		this.browseResults = [];
 		this.browseLoading = false;
+		this.browseError = null;
 		this.dispatchEvent(customEvent("go-back"));
 	}
 	async onBrowseItemClick(index) {
@@ -13300,9 +13397,9 @@ __decorate$1([n$5({ attribute: false })], SearchBrowseView.prototype, "musicAssi
 __decorate$1([n$5()], SearchBrowseView.prototype, "massQueueConfigEntryId", void 0);
 __decorate$1([r$3()], SearchBrowseView.prototype, "browseResults", void 0);
 __decorate$1([r$3()], SearchBrowseView.prototype, "browseLoading", void 0);
+__decorate$1([r$3()], SearchBrowseView.prototype, "browseError", void 0);
 customElements.define("sonos-search-browse-view", SearchBrowseView);
-//#endregion
-//#region src/sections/search/search-section.ts
+// src/sections/search/search-section.ts
 var Search = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -13312,6 +13409,8 @@ var Search = class extends i$5 {
 		this.results = [];
 		this.loading = false;
 		this.error = null;
+		this.massConfigEntryId = "";
+		this.massQueueConfigEntryId = "";
 		this.discoveryComplete = false;
 		this.browsingItem = null;
 		this.selectMode = false;
@@ -13329,33 +13428,46 @@ var Search = class extends i$5 {
 		this.searchService?.dispose();
 	}
 	willUpdate(changedProperties) {
+		if (changedProperties.has("results")) {
+			const previousResults = changedProperties.get("results") ?? [];
+			if (previousResults.length !== this.results.length || previousResults.some((item, index) => item.uri !== this.results[index].uri)) {
+				this.searchResults?.clearSelectionState();
+				this.hasSelection = false;
+			}
+		}
 		if (changedProperties.has("store") && !this.searchService) {
 			this.musicAssistantService = new MusicAssistantService(this.store.hass);
 			this.searchService = new SearchService(this);
 			this.discoverConfigEntry();
 			const { defaultMediaType } = this.searchConfig;
-			if (this.mediaTypes.size === 0 && defaultMediaType && defaultMediaType !== "none") this.mediaTypes = new Set([defaultMediaType]);
+			if (this.mediaTypes.size === 0 && defaultMediaType && defaultMediaType !== "none") this.mediaTypes = /* @__PURE__ */ new Set([defaultMediaType]);
 		}
 	}
 	async discoverConfigEntry() {
 		const { massConfigEntryId: configuredId } = this.searchConfig;
-		this.massConfigEntryId = configuredId ?? await this.musicAssistantService.discoverConfigEntryId();
-		this.massQueueConfigEntryId = await this.musicAssistantService.discoverMassQueueConfigEntryId() ?? "";
-		this.discoveryComplete = true;
+		try {
+			this.massConfigEntryId = configuredId ?? await this.musicAssistantService.discoverConfigEntryId();
+			this.massQueueConfigEntryId = await this.musicAssistantService.discoverMassQueueConfigEntryId() ?? "";
+		} catch (error) {
+			console.warn("Failed to discover Music Assistant configuration:", error);
+			this.massQueueConfigEntryId = "";
+		} finally {
+			this.discoveryComplete = true;
+		}
 		if (this.searchText && this.massConfigEntryId) this.searchService.execute(this.searchText, this.mediaTypes, this.libraryFilter, this.searchConfig);
 	}
 	render() {
-		if (this.store.config.entityPlatform !== "music_assistant") return x`<div class="search-container">
+		if (this.store.config.entityPlatform !== "music_assistant") return b`<div class="search-container">
         <div class="config-required">
           <ha-icon icon="mdi:music-box-multiple-outline"></ha-icon>
           <div class="title">Music Assistant Required</div>
           <div>Search requires <code>entityPlatform: music_assistant</code> in the card configuration.</div>
         </div>
       </div>`;
-		if (!this.discoveryComplete) return x`<div class="search-container">
+		if (!this.discoveryComplete) return b`<div class="search-container">
         <div class="loading"><ha-spinner></ha-spinner></div>
       </div>`;
-		if (!this.massConfigEntryId) return x`<div class="search-container">
+		if (!this.massConfigEntryId) return b`<div class="search-container">
         <div class="config-required">
           <ha-icon icon="mdi:music-box-multiple-outline"></ha-icon>
           <div class="title">Music Assistant Not Found</div>
@@ -13363,7 +13475,7 @@ var Search = class extends i$5 {
         </div>
       </div>`;
 		const { title } = this.searchConfig;
-		return x`
+		return b`
       <div class="search-container" @keydown=${this.onKeyDown} tabindex="-1">
         <sonos-search-browse-view
           ?hidden=${!this.browsingItem}
@@ -13379,6 +13491,7 @@ var Search = class extends i$5 {
             .mediaTypes=${this.mediaTypes}
             .selectMode=${this.selectMode}
             .hasSelection=${this.hasSelection}
+            .showRadio=${!this.searchResults?.hasPodcastSelection(this.results)}
             .libraryFilter=${this.libraryFilter}
             .viewMode=${this.viewMode}
             .store=${this.store}
@@ -13402,7 +13515,7 @@ var Search = class extends i$5 {
             .musicAssistantService=${this.musicAssistantService}
             .massQueueConfigEntryId=${this.massQueueConfigEntryId}
             @browse-collection=${(e) => this.browsingItem = e.detail}
-            @has-selection-change=${(e) => this.hasSelection = e.detail}
+            @has-selection-change=${this.handleSelectionChange}
             @results-updated=${(e) => this.results = e.detail}
           ></sonos-search-results>
         </div>
@@ -13411,6 +13524,10 @@ var Search = class extends i$5 {
 	}
 	get searchConfig() {
 		return this.store.config.search ?? {};
+	}
+	handleSelectionChange({ detail }) {
+		this.hasSelection = detail;
+		this.requestUpdate();
 	}
 	handleHeaderAction({ detail }) {
 		if (detail.type === "toggle-media-type") this.toggleMediaType(detail.mediaType);
@@ -13473,13 +13590,12 @@ __decorate$1([r$3()], Search.prototype, "hasSelection", void 0);
 __decorate$1([r$3()], Search.prototype, "viewMode", void 0);
 __decorate$1([e$3("sonos-search-results")], Search.prototype, "searchResults", void 0);
 __decorate$1([e$3("sonos-search-bar")], Search.prototype, "searchBar", void 0);
-//#endregion
-//#region src/sections/volumes/sleep-timer.ts
+// src/sections/volumes/sleep-timer.ts
 var SleepTimer = class extends i$5 {
 	render() {
 		const hassService = this.store.hassService;
-		if (this.player.attributes.platform !== "sonos") return x``;
-		return x`
+		if (this.player.attributes.platform !== "sonos") return b``;
+		return b`
       <div id="sleepTimer">
         <sonos-icon-button id="sleepTimerAlarm" .path=${mdiAlarm}></sonos-icon-button>
         <label for="sleepTimer">Sleep Timer (s)</label>
@@ -13506,7 +13622,7 @@ var SleepTimer = class extends i$5 {
       }
 
       #sleepTimerSubmit {
-        color: var(--accent-color);
+        color: var(--primary-color);
       }
 
       #sleepTimer > label {
@@ -13520,8 +13636,7 @@ __decorate$1([n$5({ attribute: false })], SleepTimer.prototype, "store", void 0)
 __decorate$1([n$5({ attribute: false })], SleepTimer.prototype, "player", void 0);
 __decorate$1([e$3("#sleepTimerInput")], SleepTimer.prototype, "sleepTimer", void 0);
 customElements.define("sonos-sleep-timer", SleepTimer);
-//#endregion
-//#region src/sections/volumes/volumes-section.ts
+// src/sections/volumes/volumes-section.ts
 var Volumes = class extends i$5 {
 	constructor(..._args) {
 		super(..._args);
@@ -13532,8 +13647,8 @@ var Volumes = class extends i$5 {
 		const showAll = members.length > 1;
 		const hideActivePlayerName = this.store.config.volumes?.hideActivePlayerName ?? false;
 		const playerName = showAll && !hideActivePlayerName ? getSpeakerList(this.store.activePlayer, this.store.predefinedGroups) : "";
-		return x`
-      <div ?hidden=${!showAll}>${showAll ? this.volumeWithName(this.store.activePlayer, true, playerName) : E}</div>
+		return b`
+      <div ?hidden=${!showAll}>${showAll ? this.volumeWithName(this.store.activePlayer, true, playerName) : A}</div>
       ${members.map((member) => this.volumeWithName(member, false))}
     `;
 	}
@@ -13546,15 +13661,15 @@ var Volumes = class extends i$5 {
 		const hideSwitches = updateMembers || !this.showSwitches[player.id];
 		const sliderHeight = this.store.config.volumeSliderHeight;
 		const buttonStyle = sliderHeight ? `height: ${sliderHeight}rem;--icon-button-size: ${sliderHeight}rem;--icon-size: ${sliderHeight * .75}rem;` : "";
-		return x` <div class="row">
+		return b` <div class="row">
       <div class="volume-name">
-        ${updateMembers && groupName ? x`
-              <div class="volume-name-text grouped-name">
-                <span class="grouped-name-prefix">${name} (</span>
-                <span class="grouped-name-main">${groupName}</span>
-                <span class="grouped-name-suffix">)</span>
-              </div>
-            ` : x`<div class="volume-name-text">${name}</div>`}
+        ${updateMembers && groupName ? b`
+                <div class="volume-name-text grouped-name">
+                  <span class="grouped-name-prefix">${name} (</span>
+                  <span class="grouped-name-main">${groupName}</span>
+                  <span class="grouped-name-suffix">)</span>
+                </div>
+              ` : b`<div class="volume-name-text">${name}</div>`}
       </div>
       <div class="slider-row">
         <sonos-icon-button
@@ -13576,7 +13691,7 @@ var Volumes = class extends i$5 {
           ?hidden=${updateMembers || !!hideCogwheel}
           @click=${() => this.toggleShowSwitches(player)}
           .path=${mdiCog}
-          show-switches=${this.showSwitches[player.id] || E}
+          show-switches=${this.showSwitches[player.id] || A}
           style=${buttonStyle}
         ></sonos-icon-button>
       </div>
@@ -13596,10 +13711,17 @@ var Volumes = class extends i$5 {
 		const relatedEntities = await this.store.hassService.getRelatedEntities(player, "switch", "number", "sensor");
 		const { additionalControlsFontSize: fontSize = .75 } = this.store.config.volumes ?? {};
 		return relatedEntities.map((relatedEntity) => {
-			relatedEntity.attributes.friendly_name = relatedEntity.attributes.friendly_name?.replaceAll(player.name, "")?.trim() ?? "";
-			return x`
+			const entityName = getEntityNameWithoutDevice(this.store.hass, relatedEntity, player.name);
+			const stateObj = {
+				...relatedEntity,
+				attributes: {
+					...relatedEntity.attributes,
+					friendly_name: entityName
+				}
+			};
+			return b`
         <div style="--ha-font-size-m: ${fontSize}rem">
-          <state-card-content .stateObj=${relatedEntity} .hass=${this.store.hass}></state-card-content>
+          <state-card-content .stateObj=${stateObj} .hass=${this.store.hass}></state-card-content>
         </div>
       `;
 		});
@@ -13673,7 +13795,7 @@ var Volumes = class extends i$5 {
       }
 
       *[show-switches] {
-        color: var(--accent-color);
+        color: var(--primary-color);
       }
 
       [hidden] {
@@ -13689,8 +13811,7 @@ var Volumes = class extends i$5 {
 };
 __decorate$1([n$5({ attribute: false })], Volumes.prototype, "store", void 0);
 __decorate$1([r$3()], Volumes.prototype, "showSwitches", void 0);
-//#endregion
-//#region src/main.ts
+// src/main.ts
 window.customCards.push({
 	type: "sonos-card",
 	name: "Sonos",
@@ -13709,4 +13830,3 @@ customElements.define("sonos-queue", Queue);
 customElements.define("sonos-queue-mass", QueueMass);
 customElements.define("sonos-queue-sonos", QueueSonos);
 customElements.define("sonos-search", Search);
-//#endregion
